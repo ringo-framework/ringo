@@ -7,17 +7,16 @@ from sqlalchemy import engine_from_config
 from pyramid.paster import (
     get_appsettings,
     setup_logging,
-    )
+)
 
-from ..models import (
+from ringo.model import (
     DBSession,
-    User,
-    Usergroup,
-    Role,
-    Permission,
-    MyModel,
     Base,
-    )
+)
+
+from ringo.model.user import (
+    init_model as init_user_model,
+)
 
 
 def usage(argv):
@@ -37,23 +36,4 @@ def main(argv=sys.argv):
     DBSession.configure(bind=engine)
     Base.metadata.create_all(engine)
     with transaction.manager:
-        model = MyModel(name='one', value=1)
-        DBSession.add(model)
-        user = User(login='admin', password='secret')
-        DBSession.add(user)
-        usergroup = Usergroup(name='admins')
-        DBSession.add(usergroup)
-        usergroup = Usergroup(name='users')
-        DBSession.add(usergroup)
-        role = Role(name='admin')
-        DBSession.add(role)
-        role = Role(name='user')
-        DBSession.add(role)
-        read_perm = Permission(name='create')
-        create_perm = Permission(name='read')
-        update_perm = Permission(name='update')
-        delete_perm = Permission(name='delete')
-        DBSession.add(read_perm)
-        DBSession.add(create_perm)
-        DBSession.add(update_perm)
-        DBSession.add(delete_perm)
+        init_user_model(DBSession)
