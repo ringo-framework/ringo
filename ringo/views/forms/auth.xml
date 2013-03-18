@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration>
+  <source>
+    <!-- Define different entity types -->
+    <entity id="e1" name="login" label="Login" type="string"/>
+    <entity id="e2" name="pass" label="Password" type="password"/>
+  </source>
+  <form id="login" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
+    <snippet ref="s1"/>
+  </form>
+  <snippet id="s1">
+    <row>
+      <col><field ref="e1"/></col>
+    </row>
+    <row>
+      <col><field ref="e2"/></col>
+    </row>
+  </snippet>
+</configuration>
