@@ -11,6 +11,10 @@ from pyramid.paster import (
 
 from ..models import (
     DBSession,
+    User,
+    Usergroup,
+    Role,
+    Permission,
     MyModel,
     Base,
     )
@@ -35,3 +39,21 @@ def main(argv=sys.argv):
     with transaction.manager:
         model = MyModel(name='one', value=1)
         DBSession.add(model)
+        user = User(login='admin', password='secret')
+        DBSession.add(user)
+        usergroup = Usergroup(name='admins')
+        DBSession.add(usergroup)
+        usergroup = Usergroup(name='users')
+        DBSession.add(usergroup)
+        role = Role(name='admin')
+        DBSession.add(role)
+        role = Role(name='user')
+        DBSession.add(role)
+        read_perm = Permission(name='create')
+        create_perm = Permission(name='read')
+        update_perm = Permission(name='update')
+        delete_perm = Permission(name='delete')
+        DBSession.add(read_perm)
+        DBSession.add(create_perm)
+        DBSession.add(update_perm)
+        DBSession.add(delete_perm)
