@@ -35,7 +35,7 @@ class TestMyView(unittest.TestCase):
         self.assertEqual(info['project'], 'ringo')
 
 
-class TestUserModel(unittest.TestCase):
+class TestDefaultAdminUser(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
         from sqlalchemy import create_engine
@@ -65,3 +65,26 @@ class TestUserModel(unittest.TestCase):
         m.update('secret')
         result = DBSession.query(User).all()
         self.assertEqual(result[0].password, m.hexdigest())
+
+    def test_defaultusergroup(self):
+        result = DBSession.query(User).all()
+        self.assertEqual(result[0].default_group.name, 'admins')
+
+    def test_groups(self):
+        result = DBSession.query(User).all()
+        self.assertEqual(len(result[0].groups), 1)
+        self.assertEqual(result[0].groups[0].name, 'admins')
+
+    def test_roles(self):
+        result = DBSession.query(User).all()
+        self.assertEqual(len(result[0].get_roles()), 1)
+        self.assertEqual(result[0].get_roles()[0].name, 'admin')
+
+    def test_permissions(self):
+        result = DBSession.query(User).all()
+        role = result[0].get_roles()[0]
+        self.assertEqual(len(role.permissions), 4)
+        self.assertEqual(role.permissions[0].name, 'create')
+        self.assertEqual(role.permissions[1].name, 'read')
+        self.assertEqual(role.permissions[2].name, 'update')
+        self.assertEqual(role.permissions[3].name, 'delete')
