@@ -1,3 +1,4 @@
+import hashlib
 from ringo.model import Base, Column, Integer, Text
 
 
@@ -34,7 +35,9 @@ def init_model(dbsession):
     :returns: None
 
     """
-    user = User(login='admin', password='secret')
+    pw = hashlib.md5()
+    pw.update('secret')
+    user = User(login='admin', password=pw.hexdigest())
     dbsession.add(user)
     usergroup = Usergroup(name='admins')
     dbsession.add(usergroup)
