@@ -12,6 +12,21 @@ from ringo.models import (
 )
 
 
+@view_config(route_name='login', renderer='/auth/login.mako')
+def login(request):
+    if request.POST:
+        # Load the user and redirect the user to the url where he comes
+        # from
+        return {}
+    else:
+        return {}
+
+
+@view_config(route_name='logout', renderer='/auth/logout.mako')
+def logout(request):
+    return {'project': 'ringo'}
+
+
 @view_config(route_name='home', renderer='templates/mytemplate.pt')
 def my_view(request):
     try:
