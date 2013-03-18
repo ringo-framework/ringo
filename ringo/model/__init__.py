@@ -1,3 +1,4 @@
+import sqlalchemy
 from sqlalchemy import (
     Column,
     Integer,
