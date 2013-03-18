@@ -3,7 +3,7 @@ import transaction
 
 from pyramid import testing
 
-from .models import DBSession
+from ringo.model import DBSession
 
 
 class TestMyView(unittest.TestCase):
@@ -14,7 +14,7 @@ class TestMyView(unittest.TestCase):
         from .models import (
             Base,
             MyModel,
-            )
+        )
         DBSession.configure(bind=engine)
         Base.metadata.create_all(engine)
         with transaction.manager:
