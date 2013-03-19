@@ -12,9 +12,11 @@ requires = [
     'transaction',
     'pyramid_tm',
     'pyramid_debugtoolbar',
+    'pyramid_beaker',
+    'pyramid_handlers',
     'zope.sqlalchemy',
     'waitress',
-    ]
+]
 
 setup(name='ringo',
       version='0.0',
@@ -25,7 +27,7 @@ setup(name='ringo',
         "Framework :: Pyramid",
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
-        ],
+      ],
       author='',
       author_email='',
       url='',
