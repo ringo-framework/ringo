@@ -5,7 +5,7 @@
     <entity id="e1" name="login" label="Login" type="string"/>
     <entity id="e2" name="pass" label="Password" type="password"/>
   </source>
-  <form id="login" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
+  <form id="loginform" autocomplete="off" method="POST" action="/auth/login" enctype="multipart/form-data">
     <snippet ref="s1"/>
   </form>
   <snippet id="s1">

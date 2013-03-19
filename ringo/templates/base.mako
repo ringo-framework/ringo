@@ -30,9 +30,26 @@
       </div>
     </div>
     <div class="container">
+    ${self.flash_messages()}
     ${next.body()}
     </div>
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
   </body>
 </html>
+
+## flash messages with css class und fade in options
+<%def name="flash_messages()">
+  % for message in request.session.pop_flash('success'):
+    <div class="alert alert-success fade in">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      ${message}
+    </div>
+  % endfor
+  % for message in request.session.pop_flash('error'):
+    <div class="alert alert-error fade in">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      ${message}
+    </div>
+  % endfor
+</%def>

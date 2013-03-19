@@ -1,5 +1,6 @@
 from pyramid.config import Configurator
 from pyramid.events import BeforeRender
+from pyramid_beaker import session_factory_from_settings
 
 from sqlalchemy import engine_from_config
 
@@ -24,6 +25,10 @@ def main(global_config, **settings):
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
     config = Configurator(settings=settings)
+    config.set_session_factory(session_factory_from_settings(settings))
+    config.include('pyramid_handlers')
+    config.include('pyramid_beaker')
+    config.include('ringo.lib.security.setup_ringo_security')
     config.add_subscriber(add_renderer_globals, BeforeRender)
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
