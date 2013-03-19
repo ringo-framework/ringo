@@ -7,6 +7,9 @@
     <!-- Bootstrap -->
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="/static/css/style.css" rel="stylesheet" media="screen">
+    <style>
+      ${h.get_formbar_css()}
+    </style>
   </head>
   <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
