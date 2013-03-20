@@ -46,7 +46,7 @@ def login(username, password):
 
     """
     md5_pw = hashlib.md5()
-    md5_pw.update(password)
+    md5_pw.update(password or "")
     md5_pw = md5_pw.hexdigest()
     log.debug("Login user '%s' with pw '%s'" % (username, password))
     try:
