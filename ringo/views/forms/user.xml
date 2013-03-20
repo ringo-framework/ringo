@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration>
+  <source>
+    <!-- Define different entity types -->
+    <entity id="e1" name="login" label="Login" type="string">
+      <rule expr="len($login) ge 8" msg="Login must have a length of greater or equal than 8"></rule>
+    </entity>
+    <entity id="e2" name="password" label="Password" type="password"/>
+    <entity id="e3" name="retype_password" label="Retype Password" type="password"/>
+    <entity id="e4" name="roles" label="Roles"/>
+    <entity id="e5" name="groups" label="Groups"/>
+    <entity id="e6" name="default_group" label="Default group"/>
+  </source>
+  <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
+    <snippet ref="create_snippet"/>
+  </form>
+  <form id="update" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
+    <snippet ref="update_snippet"/>
+  </form>
+  <form id="read" readonly="true">
+    <snippet ref="update_snippet"/>
+  </form>
+
+  <!-- Create-->
+  <snippet id="create_snippet">
+    <snippet ref="s1"/>
+    <snippet ref="s2"/>
+    <snippet ref="s3"/>
+  </snippet>
+  <!-- Create-->
+  <snippet id="update_snippet">
+    <snippet ref="s1"/>
+    <snippet ref="s3"/>
+  </snippet>
+
+  <!-- Login -->
+  <snippet id="s1">
+    <row>
+      <col><field ref="e1"/></col>
+    </row>
+  </snippet>
+  <!-- Password -->
+  <snippet id="s2">
+    <row>
+      <col><field ref="e2"/></col>
+      <col><field ref="e3"/></col>
+    </row>
+  </snippet>
+  <!-- Roles and Groups etc. -->
+  <snippet id="s3">
+    <row>
+      <col><field ref="e4"/></col>
+    </row>
+    <row>
+      <col><field ref="e5"/></col>
+      <col><field ref="e6"/></col>
+    </row>
+  </snippet>
+</configuration>

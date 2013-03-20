@@ -24,6 +24,7 @@
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class="active"><a href="#">Home</a></li>
+              <li><a href="${request.route_url('admin-users-list')}">Users</a></li>
             </ul>
             <ul class="nav pull-right">
               <li class="divider-vertical"></li>
