@@ -35,6 +35,44 @@ class TestMyView(unittest.TestCase):
         self.assertEqual(info['project'], 'ringo')
 
 
+class TestLoginView(unittest.TestCase):
+    def setUp(self):
+        self.config = testing.setUp()
+        from sqlalchemy import create_engine
+        engine = create_engine('sqlite://')
+        from .models import (
+            Base,
+            MyModel,
+        )
+        DBSession.configure(bind=engine)
+        Base.metadata.create_all(engine)
+        with transaction.manager:
+            model = MyModel(name='one', value=55)
+            DBSession.add(model)
+
+    def tearDown(self):
+        DBSession.remove()
+        testing.tearDown()
+
+    def test_login(self):
+        from .views import login
+        request = testing.DummyRequest()
+        result = login(request)
+        self.assertEqual(result.status, '200 OK')
+
+    def test_login_ok(self):
+        from .views import login
+        request = testing.DummyRequest(post={})
+        result = login(request)
+        self.assertEqual(result.status, '301 OK')
+
+    def test_login_fail(self):
+        from .views import login
+        request = testing.DummyRequest()
+        result = login(request)
+        self.assertEqual(result.status, '200 OK')
+
+
 class TestDefaultAdminUser(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
