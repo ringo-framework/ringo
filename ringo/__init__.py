@@ -1,5 +1,5 @@
 from pyramid.config import Configurator
-from pyramid.events import BeforeRender
+from pyramid.events import BeforeRender, NewRequest
 from pyramid_beaker import session_factory_from_settings
 
 from sqlalchemy import engine_from_config
@@ -18,6 +18,16 @@ def add_renderer_globals(event):
     event['h'] = helpers
 
 
+def connect_on_request(event):
+    request = event.request
+    request.db = DBSession
+    request.add_finished_callback(close_db_connection)
+
+
+def close_db_connection(request):
+    request.db.close()
+
+
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
@@ -30,6 +40,7 @@ def main(global_config, **settings):
     config.include('pyramid_beaker')
     config.include('ringo.lib.security.setup_ringo_security')
     config.add_subscriber(add_renderer_globals, BeforeRender)
+    config.add_subscriber(connect_on_request, NewRequest)
     config.add_route('home', '/')
     config.add_route('login', 'auth/login')
     config.add_route('logout', 'auth/logout')
