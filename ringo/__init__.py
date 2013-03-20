@@ -30,9 +30,20 @@ def main(global_config, **settings):
     config.include('pyramid_beaker')
     config.include('ringo.lib.security.setup_ringo_security')
     config.add_subscriber(add_renderer_globals, BeforeRender)
-    config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
     config.add_route('login', 'auth/login')
     config.add_route('logout', 'auth/logout')
+    config.add_static_view('static',
+                           path='ringo:static',
+                           cache_max_age=3600)
+    config.add_static_view('images',
+                           path='ringo:static/images',
+                           cache_max_age=3600)
+    config.add_static_view('bootstrap',
+                           path='ringo:static/bootstrap',
+                           cache_max_age=3600)
+    config.add_static_view('css',
+                           path='ringo:static/css',
+                           cache_max_age=3600)
     config.scan()
     return config.make_wsgi_app()
