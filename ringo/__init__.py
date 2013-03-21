@@ -1,3 +1,5 @@
+import os
+import pkg_resources
 from pyramid.config import Configurator
 from pyramid.events import BeforeRender, NewRequest
 from pyramid_beaker import session_factory_from_settings
@@ -12,6 +14,9 @@ from ringo.model import (
 from ringo.lib import (
     helpers,
 )
+
+base_dir = pkg_resources.get_distribution("ringo").location
+template_dir = os.path.join(base_dir, 'ringo', 'templates')
 
 
 def add_renderer_globals(event):

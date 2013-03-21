@@ -1,4 +1,6 @@
 import hashlib
+import random
+import string
 from ringo.model import Base, sqlalchemy as sa
 
 # NM-Table definitions
@@ -35,11 +37,17 @@ class User(Base):
     gid = sa.Column(sa.Integer, sa.ForeignKey('usergroups.id'))
 
     # Relations
-    roles = sa.orm.relationship("Role", secondary=nm_user_roles)
+    roles = sa.orm.relationship("Role",
+                                secondary=nm_user_roles)
     groups = sa.orm.relationship("Usergroup",
                                  secondary=nm_user_usergroups,
                                  backref='members')
     default_group = sa.orm.relationship("Usergroup", uselist=False)
+
+    # Configuration
+    _table_fields = [('login', 'Login'),
+                     ('roles', 'Roles'),
+                     ('groups', 'Groups')]
 
     def get_roles(self):
         """Returns a list of roles the user has. The list contains
@@ -126,3 +134,12 @@ def init_model(dbsession):
     user.default_group = admin_usergroup
     user.groups.append(admin_usergroup)
     dbsession.add(user)
+    #Performance tests
+    for i in range(100):
+        login = ''.join(random.choice(string.ascii_uppercase
+                                      + string.digits) for x in range(8))
+        pw.update(login)
+        user = User(login=login, password=pw.hexdigest())
+        user.default_group = admin_usergroup
+        user.groups.append(admin_usergroup)
+        dbsession.add(user)

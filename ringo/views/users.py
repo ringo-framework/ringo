@@ -1,4 +1,5 @@
 import logging
+from sqlalchemy.orm import joinedload, subqueryload
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 
@@ -7,6 +8,7 @@ from formbar.form import Form
 
 from ringo.model.user import User
 from ringo.lib.helpers import get_path_to_form_config
+from ringo.lib.renderer import ListRenderer
 
 log = logging.getLogger(__name__)
 
@@ -14,8 +16,15 @@ log = logging.getLogger(__name__)
 @view_config(route_name='admin-users-list', renderer='/default/list.mako')
 def list(request):
     rvalue = {}
-    rvalue['item'] = None
-    rvalue['items'] = request.db.query(User).all()
+    # TODO: Check which is the best loading strategy here for large
+    # collections. Tests with 100k datasets rendering only 100 shows
+    # that the usual lazyload method seems to be the fastest which is
+    # not what if have been expected.
+    #items = request.db.query(User).options(joinedload('*')).all()
+    #items = request.db.query(User).options(subqueryload('*')).all()
+    items = request.db.query(User).all()
+    renderer = ListRenderer(User)
+    rvalue['listing'] = renderer.render(items)
     return rvalue
 
 
