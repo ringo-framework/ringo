@@ -13,22 +13,22 @@ from ringo.lib.renderer import ListRenderer
 log = logging.getLogger(__name__)
 
 
-@view_config(route_name='admin-users-list', renderer='/default/list.mako')
+@view_config(route_name='users-list', renderer='/default/list.mako')
 def list(request):
     rvalue = {}
     # TODO: Check which is the best loading strategy here for large
     # collections. Tests with 100k datasets rendering only 100 shows
     # that the usual lazyload method seems to be the fastest which is
     # not what if have been expected.
-    #items = request.db.query(User).options(joinedload('*')).all()
+    items = request.db.query(User).options(joinedload('*')).all()
     #items = request.db.query(User).options(subqueryload('*')).all()
-    items = request.db.query(User).all()
+    #items = request.db.query(User).all()
     renderer = ListRenderer(User)
     rvalue['listing'] = renderer.render(items)
     return rvalue
 
 
-@view_config(route_name='admin-users-create', renderer='/default/create.mako')
+@view_config(route_name='users-create', renderer='/default/create.mako')
 def create(request):
     rvalue = {}
     item = User()
@@ -50,7 +50,7 @@ def create(request):
     return rvalue
 
 
-@view_config(route_name='admin-users-update', renderer='/default/update.mako')
+@view_config(route_name='users-update', renderer='/default/update.mako')
 def update(request):
     rvalue = {}
     uid = request.matchdict.get('id')
@@ -67,7 +67,7 @@ def update(request):
     return rvalue
 
 
-@view_config(route_name='admin-users-read', renderer='/default/read.mako')
+@view_config(route_name='users-read', renderer='/default/read.mako')
 def read(request):
     rvalue = {}
     uid = request.matchdict.get('id')

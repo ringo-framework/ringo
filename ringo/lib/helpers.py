@@ -1,6 +1,24 @@
 import os
 from formbar.helpers import get_css
 
+def get_action_url(request, item, action):
+    """Return an URL object for the given item and action. If the item
+    is an instance of object then we assume that we want to get the URL
+    for the specific item. So we add the ID of the instance to the url.
+    If the item is the class, then no ID is added (Create actions e.g.)
+
+    :item: loaded instance or class of an item
+    :action: string of the action
+    :returns: URL instance
+    """
+    base_name = item.__tablename__
+    route_name = "%s-%s" % (base_name, action)
+    if isinstance(item, object):
+        return request.route_url(route_name, id=item.id)
+    return request.route_url(route_name)
+
+
+
 
 def get_path_to(location):
     """Will return the full pathname the given file name with in the path. path

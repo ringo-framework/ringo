@@ -5,6 +5,9 @@
       ${field[1]}
     </th>
   % endfor
+    <th>
+      Actions
+    </th>
   </tr>
   % for item in items:
   <tr>
@@ -19,6 +22,10 @@
         % endif
     </td>
     % endfor
+    ## Actions
+    <td>
+      <a href="read/${item.id}">Read</a>
+    </td>
   </tr>
   % endfor
   % if len(items) == 0:

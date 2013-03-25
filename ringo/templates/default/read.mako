@@ -5,8 +5,8 @@
   </div>
   <div class="span6">
     <div class="pull-right context-menu btn-group">
-      <a href="/users/update/${item.id}" class="btn"><i class="icon-edit"></i></a>
-      <a href="/users/delete${item.id}" class="btn"><i class="icon-trash"></i></a>
+      <a href="${h.get_action_url(request, item, 'update')}" class="btn"><i class="icon-edit"></i></a>
+      <a href="${h.get_action_url(request, item, 'delete')}" class="btn"><i class="icon-trash"></i></a>
     </div>
   </div>
 </div>

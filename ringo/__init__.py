@@ -51,10 +51,11 @@ def main(global_config, **settings):
     config.add_route('logout', 'auth/logout')
 
     # Users admininistration
-    config.add_route('admin-users-list', 'users/list')
-    config.add_route('admin-users-create', 'users/create')
-    config.add_route('admin-users-update', 'users/update/{id}')
-    config.add_route('admin-users-read', 'users/read/{id}')
+    config.add_route('users-list', 'users/list')
+    config.add_route('users-create', 'users/create')
+    config.add_route('users-update', 'users/update/{id}')
+    config.add_route('users-read', 'users/read/{id}')
+    config.add_route('users-delete', 'users/delete/{id}')
 
     config.add_static_view('static',
                            path='ringo:static',
