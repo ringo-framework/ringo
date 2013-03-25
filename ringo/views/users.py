@@ -8,7 +8,7 @@ from formbar.form import Form
 
 from ringo.model.user import User
 from ringo.lib.helpers import get_path_to_form_config
-from ringo.lib.renderer import ListRenderer
+from ringo.lib.renderer import ListRenderer, ConfirmDialogRenderer
 
 log = logging.getLogger(__name__)
 
@@ -42,7 +42,7 @@ def create(request):
             # flush the session to make the new id in the element
             # presistent.
             request.db.flush()
-            url = request.route_url('admin-users-update', id=sitem.id)
+            url = request.route_url('users-update', id=sitem.id)
             # Redirect to the update view.
             return HTTPFound(location=url)
 
@@ -61,7 +61,9 @@ def update(request):
     if request.POST:
         if form.validate(request.params):
             form.save()
-            log.info('Edited user "%s"' % form.data.get('login'))
+            msg = '"%s" was edited successfull.' % item
+            request.session.flash(msg, 'success')
+            log.info('Edited "%s"' % form.data.get('login'))
     rvalue['item'] = item
     rvalue['form'] = form.render()
     return rvalue
@@ -78,3 +80,26 @@ def read(request):
     rvalue['item'] = item
     rvalue['form'] = form.render()
     return rvalue
+
+
+@view_config(route_name='users-delete', renderer='/default/confirm.mako')
+def delete(request):
+    rvalue = {}
+    uid = request.matchdict.get('id')
+    item = request.db.query(User).filter(User.id == uid).one()
+    if request.method == 'POST' and confirmed(request):
+        request.db.delete(item)
+        url = request.route_url('users-list')
+        msg = '"%s" was deleted successfull.' % item
+        request.session.flash(msg, 'success')
+        log.info('Deleted "%s"' % item)
+        return HTTPFound(location=url)
+    else:
+        renderer = ConfirmDialogRenderer(request, item, 'delete')
+        rvalue['dialog'] = renderer.render()
+        return rvalue
+
+
+def confirmed(request):
+    """Returns True id the request is confirmed"""
+    return request.params.get('confirmed') == "1"

@@ -51,6 +51,7 @@
     </div>
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/js/init.js"></script>
   </body>
 </html>
 

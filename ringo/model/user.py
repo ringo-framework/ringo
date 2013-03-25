@@ -29,7 +29,13 @@ nm_role_permissions = sa.Table(
 )
 
 
-class User(Base):
+class BaseItem(object):
+
+    def __str__(self):
+        return self.__unicode__()
+
+
+class User(BaseItem, Base):
     __tablename__ = 'users'
     id = sa.Column(sa.Integer, primary_key=True)
     login = sa.Column(sa.Text, unique=True, nullable=False)
@@ -77,7 +83,7 @@ class User(Base):
         return list(tmp_roles.values())
 
 
-class Usergroup(Base):
+class Usergroup(BaseItem, Base):
     __tablename__ = 'usergroups'
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.Text, unique=True, nullable=False)
@@ -89,7 +95,7 @@ class Usergroup(Base):
         return self.name
 
 
-class Role(Base):
+class Role(BaseItem, Base):
     __tablename__ = 'roles'
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.Text, unique=True, nullable=False)
@@ -102,7 +108,7 @@ class Role(Base):
         return self.name
 
 
-class Permission(Base):
+class Permission(BaseItem, Base):
     __tablename__ = 'permissions'
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.Text, unique=True, nullable=False)
