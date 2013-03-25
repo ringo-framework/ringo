@@ -54,14 +54,15 @@ def create(request):
 def update(request):
     rvalue = {}
     uid = request.matchdict.get('id')
-    user = request.db.query(User).filter(User.id == uid).one()
+    item = request.db.query(User).filter(User.id == uid).one()
     config = Config(load(get_path_to_form_config('user.xml')))
     form_config = config.get_form('update')
-    form = Form(form_config, user)
+    form = Form(form_config, item)
     if request.POST:
         if form.validate(request.params):
             form.save()
             log.info('Edited user "%s"' % form.data.get('login'))
+    rvalue['item'] = item
     rvalue['form'] = form.render()
     return rvalue
 
@@ -70,9 +71,10 @@ def update(request):
 def read(request):
     rvalue = {}
     uid = request.matchdict.get('id')
-    user = request.db.query(User).filter(User.id == uid).one()
+    item = request.db.query(User).filter(User.id == uid).one()
     config = Config(load(get_path_to_form_config('user.xml')))
     form_config = config.get_form('read')
-    form = Form(form_config, user)
+    form = Form(form_config, item)
+    rvalue['item'] = item
     rvalue['form'] = form.render()
     return rvalue
