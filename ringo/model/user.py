@@ -49,6 +49,9 @@ class User(Base):
                      ('roles', 'Roles'),
                      ('groups', 'Groups')]
 
+    def __unicode__(self):
+        return self.login
+
     def get_roles(self):
         """Returns a list of roles the user has. The list contains
         `Role` object and are collected by loading roles directly
@@ -82,6 +85,9 @@ class Usergroup(Base):
     # Relations
     roles = sa.orm.relationship("Role", secondary=nm_usergroup_roles)
 
+    def __unicode__(self):
+        return self.name
+
 
 class Role(Base):
     __tablename__ = 'roles'
@@ -92,11 +98,17 @@ class Role(Base):
     permissions = sa.orm.relationship("Permission",
                                       secondary=nm_role_permissions)
 
+    def __unicode__(self):
+        return self.name
+
 
 class Permission(Base):
     __tablename__ = 'permissions'
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.Text, unique=True, nullable=False)
+
+    def __unicode__(self):
+        return self.name
 
 
 def init_model(dbsession):
