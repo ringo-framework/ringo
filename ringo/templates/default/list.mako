@@ -5,7 +5,7 @@
   </div>
   <div class="span6">
     <div class="pull-right context-menu btn-group">
-      <a href="${request.route_url('users-create')}" class="btn btn-primary">New</a>
+      <a href="${request.route_url(clazz.get_action_routename('create'))}" class="btn btn-primary">New</a>
     </div>
   </div>
 </div>

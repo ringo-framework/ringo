@@ -17,6 +17,7 @@ def list_(clazz, request):
     # not what if have been expected.
     items = request.db.query(clazz).options(joinedload('*')).all()
     renderer = ListRenderer(clazz)
+    rvalue['clazz'] = clazz
     rvalue['listing'] = renderer.render(items)
     return rvalue
 
@@ -36,6 +37,8 @@ def create_(clazz, request):
             url = request.route_url(route_name, id=sitem.id)
             # Redirect to the update view.
             return HTTPFound(location=url)
+    rvalue['clazz'] = clazz
+    rvalue['item'] = item
     rvalue['form'] = form.render()
     return rvalue
 
@@ -51,6 +54,7 @@ def update_(clazz, request):
             msg = '"%s" was edited successfull.' % item
             request.session.flash(msg, 'success')
             log.info('Edited "%s"' % form.data.get('login'))
+    rvalue['clazz'] = clazz
     rvalue['item'] = item
     rvalue['form'] = form.render()
     return rvalue
@@ -61,6 +65,7 @@ def read_(clazz, request):
     id = request.matchdict.get('id')
     item = request.db.query(clazz).filter(clazz.id == id).one()
     form = Form(item.get_form_config('read'), item)
+    rvalue['clazz'] = clazz
     rvalue['item'] = item
     rvalue['form'] = form.render()
     return rvalue
@@ -81,6 +86,8 @@ def delete_(clazz, request):
     else:
         renderer = ConfirmDialogRenderer(request, item, 'delete')
         rvalue['dialog'] = renderer.render()
+        rvalue['clazz'] = clazz
+        rvalue['item'] = item
         return rvalue
 
 
