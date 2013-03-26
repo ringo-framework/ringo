@@ -53,9 +53,15 @@ def main(global_config, **settings):
     # Users admininistration
     config.add_route('users-list', 'users/list')
     config.add_route('users-create', 'users/create')
-    config.add_route('users-update', 'users/update/{id}')
     config.add_route('users-read', 'users/read/{id}')
+    config.add_route('users-update', 'users/update/{id}')
     config.add_route('users-delete', 'users/delete/{id}')
+    # Usergroups admininistration
+    config.add_route('usergroups-list', 'usergroups/list')
+    config.add_route('usergroups-create', 'usergroups/create')
+    config.add_route('usergroups-read', 'usergroups/read/{id}')
+    config.add_route('usergroups-update', 'usergroups/update/{id}')
+    config.add_route('usergroups-delete', 'usergroups/delete/{id}')
 
     config.add_static_view('static',
                            path='ringo:static',

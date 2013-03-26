@@ -1,7 +1,9 @@
 import hashlib
 import random
 import string
+from formbar.config import Config, load
 from ringo.model import Base, sqlalchemy as sa
+from ringo.lib.helpers import get_path_to_form_config
 
 # NM-Table definitions
 nm_user_roles = sa.Table(
@@ -33,6 +35,20 @@ class BaseItem(object):
 
     def __str__(self):
         return self.__unicode__()
+
+    @classmethod
+    def get_table_config(cls):
+        return cls._table_fields
+
+    @classmethod
+    def get_form_config(cls, formname):
+        cfile = "%s.xml" % cls.__tablename__
+        config = Config(load(get_path_to_form_config(cfile)))
+        return config.get_form(formname)
+
+    @classmethod
+    def get_action_routename(cls, action):
+        return "%s-%s" % (cls.__tablename__, action)
 
 
 class User(BaseItem, Base):
@@ -90,6 +106,10 @@ class Usergroup(BaseItem, Base):
 
     # Relations
     roles = sa.orm.relationship("Role", secondary=nm_usergroup_roles)
+
+    # Configuration
+    _table_fields = [('name', 'Login'),
+                     ('roles', 'Roles')]
 
     def __unicode__(self):
         return self.name
