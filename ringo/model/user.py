@@ -124,6 +124,10 @@ class Role(BaseItem, Base):
     permissions = sa.orm.relationship("Permission",
                                       secondary=nm_role_permissions)
 
+    # Configuration
+    _table_fields = [('name', 'Name'),
+                     ('permissions', 'Permissions')]
+
     def __unicode__(self):
         return self.name
 

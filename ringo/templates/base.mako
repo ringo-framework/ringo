@@ -26,6 +26,7 @@
               <li class="active"><a href="#">Home</a></li>
               <li><a href="${request.route_url('users-list')}">Users</a></li>
               <li><a href="${request.route_url('usergroups-list')}">Usergroups</a></li>
+              <li><a href="${request.route_url('roles-list')}">Roles</a></li>
             </ul>
             <ul class="nav pull-right">
               <li class="divider-vertical"></li>
