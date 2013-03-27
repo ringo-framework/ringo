@@ -70,7 +70,8 @@ class ConfirmDialogRenderer(DialogRenderer):
 
     def render(self):
         values = {}
-        values['icon'] = ""
+        values['icon'] = self._request.static_url(
+            'ringo:static/images/icons/32x32/dialog-warning.png')
         values['header'] = "Confirm %s" % self._action
         values['body'] = self._render_body()
         values['action'] = self._action.capitalize()
@@ -80,8 +81,9 @@ class ConfirmDialogRenderer(DialogRenderer):
 
     def _render_body(self):
         out = []
+        item_label = self._item.get_item_modul().get_label()
         out.append("Do you really want to %s"
-                   " the following items?" % self._action)
+                   " the following %s items?" % (self._action, item_label))
         out.append("<br>")
         out.append("<ol>")
         if isinstance(self._item, list):
