@@ -30,7 +30,8 @@ def create_(clazz, request):
     if request.POST:
         if form.validate(request.params):
             sitem = form.save()
-            log.info('Created new user "%s"' % form.data.get('login'))
+            item_label = clazz.get_item_modul().get_label()
+            log.info('Created new %s "%s"' % (item_label, sitem))
             # flush the session to make the new id in the element
             # presistent.
             request.db.flush()
@@ -53,7 +54,9 @@ def update_(clazz, request):
     if request.POST:
         if form.validate(request.params):
             form.save()
-            msg = '"%s" was edited successfull.' % item
+            item_label = clazz.get_item_modul().get_label()
+            log.info('%s "%s" was edited successfull.' % (item_label, item))
+            msg = '%s "%s" was edited successfull.' % (item_label, item)
             request.session.flash(msg, 'success')
             log.info('Edited "%s"' % form.data.get('login'))
     rvalue['clazz'] = clazz
@@ -83,9 +86,10 @@ def delete_(clazz, request):
         request.db.delete(item)
         route_name = clazz.get_action_routename('list')
         url = request.route_url(route_name)
-        msg = '"%s" was deleted successfull.' % item
+        item_label = clazz.get_item_modul().get_label()
+        log.info('%s "%s" was deleted successfull.' % (item_label, item))
+        msg = '%s "%s" was deleted successfull.' % (item_label, item)
         request.session.flash(msg, 'success')
-        log.info('Deleted "%s"' % item)
         return HTTPFound(location=url)
     else:
         renderer = ConfirmDialogRenderer(request, item, 'delete')
