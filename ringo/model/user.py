@@ -33,6 +33,8 @@ nm_role_permissions = sa.Table(
 
 class BaseItem(object):
 
+    _table_fields = []
+
     def __str__(self):
         return self.__unicode__()
 
