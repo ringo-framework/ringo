@@ -50,6 +50,12 @@ def main(global_config, **settings):
     config.add_route('login', 'auth/login')
     config.add_route('logout', 'auth/logout')
 
+    # Roles admininistration
+    config.add_route('modules-list', 'modules/list')
+    config.add_route('modules-create', 'modules/create')
+    config.add_route('modules-read', 'modules/read/{id}')
+    config.add_route('modules-update', 'modules/update/{id}')
+    config.add_route('modules-delete', 'modules/delete/{id}')
     # Users admininistration
     config.add_route('users-list', 'users/list')
     config.add_route('users-create', 'users/create')

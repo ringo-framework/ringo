@@ -24,6 +24,7 @@
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class="active"><a href="#">Home</a></li>
+              <li><a href="${request.route_url('modules-list')}">Modules</a></li>
               <li><a href="${request.route_url('users-list')}">Users</a></li>
               <li><a href="${request.route_url('usergroups-list')}">Usergroups</a></li>
               <li><a href="${request.route_url('roles-list')}">Roles</a></li>

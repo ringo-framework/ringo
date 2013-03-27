@@ -20,7 +20,7 @@
     <snippet ref="s1"/>
   </snippet>
 
-  <!-- Usergroup -->
+  <!-- Role -->
   <snippet id="s1">
     <row>
       <col><field ref="e1"/></col>

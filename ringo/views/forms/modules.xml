@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration>
+  <source>
+    <!-- Define different entity types -->
+    <entity id="e1" name="name" label="Name" type="string">
+      <help>Internal name for the modul.</help>
+    </entity>
+    <entity id="e2" name="label" label="Label">
+      <help>Label of the modul in singular form. Used in the UI</help>
+    </entity>
+    <entity id="e3" name="label_plural" label="Label">
+      <help>Label of the modul in plural form. Used in the UI</help>
+    </entity>
+    <entity id="e4" name="description" label="Description" type="textarea"/>
+    <entity id="e5" name="str_repr" label="String represention">
+      <help>Whenever an item of the modul is displayed as simple string it
+      will be displayed in the following form.</help>
+    </entity>
+  </source>
+  <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
+    <snippet ref="create_snippet"/>
+  </form>
+  <form id="update" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
+    <snippet ref="create_snippet"/>
+  </form>
+  <form id="read" readonly="true">
+    <snippet ref="create_snippet"/>
+  </form>
+
+  <!-- Create-->
+  <snippet id="create_snippet">
+    <snippet ref="s1"/>
+  </snippet>
+
+  <!-- Modul -->
+  <snippet id="s1">
+    <row>
+      <col><field ref="e1"/></col>
+    </row>
+    <row>
+      <col><field ref="e2"/></col>
+      <col><field ref="e3"/></col>
+    </row>
+    <row>
+      <col><field ref="e4"/></col>
+    </row>
+    <row>
+      <col><field ref="e5"/></col>
+    </row>
+  </snippet>
+</configuration>
