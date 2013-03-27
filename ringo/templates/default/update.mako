@@ -1,5 +1,5 @@
 <%inherit file="/base.mako" />
-<div class="row-fluid pageheader">
+<div class="row-fluid page-header">
   <div class="span6">
     <h1>Edit ${clazz.get_item_modul().get_label()}</h1>
   </div>

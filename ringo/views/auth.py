@@ -35,4 +35,6 @@ def login(request):
 def logout(request):
     target_url = request.route_url('home')
     headers = forget(request)
+    msg = "Logout was successfull :)"
+    request.session.flash(msg, 'success')
     return HTTPFound(location=target_url, headers=headers)

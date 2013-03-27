@@ -1,2 +1,4 @@
 <%inherit file="/base.mako" />
-<h1>Welcome</h1>
+<div class="page-header">
+<h1>Home</h1>
+</div>
