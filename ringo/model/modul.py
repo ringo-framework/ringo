@@ -23,6 +23,11 @@ class ModulItem(BaseItem, Base):
     def __unicode__(self):
         return self.name
 
+    def get_label(self, plural=False):
+        if plural:
+            return self.label_plural
+        return self.label
+
 
 def init_model(dbsession):
     """Will setup the initial model for the usermanagement. This
