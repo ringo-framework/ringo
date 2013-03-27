@@ -3,7 +3,7 @@ from ringo.model.user import BaseItem
 from ringo.model.meta import MetaItem
 
 
-class Modul(BaseItem, Base):
+class ModulItem(BaseItem, Base):
     __tablename__ = 'modules'
     _modul_id = 1
     id = sa.Column(sa.Integer, primary_key=True)
@@ -32,31 +32,31 @@ def init_model(dbsession):
     :returns: None
 
     """
-    modul = Modul(name='modules')
+    modul = ModulItem(name='modules')
     modul.label = "Modul"
     modul.label_plural = "Modules"
     meta = MetaItem(mid=1, uid=1, gid=None)
     modul.meta = meta
     dbsession.add(modul)
-    modul = Modul(name='users')
+    modul = ModulItem(name='users')
     modul.label = "User"
     modul.label_plural = "Users"
     meta = MetaItem(mid=1, uid=1, gid=None)
     modul.meta = meta
     dbsession.add(modul)
-    modul = Modul(name='usergroups')
+    modul = ModulItem(name='usergroups')
     modul.label = "Usergroup"
     modul.label_plural = "Usergroups"
     meta = MetaItem(mid=1, uid=1, gid=None)
     modul.meta = meta
     dbsession.add(modul)
-    modul = Modul(name='roles')
+    modul = ModulItem(name='roles')
     modul.label = "Role"
     modul.label_plural = "Roles"
     meta = MetaItem(mid=1, uid=1, gid=None)
     modul.meta = meta
     dbsession.add(modul)
-    modul = Modul(name='permissions')
+    modul = ModulItem(name='permissions')
     modul.label = "Permission"
     modul.label_plural = "Permissions"
     meta = MetaItem(mid=1, uid=1, gid=None)
