@@ -17,6 +17,9 @@ from ringo.model import (
 from ringo.model.user import (
     init_model as init_user_model,
 )
+from ringo.model.modul import (
+    init_model as init_modul_model,
+)
 
 
 def usage(argv):
@@ -37,3 +40,4 @@ def main(argv=sys.argv):
     Base.metadata.create_all(engine)
     with transaction.manager:
         init_user_model(DBSession)
+        init_modul_model(DBSession)
