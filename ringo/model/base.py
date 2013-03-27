@@ -60,12 +60,14 @@ class BaseFactory(object):
         item.meta = meta
         return item
 
-    def load(self, id, dbsession=None):
+    def load(self, id, db=None):
         """Loads the item with id from the database and returns it.
 
         :id: ID of the item to be loaded
-        :dbsession: DB session to load the item
+        :db: DB session to load the item
         :returns: Instance of clazz
 
         """
-        return dbsession.query(self._clazz).filter(self._clazz.id == id).one()
+        if db is None:
+            db = DBSession
+        return db.query(self._clazz).filter(self._clazz.id == id).one()
