@@ -3,6 +3,7 @@ import random
 import string
 from formbar.config import Config, load
 from ringo.model import Base, sqlalchemy as sa
+from ringo.model.meta import MetaItem
 from ringo.lib.helpers import get_path_to_form_config
 
 # NM-Table definitions
@@ -56,11 +57,13 @@ class BaseItem(object):
 class User(BaseItem, Base):
     __tablename__ = 'users'
     id = sa.Column(sa.Integer, primary_key=True)
+    mid = sa.Column(sa.Integer, sa.ForeignKey('meta.id'))
     login = sa.Column(sa.Text, unique=True, nullable=False)
     password = sa.Column(sa.Text, nullable=False)
     gid = sa.Column(sa.Integer, sa.ForeignKey('usergroups.id'))
 
     # Relations
+    meta = sa.orm.relation("MetaItem"),
     roles = sa.orm.relationship("Role",
                                 secondary=nm_user_roles)
     groups = sa.orm.relationship("Usergroup",
@@ -104,9 +107,11 @@ class User(BaseItem, Base):
 class Usergroup(BaseItem, Base):
     __tablename__ = 'usergroups'
     id = sa.Column(sa.Integer, primary_key=True)
+    mid = sa.Column(sa.Integer, sa.ForeignKey('meta.id'))
     name = sa.Column(sa.Text, unique=True, nullable=False)
 
     # Relations
+    meta = sa.orm.relation("MetaItem"),
     roles = sa.orm.relationship("Role", secondary=nm_usergroup_roles)
 
     # Configuration
@@ -120,9 +125,11 @@ class Usergroup(BaseItem, Base):
 class Role(BaseItem, Base):
     __tablename__ = 'roles'
     id = sa.Column(sa.Integer, primary_key=True)
+    mid = sa.Column(sa.Integer, sa.ForeignKey('meta.id'))
     name = sa.Column(sa.Text, unique=True, nullable=False)
 
     # Relations
+    meta = sa.orm.relation("MetaItem"),
     permissions = sa.orm.relationship("Permission",
                                       secondary=nm_role_permissions)
 
@@ -137,7 +144,10 @@ class Role(BaseItem, Base):
 class Permission(BaseItem, Base):
     __tablename__ = 'permissions'
     id = sa.Column(sa.Integer, primary_key=True)
+    mid = sa.Column(sa.Integer, sa.ForeignKey('meta.id'))
     name = sa.Column(sa.Text, unique=True, nullable=False)
+
+    meta = sa.orm.relation("MetaItem"),
 
     def __unicode__(self):
         return self.name
@@ -152,31 +162,58 @@ def init_model(dbsession):
 
     """
     read_perm = Permission(name='read')
+    meta = MetaItem(mid=1, uid=1, gid=None)
+    dbsession.add(meta)
+    read_perm.meta = meta
     create_perm = Permission(name='create')
+    meta = MetaItem(mid=1, uid=1, gid=None)
+    dbsession.add(meta)
+    create_perm.meta = meta
     update_perm = Permission(name='update')
+    meta = MetaItem(mid=1, uid=1, gid=None)
+    dbsession.add(meta)
+    update_perm.meta = meta
     delete_perm = Permission(name='delete')
+    meta = MetaItem(mid=1, uid=1, gid=None)
+    dbsession.add(meta)
+    delete_perm.meta = meta
     dbsession.add(read_perm)
     dbsession.add(create_perm)
     dbsession.add(update_perm)
     dbsession.add(delete_perm)
     admin_role = Role(name='admin')
+    meta = MetaItem(mid=1, uid=1, gid=None)
+    dbsession.add(meta)
+    admin_role.meta = meta
     admin_role.permissions.append(create_perm)
     admin_role.permissions.append(read_perm)
     admin_role.permissions.append(update_perm)
     admin_role.permissions.append(delete_perm)
     dbsession.add(admin_role)
     role = Role(name='user')
+    meta = MetaItem(mid=1, uid=1, gid=None)
+    dbsession.add(meta)
+    role.meta = meta
     dbsession.add(role)
     admin_usergroup = Usergroup(name='admins')
     admin_usergroup.roles.append(admin_role)
+    meta = MetaItem(mid=1, uid=1, gid=None)
+    dbsession.add(meta)
+    admin_usergroup.meta = meta
     dbsession.add(admin_usergroup)
     usergroup = Usergroup(name='users')
+    meta = MetaItem(mid=1, uid=1, gid=None)
+    dbsession.add(meta)
+    usergroup.meta = meta
     dbsession.add(usergroup)
     pw = hashlib.md5()
     pw.update('secret')
     user = User(login='admin', password=pw.hexdigest())
     user.default_group = admin_usergroup
     user.groups.append(admin_usergroup)
+    meta = MetaItem(mid=1, uid=1, gid=None)
+    dbsession.add(meta)
+    user.meta = meta
     dbsession.add(user)
     #Performance tests
     for i in range(100):
@@ -186,4 +223,7 @@ def init_model(dbsession):
         user = User(login=login, password=pw.hexdigest())
         user.default_group = admin_usergroup
         user.groups.append(admin_usergroup)
+        meta = MetaItem(mid=1, uid=1, gid=None)
+        dbsession.add(meta)
+        user.meta = meta
         dbsession.add(user)

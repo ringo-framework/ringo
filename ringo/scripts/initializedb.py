@@ -39,5 +39,5 @@ def main(argv=sys.argv):
     DBSession.configure(bind=engine)
     Base.metadata.create_all(engine)
     with transaction.manager:
-        init_user_model(DBSession)
         init_modul_model(DBSession)
+        init_user_model(DBSession)
