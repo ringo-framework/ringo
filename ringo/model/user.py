@@ -1,10 +1,10 @@
 import hashlib
 import random
 import string
-from formbar.config import Config, load
 from ringo.model import Base, sqlalchemy as sa
 from ringo.model.meta import MetaItem
-from ringo.lib.helpers import get_path_to_form_config
+from ringo.model.base import BaseItem
+
 
 # NM-Table definitions
 nm_user_roles = sa.Table(
@@ -32,30 +32,9 @@ nm_role_permissions = sa.Table(
 )
 
 
-class BaseItem(object):
-
-    _table_fields = []
-
-    def __str__(self):
-        return self.__unicode__()
-
-    @classmethod
-    def get_table_config(cls):
-        return cls._table_fields
-
-    @classmethod
-    def get_form_config(cls, formname):
-        cfile = "%s.xml" % cls.__tablename__
-        config = Config(load(get_path_to_form_config(cfile)))
-        return config.get_form(formname)
-
-    @classmethod
-    def get_action_routename(cls, action):
-        return "%s-%s" % (cls.__tablename__, action)
-
-
 class User(BaseItem, Base):
     __tablename__ = 'users'
+    _modul_id = 2
     id = sa.Column(sa.Integer, primary_key=True)
     mid = sa.Column(sa.Integer, sa.ForeignKey('meta.id'))
     login = sa.Column(sa.Text, unique=True, nullable=False)
@@ -63,7 +42,8 @@ class User(BaseItem, Base):
     gid = sa.Column(sa.Integer, sa.ForeignKey('usergroups.id'))
 
     # Relations
-    meta = sa.orm.relation("MetaItem"),
+    meta = sa.orm.relation("MetaItem", uselist=False,
+                           cascade="all, delete-orphan", single_parent=True)
     roles = sa.orm.relationship("Role",
                                 secondary=nm_user_roles)
     groups = sa.orm.relationship("Usergroup",
@@ -106,12 +86,14 @@ class User(BaseItem, Base):
 
 class Usergroup(BaseItem, Base):
     __tablename__ = 'usergroups'
+    _modul_id = 3
     id = sa.Column(sa.Integer, primary_key=True)
     mid = sa.Column(sa.Integer, sa.ForeignKey('meta.id'))
     name = sa.Column(sa.Text, unique=True, nullable=False)
 
     # Relations
-    meta = sa.orm.relation("MetaItem"),
+    meta = sa.orm.relation("MetaItem", cascade="all, delete-orphan",
+                           single_parent=True)
     roles = sa.orm.relationship("Role", secondary=nm_usergroup_roles)
 
     # Configuration
@@ -124,12 +106,14 @@ class Usergroup(BaseItem, Base):
 
 class Role(BaseItem, Base):
     __tablename__ = 'roles'
+    _modul_id = 4
     id = sa.Column(sa.Integer, primary_key=True)
     mid = sa.Column(sa.Integer, sa.ForeignKey('meta.id'))
     name = sa.Column(sa.Text, unique=True, nullable=False)
 
     # Relations
-    meta = sa.orm.relation("MetaItem"),
+    meta = sa.orm.relation("MetaItem", cascade="all, delete-orphan",
+                           single_parent=True)
     permissions = sa.orm.relationship("Permission",
                                       secondary=nm_role_permissions)
 
@@ -143,11 +127,13 @@ class Role(BaseItem, Base):
 
 class Permission(BaseItem, Base):
     __tablename__ = 'permissions'
+    _modul_id = 6
     id = sa.Column(sa.Integer, primary_key=True)
     mid = sa.Column(sa.Integer, sa.ForeignKey('meta.id'))
     name = sa.Column(sa.Text, unique=True, nullable=False)
 
-    meta = sa.orm.relation("MetaItem"),
+    meta = sa.orm.relation("MetaItem", cascade="all, delete-orphan",
+                           single_parent=True)
 
     def __unicode__(self):
         return self.name
@@ -220,10 +206,10 @@ def init_model(dbsession):
         login = ''.join(random.choice(string.ascii_uppercase
                                       + string.digits) for x in range(8))
         pw.update(login)
+        meta = MetaItem(mid=1, uid=1, gid=None)
+        dbsession.add(meta)
         user = User(login=login, password=pw.hexdigest())
         user.default_group = admin_usergroup
         user.groups.append(admin_usergroup)
-        meta = MetaItem(mid=1, uid=1, gid=None)
-        dbsession.add(meta)
         user.meta = meta
         dbsession.add(user)

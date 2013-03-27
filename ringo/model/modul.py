@@ -2,8 +2,10 @@ from ringo.model import Base, sqlalchemy as sa
 from ringo.model.user import BaseItem
 from ringo.model.meta import MetaItem
 
+
 class Modul(BaseItem, Base):
     __tablename__ = 'modules'
+    _modul_id = 1
     id = sa.Column(sa.Integer, primary_key=True)
     mid = sa.Column(sa.Integer, sa.ForeignKey('meta.id'))
     name = sa.Column(sa.Text, unique=True, nullable=False)
@@ -13,13 +15,14 @@ class Modul(BaseItem, Base):
     str_repr = sa.Column(sa.Text)
 
     # Relations
-    meta = sa.orm.relationship("MetaItem")
-
+    meta = sa.orm.relation("MetaItem", cascade="all, delete-orphan",
+                           single_parent=True)
     # Configuration
     _table_fields = [('name', 'Name')]
 
     def __unicode__(self):
         return self.name
+
 
 def init_model(dbsession):
     """Will setup the initial model for the usermanagement. This

@@ -24,7 +24,8 @@ def list_(clazz, request):
 
 def create_(clazz, request):
     rvalue = {}
-    item = clazz()
+    factory = clazz.get_item_factory()
+    item = factory.create(request.user)
     form = Form(item.get_form_config('create'), item, request.db)
     if request.POST:
         if form.validate(request.params):
@@ -46,7 +47,8 @@ def create_(clazz, request):
 def update_(clazz, request):
     rvalue = {}
     id = request.matchdict.get('id')
-    item = request.db.query(clazz).filter(clazz.id == id).one()
+    factory = clazz.get_item_factory()
+    item = factory.load(id, request.db)
     form = Form(item.get_form_config('update'), item)
     if request.POST:
         if form.validate(request.params):
@@ -63,7 +65,8 @@ def update_(clazz, request):
 def read_(clazz, request):
     rvalue = {}
     id = request.matchdict.get('id')
-    item = request.db.query(clazz).filter(clazz.id == id).one()
+    factory = clazz.get_item_factory()
+    item = factory.load(id, request.db)
     form = Form(item.get_form_config('read'), item)
     rvalue['clazz'] = clazz
     rvalue['item'] = item
@@ -74,7 +77,8 @@ def read_(clazz, request):
 def delete_(clazz, request):
     rvalue = {}
     id = request.matchdict.get('id')
-    item = request.db.query(clazz).filter(clazz.id == id).one()
+    factory = clazz.get_item_factory()
+    item = factory.load(id, request.db)
     if request.method == 'POST' and confirmed(request):
         request.db.delete(item)
         route_name = clazz.get_action_routename('list')
