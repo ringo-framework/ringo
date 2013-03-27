@@ -1,7 +1,7 @@
 <%inherit file="/base.mako" />
 <div class="row-fluid pageheader">
   <div class="span6">
-    <h1>List</h1>
+    <h1>${clazz.get_item_modul().get_label(plural=True)}</h1>
   </div>
   <div class="span6">
     <div class="pull-right context-menu btn-group">
