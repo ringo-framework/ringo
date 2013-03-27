@@ -1,5 +1,6 @@
 from formbar.config import Config, load
 from ringo.lib.helpers import get_path_to_form_config
+from ringo.model import DBSession
 from ringo.model.meta import MetaItem
 
 
@@ -14,6 +15,12 @@ class BaseItem(object):
     @classmethod
     def get_item_factory(cls):
         return BaseFactory(cls)
+
+    @classmethod
+    def get_item_modul(cls):
+        from ringo.model.modul import ModulItem
+        factory = BaseFactory(ModulItem)
+        return factory.load(cls._modul_id)
 
     @classmethod
     def get_table_config(cls):
