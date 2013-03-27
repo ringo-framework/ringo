@@ -23,11 +23,17 @@
           <a class="brand" href="#">Ringo</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="${request.route_url('modules-list')}">Modules</a></li>
-              <li><a href="${request.route_url('users-list')}">Users</a></li>
-              <li><a href="${request.route_url('usergroups-list')}">Usergroups</a></li>
-              <li><a href="${request.route_url('roles-list')}">Roles</a></li>
+              <%
+                if clazz:
+                  modul = clazz.get_item_modul().name
+                else:
+                  modul = None
+              %>
+              <li class="${(modul == None) and 'active'}"><a href="#">Home</a></li>
+              <li class="${(modul == 'modules') and 'active'}"><a href="${request.route_url('modules-list')}">Modules</a></li>
+              <li class="${(modul == 'users') and 'active'}"><a href="${request.route_url('users-list')}">Users</a></li>
+              <li class="${(modul == 'usergroups') and 'active'}"><a href="${request.route_url('usergroups-list')}">Usergroups</a></li>
+              <li class="${(modul == 'roles') and 'active'}"><a href="${request.route_url('roles-list')}">Roles</a></li>
             </ul>
             <ul class="nav pull-right">
               <li class="divider-vertical"></li>
