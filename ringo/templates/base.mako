@@ -53,11 +53,11 @@
                   else:
                     modul = None
                 %>
-                <li class="${(modul == None) and 'active'}"><a href="#">Home</a></li>
-                <li class="${(modul == 'modules') and 'active'}"><a href="${request.route_url('modules-list')}">Modules</a></li>
-                <li class="${(modul == 'users') and 'active'}"><a href="${request.route_url('users-list')}">Users</a></li>
-                <li class="${(modul == 'usergroups') and 'active'}"><a href="${request.route_url('usergroups-list')}">Usergroups</a></li>
-                <li class="${(modul == 'roles') and 'active'}"><a href="${request.route_url('roles-list')}">Roles</a></li>
+                <li class="${(modul == None) and 'active'}"><a href="#">${_('Home')}</a></li>
+                <li class="${(modul == 'modules') and 'active'}"><a href="${request.route_url('modules-list')}">${_('Modules')}</a></li>
+                <li class="${(modul == 'users') and 'active'}"><a href="${request.route_url('users-list')}">${_('Users')}</a></li>
+                <li class="${(modul == 'usergroups') and 'active'}"><a href="${request.route_url('usergroups-list')}">${_('Usergroups')}</a></li>
+                <li class="${(modul == 'roles') and 'active'}"><a href="${request.route_url('roles-list')}">${_('Roles')}</a></li>
               </ul>
               <ul class="nav pull-right">
                 <li class="divider-vertical"></li>
@@ -65,13 +65,13 @@
                   <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">${request.user.login}<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                      <li><a href="#"><img class="icon" src="/images/icons/16x16/profile.png"/>Profile</a></li>
+                      <li><a href="#"><img class="icon" src="/images/icons/16x16/profile.png"/>${_('Profile')}</a></li>
                       <li class="divider"></li>
-                      <li><a href="${request.route_url('logout')}"><img class="icon" src="/images/icons/16x16/system-log-out.png"/>Logout</a></li>
+                      <li><a href="${request.route_url('logout')}"><img class="icon" src="/images/icons/16x16/system-log-out.png"/>${_('Logout')}</a></li>
                     </ul>
                   </li>
                 % else:
-                  <li><a href="${request.route_url('login')}">Login</a></li>
+                  <li><a href="${request.route_url('login')}">${_('Login')}</a></li>
                 % endif
               </ul>
             </div><!--/.nav-collapse -->

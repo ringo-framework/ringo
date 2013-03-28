@@ -1,0 +1,44 @@
+# Translations template for ringo.
+# Copyright (C) 2013 ORGANIZATION
+# This file is distributed under the same license as the ringo project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ringo 0.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2013-03-28 18:38+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+
+#: ringo/views/base.py:35
+#, python-format
+msgid "Created new %(item_type)s successfull."
+msgstr ""
+
+#: ringo/views/base.py:46
+#, python-format
+msgid "Error on validation the data for new %(item_type)s"
+msgstr ""
+
+#: ringo/views/base.py:66
+#, python-format
+msgid "Edited %(item_type)s \"%(item)s\" successfull."
+msgstr ""
+
+#: ringo/views/base.py:70
+#, python-format
+msgid "Error on validation the data for %(item_type)s \"%(item)s\"."
+msgstr ""
+
+#: ringo/views/base.py:102
+#, python-format
+msgid "Deleted %(item_type)s \"%(item)s\" successfull."
+msgstr ""
+

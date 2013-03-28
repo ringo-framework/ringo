@@ -16,6 +16,8 @@ requires = [
     'pyramid_handlers',
     'zope.sqlalchemy',
     'waitress',
+    'babel',
+    'lingua',
 ]
 
 setup(name='ringo',
@@ -43,4 +45,8 @@ setup(name='ringo',
       [console_scripts]
       initialize_ringo_db = ringo.scripts.initializedb:main
       """,
+      message_extractors = { '.': [
+        ('**.py',   'lingua_python', None ),
+        ('**.mako',   'lingua_xml', None ),
+      ]},
       )
