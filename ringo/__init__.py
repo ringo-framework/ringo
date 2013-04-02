@@ -14,6 +14,9 @@ from ringo.model import (
 from ringo.lib import (
     helpers,
 )
+from ringo.lib.i18n import (
+    locale_negotiator,
+)
 
 base_dir = pkg_resources.get_distribution("ringo").location
 template_dir = os.path.join(base_dir, 'ringo', 'templates')
@@ -24,6 +27,7 @@ def add_renderer_globals(event):
     event['h'] = helpers
     event['_'] = request.translate
     event['localizer'] = request.localizer
+
 
 def connect_on_request(event):
     request = event.request
@@ -41,14 +45,14 @@ def main(global_config, **settings):
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
-    config = Configurator(settings=settings)
+    config = Configurator(settings=settings,
+                          locale_negotiator=locale_negotiator)
     config.set_session_factory(session_factory_from_settings(settings))
     config.include('pyramid_handlers')
     config.include('pyramid_beaker')
     config.include('ringo.lib.security.setup_ringo_security')
-    config.add_subscriber(add_renderer_globals, BeforeRender)
-    #config.add_subscriber('ringo.lib.i18n.add_localizer', NewRequest)
     config.add_subscriber(connect_on_request, NewRequest)
+    config.add_subscriber(add_renderer_globals, BeforeRender)
     config.add_route('home', '/')
     config.add_route('login', 'auth/login')
     config.add_route('logout', 'auth/logout')

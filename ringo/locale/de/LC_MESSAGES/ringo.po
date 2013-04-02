@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-03-28 18:38+0100\n"
+"POT-Creation-Date: 2013-04-03 00:14+0200\n"
 "PO-Revision-Date: 2013-03-28 18:31+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
@@ -17,28 +17,91 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: ringo/views/base.py:35
-#, python-format
-msgid "Created new %(item_type)s successfull."
-msgstr "%(item_type)s wurde erfolgreich angelegt."
+#: ringo/model/modul.py:42
+msgid "Modul"
+msgstr "Modul"
 
-#: ringo/views/base.py:46
-#, python-format
-msgid "Error on validation the data for new %(item_type)s"
-msgstr "Fehler bei der Überprüfung der Daten für %(item_type)s"
+#: ringo/model/modul.py:43 ringo/templates/base.mako:57
+msgid "Modules"
+msgstr "Module"
 
-#: ringo/views/base.py:66
-#, python-format
-msgid "Edited %(item_type)s \"%(item)s\" successfull."
-msgstr "%(item_type)s wurde erfolgreich bearbeitet."
+#: ringo/model/modul.py:48
+msgid "User"
+msgstr "Benutzer"
 
-#: ringo/views/base.py:70
-#, python-format
-msgid "Error on validation the data for %(item_type)s \"%(item)s\"."
-msgstr "Fehler bei der Überprüfung der Daten für %(item_type)s"
+#: ringo/model/modul.py:49 ringo/templates/base.mako:58
+msgid "Users"
+msgstr "Benutzer"
 
-#: ringo/views/base.py:102
-#, python-format
-msgid "Deleted %(item_type)s \"%(item)s\" successfull."
-msgstr "%(item_type)s wurde erfolgreich gelöscht."
+#: ringo/model/modul.py:54
+msgid "Usergroup"
+msgstr "Benutzergruppe"
+
+#: ringo/model/modul.py:55 ringo/templates/base.mako:59
+msgid "Usergroups"
+msgstr "Benutzergruppen"
+
+#: ringo/model/modul.py:60
+msgid "Role"
+msgstr "Rolle"
+
+#: ringo/model/modul.py:61 ringo/templates/base.mako:60
+msgid "Roles"
+msgstr "Rollen"
+
+#: ringo/model/modul.py:66
+msgid "Permission"
+msgstr "Berechtigung"
+
+#: ringo/model/modul.py:67
+msgid "Permissions"
+msgstr "Berechtigungen"
+
+#: ringo/templates/base.mako:56
+msgid "Home"
+msgstr "Home"
+
+#: ringo/templates/base.mako:68
+msgid "Profile"
+msgstr "Profil"
+
+#: ringo/templates/base.mako:70
+msgid "Logout"
+msgstr "Abmelden"
+
+#: ringo/templates/base.mako:74
+msgid "Login"
+msgstr "Anmelden"
+
+#: ringo/views/auth.py:24
+msgid "Login failed!"
+msgstr "Anmeldung fehlgeschlagen"
+
+#: ringo/views/auth.py:27
+msgid "Login was successfull :)"
+msgstr "Anmeldung war erfolgreich :)"
+
+#: ringo/views/auth.py:40
+msgid "Logout was successfull :)"
+msgstr "Abmeldung war erfolgreich :)"
+
+#: ringo/views/base.py:36
+msgid "Created new ${item_type} successfull."
+msgstr "${item_type} wurde erfolgreich angelegt."
+
+#: ringo/views/base.py:47
+msgid "Error on validation the data for new ${item_type}"
+msgstr "Fehler bei der Überprüfung der Daten für ${item_type}"
+
+#: ringo/views/base.py:68
+msgid "Edited ${item_type} \"${item}\" successfull."
+msgstr "${item_type} wurde erfolgreich bearbeitet."
+
+#: ringo/views/base.py:72
+msgid "Error on validation the data for ${item_type} \"${item}\"."
+msgstr "Fehler bei der Überprüfung der Daten für ${item_type}"
+
+#: ringo/views/base.py:105
+msgid "Deleted ${item_type} \"${item}\" successfull."
+msgstr "${item_type} wurde erfolgreich gelöscht."
 

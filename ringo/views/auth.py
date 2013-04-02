@@ -11,6 +11,7 @@ from ringo.lib.security import login as user_login
 
 @view_config(route_name='login', renderer='/auth/login.mako')
 def login(request):
+    _ = request.translate
     config = Config(load(get_path_to_form_config('auth.xml')))
     form_config = config.get_form('loginform')
     form = Form(form_config)
@@ -20,10 +21,10 @@ def login(request):
         password = form.data.get('pass')
         user = user_login(username, password)
         if user is None:
-            msg = "Login failed!"
+            msg = _("Login failed!")
             request.session.flash(msg, 'error')
         else:
-            msg = "Login was successfull :)"
+            msg = _("Login was successfull :)")
             request.session.flash(msg, 'success')
             headers = remember(request, user.id, max_age='86400')
             target_url = request.route_url('home')
@@ -33,8 +34,9 @@ def login(request):
 
 @view_config(route_name='logout', renderer='/auth/logout.mako')
 def logout(request):
+    _ = request.translate
     target_url = request.route_url('home')
     headers = forget(request)
-    msg = "Logout was successfull :)"
+    msg = _("Logout was successfull :)")
     request.session.flash(msg, 'success')
     return HTTPFound(location=target_url, headers=headers)

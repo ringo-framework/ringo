@@ -15,13 +15,12 @@ def list_(clazz, request):
     # collections. Tests with 100k datasets rendering only 100 shows
     # that the usual lazyload method seems to be the fastest which is
     # not what if have been expected.
-    _ = request.translate
     items = request.db.query(clazz).options(joinedload('*')).all()
     renderer = ListRenderer(clazz)
-    rvalue['xxx'] = _('add-number', default='Add ${number}', mapping={'number':1})
     rvalue['clazz'] = clazz
     rvalue['listing'] = renderer.render(items)
     return rvalue
+
 
 def create_(clazz, request):
     _ = request.translate
@@ -31,10 +30,10 @@ def create_(clazz, request):
     form = Form(item.get_form_config('create'), item, request.db)
     if request.POST:
         item_label = clazz.get_item_modul().get_label()
-        mapping={'item_type':item_label}
+        mapping = {'item_type': item_label}
         if form.validate(request.params):
             sitem = form.save()
-            msg = _('Created new %(item_type)s successfull.') % mapping
+            msg = _('Created new ${item_type} successfull.', mapping)
             log.info(msg)
             request.session.flash(msg, 'success')
             # flush the session to make the new id in the element
@@ -46,7 +45,7 @@ def create_(clazz, request):
             return HTTPFound(location=url)
         else:
             msg = _('Error on validation the data'
-                    ' for new %(item_type)s') % mapping
+                    ' for new ${item_type}', mapping)
             request.session.flash(msg, 'error')
     rvalue['clazz'] = clazz
     rvalue['item'] = item
@@ -63,15 +62,15 @@ def update_(clazz, request):
     form = Form(item.get_form_config('update'), item)
     if request.POST:
         item_label = clazz.get_item_modul().get_label()
-        mapping={'item_type':item_label, 'item':item}
+        mapping = {'item_type': item_label, 'item': item}
         if form.validate(request.params):
             form.save()
-            msg = _('Edited %(item_type)s "%(item)s" successfull.') % mapping
+            msg = _('Edited ${item_type} "${item}" successfull.', mapping)
             log.info(msg)
             request.session.flash(msg, 'success')
         else:
             msg = _('Error on validation the data for '
-                    '%(item_type)s "%(item)s".') % mapping
+                    '${item_type} "${item}".', mapping)
             request.session.flash(msg, 'error')
     rvalue['clazz'] = clazz
     rvalue['item'] = item
@@ -80,7 +79,6 @@ def update_(clazz, request):
 
 
 def read_(clazz, request):
-    _ = request.translate
     rvalue = {}
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
@@ -103,8 +101,8 @@ def delete_(clazz, request):
         route_name = clazz.get_action_routename('list')
         url = request.route_url(route_name)
         item_label = clazz.get_item_modul().get_label()
-        mapping={'item_type':item_label, 'item':item}
-        msg = _('Deleted %(item_type)s "%(item)s" successfull.') % mapping
+        mapping = {'item_type': item_label, 'item': item}
+        msg = _('Deleted ${item_type} "${item}" successfull.', mapping)
         log.info(msg)
         request.session.flash(msg, 'success')
         return HTTPFound(location=url)
@@ -117,6 +115,5 @@ def delete_(clazz, request):
 
 
 def confirmed(request):
-    _ = request.translate
     """Returns True id the request is confirmed"""
     return request.params.get('confirmed') == "1"
