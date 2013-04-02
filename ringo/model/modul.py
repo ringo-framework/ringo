@@ -1,6 +1,7 @@
 from ringo.model import Base, sqlalchemy as sa
 from ringo.model.user import BaseItem
 from ringo.model.meta import MetaItem
+from ringo.lib.i18n import _
 
 
 class ModulItem(BaseItem, Base):
@@ -38,32 +39,32 @@ def init_model(dbsession):
 
     """
     modul = ModulItem(name='modules')
-    modul.label = "Modul"
-    modul.label_plural = "Modules"
+    modul.label = _("Modul")
+    modul.label_plural = _("Modules")
     meta = MetaItem(mid=1, uid=1, gid=None)
     modul.meta = meta
     dbsession.add(modul)
     modul = ModulItem(name='users')
-    modul.label = "User"
-    modul.label_plural = "Users"
+    modul.label = _("User")
+    modul.label_plural = _("Users")
     meta = MetaItem(mid=1, uid=1, gid=None)
     modul.meta = meta
     dbsession.add(modul)
     modul = ModulItem(name='usergroups')
-    modul.label = "Usergroup"
-    modul.label_plural = "Usergroups"
+    modul.label = _("Usergroup")
+    modul.label_plural = _("Usergroups")
     meta = MetaItem(mid=1, uid=1, gid=None)
     modul.meta = meta
     dbsession.add(modul)
     modul = ModulItem(name='roles')
-    modul.label = "Role"
-    modul.label_plural = "Roles"
+    modul.label = _("Role")
+    modul.label_plural = _("Roles")
     meta = MetaItem(mid=1, uid=1, gid=None)
     modul.meta = meta
     dbsession.add(modul)
     modul = ModulItem(name='permissions')
-    modul.label = "Permission"
-    modul.label_plural = "Permissions"
+    modul.label = _("Permission")
+    modul.label_plural = _("Permissions")
     meta = MetaItem(mid=1, uid=1, gid=None)
     modul.meta = meta
     dbsession.add(modul)

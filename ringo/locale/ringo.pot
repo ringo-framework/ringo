@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-04-03 00:14+0200\n"
+"POT-Creation-Date: 2013-04-03 00:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,6 +71,10 @@ msgstr ""
 
 #: ringo/templates/base.mako:74
 msgid "Login"
+msgstr ""
+
+#: ringo/templates/default/update.mako:4
+msgid "Edit"
 msgstr ""
 
 #: ringo/views/auth.py:24
