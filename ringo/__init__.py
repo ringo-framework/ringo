@@ -4,7 +4,6 @@ from pyramid.config import Configurator
 from pyramid.events import BeforeRender, NewRequest
 from pyramid_beaker import session_factory_from_settings
 
-
 from sqlalchemy import engine_from_config
 
 
@@ -15,16 +14,16 @@ from ringo.model import (
 from ringo.lib import (
     helpers,
 )
-from ringo.lib.i18n  import _
 
 base_dir = pkg_resources.get_distribution("ringo").location
 template_dir = os.path.join(base_dir, 'ringo', 'templates')
 
 
 def add_renderer_globals(event):
+    request = event['request']
     event['h'] = helpers
-    event['_'] = _
-
+    event['_'] = request.translate
+    event['localizer'] = request.localizer
 
 def connect_on_request(event):
     request = event.request
@@ -48,6 +47,7 @@ def main(global_config, **settings):
     config.include('pyramid_beaker')
     config.include('ringo.lib.security.setup_ringo_security')
     config.add_subscriber(add_renderer_globals, BeforeRender)
+    #config.add_subscriber('ringo.lib.i18n.add_localizer', NewRequest)
     config.add_subscriber(connect_on_request, NewRequest)
     config.add_route('home', '/')
     config.add_route('login', 'auth/login')
@@ -78,6 +78,7 @@ def main(global_config, **settings):
     config.add_route('roles-update', 'roles/update/{id}')
     config.add_route('roles-delete', 'roles/delete/{id}')
 
+    config.add_translation_dirs('ringo:locale/')
     config.add_static_view('static',
                            path='ringo:static',
                            cache_max_age=3600)

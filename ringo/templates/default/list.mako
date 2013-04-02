@@ -11,6 +11,7 @@
 </div>
 <div class="row-fluid">
   <div class="span12">
+    ${xxx}
     ${listing | n}
   </div>
 </div>

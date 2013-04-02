@@ -5,7 +5,6 @@ from pyramid.httpexceptions import HTTPFound
 from formbar.form import Form
 
 from ringo.lib.renderer import ListRenderer, ConfirmDialogRenderer
-from ringo.lib.i18n import _
 
 log = logging.getLogger(__name__)
 
@@ -16,13 +15,16 @@ def list_(clazz, request):
     # collections. Tests with 100k datasets rendering only 100 shows
     # that the usual lazyload method seems to be the fastest which is
     # not what if have been expected.
+    _ = request.translate
     items = request.db.query(clazz).options(joinedload('*')).all()
     renderer = ListRenderer(clazz)
+    rvalue['xxx'] = _('add-number', default='Add ${number}', mapping={'number':1})
     rvalue['clazz'] = clazz
     rvalue['listing'] = renderer.render(items)
     return rvalue
 
 def create_(clazz, request):
+    _ = request.translate
     rvalue = {}
     factory = clazz.get_item_factory()
     item = factory.create(request.user)
@@ -53,6 +55,7 @@ def create_(clazz, request):
 
 
 def update_(clazz, request):
+    _ = request.translate
     rvalue = {}
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
@@ -77,6 +80,7 @@ def update_(clazz, request):
 
 
 def read_(clazz, request):
+    _ = request.translate
     rvalue = {}
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
@@ -89,6 +93,7 @@ def read_(clazz, request):
 
 
 def delete_(clazz, request):
+    _ = request.translate
     rvalue = {}
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
@@ -112,5 +117,6 @@ def delete_(clazz, request):
 
 
 def confirmed(request):
+    _ = request.translate
     """Returns True id the request is confirmed"""
     return request.params.get('confirmed') == "1"
