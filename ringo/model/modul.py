@@ -68,3 +68,9 @@ def init_model(dbsession):
     meta = MetaItem(mid=1, uid=1, gid=None)
     modul.meta = meta
     dbsession.add(modul)
+    modul = ModulItem(name='profiles')
+    modul.label = _("Profile")
+    modul.label_plural = _("Profiles")
+    meta = MetaItem(mid=1, uid=1, gid=None)
+    modul.meta = meta
+    dbsession.add(modul)

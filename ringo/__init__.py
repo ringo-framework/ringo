@@ -82,6 +82,12 @@ def main(global_config, **settings):
     config.add_route('roles-read', 'roles/read/{id}')
     config.add_route('roles-update', 'roles/update/{id}')
     config.add_route('roles-delete', 'roles/delete/{id}')
+    # Profile admininistration
+    config.add_route('profiles-list', 'profiles/list')
+    config.add_route('profiles-create', 'profiles/create')
+    config.add_route('profiles-read', 'profiles/read/{id}')
+    config.add_route('profiles-update', 'profiles/update/{id}')
+    config.add_route('profiles-delete', 'profiles/delete/{id}')
 
     config.add_translation_dirs('ringo:locale/')
     config.add_static_view('static',

@@ -65,7 +65,7 @@
                   <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">${request.user.login}<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                      <li><a href="#"><img class="icon" src="/images/icons/16x16/profile.png"/>${_('Profile')}</a></li>
+                      <li><a href="${request.route_url('profiles-read', id=request.user.profile[0].id)}"><img class="icon" src="/images/icons/16x16/profile.png"/>${_('Profile')}</a></li>
                       <li class="divider"></li>
                       <li><a href="${request.route_url('logout')}"><img class="icon" src="/images/icons/16x16/system-log-out.png"/>${_('Logout')}</a></li>
                     </ul>

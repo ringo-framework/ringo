@@ -127,7 +127,7 @@ class Role(BaseItem, Base):
 
 class Permission(BaseItem, Base):
     __tablename__ = 'permissions'
-    _modul_id = 6
+    _modul_id = 5
     id = sa.Column(sa.Integer, primary_key=True)
     mid = sa.Column(sa.Integer, sa.ForeignKey('meta.id'))
     name = sa.Column(sa.Text, unique=True, nullable=False)
@@ -137,6 +137,26 @@ class Permission(BaseItem, Base):
 
     def __unicode__(self):
         return self.name
+
+
+class Profile(BaseItem, Base):
+    __tablename__ = 'profiles'
+    _modul_id = 6
+    id = sa.Column(sa.Integer, primary_key=True)
+    uid = sa.Column(sa.Integer, sa.ForeignKey('users.id'))
+    first_name = sa.Column(sa.Text, nullable=False)
+    last_name = sa.Column(sa.Text, nullable=False)
+    birthday = sa.Column(sa.Date)
+    address = sa.Column(sa.Text)
+    phone = sa.Column(sa.Text)
+    email = sa.Column(sa.Text, nullable=False)
+    web = sa.Column(sa.Text)
+
+    user = sa.orm.relation("User", cascade="all, delete-orphan",
+                           backref="profile", single_parent=True)
+
+    def __unicode__(self):
+        return "%s %s" % (self.first_name, self.last_name)
 
 
 def init_model(dbsession):
@@ -201,6 +221,12 @@ def init_model(dbsession):
     dbsession.add(meta)
     user.meta = meta
     dbsession.add(user)
+    profile = Profile()
+    profile.first_name = "Firstname"
+    profile.last_name = "Lastname"
+    profile.email = "mail@example.com"
+    profile.user = user
+    dbsession.add(profile)
     #Performance tests
     for i in range(100):
         login = ''.join(random.choice(string.ascii_uppercase
@@ -213,3 +239,9 @@ def init_model(dbsession):
         user.groups.append(admin_usergroup)
         user.meta = meta
         dbsession.add(user)
+        profile = Profile()
+        profile.first_name = "Firstname-%s" % i
+        profile.last_name = "Lastname-%s" % i
+        profile.email = "mail-%s@example.com" % i
+        profile.user = user
+        dbsession.add(profile)
