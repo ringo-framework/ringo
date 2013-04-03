@@ -14,7 +14,9 @@ log = logging.getLogger(__name__)
 
 
 def setup_ringo_security(config):
-    authn_policy = AuthTktAuthenticationPolicy('seekrit', hashalg='sha512')
+    authn_policy = AuthTktAuthenticationPolicy('seekrit',
+                                               hashalg='sha512',
+                                               callback=get_principals)
     authz_policy = ACLAuthorizationPolicy()
     config.set_authentication_policy(authn_policy)
     config.set_authorization_policy(authz_policy)
@@ -25,14 +27,43 @@ def setup_ringo_security(config):
     config.set_request_property(get_user, 'user', reify=True)
 
 
+def get_principals(userid, request):
+    """Returns a list of pricipals for the user with userid for the
+    given request.
+
+    Principals are basically strings naming the groups or roles the user have.
+    Example: role:admin or group:users are typical principals.
+
+    :userid: id of the user
+    :request: current request
+    :returns: list with pricipals
+
+    """
+    user = _load_user(userid, request)
+    principals = []
+    if user:
+        for role in user.roles:
+            principals.append('role:%s' % role.name)
+        for group in user.groups:
+            principals.append('group:%s' % group.name)
+            for role in group.roles:
+                principals.append('role:%s' % role.name)
+    log.debug('Principals for user "%s": %s' % (user.login, principals))
+    return principals
+
+
+def _load_user(userid, request):
+    try:
+        user = request.db.query(User).filter_by(id=userid).one()
+        return user
+    except NoResultFound:
+        return None
+
+
 def get_user(request):
     userid = unauthenticated_userid(request)
     if userid is not None:
-        try:
-            user = request.db.query(User).filter_by(id=userid).one()
-            return user
-        except NoResultFound:
-            pass
+        return _load_user(userid, request)
     return None
 
 

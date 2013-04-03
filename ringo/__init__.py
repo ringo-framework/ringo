@@ -54,6 +54,7 @@ def main(global_config, **settings):
     config.include('ringo.lib.security.setup_ringo_security')
     config.add_subscriber(connect_on_request, NewRequest)
     config.add_subscriber(add_renderer_globals, BeforeRender)
+
     config.add_route('home', '/')
     config.add_route('login', 'auth/login')
     config.add_route('logout', 'auth/logout')
@@ -65,11 +66,16 @@ def main(global_config, **settings):
     config.add_route('modules-update', 'modules/update/{id}')
     config.add_route('modules-delete', 'modules/delete/{id}')
     # Users admininistration
-    config.add_route('users-list', 'users/list')
-    config.add_route('users-create', 'users/create')
-    config.add_route('users-read', 'users/read/{id}')
-    config.add_route('users-update', 'users/update/{id}')
-    config.add_route('users-delete', 'users/delete/{id}')
+    config.add_route('users-list', 'users/list',
+                     factory='ringo.views.users.RessourceFactory')
+    config.add_route('users-create', 'users/create',
+                     factory='ringo.views.users.RessourceFactory')
+    config.add_route('users-read', 'users/read/{id}',
+                     factory='ringo.views.users.RessourceFactory')
+    config.add_route('users-update', 'users/update/{id}',
+                     factory='ringo.views.users.RessourceFactory')
+    config.add_route('users-delete', 'users/delete/{id}',
+                     factory='ringo.views.users.RessourceFactory')
     # Usergroups admininistration
     config.add_route('usergroups-list', 'usergroups/list')
     config.add_route('usergroups-create', 'usergroups/create')

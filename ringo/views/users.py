@@ -22,30 +22,35 @@ class RessourceFactory(object):
 
 
 @view_config(route_name=User.get_action_routename('list'),
-             renderer='/default/list.mako')
+             renderer='/default/list.mako',
+             permission='list')
 def list(request):
     return list_(User, request)
 
 
 @view_config(route_name=User.get_action_routename('create'),
-             renderer='/default/create.mako')
+             renderer='/default/create.mako',
+             permission='create')
 def create(request):
     return create_(User, request)
 
 
 @view_config(route_name=User.get_action_routename('update'),
-             renderer='/default/update.mako')
+             renderer='/default/update.mako',
+             permission='update')
 def update(request):
     return update_(User, request)
 
 
 @view_config(route_name=User.get_action_routename('read'),
-             renderer='/default/read.mako')
+             renderer='/default/read.mako',
+             permission='read')
 def read(request):
     return read_(User, request)
 
 
 @view_config(route_name=User.get_action_routename('delete'),
-             renderer='/default/confirm.mako')
+             renderer='/default/confirm.mako',
+             permission='delete')
 def delete(request):
     return delete_(User, request)
