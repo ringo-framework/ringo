@@ -63,3 +63,9 @@ body {
 code {
   font-size: 80%;
 }
+
+/* Hide carret in dropup menus. TODO: Display caret but in down direction. */
+.navbar .nav > li.dropup > .dropdown-menu::after, 
+.navbar .nav > li.dropup > .dropdown-menu::before {
+  display:none;
+}

@@ -17,10 +17,6 @@
               modul = None
           %>
           <li class="${(modul == None) and 'active'}"><a href="#">${_('Home')}</a></li>
-          <li class="${(modul == 'modules') and 'active'}"><a href="${request.route_url('modules-list')}">${_('Modules')}</a></li>
-          <li class="${(modul == 'users') and 'active'}"><a href="${request.route_url('users-list')}">${_('Users')}</a></li>
-          <li class="${(modul == 'usergroups') and 'active'}"><a href="${request.route_url('usergroups-list')}">${_('Usergroups')}</a></li>
-          <li class="${(modul == 'roles') and 'active'}"><a href="${request.route_url('roles-list')}">${_('Roles')}</a></li>
         </ul>
         <ul class="nav pull-right">
           <li class="divider-vertical"></li>

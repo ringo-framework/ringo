@@ -1,3 +1,18 @@
 <div class="container">
-  <p class="muted credit">Ringo ver. X.X</p>
+  <div class="navbar">
+    <ul class="nav">
+      <li class="dropdown dropup">
+        <a href="#" data-toggle="dropdown"><img src="${request.static_url('ringo:static/images/icons/16x16/applications-system.png')}"/>${_('Administration')}<b class="caret"></b></a>
+        <ul class="dropdown-menu dropup-menu" role="menu">
+          <li class="${(modul == 'modules') and 'active'}"><a href="${request.route_url('modules-list')}">${_('Modules')}</a></li>
+          <li class="${(modul == 'users') and 'active'}"><a href="${request.route_url('users-list')}">${_('Users')}</a></li>
+          <li class="${(modul == 'usergroups') and 'active'}"><a href="${request.route_url('usergroups-list')}">${_('Usergroups')}</a></li>
+          <li class="${(modul == 'roles') and 'active'}"><a href="${request.route_url('roles-list')}">${_('Roles')}</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="pull-right">
+      <p class="muted credit">Ringo ver. X.X</p>
+    </div>
+  </div>
 </div>
