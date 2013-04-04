@@ -27,6 +27,13 @@ def setup_ringo_security(config):
     config.set_request_property(get_user, 'user', reify=True)
 
 
+def get_user(request):
+    userid = unauthenticated_userid(request)
+    if userid is not None:
+        return _load_user(userid, request)
+    return None
+
+
 def get_principals(userid, request):
     """Returns a list of pricipals for the user with userid for the
     given request.
@@ -42,12 +49,8 @@ def get_principals(userid, request):
     user = _load_user(userid, request)
     principals = []
     if user:
-        for role in user.roles:
+        for role in get_roles(user):
             principals.append('role:%s' % role.name)
-        for group in user.groups:
-            principals.append('group:%s' % group.name)
-            for role in group.roles:
-                principals.append('role:%s' % role.name)
     log.debug('Principals for user "%s": %s' % (user.login, principals))
     return principals
 
@@ -113,13 +116,6 @@ def _load_user(userid, request):
         return user
     except NoResultFound:
         return None
-
-
-def get_user(request):
-    userid = unauthenticated_userid(request)
-    if userid is not None:
-        return _load_user(userid, request)
-    return None
 
 
 def login(username, password):
