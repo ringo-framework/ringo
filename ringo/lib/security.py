@@ -51,6 +51,61 @@ def get_principals(userid, request):
     log.debug('Principals for user "%s": %s' % (user.login, principals))
     return principals
 
+# ROLES
+#######
+
+
+def has_role(user, role):
+    """Return True if the user has the given role. Else False"
+    :user: User instance
+    :returns: True or False
+    """
+
+    roles = [r.name for r in get_roles(user)]
+    return role in roles
+
+
+def get_roles(user):
+    """Returns a list of roles the user has. The list contains
+    `Role` object and are collected by loading roles directly
+    attached to the user plus roles attached to the groups the user
+    is member of
+
+    :user: User instance
+    :returns: List of `Role` instances
+
+    """
+    tmp_roles = {}
+
+    # Add roles directly attached to the user.
+    for role in user.roles:
+        if role.name not in tmp_roles:
+            tmp_roles[role.name] = role
+
+    # Add roles directly attached to the user.
+    for group in user.groups:
+        for role in group.roles:
+            if role.name not in tmp_roles:
+                tmp_roles[role.name] = role
+
+    return list(tmp_roles.values())
+
+# GROUPS
+########
+
+
+def has_group(user, group):
+    """Return True if the user is in the the given group. Else False"
+    :user: User instance
+    :returns: True or False
+    """
+
+    groups = [g.name for g in user.groups]
+    return group in groups
+
+# Helpers
+#########
+
 
 def _load_user(userid, request):
     try:

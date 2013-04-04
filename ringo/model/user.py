@@ -59,30 +59,6 @@ class User(BaseItem, Base):
     def __unicode__(self):
         return self.login
 
-    def get_roles(self):
-        """Returns a list of roles the user has. The list contains
-        `Role` object and are collected by loading roles directly
-        attached to the user plus roles attached to the groups the user
-        is member of
-
-        :returns: List of `Role` instances
-
-        """
-        tmp_roles = {}
-
-        # Add roles directly attached to the user.
-        for role in self.roles:
-            if role.name not in tmp_roles:
-                tmp_roles[role.name] = role
-
-        # Add roles directly attached to the user.
-        for group in self.groups:
-            for role in group.roles:
-                if role.name not in tmp_roles:
-                    tmp_roles[role.name] = role
-
-        return list(tmp_roles.values())
-
 
 class Usergroup(BaseItem, Base):
     __tablename__ = 'usergroups'
