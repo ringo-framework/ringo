@@ -13,6 +13,7 @@ from ringo.model import (
 )
 from ringo.lib import (
     helpers,
+    security
 )
 from ringo.lib.i18n import (
     locale_negotiator,
@@ -25,6 +26,7 @@ template_dir = os.path.join(base_dir, 'ringo', 'templates')
 def add_renderer_globals(event):
     request = event['request']
     event['h'] = helpers
+    event['s'] = security
     event['_'] = request.translate
     event['N_'] = request.translate
     event['localizer'] = request.localizer

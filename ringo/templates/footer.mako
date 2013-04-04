@@ -1,5 +1,6 @@
 <div class="container">
   <div class="navbar">
+    % if request.user and s.has_role(request.user, 'admin'):
     <ul class="nav">
       <li class="dropdown dropup">
         <a href="#" data-toggle="dropdown"><img src="${request.static_url('ringo:static/images/icons/16x16/applications-system.png')}"/>${_('Administration')}<b class="caret"></b></a>
@@ -11,6 +12,7 @@
         </ul>
       </li>
     </ul>
+    % endif
     <div class="pull-right">
       <p class="muted credit">Ringo ver. X.X</p>
     </div>
