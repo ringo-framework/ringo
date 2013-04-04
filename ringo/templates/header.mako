@@ -16,7 +16,7 @@
             else:
               modul = None
           %>
-          <li class="${(modul == None) and 'active'}"><a href="#">${_('Home')}</a></li>
+          <li class="${(modul == None) and 'active'}"><a href="${request.route_url('home')}">${_('Home')}</a></li>
         </ul>
         <ul class="nav pull-right">
           <li class="divider-vertical"></li>
