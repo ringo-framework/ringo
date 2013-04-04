@@ -1,2 +1,2 @@
-<%inherit file="/base.mako" />
+<%inherit file="/main.mako" />
 ${dialog | n}

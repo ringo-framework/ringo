@@ -53,7 +53,7 @@ body {
 -------------------------------------------------- */
 /* Not required for template or sticky footer method. */
 
-#wrap > .container {
+#main {
   padding-top: 40px;
 }
 .container .credit {

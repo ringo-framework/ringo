@@ -1,4 +1,4 @@
-<%inherit file="/base.mako" />
+<%inherit file="/main.mako" />
 <div class="row-fluid page-header">
   <div class="span6">
     <h1>New ${clazz.get_item_modul().get_label(plural)}</h1>
