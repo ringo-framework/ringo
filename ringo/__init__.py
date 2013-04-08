@@ -84,11 +84,16 @@ def main(global_config, **settings):
     config.add_route('users-delete', 'users/delete/{id}',
                      factory='ringo.views.users.RessourceFactory')
     # Usergroups admininistration
-    config.add_route('usergroups-list', 'usergroups/list')
-    config.add_route('usergroups-create', 'usergroups/create')
-    config.add_route('usergroups-read', 'usergroups/read/{id}')
-    config.add_route('usergroups-update', 'usergroups/update/{id}')
-    config.add_route('usergroups-delete', 'usergroups/delete/{id}')
+    config.add_route('usergroups-list', 'usergroups/list',
+                     factory='ringo.views.usergroups.RessourceFactory')
+    config.add_route('usergroups-create', 'usergroups/create',
+                     factory='ringo.views.usergroups.RessourceFactory')
+    config.add_route('usergroups-read', 'usergroups/read/{id}',
+                     factory='ringo.views.usergroups.RessourceFactory')
+    config.add_route('usergroups-update', 'usergroups/update/{id}',
+                     factory='ringo.views.usergroups.RessourceFactory')
+    config.add_route('usergroups-delete', 'usergroups/delete/{id}',
+                     factory='ringo.views.usergroups.RessourceFactory')
     # Roles admininistration
     config.add_route('roles-list', 'roles/list')
     config.add_route('roles-create', 'roles/create')
