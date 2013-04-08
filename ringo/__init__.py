@@ -106,11 +106,16 @@ def main(global_config, **settings):
     config.add_route('roles-delete', 'roles/delete/{id}',
                      factory='ringo.views.roles.RessourceFactory')
     # Profile admininistration
-    config.add_route('profiles-list', 'profiles/list')
-    config.add_route('profiles-create', 'profiles/create')
-    config.add_route('profiles-read', 'profiles/read/{id}')
-    config.add_route('profiles-update', 'profiles/update/{id}')
-    config.add_route('profiles-delete', 'profiles/delete/{id}')
+    config.add_route('profiles-list', 'profiles/list',
+                     factory='ringo.views.usergroups.RessourceFactory')
+    config.add_route('profiles-create', 'profiles/create',
+                     factory='ringo.views.usergroups.RessourceFactory')
+    config.add_route('profiles-read', 'profiles/read/{id}',
+                     factory='ringo.views.usergroups.RessourceFactory')
+    config.add_route('profiles-update', 'profiles/update/{id}',
+                     factory='ringo.views.usergroups.RessourceFactory')
+    config.add_route('profiles-delete', 'profiles/delete/{id}',
+                     factory='ringo.views.usergroups.RessourceFactory')
 
     config.add_translation_dirs('ringo:locale/')
     config.add_static_view('static',
