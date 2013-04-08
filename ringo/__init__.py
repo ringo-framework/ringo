@@ -62,11 +62,16 @@ def main(global_config, **settings):
     config.add_route('logout', 'auth/logout')
 
     # Roles admininistration
-    config.add_route('modules-list', 'modules/list')
-    config.add_route('modules-create', 'modules/create')
-    config.add_route('modules-read', 'modules/read/{id}')
-    config.add_route('modules-update', 'modules/update/{id}')
-    config.add_route('modules-delete', 'modules/delete/{id}')
+    config.add_route('modules-list', 'modules/list',
+                     factory='ringo.views.modules.RessourceFactory')
+    config.add_route('modules-create', 'modules/create',
+                     factory='ringo.views.modules.RessourceFactory')
+    config.add_route('modules-read', 'modules/read/{id}',
+                     factory='ringo.views.modules.RessourceFactory')
+    config.add_route('modules-update', 'modules/update/{id}',
+                     factory='ringo.views.modules.RessourceFactory')
+    config.add_route('modules-delete', 'modules/delete/{id}',
+                     factory='ringo.views.modules.RessourceFactory')
     # Users admininistration
     config.add_route('users-list', 'users/list',
                      factory='ringo.views.users.RessourceFactory')
