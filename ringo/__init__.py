@@ -95,11 +95,16 @@ def main(global_config, **settings):
     config.add_route('usergroups-delete', 'usergroups/delete/{id}',
                      factory='ringo.views.usergroups.RessourceFactory')
     # Roles admininistration
-    config.add_route('roles-list', 'roles/list')
-    config.add_route('roles-create', 'roles/create')
-    config.add_route('roles-read', 'roles/read/{id}')
-    config.add_route('roles-update', 'roles/update/{id}')
-    config.add_route('roles-delete', 'roles/delete/{id}')
+    config.add_route('roles-list', 'roles/list',
+                     factory='ringo.views.roles.RessourceFactory')
+    config.add_route('roles-create', 'roles/create',
+                     factory='ringo.views.roles.RessourceFactory')
+    config.add_route('roles-read', 'roles/read/{id}',
+                     factory='ringo.views.roles.RessourceFactory')
+    config.add_route('roles-update', 'roles/update/{id}',
+                     factory='ringo.views.roles.RessourceFactory')
+    config.add_route('roles-delete', 'roles/delete/{id}',
+                     factory='ringo.views.roles.RessourceFactory')
     # Profile admininistration
     config.add_route('profiles-list', 'profiles/list')
     config.add_route('profiles-create', 'profiles/create')
