@@ -3,9 +3,6 @@ from pyramid.view import view_config
 
 from pyramid.security import (
     Allow,
-    Everyone,
-    ALL_PERMISSIONS,
-    DENY_ALL
 )
 
 from ringo.views.base import list_, create_, update_, read_, delete_
