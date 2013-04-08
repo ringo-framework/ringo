@@ -4,9 +4,18 @@
     <!-- Define different entity types -->
     <entity id="e1" name="login" label="Login" type="string"/>
     <entity id="e2" name="pass" label="Password" type="password"/>
+    <entity id="e3" name="login" label="Login" type="string">
+      <help>Please enter your login name. A email will be sent to the users email address with further instructions on how to reset the password.</help>
+      <rule expr="bool($login)" msg="Loginname is required" method="pre"/>
+    </entity>
   </source>
   <form id="loginform" autocomplete="off" method="POST" action="/auth/login" enctype="multipart/form-data">
     <snippet ref="s1"/>
+  </form>
+  <form id="forgot_password" autocomplete="off" method="POST" action="/auth/forgot_password" enctype="multipart/form-data">
+    <row>
+      <col><field ref="e3"/></col>
+    </row>
   </form>
   <snippet id="s1">
     <row>

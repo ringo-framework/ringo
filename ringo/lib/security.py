@@ -1,5 +1,6 @@
 import logging
 import hashlib
+import uuid
 
 from pyramid.security import unauthenticated_userid
 from pyramid.authentication import AuthTktAuthenticationPolicy
@@ -8,7 +9,7 @@ from pyramid.authorization import ACLAuthorizationPolicy
 from sqlalchemy.orm.exc import NoResultFound
 
 from ringo.model import DBSession
-from ringo.model.user import User
+from ringo.model.user import User, password_reset_requests
 
 log = logging.getLogger(__name__)
 
@@ -116,6 +117,35 @@ def _load_user(userid, request):
         return user
     except NoResultFound:
         return None
+
+
+def request_password_reset(username):
+    """Will check if there is a user with the given username and creates
+    a new entry in the password_reset table with a new token. The new
+    token is than returned. If there is no user with the username then
+    do nothing and return None.
+
+    :username: username
+    :returns: password request token.
+
+    """
+    token = None
+    try:
+        user = DBSession.query(User).filter_by(login=username).one()
+        log.warning('Password reset request for user %s' % user)
+        token = str(uuid.uuid4())
+        # Insert the token and the username into the password_reset
+        # table
+        ins = password_reset_requests.insert().values(login=username,
+                                                      token=token)
+        # FIXME: Entry is not created.
+        DBSession.execute(ins)
+        DBSession.flush()
+
+    except NoResultFound:
+        log.warning('Password reset request for non existing user %s'
+                    % username)
+    return token
 
 
 def login(username, password):

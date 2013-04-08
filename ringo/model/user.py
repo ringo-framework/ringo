@@ -5,6 +5,11 @@ from ringo.model import Base, sqlalchemy as sa
 from ringo.model.meta import MetaItem
 from ringo.model.base import BaseItem
 
+password_reset_requests = sa.Table(
+    'password_reset_requests', Base.metadata,
+    sa.Column('login', sa.Text),
+    sa.Column('token', sa.Text)
+)
 
 # NM-Table definitions
 nm_user_roles = sa.Table(

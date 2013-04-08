@@ -59,6 +59,8 @@ def main(global_config, **settings):
 
     config.add_route('home', '/')
     config.add_route('login', 'auth/login')
+    config.add_route('register_user', 'auth/register_user')
+    config.add_route('forgot_password', 'auth/forgot_password')
     config.add_route('logout', 'auth/logout')
 
     # Roles admininistration
