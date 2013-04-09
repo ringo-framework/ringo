@@ -1,3 +1,6 @@
+import smtplib
+from email.mime.text import MIMEText
+
 from pyramid.security import remember, forget
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
@@ -6,7 +9,8 @@ from formbar.config import Config, load
 from formbar.form import Form
 
 from ringo.lib.helpers import get_path_to_form_config
-from ringo.lib.security import login as user_login, request_password_reset
+from ringo.lib.security import login as user_login, \
+request_password_reset, password_reset
 
 
 @view_config(route_name='login', renderer='/auth/login.mako')
@@ -52,9 +56,17 @@ def forgot_password(request):
     if request.POST:
         if form.validate(request.params.mixed()):
             username = form.data.get('login')
-            token = request_password_reset(username)
+            token = request_password_reset(username, request.db)
             if token:
                 # Generate email with the password request token.
+                sender = ""
+                recipient = ""
+                subject = _('Password reset request for xxx')
+                message = "Visit this URL to confirm a password reset: %s" \
+                          % request.route_url('reset_password',
+                                              token=token.token)
+                _send_mail(recipient, sender, subject, message)
+
                 pass
             target_url = request.route_url('login')
             headers = forget(request)
@@ -63,3 +75,44 @@ def forgot_password(request):
             request.session.flash(msg, 'success')
             return HTTPFound(location=target_url, headers=headers)
     return {'form': form.render()}
+
+
+@view_config(route_name='reset_password',
+             renderer='/auth/reset_password.mako')
+def reset_password(request):
+    _ = request.translate
+    token = request.matchdict.get('token')
+    password = password_reset(token, request.db)
+    if password:
+        # Generate email with the password request token.
+        sender = ""
+        recipient = ""
+        subject = _('Password has been resetted')
+        message = "Your password has been resetted tp: %s" % password
+        _send_mail(recipient, sender, subject, message)
+        msg = _("Password reset token has been sent to the users "
+                "email address. Please check your email :)")
+        request.session.flash(msg, 'success')
+    return {'msg': msg}
+
+
+def _send_mail(recipient, sender, subject, message):
+    """Will send and email with the subject and body to the recipient
+    from the sender
+
+    :recipient: The recipients mail address
+    :sender: The senders mail address
+    :subject: String of subject
+    :message: Mails body.
+    :returns: True or False
+
+    """
+    msg = MIMEText(message)
+    msg['Subject'] = subject
+    msg['From'] = sender
+    msg['To'] = recipient
+
+    s = smtplib.SMTP('')
+    s.login('', '')
+    s.sendmail(sender, [recipient], msg.as_string())
+    s.quit()
