@@ -1,6 +1,8 @@
 import logging
 import hashlib
 import uuid
+import string
+import random
 
 from pyramid.security import unauthenticated_userid
 from pyramid.authentication import AuthTktAuthenticationPolicy
@@ -12,6 +14,10 @@ from ringo.model import DBSession
 from ringo.model.user import User, password_reset_requests
 
 log = logging.getLogger(__name__)
+
+
+def password_generator(size=8, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for x in range(size))
 
 
 def setup_ringo_security(config):
