@@ -11,7 +11,7 @@ from pyramid.authorization import ACLAuthorizationPolicy
 from sqlalchemy.orm.exc import NoResultFound
 
 from ringo.model import DBSession
-from ringo.model.user import User, password_reset_requests
+from ringo.model.user import User, PasswordResetRequest
 
 log = logging.getLogger(__name__)
 
@@ -125,7 +125,32 @@ def _load_user(userid, request):
         return None
 
 
-def request_password_reset(username):
+def password_reset(token, db):
+    """Will check if there is a password reset token is valid. The
+    function will reset the password of the user. The new generated
+    password is returned.
+
+    :token: password reset token
+    :db: db connection
+    :returns: password .
+    """
+    try:
+        token = db.query(PasswordResetRequest).filter_by(token=token).one()
+        user = token.user
+        user.reset_tokens = []
+        password = password_generator()
+        md5_pw = hashlib.md5()
+        md5_pw.update(password)
+        md5_pw = md5_pw.hexdigest()
+        user.password = md5_pw
+        log.info('Password reset success for user %s' % user)
+        return password
+    except NoResultFound:
+        log.warning('Password reset failed for token %s' % token)
+        return None
+
+
+def request_password_reset(username, db):
     """Will check if there is a user with the given username and creates
     a new entry in the password_reset table with a new token. The new
     token is than returned. If there is no user with the username then
