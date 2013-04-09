@@ -133,7 +133,7 @@ def password_reset(token, db):
 
     :token: password reset token
     :db: db connection
-    :returns: password .
+    :returns: tupe of user and password
     """
     try:
         token = db.query(PasswordResetRequest).filter_by(token=token).one()
@@ -148,14 +148,14 @@ def password_reset(token, db):
             md5_pw = md5_pw.hexdigest()
             user.password = md5_pw
             log.info('Password reset success for user %s' % user)
-            return password
+            return user, password
         else:
             log.warning('Password reset failed for token %s (outdated)'
                         % token)
-            return None
+            return None, None
     except NoResultFound:
         log.warning('Password reset failed for token %s' % token)
-        return None
+        return None, None
 
 
 def request_password_reset(username, db):
@@ -166,10 +166,10 @@ def request_password_reset(username, db):
 
     :username: username
     :db: db connection
-    :returns: password request token.
+    :returns: User
 
     """
-    reset_token = None
+    user = None
     try:
         user = db.query(User).filter_by(login=username).one()
         log.info('Password reset request for user %s' % user)
@@ -178,7 +178,7 @@ def request_password_reset(username, db):
     except NoResultFound:
         log.warning('Password reset request for non existing user %s'
                     % username)
-    return reset_token
+    return user
 
 
 def login(username, password):
