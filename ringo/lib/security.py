@@ -3,6 +3,7 @@ import hashlib
 import uuid
 import string
 import random
+from datetime import datetime
 
 from pyramid.security import unauthenticated_userid
 from pyramid.authentication import AuthTktAuthenticationPolicy
@@ -136,15 +137,22 @@ def password_reset(token, db):
     """
     try:
         token = db.query(PasswordResetRequest).filter_by(token=token).one()
-        user = token.user
-        user.reset_tokens = []
-        password = password_generator()
-        md5_pw = hashlib.md5()
-        md5_pw.update(password)
-        md5_pw = md5_pw.hexdigest()
-        user.password = md5_pw
-        log.info('Password reset success for user %s' % user)
-        return password
+        # Check that the token is not outdated
+        td = datetime.now() - token.created
+        if td.days <= 1:
+            user = token.user
+            user.reset_tokens = []
+            password = password_generator()
+            md5_pw = hashlib.md5()
+            md5_pw.update(password)
+            md5_pw = md5_pw.hexdigest()
+            user.password = md5_pw
+            log.info('Password reset success for user %s' % user)
+            return password
+        else:
+            log.warning('Password reset failed for token %s (outdated)'
+                        % token)
+            return None
     except NoResultFound:
         log.warning('Password reset failed for token %s' % token)
         return None

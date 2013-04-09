@@ -81,19 +81,24 @@ def forgot_password(request):
              renderer='/auth/reset_password.mako')
 def reset_password(request):
     _ = request.translate
+    success = False
     token = request.matchdict.get('token')
     password = password_reset(token, request.db)
     if password:
+        success = True
         # Generate email with the password request token.
         sender = ""
         recipient = ""
         subject = _('Password has been resetted')
         message = "Your password has been resetted tp: %s" % password
         _send_mail(recipient, sender, subject, message)
-        msg = _("Password reset token has been sent to the users "
-                "email address. Please check your email :)")
-        request.session.flash(msg, 'success')
-    return {'msg': msg}
+        msg = _("Password has been successfull resetted. "
+                "The new password was sent to the users email address."
+                " Please check your email.")
+    else:
+        msg = _("Password was not resetted. Maybe the request"
+                " token was not valid?")
+    return {'msg': msg, 'success': success}
 
 
 def _send_mail(recipient, sender, subject, message):
