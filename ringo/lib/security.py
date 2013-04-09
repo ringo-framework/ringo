@@ -132,26 +132,20 @@ def request_password_reset(username):
     do nothing and return None.
 
     :username: username
+    :db: db connection
     :returns: password request token.
 
     """
-    token = None
+    reset_token = None
     try:
-        user = DBSession.query(User).filter_by(login=username).one()
-        log.warning('Password reset request for user %s' % user)
-        token = str(uuid.uuid4())
-        # Insert the token and the username into the password_reset
-        # table
-        ins = password_reset_requests.insert().values(login=username,
-                                                      token=token)
-        # FIXME: Entry is not created.
-        DBSession.execute(ins)
-        DBSession.flush()
-
+        user = db.query(User).filter_by(login=username).one()
+        log.info('Password reset request for user %s' % user)
+        reset_token = PasswordResetRequest(str(uuid.uuid4()))
+        user.reset_tokens.append(reset_token)
     except NoResultFound:
         log.warning('Password reset request for non existing user %s'
                     % username)
-    return token
+    return reset_token
 
 
 def login(username, password):
