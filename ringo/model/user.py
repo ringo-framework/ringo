@@ -7,7 +7,8 @@ from ringo.model.base import BaseItem
 
 password_reset_requests = sa.Table(
     'password_reset_requests', Base.metadata,
-    sa.Column('login', sa.Text),
+    sa.Column('id', sa.Integer, primary_key=True),
+    sa.Column('uid', sa.Integer, sa.ForeignKey('users.id')),
     sa.Column('token', sa.Text)
 )
 
@@ -35,6 +36,14 @@ nm_role_permissions = sa.Table(
     sa.Column('rid', sa.Integer, sa.ForeignKey('roles.id')),
     sa.Column('pid', sa.Integer, sa.ForeignKey('permissions.id'))
 )
+
+
+class PasswordResetRequest(Base):
+    __tablename__ = 'password_reset_requests'
+    user = sa.orm.relationship("User", backref='reset_tokens')
+
+    def __init__(self, token):
+        self.token = token
 
 
 class User(BaseItem, Base):
