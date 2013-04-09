@@ -146,7 +146,8 @@ class Profile(BaseItem, Base):
     web = sa.Column(sa.Text)
 
     user = sa.orm.relation("User", cascade="all, delete-orphan",
-                           backref="profile", single_parent=True)
+                           backref="profile", single_parent=True,
+                           uselist=False)
 
     def __unicode__(self):
         return "%s %s" % (self.first_name, self.last_name)
