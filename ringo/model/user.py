@@ -1,6 +1,7 @@
 import hashlib
 import random
 import string
+from datetime import datetime
 from ringo.model import Base, sqlalchemy as sa
 from ringo.model.meta import MetaItem
 from ringo.model.base import BaseItem
@@ -9,6 +10,7 @@ password_reset_requests = sa.Table(
     'password_reset_requests', Base.metadata,
     sa.Column('id', sa.Integer, primary_key=True),
     sa.Column('uid', sa.Integer, sa.ForeignKey('users.id')),
+    sa.Column('created', sa.DateTime),
     sa.Column('token', sa.Text)
 )
 
@@ -44,6 +46,7 @@ class PasswordResetRequest(Base):
 
     def __init__(self, token):
         self.token = token
+        self.created = datetime.now()
 
 
 class User(BaseItem, Base):
