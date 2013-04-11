@@ -23,6 +23,18 @@ def list_(clazz, request):
 
 
 def create_(clazz, request, callback=None):
+    """Base view to create a new item of type clazz. This view will
+    render a create form to create new items. It the user submits the
+    data (POST) that the data will be validated and the new item will be
+    saved to the database. Finally after saving on the POST-request the
+    optional callback will be called.
+
+    :clazz: Class of items which will be created.
+    :request: The current request
+    :callback: A callback function [function(request, item)] which
+    returns the item again.
+    :returns: Dictionary with the following keys 'clazz', 'item', 'form'
+    """
     _ = request.translate
     rvalue = {}
     factory = clazz.get_item_factory()
