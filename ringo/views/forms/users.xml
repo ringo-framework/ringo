@@ -3,7 +3,7 @@
   <source>
     <!-- Define different entity types -->
     <entity id="e1" name="login" label="Login" type="string">
-      <rule expr="len($login) ge 8" msg="Login must have a length of greater or equal than 8"></rule>
+      <rule expr="len($login) ge 2" msg="Login must have a length of greater or equal than 2"></rule>
     </entity>
     <entity id="e2" name="password" label="Password" type="password"/>
     <entity id="e3" name="retype_password" label="Retype Password" type="password"/>
