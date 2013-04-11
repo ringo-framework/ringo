@@ -22,7 +22,7 @@ def list_(clazz, request):
     return rvalue
 
 
-def create_(clazz, request):
+def create_(clazz, request, callback=None):
     _ = request.translate
     rvalue = {}
     factory = clazz.get_item_factory()
@@ -41,6 +41,8 @@ def create_(clazz, request):
             request.db.flush()
             route_name = sitem.get_action_routename('update')
             url = request.route_url(route_name, id=sitem.id)
+            if callback:
+                sitem = callback(request, sitem)
             # Redirect to the update view.
             return HTTPFound(location=url)
         else:
