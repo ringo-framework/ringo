@@ -4,7 +4,7 @@ import string
 from datetime import datetime
 from ringo.model import Base, sqlalchemy as sa
 from ringo.model.meta import MetaItem
-from ringo.model.base import BaseItem
+from ringo.model.base import BaseItem, BaseFactory
 
 password_reset_requests = sa.Table(
     'password_reset_requests', Base.metadata,
@@ -49,6 +49,17 @@ class PasswordResetRequest(Base):
         self.created = datetime.now()
 
 
+class UserFactory(BaseFactory):
+
+    def create(self, user):
+        new_user = BaseFactory.create(self, user)
+        # Now create a a new Profile
+        profile_factory = BaseFactory(Profile)
+        profile = profile_factory.create(user)
+        new_user.profile.append(profile)
+        return new_user
+
+
 class User(BaseItem, Base):
     __tablename__ = 'users'
     _modul_id = 2
@@ -72,6 +83,10 @@ class User(BaseItem, Base):
     _table_fields = [('login', 'Login'),
                      ('roles', 'Roles'),
                      ('groups', 'Groups')]
+
+    @classmethod
+    def get_item_factory(cls):
+        return UserFactory(cls)
 
     def __unicode__(self):
         return self.login
