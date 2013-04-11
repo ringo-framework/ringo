@@ -48,6 +48,9 @@ class PasswordResetRequest(Base):
         self.token = token
         self.created = datetime.now()
 
+    def __str__(self):
+        return self.token
+
 
 class UserFactory(BaseFactory):
 
