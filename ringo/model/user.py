@@ -137,12 +137,12 @@ class Profile(BaseItem, Base):
     _modul_id = 6
     id = sa.Column(sa.Integer, primary_key=True)
     uid = sa.Column(sa.Integer, sa.ForeignKey('users.id'))
-    first_name = sa.Column(sa.Text, nullable=False)
-    last_name = sa.Column(sa.Text, nullable=False)
+    first_name = sa.Column(sa.Text, nullable=True)
+    last_name = sa.Column(sa.Text, nullable=True)
     birthday = sa.Column(sa.Date)
     address = sa.Column(sa.Text)
     phone = sa.Column(sa.Text)
-    email = sa.Column(sa.Text, nullable=False)
+    email = sa.Column(sa.Text, nullable=True)
     web = sa.Column(sa.Text)
 
     user = sa.orm.relation("User", cascade="all, delete-orphan",
