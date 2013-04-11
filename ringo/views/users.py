@@ -1,4 +1,5 @@
 import logging
+import hashlib
 from pyramid.view import view_config
 
 from pyramid.security import (
@@ -18,6 +19,17 @@ class RessourceFactory(object):
                                 'delete', 'list'))]
 
 
+def encrypt_password(request, user):
+    """Callback helper function. This function is called within the base
+    create view to encrypt the password after the user has been
+    created."""
+    unencryped_pw = user.password
+    pw = hashlib.md5()
+    pw.update(unencryped_pw)
+    user.password = pw.hexdigest()
+    return user
+
+
 @view_config(route_name=User.get_action_routename('list'),
              renderer='/default/list.mako',
              permission='list')
@@ -29,7 +41,7 @@ def list(request):
              renderer='/default/create.mako',
              permission='create')
 def create(request):
-    return create_(User, request)
+    return create_(User, request, encrypt_password)
 
 
 @view_config(route_name=User.get_action_routename('update'),
