@@ -1,3 +1,5 @@
+import hashlib
+
 from pyramid.security import remember, forget
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
@@ -5,12 +7,21 @@ from pyramid_mailer import get_mailer
 from pyramid_mailer.message import Message
 
 
+from ringo.model import DBSession
+from ringo.model.base import BaseFactory
+from ringo.model.user import User, Profile
 from formbar.config import Config, load
-from formbar.form import Form
+from formbar.form import Form, Validator
 
 from ringo.lib.helpers import get_path_to_form_config
 from ringo.lib.security import login as user_login, request_password_reset, \
     password_reset
+
+
+def is_login_unique(field, data):
+    """Validator function as helper for formbar validators"""
+    users = DBSession.query(User).filter_by(login=data[field]).all()
+    return len(users) == 0
 
 
 @view_config(route_name='login', renderer='/auth/login.mako')
@@ -44,6 +55,42 @@ def logout(request):
     msg = _("Logout was successfull :)")
     request.session.flash(msg, 'success')
     return HTTPFound(location=target_url, headers=headers)
+
+
+@view_config(route_name='register_user',
+             renderer='/auth/register_user.mako')
+def register_user(request):
+    #_ = request.translate
+    #settings = request.registry.settings
+    config = Config(load(get_path_to_form_config('auth.xml')))
+    form_config = config.get_form('register_user')
+    form = Form(form_config)
+    # Do extra validation which is not handled by formbar.
+    # Is the login unique?
+    validator = Validator('login',
+                          'There is already a user with this name',
+                          is_login_unique)
+    form.add_validator(validator)
+    if request.POST:
+        if form.validate(request.params.mixed()):
+            # 1. Create user. Do not activate him. Default role is user.
+            ufac = BaseFactory(User)
+            pfac = BaseFactory(Profile)
+            user = ufac.create(None)
+            user.login = form.data['login']
+            # TODO: Deactive user, set activation token
+            pw = hashlib.md5()
+            pw.update(form.data['pass'])
+            user.password = pw.hexdigest()
+            DBSession.add(user)
+            profile = pfac.create(None)
+            profile.email = form.data['email']
+            profile.user = user
+            DBSession.add(profile)
+            # 3. Send confirmation email. The user will be activated
+            #    after the user clicks on the confirmation link
+            pass
+    return {'form': form.render()}
 
 
 @view_config(route_name='forgot_password',
