@@ -54,7 +54,7 @@ class PasswordResetRequest(Base):
 
 class UserFactory(BaseFactory):
 
-    def create(self, user):
+    def create(self, user=None):
         new_user = BaseFactory.create(self, user)
         # Now create a a new Profile
         profile_factory = BaseFactory(Profile)
