@@ -1,13 +1,13 @@
 <%inherit file="/main.mako" />
 <div class="row-fluid page-header">
-  <div class="span3">
-  </div>
   <div class="span6">
-    <div class="well">
-      <h3>${_('Request password reset')}</h3>
-      ${form | n}
-    </div>
+    <h1>${_('Reset Password')}</h1>
   </div>
-  <div class="span3">
+</div>
+<div class="row-fluid">
+  <div class="span8">
+    <p>${_('Enter your Loginname and a password reset email will be sent out')}</p>
+    <br>
+    ${form | n}
   </div>
 </div>

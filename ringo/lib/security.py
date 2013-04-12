@@ -142,8 +142,8 @@ def activate_user(token, db):
         log.info('User %s activated' % user)
         return user
     except NoResultFound:
-        log.warning('User activation failed for user %s with token %s'
-                    % (user, token))
+        log.warning('User activation failed for token %s'
+                    % (token))
         return None
 
 
@@ -162,13 +162,15 @@ def password_reset(token, db):
         td = datetime.now() - token.created
         if td.days <= 1:
             user = token.user
-            user.reset_tokens = []
             password = password_generator()
             md5_pw = hashlib.md5()
             md5_pw.update(password)
             md5_pw = md5_pw.hexdigest()
             user.password = md5_pw
             log.info('Password reset success for user %s' % user)
+            # delete all old password request token
+            for old_token in user.reset_tokens:
+                db.delete(old_token)
             return user, password
         else:
             log.warning('Password reset failed for token %s (outdated)'

@@ -10,7 +10,6 @@
       <rule expr="len($pass) >= 6" msg="Password must be at least 6 chars long" method="pre"/>
     </entity>
     <entity id="e3" name="login" label="Login" type="string">
-      <help>Please enter your login name. A email will be sent to the users email address with further instructions on how to reset the password.</help>
       <rule expr="bool($login)" msg="Loginname is required" method="pre"/>
     </entity>
     <entity id="e4" name="pass2" label="Retype password" type="password">
@@ -27,6 +26,7 @@
   <form id="forgot_password" autocomplete="off" method="POST" action="/auth/forgot_password" enctype="multipart/form-data">
     <row>
       <col><field ref="e3"/></col>
+      <col></col>
     </row>
   </form>
   <form id="register_user" method="POST" action="/auth/register_user" enctype="multipart/form-data">
