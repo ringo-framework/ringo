@@ -4,9 +4,15 @@
     <h1>${_('Edit')} ${N_(clazz.get_item_modul().get_label())}</h1>
   </div>
   <div class="span6">
-    <div class="pull-right context-menu btn-group">
-      <a href="${h.get_action_url(request, item, 'read')}" class="btn"><i class="icon-eye-open"></i></a>
-      <a href="${h.get_action_url(request, item, 'delete')}" class="btn"><i class="icon-trash"></i></a>
+    <div class="btn-toolbar pull-right">
+      <div class="context-menu btn-group">
+        <!-- Item specific actions -->
+        ${main.render_item_specific_actions(item)}
+      </div>
+      <div class="context-menu btn-group">
+        <!-- Base ringo actions -->
+        ${main.render_item_base_actions(item)}
+      </div>
     </div>
   </div>
 </div>

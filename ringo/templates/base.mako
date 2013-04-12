@@ -35,3 +35,15 @@
     <script src="/static/js/init.js"></script>
   </body>
 </html>
+
+<%def name="render_item_base_actions(item)">
+  <a href="${h.get_action_url(request, item, 'list')}" class="btn"><i class="icon-list-alt"></i></a>
+  <a href="${h.get_action_url(request, item, 'update')}" class="btn"><i class="icon-edit"></i></a>
+  <a href="${h.get_action_url(request, item, 'delete')}" class="btn"><i class="icon-trash"></i></a>
+</%def>
+
+<%def name="render_item_specific_actions(item)">
+  ##<a href="${h.get_action_url(request, item, 'list')}" class="btn"><i class="icon-list-alt"></i></a>
+  ##<a href="${h.get_action_url(request, item, 'update')}" class="btn"><i class="icon-edit"></i></a>
+  ##<a href="${h.get_action_url(request, item, 'delete')}" class="btn"><i class="icon-trash"></i></a>
+</%def>
