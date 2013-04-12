@@ -1,4 +1,5 @@
-from ringo.model import Base, sqlalchemy as sa
+import sqlalchemy as sa
+from ringo.model import Base
 from ringo.model.user import BaseItem
 from ringo.model.meta import MetaItem
 from ringo.lib.i18n import _

@@ -1,8 +1,9 @@
 import hashlib
 import random
 import string
+import sqlalchemy as sa
 from datetime import datetime
-from ringo.model import Base, sqlalchemy as sa
+from ringo.model import Base
 from ringo.model.meta import MetaItem
 from ringo.model.base import BaseItem, BaseFactory
 

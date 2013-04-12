@@ -1,4 +1,6 @@
-from ringo.model import Base, sqlalchemy as sa
+import sqlalchemy as sa
+from ringo.model import Base
+from ringo.model.mixins import Owned, Meta
 
 
 class MetaItem(Base):
