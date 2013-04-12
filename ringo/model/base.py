@@ -1,7 +1,6 @@
 from formbar.config import Config, load
 from ringo.lib.helpers import get_path_to_form_config
 from ringo.model import DBSession
-from ringo.model.meta import MetaItem
 
 
 class BaseItem(object):
@@ -50,21 +49,19 @@ class BaseFactory(object):
     def create(self, user):
         """Will create a new instance of clazz. The instance is it is not saved
         persistent at this moment. The method will also take care of
-        creating a MetaItem.
+        setting the correct ownership.
 
         :user: User instance will own the new created item
         :returns: Instance of clazz
 
         """
-        mid = self._clazz._modul_id
-        uid = None
-        gid = None
-        if user is not None:
-            uid = user.id
-            gid = user.gid
-        meta = MetaItem(mid=mid, uid=uid, gid=gid)
         item = self._clazz()
-        item.meta = meta
+        # TODO: Set ownership if possible
+        #uid = None
+        #gid = None
+        #if user is not None:
+        #    uid = user.id
+        #    gid = user.gid
         return item
 
     def load(self, id, db=None):
