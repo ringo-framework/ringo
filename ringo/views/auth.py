@@ -1,4 +1,5 @@
 import hashlib
+import uuid
 
 from pyramid.security import remember, forget
 from pyramid.view import view_config
@@ -9,13 +10,13 @@ from pyramid_mailer.message import Message
 
 from ringo.model import DBSession
 from ringo.model.base import BaseFactory
-from ringo.model.user import User, Profile
+from ringo.model.user import User, Profile, Usergroup, USER_GROUP_ID
 from formbar.config import Config, load
 from formbar.form import Form, Validator
 
 from ringo.lib.helpers import get_path_to_form_config
 from ringo.lib.security import login as user_login, request_password_reset, \
-    password_reset
+    password_reset, activate_user
 
 
 def is_login_unique(field, data):
@@ -60,8 +61,8 @@ def logout(request):
 @view_config(route_name='register_user',
              renderer='/auth/register_user.mako')
 def register_user(request):
-    #_ = request.translate
-    #settings = request.registry.settings
+    _ = request.translate
+    settings = request.registry.settings
     config = Config(load(get_path_to_form_config('auth.xml')))
     form_config = config.get_form('register_user')
     form = Form(form_config)
@@ -76,12 +77,24 @@ def register_user(request):
             # 1. Create user. Do not activate him. Default role is user.
             ufac = BaseFactory(User)
             pfac = BaseFactory(Profile)
+            gfac = BaseFactory(Usergroup)
             user = ufac.create(None)
+            # Set login from formdata
             user.login = form.data['login']
-            # TODO: Deactive user, set activation token
+            # Encrypt password and save
             pw = hashlib.md5()
             pw.update(form.data['pass'])
             user.password = pw.hexdigest()
+            # Deactivate the user. To activate the user needs to confirm
+            # with the activation link
+            user.activated = False
+            atoken = str(uuid.uuid4())
+            user.activation_token = atoken
+            # Set user group
+            group = gfac.load(USER_GROUP_ID)
+            user.groups.append(group)
+            # Set default user group.
+            user.gid = group.id
             DBSession.add(user)
             profile = pfac.create(None)
             profile.email = form.data['email']
@@ -89,8 +102,37 @@ def register_user(request):
             DBSession.add(profile)
             # 3. Send confirmation email. The user will be activated
             #    after the user clicks on the confirmation link
-            pass
+            sender = settings['mail.default_sender']
+            recipient = profile.email
+            subject = _('Confirm user registration for ringo')
+            message = _('Please confirm the user registration by clicking'
+                        ' on the following link: %s'
+                        % request.route_url('confirm_user',
+                                            token=atoken))
+            _send_mail(request, recipient, sender, subject, message)
+            target_url = request.route_url('login')
+            headers = forget(request)
+            msg = _("User has been created and a confirmation mail was sent"
+                    " to the users email adress. Please check your email :)")
+            request.session.flash(msg, 'success')
+            return HTTPFound(location=target_url, headers=headers)
     return {'form': form.render()}
+
+
+@view_config(route_name='confirm_user',
+             renderer='/auth/confirm_user.mako')
+def confirm_user(request):
+    _ = request.translate
+    success = False
+    token = request.matchdict.get('token')
+    user = activate_user(token, request.db)
+    if user:
+        success = True
+        msg = _("The user has beed successfull confirmed.")
+    else:
+        msg = _("The user was not confirmed. Maybe the confirmation"
+                " token was not valid?")
+    return {'msg': msg, 'success': success}
 
 
 @view_config(route_name='forgot_password',
@@ -116,8 +158,6 @@ def forgot_password(request):
                           % request.route_url('reset_password',
                                               token=user.reset_tokens[-1])
                 _send_mail(request, recipient, sender, subject, message)
-
-                pass
             target_url = request.route_url('login')
             headers = forget(request)
             msg = _("Password reset token has been sent to the users "

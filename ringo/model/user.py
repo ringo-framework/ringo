@@ -6,6 +6,7 @@ from ringo.model import Base, sqlalchemy as sa
 from ringo.model.meta import MetaItem
 from ringo.model.base import BaseItem, BaseFactory
 
+
 password_reset_requests = sa.Table(
     'password_reset_requests', Base.metadata,
     sa.Column('id', sa.Integer, primary_key=True),
@@ -70,6 +71,8 @@ class User(BaseItem, Base):
     mid = sa.Column(sa.Integer, sa.ForeignKey('meta.id'))
     login = sa.Column(sa.Text, unique=True, nullable=False)
     password = sa.Column(sa.Text, nullable=False)
+    activated = sa.Column(sa.Boolean, default=True)
+    activation_token = sa.Column(sa.Text)
     gid = sa.Column(sa.Integer, sa.ForeignKey('usergroups.id'))
 
     # Relations
@@ -93,6 +96,12 @@ class User(BaseItem, Base):
 
     def __unicode__(self):
         return self.login
+
+
+ADMIN_GROUP_ID = 1
+"""Role ID your the system administration group"""
+USER_GROUP_ID = 2
+"""Role ID your the system user group"""
 
 
 class Usergroup(BaseItem, Base):

@@ -126,6 +126,27 @@ def _load_user(userid, request):
         return None
 
 
+def activate_user(token, db):
+    """Will check if confirmation token is valid by searching a user
+    with this activation token. If a user is found the activated flag
+    will be set to true.
+
+    :token: confirmation token
+    :db: db connection
+    :returns: user
+    """
+    try:
+        user = db.query(User).filter_by(activation_token=token).one()
+        user.activated = True
+        user.activation_token = None
+        log.info('User %s activated' % user)
+        return user
+    except NoResultFound:
+        log.warning('User activation failed for user %s with token %s'
+                    % (user, token))
+        return None
+
+
 def password_reset(token, db):
     """Will check if there is a password reset token is valid. The
     function will reset the password of the user. The new generated
@@ -197,8 +218,12 @@ def login(username, password):
     try:
         user = DBSession.query(User).filter_by(login=username,
                                                password=md5_pw).one()
-        log.info("Login successfull '%s'" % (username))
-        return user
+        if user.activated:
+            log.info("Login successfull '%s'" % (username))
+            return user
+        log.info("Login failed for user '%s'. "
+                 "Reason: Not activated" % username)
     except NoResultFound:
-        log.info("Login failed for user '%s'" % username)
-        return None
+        log.info("Login failed for user '%s'. "
+                 "Reason: Username or Password wrong" % username)
+    return None
