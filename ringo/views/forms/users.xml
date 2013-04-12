@@ -10,6 +10,12 @@
     <entity id="e4" name="roles" label="Roles"/>
     <entity id="e5" name="groups" label="Groups"/>
     <entity id="e6" name="default_group" label="Default group"/>
+    <entity id="e7" name="activated" label="Activated"/>
+    <entity id="e8" name="activation_token" label="Activation Token">
+      <help>The activation token can be used to (re)activate a deactivated or
+      new registered user. Please call /auth/activate_user/$token to active
+      the user.</help>
+    </entity>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>
@@ -54,6 +60,10 @@
     <row>
       <col><field ref="e5"/></col>
       <col><field ref="e6"/></col>
+    </row>
+    <row>
+      <col><field ref="e7"/></col>
+      <col><field ref="e8"/></col>
     </row>
   </snippet>
 </configuration>
