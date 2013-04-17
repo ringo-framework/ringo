@@ -55,12 +55,13 @@ class BaseFactory(object):
 
         """
         item = self._clazz()
-        # TODO: Set ownership if possible
-        #uid = None
-        #gid = None
-        #if user is not None:
-        #    uid = user.id
-        #    gid = user.gid
+        # Try to set the ownership of the entry if the item provides the
+        # fields.
+        if (hasattr(item, 'uid')
+        and hasattr(item, 'gid')
+        and user is not None):
+            item.uid = user.id
+            item.gid = user.gid
         return item
 
     def load(self, id, db=None):
