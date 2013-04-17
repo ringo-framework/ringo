@@ -36,6 +36,7 @@ def init_model(dbsession):
     modul = ModulItem(name='modules')
     modul.label = _("Modul")
     modul.label_plural = _("Modules")
+    dbsession.add(modul)
     modul = ModulItem(name='users')
     modul.label = _("User")
     modul.label_plural = _("Users")

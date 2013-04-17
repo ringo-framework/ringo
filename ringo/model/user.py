@@ -149,7 +149,7 @@ class Permission(BaseItem, Base):
 
 class Profile(BaseItem, Owned, Base):
     __tablename__ = 'profiles'
-    _modul_id = 5
+    _modul_id = 6
     id = sa.Column(sa.Integer, primary_key=True)
     first_name = sa.Column(sa.Text, nullable=True)
     last_name = sa.Column(sa.Text, nullable=True)
