@@ -2,7 +2,6 @@ from formbar.config import Config, load
 from ringo.lib.helpers import get_path_to_form_config
 from ringo.model import DBSession
 
-
 class BaseItem(object):
 
     _table_fields = []
