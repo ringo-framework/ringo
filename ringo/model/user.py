@@ -5,6 +5,7 @@ import sqlalchemy as sa
 from datetime import datetime
 from ringo.model import Base
 from ringo.model.base import BaseItem, BaseFactory
+from ringo.model.mixins import Owned
 
 
 password_reset_requests = sa.Table(
@@ -146,11 +147,10 @@ class Permission(BaseItem, Base):
         return self.name
 
 
-class Profile(BaseItem, Base):
+class Profile(BaseItem, Owned, Base):
     __tablename__ = 'profiles'
     _modul_id = 5
     id = sa.Column(sa.Integer, primary_key=True)
-    uid = sa.Column(sa.Integer, sa.ForeignKey('users.id'))
     first_name = sa.Column(sa.Text, nullable=True)
     last_name = sa.Column(sa.Text, nullable=True)
     birthday = sa.Column(sa.Date)
@@ -159,6 +159,7 @@ class Profile(BaseItem, Base):
     email = sa.Column(sa.Text, nullable=True)
     web = sa.Column(sa.Text)
 
+    # The foreign key to the user is injected from the Owned mixin.
     user = sa.orm.relation("User", cascade="all, delete-orphan",
                            backref="profile", single_parent=True,
                            uselist=False)
