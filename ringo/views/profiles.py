@@ -21,9 +21,6 @@ class RessourceFactory(object):
 @view_config(route_name=Profile.get_action_routename('list'),
              renderer='/default/list.mako',
              permission='list')
-@view_config(name='xxx',
-             renderer='/default/list.mako',
-             permission='list')
 def list(request):
     return list_(Profile, request)
 
