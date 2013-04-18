@@ -14,6 +14,15 @@ from ringo.model import (
     DBSession,
     Base,
 )
+from ringo.model.user import (
+    User,
+    Profile,
+    Usergroup,
+    Role
+)
+from ringo.model.modul import (
+    ModulItem,
+)
 from ringo.lib import (
     helpers,
     security
@@ -43,6 +52,20 @@ def connect_on_request(event):
 
 def close_db_connection(request):
     request.db.close()
+
+
+def add_route(config, clazz):
+    actions = ['list', 'create', 'read', 'update', 'delete']
+    name = clazz.__tablename__
+    for action in actions:
+        route_name = "%s-%s" % (name, action)
+        if action in ['read', 'update', 'delete']:
+            route_url = "%s/%s/{id}" % (name, action)
+        else:
+            route_url = "%s/%s" % (name, action)
+        config.add_route(route_name, route_url,
+                         factory=get_resource_factory(clazz))
+    return config
 
 
 def main(global_config, **settings):
@@ -113,16 +136,7 @@ def main(global_config, **settings):
     config.add_route('roles-delete', 'roles/delete/{id}',
                      factory='ringo.views.roles.RessourceFactory')
     # Profile admininistration
-    config.add_route('profiles-list', 'profiles/list',
-                     factory='ringo.views.profiles.RessourceFactory')
-    config.add_route('profiles-create', 'profiles/create',
-                     factory='ringo.views.profiles.RessourceFactory')
-    config.add_route('profiles-read', 'profiles/read/{id}',
-                     factory='ringo.views.profiles.RessourceFactory')
-    config.add_route('profiles-update', 'profiles/update/{id}',
-                     factory='ringo.views.profiles.RessourceFactory')
-    config.add_route('profiles-delete', 'profiles/delete/{id}',
-                     factory='ringo.views.profiles.RessourceFactory')
+    add_route(config, Profile)
 
     config.add_translation_dirs('ringo:locale/')
     config.add_static_view('static',
