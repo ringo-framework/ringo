@@ -34,19 +34,25 @@ class Resource(object):
     __acl__ = [(Allow, 'role:admin', ('create', 'read', 'update',
                                       'delete', 'list'))]
 
-    def __init__(self, title=None):
+    def __init__(self, title=None, model=None):
         self._childs = {}
         self._title = title
-        #self.request = request
+        self._model = title
 
     def add_child(self, url, resource):
         resource.__name__ = url
         resource.__parent__ = self
-        self._childs[self.__name__] = resource
+        self._childs[url] = resource
 
     def __getitem__(self, name):
         log.debug('Searching for resource "%s" in %s' % (name, self._childs))
         try:
             resource = self._childs[name]
+            return resource
         except KeyError:
             raise
+
+class Root(Resource):
+    def __init__(self, request):
+        super(Root, self).__init__("Root")
+        self.request = request
