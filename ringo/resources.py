@@ -13,6 +13,24 @@ def bootstrap(request):
     root.add_child("testtraversal", test)
     return root
 
+def get_resource_factory(clazz):
+    factory = RessourceFactory
+    factory.__model__ = clazz
+    return factory
+
+
+class RessourceFactory(object):
+
+    __model__ = None
+    __acl__ = [(Allow, 'role:admin', ('create', 'read', 'update',
+                                      'delete', 'list'))]
+
+    def __init__(self, request):
+        self._set_acl(request)
+
+    def _set_acl(self, request):
+        pass
+
 class Resource(object):
     """Ressource element"""
 
