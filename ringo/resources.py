@@ -5,13 +5,6 @@ from pyramid.security import (
 
 log = logging.getLogger(__name__)
 
-def bootstrap(request):
-    root = Resource("Root")
-    test = Resource("Test")
-    test2 = Resource("Test2")
-    test.add_child("xxx", test2)
-    root.add_child("testtraversal", test)
-    return root
 
 def get_resource_factory(clazz):
     factory = RessourceFactory
