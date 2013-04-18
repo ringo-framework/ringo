@@ -1,10 +1,13 @@
 import os
+import logging
 import pkg_resources
 from pyramid.config import Configurator
 from pyramid.events import BeforeRender, NewRequest
 from pyramid_beaker import session_factory_from_settings
 
 from sqlalchemy import engine_from_config
+
+log = logging.getLogger(__name__)
 
 
 from ringo.resources import (
@@ -92,49 +95,13 @@ def main(global_config, **settings):
     config.add_route('logout', 'auth/logout')
 
     # Roles admininistration
-    config.add_route('modules-list', 'modules/list',
-                     factory='ringo.views.modules.RessourceFactory')
-    config.add_route('modules-create', 'modules/create',
-                     factory='ringo.views.modules.RessourceFactory')
-    config.add_route('modules-read', 'modules/read/{id}',
-                     factory='ringo.views.modules.RessourceFactory')
-    config.add_route('modules-update', 'modules/update/{id}',
-                     factory='ringo.views.modules.RessourceFactory')
-    config.add_route('modules-delete', 'modules/delete/{id}',
-                     factory='ringo.views.modules.RessourceFactory')
+    add_route(config, ModulItem)
     # Users admininistration
-    config.add_route('users-list', 'users/list',
-                     factory='ringo.views.users.RessourceFactory')
-    config.add_route('users-create', 'users/create',
-                     factory='ringo.views.users.RessourceFactory')
-    config.add_route('users-read', 'users/read/{id}',
-                     factory='ringo.views.users.RessourceFactory')
-    config.add_route('users-update', 'users/update/{id}',
-                     factory='ringo.views.users.RessourceFactory')
-    config.add_route('users-delete', 'users/delete/{id}',
-                     factory='ringo.views.users.RessourceFactory')
+    add_route(config, User)
     # Usergroups admininistration
-    config.add_route('usergroups-list', 'usergroups/list',
-                     factory='ringo.views.usergroups.RessourceFactory')
-    config.add_route('usergroups-create', 'usergroups/create',
-                     factory='ringo.views.usergroups.RessourceFactory')
-    config.add_route('usergroups-read', 'usergroups/read/{id}',
-                     factory='ringo.views.usergroups.RessourceFactory')
-    config.add_route('usergroups-update', 'usergroups/update/{id}',
-                     factory='ringo.views.usergroups.RessourceFactory')
-    config.add_route('usergroups-delete', 'usergroups/delete/{id}',
-                     factory='ringo.views.usergroups.RessourceFactory')
+    add_route(config, Usergroup)
     # Roles admininistration
-    config.add_route('roles-list', 'roles/list',
-                     factory='ringo.views.roles.RessourceFactory')
-    config.add_route('roles-create', 'roles/create',
-                     factory='ringo.views.roles.RessourceFactory')
-    config.add_route('roles-read', 'roles/read/{id}',
-                     factory='ringo.views.roles.RessourceFactory')
-    config.add_route('roles-update', 'roles/update/{id}',
-                     factory='ringo.views.roles.RessourceFactory')
-    config.add_route('roles-delete', 'roles/delete/{id}',
-                     factory='ringo.views.roles.RessourceFactory')
+    add_route(config, Role)
     # Profile admininistration
     add_route(config, Profile)
 

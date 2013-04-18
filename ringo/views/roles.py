@@ -1,21 +1,10 @@
 import logging
 from pyramid.view import view_config
 
-from pyramid.security import (
-    Allow,
-)
-
 from ringo.views.base import list_, create_, update_, read_, delete_
 from ringo.model.user import Role
 
 log = logging.getLogger(__name__)
-
-
-class RessourceFactory(object):
-
-    def __init__(self, request):
-        self.__acl__ = [(Allow, 'role:admin', ('create', 'read', 'update',
-                                'delete', 'list'))]
 
 
 @view_config(route_name=Role.get_action_routename('list'),
