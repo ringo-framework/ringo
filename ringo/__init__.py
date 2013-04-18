@@ -8,7 +8,7 @@ from sqlalchemy import engine_from_config
 
 
 from ringo.resources import (
-    bootstrap,
+    get_resource_factory,
 )
 from ringo.model import (
     DBSession,
@@ -52,8 +52,7 @@ def main(global_config, **settings):
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
     config = Configurator(settings=settings,
-                          locale_negotiator=locale_negotiator,
-                          root_factory=bootstrap)
+                          locale_negotiator=locale_negotiator)
     config.set_session_factory(session_factory_from_settings(settings))
     config.include('pyramid_handlers')
     config.include('pyramid_beaker')
