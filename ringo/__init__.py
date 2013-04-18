@@ -7,6 +7,9 @@ from pyramid_beaker import session_factory_from_settings
 from sqlalchemy import engine_from_config
 
 
+from ringo.resources import (
+    bootstrap,
+)
 from ringo.model import (
     DBSession,
     Base,
@@ -49,7 +52,8 @@ def main(global_config, **settings):
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
     config = Configurator(settings=settings,
-                          locale_negotiator=locale_negotiator)
+                          locale_negotiator=locale_negotiator,
+                          root_factory=bootstrap)
     config.set_session_factory(session_factory_from_settings(settings))
     config.include('pyramid_handlers')
     config.include('pyramid_beaker')
@@ -111,15 +115,15 @@ def main(global_config, **settings):
                      factory='ringo.views.roles.RessourceFactory')
     # Profile admininistration
     config.add_route('profiles-list', 'profiles/list',
-                     factory='ringo.views.usergroups.RessourceFactory')
+                     factory='ringo.views.profiles.RessourceFactory')
     config.add_route('profiles-create', 'profiles/create',
-                     factory='ringo.views.usergroups.RessourceFactory')
+                     factory='ringo.views.profiles.RessourceFactory')
     config.add_route('profiles-read', 'profiles/read/{id}',
-                     factory='ringo.views.usergroups.RessourceFactory')
+                     factory='ringo.views.profiles.RessourceFactory')
     config.add_route('profiles-update', 'profiles/update/{id}',
-                     factory='ringo.views.usergroups.RessourceFactory')
+                     factory='ringo.views.profiles.RessourceFactory')
     config.add_route('profiles-delete', 'profiles/delete/{id}',
-                     factory='ringo.views.usergroups.RessourceFactory')
+                     factory='ringo.views.profiles.RessourceFactory')
 
     config.add_translation_dirs('ringo:locale/')
     config.add_static_view('static',
