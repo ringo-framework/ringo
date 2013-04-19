@@ -16,6 +16,9 @@
       <help>Whenever an item of the modul is displayed as simple string it
       will be displayed in the following form.</help>
     </entity>
+    <entity id="e6" name="actions" label="Actions">
+      <help>Select the actions which should be enabled for this modul</help>
+    </entity>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>
@@ -46,6 +49,9 @@
     </row>
     <row>
       <col><field ref="e5"/></col>
+    </row>
+    <row>
+      <col><field ref="e6"/></col>
     </row>
   </snippet>
 </configuration>
