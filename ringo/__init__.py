@@ -59,13 +59,14 @@ def close_db_connection(request):
 
 def add_route(config, clazz):
     actions = ['list', 'create', 'read', 'update', 'delete']
+    # load modul to get the enabled actions
+    factory = ModulItem.get_item_factory()
+    modul = factory.load(clazz._modul_id)
     name = clazz.__tablename__
-    for action in actions:
-        route_name = "%s-%s" % (name, action)
-        if action in ['read', 'update', 'delete']:
-            route_url = "%s/%s/{id}" % (name, action)
-        else:
-            route_url = "%s/%s" % (name, action)
+    for action in modul.actions:
+        route_name = "%s-%s" % (name, action.name.lower())
+        route_url = "%s/%s" % (name, action.url)
+        log.debug("Adding route: %s, %s" % (route_name, route_url))
         config.add_route(route_name, route_url,
                          factory=get_resource_factory(clazz))
     return config
