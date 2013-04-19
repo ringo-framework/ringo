@@ -57,8 +57,16 @@ def get_principals(userid, request):
     user = _load_user(userid, request)
     principals = []
     if user:
+        # Add roles the user have
         for role in get_roles(user):
             principals.append('role:%s' % role.name)
+        # Add groups the user member of
+        for group in user.groups:
+            principals.append('group:%s' % group.name)
+        # Finally add the user itself
+        principals.append('uid:%s' % user.id)
+
+
     log.debug('Principals for user "%s": %s' % (user.login, principals))
     return principals
 
