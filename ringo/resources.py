@@ -1,24 +1,24 @@
 import logging
 from pyramid.security import (
     Allow,
+    ALL_PERMISSIONS
 )
+from ringo.lib.security import get_roles
 
 log = logging.getLogger(__name__)
 
 
 def get_resource_factory(clazz):
-    factory = RessourceFactory
-    factory.__model__ = clazz
+    """Dynamically create a Resource factory"""
+    name = clazz.__name__
+    factory = type(name, (RessourceFactory, ), {'__model__': clazz})
     return factory
 
 
 class RessourceFactory(object):
 
-    __model__ = None
-
     # Users with the admin role should be allowed to to all actions
-    __default_acl__ = [(Allow, 'role:admin', ('create', 'read', 'update',
-                                      'delete', 'list'))]
+    __default_acl__ = [(Allow, 'role:admin', ALL_PERMISSIONS)]
 
     def __init__(self, request):
         # Reset ACL
@@ -37,15 +37,28 @@ class RessourceFactory(object):
         self.__acl__.extend(self.__default_acl__)
 
     def _set_acl(self, request):
-        # Row bases permission checks: Check if the current user is the
-        # owner of the item
+        log.debug("Setting ACL for user %s" % request.user)
         self._set_default_acl()
-        if self.item:
+        # Set role based permissions
+        user = request.user
+        for role in get_roles(user):
+            log.debug("Setting permissions for role %s" % role)
+            for perm in role.permissions:
+                if perm.modul.id == self.__model__._modul_id:
+                    permission = (Allow, 'role:%s' % role, perm.name.lower())
+                    log.debug("adding new permission: %s" % str(permission))
+                    self.__acl__.append(permission)
+
+        # Row bases permission checks: Check if the current user is the
+        # owner of the item and the modul has information abouts the
+        # owner (id > 5, starts with profiles)
+        if self.item and self.__model__._modul_id > 5:
             uid = self.item.uid
             permission = (Allow, 'uid:%s' % uid, ('create', 'read', 'update',
                                                   'delete', 'list'))
             log.debug("adding new permission: %s" % str(permission))
             self.__acl__.append(permission)
+
 
 class Resource(object):
     """Ressource element"""
@@ -74,6 +87,7 @@ class Resource(object):
             return resource
         except KeyError:
             raise
+
 
 class Root(Resource):
     def __init__(self, request):
