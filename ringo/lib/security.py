@@ -5,7 +5,8 @@ import string
 import random
 from datetime import datetime
 
-from pyramid.security import unauthenticated_userid
+from pyramid.security import unauthenticated_userid,\
+    has_permission as has_permission_
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 
@@ -40,6 +41,10 @@ def get_user(request):
     if userid is not None:
         return _load_user(userid, request)
     return None
+
+
+def has_permission(permission, context, request):
+    return has_permission_(permission, context, request)
 
 
 def get_principals(userid, request):
