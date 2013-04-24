@@ -37,9 +37,11 @@
 </html>
 
 <%def name="render_item_base_actions(item)">
-  <a href="${h.get_action_url(request, item, 'list')}" class="btn"><i class="icon-list-alt"></i></a>
-  <a href="${h.get_action_url(request, item, 'update')}" class="btn"><i class="icon-edit"></i></a>
-  <a href="${h.get_action_url(request, item, 'delete')}" class="btn"><i class="icon-trash"></i></a>
+  % for action in item.get_item_modul().actions:
+    % if s.has_permission(action.name.lower(), request.context, request):
+      <a href="${h.get_action_url(request, item, action.name.lower())}" class="btn"><i class="${action.icon}"></i></a>
+    % endif
+  % endfor
 </%def>
 
 <%def name="render_item_specific_actions(item)">
