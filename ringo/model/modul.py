@@ -21,6 +21,8 @@ class ActionItem(BaseItem, Base):
     url = sa.Column(sa.Text, nullable=False)
     description = sa.Column(sa.Text)
 
+    _table_fields = [('modul', 'Modul'), ('name', 'Name'), ('url', 'Url')]
+
     def __unicode__(self):
         return u"%s (%s/%s)" % (self.name, self.modul, self.url)
 
