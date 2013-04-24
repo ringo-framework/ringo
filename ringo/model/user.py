@@ -5,6 +5,7 @@ import sqlalchemy as sa
 from datetime import datetime
 from ringo.model import Base
 from ringo.model.base import BaseItem, BaseFactory
+from ringo.model.modul import ActionItem
 from ringo.model.mixins import Owned
 
 
@@ -35,10 +36,10 @@ nm_user_usergroups = sa.Table(
     sa.Column('gid', sa.Integer, sa.ForeignKey('usergroups.id'))
 )
 
-nm_role_permissions = sa.Table(
-    'nm_role_permissions', Base.metadata,
-    sa.Column('rid', sa.Integer, sa.ForeignKey('roles.id')),
-    sa.Column('pid', sa.Integer, sa.ForeignKey('permissions.id'))
+nm_action_roles = sa.Table(
+    'nm_action_roles', Base.metadata,
+    sa.Column('aid', sa.Integer, sa.ForeignKey('actions.id')),
+    sa.Column('rid', sa.Integer, sa.ForeignKey('roles.id'))
 )
 
 
@@ -67,7 +68,7 @@ class UserFactory(BaseFactory):
 
 class User(BaseItem, Base):
     __tablename__ = 'users'
-    _modul_id = 2
+    _modul_id = 3
     id = sa.Column(sa.Integer, primary_key=True)
     login = sa.Column(sa.Text, unique=True, nullable=False)
     password = sa.Column(sa.Text, nullable=False)
@@ -104,7 +105,7 @@ USER_GROUP_ID = 2
 
 class Usergroup(BaseItem, Base):
     __tablename__ = 'usergroups'
-    _modul_id = 3
+    _modul_id = 4
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.Text, unique=True, nullable=False)
 
@@ -121,27 +122,14 @@ class Usergroup(BaseItem, Base):
 
 class Role(BaseItem, Base):
     __tablename__ = 'roles'
-    _modul_id = 4
-    id = sa.Column(sa.Integer, primary_key=True)
-    name = sa.Column(sa.Text, unique=True, nullable=False)
-
-    # Relations
-    permissions = sa.orm.relationship("Permission",
-                                      secondary=nm_role_permissions)
-
-    # Configuration
-    _table_fields = [('name', 'Name'),
-                     ('permissions', 'Permissions')]
-
-    def __unicode__(self):
-        return self.name
-
-
-class Permission(BaseItem, Base):
-    __tablename__ = 'permissions'
     _modul_id = 5
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.Text, unique=True, nullable=False)
+
+    # Configuration
+    _table_fields = [('name', 'Name')]
+
+    permissions = sa.orm.relation(ActionItem, secondary=nm_action_roles)
 
     def __unicode__(self):
         return self.name
@@ -176,19 +164,7 @@ def init_model(dbsession):
     :returns: None
 
     """
-    read_perm = Permission(name='read')
-    create_perm = Permission(name='create')
-    update_perm = Permission(name='update')
-    delete_perm = Permission(name='delete')
-    dbsession.add(read_perm)
-    dbsession.add(create_perm)
-    dbsession.add(update_perm)
-    dbsession.add(delete_perm)
     admin_role = Role(name='admin')
-    admin_role.permissions.append(create_perm)
-    admin_role.permissions.append(read_perm)
-    admin_role.permissions.append(update_perm)
-    admin_role.permissions.append(delete_perm)
     dbsession.add(admin_role)
     role = Role(name='user')
     dbsession.add(role)

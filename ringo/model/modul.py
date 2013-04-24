@@ -14,6 +14,7 @@ from ringo.lib.i18n import _
 
 class ActionItem(BaseItem, Base):
     __tablename__ = 'actions'
+    _modul_id = 2
     id = sa.Column(sa.Integer, primary_key=True)
     mid = sa.Column(sa.Integer, sa.ForeignKey('modules.id'))
     name = sa.Column(sa.Text, nullable=False)
@@ -71,32 +72,37 @@ def init_model(dbsession):
 
     """
 
-
+    # ID 1
     modul = ModulItem(name='modules')
     modul.label = _("Modul")
     modul.label_plural = _("Modules")
     modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
+    # ID 2
+    modul = ModulItem(name='actions')
+    modul.label = _("Action")
+    modul.label_plural = _("Actions")
+    modul.actions.extend(_create_default_actions(dbsession))
+    dbsession.add(modul)
+    # ID 3
     modul = ModulItem(name='users')
     modul.label = _("User")
     modul.label_plural = _("Users")
     modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
+    # ID 4
     modul = ModulItem(name='usergroups')
     modul.label = _("Usergroup")
     modul.label_plural = _("Usergroups")
     modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
+    # ID 5
     modul = ModulItem(name='roles')
     modul.label = _("Role")
     modul.label_plural = _("Roles")
     modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
-    modul = ModulItem(name='permissions')
-    modul.label = _("Permission")
-    modul.label_plural = _("Permissions")
-    modul.actions.extend(_create_default_actions(dbsession))
-    dbsession.add(modul)
+    # ID 6
     modul = ModulItem(name='profiles')
     modul.label = _("Profile")
     modul.label_plural = _("Profiles")
