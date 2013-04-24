@@ -25,6 +25,7 @@ from ringo.model.user import (
 )
 from ringo.model.modul import (
     ModulItem,
+    ActionItem,
 )
 from ringo.lib import (
     helpers,
@@ -58,7 +59,6 @@ def close_db_connection(request):
 
 
 def add_route(config, clazz):
-    actions = ['list', 'create', 'read', 'update', 'delete']
     # load modul to get the enabled actions
     factory = ModulItem.get_item_factory()
     modul = factory.load(clazz._modul_id)
@@ -95,8 +95,9 @@ def main(global_config, **settings):
     config.add_route('reset_password', 'auth/reset_password/{token}')
     config.add_route('logout', 'auth/logout')
 
-    # Roles admininistration
+    # Modules admininistration
     add_route(config, ModulItem)
+    add_route(config, ActionItem)
     # Users admininistration
     add_route(config, User)
     # Usergroups admininistration
