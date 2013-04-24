@@ -19,6 +19,7 @@ class ActionItem(BaseItem, Base):
     mid = sa.Column(sa.Integer, sa.ForeignKey('modules.id'))
     name = sa.Column(sa.Text, nullable=False)
     url = sa.Column(sa.Text, nullable=False)
+    icon = sa.Column(sa.Text, nullable=False)
     description = sa.Column(sa.Text)
 
     _table_fields = [('modul', 'Modul'), ('name', 'Name'), ('url', 'Url')]
@@ -51,11 +52,11 @@ class ModulItem(BaseItem, Base):
 
 
 def _create_default_actions(dbsession):
-    a0 = ActionItem(name="List", url="list")
-    a1 = ActionItem(name="Create", url="create")
-    a2 = ActionItem(name="Read", url="read/{id}")
-    a3 = ActionItem(name="Update", url="update/{id}")
-    a4 = ActionItem(name="Delete", url="delete/{id}")
+    a0 = ActionItem(name="List", url="list", icon="icon-list-alt")
+    a1 = ActionItem(name="Create", url="create", icon=" icon-plus")
+    a2 = ActionItem(name="Read", url="read/{id}", icon="icon-eye-open")
+    a3 = ActionItem(name="Update", url="update/{id}", icon="icon-edit")
+    a4 = ActionItem(name="Delete", url="delete/{id}", icon="icon-trash")
     dbsession.add(a0)
     dbsession.add(a1)
     dbsession.add(a2)
