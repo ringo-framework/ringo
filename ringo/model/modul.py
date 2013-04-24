@@ -11,6 +11,7 @@ from ringo.lib.i18n import _
 #    sa.Column('required_permissio', sa.Text)
 #)
 
+
 class ActionItem(BaseItem, Base):
     __tablename__ = 'actions'
     id = sa.Column(sa.Integer, primary_key=True)
@@ -21,6 +22,7 @@ class ActionItem(BaseItem, Base):
 
     def __unicode__(self):
         return u"%s (%s/%s)" % (self.name, self.modul, self.url)
+
 
 class ModulItem(BaseItem, Base):
     __tablename__ = 'modules'
@@ -44,6 +46,7 @@ class ModulItem(BaseItem, Base):
             return self.label_plural
         return self.label
 
+
 def _create_default_actions(dbsession):
     a0 = ActionItem(name="List", url="list")
     a1 = ActionItem(name="Create", url="create")
@@ -55,8 +58,9 @@ def _create_default_actions(dbsession):
     dbsession.add(a2)
     dbsession.add(a3)
     dbsession.add(a4)
-    actions = [a0,a1,a2,a3,a4]
+    actions = [a0, a1, a2, a3, a4]
     return actions
+
 
 def init_model(dbsession):
     """Will setup the initial model for the usermanagement. This
