@@ -15,7 +15,8 @@ def list_(clazz, request):
     # collections. Tests with 100k datasets rendering only 100 shows
     # that the usual lazyload method seems to be the fastest which is
     # not what if have been expected.
-    items = request.db.query(clazz).options(joinedload('*')).all()
+    #items = request.db.query(clazz).options(joinedload('*')).all()
+    items = request.db.query(clazz).all()
     renderer = ListRenderer(clazz)
     rvalue['clazz'] = clazz
     rvalue['listing'] = renderer.render(items)
