@@ -1,6 +1,10 @@
+<form id="data-table">
 <table id="data" class="table table-striped table-hover table-condensed
 table-bordered">
   <tr>
+  <th width="2em">
+    <input type="checkbox" name="check_all" onclick="checkAll('id');">
+  </th>
   % for field in headers:
     <th>
       % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
@@ -23,6 +27,9 @@ table-bordered">
   </tr>
   % for item in items:
   <tr>
+    <td>
+      <input type="checkbox" name="id" value="${item.id}">
+    </td>
     % for field in headers:
     <td>
         <% value = getattr(item, field[0]) %>
@@ -48,3 +55,19 @@ table-bordered">
   </tr>
   % endif
 </table>
+</form>
+
+<script type="text/javascript">
+function checkAll(checkId) {
+  var inputs = document.getElementsByTagName("input");
+  for (var i = 0; i < inputs.length; i++) {
+      if (inputs[i].type == "checkbox" && inputs[i].name == checkId) {
+          if(inputs[i].checked == true) {
+              inputs[i].checked = false ;
+          } else if (inputs[i].checked == false ) {
+              inputs[i].checked = true ;
+          }
+      }
+  }
+}
+</script>
