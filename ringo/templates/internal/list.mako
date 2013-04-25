@@ -1,4 +1,5 @@
-<table id="data" class="table table-striped table-hover table-condensed">
+<table id="data" class="table table-striped table-hover table-condensed
+table-bordered">
   <tr>
   % for field in headers:
     <th>
