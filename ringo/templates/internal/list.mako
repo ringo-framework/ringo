@@ -2,7 +2,18 @@
   <tr>
   % for field in headers:
     <th>
-      ${field[1]}
+      % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
+        <a href="${request.current_route_url()}?sort_field=${field[0]}&sort_order=desc">${field[1]}</a>
+      % else:
+        <a href="${request.current_route_url()}?sort_field=${field[0]}&sort_order=asc">${field[1]}</a>
+      % endif
+      % if request.session['%s.list.sort_field' % clazz.__tablename__] == field[0]:
+        % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
+          <i class="pull-right icon-arrow-up"></i>
+        % else:
+          <i class="pull-right icon-arrow-down"></i>
+        % endif
+      % endif
     </th>
   % endfor
     <th>

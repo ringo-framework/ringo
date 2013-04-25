@@ -4,22 +4,37 @@ from pyramid.httpexceptions import HTTPFound
 
 from formbar.form import Form
 
+from ringo.model.base import BaseList
 from ringo.lib.renderer import ListRenderer, ConfirmDialogRenderer
 
 log = logging.getLogger(__name__)
 
 
+def handle_sorting(clazz, request):
+    default_sort_field = clazz._table_fields[0][0]
+    name = clazz.__tablename__
+    field = request.GET.get('sort_field', default_sort_field)
+    order = request.GET.get('sort_order', 'asc')
+    request.session['%s.list.sort_field' % name] = field
+    request.session['%s.list.sort_order' % name] = order
+    request.session.save()
+    return field, order
+
+
 def list_(clazz, request):
     rvalue = {}
+    field, order = handle_sorting(clazz, request)
     # TODO: Check which is the best loading strategy here for large
     # collections. Tests with 100k datasets rendering only 100 shows
     # that the usual lazyload method seems to be the fastest which is
     # not what if have been expected.
     #items = request.db.query(clazz).options(joinedload('*')).all()
-    items = request.db.query(clazz).all()
+    listing = BaseList(clazz, request.db)
+    listing.sort(field, order)
+    items = listing.items
     renderer = ListRenderer(clazz)
     rvalue['clazz'] = clazz
-    rvalue['listing'] = renderer.render(items)
+    rvalue['listing'] = renderer.render(items, request)
     return rvalue
 
 

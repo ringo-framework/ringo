@@ -29,9 +29,11 @@ class ListRenderer(Renderer):
         self.clazz = clazz
         self.template = template_lookup.get_template("internal/list.mako")
 
-    def render(self, items):
+    def render(self, items, request):
         """Initialize renderer"""
         values = {'items': items,
+                  'clazz': self.clazz,
+                  'request': request,
                   'headers': self.clazz._table_fields}
         return self.template.render(**values)
 

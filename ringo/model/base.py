@@ -1,3 +1,4 @@
+from operator import itemgetter
 from formbar.config import Config, load
 from ringo.lib.helpers import get_path_to_form_config
 from ringo.model import DBSession
@@ -9,6 +10,9 @@ class BaseItem(object):
 
     def __str__(self):
         return self.__unicode__()
+
+    def __getitem__(self, name):
+        return getattr(self, name)
 
     @classmethod
     def get_item_factory(cls):
@@ -33,6 +37,18 @@ class BaseItem(object):
     @classmethod
     def get_action_routename(cls, action):
         return "%s-%s" % (cls.__tablename__, action)
+
+
+class BaseList(object):
+    def __init__(self, clazz, db):
+        self.clazz = clazz
+        self.items = db.query(clazz).all()
+
+    def sort(self, field, order):
+        sorted_items = sorted(self.items, key=itemgetter(field))
+        if order == "desc":
+            sorted_items.reverse()
+        self.items = sorted_items
 
 
 class BaseFactory(object):
