@@ -5,9 +5,6 @@
       ${field[1]}
     </th>
   % endfor
-    <th>
-      Actions
-    </th>
   </tr>
   % for item in items:
   <tr onclick="openItem('${request.route_url(clazz.get_action_routename("read"), id=item.id)}')">
@@ -22,10 +19,6 @@
         % endif
     </td>
     % endfor
-    ## Actions
-    <td>
-      <a href="read/${item.id}">Read</a>
-    </td>
   </tr>
   % endfor
   % if len(items) == 0:
