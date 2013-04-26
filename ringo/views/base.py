@@ -18,7 +18,7 @@ def list_(clazz, request):
     items = request.db.query(clazz).options(joinedload('*')).all()
     renderer = ListRenderer(clazz)
     rvalue['clazz'] = clazz
-    rvalue['listing'] = renderer.render(items)
+    rvalue['listing'] = renderer.render(items, request)
     return rvalue
 
 

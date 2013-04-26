@@ -10,7 +10,7 @@
     </th>
   </tr>
   % for item in items:
-  <tr>
+  <tr onclick="openItem('${request.route_url(clazz.get_action_routename("read"), id=item.id)}')">
     % for field in headers:
     <td>
         <% value = getattr(item, field[0]) %>
@@ -36,3 +36,9 @@
   </tr>
   % endif
 </table>
+
+<script language="JavaScript">
+function openItem(url) {
+  location.href = url;
+}
+</script>
