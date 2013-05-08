@@ -59,6 +59,23 @@ def close_db_connection(request):
 
 
 def add_route(config, clazz):
+    """Setup routes for the activates actions of the given modul.
+    Therefor the modul will be loaded to get the configured actions. The
+    new routes will be added with the following name and url:
+
+    * Name: $modulname-$actionname
+    * Url:  $modulname/$actionurl
+
+    Note, that the actionname can be configured only as admin.
+
+    Further a clazz specific factory will be added to the route which is
+    later used to setup the ACL of items of the modul.
+
+    :config: Pylons config instance
+    :clazz: The clazz of the module for which the new routes will be set up.
+    :returns: config
+
+    """
     # load modul to get the enabled actions
     factory = ModulItem.get_item_factory()
     modul = factory.load(clazz._modul_id)
