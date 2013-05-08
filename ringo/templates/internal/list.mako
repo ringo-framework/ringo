@@ -26,7 +26,7 @@ table-bordered">
     </th>
   </tr>
   % for item in items:
-  <tr>
+  <tr onclick="openItem('${request.route_url(clazz.get_action_routename("read"), id=item.id)}')">
     <td>
       <input type="checkbox" name="id" value="${item.id}">
     </td>
@@ -41,10 +41,6 @@ table-bordered">
         % endif
     </td>
     % endfor
-    ## Actions
-    <td>
-      <a href="read/${item.id}">Read</a>
-    </td>
   </tr>
   % endfor
   % if len(items) == 0:
@@ -58,6 +54,10 @@ table-bordered">
 </form>
 
 <script type="text/javascript">
+function openItem(url) {
+  location.href = url;
+};
+
 function checkAll(checkId) {
   var inputs = document.getElementsByTagName("input");
   for (var i = 0; i < inputs.length; i++) {

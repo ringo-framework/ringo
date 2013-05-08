@@ -49,6 +49,10 @@ body {
   }
 }
 
+#data td:hover {
+	cursor: pointer;
+}
+
 /* Custom page CSS
 -------------------------------------------------- */
 /* Not required for template or sticky footer method. */
