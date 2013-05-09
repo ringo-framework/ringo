@@ -4,6 +4,7 @@
     <!-- Define different entity types -->
     <entity id="e1" name="name" label="Name" type="string"/>
     <entity id="e2" name="permissions" label="Permissions"/>
+    <entity id="e3" name="admin" label="Administrational role"/>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>
@@ -27,6 +28,9 @@
     </row>
     <row>
       <col><field ref="e2"/></col>
+    </row>
+    <row>
+      <col><field ref="e3"/></col>
     </row>
   </snippet>
 </configuration>
