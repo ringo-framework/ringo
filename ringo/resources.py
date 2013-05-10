@@ -36,28 +36,53 @@ class RessourceFactory(object):
     def _set_default_acl(self):
         self.__acl__.extend(self.__default_acl__)
 
-    def _set_acl(self, request):
-        log.debug("Setting ACL for user %s" % request.user)
-        self._set_default_acl()
-        # Set role based permissions
+    def _get_role_permissions(self, request, admin=False):
+        """@todo: Will return the assigned permissions for the current user in the request.
+
+        :request: current request
+        :admin: Returns permissions of the administrational roles. Else
+        return permissons from user role.
+        :returns: List of Action items (Permissions)
+
+        """
+        permissions = []
         user = request.user
         for role in get_roles(user):
+            if role.admin != admin: continue
             log.debug("Setting permissions for role %s" % role)
             for perm in role.permissions:
                 if perm.modul.id == self.__model__._modul_id:
-                    permission = (Allow, 'role:%s' % role, perm.name.lower())
+                    if admin:
+                        permission = (Allow, 'role:%s' % role, perm.name.lower())
+                    else:
+                        permission = (Allow, 'uid:%s' % self.item.uid, perm.name.lower())
                     log.debug("adding new permission: %s" % str(permission))
-                    self.__acl__.append(permission)
+                    permissions.append(permission)
+        return permissions
 
-        # Row bases permission checks: Check if the current user is the
-        # owner of the item and the modul has information abouts the
-        # owner (id > 5, starts with profiles)
+    def _set_acl(self, request):
+        """Will dynamically set the __acl__ for this ressource for the current request.
+
+        :request: current request
+        :returns: None
+
+        """
+        log.debug("Setting ACL for user %s" % request.user)
+        self._set_default_acl()
+        # Set administrational role based permissions. For
+        # administrational roles no ownership is
+        # checked an the user will get all permissions which are
+        # assigned to the role.
+        self.__acl__.extend(self._get_role_permissions(request, admin=True))
+
+        # Set user roles based permission. In contrast to the
+        # administrational roles the user will only get the permissions
+        # assigned to the role if he is the owner of the item.
+        # Check if the current user is the owner of the item and the
+        # modul has information abouts the owner (id > 5, starts with
+        # profiles)
         if self.item and self.__model__._modul_id > 5:
-            uid = self.item.uid
-            permission = (Allow, 'uid:%s' % uid, ('create', 'read', 'update',
-                                                  'delete', 'list'))
-            log.debug("adding new permission: %s" % str(permission))
-            self.__acl__.append(permission)
+            self.__acl__.extend(self._get_role_permissions(request))
 
 
 class Resource(object):
