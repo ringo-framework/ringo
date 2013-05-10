@@ -61,7 +61,8 @@ def create_(clazz, request, callback=None):
         mapping = {'item_type': item_label}
         if form.validate(request.params):
             sitem = form.save()
-            msg = _('Created new ${item_type} successfull.', mapping)
+            msg = _('Created new ${item_type} successfull.',
+                    mapping=mapping)
             log.info(msg)
             request.session.flash(msg, 'success')
             # flush the session to make the new id in the element
@@ -75,7 +76,7 @@ def create_(clazz, request, callback=None):
             return HTTPFound(location=url)
         else:
             msg = _('Error on validation the data'
-                    ' for new ${item_type}', mapping)
+                    ' for new ${item_type}', mapping=mapping)
             request.session.flash(msg, 'error')
     rvalue['clazz'] = clazz
     rvalue['item'] = item
@@ -95,12 +96,13 @@ def update_(clazz, request):
         mapping = {'item_type': item_label, 'item': item}
         if form.validate(request.params):
             form.save()
-            msg = _('Edited ${item_type} "${item}" successfull.', mapping)
+            msg = _('Edited ${item_type} "${item}" successfull.',
+                    mapping=mapping)
             log.info(msg)
             request.session.flash(msg, 'success')
         else:
             msg = _('Error on validation the data for '
-                    '${item_type} "${item}".', mapping)
+                    '${item_type} "${item}".', mapping=mapping)
             request.session.flash(msg, 'error')
     rvalue['clazz'] = clazz
     rvalue['item'] = item
@@ -132,7 +134,7 @@ def delete_(clazz, request):
         url = request.route_url(route_name)
         item_label = clazz.get_item_modul().get_label()
         mapping = {'item_type': item_label, 'item': item}
-        msg = _('Deleted ${item_type} "${item}" successfull.', mapping)
+        msg = _('Deleted ${item_type} "${item}" successfull.', mapping=mapping)
         log.info(msg)
         request.session.flash(msg, 'success')
         return HTTPFound(location=url)

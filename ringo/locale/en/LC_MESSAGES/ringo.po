@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-04-03 00:37+0200\n"
+"POT-Creation-Date: 2013-05-10 16:06+0200\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -17,95 +17,199 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: ringo/model/modul.py:42
+#: ringo/model/modul.py:80
 msgid "Modul"
 msgstr ""
 
-#: ringo/model/modul.py:43 ringo/templates/base.mako:57
+#: ringo/model/modul.py:81 ringo/templates/footer.mako:8
 msgid "Modules"
 msgstr ""
 
-#: ringo/model/modul.py:48
+#: ringo/model/modul.py:86
+msgid "Action"
+msgstr ""
+
+#: ringo/model/modul.py:87
+msgid "Actions"
+msgstr ""
+
+#: ringo/model/modul.py:92
 msgid "User"
 msgstr ""
 
-#: ringo/model/modul.py:49 ringo/templates/base.mako:58
+#: ringo/model/modul.py:93 ringo/templates/footer.mako:10
 msgid "Users"
 msgstr ""
 
-#: ringo/model/modul.py:54
+#: ringo/model/modul.py:98
 msgid "Usergroup"
 msgstr ""
 
-#: ringo/model/modul.py:55 ringo/templates/base.mako:59
+#: ringo/model/modul.py:99 ringo/templates/footer.mako:11
 msgid "Usergroups"
 msgstr ""
 
-#: ringo/model/modul.py:60
+#: ringo/model/modul.py:104
 msgid "Role"
 msgstr ""
 
-#: ringo/model/modul.py:61 ringo/templates/base.mako:60
+#: ringo/model/modul.py:105 ringo/templates/footer.mako:12
 msgid "Roles"
 msgstr ""
 
-#: ringo/model/modul.py:66
-msgid "Permission"
-msgstr ""
-
-#: ringo/model/modul.py:67
-msgid "Permissions"
-msgstr ""
-
-#: ringo/templates/base.mako:56
-msgid "Home"
-msgstr ""
-
-#: ringo/templates/base.mako:68
+#: ringo/model/modul.py:110 ringo/templates/header.mako:27
 msgid "Profile"
 msgstr ""
 
-#: ringo/templates/base.mako:70
+#: ringo/model/modul.py:111
+msgid "Profiles"
+msgstr ""
+
+#: ringo/templates/footer.mako:6
+msgid "Administration"
+msgstr ""
+
+#: ringo/templates/header.mako:19
+msgid "Home"
+msgstr ""
+
+#: ringo/templates/header.mako:29
 msgid "Logout"
 msgstr ""
 
-#: ringo/templates/base.mako:74
+#: ringo/templates/header.mako:33 ringo/templates/auth/confirm_user.mako:17
+#: ringo/templates/auth/confirm_user.mako:22
+#: ringo/templates/auth/reset_password.mako:17
+#: ringo/templates/auth/reset_password.mako:22
 msgid "Login"
 msgstr ""
 
-#: ringo/templates/default/update.mako:4
+#: ringo/templates/auth/confirm_user.mako:6
+msgid "User confirmed"
+msgstr ""
+
+#: ringo/templates/auth/confirm_user.mako:8
+msgid "User not confirmed"
+msgstr ""
+
+#: ringo/templates/auth/confirm_user.mako:21
+#: ringo/templates/auth/reset_password.mako:21
+msgid "Try again"
+msgstr ""
+
+#: ringo/templates/auth/forgot_password.mako:4
+#: ringo/templates/auth/login.mako:11
+msgid "Reset Password"
+msgstr ""
+
+#: ringo/templates/auth/forgot_password.mako:9
+msgid "Enter your Loginname and a password reset email will be sent out"
+msgstr ""
+
+#: ringo/templates/auth/login.mako:10 ringo/templates/auth/register_user.mako:4
+msgid "Register Account"
+msgstr ""
+
+#: ringo/templates/auth/register_user.mako:9
+msgid ""
+"Please fillout the form the register a new account. You will recieve an "
+"email with a confirmation link to complete the registration."
+msgstr ""
+
+#: ringo/templates/auth/reset_password.mako:6
+msgid "Password resetted"
+msgstr ""
+
+#: ringo/templates/auth/reset_password.mako:8
+msgid "Password not resetted"
+msgstr ""
+
+#: ringo/templates/default/update.mako:5
 msgid "Edit"
 msgstr ""
 
-#: ringo/views/auth.py:24
+#: ringo/views/auth.py:40
 msgid "Login failed!"
 msgstr ""
 
-#: ringo/views/auth.py:27
+#: ringo/views/auth.py:43
 msgid "Login was successfull :)"
 msgstr ""
 
-#: ringo/views/auth.py:40
+#: ringo/views/auth.py:56
 msgid "Logout was successfull :)"
 msgstr ""
 
-#: ringo/views/base.py:36
+#: ringo/views/auth.py:107
+msgid "Confirm user registration for ringo"
+msgstr ""
+
+#: ringo/views/auth.py:110
+#, python-format
+msgid "Please confirm the user registration by clicking on the following link: %s"
+msgstr ""
+
+#: ringo/views/auth.py:115
+msgid ""
+"User has been created and a confirmation mail was sent to the users email"
+" adress. Please check your email :)"
+msgstr ""
+
+#: ringo/views/auth.py:131
+msgid "The user has beed successfull confirmed."
+msgstr ""
+
+#: ringo/views/auth.py:133
+msgid "The user was not confirmed. Maybe the confirmation token was not valid?"
+msgstr ""
+
+#: ringo/views/auth.py:156
+msgid "Password reset request for xxx"
+msgstr ""
+
+#: ringo/views/auth.py:163
+msgid ""
+"Password reset token has been sent to the users email address. Please "
+"check your email :)"
+msgstr ""
+
+#: ringo/views/auth.py:183
+msgid "Password has been resetted"
+msgstr ""
+
+#: ringo/views/auth.py:186
+msgid ""
+"Password has been successfull resetted. The new password was sent to the "
+"users email address. Please check your email."
+msgstr ""
+
+#: ringo/views/auth.py:190
+msgid "Password was not resetted. Maybe the request token was not valid?"
+msgstr ""
+
+#: ringo/views/base.py:64
 msgid "Created new ${item_type} successfull."
 msgstr ""
 
-#: ringo/views/base.py:47
+#: ringo/views/base.py:77
 msgid "Error on validation the data for new ${item_type}"
 msgstr ""
 
-#: ringo/views/base.py:68
+#: ringo/views/base.py:98
 msgid "Edited ${item_type} \"${item}\" successfull."
 msgstr ""
 
-#: ringo/views/base.py:72
+#: ringo/views/base.py:102
 msgid "Error on validation the data for ${item_type} \"${item}\"."
 msgstr ""
 
-#: ringo/views/base.py:105
+#: ringo/views/base.py:135
 msgid "Deleted ${item_type} \"${item}\" successfull."
 msgstr ""
+
+#~ msgid "Permission"
+#~ msgstr ""
+
+#~ msgid "Permissions"
+#~ msgstr ""
 
