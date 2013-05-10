@@ -125,6 +125,10 @@ class Role(BaseItem, Base):
     _modul_id = 5
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.Text, unique=True, nullable=False)
+    admin = sa.Column(sa.Boolean, default=False)
+    """Flag to set the role as administrational role which means that
+    the user will gain the assigned permissions irrespective from
+    checking the ownership"""
 
     # Configuration
     _table_fields = [('name', 'Name')]
@@ -164,7 +168,7 @@ def init_model(dbsession):
     :returns: None
 
     """
-    admin_role = Role(name='admin')
+    admin_role = Role(name='admin', admin=True)
     dbsession.add(admin_role)
     role = Role(name='user')
     dbsession.add(role)
