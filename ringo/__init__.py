@@ -98,33 +98,45 @@ def main(global_config, **settings):
     config = Configurator(settings=settings,
                           locale_negotiator=locale_negotiator)
     config.set_session_factory(session_factory_from_settings(settings))
+    config.include('ringo')
+    return config.make_wsgi_app()
+
+def includeme(config):
+    log.info('Setup of Ringo...')
+    config = setup_pyramid_modules(config)
+    log.info('-> Modules finished.')
+    config = setup_subscribers(config)
+    log.info('-> Subscribers finished.')
+    config = setup_security(config)
+    log.info('-> Security finished.')
+    config = setup_static_views(config)
+    log.info('-> Static views finished.')
+    config = setup_routes(config)
+    log.info('-> Routes finished.')
+    config = setup_translation(config)
+    log.info('-> Translation finished.')
+    config.scan()
+    log.info('OK :) Setup of Ringo finished.')
+
+def setup_pyramid_modules(config):
     config.include('pyramid_handlers')
     config.include('pyramid_beaker')
+    return config
+
+def setup_security(config):
     config.include('ringo.lib.security.setup_ringo_security')
+    return config
+
+def setup_translation(config):
+    config.add_translation_dirs('ringo:locale/')
+    return config
+    return config
+
+def setup_subscribers(config):
     config.add_subscriber(connect_on_request, NewRequest)
     config.add_subscriber(add_renderer_globals, BeforeRender)
 
-    config.add_route('home', '/')
-    config.add_route('login', 'auth/login')
-    config.add_route('register_user', 'auth/register_user')
-    config.add_route('confirm_user', 'auth/confirm_user/{token}')
-    config.add_route('forgot_password', 'auth/forgot_password')
-    config.add_route('reset_password', 'auth/reset_password/{token}')
-    config.add_route('logout', 'auth/logout')
-
-    # Modules admininistration
-    add_route(config, ModulItem)
-    add_route(config, ActionItem)
-    # Users admininistration
-    add_route(config, User)
-    # Usergroups admininistration
-    add_route(config, Usergroup)
-    # Roles admininistration
-    add_route(config, Role)
-    # Profile admininistration
-    add_route(config, Profile)
-
-    config.add_translation_dirs('ringo:locale/')
+def setup_static_views(config):
     config.add_static_view('static',
                            path='ringo:static',
                            cache_max_age=3600)
@@ -137,5 +149,32 @@ def main(global_config, **settings):
     config.add_static_view('css',
                            path='ringo:static/css',
                            cache_max_age=3600)
-    config.scan()
-    return config.make_wsgi_app()
+    return config
+
+def setup_routes(config):
+    """Function which will setup the routes of the ringo application"""
+
+    # SINGLE PAGES
+    ##############
+    config.add_route('home', '/')
+    config.add_route('login', 'auth/login')
+    config.add_route('register_user', 'auth/register_user')
+    config.add_route('confirm_user', 'auth/confirm_user/{token}')
+    config.add_route('forgot_password', 'auth/forgot_password')
+    config.add_route('reset_password', 'auth/reset_password/{token}')
+    config.add_route('logout', 'auth/logout')
+
+    # MODULES
+    #########
+    # Modules
+    add_route(config, ModulItem)
+    add_route(config, ActionItem)
+    # Users
+    add_route(config, User)
+    # Usergroups
+    add_route(config, Usergroup)
+    # Roles
+    add_route(config, Role)
+    # Profile
+    add_route(config, Profile)
+    return config
