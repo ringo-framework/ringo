@@ -1,4 +1,4 @@
-<%inherit file="/layout.mako" />
+<%inherit file="ringo:templates/layout.mako" />
 <div class="container">
   <div id="status-messages">
     ${self.flash_messages()}

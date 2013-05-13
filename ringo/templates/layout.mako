@@ -1,9 +1,9 @@
-<%inherit file="/base.mako" />
+<%inherit file="ringo:templates/base.mako" />
 <!-- Part 1: Wrap all page content here -->
 <div id="wrap">
   <!-- Begin header content -->
   <div id="header">
-    <%include file="header.mako" />
+    <%include file="ringo:templates/header.mako" />
   </div>
   <!-- Begin page content -->
   <div id="main">
@@ -12,5 +12,5 @@
   <div id="push"></div>
 </div>
 <div id="footer">
-  <%include file="footer.mako" />
+  <%include file="ringo:templates/footer.mako" />
 </div>
