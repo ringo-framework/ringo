@@ -5,7 +5,7 @@ import sqlalchemy as sa
 from datetime import datetime
 from ringo.model import Base
 from ringo.model.base import BaseItem, BaseFactory
-from ringo.model.modul import ActionItem
+from ringo.model.modul import ActionItem, ModulItem
 from ringo.model.mixins import Owned
 
 
@@ -168,28 +168,53 @@ def init_model(dbsession):
     :returns: None
 
     """
+    # Admin Role
+    ############
     admin_role = Role(name='admin', admin=True)
     dbsession.add(admin_role)
+
+    # User Role
+    ###########
     role = Role(name='user')
     dbsession.add(role)
+    # Load profiles modul
+    modul = ModulItem.get_item_factory().load(Profile._modul_id)
+    # Add permissions to edit and read the users profiles
+    role.permissions.append(modul.actions[2])
+    role.permissions.append(modul.actions[3])
+
+    # Admin group
+    #############
     admin_usergroup = Usergroup(name='admins')
     admin_usergroup.roles.append(admin_role)
     dbsession.add(admin_usergroup)
+
+    # User group
+    ############
     usergroup = Usergroup(name='users')
+    usergroup.roles.append(role)
     dbsession.add(usergroup)
+
+    # Admin user
+    ############
     pw = hashlib.md5()
     pw.update('secret')
     user = User(login='admin', password=pw.hexdigest())
     user.default_group = admin_usergroup
     user.groups.append(admin_usergroup)
     dbsession.add(user)
+
+    # Admin profile
+    ###############
     profile = Profile()
     profile.first_name = "Firstname"
     profile.last_name = "Lastname"
     profile.email = "mail@example.com"
     profile.user = user
     dbsession.add(profile)
-    #Performance tests
+
+    # Performance tests (not needed in production use)
+    ##################################################
     for i in range(100):
         login = ''.join(random.choice(string.ascii_uppercase
                                       + string.digits) for x in range(8))
