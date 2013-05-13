@@ -130,11 +130,11 @@ def setup_security(config):
 def setup_translation(config):
     config.add_translation_dirs('ringo:locale/')
     return config
-    return config
 
 def setup_subscribers(config):
     config.add_subscriber(connect_on_request, NewRequest)
     config.add_subscriber(add_renderer_globals, BeforeRender)
+    return config
 
 def setup_static_views(config):
     config.add_static_view('static',
