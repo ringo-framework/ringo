@@ -20,35 +20,35 @@ def encrypt_password(request, user):
 
 
 @view_config(route_name=User.get_action_routename('list'),
-             renderer='/default/list.mako',
+             renderer='ringo:templates/default/list.mako',
              permission='list')
 def list(request):
     return list_(User, request)
 
 
 @view_config(route_name=User.get_action_routename('create'),
-             renderer='/default/create.mako',
+             renderer='ringo:templates/default/create.mako',
              permission='create')
 def create(request):
     return create_(User, request, encrypt_password)
 
 
 @view_config(route_name=User.get_action_routename('update'),
-             renderer='/default/update.mako',
+             renderer='ringo:templates/default/update.mako',
              permission='update')
 def update(request):
     return update_(User, request)
 
 
 @view_config(route_name=User.get_action_routename('read'),
-             renderer='/default/read.mako',
+             renderer='ringo:templates/default/read.mako',
              permission='read')
 def read(request):
     return read_(User, request)
 
 
 @view_config(route_name=User.get_action_routename('delete'),
-             renderer='/default/confirm.mako',
+             renderer='ringo:templates/default/confirm.mako',
              permission='delete')
 def delete(request):
     return delete_(User, request)
