@@ -36,8 +36,12 @@ def main(argv=sys.argv):
     setup_logging(config_uri)
     settings = get_appsettings(config_uri)
     engine = engine_from_config(settings, 'sqlalchemy.')
-    DBSession.configure(bind=engine)
+    inititializedb(engine)
+
+def inititializedb(engine):
     Base.metadata.create_all(engine)
+    DBSession.configure(bind=engine)
     with transaction.manager:
         init_modul_model(DBSession)
         init_user_model(DBSession)
+
