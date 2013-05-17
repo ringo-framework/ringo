@@ -1,2 +1,2 @@
-<%inherit file="ringo:templates/main.mako" />
+<%inherit file="/main.mako" />
 ${dialog | n}

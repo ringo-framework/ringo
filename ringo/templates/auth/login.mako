@@ -1,4 +1,4 @@
-<%inherit file="ringo:templates/main.mako" />
+<%inherit file="/main.mako" />
 <div class="row-fluid page-header">
   <div class="span4">
   </div>

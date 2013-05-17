@@ -25,7 +25,7 @@ def is_login_unique(field, data):
     return len(users) == 0
 
 
-@view_config(route_name='login', renderer='ringo:templates/auth/login.mako')
+@view_config(route_name='login', renderer='/auth/login.mako')
 def login(request):
     _ = request.translate
     config = Config(load(get_path_to_form_config('auth.xml')))
@@ -48,7 +48,7 @@ def login(request):
     return {'form': form.render()}
 
 
-@view_config(route_name='logout', renderer='ringo:templates/auth/logout.mako')
+@view_config(route_name='logout', renderer='/auth/logout.mako')
 def logout(request):
     _ = request.translate
     target_url = request.route_url('home')
@@ -59,7 +59,7 @@ def logout(request):
 
 
 @view_config(route_name='register_user',
-             renderer='ringo:templates/auth/register_user.mako')
+             renderer='/auth/register_user.mako')
 def register_user(request):
     _ = request.translate
     settings = request.registry.settings
@@ -120,7 +120,7 @@ def register_user(request):
 
 
 @view_config(route_name='confirm_user',
-             renderer='ringo:templates/auth/confirm_user.mako')
+             renderer='/auth/confirm_user.mako')
 def confirm_user(request):
     _ = request.translate
     success = False
@@ -136,7 +136,7 @@ def confirm_user(request):
 
 
 @view_config(route_name='forgot_password',
-             renderer='ringo:templates/auth/forgot_password.mako')
+             renderer='/auth/forgot_password.mako')
 def forgot_password(request):
     _ = request.translate
     settings = request.registry.settings
@@ -168,7 +168,7 @@ def forgot_password(request):
 
 
 @view_config(route_name='reset_password',
-             renderer='ringo:templates/auth/reset_password.mako')
+             renderer='/auth/reset_password.mako')
 def reset_password(request):
     _ = request.translate
     settings = request.registry.settings

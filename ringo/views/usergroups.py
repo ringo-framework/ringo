@@ -8,35 +8,35 @@ log = logging.getLogger(__name__)
 
 
 @view_config(route_name=Usergroup.get_action_routename('list'),
-             renderer='ringo:templates/default/list.mako',
+             renderer='/default/list.mako',
              permission='list')
 def list(request):
     return list_(Usergroup, request)
 
 
 @view_config(route_name=Usergroup.get_action_routename('create'),
-             renderer='ringo:templates/default/create.mako',
+             renderer='/default/create.mako',
              permission='create')
 def create(request):
     return create_(Usergroup, request)
 
 
 @view_config(route_name=Usergroup.get_action_routename('update'),
-             renderer='ringo:templates/default/update.mako',
+             renderer='/default/update.mako',
              permission='update')
 def update(request):
     return update_(Usergroup, request)
 
 
 @view_config(route_name=Usergroup.get_action_routename('read'),
-             renderer='ringo:templates/default/read.mako',
+             renderer='/default/read.mako',
              permission='read')
 def read(request):
     return read_(Usergroup, request)
 
 
 @view_config(route_name=Usergroup.get_action_routename('delete'),
-             renderer='ringo:templates/default/confirm.mako',
+             renderer='/default/confirm.mako',
              permission='delete')
 def delete(request):
     return delete_(Usergroup, request)

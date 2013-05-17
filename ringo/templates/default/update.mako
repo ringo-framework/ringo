@@ -1,5 +1,5 @@
-<%inherit file="ringo:templates/main.mako" />
-<%namespace name="main" file="ringo:templates/main.mako"/>
+<%inherit file="/main.mako" />
+<%namespace name="main" file="/main.mako"/>
 <div class="row-fluid page-header">
   <div class="span6">
     <h1>${_('Edit')} ${N_(clazz.get_item_modul().get_label())}</h1>

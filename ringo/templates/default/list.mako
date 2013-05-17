@@ -1,4 +1,4 @@
-<%inherit file="ringo:templates/main.mako" />
+<%inherit file="/main.mako" />
 <div class="row-fluid page-header">
   <div class="span6">
     <h1>${N_(clazz.get_item_modul().get_label(plural=True))}</h1>
