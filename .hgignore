@@ -2,6 +2,8 @@
 syntax: glob
 
 *.pyc
+*.pye
+*.makoe
 *.orig
 *.swp
 *.sqlite
