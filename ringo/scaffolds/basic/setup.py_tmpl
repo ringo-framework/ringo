@@ -34,6 +34,5 @@ setup(name='{{package}}',
       main = {{package}}:main
       [console_scripts]
       initialize_{{package}}_db = {{package}}.scripts.initializedb:main
-      manage_{{package}} = ringo.scripts.manage:main
       """,
       )
