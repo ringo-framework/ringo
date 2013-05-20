@@ -44,6 +44,8 @@ setup(name='ringo',
       main = ringo:main
       [console_scripts]
       initialize_ringo_db = ringo.scripts.initializedb:main
+      [pyramid.scaffold]
+      ringo-basic=ringo.scaffolds:BasicRingoTemplate
       """,
       message_extractors = {'ringo': [
             ('**.py', 'python', None),
