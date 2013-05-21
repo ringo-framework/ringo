@@ -6,12 +6,14 @@
 import sys
 import os
 import logging
+import transaction
 import pkg_resources
 import argparse
 import ConfigParser, os
 
-
+from ringo.lib.i18n import _
 from ringo.model import DBSession
+from ringo.model.modul import ModulItem, _create_default_actions
 
 from pyramid.paster import (
     get_appsettings,
@@ -40,17 +42,39 @@ def get_db(config_file):
     settings = get_appsettings(config_file)
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
+    return DBSession
 
 def add_db_entry(name, session):
     print 'Adding new entry in modules table for "%s"... ' % name,
+    modul_name = name + "s"
+    label = name.capitalize()
+    label_plural = label + "s"
     try:
+        with transaction.manager:
+            modul = ModulItem(name=modul_name)
+            modul.label = _(label)
+            modul.label_plural = _(label_plural)
+            modul.actions.extend(_create_default_actions(session))
+            session.add(modul)
+            session.flush()
         print 'Ok.'
-    except:
+        # Get last inserted id.
+        last_modul = session.query(ModulItem).filter(ModulItem.name == modul_name).one()
+        return last_modul.id
+    except Exception, e:
+        print e
         print 'Failed.'
+
+def get_template(name):
+    base_path = pkg_resources.get_distribution('ringo').location
+    template_path = os.path.join(base_path, 'scripts', 'templates', name+".tmpl")
+    print template_path
+
 
 def add_model_file(name, path):
     target_file = os.path.join(path, 'model', '%s.py' % name)
     print 'Adding new model file "%s"... ' % target_file,
+    template = get_template('model')
     try:
         print 'Ok.'
     except:
@@ -77,7 +101,8 @@ def add_modul(name, path, config):
     print 'Adding modul "%s" under "%s"' % (name, path)
     # 1. Adding the new model to the database
     session = get_db(config)
-    add_db_entry(name, session)
+    #modul_id = add_db_entry(name, session)
+    #print "Inserted modul with ID %s" % modul_id
     # 2. Adding a new model file.
     add_model_file(name, path)
     # 3. Adding a new view file.
