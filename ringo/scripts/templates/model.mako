@@ -4,15 +4,16 @@ from ringo.model.base import BaseItem, BaseFactory
 from ringo.model.mixins import Owned
 
 
-class $modul_clazzFactory(BaseFactory):
+class ${clazz}Factory(BaseFactory):
 
     def create(self, user=None):
         new_item = BaseFactory.create(self, user)
-        return new_user
+        return new_item
 
-class $modul_clazz(BaseItem, Owned, Base):
-    __tablename__ = '$modul'
-    _modul_id = $modul_id
+
+class ${clazz}(BaseItem, Owned, Base):
+    __tablename__ = '${table}'
+    _modul_id = ${id}
     id = sa.Column(sa.Integer, primary_key=True)
 
     # Configuration

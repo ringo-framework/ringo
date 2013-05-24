@@ -38,6 +38,9 @@ from ringo.lib.i18n import (
 base_dir = pkg_resources.get_distribution("ringo").location
 template_dir = os.path.join(base_dir, 'ringo', 'templates')
 
+# Directory with templates to generate views and models
+modul_template_dir = os.path.join(base_dir, 'ringo', 'scripts', 'templates')
+
 
 def add_renderer_globals(event):
     request = event['request']
