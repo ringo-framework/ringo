@@ -106,6 +106,7 @@ def add_view_file(package, modul, clazz):
     print 'Adding new view file "%s"... ' % target_file,
     try:
         values = {
+            'package': package,
             'modul': modul,
             'clazz': clazz
         }
