@@ -119,6 +119,21 @@ def add_view_file(package, modul, clazz):
     except:
         print 'Failed.'
 
+def add_form_file(package, modul):
+    filename = modul+"s"
+    target_file= os.path.join(get_app_path(package), 'ringo', 'views', 'forms', '%s.xml' % filename)
+    print 'Adding new form configuration file "%s"... ' % target_file,
+    try:
+        values = {}
+        template = template_lookup.get_template("form.mako")
+        generated = template.render(**values)
+        outfile = open(target_file, 'w+')
+        outfile.write(generated)
+        outfile.close()
+        print 'Ok.'
+    except:
+        print 'Failed.'
+
 def add_routes(package, modul, clazz):
     target_file = os.path.join(get_app_path(package), 'ringo', '__init__.py')
     print 'Adding routes to "%s"... ' % target_file,
@@ -130,6 +145,7 @@ def add_routes(package, modul, clazz):
         print 'Ok.'
     except:
         print 'Failed.'
+
 def replace(file_path, pattern, subst):
     #Create temp file
     fh, abs_path = mkstemp()
@@ -146,7 +162,6 @@ def replace(file_path, pattern, subst):
     #Move new file
     move(abs_path, file_path)
 
-
 def add_modul(name, package, config):
     path = get_app_path(package)
     print 'Adding modul "%s" under "%s"' % (name, path)
@@ -162,7 +177,9 @@ def add_modul(name, package, config):
     add_model_file(package, modul, modul_id, clazz)
     # 3. Adding a new view file.
     add_view_file(package, modul, clazz)
-    # 4. Configure Routes for the new modul.
+    # 4. Adding a new form configuration
+    add_form_file(package, modul)
+    # 5. Configure Routes for the new modul.
     add_routes(package, modul, clazz)
 
     # 5. Dynamic import of new clazz to be able to create the table.
