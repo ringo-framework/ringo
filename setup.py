@@ -44,6 +44,7 @@ setup(name='ringo',
       main = ringo:main
       [console_scripts]
       initialize_ringo_db = ringo.scripts.initializedb:main
+      add_ringo_modul = ringo.scripts.add_modul:main
       [pyramid.scaffold]
       ringo=ringo.scaffolds:BasicRingoTemplate
       """,
