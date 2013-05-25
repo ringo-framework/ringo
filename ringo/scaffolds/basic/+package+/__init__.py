@@ -1,7 +1,7 @@
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
 
-from ringo import DBSession
+from ringo import DBSession, add_route
 from ringo.model import Base
 
 
