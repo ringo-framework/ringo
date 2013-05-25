@@ -9,7 +9,9 @@ Welcome to Ringo's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
+
+   xxx
 
 Indices and tables
 ==================
