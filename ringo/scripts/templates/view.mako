@@ -2,7 +2,7 @@ import logging
 from pyramid.view import view_config
 
 from ringo.views.base import list_, create_, update_, read_, delete_
-from ringo.model.${modul} import ${clazz}
+from ${package}.model.${modul} import ${clazz}
 
 log = logging.getLogger(__name__)
 
