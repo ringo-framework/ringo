@@ -27,8 +27,7 @@ from sqlalchemy import engine_from_config
 from mako.lookup import TemplateLookup
 
 log = logging.getLogger(name=__name__)
-template_lookup = TemplateLookup(directories=[modul_template_dir],
-                                 module_directory='/tmp/ringo_modules')
+template_lookup = TemplateLookup(directories=[modul_template_dir])
 
 MODEL = """
 """
@@ -83,7 +82,7 @@ def add_db_entry(name, engine):
         print 'Failed.'
 
 def add_model_file(package, modul, id, clazz):
-    target_file = os.path.join(get_app_path(package), 'ringo', 'model', '%s.py' % modul)
+    target_file = os.path.join(get_app_path(package), package, 'model', '%s.py' % modul)
     print 'Adding new model file "%s"... ' % target_file,
     try:
         tablename = modul+'s'
@@ -103,7 +102,7 @@ def add_model_file(package, modul, id, clazz):
 
 def add_view_file(package, modul, clazz):
     filename = modul+"s"
-    target_file= os.path.join(get_app_path(package), 'ringo', 'views', '%s.py' % filename)
+    target_file= os.path.join(get_app_path(package), package, 'views', '%s.py' % filename)
     print 'Adding new view file "%s"... ' % target_file,
     try:
         values = {
@@ -121,7 +120,7 @@ def add_view_file(package, modul, clazz):
 
 def add_form_file(package, modul):
     filename = modul+"s"
-    target_file= os.path.join(get_app_path(package), 'ringo', 'views', 'forms', '%s.xml' % filename)
+    target_file= os.path.join(get_app_path(package), package, 'views', 'forms', '%s.xml' % filename)
     print 'Adding new form configuration file "%s"... ' % target_file,
     try:
         values = {}
@@ -135,7 +134,7 @@ def add_form_file(package, modul):
         print 'Failed.'
 
 def add_routes(package, modul, clazz):
-    target_file = os.path.join(get_app_path(package), 'ringo', '__init__.py')
+    target_file = os.path.join(get_app_path(package), package, '__init__.py')
     print 'Adding routes to "%s"... ' % target_file,
     try:
         importstr = "from %s.model.%s import %s\n# AUTOREPLACEIMPORT" % (package, modul, clazz)
