@@ -10,10 +10,12 @@ import transaction
 import pkg_resources
 import argparse
 import ConfigParser, os
+from tempfile import mkstemp
+from shutil import move
 
 from ringo  import modul_template_dir
 from ringo.lib.i18n import _
-from ringo.model import DBSession
+from ringo.model import DBSession, Base
 from ringo.model.modul import ModulItem, _create_default_actions
 
 from pyramid.paster import (
@@ -34,60 +36,61 @@ MODEL = """
 VIEW = """
 """
 
-def get_app_path(config_file):
+def my_import(name):
+    mod = __import__(name)
+    components = name.split('.')
+    for comp in components[1:]:
+        mod = getattr(mod, comp)
+    return mod
+
+def get_package_name(config_file):
     config = ConfigParser.ConfigParser()
     config.read(config_file)
     egg = config.get('app:main', 'use')
     package = egg.split(':')[1]
+    return package
+
+def get_app_path(package):
     path = pkg_resources.get_distribution(package).location
     return path
 
-def get_db(config_file):
+def get_engine(config_file):
     setup_logging(config_file)
     settings = get_appsettings(config_file)
     engine = engine_from_config(settings, 'sqlalchemy.')
-    DBSession.configure(bind=engine)
-    return DBSession
+    return engine
 
-def add_db_entry(name, session):
+def add_db_entry(name, engine):
     print 'Adding new entry in modules table for "%s"... ' % name,
+    DBSession.configure(bind=engine)
     modul_name = name + "s"
     label = name.capitalize()
     label_plural = label + "s"
     try:
-        return 6
-        #with transaction.manager:
-        #    modul = ModulItem(name=modul_name)
-        #    modul.label = _(label)
-        #    modul.label_plural = _(label_plural)
-        #    modul.actions.extend(_create_default_actions(session))
-        #    session.add(modul)
-        #    session.flush()
-        #print 'Ok.'
-        ## Get last inserted id.
-        #last_modul = session.query(ModulItem).filter(ModulItem.name == modul_name).one()
-        #return last_modul.id
+        with transaction.manager:
+            modul = ModulItem(name=modul_name)
+            modul.label = _(label)
+            modul.label_plural = _(label_plural)
+            modul.actions.extend(_create_default_actions(DBSession))
+            DBSession.add(modul)
+            DBSession.flush()
+        # Get last inserted id.
+        last_modul = DBSession.query(ModulItem).filter(ModulItem.name == modul_name).one()
+        print 'Ok.'
+        return last_modul.id
     except Exception, e:
         print e
         print 'Failed.'
 
-def get_template(name):
-    base_path = pkg_resources.get_distribution('ringo').location
-    template_path = os.path.join(base_path, 'scripts', 'templates', name+".tmpl")
-    print template_path
-
-
-def add_model_file(id, name, path):
-    target_file = os.path.join(path, 'ringo', 'model', '%s.py' % name)
+def add_model_file(package, modul, id, clazz):
+    target_file = os.path.join(get_app_path(package), 'ringo', 'model', '%s.py' % modul)
     print 'Adding new model file "%s"... ' % target_file,
-    template = template_lookup.get_template("model.mako")
     try:
-        clazzname = name.capitalize()
-        tablename = name+'s'
+        tablename = modul+'s'
         values = {
             'table': tablename,
             'id': id,
-            'clazz': clazzname
+            'clazz': clazz
         }
         template = template_lookup.get_template("model.mako")
         generated = template.render(**values)
@@ -98,35 +101,74 @@ def add_model_file(id, name, path):
     except Exception, e:
         print 'Failed.'
 
-def add_view_file(name, path):
-    target_file= os.path.join(path, 'views', '%s.py' % name)
+def add_view_file(package, modul, clazz):
+    filename = modul+"s"
+    target_file= os.path.join(get_app_path(package), 'ringo', 'views', '%s.py' % filename)
     print 'Adding new view file "%s"... ' % target_file,
     try:
+        values = {
+            'modul': modul,
+            'clazz': clazz
+        }
+        template = template_lookup.get_template("view.mako")
+        generated = template.render(**values)
+        outfile = open(target_file, 'w+')
+        outfile.write(generated)
+        outfile.close()
         print 'Ok.'
     except:
         print 'Failed.'
 
-def add_routes(name, path):
-    target_file = os.path.join(path, '__init__.py')
+def add_routes(package, modul, clazz):
+    target_file = os.path.join(get_app_path(package), 'ringo', '__init__.py')
     print 'Adding routes to "%s"... ' % target_file,
     try:
+        importstr = "from %s.model.%s import %s\n# AUTOREPLACEIMPORT" % (package, modul, clazz)
+        routestr = "add_route(config, %s)\n    # AUTOREPLACEROUTE" % (clazz)
+        replace(target_file, '# AUTOREPLACEIMPORT', importstr)
+        replace(target_file, '# AUTOREPLACEROUTE', routestr)
         print 'Ok.'
     except:
         print 'Failed.'
+def replace(file_path, pattern, subst):
+    #Create temp file
+    fh, abs_path = mkstemp()
+    new_file = open(abs_path,'w')
+    old_file = open(file_path)
+    for line in old_file:
+        new_file.write(line.replace(pattern, subst))
+    #close temp file
+    new_file.close()
+    os.close(fh)
+    old_file.close()
+    #Remove original file
+    os.remove(file_path)
+    #Move new file
+    move(abs_path, file_path)
 
 
-def add_modul(name, path, config):
+def add_modul(name, package, config):
+    path = get_app_path(package)
     print 'Adding modul "%s" under "%s"' % (name, path)
+
+    modul = name
+    clazz = name.capitalize()
+
     # 1. Adding the new model to the database
-    session = get_db(config)
-    modul_id = add_db_entry(name, session)
+    engine = get_engine(config)
+    modul_id = add_db_entry(modul, engine)
     #print "Inserted modul with ID %s" % modul_id
     # 2. Adding a new model file.
-    add_model_file(modul_id, name, path)
+    add_model_file(package, modul, modul_id, clazz)
     # 3. Adding a new view file.
-    add_view_file(name, path)
+    add_view_file(package, modul, clazz)
     # 4. Configure Routes for the new modul.
-    add_routes(name, path)
+    add_routes(package, modul, clazz)
+
+    # 5. Dynamic import of new clazz to be able to create the table.
+    mod = __import__('%s.model.%s' % (package, modul), fromlist=[clazz])
+    klass = getattr(mod, clazz)
+    Base.metadata.create_all(engine)
 
 def main():
     '''Main function'''
@@ -138,12 +180,12 @@ def main():
     args = parser.parse_args()
     try:
         app_config = args.configuration
-        app_path = get_app_path(app_config)
+        package = get_package_name(app_config)
     except pkg_resources.DistributionNotFound:
         print 'Failed: Application "%s" was not found' % app_name
         return sys.exit(1)
 
-    add_modul(args.name, app_path, app_config)
+    add_modul(args.name, package, app_config)
 
     return sys.exit(1)
 
