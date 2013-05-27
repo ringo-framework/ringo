@@ -1,5 +1,27 @@
 import os
+import pkg_resources
+from pyramid.threadlocal import get_current_registry
 from formbar.helpers import get_css
+
+
+
+def get_ringo_version():
+    return pkg_resources.get_distribution('ringo').version
+
+
+def get_app_name():
+    registry = get_current_registry()
+    return registry.__name__
+
+
+def get_app_version():
+    return pkg_resources.get_distribution(get_app_name()).version
+
+
+def get_app_title():
+    registry = get_current_registry()
+    settings = registry.settings
+    return settings['app.title']
 
 
 def get_action_url(request, item, action):
