@@ -7,7 +7,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="brand" href="#">Ringo</a>
+      <a class="brand" href="#">${h.get_app_title()}</a>
       <div class="nav-collapse collapse">
         <ul class="nav">
           <%

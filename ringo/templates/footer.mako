@@ -15,7 +15,7 @@
     </ul>
     % endif
     <div class="pull-right">
-      <p class="muted credit">Ringo ver. X.X</p>
+      <p class="muted credit">${h.get_app_title()} ver. ${h.get_app_version()}</p>
     </div>
   </div>
 </div>
