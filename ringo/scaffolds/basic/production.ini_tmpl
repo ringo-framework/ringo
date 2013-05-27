@@ -4,6 +4,8 @@
 ###
 
 [app:main]
+app.title = {{package}}
+
 use = egg:{{package}}
 
 pyramid.reload_templates = false
