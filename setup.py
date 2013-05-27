@@ -18,6 +18,8 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'babel',
+    'sphinx',
+    'formbar',
 ]
 
 setup(name='ringo',
