@@ -1,9 +1,9 @@
-ringo
+Ringo
 =====
 
-`Ringo` wants to be a small python web application which can be used as
-boilerplate code for larger projects.
-
+`Ringo` is a small Python based high level web application framework build with
+Pyramid . It provides basic functionality which is often used in modern web
+applications.
 Currently ringo is highly experimental and not meant for others to use!
 
 Getting Started
