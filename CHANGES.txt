@@ -1,3 +1,10 @@
+0.9
+---
+First more or less version which includes all basic functionallity.
+
+- Added basic scaffold
+- Added "add_modul" command to add boilerplate code for new moduls.
+
 0.0
 ---
 
