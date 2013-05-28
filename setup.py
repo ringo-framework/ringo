@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 
 from setuptools import setup, find_packages
@@ -23,7 +24,7 @@ requires = [
 ]
 
 setup(name='ringo',
-      version='0.0',
+      version='0.2',
       description='ringo',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
@@ -41,6 +42,7 @@ setup(name='ringo',
       zip_safe=False,
       test_suite='ringo',
       install_requires=requires,
+      setup_requires=["hgtools"],
       entry_points="""\
       [paste.app_factory]
       main = ringo:main

@@ -1,9 +1,17 @@
-0.9
+0.2
 ---
+
 First more or less version which includes all basic functionallity.
 
 - Added basic scaffold
 - Added "add_modul" command to add boilerplate code for new moduls.
+
+0.1
+---
+
+- Basic model initialisation
+- Basic page layout
+- Added authentification
 
 0.0
 ---
