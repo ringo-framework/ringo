@@ -14,6 +14,11 @@ def index_view(request):
     return {}
 
 
+@view_config(route_name='contact', renderer='/contact.mako')
+def index_view(request):
+    return {}
+
+
 @view_config(route_name='version', renderer='/version.mako')
 def version_view(request):
     # Fetch the versions of some Packages

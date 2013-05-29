@@ -16,6 +16,9 @@
     % endif
     <ul class="nav pull-right">
       <li>
+        <a href="${request.route_url('contact')}">${_('Contact')}</a>
+      </li>
+      <li>
         <a href="${request.route_url('version')}" title="${_('Show version information')}">${h.get_app_title()} ver. ${h.get_app_version()}</a>
       </li>
     </ul>
