@@ -1,6 +1,6 @@
 Ringo
 #####
-This is the documentation of the Ringo software. After a short overview we
+This is the documentation of the Ringo application framework. After a short overview we
 will explain the user interface and some basic concepts in Ringo.
 
 Overview
@@ -31,7 +31,7 @@ updating Ringo to a new version.
 License
 =======
 Ringo is Free Software. It is licensed under the GPL license in version 2 or
-later.
+later. See `<http://www.gnu.org/licenses/gpl-2.0>`_ for more details on the license.
 
 .. _features:
 
@@ -47,6 +47,8 @@ web application based on Ringo:
  * Layoutable forms
  * Extendable, Configurable
 
+.. _installation_production:
+
 Installation
 ============
 Ringo is available in its latest stable version on `PyPi <https://pypi.org/toirl/ringo>`_::
@@ -60,6 +62,9 @@ the latest development version::
         cd ringo
         python setup.py install
 
+You probably want to continue to read the :ref:`development` section to learn
+how to setup Ringo based application.
+
 Contact
 =======
 You can contact the author by his email address "torsten at irlaender dot de".
@@ -67,6 +72,9 @@ In case of bugs and feature requests please open a ticket on Bitbucket.
 
 UI
 **
+
+.. _modules:
+
 Modules
 *******
 User
@@ -88,15 +96,137 @@ Authentification
 Authorisation
 =============
 
+.. _commands:
+
+Commands
+********
+Ringo implements some additional commands which can be used on the shell.
+
+add_modul
+=========
+The "add_modul" command is used to add :ref:`modules` to your application. The
+command will do needed database modifications and create some skeleton files
+within your projects as boilerplate for further development.
+
+Usage::
+
+        add_ringo_modul --config /path/to/your/application-config.ini NameOfModul
+
+The actual name of the command may vary if you want to add a modul your a
+Ringo based application. Please call the command with "--help" option to get a
+full list of available options.
+
 .. _development:
 
 Development
 ###########
+
+How to...
+*********
+... do XYZ? To help you to get the feet on the ground in Ringo development this section will try to give answers on some of basic questions you might have in the beginning.
+
+.. _installation_development:
+
+Setup a Ringo developmet environment
+====================================
+If you plan to do any development with Ringo I recommend to setup a dedicated
+development environment based on a `Virtual Python Environment
+<https://pypi.python.org/pypi/virtualenv>`_.
+
+This section will give you an example how create a development environment if
+you want to work on Ringo itself or if you want to create a Ringo based application.
+
+First create a new folder where all the development will happen. Then create a
+new Virtual Python Environment::
+
+        cd /path/to/your/development/folder
+        # create a folder where all the ringo development happens.
+        mkdir ringo
+        # create a subfolder where all the application development happens.
+        mkdir applications
+
+        # setup ringo.
+        cd ringo
+        virtualenv --no-site-packages python
+        # Activate your virtual environment and do all following steps with
+        # the activaed virtual env.
+        source python/bin/activate
+
+Now setup Ringo by getting the source from Bitbucket and installing it in the
+Virtual Python Environment::
+
+        hg clone https://bitbucket.org/ti/ringo
+        cd ringo
+        # Do only set a link to the Ringo application if you plan to develop
+        # on Ringo itself. Else you can also use "install" instead of "develop"
+        python setup.py development
+
+If you only want to work on Ringo itself you are ready here and can continue
+to read the :ref:`develop_ringo_application` section.
+
+If you want to create a new Ringo based application you should head
+over to the :ref:`create_ringo_based_application` section and continue the
+setup.
+
+.. _develop_ringo_application:
+
+Develop on Ringo
+================
+Ringo is not just a library which can be used in other applications.
+Ringo is for itself a standalone application! This means you can start Ringo
+and click around in the web application and use all the features provided by
+Ringo.
+
+This is very helpful as can see immediately the result of your changes.
+
+To develop on Ringo you obviously must have installed Ringo.
+This is explained in the :ref:`installation_development` section.
+After you installed Ringo for development the last final steps is to
+initialize the application. Please follow the instruction documented in the
+README file coming with Ringo::
+
+        # Change to your development folder
+        cd /path/to/your/development/folder/ringo/
+        cd ringo
+        cat README.rst
+
+That is it. You are ready to go!
+
+.. _create_ringo_based_application:
+
+Develop/Create on a Ringo based application
+===========================================
+To create a Ringo based application you obviously must have installed Ringo.
+The can be done either explained in the :ref:`installation_production` or :ref:`installation_development` section.
+
+You can now create a new Ringo based application. In the following example we
+will create an new application named ''MyFirstRingoApp''::
+
+        # Change to your development folder
+        cd /path/to/your/development/folder/ringo/applications
+        # Create a subfolder Change to your development folder
+        cd applications
+        pcreate -s ringo MyFirstRingoApp
+
+This will trigger the creation of an application skeleton based on the
+:ref:`scaffold_basic`.
+
+Now you can initialize and start your fresh created application by following
+the instructions provided in the README file with the application folder::
+
+        cd MyFirstRingoApp
+        cat README.rst
+
+Your application is ready for development :)
+
 API
 ***
 Tests
 *****
 Scaffolds
 *********
-Basic
-=====
+
+.. _scaffold_basic:
+
+Basic Scaffold
+==============
