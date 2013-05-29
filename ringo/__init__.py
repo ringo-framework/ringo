@@ -164,13 +164,13 @@ def setup_routes(config):
 
     # SINGLE PAGES
     ##############
-    config.add_route('home', '/')
     config.add_route('login', 'auth/login')
     config.add_route('register_user', 'auth/register_user')
     config.add_route('confirm_user', 'auth/confirm_user/{token}')
     config.add_route('forgot_password', 'auth/forgot_password')
     config.add_route('reset_password', 'auth/reset_password/{token}')
     config.add_route('logout', 'auth/logout')
+    config.add_route('home', '/')
 
     # MODULES
     #########
