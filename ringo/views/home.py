@@ -15,7 +15,7 @@ def index_view(request):
 
 
 @view_config(route_name='contact', renderer='/contact.mako')
-def index_view(request):
+def contact_view(request):
     return {}
 
 
