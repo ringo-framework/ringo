@@ -14,8 +14,10 @@
       </li>
     </ul>
     % endif
-    <div class="pull-right">
-      <p class="muted credit">${h.get_app_title()} ver. ${h.get_app_version()}</p>
-    </div>
+    <ul class="nav pull-right">
+      <li>
+        <a href="${request.route_url('version')}" title="${_('Show version information')}">${h.get_app_title()} ver. ${h.get_app_version()}</a>
+      </li>
+    </ul>
   </div>
 </div>
