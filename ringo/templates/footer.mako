@@ -16,6 +16,9 @@
     % endif
     <ul class="nav pull-right">
       <li>
+        <a href="${request.route_url('about')}">${_('About')}</a>
+      </li>
+      <li>
         <a href="${request.route_url('contact')}">${_('Contact')}</a>
       </li>
       <li>

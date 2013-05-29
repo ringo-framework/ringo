@@ -14,6 +14,13 @@ def index_view(request):
     return {}
 
 
+@view_config(route_name='about', renderer='/about.mako')
+def about_view(request):
+    values = {}
+    values['app_title'] = get_app_title()
+    return values
+
+
 @view_config(route_name='contact', renderer='/contact.mako')
 def contact_view(request):
     return {}
