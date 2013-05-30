@@ -47,6 +47,8 @@ class RessourceFactory(object):
         """
         permissions = []
         user = request.user
+        if user is None:
+            return []
         for role in get_roles(user):
             if role.admin != admin: continue
             log.debug("Setting permissions for role %s" % role)
