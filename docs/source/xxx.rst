@@ -65,6 +65,12 @@ the latest development version::
 You probably want to continue to read the :ref:`development` section to learn
 how to setup Ringo based application.
 
+Requirements
+------------
+Ringo was developed within a Python 2.7.3 environment. Older versions will not
+work as Ringo uses some XML features only available in Python >= 2.7.3. Newer
+versions might work, but it is not tested.
+
 Contact
 =======
 You can contact the author by his email address "torsten at irlaender dot de".
