@@ -1,0 +1,22 @@
+/* Context menu
+ * *************************************************************************/
+/* Chane positon to align the menu with the page header on the left side. */
+.context-menu {
+  position: relative;
+  top: 5px;
+}
+
+/* Status message
+ * *************************************************************************/
+/* Push the status message a littlebit down from the page header. */
+#status-messages {
+  margin-top: 10px;
+}
+
+/* Overview tables
+ * *************************************************************************/
+/* Change the mouse cursor to a pointer when hovering the rows of the
+ * overviewtable to indicate that they are clickable. */
+#data td:hover {
+	cursor: pointer;
+}

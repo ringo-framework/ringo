@@ -1,74 +1,16 @@
-/* Add some margin to icon images. */
+/* Icons
+ ****************************************************************************/
+/* Add some margin to icon images like profil, or logout. (these are not the
+ * bootstrap icons) */
 img.icon {
     margin: 0 5px;
 }
 
-.context-menu {
-  position: relative;
-  top: 12px;
-}
-
-#status-messages {
-  margin-top: 10px;
-}
-
-/* Sticky footer styles
--------------------------------------------------- */
-
-html,
-body {
-  height: 100%;
-  /* The html and body elements cannot have any padding or margin. */
-}
-
-/* Wrapper for page content to push down footer */
-#wrap {
-  min-height: 100%;
-  height: auto !important;
-  height: 100%;
-  /* Negative indent footer by it's height */
-  margin: 0 auto -60px;
-}
-
-/* Set the fixed height of the footer here */
-#push,
-#footer {
-  height: 60px;
-}
-#footer {
-  background-color: #f5f5f5;
-}
-
-/* Lastly, apply responsive CSS fixes as necessary */
-@media (max-width: 767px) {
-  #footer {
-    margin-left: -20px;
-    margin-right: -20px;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-}
-
-#data td:hover {
-	cursor: pointer;
-}
-
-/* Custom page CSS
--------------------------------------------------- */
-/* Not required for template or sticky footer method. */
-
-#main {
-  padding-top: 40px;
-}
-.container .credit {
-  margin: 20px 0;
-}
-
-code {
-  font-size: 80%;
-}
-
-/* Hide carret in dropup menus. TODO: Display caret but in down direction. */
+/* Bootstrap overwrites
+ ****************************************************************************/
+/* Hide carret in dropup menus as they are displayed in up direction which
+ * does not fit for the administrationial menu. So hide them all.
+ * TODO: Display caret but in down direction. */
 .navbar .nav > li.dropup > .dropdown-menu::after, 
 .navbar .nav > li.dropup > .dropdown-menu::before {
   display:none;

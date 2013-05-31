@@ -9,6 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/css/layout.css" rel="stylesheet" media="screen">
+    <link href="/css/widgets.css" rel="stylesheet" media="screen">
     <link href="/css/style.css" rel="stylesheet" media="screen">
     <style>
       ${h.get_formbar_css()}
