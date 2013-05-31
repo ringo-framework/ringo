@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 #!/usr/bin/env python
 # Authors:
-# Torsten Irländer <torsten.irlaender@intevation.de>
+# Torsten Irlaender <torsten.irlaender@intevation.de>
 
 import sys
 import os
