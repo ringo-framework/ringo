@@ -19,8 +19,10 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'babel',
-    'sphinx',
+    'Sphinx',
     'formbar',
+    'nose',
+    'coverage'
 ]
 
 setup(name='ringo',
@@ -40,7 +42,8 @@ setup(name='ringo',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
-      test_suite='ringo',
+      #test_suite='ringo',
+      test_suite = 'nose.collector',
       install_requires=requires,
       setup_requires=["hgtools"],
       entry_points="""\
