@@ -19,6 +19,10 @@ class BaseItem(object):
         return BaseFactory(cls)
 
     @classmethod
+    def get_item_list(cls, db):
+        return BaseList(cls, db)
+
+    @classmethod
     def get_item_modul(cls):
         from ringo.model.modul import ModulItem
         factory = BaseFactory(ModulItem)
