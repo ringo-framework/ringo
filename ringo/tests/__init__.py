@@ -1,8 +1,8 @@
-import hashlib
 import unittest
 import transaction
 
 from pyramid import testing
+from pyramid import paster
 
 from ringo.model import DBSession, Base
 from ringo.model.modul import (
@@ -28,3 +28,37 @@ class TestInit(unittest.TestCase):
     def tearDown(self):
         DBSession.remove()
         testing.tearDown()
+
+class TestFunctional(unittest.TestCase):
+    def setUp(self):
+        # TODO: Setup creating a testdatabase.
+        #self.config = testing.setUp()
+        print "XXXX"
+        app = paster.get_app('test.ini')
+        #Base.metadata.create_all(DBSession.get_bind())
+        from webtest import TestApp
+        self.testapp = TestApp(app)
+
+    def tearDown(self):
+        del self.testapp
+        #Base.metadata.drop_all(DBSession.get_bind())
+        #DBSession.remove()
+
+    def login(self, username, password, status=302):
+        '''Will login the user with username and password. On default we we do
+        a check on a successfull login (status 302).'''
+        self.logout()
+        response = self.testapp.post('/auth/login',
+            params={'login': username,
+                    'pass': password},
+            status=status
+        )
+        return response
+
+    def logout(self):
+        'Logout the currently logged in user (if any)' 
+        response = self.testapp.get('/auth/logout',
+            params={},
+            status=302
+        )
+        return response
