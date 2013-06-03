@@ -213,19 +213,19 @@ def init_model(dbsession):
     profile.user = user
     dbsession.add(profile)
 
-    # Performance tests (not needed in production use)
-    ##################################################
-    for i in range(100):
-        login = ''.join(random.choice(string.ascii_uppercase
-                                      + string.digits) for x in range(8))
-        pw.update(login)
-        user = User(login=login, password=pw.hexdigest())
-        user.default_group = admin_usergroup
-        user.groups.append(admin_usergroup)
-        dbsession.add(user)
-        profile = Profile()
-        profile.first_name = "Firstname-%s" % i
-        profile.last_name = "Lastname-%s" % i
-        profile.email = "mail-%s@example.com" % i
-        profile.user = user
-        dbsession.add(profile)
+    ## Performance tests (not needed in production use)
+    ###################################################
+    #for i in range(100):
+    #    login = ''.join(random.choice(string.ascii_uppercase
+    #                                  + string.digits) for x in range(8))
+    #    pw.update(login)
+    #    user = User(login=login, password=pw.hexdigest())
+    #    user.default_group = admin_usergroup
+    #    user.groups.append(admin_usergroup)
+    #    dbsession.add(user)
+    #    profile = Profile()
+    #    profile.first_name = "Firstname-%s" % i
+    #    profile.last_name = "Lastname-%s" % i
+    #    profile.email = "mail-%s@example.com" % i
+    #    profile.user = user
+    #    dbsession.add(profile)
