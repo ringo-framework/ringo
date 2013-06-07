@@ -30,16 +30,17 @@ class TestInit(unittest.TestCase):
         testing.tearDown()
 
 class TestFunctional(unittest.TestCase):
-    def setUp(self):
+
+    @classmethod
+    def setUpClass(self):
         # TODO: Setup creating a testdatabase.
-        #self.config = testing.setUp()
-        print "XXXX"
         app = paster.get_app('test.ini')
         #Base.metadata.create_all(DBSession.get_bind())
         from webtest import TestApp
         self.testapp = TestApp(app)
 
-    def tearDown(self):
+    @classmethod
+    def tearDownClass(self):
         del self.testapp
         #Base.metadata.drop_all(DBSession.get_bind())
         #DBSession.remove()
