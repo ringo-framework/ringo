@@ -24,7 +24,7 @@ class TestUser(TestFunctional):
     def test_read_unknown(self):
         self.login('admin', 'secret')
         try:
-            self.testapp.get('/users/read/2')
+            self.testapp.get('/users/read/xxx')
         except NoResultFound:
             return True
         # Must fail!
@@ -33,6 +33,28 @@ class TestUser(TestFunctional):
     def test_create(self):
         self.login('admin', 'secret')
         self.testapp.get('/users/create', status=200)
+
+    def test_create_save_fail(self):
+        self.login('admin', 'secret')
+        # fail because password missmatch!
+        values = {
+            'login': 'testuser',
+            'activation_token': '',
+            'password': '12345678',
+            'retype_password': '123456789'
+        }
+        self.testapp.post('/users/create', values, status=200)
+
+    def test_create_save_success(self):
+        self.login('admin', 'secret')
+        # fail because password missmatch!
+        values = {
+            'login': 'testuser',
+            'activation_token': '',
+            'password': '12345678',
+            'retype_password': '12345678'
+        }
+        self.testapp.post('/users/create', values, status=302)
 
     def test_edit(self):
         self.login('admin', 'secret')
