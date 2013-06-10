@@ -1,65 +1,115 @@
+import os
 import unittest
-import transaction
+from mock import Mock
+from paste.deploy.loadwsgi import appconfig
+from webtest import TestApp
 
 from pyramid import testing
-from pyramid import paster
 
-from ringo.model import DBSession, Base
-from ringo.model.modul import (
-    init_model as init_modul_model,
-)
-from ringo.model.user import (
-    init_model as init_user_model
-)
+from sqlalchemy import engine_from_config
+from sqlalchemy.orm import sessionmaker
+
+from ringo.model import DBSession
+from ringo import main
+from ringo.lib.i18n import locale_negotiator
 
 
-class TestInit(unittest.TestCase):
+here = os.path.dirname(__file__)
+settings = appconfig('config:' + os.path.join(here, '../../', 'test.ini'))
+
+
+class BaseTestCase(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.engine = engine_from_config(settings, prefix='sqlalchemy.')
+        cls.Session = sessionmaker()
+
     def setUp(self):
-        self.config = testing.setUp()
-        from sqlalchemy import create_engine
-        engine = create_engine('sqlite://')
-        DBSession.configure(bind=engine)
-        Base.metadata.create_all(engine)
+        connection = self.engine.connect()
 
-        with transaction.manager:
-            init_modul_model(DBSession)
-            init_user_model(DBSession)
+        # begin a non-ORM transaction
+        self.trans = connection.begin()
+
+        # bind an individual Session to the connection
+        #DBSession.configure(bind=connection)
+        self.session = self.Session(bind=connection)
 
     def tearDown(self):
-        DBSession.remove()
+        # rollback - everything that happened with the
+        # Session above (including calls to commit())
+        # is rolled back.
         testing.tearDown()
+        self.trans.rollback()
+        self.session.close()
 
-class TestFunctional(unittest.TestCase):
 
+class BaseUnitTest(BaseTestCase):
+    def setUp(self):
+        self.config = testing.setUp(request=testing.DummyRequest())
+        super(BaseUnitTest, self).setUp()
+
+    def get_csrf_request(self, post=None):
+        csrf = 'abc'
+
+        if not u'csrf_token' in post.keys():
+            post.update({
+                'csrf_token': csrf
+            })
+
+        request = testing.DummyRequest(post)
+
+        request.session = Mock()
+        csrf_token = Mock()
+        csrf_token.return_value = csrf
+
+        request.session.get_csrf_token = csrf_token
+
+        return request
+
+
+class BaseFunctionalTest(BaseTestCase):
     @classmethod
-    def setUpClass(self):
-        # TODO: Setup creating a testdatabase.
-        app = paster.get_app('test.ini')
-        #Base.metadata.create_all(DBSession.get_bind())
-        from webtest import TestApp
-        self.testapp = TestApp(app)
+    def setUpClass(cls):
+        cls.app = main({}, **settings)
+        super(BaseFunctionalTest, cls).setUpClass()
 
-    @classmethod
-    def tearDownClass(self):
-        del self.testapp
-        #Base.metadata.drop_all(DBSession.get_bind())
-        #DBSession.remove()
+    def setUp(self):
+        self.app = TestApp(self.app)
+        self.config = testing.setUp()
+        super(BaseFunctionalTest, self).setUp()
 
-    def login(self, username, password, status=302):
-        '''Will login the user with username and password. On default we we do
-        a check on a successfull login (status 302).'''
-        self.logout()
-        response = self.testapp.post('/auth/login',
-            params={'login': username,
-                    'pass': password},
-            status=status
-        )
-        return response
-
-    def logout(self):
-        'Logout the currently logged in user (if any)' 
-        response = self.testapp.get('/auth/logout',
-            params={},
-            status=302
-        )
-        return response
+#class BaseFunctionalTest(unittest.TestCase):
+#
+#    @classmethod
+#    def setUpClass(self):
+#        # TODO: Setup creating a testdatabase.
+#        app = paster.get_app('test.ini')
+#        #Base.metadata.create_all(DBSession.get_bind())
+#        from webtest import TestApp
+#        self.testapp = TestApp(app)
+#
+#    @classmethod
+#    def tearDownClass(self):
+#        del self.testapp
+#        #Base.metadata.drop_all(DBSession.get_bind())
+#        #DBSession.remove()
+#
+#    def login(self, username, password, status=302):
+#        '''Will login the user with username and password. On default we we do
+#        a check on a successfull login (status 302).'''
+#        self.logout()
+#        response = self.testapp.post('/auth/login',
+#            params={'login': username,
+#                    'pass': password},
+#            status=status
+#        )
+#        return response
+#
+#    def logout(self):
+#        'Logout the currently logged in user (if any)' 
+#        response = self.testapp.get('/auth/logout',
+#            params={},
+#            status=302
+#        )
+#        return response
