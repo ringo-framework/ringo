@@ -24,7 +24,7 @@ class TestUser(TestFunctional):
     def test_read_unknown(self):
         self.login('admin', 'secret')
         try:
-            self.testapp.get('/users/read/xxx')
+            self.testapp.get('/users/read/1234')
         except NoResultFound:
             return True
         # Must fail!
@@ -56,13 +56,27 @@ class TestUser(TestFunctional):
         }
         self.testapp.post('/users/create', values, status=302)
 
-    def test_edit(self):
-        self.login('admin', 'secret')
-        self.testapp.get('/users/update/1', status=200)
+    #def test_edit(self):
+    #    self.login('admin', 'secret')
+    #    self.testapp.get('/users/update/2', status=200)
 
-    def test_delete(self):
-        self.login('admin', 'secret')
-        self.testapp.get('/users/delete/1', status=200)
+    #def test_edit_save(self):
+    #    self.login('admin', 'secret')
+    #    self.testapp.post('/users/update/2', status=200)
+
+    #def test_delete(self):
+    #    self.login('admin', 'secret')
+    #    self.testapp.get('/users/delete/2', status=200)
+
+    #def test_delete_fail(self):
+    #    self.login('admin', 'secret')
+    #    values = {'confirmed': '0'}
+    #    self.testapp.post('/users/delete/1', values, status=200)
+
+    #def test_delete_success(self):
+    #    self.login('admin', 'secret')
+    #    values = {'confirmed': '1'}
+    #    self.testapp.post('/users/delete/1', values, status=302)
 
 if __name__ == '__main__':
     unittest.main()
