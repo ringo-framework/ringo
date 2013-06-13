@@ -78,6 +78,129 @@ In case of bugs and feature requests please open a ticket on Bitbucket.
 
 UI
 **
+This section will explain the User Interface of Ringo. This will introduce
+some Ringo specific terminology which is used later in the documentation.
+
+
+Below you can see an example of a view in the Ringo application.
+
+
+.. image:: screenshots/home.png
+   :width: 800
+   :alt: Ringo after login 
+
+The Ringo UI is divided into three areas. In the top there is a header. At the
+bottom the footer and in the middle there is the content.
+
+Header
+======
+The header is at the top of the page an includes name of the application, the :ref:`ui-main-menu` and the
+:ref:`ui-user-menu`.
+
+.. _ui-main-menu:
+
+Main Menu
+---------
+The Main Menu will list the link to the :ref:`ui-home` page of your
+application and a entry for all available and enabled non administrational
+:ref:`modules`. The links will usually link the :ref:`ui-overview` page of the
+selected modul.
+
+.. image:: screenshots/ui/mainmenu.png
+
+The currently active modul is highlighted.
+
+.. _ui-user-menu:
+
+User Menu
+---------
+
+The User Menu is only visible for logged in users. The Menu will give access
+to user specific functions.
+
+.. image:: screenshots/ui/usermenu.png
+
+The label of the menu shows the login name of the currently logged in user.
+These are:
+
+ * Profil: Will open the Profil of the user.
+ * Logout: Will logout the user
+
+Main
+====
+The section is used to display the main content in your application. Each page
+which is displayed here will usually have a header which gives information on
+what you are currently viewing. In the header there is also a context menu on
+the right side.
+
+Context Menu
+------------
+The context menu will provide available actions for the currently selected
+item, or more generally speaking for the currently displayed page.
+
+The available actions can be configured in the :ref:`modul-modul` administration.
+
+.. image:: screenshots/ui/contextmenu.png
+
+The following actions are currently availabe in Ringo. Listed from left to right:
+
+ 1. Overview: Go back to the overview of the modul.
+ 2. Add new item: Will open the page to create a new item of the modul.
+ 3. Read item: Will open the currently selected item in read only mode.
+ 4. Edit item: Will open the currently selected item in edit mode.
+ 5. Delete item: Will delete the currently selected item.
+
+.. _ui-home:
+
+Home
+----
+The home page is the entry page of your application and will give you an
+overview of the most important news in your application like appointments, new
+entries, or some statistics. However in Ringo this page is empty and it is up
+to you to fill it with content.
+
+.. _ui-overview:
+
+Overview
+--------
+Each modul has an overview page which lists all items of the modul. Each
+overview provides the following functionality:
+
+ 1. Sorting
+ 2. more will to be implemented...
+
+.. image:: screenshots/ui/overview.png
+
+Sorting
+```````
+The header of the overview table is clickable to sort the listing on the
+selected header. Clicking on the header toggles between ascending and
+descending sorting. A small icon shown on which column the sorting was done.
+
+Footer
+======
+At the bottom of the screen is the footer which provides access to the
+:ref:`ui-administrationmenu` and :ref:`ui-footermenu`.
+
+.. _ui-administrationmenu:
+
+Administraion Menu
+------------------
+
+.. image:: screenshots/ui/administrationmenu.png
+
+The Administraion Menu is only visible for users with the "admin" role after
+login. It gives access to the administration of the modules.
+
+.. _ui-footermenu:
+
+Footer Menu
+-----------
+
+.. image:: screenshots/ui/footermenu.png
+
+The Footer menu gives general information on your application like how to
+contact you or version information.
 
 .. _modules:
 
@@ -86,14 +209,32 @@ Modules
 User
 ====
 
+.. image:: screenshots/user.png
+   :width: 800
+   :alt: Ringo after login 
+
 Usergroup
 =========
+
+.. image:: screenshots/usergroup.png
+   :width: 800
+   :alt: Ringo after login 
 
 Role
 ====
 
+.. image:: screenshots/role.png
+   :width: 800
+   :alt: Ringo after login 
+
+.. _modul-modul:
+
 Modul
 =====
+
+.. image:: screenshots/modul.png
+   :width: 800
+   :alt: Ringo after login 
 
 Permission System
 *****************
@@ -224,6 +365,11 @@ the instructions provided in the README file with the application folder::
         cat README.rst
 
 Your application is ready for development :)
+
+Change various aspects in my Ringo based application
+====================================================
+Change the name of the application
+----------------------------------
 
 API
 ***
