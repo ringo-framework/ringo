@@ -1,6 +1,6 @@
 import os
 import unittest
-from mock import Mock
+#from mock import Mock
 from paste.deploy.loadwsgi import appconfig
 from webtest import TestApp
 
@@ -44,28 +44,28 @@ class BaseTestCase(unittest.TestCase):
         self.session.close()
 
 
-class BaseUnitTest(BaseTestCase):
-    def setUp(self):
-        self.config = testing.setUp(request=testing.DummyRequest())
-        super(BaseUnitTest, self).setUp()
-
-    def get_csrf_request(self, post=None):
-        csrf = 'abc'
-
-        if not u'csrf_token' in post.keys():
-            post.update({
-                'csrf_token': csrf
-            })
-
-        request = testing.DummyRequest(post)
-
-        request.session = Mock()
-        csrf_token = Mock()
-        csrf_token.return_value = csrf
-
-        request.session.get_csrf_token = csrf_token
-
-        return request
+#class BaseUnitTest(BaseTestCase):
+#    def setUp(self):
+#        self.config = testing.setUp(request=testing.DummyRequest())
+#        super(BaseUnitTest, self).setUp()
+#
+#    def get_csrf_request(self, post=None):
+#        csrf = 'abc'
+#
+#        if not u'csrf_token' in post.keys():
+#            post.update({
+#                'csrf_token': csrf
+#            })
+#
+#        request = testing.DummyRequest(post)
+#
+#        request.session = Mock()
+#        csrf_token = Mock()
+#        csrf_token.return_value = csrf
+#
+#        request.session.get_csrf_token = csrf_token
+#
+#        return request
 
 
 class BaseFunctionalTest(BaseTestCase):
@@ -78,6 +78,31 @@ class BaseFunctionalTest(BaseTestCase):
         self.app = TestApp(self.app)
         self.config = testing.setUp()
         super(BaseFunctionalTest, self).setUp()
+
+    def login(self, username, password, status=302):
+        '''Will login the user with username and password. On default we we do
+        a check on a successfull login (status 302).'''
+        self.logout()
+        response = self.app.post('/auth/login',
+            params={'login': username,
+                    'pass': password},
+            status=status
+        )
+        return response
+
+    def logout(self):
+        'Logout the currently logged in user (if any)' 
+        response = self.app.get('/auth/logout',
+            params={},
+            status=302
+        )
+        return response
+
+    def get_max_id(self, clazz):
+        'Returns the max id of item (last inserted) of clazz'
+        items = clazz.get_item_list(DBSession)
+        last_item = items.items[-1]
+        return last_item.id
 
 #class BaseFunctionalTest(unittest.TestCase):
 #

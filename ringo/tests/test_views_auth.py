@@ -1,21 +1,21 @@
-from pyramid import testing
-from ringo.tests import BaseFunctionalTest, BaseUnitTest
-
-
-class TestViews(BaseUnitTest):
+#from pyramid import testing
+#from ringo.tests import BaseFunctionalTest, BaseUnitTest
+#
+#
+#class TestViews(BaseUnitTest):
     #def test_login_fails_empty(self):
     #    """ Make sure we can't login with empty credentials"""
     #    self.app.post('/auth/login', status=200)
 
-    def test_login_fails_empty(self):
-        """ Make sure we can't login with empty credentials"""
-        from ringo.views.auth import login
-        self.config.add_route('login', 'auth/login')
-        request = testing.DummyRequest(post={
-            'submit': True,
-        })
-        view = login(request)
-        response = view.post()
+    #def test_login_fails_empty(self):
+    #    """ Make sure we can't login with empty credentials"""
+    #    from ringo.views.auth import login
+    #    self.config.add_route('login', 'auth/login')
+    #    request = testing.DummyRequest(post={
+    #        'submit': True,
+    #    })
+    #    view = login(request)
+    #    response = view.post()
 
 
     #def test_login_succeeds(self):

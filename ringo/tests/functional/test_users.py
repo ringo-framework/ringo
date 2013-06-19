@@ -1,30 +1,31 @@
 import unittest
 from sqlalchemy.orm.exc import NoResultFound
-from ringo.tests import TestFunctional
+from ringo.model.user import User
+from ringo.tests import BaseFunctionalTest
 
 #class TestEncryptPassword(TestFunctional):
 #    def test_encrypt_password(self):
 #        # self.assertEqual(expected, encrypt_password(request, user))
 #        assert False # TODO: implement your test here
 
-class TestUser(TestFunctional):
+class TestUser(BaseFunctionalTest):
 
     def test_wrong_url(self):
         self.login('admin', 'secret')
-        self.testapp.get('/users/listtest', status=404)
+        self.app.get('/users/listtest', status=404)
 
     def test_list(self):
         self.login('admin', 'secret')
-        self.testapp.get('/users/list', status=200)
+        self.app.get('/users/list', status=200)
 
     def test_read(self):
         self.login('admin', 'secret')
-        self.testapp.get('/users/read/1', status=200)
+        self.app.get('/users/read/1', status=200)
 
     def test_read_unknown(self):
         self.login('admin', 'secret')
         try:
-            self.testapp.get('/users/read/1234')
+            self.app.get('/users/read/1234')
         except NoResultFound:
             return True
         # Must fail!
@@ -32,7 +33,7 @@ class TestUser(TestFunctional):
 
     def test_create(self):
         self.login('admin', 'secret')
-        self.testapp.get('/users/create', status=200)
+        self.app.get('/users/create', status=200)
 
     def test_create_save_fail(self):
         self.login('admin', 'secret')
@@ -43,7 +44,7 @@ class TestUser(TestFunctional):
             'password': '12345678',
             'retype_password': '123456789'
         }
-        self.testapp.post('/users/create', values, status=200)
+        self.app.post('/users/create', values, status=200)
 
     def test_create_save_success(self):
         self.login('admin', 'secret')
@@ -54,29 +55,32 @@ class TestUser(TestFunctional):
             'password': '12345678',
             'retype_password': '12345678'
         }
-        self.testapp.post('/users/create', values, status=302)
+        self.app.post('/users/create', values, status=302)
 
-    #def test_edit(self):
-    #    self.login('admin', 'secret')
-    #    self.testapp.get('/users/update/2', status=200)
+    def test_edit(self):
+        self.login('admin', 'secret')
+        self.app.get('/users/update/1', status=200)
 
-    #def test_edit_save(self):
-    #    self.login('admin', 'secret')
-    #    self.testapp.post('/users/update/2', status=200)
+    def test_edit_save(self):
+        self.login('admin', 'secret')
+        self.app.post('/users/update/1', status=200)
 
-    #def test_delete(self):
-    #    self.login('admin', 'secret')
-    #    self.testapp.get('/users/delete/2', status=200)
+    def test_delete(self):
+        last_id = self.get_max_id(User)
+        self.login('admin', 'secret')
+        self.app.get('/users/delete/%s' % last_id, status=200)
 
-    #def test_delete_fail(self):
-    #    self.login('admin', 'secret')
-    #    values = {'confirmed': '0'}
-    #    self.testapp.post('/users/delete/1', values, status=200)
+    def test_delete_confirmed(self):
+        last_id = self.get_max_id(User)
+        self.login('admin', 'secret')
+        values = {'confirmed': '1'}
+        self.app.post('/users/delete/%s' % last_id, values, status=302)
 
-    #def test_delete_success(self):
-    #    self.login('admin', 'secret')
-    #    values = {'confirmed': '1'}
-    #    self.testapp.post('/users/delete/1', values, status=302)
+    def test_delete_fail(self):
+        last_id = self.get_max_id(User)
+        self.login('admin', 'secret')
+        values = {'confirmed': '0'}
+        self.app.post('/users/delete/%s' % last_id, values, status=200)
 
 if __name__ == '__main__':
     unittest.main()
