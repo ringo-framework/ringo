@@ -80,7 +80,6 @@ class TestUsergroup(BaseFunctionalTest):
     def test_delete_confirmed(self):
         self.login('admin', 'secret')
         last_id = self.get_max_id(Usergroup)
-        print last_id
         values = {'confirmed': '1'}
         self.app.post('/usergroups/delete/%s' % last_id, values, status=302)
 
