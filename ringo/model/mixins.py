@@ -24,7 +24,7 @@ class Owned(object):
         return Column(Integer, ForeignKey('users.id'))
 
     @declared_attr
-    def user(cls):
+    def owner(cls):
         return relationship("User",
                             primaryjoin="User.id==%s.uid" % cls.__name__)
 
