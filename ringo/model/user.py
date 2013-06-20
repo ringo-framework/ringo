@@ -183,8 +183,8 @@ def init_model(dbsession):
     # Load profiles modul
     modul = ModulItem.get_item_factory().load(Profile._modul_id)
     # Add permissions to edit and read the users profiles
+    role.permissions.append(modul.actions[1])
     role.permissions.append(modul.actions[2])
-    role.permissions.append(modul.actions[3])
 
     # Admin group
     #############
