@@ -42,7 +42,9 @@ class TestUsergroup(BaseFunctionalTest):
         self.login('admin', 'secret')
         # fail because password missmatch!
         values = {
-            'name': 'testusergroup'
+            'name': 'testusergroup',
+            "roles":"1",
+            "members":"1"
         }
         self.app.post('/usergroups/create', values, status=302)
 
@@ -70,22 +72,23 @@ class TestUsergroup(BaseFunctionalTest):
         self.app.post('/usergroups/update/1', values, status=200)
 
     def test_delete(self):
+        self.login('admin', 'secret')
         last_id = self.get_max_id(Usergroup)
         self.login('admin', 'secret')
         self.app.get('/usergroups/delete/%s' % last_id, status=200)
 
     def test_delete_confirmed(self):
-        last_id = self.get_max_id(Usergroup)
         self.login('admin', 'secret')
+        last_id = self.get_max_id(Usergroup)
+        print last_id
         values = {'confirmed': '1'}
         self.app.post('/usergroups/delete/%s' % last_id, values, status=302)
 
     def test_delete_fail(self):
-        self.test_create_save_success()
+        self.login('admin', 'secret')
         last_id = self.get_max_id(Usergroup)
         values = {'confirmed': '0'}
         self.app.post('/usergroups/delete/%s' % last_id, values, status=200)
-        self.test_delete_confirmed()
 
 if __name__ == '__main__':
     unittest.main()

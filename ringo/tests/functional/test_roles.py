@@ -41,7 +41,8 @@ class TestRole(BaseFunctionalTest):
     def test_create_save_success(self):
         self.login('admin', 'secret')
         values = {
-            'name': 'testrole'
+            'name': 'testrole',
+            'admin': 'True'
         }
         self.app.post('/roles/create', values, status=302)
 
@@ -77,11 +78,10 @@ class TestRole(BaseFunctionalTest):
         self.app.post('/roles/delete/%s' % last_id, values, status=302)
 
     def test_delete_fail(self):
-        self.test_create_save_success()
         last_id = self.get_max_id(Role)
+        self.login('admin', 'secret')
         values = {'confirmed': '0'}
         self.app.post('/roles/delete/%s' % last_id, values, status=200)
-        self.test_delete_confirmed()
 
 if __name__ == '__main__':
     unittest.main()
