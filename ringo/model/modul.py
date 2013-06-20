@@ -42,6 +42,14 @@ class ModulItem(BaseItem, Base):
             return self.label_plural
         return self.label
 
+    def has_action(self, url):
+        """Will return True if the modul has a ActionItem configured
+        with given url. Else false."""
+        for action in self.actions:
+            if action.url == url:
+                return True
+        return False
+
 
 def _create_default_actions(dbsession, ignore=[]):
     a0 = ActionItem(name="List", url="list", icon="icon-list-alt")
