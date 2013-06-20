@@ -3,6 +3,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from ringo.model.user import Role
 from ringo.tests import BaseFunctionalTest
 
+
 class TestRole(BaseFunctionalTest):
 
     def test_wrong_url(self):
@@ -12,6 +13,14 @@ class TestRole(BaseFunctionalTest):
     def test_list(self):
         self.login('admin', 'secret')
         self.app.get('/roles/list', status=200)
+
+    def test_sort(self):
+        self.login('admin', 'secret')
+        values = {
+            'sort_field': 'name',
+            'sort_order': 'desc'
+        }
+        self.app.get('/roles/list', values, status=200)
 
     def test_read(self):
         self.login('admin', 'secret')
