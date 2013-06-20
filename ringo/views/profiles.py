@@ -26,10 +26,3 @@ def update(request):
              permission='read')
 def read(request):
     return read_(Profile, request)
-
-
-@view_config(route_name=Profile.get_action_routename('delete'),
-             renderer='/default/confirm.mako',
-             permission='delete')
-def delete(request):
-    return delete_(Profile, request)
