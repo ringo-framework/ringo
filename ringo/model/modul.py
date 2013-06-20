@@ -87,7 +87,9 @@ def init_model(dbsession):
     modul = ModulItem(name='actions')
     modul.label = _("Action")
     modul.label_plural = _("Actions")
-    modul.actions.extend(_create_default_actions(dbsession))
+    # Actions modul is not meant to be callable from anybody (There is
+    # now view at all). So do not add any actions here.
+    # modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
     # ID 3
     modul = ModulItem(name='users')
