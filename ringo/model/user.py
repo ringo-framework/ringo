@@ -203,6 +203,7 @@ def init_model(dbsession):
     pw = hashlib.md5()
     pw.update('secret')
     user = User(login='admin', password=pw.hexdigest())
+    user.activation_token = "0e3cc848-22f6-4ff7-a562-12baf3037439"
     user.default_group = admin_usergroup
     user.groups.append(admin_usergroup)
     dbsession.add(user)
