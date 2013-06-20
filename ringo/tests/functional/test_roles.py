@@ -41,7 +41,7 @@ class TestRole(BaseFunctionalTest):
     def test_create_save_success(self):
         self.login('admin', 'secret')
         values = {
-            'name': 'testusergroup'
+            'name': 'testrole'
         }
         self.app.post('/roles/create', values, status=302)
 
@@ -49,9 +49,21 @@ class TestRole(BaseFunctionalTest):
         self.login('admin', 'secret')
         self.app.get('/roles/update/1', status=200)
 
-    def test_edit_save(self):
+    def test_edit_save_ok(self):
         self.login('admin', 'secret')
-        self.app.post('/roles/update/1', status=200)
+        values = {
+            'name': 'admin',
+            'admin': 'True'
+        }
+        self.app.post('/roles/update/1', values, status=302)
+
+    def test_edit_save_fail(self):
+        self.login('admin', 'secret')
+        # Missing value
+        values = {
+            'name': ''
+        }
+        self.app.post('/roles/update/1', values, status=200)
 
     def test_delete(self):
         last_id = self.get_max_id(Role)

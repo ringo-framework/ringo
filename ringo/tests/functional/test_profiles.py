@@ -30,9 +30,20 @@ class TestProfile(BaseFunctionalTest):
         self.login('admin', 'secret')
         self.app.get('/profiles/update/1', status=200)
 
-    def test_edit_save(self):
+    def test_edit_save_ok(self):
         self.login('admin', 'secret')
-        self.app.post('/profiles/update/1', status=200)
+        values = {
+            "first_name":"Firstname",
+            "last_name":"Lastname",
+            "address":"",
+            "birthday__month":"MM",
+            "birthday__day":"DD",
+            "birthday__year":"",
+            "email":"mail@example.com",
+            "url":"",
+            "phone":""
+        }
+        self.app.post('/profiles/update/1', values, status=302)
 
 if __name__ == '__main__':
     unittest.main()

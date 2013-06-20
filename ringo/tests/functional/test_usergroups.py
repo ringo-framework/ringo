@@ -50,9 +50,24 @@ class TestUsergroup(BaseFunctionalTest):
         self.login('admin', 'secret')
         self.app.get('/usergroups/update/1', status=200)
 
-    def test_edit_save(self):
+    def test_edit_save_ok(self):
         self.login('admin', 'secret')
-        self.app.post('/usergroups/update/1', status=200)
+        values = {
+            "name":"admins",
+            "roles":"1",
+            "members":"1"
+        }
+        self.app.post('/usergroups/update/1', values, status=302)
+
+    def test_edit_save_fail(self):
+        self.login('admin', 'secret')
+        # Missing values.
+        values = {
+            "name":"",
+            "roles":"1",
+            "members":"1"
+        }
+        self.app.post('/usergroups/update/1', values, status=200)
 
     def test_delete(self):
         last_id = self.get_max_id(Usergroup)

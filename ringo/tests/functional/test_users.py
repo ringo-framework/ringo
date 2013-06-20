@@ -56,9 +56,27 @@ class TestUser(BaseFunctionalTest):
         self.login('admin', 'secret')
         self.app.get('/users/update/1', status=200)
 
-    def test_edit_save(self):
+    def test_edit_save_ok(self):
         self.login('admin', 'secret')
-        self.app.post('/users/update/1', status=200)
+        values = {
+            'login': 'admin',
+            'groups': '1',
+            'gid': '',
+            'activated': 'True',
+            'activation_token': ''
+        }
+        self.app.post('/users/update/1', values, status=302)
+
+    def test_edit_save_fail(self):
+        self.login('admin', 'secret')
+        values = {
+            'login': '',
+            'groups': '1',
+            'gid': '',
+            'activated': 'True',
+            'activation_token': ''
+        }
+        self.app.post('/users/update/1', values, status=200)
 
     def test_delete(self):
         last_id = self.get_max_id(User)
