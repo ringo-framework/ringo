@@ -156,6 +156,9 @@ class Profile(BaseItem, Owned, Base):
                            backref="profile", single_parent=True,
                            uselist=False)
 
+    # Configuration
+    _table_fields = [('first_name', 'last_name', 'email')]
+
     def __unicode__(self):
         return "%s %s" % (self.first_name, self.last_name)
 
