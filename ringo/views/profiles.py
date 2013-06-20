@@ -14,13 +14,6 @@ def list(request):
     return list_(Profile, request)
 
 
-@view_config(route_name=Profile.get_action_routename('create'),
-             renderer='/default/create.mako',
-             permission='create')
-def create(request):
-    return create_(Profile, request)
-
-
 @view_config(route_name=Profile.get_action_routename('update'),
              renderer='/default/update.mako',
              permission='update')
