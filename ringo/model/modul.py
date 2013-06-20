@@ -3,14 +3,6 @@ from ringo.model import Base
 from ringo.model.user import BaseItem
 from ringo.lib.i18n import _
 
-## NM-Table definitions
-#nm_modules_actions = sa.Table(
-#    'nm_modules_actions', Base.metadata,
-#    sa.Column('mid', sa.Integer, sa.ForeignKey('modules.id')),
-#    sa.Column('aid', sa.Integer, sa.ForeignKey('actions.id')),
-#    sa.Column('required_permissio', sa.Text)
-#)
-
 
 class ActionItem(BaseItem, Base):
     __tablename__ = 'actions'
@@ -95,7 +87,7 @@ def init_model(dbsession):
     modul = ModulItem(name='actions')
     modul.label = _("Action")
     modul.label_plural = _("Actions")
-    modul.actions.extend(_create_default_actions(dbsession, ignore=['create', 'delete']))
+    modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
     # ID 3
     modul = ModulItem(name='users')
