@@ -34,7 +34,7 @@ class ListRenderer(Renderer):
         values = {'items': items,
                   'clazz': self.clazz,
                   'request': request,
-                  'headers': self.clazz._table_fields}
+                  'headers': self.clazz.get_table_config()}
         return self.template.render(**values)
 
 
