@@ -3,11 +3,6 @@ from sqlalchemy.orm.exc import NoResultFound
 from ringo.model.user import User
 from ringo.tests import BaseFunctionalTest
 
-#class TestEncryptPassword(TestFunctional):
-#    def test_encrypt_password(self):
-#        # self.assertEqual(expected, encrypt_password(request, user))
-#        assert False # TODO: implement your test here
-
 class TestUser(BaseFunctionalTest):
 
     def test_wrong_url(self):
@@ -77,10 +72,11 @@ class TestUser(BaseFunctionalTest):
         self.app.post('/users/delete/%s' % last_id, values, status=302)
 
     def test_delete_fail(self):
+        self.test_create_save_success()
         last_id = self.get_max_id(User)
-        self.login('admin', 'secret')
         values = {'confirmed': '0'}
         self.app.post('/users/delete/%s' % last_id, values, status=200)
+        self.test_delete_confirmed()
 
 if __name__ == '__main__':
     unittest.main()
