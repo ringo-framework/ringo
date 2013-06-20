@@ -14,13 +14,6 @@ def list(request):
     return list_(ModulItem, request)
 
 
-@view_config(route_name=ModulItem.get_action_routename('create'),
-             renderer='/default/create.mako',
-             permission='create')
-def create(request):
-    return create_(ModulItem, request)
-
-
 @view_config(route_name=ModulItem.get_action_routename('update'),
              renderer='/default/update.mako',
              permission='update')
@@ -33,10 +26,3 @@ def update(request):
              permission='read')
 def read(request):
     return read_(ModulItem, request)
-
-
-@view_config(route_name=ModulItem.get_action_routename('delete'),
-             renderer='/default/confirm.mako',
-             permission='delete')
-def delete(request):
-    return delete_(ModulItem, request)
