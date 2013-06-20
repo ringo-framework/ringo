@@ -89,13 +89,13 @@ def init_model(dbsession):
     modul = ModulItem(name='modules')
     modul.label = _("Modul")
     modul.label_plural = _("Modules")
-    modul.actions.extend(_create_default_actions(dbsession))
+    modul.actions.extend(_create_default_actions(dbsession, ignore=['create', 'delete']))
     dbsession.add(modul)
     # ID 2
     modul = ModulItem(name='actions')
     modul.label = _("Action")
     modul.label_plural = _("Actions")
-    modul.actions.extend(_create_default_actions(dbsession))
+    modul.actions.extend(_create_default_actions(dbsession, ignore=['create', 'delete']))
     dbsession.add(modul)
     # ID 3
     modul = ModulItem(name='users')
@@ -119,5 +119,5 @@ def init_model(dbsession):
     modul = ModulItem(name='profiles')
     modul.label = _("Profile")
     modul.label_plural = _("Profiles")
-    modul.actions.extend(_create_default_actions(dbsession))
+    modul.actions.extend(_create_default_actions(dbsession, ignore=['create', 'delete']))
     dbsession.add(modul)
