@@ -100,9 +100,14 @@ def update_(clazz, request):
                     mapping=mapping)
             log.info(msg)
             request.session.flash(msg, 'success')
+            route_name = item.get_action_routename('update')
+            url = request.route_url(route_name, id=item.id)
+            # Redirect to the update view.
+            return HTTPFound(location=url)
         else:
             msg = _('Error on validation the data for '
                     '${item_type} "${item}".', mapping=mapping)
+            log.info(msg)
             request.session.flash(msg, 'error')
     rvalue['clazz'] = clazz
     rvalue['item'] = item
