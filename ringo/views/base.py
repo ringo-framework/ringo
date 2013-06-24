@@ -6,6 +6,7 @@ from formbar.form import Form
 
 from ringo.model.base import BaseList
 from ringo.lib.renderer import ListRenderer, ConfirmDialogRenderer
+from ringo.views import handle_history
 
 log = logging.getLogger(__name__)
 
@@ -20,8 +21,8 @@ def handle_sorting(clazz, request):
     request.session.save()
     return field, order
 
-
 def list_(clazz, request):
+    handle_history(request)
     rvalue = {}
     field, order = handle_sorting(clazz, request)
     # TODO: Check which is the best loading strategy here for large
@@ -51,6 +52,7 @@ def create_(clazz, request, callback=None):
     returns the item again.
     :returns: Dictionary with the following keys 'clazz', 'item', 'form'
     """
+    handle_history(request)
     _ = request.translate
     rvalue = {}
     factory = clazz.get_item_factory()
@@ -85,6 +87,7 @@ def create_(clazz, request, callback=None):
 
 
 def update_(clazz, request):
+    handle_history(request)
     _ = request.translate
     rvalue = {}
     id = request.matchdict.get('id')
@@ -116,6 +119,7 @@ def update_(clazz, request):
 
 
 def read_(clazz, request):
+    handle_history(request)
     rvalue = {}
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
@@ -128,6 +132,7 @@ def read_(clazz, request):
 
 
 def delete_(clazz, request):
+    handle_history(request)
     _ = request.translate
     rvalue = {}
     id = request.matchdict.get('id')

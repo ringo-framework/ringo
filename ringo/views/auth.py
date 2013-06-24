@@ -14,6 +14,7 @@ from ringo.model.user import User, Profile, Usergroup, USER_GROUP_ID
 from formbar.config import Config, load
 from formbar.form import Form, Validator
 
+from ringo.views import handle_history
 from ringo.lib.helpers import get_path_to_form_config
 from ringo.lib.security import login as user_login, request_password_reset, \
     password_reset, activate_user
@@ -27,6 +28,7 @@ def is_login_unique(field, data):
 
 @view_config(route_name='login', renderer='/auth/login.mako')
 def login(request):
+    handle_history(request)
     _ = request.translate
     config = Config(load(get_path_to_form_config('auth.xml')))
     form_config = config.get_form('loginform')
@@ -50,6 +52,7 @@ def login(request):
 
 @view_config(route_name='logout', renderer='/auth/logout.mako')
 def logout(request):
+    handle_history(request)
     _ = request.translate
     target_url = request.route_url('home')
     headers = forget(request)
@@ -61,6 +64,7 @@ def logout(request):
 @view_config(route_name='register_user',
              renderer='/auth/register_user.mako')
 def register_user(request):
+    handle_history(request)
     _ = request.translate
     settings = request.registry.settings
     config = Config(load(get_path_to_form_config('auth.xml')))
@@ -122,6 +126,7 @@ def register_user(request):
 @view_config(route_name='confirm_user',
              renderer='/auth/confirm_user.mako')
 def confirm_user(request):
+    handle_history(request)
     _ = request.translate
     success = False
     token = request.matchdict.get('token')
@@ -138,6 +143,7 @@ def confirm_user(request):
 @view_config(route_name='forgot_password',
              renderer='/auth/forgot_password.mako')
 def forgot_password(request):
+    handle_history(request)
     _ = request.translate
     settings = request.registry.settings
     config = Config(load(get_path_to_form_config('auth.xml')))
@@ -170,6 +176,7 @@ def forgot_password(request):
 @view_config(route_name='reset_password',
              renderer='/auth/reset_password.mako')
 def reset_password(request):
+    handle_history(request)
     _ = request.translate
     settings = request.registry.settings
     success = False
