@@ -5,6 +5,9 @@ from ringo.tests.functional.test_users import TestUser
 
 class TestAuth(BaseFunctionalTest):
 
+    def test_403(self):
+        self.app.get('/users/list', status=403)
+
     def test_login(self):
         self.app.get('/auth/login', status=200)
 
