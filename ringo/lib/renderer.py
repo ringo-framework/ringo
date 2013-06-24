@@ -118,7 +118,11 @@ class ErrorDialogRenderer(DialogRenderer):
             'ringo:static/images/icons/32x32/dialog-error.png')
         values['header'] = self._title
         values['body'] = self._render_body()
-        values['ok_url'] = self._request.session['history'].pop()
+        history = self._request.session.get('history')
+        if history:
+            values['ok_url'] = self._request.session['history'].pop()
+        else:
+            values['ok_url'] = self._request.route_url('home')
         return self.template.render(**values)
 
     def _render_body(self):
