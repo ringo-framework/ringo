@@ -102,3 +102,26 @@ class ConfirmDialogRenderer(DialogRenderer):
                    % (self._action.capitalize(), self._action))
 
         return "".join(out)
+
+
+class ErrorDialogRenderer(DialogRenderer):
+    """Docstring for ErrorDialogRenderer """
+
+    def __init__(self, request, title, body):
+        """@todo: to be defined """
+        DialogRenderer.__init__(self, request, None, None, title, body)
+        self.template = template_lookup.get_template("internal/error.mako")
+
+    def render(self):
+        values = {}
+        values['icon'] = self._request.static_url(
+            'ringo:static/images/icons/32x32/dialog-error.png')
+        values['header'] = self._title
+        values['body'] = self._render_body()
+        values['ok_url'] = self._request.session['history'].pop()
+        return self.template.render(**values)
+
+    def _render_body(self):
+        out = []
+        out.append(self._body)
+        return "".join(out)
