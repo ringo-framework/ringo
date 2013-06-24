@@ -1,3 +1,15 @@
+0.2.1
+-----
+
+- Improved documentation
+- #1: Error on getting roles while authorisation when user is not logged in
+- #2: Put some usefull content on the default index page
+- #3: Set application title in the page header
+- #4: Add version info page
+- #5: Add about page
+- #6: Add contact page
+- #9: Cleanup and structure css
+
 0.2
 ---
 
