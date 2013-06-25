@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-06-25 21:21+0200\n"
-"PO-Revision-Date: 2013-06-25 22:24+0200\n"
+"POT-Creation-Date: 2013-06-25 22:31+0200\n"
+"PO-Revision-Date: 2013-06-25 22:32+0200\n"
 "Last-Translator: Torsten Irlaender <torsten@irlaender.de>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -68,7 +68,7 @@ msgstr "Profile"
 #: ringo/templates/about.mako:4 ringo/templates/about.mako:6
 #: ringo/templates/footer.mako:19
 msgid "About"
-msgstr "Über"
+msgstr "Info"
 
 #: ringo/templates/about.mako:7
 msgid "Please provide some usefull information about your application here"
@@ -177,6 +177,10 @@ msgstr ""
 "Weise gibt Ihnen diese Seite eine Übersicht über die wichtigsten Dinge "
 "wie Termine, Neuigkeiten und mehr in Anwendung."
 
+#: ringo/templates/index.mako:8
+msgid "Next stop: Login!"
+msgstr "Nächster Halt: Anmeldung!"
+
 #: ringo/templates/index.mako:9
 msgid ""
 "This is the dashboard as seen by anonymous users. To get a better "
@@ -207,6 +211,10 @@ msgstr ""
 #: ringo/templates/index.mako:15
 msgid "Login in the application"
 msgstr "In der Anwendung anmelden"
+
+#: ringo/templates/index.mako:17
+msgid "What to do next?"
+msgstr "Was als nächstes tun?"
 
 #: ringo/templates/index.mako:18
 msgid ""
@@ -337,6 +345,14 @@ msgstr "Passwort zurückgesetzt"
 #: ringo/templates/auth/reset_password.mako:8
 msgid "Password not resetted"
 msgstr "Password nicht zurückgesetzt"
+
+#: ringo/templates/default/create.mako:4
+msgid "New"
+msgstr "Neu"
+
+#: ringo/templates/default/read.mako:5
+msgid "Read"
+msgstr "Lesen"
 
 #: ringo/templates/default/update.mako:5
 msgid "Edit"
