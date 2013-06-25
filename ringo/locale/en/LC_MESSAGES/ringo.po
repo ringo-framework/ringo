@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-06-25 22:31+0200\n"
+"POT-Creation-Date: 2013-06-25 22:42+0200\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -98,32 +98,26 @@ msgid "Contact"
 msgstr ""
 
 #: ringo/templates/contact.mako:6
-msgid ""
-"Below you find some options to get in touch with the developers or how to"
-" file new tickets in the issue tracker."
-msgstr ""
-
-#: ringo/templates/contact.mako:7
 msgid "Author"
 msgstr ""
 
-#: ringo/templates/contact.mako:8
+#: ringo/templates/contact.mako:7
 msgid "If you have any questions do not hestitate to contact me."
 msgstr ""
 
-#: ringo/templates/contact.mako:11
+#: ringo/templates/contact.mako:10
 msgid "Mail"
 msgstr ""
 
-#: ringo/templates/contact.mako:12
+#: ringo/templates/contact.mako:11
 msgid "IM"
 msgstr ""
 
-#: ringo/templates/contact.mako:14
+#: ringo/templates/contact.mako:13
 msgid "Bugs"
 msgstr ""
 
-#: ringo/templates/contact.mako:15
+#: ringo/templates/contact.mako:14
 msgid ""
 "If you do encounter bugs or miss some features please fill file a issue "
 "in the Ringo issue tracker."
@@ -406,4 +400,11 @@ msgid ""
 "Authorisation error! Sorry, you are not allowed to access to requested "
 "ressource!"
 msgstr ""
+
+#~ msgid ""
+#~ "Below you find some options to get"
+#~ " in touch with the developers or "
+#~ "how to file new tickets in the "
+#~ "issue tracker."
+#~ msgstr ""
 

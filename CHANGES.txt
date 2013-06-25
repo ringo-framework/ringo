@@ -13,6 +13,7 @@
 - #9: Cleanup and structure css
 - #17: Hide checkboxes in overviews if bundled actions are not enabled
 - #20: Fix layout of flash messages
+- #21: Complete german translation
 
 0.2
 ---
