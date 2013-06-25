@@ -2,7 +2,7 @@
 <%namespace name="main" file="/main.mako"/>
 <div class="row-fluid page-header">
   <div class="span6">
-    <h1>Read ${clazz.get_item_modul().get_label()}</h1>
+    <h1>${_('Read')} ${clazz.get_item_modul().get_label()}</h1>
   </div>
   <div class="span6">
     <div class="btn-toolbar pull-right">
