@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-05-10 16:06+0200\n"
-"PO-Revision-Date: 2013-03-28 18:31+0100\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2013-06-25 21:21+0200\n"
+"PO-Revision-Date: 2013-06-25 22:24+0200\n"
+"Last-Translator: Torsten Irlaender <torsten@irlaender.de>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
@@ -17,59 +17,133 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: ringo/model/modul.py:80
+#: ringo/model/modul.py:90
 msgid "Modul"
 msgstr "Modul"
 
-#: ringo/model/modul.py:81 ringo/templates/footer.mako:8
+#: ringo/model/modul.py:91 ringo/templates/footer.mako:8
 msgid "Modules"
 msgstr "Module"
 
-#: ringo/model/modul.py:86
+#: ringo/model/modul.py:96
 msgid "Action"
-msgstr ""
+msgstr "Aktion"
 
-#: ringo/model/modul.py:87
+#: ringo/model/modul.py:97
 msgid "Actions"
-msgstr ""
+msgstr "Aktionen"
 
-#: ringo/model/modul.py:92
+#: ringo/model/modul.py:104
 msgid "User"
 msgstr "Benutzer"
 
-#: ringo/model/modul.py:93 ringo/templates/footer.mako:10
+#: ringo/model/modul.py:105 ringo/templates/footer.mako:10
 msgid "Users"
 msgstr "Benutzer"
 
-#: ringo/model/modul.py:98
+#: ringo/model/modul.py:110
 msgid "Usergroup"
 msgstr "Benutzergruppe"
 
-#: ringo/model/modul.py:99 ringo/templates/footer.mako:11
+#: ringo/model/modul.py:111 ringo/templates/footer.mako:11
 msgid "Usergroups"
 msgstr "Benutzergruppen"
 
-#: ringo/model/modul.py:104
+#: ringo/model/modul.py:116
 msgid "Role"
 msgstr "Rolle"
 
-#: ringo/model/modul.py:105 ringo/templates/footer.mako:12
+#: ringo/model/modul.py:117 ringo/templates/footer.mako:12
 msgid "Roles"
 msgstr "Rollen"
 
-#: ringo/model/modul.py:110 ringo/templates/header.mako:27
+#: ringo/model/modul.py:122 ringo/templates/header.mako:27
 msgid "Profile"
 msgstr "Profil"
 
-#: ringo/model/modul.py:111
-#, fuzzy
-#| msgid "Profile"
+#: ringo/model/modul.py:123
 msgid "Profiles"
-msgstr "Profil"
+msgstr "Profile"
+
+#: ringo/templates/about.mako:4 ringo/templates/about.mako:6
+#: ringo/templates/footer.mako:19
+msgid "About"
+msgstr "Über"
+
+#: ringo/templates/about.mako:7
+msgid "Please provide some usefull information about your application here"
+msgstr "Bitte geben Sie hier sinnvolle Informationen über Anwendung an."
+
+#: ringo/templates/about.mako:8
+msgid "This application is based on the Ringo web application framework."
+msgstr "Diese Anwendung basiert auf dem Ringo Webanwendungs-Rahmen."
+
+#: ringo/templates/about.mako:9
+msgid "License"
+msgstr "Lizens"
+
+#: ringo/templates/about.mako:11
+msgid ""
+"This application is free software: you can redistribute it and/or modify "
+"it under the terms of the GNU General Public License as published by the "
+"Free Software Foundation, either version 2 of the License."
+msgstr ""
+"Dieses Programm ist freie Software. Sie können es unter den Bedingungen "
+"der GNU General Public License, wie von der Free Software Foundation "
+"veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß Version"
+" 2 der Lizenz oder (nach Ihrer Option) jeder späteren Version. "
+
+#: ringo/templates/about.mako:13
+msgid "Authors"
+msgstr "Autoren"
+
+#: ringo/templates/contact.mako:4 ringo/templates/footer.mako:22
+msgid "Contact"
+msgstr "Kontakt"
+
+#: ringo/templates/contact.mako:6
+msgid ""
+"Below you find some options to get in touch with the developers or how to"
+" file new tickets in the issue tracker."
+msgstr ""
+"Unten finden Sie einige Möglichkeiten um mit den Entwicklern in Kontakt "
+"zu treten oder neue Tickets in dem Issue-Tracker anlegen zu können."
+
+#: ringo/templates/contact.mako:7
+msgid "Author"
+msgstr "Author"
+
+#: ringo/templates/contact.mako:8
+msgid "If you have any questions do not hestitate to contact me."
+msgstr "Wenn Sie fragen haben, dann zögen Sie nicht mich zu kontaktieren."
+
+#: ringo/templates/contact.mako:11
+msgid "Mail"
+msgstr "E-Mail"
+
+#: ringo/templates/contact.mako:12
+msgid "IM"
+msgstr "IM"
+
+#: ringo/templates/contact.mako:14
+msgid "Bugs"
+msgstr "Defekte"
+
+#: ringo/templates/contact.mako:15
+msgid ""
+"If you do encounter bugs or miss some features please fill file a issue "
+"in the Ringo issue tracker."
+msgstr ""
+"Wenn Sie Defekten begegnen oder Funktionen vermissen, dann legen Sie "
+"bitte ein neues Ticket in dem Issue-Tracker von Ringo an."
 
 #: ringo/templates/footer.mako:6
 msgid "Administration"
-msgstr ""
+msgstr "Administration"
+
+#: ringo/templates/footer.mako:25
+msgid "Show version information"
+msgstr "Zeige Informationen zur Version"
 
 #: ringo/templates/header.mako:19
 msgid "Home"
@@ -79,132 +153,305 @@ msgstr "Home"
 msgid "Logout"
 msgstr "Abmelden"
 
-#: ringo/templates/header.mako:33 ringo/templates/auth/confirm_user.mako:17
+#: ringo/templates/header.mako:33 ringo/templates/index.mako:15
+#: ringo/templates/auth/confirm_user.mako:17
 #: ringo/templates/auth/confirm_user.mako:22
 #: ringo/templates/auth/reset_password.mako:17
 #: ringo/templates/auth/reset_password.mako:22
 msgid "Login"
 msgstr "Anmelden"
 
+#: ringo/templates/index.mako:5
+msgid "Welcome to ${app_title}!"
+msgstr "Willkommen zu ${app_title}!"
+
+#: ringo/templates/index.mako:6
+msgid ""
+"What you see here is the default dashboard and layout based on the Ringo "
+"application framework. This is your home. Your dashboard. Usually this "
+"page is used to give and overview on the most important things like "
+"appointments, news and more in this application."
+msgstr ""
+"Was Sie hier sehen, ist die Standard-Startseite in dem auf Ringo "
+"basierenden Layout. Dies ist Ihr Zuhause. Ihre Startseite. Gewöhnlicher "
+"Weise gibt Ihnen diese Seite eine Übersicht über die wichtigsten Dinge "
+"wie Termine, Neuigkeiten und mehr in Anwendung."
+
+#: ringo/templates/index.mako:9
+msgid ""
+"This is the dashboard as seen by anonymous users. To get a better "
+"impression of the functionality provided by Ringo then you can login "
+"now.<br></br>Please login withe the following credentials:"
+msgstr ""
+"Dies ist die Startseite wie Sie von anonymen Nutzern gesehen wird. Um "
+"einen besseren Eindruck von der Funktionalität zu erhalten, die von Ringo"
+" bereit gestellt wird, können Sie sich jetzt anmelden. Bitte melden Sie "
+"sich mit den folgenden Anmeldedaten an:"
+
+#: ringo/templates/index.mako:11
+msgid "Loginname"
+msgstr "Anmeldekennung"
+
+#: ringo/templates/index.mako:12
+msgid "Password"
+msgstr "Passwort"
+
+#: ringo/templates/index.mako:14
+msgid ""
+"Please do not forget to change the password after your first login! What "
+"are you waiting for?"
+msgstr ""
+"Bitte vergessen Sie nicht das Passwort nach der ersten Anmeldung zu "
+"ändern! Worauf warten Sie?"
+
+#: ringo/templates/index.mako:15
+msgid "Login in the application"
+msgstr "In der Anwendung anmelden"
+
+#: ringo/templates/index.mako:18
+msgid ""
+"The Ringo application framework provides already some basic functionality"
+" which is ready for use in your fresh created application. It time to "
+"make a tour in your application to get a better impression of what is "
+"already included and how things work."
+msgstr ""
+"Der Ringo Webanwendungs-Rahmen bietet bereits einige grundlegende "
+"Funktionalität, die bereit für die Benutzung in ihrer frisch angelegten "
+"Anwendung ist. Es ist Zeit eine Tour durch ihre Anwendung zu machen, um "
+"einen besseren Eindruck davon zu bekommen welche Funktionen bereits "
+"enthalten sind, und wie diese funktionieren."
+
+#: ringo/templates/index.mako:19
+msgid ""
+"You probably want to change this page and other things. No problem. A "
+"good starting point is the documentation. Please consult the part on "
+"development and learn how to change and add things to this application. "
+"Happy coding! :)"
+msgstr ""
+"Sie wollen wahrscheinlich diese Seite und andere Dinge anpassen. Kein "
+"Problem. Ein guter Startpunkt ist die Dokumentation. Bitte betrachten sie"
+" den den Teil zu Entwicklung und lernen Sie, wie man Dinge in der "
+"Anwendung anpasst. Happy Coding! :)"
+
+#: ringo/templates/version.mako:5
+msgid ""
+"This page lists the version of some of the most important libraries used "
+"by the application."
+msgstr ""
+"Diese Seite listet die Versionen von den wichtigsten Bibliotheken, die "
+"von der Anwendung genutzt werden."
+
+#: ringo/templates/version.mako:8
+msgid "This application."
+msgstr "Diese Anwendung."
+
+#: ringo/templates/version.mako:9 ringo/templates/version.mako:13
+#: ringo/templates/version.mako:16 ringo/templates/version.mako:19
+#: ringo/templates/version.mako:22
+msgid "Version"
+msgstr "Version"
+
+#: ringo/templates/version.mako:12
+msgid ""
+"<a href=\"https://bitbucket.org/ti/ringo\" target=\"_blank\">Ringo</a> is"
+" a small Python based high level web application framework build with "
+"Pyramid . It provides basic functionality which is often used in modern "
+"web applications"
+msgstr ""
+"<a href=\"https://bitbucket.org/ti/ringo\" target=\"_blank\">Ringo</a> is"
+" ein kleine Webanwendungs-Rahmen der auf Pyramid basiert. Er stellt "
+"einige Basis-Funktionalität bereit, die oft in modernen Webanwendungen "
+"genutzt werden."
+
+#: ringo/templates/version.mako:15
+msgid ""
+"<a href=\"https://bitbucket.org/ti/formbar\" "
+"target=\"_blank\">Formbar</a> is a Python library to layout, render and "
+"validate HTML forms in web applications."
+msgstr ""
+"<a href=\"https://bitbucket.org/ti/formbar\\ "
+"target=\"_blank\">Formbar</a> ist eine Python Bibliothek zum Layout, "
+"Rendern und Validieren von HTML-Formularen in Webanwendungen."
+
+#: ringo/templates/version.mako:18
+msgid ""
+"<a href=\"www.sqlalchemy.org\" target=\"_blank\">SQLAlchemy</a> is Python"
+" based ORM mapper."
+msgstr ""
+"<a href=\"www.sqlalchemy.org\" target=\"_blank\">SQLAlchemy</a> ist ein "
+"Python basierter ORM"
+
+#: ringo/templates/version.mako:21
+msgid ""
+"<a href=\"http://www.pylonsproject.org/\" "
+"target=\"_blank\">Pyramid</a></a> is a Python based web application "
+"framework."
+msgstr ""
+"<a href=\"http://www.pylonsproject.org/\\ target=\"_blank\">Pyramid</> is"
+" ein Python basierter Webanwendungs-Rahmen."
+
 #: ringo/templates/auth/confirm_user.mako:6
 msgid "User confirmed"
-msgstr ""
+msgstr "Benutzer bestätigt"
 
 #: ringo/templates/auth/confirm_user.mako:8
 msgid "User not confirmed"
-msgstr ""
+msgstr "Benutzer nicht bestätigt"
 
 #: ringo/templates/auth/confirm_user.mako:21
 #: ringo/templates/auth/reset_password.mako:21
 msgid "Try again"
-msgstr ""
+msgstr "Versuche es erneut"
 
 #: ringo/templates/auth/forgot_password.mako:4
 #: ringo/templates/auth/login.mako:11
 msgid "Reset Password"
-msgstr ""
+msgstr "Passwort zurücksetzen"
 
 #: ringo/templates/auth/forgot_password.mako:9
 msgid "Enter your Loginname and a password reset email will be sent out"
 msgstr ""
+"Geben Sie ihre Anmeldekennung und Passwort ein. Eine Email mit \"\n"
+"\"weiteren Informationen zum zurücksetzen des Passworts wird Ihnen "
+"zugesendet"
 
 #: ringo/templates/auth/login.mako:10 ringo/templates/auth/register_user.mako:4
 msgid "Register Account"
-msgstr ""
+msgstr "Zugang registrieren"
 
 #: ringo/templates/auth/register_user.mako:9
 msgid ""
 "Please fillout the form the register a new account. You will recieve an "
 "email with a confirmation link to complete the registration."
 msgstr ""
+"Bitte füllen Sie das Formular aus, um einen neuen Zugang zur "
+"registrieren. \"\n"
+"\"Sie erhalten im Anschluss eine Email mit einem Bestätigungslink um die "
+"\"\n"
+"\"Registrierung abzuschließen."
 
 #: ringo/templates/auth/reset_password.mako:6
 msgid "Password resetted"
-msgstr ""
+msgstr "Passwort zurückgesetzt"
 
 #: ringo/templates/auth/reset_password.mako:8
 msgid "Password not resetted"
-msgstr ""
+msgstr "Password nicht zurückgesetzt"
 
 #: ringo/templates/default/update.mako:5
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: ringo/views/auth.py:40
+#: ringo/views/auth.py:42
 msgid "Login failed!"
 msgstr "Anmeldung fehlgeschlagen"
 
-#: ringo/views/auth.py:43
+#: ringo/views/auth.py:45
 msgid "Login was successfull :)"
 msgstr "Anmeldung war erfolgreich :)"
 
-#: ringo/views/auth.py:56
+#: ringo/views/auth.py:59
 msgid "Logout was successfull :)"
 msgstr "Abmeldung war erfolgreich :)"
 
-#: ringo/views/auth.py:107
+#: ringo/views/auth.py:111
 msgid "Confirm user registration for ringo"
-msgstr ""
+msgstr "Bestätigen Sie die Registration für Ringo"
 
-#: ringo/views/auth.py:110
+#: ringo/views/auth.py:114
 #, python-format
 msgid "Please confirm the user registration by clicking on the following link: %s"
 msgstr ""
+"Bitte bestätigen Sie die Registration indem Sie den folgenden Link \"\n"
+"\"folgen: %s"
 
-#: ringo/views/auth.py:115
+#: ringo/views/auth.py:119
 msgid ""
 "User has been created and a confirmation mail was sent to the users email"
 " adress. Please check your email :)"
 msgstr ""
+"Der Zugang wurde eingerichtet und eine Bestätigungsmail wurde an die\"\n"
+"\" angegebene Email-Adresse versendet. Bitte prüfen Sie Ihre Email"
 
-#: ringo/views/auth.py:131
+#: ringo/views/auth.py:136
 msgid "The user has beed successfull confirmed."
-msgstr ""
+msgstr "Der Zugang wurde erfolgreich bestätigt."
 
-#: ringo/views/auth.py:133
+#: ringo/views/auth.py:138
 msgid "The user was not confirmed. Maybe the confirmation token was not valid?"
 msgstr ""
+"Der Zugang konnte nicht bestätigt werden. Vielleicht ist das\"\n"
+"\" Bestätigungs-Token nicht gülitg?"
 
-#: ringo/views/auth.py:156
+#: ringo/views/auth.py:162
 msgid "Password reset request for xxx"
-msgstr ""
+msgstr "Anfrage zur Zurücksetzen des Passwort für xxx"
 
-#: ringo/views/auth.py:163
+#: ringo/views/auth.py:169
 msgid ""
 "Password reset token has been sent to the users email address. Please "
 "check your email :)"
 msgstr ""
+"Eine Token zum Zurücksetzen des Passworts wurde an die Email des Nutzers "
+"geschickt. Bitte prüfen Sie Ihre Email :)"
 
-#: ringo/views/auth.py:183
+#: ringo/views/auth.py:190
 msgid "Password has been resetted"
-msgstr ""
+msgstr "Passwort wurde zurückgesetzt"
 
-#: ringo/views/auth.py:186
+#: ringo/views/auth.py:193
 msgid ""
 "Password has been successfull resetted. The new password was sent to the "
 "users email address. Please check your email."
 msgstr ""
+"Das Passwort wurde erfolgreich zurückgesetzt. Das neue Passwort wurde an "
+"die Email des Nutzers geschickt. Bitte prüfen Sie Ihre Email."
 
-#: ringo/views/auth.py:190
+#: ringo/views/auth.py:197
 msgid "Password was not resetted. Maybe the request token was not valid?"
 msgstr ""
+"Das Passwort wurde nicht zurückgesetzt. Vielleicht ist das Token nicht "
+"gültig?"
 
-#: ringo/views/base.py:64
+#: ringo/views/base.py:66
 msgid "Created new ${item_type} successfull."
 msgstr "${item_type} wurde erfolgreich angelegt."
 
-#: ringo/views/base.py:77
+#: ringo/views/base.py:80
 msgid "Error on validation the data for new ${item_type}"
 msgstr "Fehler bei der Überprüfung der Daten für ${item_type} \"${item}\""
 
-#: ringo/views/base.py:98
+#: ringo/views/base.py:102
 msgid "Edited ${item_type} \"${item}\" successfull."
 msgstr "${item_type} \"${item}\" wurde erfolgreich bearbeitet."
 
-#: ringo/views/base.py:102
+#: ringo/views/base.py:111
 msgid "Error on validation the data for ${item_type} \"${item}\"."
 msgstr "Fehler bei der Überprüfung der Daten für ${item_type} \"${item}\""
 
-#: ringo/views/base.py:135
+#: ringo/views/base.py:147
 msgid "Deleted ${item_type} \"${item}\" successfull."
 msgstr "${item_type} wurde erfolgreich gelöscht."
+
+#: ringo/views/errors.py:10
+msgid "Error 404"
+msgstr "Fehler 404"
+
+#: ringo/views/errors.py:11
+msgid "Sorry, the requested ressource could not be found!"
+msgstr ""
+"Es tut mir leid, aber die angeforderte Ressource konnte nicht\"\n"
+"\" gefunden werden."
+
+#: ringo/views/errors.py:22
+msgid "Error 403"
+msgstr "Fehler 403"
+
+#: ringo/views/errors.py:23
+msgid ""
+"Authorisation error! Sorry, you are not allowed to access to requested "
+"ressource!"
+msgstr ""
+"Authorisierung fehlgeschlagen. Es tut mir leid, aber Sie haben nicht\"\n"
+"\" die erforderlichen Rechte, um auf die Ressource zuzugreifen."
+
