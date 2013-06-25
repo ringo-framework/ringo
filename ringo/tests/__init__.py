@@ -15,7 +15,12 @@ from ringo.lib.i18n import locale_negotiator
 
 
 here = os.path.dirname(__file__)
-settings = appconfig('config:' + os.path.join(here, '../../', 'test.ini'))
+try:
+    settings = appconfig('config:' + os.path.join(here, '../../', 'test.ini'))
+except IOError:
+    # Issue #22. Silently igonore this error if there is no test.ini
+    pass
+
 
 
 class BaseTestCase(unittest.TestCase):
