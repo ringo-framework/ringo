@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2013-06-25 22:31+0200\n"
-"PO-Revision-Date: 2013-06-25 22:32+0200\n"
+"PO-Revision-Date: 2013-06-25 22:34+0200\n"
 "Last-Translator: Torsten Irlaender <torsten@irlaender.de>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -80,7 +80,7 @@ msgstr "Diese Anwendung basiert auf dem Ringo Webanwendungs-Rahmen."
 
 #: ringo/templates/about.mako:9
 msgid "License"
-msgstr "Lizens"
+msgstr "Lizenz"
 
 #: ringo/templates/about.mako:11
 msgid ""
