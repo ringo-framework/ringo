@@ -1,3 +1,4 @@
+# -*- coding: utf8 -*-
 <%inherit file="/main.mako" />
 <div class="page-header">
 <h1>${_('Contact')}</h1>
