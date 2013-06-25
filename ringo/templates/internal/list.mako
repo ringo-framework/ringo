@@ -2,9 +2,11 @@
 <table id="data" class="table table-striped table-hover table-condensed
 table-bordered">
   <tr>
-  <th width="2em">
-    <input type="checkbox" name="check_all" onclick="checkAll('id');">
-  </th>
+  % if enable_bundled_actions:
+    <th width="2em">
+      <input type="checkbox" name="check_all" onclick="checkAll('id');">
+    </th>
+  % endif
   % for field in headers:
     <th>
       % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
@@ -24,9 +26,11 @@ table-bordered">
   </tr>
   % for item in items:
   <tr onclick="openItem('${request.route_url(clazz.get_action_routename("read"), id=item.id)}')">
+    % if enable_bundled_actions:
     <td>
       <input type="checkbox" name="id" value="${item.id}">
     </td>
+    % endif
     % for field in headers:
     <td>
         <% value = getattr(item, field[0]) %>
