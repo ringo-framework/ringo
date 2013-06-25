@@ -11,6 +11,8 @@
 - #6: Add contact page
 - #7: Add dialogs for errors (404, 403)
 - #9: Cleanup and structure css
+- #17: Hide checkboxes in overviews if bundled actions are not enabled
+- #20: Fix layout of flash messages
 
 0.2
 ---
