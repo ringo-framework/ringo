@@ -22,7 +22,8 @@ requires = [
     'Sphinx',
     'formbar',
     'nose',
-    'coverage'
+    'coverage',
+    'webtest'
 ]
 
 setup(name='ringo',
