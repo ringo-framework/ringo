@@ -44,10 +44,7 @@ def get_search(clazz, request):
     """
     name = clazz.__tablename__
     # Check if there is already a saved search in the session
-    saved_search = request.session.get('%s.list.search' % name)
-    if saved_search is None:
-        # initialize an empty list
-        saved_search = []
+    saved_search = request.session.get('%s.list.search' % name, [])
 
     # If the request is not a POST request from the search form then
     # abort here and return the saved search params if there are any.
