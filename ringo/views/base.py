@@ -1,5 +1,4 @@
 import logging
-from sqlalchemy.orm import joinedload
 from pyramid.httpexceptions import HTTPFound
 
 from formbar.form import Form
