@@ -1,4 +1,5 @@
 import unittest
+import re
 from sqlalchemy.orm.exc import NoResultFound
 from ringo.model.modul import ModulItem
 from ringo.tests import BaseFunctionalTest
