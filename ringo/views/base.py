@@ -72,10 +72,6 @@ def get_search(clazz, request):
         if not found:
             log.debug('Adding search for "%s" in field "%s"' % (search, search_field))
             saved_search.append((search, search_field))
-
-    # Finally save the saved_search back to the session
-    request.session['%s.list.search' % name] = saved_search
-    request.session.save()
     return saved_search
 
 
@@ -93,6 +89,10 @@ def list_(clazz, request):
     listing.sort(field, order)
     items = listing.items
     renderer = ListRenderer(clazz)
+    # Only save the search if there are items
+    if len(items) > 0:
+        request.session['%s.list.search' % clazz.__tablename__] = search
+        request.session.save()
     rvalue['clazz'] = clazz
     rvalue['listing'] = renderer.render(items, request)
     return rvalue
