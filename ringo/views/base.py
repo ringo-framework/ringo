@@ -11,8 +11,8 @@ log = logging.getLogger(__name__)
 
 
 def handle_sorting(clazz, request):
-    default_sort_field = clazz._table_fields[0][0]
     name = clazz.__tablename__
+    default_sort_field = clazz._table_fields[0][0]
     field = request.GET.get('sort_field', default_sort_field)
     order = request.GET.get('sort_order', 'asc')
     request.session['%s.list.sort_field' % name] = field
@@ -85,14 +85,16 @@ def list_(clazz, request):
     #items = request.db.query(clazz).options(joinedload('*')).all()
     listing = BaseList(clazz, request.db)
     listing.sort(field, order)
-    renderer = ListRenderer(clazz)
     listing.filter(search)
     # Only save the search if there are items
     if len(listing.items) > 0:
         request.session['%s.list.search' % clazz.__tablename__] = search
         request.session.save()
+
+    renderer = ListRenderer(listing)
+    rendered_page = renderer.render(request)
     rvalue['clazz'] = clazz
-    rvalue['listing'] = renderer.render(items, request)
+    rvalue['listing'] = rendered_page
     return rvalue
 
 

@@ -23,19 +23,28 @@ class Renderer(object):
 class ListRenderer(Renderer):
     """Docstring for ListRenderer """
 
-    def __init__(self, clazz):
+    def __init__(self, listing):
         """@todo: to be defined """
         Renderer.__init__(self)
-        self.clazz = clazz
+        self.listing = listing
         self.template = template_lookup.get_template("internal/list.mako")
 
-    def render(self, items, request):
+    def render(self, request):
         """Initialize renderer"""
-        values = {'items': items,
-                  'clazz': self.clazz,
+        if len(self.listing.search_filter) > 0:
+            search = self.listing.search_filter[-1][0]
+            search_field = self.listing.search_filter[-1][1]
+        else:
+            search = ""
+            search_field = ""
+        values = {'items': self.listing.items,
+                  'clazz': self.listing.clazz,
+                  'listing': self.listing,
                   'request': request,
                   'enable_bundled_actions': False,
-                  'headers': self.clazz.get_table_config()}
+                  'search': search,
+                  'search_field': search_field,
+                  'headers': self.listing.clazz.get_table_config()}
         return self.template.render(**values)
 
 
