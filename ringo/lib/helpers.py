@@ -4,7 +4,6 @@ from pyramid.threadlocal import get_current_registry
 from formbar.helpers import get_css
 
 
-
 def get_ringo_version():
     return pkg_resources.get_distribution('ringo').version
 
@@ -59,6 +58,20 @@ def get_path_to_form_config(filename):
     location = "views/forms"
     return get_path_to(os.path.join(location, filename))
 
+
+def get_modules(request):
+    from ringo.model.modul import ModulItem
+    listing = ModulItem.get_item_list(request.db)
+    user_moduls = []
+    for item in listing.items:
+        # Ignore system modules
+        if item.name in ['users', 'usergroups', 'actions',
+                         'modules', 'profiles', 'roles']:
+            continue
+        # TODO implement permission checks on the list action here.
+        if True:
+            user_moduls.append(item)
+    return user_moduls
 
 def get_formbar_css():
     return get_css()
