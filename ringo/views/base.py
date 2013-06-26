@@ -86,6 +86,7 @@ def list_(clazz, request):
     listing = BaseList(clazz, request.db)
     listing.sort(field, order)
     renderer = ListRenderer(clazz)
+    listing.filter(search)
     # Only save the search if there are items
     if len(listing.items) > 0:
         request.session['%s.list.search' % clazz.__tablename__] = search
