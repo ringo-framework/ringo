@@ -1,3 +1,16 @@
+<div class="well well-small search-widget">
+  <form name="search" class="form-inline" action="${request.current_route_url()}" method="POST">
+    <input name="form" type="hidden" value="search">
+    <input name="search" type="text" class="input-large">
+    <select name="field" class="input-small">
+      <option value="">All fields</option>
+      % for field in headers:
+        <option value="${field[0]}">${field[1]}</option>
+      % endfor
+    </select>
+    <button type="submit" class="btn">Search</button>
+  </form>
+</div>
 <form id="data-table">
 <table id="data" class="table table-striped table-hover table-condensed
 table-bordered">

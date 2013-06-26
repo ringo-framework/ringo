@@ -21,9 +21,52 @@ def handle_sorting(clazz, request):
     request.session.save()
     return field, order
 
+
+def handle_search(clazz, request):
+    name = clazz.__tablename__
+    # Check if there is already a saved search in the session
+    saved_search = request.session.get('%s.list.search' % name)
+    if saved_search is None:
+        # initialize an empty list
+        saved_search = []
+
+    # If the request is not a POST request from the search form then
+    # abort here and return the saved search params if there are any.
+    print request.POST
+    form_name = request.POST.get('form')
+    if form_name != "search":
+        return saved_search
+
+    search = request.POST.get('search')
+    search_field = request.POST.get('field')
+
+    # If search is empty try to pop the last filter in the saved search
+    if search == "" and len(saved_search) > 0:
+        popped = saved_search.pop()
+        log.debug('Popping %s from search stack' % repr(popped))
+
+    # Iterate over the saved search. If the search is not already in the
+    # stack push it.
+    if search != "":
+        found = False
+        for x in saved_search:
+            if search == x[0] and search_field == x[1]:
+                found = True
+                break
+        if not found:
+            log.debug('Adding search for "%s" in field "%s"' % (search, search_field))
+            saved_search.append((search, search_field))
+
+    # Finally save the saved_search back to the session
+    request.session['%s.list.search' % name] = saved_search
+    request.session.save()
+    return saved_search
+
+
 def list_(clazz, request):
     handle_history(request)
     rvalue = {}
+    search = handle_search(clazz, request)
     field, order = handle_sorting(clazz, request)
     # TODO: Check which is the best loading strategy here for large
     # collections. Tests with 100k datasets rendering only 100 shows
