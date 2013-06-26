@@ -13,6 +13,46 @@ class TestModulItem(BaseFunctionalTest):
         self.login('admin', 'secret')
         self.app.get('/modules/list', status=200)
 
+    def test_list_search(self):
+        self.login('admin', 'secret')
+        values = {
+            'search': 'modu',
+            'field': 'name',
+            'form': 'search'
+        }
+        self.app.post('/modules/list', values, status=200)
+
+    def test_list_search_empty(self):
+        self.login('admin', 'secret')
+        values1 = {
+            'search': 'modu',
+            'field': 'name',
+            'form': 'search'
+        }
+        values2 = {
+            'search': '',
+            'field': 'name',
+            'form': 'search'
+        }
+        self.app.post('/modules/list', values1, status=200)
+        self.app.post('/modules/list', values2, status=200)
+
+    def test_list_search_no_result(self):
+        self.login('admin', 'secret')
+        values1 = {
+            'search': 'modu',
+            'field': '',
+            'form': 'search'
+        }
+        values2 = {
+            'search': 'xxxxxx',
+            'field': 'name',
+            'form': 'search'
+        }
+        self.app.post('/modules/list', values1, status=200)
+        self.app.post('/modules/list', values2, status=200)
+
+
     def test_read(self):
         self.login('admin', 'secret')
         self.app.get('/modules/read/1', status=200)
