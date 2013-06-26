@@ -22,7 +22,7 @@ def handle_sorting(clazz, request):
     return field, order
 
 
-def handle_search(clazz, request):
+def get_search(clazz, request):
     name = clazz.__tablename__
     # Check if there is already a saved search in the session
     saved_search = request.session.get('%s.list.search' % name)
@@ -66,7 +66,7 @@ def handle_search(clazz, request):
 def list_(clazz, request):
     handle_history(request)
     rvalue = {}
-    search = handle_search(clazz, request)
+    search = get_search(clazz, request)
     field, order = handle_sorting(clazz, request)
     # TODO: Check which is the best loading strategy here for large
     # collections. Tests with 100k datasets rendering only 100 shows
