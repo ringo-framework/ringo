@@ -85,10 +85,9 @@ def list_(clazz, request):
     #items = request.db.query(clazz).options(joinedload('*')).all()
     listing = BaseList(clazz, request.db)
     listing.sort(field, order)
-    items = listing.items
     renderer = ListRenderer(clazz)
     # Only save the search if there are items
-    if len(items) > 0:
+    if len(listing.items) > 0:
         request.session['%s.list.search' % clazz.__tablename__] = search
         request.session.save()
     rvalue['clazz'] = clazz
