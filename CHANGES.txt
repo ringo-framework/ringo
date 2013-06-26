@@ -1,3 +1,11 @@
+Development
+-----------
+
+- Added search in overviews
+- Some improvement in Layout. Make header more compact to not waste to much
+  space
+- #15: Implement Search
+
 0.2.1
 -----
 
