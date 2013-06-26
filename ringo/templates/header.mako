@@ -12,11 +12,15 @@
         <ul class="nav">
           <%
             if clazz:
-              modul = clazz.get_item_modul().name
+              modul_name = clazz.get_item_modul().name
             else:
-              modul = None
+              modul_name = None
           %>
-          <li class="${(modul == None) and 'active'}"><a href="${request.route_url('home')}">${_('Home')}</a></li>
+          <li class="${(modul_name == None) and 'active'}"><a href="${request.route_url('home')}">${_('Home')}</a></li>
+          % for modul in h.get_modules(request):
+            <li class="${(modul_name == modul.name) and 'active'}"><a
+            href="${request.route_url(modul.name+'-list')}">${modul.get_label(plural=True)}</a></li>
+          % endfor
         </ul>
         <ul class="nav pull-right">
           <li class="divider-vertical"></li>
