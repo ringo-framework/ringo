@@ -47,7 +47,6 @@ def get_search(clazz, request):
 
     # If the request is not a POST request from the search form then
     # abort here and return the saved search params if there are any.
-    print request.POST
     form_name = request.POST.get('form')
     if form_name != "search":
         return saved_search
