@@ -23,6 +23,25 @@ def handle_sorting(clazz, request):
 
 
 def get_search(clazz, request):
+    """Returns a list of tuples with the search word and the fieldname.
+    The function will first look if there is already a saved search in
+    the session for the overview of the given clazz. If there is no
+    previous search the start with an empty search stack.  The following
+    behavior differs depending if it is a POST or GET request:
+
+    1. GET
+    Return either an empty search stack or return the saved stack in the
+    session.
+
+    2. POST
+    Get the new submitted search. If the search is not already on the
+    stack, then push it.  If the search word is empty, then pop the last
+    search from the stack.  Finally return the modified stack.
+
+    Please note the this function will not save the modified search
+    stack in the session! This should be done elsewhere. E.g Depending
+    if the search was successfull.
+    """
     name = clazz.__tablename__
     # Check if there is already a saved search in the session
     saved_search = request.session.get('%s.list.search' % name)
