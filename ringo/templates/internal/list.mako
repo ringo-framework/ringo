@@ -1,14 +1,21 @@
 <div class="well well-small search-widget">
   <form name="search" class="form-inline" action="${request.current_route_url()}" method="POST">
     <input name="form" type="hidden" value="search">
-    <input name="search" type="text" class="input-large">
+    <input name="search" type="text" class="input-large" value="${search}" placeholder="Search for (Regexpr) in ..."/>
     <select name="field" class="input-small">
       <option value="">All fields</option>
       % for field in headers:
-        <option value="${field[0]}">${field[1]}</option>
+        % if field[0] == search_field:
+          <option value="${field[0]}" selected>${field[1]}</option>
+        % else:
+          <option value="${field[0]}">${field[1]}</option>
+        % endif
       % endfor
     </select>
     <button type="submit" class="btn">Search</button>
+    % if len(listing.search_filter) > 0:
+      <span class="muted"><small>(${len(listing.search_filter)} filter applied)</small></span>
+    % endif
   </form>
 </div>
 <form id="data-table">
