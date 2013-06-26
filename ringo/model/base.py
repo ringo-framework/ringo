@@ -1,7 +1,12 @@
+import logging
+import re
 from operator import itemgetter
 from formbar.config import Config, load
 from ringo.lib.helpers import get_path_to_form_config
 from ringo.model import DBSession
+
+log = logging.getLogger(__name__)
+
 
 class BaseItem(object):
 
@@ -47,12 +52,48 @@ class BaseList(object):
     def __init__(self, clazz, db):
         self.clazz = clazz
         self.items = db.query(clazz).all()
+        self.search_filter = None
 
     def sort(self, field, order):
         sorted_items = sorted(self.items, key=itemgetter(field))
         if order == "desc":
             sorted_items.reverse()
         self.items = sorted_items
+
+    def filter(self, filter_stack):
+        """This function will filter the list of items by only leaving
+        those items in the list which match all search criterias in the
+        filter stack. The list will get reduced with every iteration on
+        the filter stack.
+
+        For each filter in the stack The search word will be compiled to
+        the regular expression. Then all items are iterated.  For each
+        item the function will try to match the value of either all, or
+        from the configued search field with the regular expression. If
+        the value matches, then the item is kept in the list.
+        """
+        self.search_filter = filter_stack
+        for search, search_field in filter_stack:
+            # Build a regular expression
+            re_expr = re.compile(search)
+            filtered_items = []
+            log.debug('Filtering "%s" in "%s" on %s items'
+                      % (search, search_field, len(self.items)))
+            if search_field != "":
+                fields = [search_field]
+            else:
+                fields = [field[0] for field in self.clazz._table_fields]
+            for item in self.items:
+                for field in fields:
+                    value = getattr(item, field)
+                    if isinstance(value, list):
+                        value = ", ".join([unicode(x) for x in value])
+                    else:
+                        value = unicode(value)
+                    if re_expr.search(value):
+                        filtered_items.append(item)
+                        break
+            self.items = filtered_items
 
 
 class BaseFactory(object):
