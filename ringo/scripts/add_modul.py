@@ -157,7 +157,7 @@ def add_init(package, modul):
     print 'Adding modul initialisation to "%s"... ' % target_file,
     try:
         importstr = "from %s.model.%s import init_model as init_%s_model\n# AUTOREPLACEIMPORT" % (package, modul, modul)
-        initstr = "init_%s_model(DBSession)\n    # AUTOREPLACEINIT" % (modul)
+        initstr = "init_%s_model(DBSession)\n        # AUTOREPLACEINIT" % (modul)
         replace(target_file, '# AUTOREPLACEIMPORT', importstr)
         replace(target_file, '# AUTOREPLACEINIT', initstr)
         print 'Ok.'
