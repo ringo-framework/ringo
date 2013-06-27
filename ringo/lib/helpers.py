@@ -17,8 +17,10 @@ def get_app_version():
     return pkg_resources.get_distribution(get_app_name()).version
 
 
-def get_app_location():
-    return pkg_resources.get_distribution(get_app_name()).location
+def get_app_location(name=None):
+    if not name:
+        name = get_app_name()
+    return pkg_resources.get_distribution(name).location
 
 
 def get_app_title():
@@ -44,15 +46,20 @@ def get_action_url(request, item, action):
     return request.route_url(route_name)
 
 
-def get_path_to(location):
+def get_path_to(location, app=None):
     """Will return the full pathname the given file name with in the
     path. path is relativ to the application package (pkg_ressource
-    location + ressource name)"""
-    base_path = os.path.join(get_app_location(), get_app_name())
+    location + ressource name). You can define a alternative
+    application."""
+    if app:
+        app_name = app
+    else:
+        app_name = get_app_name()
+    base_path = os.path.join(get_app_location(app_name), app_name)
     return os.path.join(base_path, location)
 
 
-def get_path_to_form_config(filename):
+def get_path_to_form_config(filename, app=None):
     """Returns the path the the given form configuration. The file name
     should be realtive to the default location for the configurations.
 
@@ -61,7 +68,7 @@ def get_path_to_form_config(filename):
 
     """
     location = "views/forms"
-    return get_path_to(os.path.join(location, filename))
+    return get_path_to(os.path.join(location, filename), app)
 
 
 def get_modules(request):
