@@ -30,7 +30,7 @@ def is_login_unique(field, data):
 def login(request):
     handle_history(request)
     _ = request.translate
-    config = Config(load(get_path_to_form_config('auth.xml')))
+    config = Config(load(get_path_to_form_config('auth.xml', 'ringo')))
     form_config = config.get_form('loginform')
     form = Form(form_config)
     if request.POST:
