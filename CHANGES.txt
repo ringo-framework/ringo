@@ -2,13 +2,16 @@ Development
 -----------
 
 - Added search in overviews
+- #15: Implement Search
+
 - Some improvement in Layout. Make header more compact to not waste to much
   space
 - Create an empty "forms" dir under views for the basic scaffold. Fixes error
   on creating the form.xml files when adding a new modul.
+- Improved add_<<app>>_modul command. Fixed modul (re) initialisation. It the
+  modul initialisation does not happen on recreating again the database.
 - Fix get_path function. Path is now relativ to the application (was relativ
   to Ringo)
-- #15: Implement Search
 
 0.2.1
 -----
