@@ -17,6 +17,10 @@ def get_app_version():
     return pkg_resources.get_distribution(get_app_name()).version
 
 
+def get_app_location():
+    return pkg_resources.get_distribution(get_app_name()).location
+
+
 def get_app_title():
     registry = get_current_registry()
     settings = registry.settings
