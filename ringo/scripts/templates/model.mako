@@ -1,6 +1,7 @@
 import sqlalchemy as sa
 from ringo.model import Base
 from ringo.model.base import BaseItem, BaseFactory
+from ringo.model.modul import ModulItem, _create_default_actions
 from ringo.model.mixins import Owned
 
 
@@ -21,3 +22,15 @@ class ${clazz}(BaseItem, Owned, Base):
 
     def __unicode__(self):
         return self.id
+
+def init_model(dbsession):
+    """Will setup the initial model for the ${modul}.
+
+    :dbsession: Database session to which the items will be added.
+    :returns: None
+    """
+    modul = ModulItem(name='${table}')
+    modul.label = "${label}"
+    modul.label_plural = "${label_plural}"
+    modul.actions.extend(_create_default_actions(dbsession))
+    dbsession.add(modul)
