@@ -2,7 +2,7 @@ import logging
 import re
 from operator import itemgetter
 from formbar.config import Config, load
-from ringo.lib.helpers import get_path_to_form_config
+from ringo.lib.helpers import get_path_to_form_config, get_app_name
 from ringo.model import DBSession
 
 log = logging.getLogger(__name__)
@@ -39,8 +39,15 @@ class BaseItem(object):
 
     @classmethod
     def get_form_config(cls, formname):
+        """Return the Configuration for a given form. The configuration
+        tried to be loaded from the application first. If this fails it
+        tries to load it from the ringo application."""
         cfile = "%s.xml" % cls.__tablename__
-        config = Config(load(get_path_to_form_config(cfile)))
+        try:
+            loaded_config = load(get_path_to_form_config(cfile))
+        except IOError:
+            loaded_config = load(get_path_to_form_config(cfile, 'ringo'))
+        config = Config(loaded_config)
         return config.get_form(formname)
 
     @classmethod
