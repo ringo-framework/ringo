@@ -45,10 +45,11 @@ def get_action_url(request, item, action):
 
 
 def get_path_to(location):
-    """Will return the full pathname the given file name with in the path. path
-    is relativ to the ringo package root."""
-    return os.path.join(os.path.dirname(
-                        os.path.abspath(__file__)), '..', location)
+    """Will return the full pathname the given file name with in the
+    path. path is relativ to the application package (pkg_ressource
+    location + ressource name)"""
+    base_path = os.path.join(get_app_location(), get_app_name())
+    return os.path.join(base_path, location)
 
 
 def get_path_to_form_config(filename):
