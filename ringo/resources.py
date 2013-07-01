@@ -32,6 +32,16 @@ class RessourceFactory(object):
         self._set_acl(request)
 
     def _load_item(self, id):
+        # TODO: Make loading items more robust in RessourceFactory. This
+        # is needed in case that a Ressource is build for a clazz which
+        # is not related to the  the current request which has an id. In
+        # this case loading the item might fail if there is no item with
+        # the id in the request.
+        #
+        # If think this code might cause problems as trying to build a
+        # build a Ressource with an independet request smells a
+        # littlebit. Better add a flag to to ignore the id in the
+        # request in such cases.
         try:
             factory = self.__model__.get_item_factory()
             return factory.load(id)
