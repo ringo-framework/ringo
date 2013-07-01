@@ -1,7 +1,10 @@
+import logging
 import sqlalchemy as sa
 from ringo.model import Base
 from ringo.model.user import BaseItem
 from ringo.lib.i18n import _
+
+log = logging.getLogger(__name__)
 
 
 class ActionItem(BaseItem, Base):
