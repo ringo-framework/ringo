@@ -17,7 +17,7 @@
               modul_name = None
           %>
           <li class="${(modul_name == None) and 'active'}"><a href="${request.route_url('home')}">${_('Home')}</a></li>
-          % for modul in h.get_modules(request):
+          % for modul in h.get_modules(request, 'header-menu'):
             <li class="${(modul_name == modul.name) and 'active'}"><a
             href="${request.route_url(modul.name+'-list')}">${modul.get_label(plural=True)}</a></li>
           % endfor
