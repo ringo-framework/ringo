@@ -1,4 +1,5 @@
 import logging
+from sqlalchemy.orm.exc import NoResultFound
 from pyramid.security import (
     Allow,
     ALL_PERMISSIONS
@@ -31,8 +32,11 @@ class RessourceFactory(object):
         self._set_acl(request)
 
     def _load_item(self, id):
-        factory = self.__model__.get_item_factory()
-        return factory.load(id)
+        try:
+            factory = self.__model__.get_item_factory()
+            return factory.load(id)
+        except NoResultFound:
+            return None
 
     def _set_default_acl(self):
         self.__acl__.extend(self.__default_acl__)
