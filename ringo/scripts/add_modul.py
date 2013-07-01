@@ -70,6 +70,7 @@ def add_db_entry(name, engine):
             modul = ModulItem(name=modul_name)
             modul.label = _(label)
             modul.label_plural = _(label_plural)
+            modul.display = "header-menu"
             modul.actions.extend(_create_default_actions(DBSession))
             DBSession.add(modul)
             DBSession.flush()

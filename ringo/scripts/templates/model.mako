@@ -32,5 +32,6 @@ def init_model(dbsession):
     modul = ModulItem(name='${table}')
     modul.label = "${label}"
     modul.label_plural = "${label_plural}"
+    modul.display = "header-menu"
     modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
