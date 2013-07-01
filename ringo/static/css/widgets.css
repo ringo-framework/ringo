@@ -36,5 +36,9 @@
 .search-widget form {
   margin-bottom: 0px;
 }
+/* Overwrite the margin of the button (was 15px) */
+.search-widget button {
+    margin-right: 0px;
+}
 
 
