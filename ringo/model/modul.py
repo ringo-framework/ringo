@@ -32,6 +32,7 @@ class ModulItem(BaseItem, Base):
     label_plural = sa.Column(sa.Text, nullable=False)
     description = sa.Column(sa.Text)
     str_repr = sa.Column(sa.Text)
+    display = sa.Column(sa.Text)
 
     actions = sa.orm.relationship("ActionItem", backref="modul")
 
@@ -92,18 +93,21 @@ def init_model(dbsession):
     modul = ModulItem(name='modules')
     modul.label = _("Modul")
     modul.label_plural = _("Modules")
+    modul.display = "admin-menu"
     modul.actions.extend(_create_default_actions(dbsession, ignore=['create', 'delete']))
     dbsession.add(modul)
     # ID 2
     modul = ModulItem(name='actions')
     modul.label = _("Action")
     modul.label_plural = _("Actions")
+    modul.display = "admin-menu"
     # Actions modul is not meant to be callable from anybody (There is
     # now view at all). So do not add any actions here.
     # modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
     # ID 3
     modul = ModulItem(name='users')
+    modul.display = "admin-menu"
     modul.label = _("User")
     modul.label_plural = _("Users")
     modul.actions.extend(_create_default_actions(dbsession))
@@ -112,17 +116,20 @@ def init_model(dbsession):
     modul = ModulItem(name='usergroups')
     modul.label = _("Usergroup")
     modul.label_plural = _("Usergroups")
+    modul.display = "admin-menu"
     modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
     # ID 5
     modul = ModulItem(name='roles')
     modul.label = _("Role")
     modul.label_plural = _("Roles")
+    modul.display = "admin-menu"
     modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
     # ID 6
     modul = ModulItem(name='profiles')
     modul.label = _("Profile")
     modul.label_plural = _("Profiles")
+    modul.display = "admin-menu"
     modul.actions.extend(_create_default_actions(dbsession, ignore=['create', 'delete']))
     dbsession.add(modul)
