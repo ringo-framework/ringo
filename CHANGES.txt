@@ -3,6 +3,7 @@ Development
 
 - Added search in overviews
 - #15: Implement Search
+- Enabled search by clicking on the value in colums.
 
 0.2.2
 -----
