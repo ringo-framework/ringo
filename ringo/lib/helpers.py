@@ -4,6 +4,13 @@ from pyramid.threadlocal import get_current_registry
 from formbar.helpers import get_css
 
 
+def dynamic_import(cl):
+    d = cl.rfind(".")
+    classname = cl[d+1:len(cl)]
+    m = __import__(cl[0:d], globals(), locals(), [classname])
+    return getattr(m, classname)
+
+
 def get_ringo_version():
     return pkg_resources.get_distribution('ringo').version
 
