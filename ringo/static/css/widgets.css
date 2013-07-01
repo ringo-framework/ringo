@@ -21,6 +21,11 @@
 	cursor: pointer;
 }
 
+#data td a.filter {
+  text-decoration: None;
+  color: black;
+}
+
 /* Search
  * *************************************************************************/
 /* Change the mouse cursor to a pointer when hovering the rows of the
