@@ -332,6 +332,8 @@ The screenshot shows the Edit-Dialog for a role.
  * Label plural: This is the label used for multiple items of the modul (Overviews).
  * Description: A textual description of the modul.
  * String representation: The string representation defines how items of the modul are displayed as a single string like in selection lists.
+ * Actions: A list of actions which are available for the Modul. This way you can disable an action complete. Not enabled action will not be listed anywhere.
+ * Display: Select the menu where the modul will be listed. Select hide to hide the modul completely
 
 Permission System
 *****************

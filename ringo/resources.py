@@ -24,6 +24,7 @@ class RessourceFactory(object):
         # Reset ACL
         self.__acl__ = []
         self.item = None
+
         item_id = request.matchdict.get('id')
         if item_id:
             self.item = self._load_item(item_id)
