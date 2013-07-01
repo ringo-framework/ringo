@@ -79,12 +79,23 @@ def get_path_to_form_config(filename, app=None):
 
 
 def get_modules(request, display):
+    # TODO: Fix imports here. Seems to be circular imports.
     from ringo.model.modul import ModulItem
+    from ringo.resources import get_resource_factory
+    from ringo.lib.security import has_permission
     listing = ModulItem.get_item_list(request.db)
     user_moduls = []
     for item in listing.items:
-        if (item.display == display
-            and item.has_action('list')):
+        # Only show the modul if it matches the desired display location
+        # and if the modul has an "list" action which usually is used as
+        # entry point into a modul.
+        if (item.display == display and item.has_action('list')):
+            # Build a ressource and to be able to check the current user
+            # permissions against it.
+            clazz = dynamic_import(item.clazzpath)
+            factory = get_resource_factory(clazz)
+            resource = factory(request)
+            if has_permission('list', resource, request):
                 user_moduls.append(item)
     return user_moduls
 
