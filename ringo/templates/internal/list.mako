@@ -12,7 +12,17 @@
         % endif
       % endfor
     </select>
-    <button type="submit" class="btn">Search</button>
+    <button class="btn">Search</button>
+    <div class="btn-group">
+      <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">Options <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        % for key, value in request.session.get('%s.list.saved_search' % clazz.__tablename__, {}).iteritems():
+          <li><a tabindex="-1" href="${request.current_route_url()}?form=search&saved=${key}">${key}</a></li>
+        % endfor
+        <li class="divider"></li>
+        <li><a tabindex="-1" href="${request.current_route_url()}?form=search&save">Save current search filter</a></li>
+      </ul>
+    </div>
     % if len(listing.search_filter) > 0:
       <span class="muted"><small>(${len(listing.search_filter)} filter applied)</small></span>
     % endif

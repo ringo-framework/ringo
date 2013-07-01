@@ -104,6 +104,7 @@ def list_(clazz, request):
             request.session['%s.list.saved_search' % clazz.__tablename__] = search_dic
         request.session.save()
 
+
     renderer = ListRenderer(listing)
     rendered_page = renderer.render(request)
     rvalue['clazz'] = clazz
