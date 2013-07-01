@@ -21,7 +21,7 @@ class ${clazz}(BaseItem, Owned, Base):
     _table_fields = [('id', 'ID')]
 
     def __unicode__(self):
-        return self.id
+        return str(self.id)
 
 def init_model(dbsession):
     """Will setup the initial model for the ${modul}.
