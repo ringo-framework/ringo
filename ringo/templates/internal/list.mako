@@ -56,9 +56,9 @@ table-bordered">
         <% value = getattr(item, field[0]) %>
         ## Escape value here
         % if isinstance(value, list):
-          ${", ".join(unicode(v) for v in value) | h}
+          ${", ".join(unicode(render_filter_link(v, field)) for v in value) | h}
         % else:
-          ${value | h}
+          ${render_filter_link(value, field)}
         % endif
     </td>
     % endfor
@@ -73,6 +73,10 @@ table-bordered">
   % endif
 </table>
 </form>
+
+<%def name="render_filter_link(value, field)">
+  <a href="${request.current_route_url()}?form=search&search=${value | h}&field=${field[0]}" class="filter" title="${'Filter %s on %s in %s' % (clazz.get_item_modul().get_label(plural=True), value, field[1])}">${value | h}</a>
+</%def>
 
 <script type="text/javascript">
 function openItem(url) {
