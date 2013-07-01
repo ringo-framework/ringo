@@ -59,15 +59,17 @@ def get_engine(config_file):
     engine = engine_from_config(settings, 'sqlalchemy.')
     return engine
 
-def add_db_entry(name, engine):
+def add_db_entry(package, name, engine):
     print 'Adding new entry in modules table for "%s"... ' % name,
     DBSession.configure(bind=engine)
     modul_name = name + "s"
     label = name.capitalize()
     label_plural = label + "s"
+    clazzpath = ".".join([package, 'model', name, label])
     try:
         with transaction.manager:
             modul = ModulItem(name=modul_name)
+            modul.clazzpath = clazzpath
             modul.label = _(label)
             modul.label_plural = _(label_plural)
             modul.display = "header-menu"
@@ -89,8 +91,10 @@ def add_model_file(package, modul, id, clazz):
         tablename = modul+'s'
         label = modul.capitalize()
         label_plural = label + "s"
+        clazzpath = ".".join([package, 'model', modul, label])
         values = {
             'modul': modul,
+            'clazzpath': clazzpath,
             'label': label,
             'label_plural': label_plural,
             'modul': modul,
@@ -190,7 +194,7 @@ def add_modul(name, package, config):
 
     # 1. Adding the new model to the database
     engine = get_engine(config)
-    modul_id = add_db_entry(modul, engine)
+    modul_id = add_db_entry(package, modul, engine)
     #print "Inserted modul with ID %s" % modul_id
     # 2. Adding a new model file.
     add_model_file(package, modul, modul_id, clazz)

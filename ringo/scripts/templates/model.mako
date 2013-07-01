@@ -30,6 +30,7 @@ def init_model(dbsession):
     :returns: None
     """
     modul = ModulItem(name='${table}')
+    modul.clazzpath = "${clazzpath}"
     modul.label = "${label}"
     modul.label_plural = "${label_plural}"
     modul.display = "header-menu"

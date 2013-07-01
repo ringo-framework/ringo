@@ -28,6 +28,7 @@ class ModulItem(BaseItem, Base):
     _modul_id = 1
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.Text, unique=True, nullable=False)
+    clazzpath = sa.Column(sa.Text, unique=True, nullable=False)
     label = sa.Column(sa.Text, nullable=False)
     label_plural = sa.Column(sa.Text, nullable=False)
     description = sa.Column(sa.Text)
@@ -91,6 +92,7 @@ def init_model(dbsession):
 
     # ID 1
     modul = ModulItem(name='modules')
+    modul.clazzpath = "ringo.model.modul.ModulItem"
     modul.label = _("Modul")
     modul.label_plural = _("Modules")
     modul.display = "admin-menu"
@@ -98,6 +100,7 @@ def init_model(dbsession):
     dbsession.add(modul)
     # ID 2
     modul = ModulItem(name='actions')
+    modul.clazzpath = "ringo.model.modul.ActionItem"
     modul.label = _("Action")
     modul.label_plural = _("Actions")
     modul.display = "admin-menu"
@@ -107,6 +110,7 @@ def init_model(dbsession):
     dbsession.add(modul)
     # ID 3
     modul = ModulItem(name='users')
+    modul.clazzpath = "ringo.model.user.User"
     modul.display = "admin-menu"
     modul.label = _("User")
     modul.label_plural = _("Users")
@@ -114,6 +118,7 @@ def init_model(dbsession):
     dbsession.add(modul)
     # ID 4
     modul = ModulItem(name='usergroups')
+    modul.clazzpath = "ringo.model.user.Usergroup"
     modul.label = _("Usergroup")
     modul.label_plural = _("Usergroups")
     modul.display = "admin-menu"
@@ -121,6 +126,7 @@ def init_model(dbsession):
     dbsession.add(modul)
     # ID 5
     modul = ModulItem(name='roles')
+    modul.clazzpath = "ringo.model.user.Role"
     modul.label = _("Role")
     modul.label_plural = _("Roles")
     modul.display = "admin-menu"
@@ -128,6 +134,7 @@ def init_model(dbsession):
     dbsession.add(modul)
     # ID 6
     modul = ModulItem(name='profiles')
+    modul.clazzpath = "ringo.model.user.Profile"
     modul.label = _("Profile")
     modul.label_plural = _("Profiles")
     modul.display = "admin-menu"
