@@ -71,18 +71,14 @@ def get_path_to_form_config(filename, app=None):
     return get_path_to(os.path.join(location, filename), app)
 
 
-def get_modules(request):
+def get_modules(request, display):
     from ringo.model.modul import ModulItem
     listing = ModulItem.get_item_list(request.db)
     user_moduls = []
     for item in listing.items:
-        # Ignore system modules
-        if item.name in ['users', 'usergroups', 'actions',
-                         'modules', 'profiles', 'roles']:
-            continue
-        # TODO implement permission checks on the list action here.
-        if True:
-            user_moduls.append(item)
+        if (item.display == display
+            and item.has_action('list')):
+                user_moduls.append(item)
     return user_moduls
 
 def get_formbar_css():
