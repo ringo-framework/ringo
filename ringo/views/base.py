@@ -1,3 +1,4 @@
+import uuid
 import logging
 from pyramid.httpexceptions import HTTPFound
 
@@ -51,8 +52,15 @@ def get_search(clazz, request):
     if form_name != "search":
         return saved_search
 
-    search = request.params.get('search')
-    search_field = request.params.get('field')
+    saved_search_id = request.params.get('saved')
+    if saved_search_id:
+        search_dic = request.session.get('%s.list.saved_search' % name, {})
+        return search_dic.get(saved_search_id, [])
+    elif request.params.has_key('save'):
+        return saved_search
+    else:
+        search = request.params.get('search')
+        search_field = request.params.get('field')
 
     # If search is empty try to pop the last filter in the saved search
     if search == "" and len(saved_search) > 0:
@@ -89,6 +97,11 @@ def list_(clazz, request):
     # Only save the search if there are items
     if len(listing.items) > 0:
         request.session['%s.list.search' % clazz.__tablename__] = search
+        if (request.params.get('form') == "search"
+           and request.params.has_key('save')):
+            search_dic = request.session.get('%s.list.saved_search' % clazz.__tablename__, {})
+            search_dic[str(uuid.uuid1())] = search
+            request.session['%s.list.saved_search' % clazz.__tablename__] = search_dic
         request.session.save()
 
     renderer = ListRenderer(listing)
