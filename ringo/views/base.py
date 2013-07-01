@@ -45,14 +45,14 @@ def get_search(clazz, request):
     # Check if there is already a saved search in the session
     saved_search = request.session.get('%s.list.search' % name, [])
 
-    # If the request is not a POST request from the search form then
+    # If the request is not a equest from the search form then
     # abort here and return the saved search params if there are any.
-    form_name = request.POST.get('form')
+    form_name = request.params.get('form')
     if form_name != "search":
         return saved_search
 
-    search = request.POST.get('search')
-    search_field = request.POST.get('field')
+    search = request.params.get('search')
+    search_field = request.params.get('field')
 
     # If search is empty try to pop the last filter in the saved search
     if search == "" and len(saved_search) > 0:
