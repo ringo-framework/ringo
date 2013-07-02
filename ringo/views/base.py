@@ -86,11 +86,6 @@ def list_(clazz, request):
     rvalue = {}
     search = get_search(clazz, request)
     field, order = handle_sorting(clazz, request)
-    # TODO: Check which is the best loading strategy here for large
-    # collections. Tests with 100k datasets rendering only 100 shows
-    # that the usual lazyload method seems to be the fastest which is
-    # not what if have been expected.
-    #items = request.db.query(clazz).options(joinedload('*')).all()
     listing = BaseList(clazz, request.db)
     listing.sort(field, order)
     listing.filter(search)

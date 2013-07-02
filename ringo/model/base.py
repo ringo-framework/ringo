@@ -2,6 +2,7 @@ import logging
 import re
 from operator import itemgetter
 from formbar.config import Config, load
+from sqlalchemy.orm import joinedload
 from ringo.lib.helpers import get_path_to_form_config, get_app_name
 from ringo.model import DBSession
 
@@ -58,6 +59,11 @@ class BaseItem(object):
 class BaseList(object):
     def __init__(self, clazz, db):
         self.clazz = clazz
+        # TODO: Check which is the best loading strategy here for large
+        # collections. Tests with 100k datasets rendering only 100 shows
+        # that the usual lazyload method seems to be the fastest which is
+        # not what if have been expected.
+        #self.items = db.query(clazz).options(joinedload('*')).all()
         self.items = db.query(clazz).all()
         self.search_filter = None
 
