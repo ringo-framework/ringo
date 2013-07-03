@@ -133,8 +133,8 @@ def has_group(user, group):
 
 def _load_user(userid, request):
     try:
-        user = request.db.query(User).filter_by(id=userid).one()
-        return user
+        factory = User.get_item_factory()
+        return factory.load(userid)
     except NoResultFound:
         return None
 
