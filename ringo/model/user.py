@@ -1,12 +1,17 @@
+import logging
 import hashlib
 import random
 import string
+import json
 import sqlalchemy as sa
 from datetime import datetime
 from ringo.model import Base
 from ringo.model.base import BaseItem, BaseFactory
 from ringo.model.modul import ActionItem, ModulItem
 from ringo.model.mixins import Owned
+
+
+log = logging.getLogger(__name__)
 
 
 password_reset_requests = sa.Table(
@@ -59,6 +64,20 @@ class UserSetting(Base):
 
     id = sa.Column(sa.Integer, primary_key=True)
     settings = sa.Column(sa.Text, nullable=False, default="{}")
+
+    def get(self, key, default):
+        log.debug("Getting usersetting")
+        settings = json.loads(self.settings)
+        return settings.get(key, default)
+
+    def set(self, key, value):
+        settings = json.loads(self.settings)
+        section = settings.get(key)
+        section = value
+        settings[key] = section
+        dump = json.dumps(settings)
+        log.debug("Setting usersetting for %s: %s" % (key, dump))
+        self.settings = dump
 
 class UserFactory(BaseFactory):
 
