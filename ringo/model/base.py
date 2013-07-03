@@ -45,6 +45,10 @@ class BaseItem(object):
     def get_sql_cache(cls):
         """Returns a list of relations which are configured to be
         cached"""
+        # TODO: Defining relations which should be cached seems to be
+        # ignored for lazy load. So the only way of caching those
+        # relations too is to put them in the SQL-JOIN and to a cached
+        # query. This way all relations are cached to.
         return []
 
     @classmethod
