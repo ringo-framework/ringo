@@ -4,6 +4,7 @@ Development
 - Added search in overviews
 - #15: Implement Search
 - Enabled search by clicking on the value in colums.
+- Added table to save usersettings (DB change!)
 
 - Added dogpile.cache dependency because of caching in sqlalchemy.
 - Enabled basic caching of SQL queries.
