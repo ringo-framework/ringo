@@ -6,6 +6,7 @@ from formbar.form import Form
 
 from ringo.model.base import BaseList
 from ringo.lib.renderer import ListRenderer, ConfirmDialogRenderer
+from ringo.lib.sql import invalidate_cache
 from ringo.views import handle_history
 
 log = logging.getLogger(__name__)
@@ -142,6 +143,8 @@ def create_(clazz, request, callback=None):
             url = request.route_url(route_name, id=sitem.id)
             if callback:
                 sitem = callback(request, sitem)
+            # Invalidate cache
+            invalidate_cache()
             # Redirect to the update view.
             return HTTPFound(location=url)
         else:
@@ -173,6 +176,8 @@ def update_(clazz, request):
             request.session.flash(msg, 'success')
             route_name = item.get_action_routename('update')
             url = request.route_url(route_name, id=item.id)
+            # Invalidate cache
+            invalidate_cache()
             # Redirect to the update view.
             return HTTPFound(location=url)
         else:
@@ -215,6 +220,8 @@ def delete_(clazz, request):
         msg = _('Deleted ${item_type} "${item}" successfull.', mapping=mapping)
         log.info(msg)
         request.session.flash(msg, 'success')
+        # Invalidate cache
+        invalidate_cache()
         return HTTPFound(location=url)
     else:
         renderer = ConfirmDialogRenderer(request, item, 'delete')
