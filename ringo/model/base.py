@@ -3,7 +3,7 @@ import re
 from operator import itemgetter
 from formbar.config import Config, load
 from sqlalchemy.orm import joinedload
-from ringo.lib.helpers import get_path_to_form_config, get_app_name
+from ringo.lib.helpers import get_path_to_form_config
 from ringo.lib.sql import DBSession, regions
 from ringo.lib.sql.query import FromCache, set_relation_caching
 
@@ -14,6 +14,16 @@ class BaseItem(object):
 
     _table_fields = []
     _modul_id = None
+    """Configure a list of relations which are configured to be joined
+    in the query"""
+    _sql_joined_relations = []
+    # TODO: Defining relations which should be cached seems to be
+    # ignored for lazy load. So the only way of caching those
+    # relations too is to put them in the SQL-JOIN and to a cached
+    # query. This way all relations are cached to.
+    """Configure a list of relations which are configured to be
+    cached"""
+    _sql_cached_realtions = []
 
     def __str__(self):
         return self.__unicode__()
@@ -34,22 +44,6 @@ class BaseItem(object):
         from ringo.model.modul import ModulItem
         factory = BaseFactory(ModulItem)
         return factory.load(cls._modul_id)
-
-    @classmethod
-    def get_sql_joins(cls):
-        """Returns a list of relations which are configured to be joined
-        in the query"""
-        return []
-
-    @classmethod
-    def get_sql_cache(cls):
-        """Returns a list of relations which are configured to be
-        cached"""
-        # TODO: Defining relations which should be cached seems to be
-        # ignored for lazy load. So the only way of caching those
-        # relations too is to put them in the SQL-JOIN and to a cached
-        # query. This way all relations are cached to.
-        return []
 
     @classmethod
     def get_table_config(cls):
@@ -74,7 +68,15 @@ class BaseItem(object):
 
 
 class BaseList(object):
-    def __init__(self, clazz, db, cache="default"):
+    def __init__(self, clazz, db, cache=""):
+        """
+        A List object of. A list can be filterd, and sorted.
+
+        :clazz: Class of items which will be loaded.
+        :db: DB session to load the item
+        :cache: Name of the cache region. If empty then no caching is
+        done.
+        """
         self.clazz = clazz
         # TODO: Check which is the best loading strategy here for large
         # collections. Tests with 100k datasets rendering only 100 shows
@@ -86,7 +88,7 @@ class BaseList(object):
         if cache in regions.keys():
             q = set_relation_caching(q, self.clazz, cache)
             q = q.options(FromCache(cache))
-        for relation in self.clazz.get_sql_joins():
+        for relation in self.clazz._sql_cached_realtions:
             q = q.options(joinedload(relation))
 
         self.items = q.all()
@@ -163,11 +165,13 @@ class BaseFactory(object):
             item.gid = user.gid
         return item
 
-    def load(self, id, db=None, cache="default"):
+    def load(self, id, db=None, cache=""):
         """Loads the item with id from the database and returns it.
 
         :id: ID of the item to be loaded
         :db: DB session to load the item
+        :cache: Name of the cache region. If empty then no caching is
+        done.
         :returns: Instance of clazz
 
         """
@@ -177,6 +181,6 @@ class BaseFactory(object):
         if cache in regions.keys():
             q = set_relation_caching(q, self._clazz, cache)
             q = q.options(FromCache(cache))
-        for relation in self._clazz.get_sql_joins():
+        for relation in self._clazz._sql_joined_relations:
             q = q.options(joinedload(relation))
         return q.filter(self._clazz.id == id).one()

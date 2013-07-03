@@ -256,7 +256,7 @@ class RelationshipCache(MapperOption):
 
 def set_relation_caching(query, clazz, region="default"):
         cache = None
-        for relation in clazz.get_sql_cache():
+        for relation in clazz._sql_cached_realtions:
             if cache is None:
                 cache = RelationshipCache(relation, region)
             cache.and_(RelationshipCache(relation, region))

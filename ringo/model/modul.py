@@ -38,10 +38,7 @@ class ModulItem(BaseItem, Base):
     actions = sa.orm.relationship("ActionItem", backref="modul")
 
     _table_fields = [('name', 'Name')]
-
-    @classmethod
-    def get_sql_joins(cls):
-        return [cls.actions]
+    _sql_joined_relations = ['actions']
 
     def __unicode__(self):
         return self.name
