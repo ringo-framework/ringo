@@ -85,8 +85,11 @@ class UserFactory(BaseFactory):
         new_user = BaseFactory.create(self, user)
         # Now create a a new Profile
         profile_factory = BaseFactory(Profile)
+        settings_factory = BaseFactory(UserSetting)
+        settings = settings_factory.create(user)
         profile = profile_factory.create(user)
         new_user.profile.append(profile)
+        new_user.settings = settings
         return new_user
 
 
