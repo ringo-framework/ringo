@@ -23,7 +23,8 @@ requires = [
     'formbar',
     'nose',
     'coverage',
-    'webtest'
+    'webtest',
+    'dogpile.cache'
 ]
 
 setup(name='ringo',
