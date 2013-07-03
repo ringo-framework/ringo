@@ -93,10 +93,6 @@ class User(BaseItem, Base):
     def get_item_factory(cls):
         return UserFactory(cls)
 
-    @classmethod
-    def get_sql_cache(cls):
-        return [cls.roles, cls.groups, cls.default_group]
-
     def __unicode__(self):
         return self.login
 

@@ -43,10 +43,6 @@ class ModulItem(BaseItem, Base):
     def get_sql_joins(cls):
         return [cls.actions]
 
-    @classmethod
-    def get_sql_cache(cls):
-        return [cls.actions]
-
     def __unicode__(self):
         return self.name
 
