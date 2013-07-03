@@ -213,6 +213,7 @@ def init_model(dbsession):
     user.activation_token = "0e3cc848-22f6-4ff7-a562-12baf3037439"
     user.default_group = admin_usergroup
     user.groups.append(admin_usergroup)
+    user.settings = UserSetting()
     dbsession.add(user)
 
     # Admin profile
