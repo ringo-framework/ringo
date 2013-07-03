@@ -254,3 +254,12 @@ class RelationshipCache(MapperOption):
         self._relationship_options.update(option._relationship_options)
         return self
 
+def set_relation_caching(query, clazz, region="default"):
+        cache = None
+        for relation in clazz.get_sql_cache():
+            if cache is None:
+                cache = RelationshipCache(relation, region)
+            cache.and_(RelationshipCache(relation, region))
+        if cache:
+            query = query.options(cache)
+        return query
