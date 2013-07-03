@@ -78,6 +78,14 @@ def get_path_to_form_config(filename, app=None):
     return get_path_to(os.path.join(location, filename), app)
 
 
+def get_saved_searches(request, name):
+    searches_dic = request.user.settings.get('searches', {})
+    if searches_dic:
+        searches_dic_search = searches_dic.get(name)
+        return searches_dic_search
+    return {}
+
+
 def get_modules(request, display):
     # TODO: Fix imports here. Seems to be circular imports.
     from ringo.model.modul import ModulItem
