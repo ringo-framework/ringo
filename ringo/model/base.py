@@ -35,6 +35,18 @@ class BaseItem(object):
         return factory.load(cls._modul_id)
 
     @classmethod
+    def get_sql_joins(cls):
+        """Returns a list of relations which are configured to be joined
+        in the query"""
+        return []
+
+    @classmethod
+    def get_sql_cache(cls):
+        """Returns a list of relations which are configured to be
+        cached"""
+        return []
+
+    @classmethod
     def get_table_config(cls):
         return cls._table_fields
 
