@@ -54,6 +54,11 @@ class PasswordResetRequest(Base):
     def __str__(self):
         return self.token
 
+class UserSetting(Base):
+    __tablename__ = 'user_settings'
+
+    id = sa.Column(sa.Integer, primary_key=True)
+    settings = sa.Column(sa.Text, nullable=False, default="{}")
 
 class UserFactory(BaseFactory):
 
@@ -75,6 +80,7 @@ class User(BaseItem, Base):
     activated = sa.Column(sa.Boolean, default=True)
     activation_token = sa.Column(sa.Text)
     gid = sa.Column(sa.Integer, sa.ForeignKey('usergroups.id'))
+    sid = sa.Column(sa.Integer, sa.ForeignKey('user_settings.id'))
 
     # Relations
     roles = sa.orm.relationship("Role",
@@ -83,6 +89,7 @@ class User(BaseItem, Base):
                                  secondary=nm_user_usergroups,
                                  backref='members')
     default_group = sa.orm.relationship("Usergroup", uselist=False)
+    settings = sa.orm.relationship("UserSetting", uselist=False)
 
     # Configuration
     _table_fields = [('login', 'Login'),
