@@ -4,7 +4,8 @@ from operator import itemgetter
 from formbar.config import Config, load
 from sqlalchemy.orm import joinedload
 from ringo.lib.helpers import get_path_to_form_config, get_app_name
-from ringo.lib.sql import DBSession
+from ringo.lib.sql import DBSession, regions
+from ringo.lib.sql.query import FromCache, set_relation_caching
 
 log = logging.getLogger(__name__)
 
@@ -69,14 +70,22 @@ class BaseItem(object):
 
 
 class BaseList(object):
-    def __init__(self, clazz, db):
+    def __init__(self, clazz, db, cache="default"):
         self.clazz = clazz
         # TODO: Check which is the best loading strategy here for large
         # collections. Tests with 100k datasets rendering only 100 shows
         # that the usual lazyload method seems to be the fastest which is
         # not what if have been expected.
         #self.items = db.query(clazz).options(joinedload('*')).all()
-        self.items = db.query(clazz).all()
+
+        q = db.query(self.clazz)
+        if cache in regions.keys():
+            q = set_relation_caching(q, self.clazz, cache)
+            q = q.options(FromCache(cache))
+        for relation in self.clazz.get_sql_joins():
+            q = q.options(joinedload(relation))
+
+        self.items = q.all()
         self.search_filter = None
 
     def sort(self, field, order):
@@ -150,7 +159,7 @@ class BaseFactory(object):
             item.gid = user.gid
         return item
 
-    def load(self, id, db=None):
+    def load(self, id, db=None, cache="default"):
         """Loads the item with id from the database and returns it.
 
         :id: ID of the item to be loaded
@@ -160,4 +169,10 @@ class BaseFactory(object):
         """
         if db is None:
             db = DBSession
-        return db.query(self._clazz).filter(self._clazz.id == id).one()
+        q = db.query(self._clazz)
+        if cache in regions.keys():
+            q = set_relation_caching(q, self._clazz, cache)
+            q = q.options(FromCache(cache))
+        for relation in self._clazz.get_sql_joins():
+            q = q.options(joinedload(relation))
+        return q.filter(self._clazz.id == id).one()
