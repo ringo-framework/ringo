@@ -40,5 +40,14 @@
 .search-widget button {
     margin-right: 0px;
 }
-
-
+ul.dropdown-menu li table td a {
+    padding: 10px 15px;
+    color: black;
+    text-decoration: None;
+}
+ul.dropdown-menu li table {
+    margin-bottom: 0px;
+}
+ul.dropdown-menu li table td {
+    vertical-align: middle;
+}
