@@ -1,4 +1,7 @@
 $( document ).ready(function() {
-	$('.modal').modal();
-	$('.alert').delay(3 * 1000).fadeOut()
+    $('.modal').modal();
+    $('.alert').delay(3 * 1000).fadeOut()
+    $('#savequerymodal').modal({
+      show: false;
+    })
 });
