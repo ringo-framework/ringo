@@ -1,6 +1,7 @@
 import logging
 from mako.lookup import TemplateLookup
 from ringo import template_dir
+from ringo.lib.helpers import get_saved_searches
 
 template_lookup = TemplateLookup(directories=[template_dir],
                                  module_directory='/tmp/ringo_modules')
@@ -44,6 +45,7 @@ class ListRenderer(Renderer):
                   'enable_bundled_actions': False,
                   'search': search,
                   'search_field': search_field,
+                  'saved_searches': get_saved_searches(request, self.listing.clazz.__tablename__),
                   'headers': self.listing.clazz.get_table_config()}
         return self.template.render(**values)
 
