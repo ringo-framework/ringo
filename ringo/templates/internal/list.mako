@@ -16,11 +16,23 @@
     <div class="btn-group">
       <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">Options <span class="caret"></span></button>
       <ul class="dropdown-menu">
-        % for key, value in request.session.get('%s.list.saved_search' % clazz.__tablename__, {}).iteritems():
-          <li><a tabindex="-1" href="${request.current_route_url()}?form=search&saved=${key}">${key}</a></li>
-        % endfor
+          <li>
+            <table class="table table-condensed">
+              % for key, value in saved_searches.iteritems():
+              <tr>
+                <td>
+                  <a tabindex="-1" href="${request.current_route_url()}?form=search&saved=${key}">${value[1]}</a>
+                </td>
+                <td width="20">
+                  <a class="pull-right" tabindex="-1" href="${request.current_route_url()}?form=search&delete=${key}"><i class="icon-remove"></i></a>
+                </td>
+              </tr>
+              % endfor
+            </table>
+          </li>
         <li class="divider"></li>
-        <li><a tabindex="-1" href="${request.current_route_url()}?form=search&save">Save current search filter</a></li>
+        <li><a tabindex="-1" href="#" data-toggle="modal" data-target="#savequerymodal">Save current search filter</a></li>
+        <li><a tabindex="-1" href="${request.current_route_url()}?form=search&reset">Reset current search filter</a></li>
       </ul>
     </div>
     % if len(listing.search_filter) > 0:
@@ -84,6 +96,27 @@ table-bordered">
 </table>
 </form>
 
+<div id="savequerymodal" class="modal hide fade">
+  <form id="savequery" action="${request.current_route_url()}">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Save current search filter</h3>
+  </div>
+  <div class="modal-body">
+    <label for="save">Queryname</label>
+    <input type="textfield" id="save" name="save"/>
+    <input type="hidden" name="form" value="search"/>
+    <p><small>Please insert a name for your query. It it will be selectable under
+    this name in the options menu of the search after saving.</small></p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Close</a>
+    <input class="btn btn-primary" type="button" onclick="formSubmit()" value="Save Query">
+  </div>
+  </form>
+</div>
+
+
 <%def name="render_filter_link(value, field)">
   <a href="${request.current_route_url()}?form=search&search=${value | h}&field=${field[0]}" class="filter" title="${'Filter %s on %s in %s' % (clazz.get_item_modul().get_label(plural=True), value, field[1])}">${value | h}</a>
 </%def>
@@ -92,6 +125,10 @@ table-bordered">
 function openItem(url) {
   location.href = url;
 };
+
+function formSubmit() {
+  document.getElementById("savequery").submit();
+}
 
 function checkAll(checkId) {
   var inputs = document.getElementsByTagName("input");
