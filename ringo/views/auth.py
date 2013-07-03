@@ -8,7 +8,7 @@ from pyramid_mailer import get_mailer
 from pyramid_mailer.message import Message
 
 
-from ringo.model import DBSession
+from ringo.lib.sql import DBSession
 from ringo.model.base import BaseFactory
 from ringo.model.user import User, Profile, Usergroup, USER_GROUP_ID
 from formbar.config import Config, load

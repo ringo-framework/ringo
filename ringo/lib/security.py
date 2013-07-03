@@ -12,7 +12,7 @@ from pyramid.authorization import ACLAuthorizationPolicy
 
 from sqlalchemy.orm.exc import NoResultFound
 
-from ringo.model import DBSession
+from ringo.lib.sql import DBSession
 from ringo.model.user import User, PasswordResetRequest
 
 log = logging.getLogger(__name__)

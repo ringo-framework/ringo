@@ -3,7 +3,7 @@ from pyramid.view import view_config
 
 from sqlalchemy.exc import DBAPIError
 
-from ringo.model import (
+from ringo.lib.sql import (
     DBSession,
 )
 

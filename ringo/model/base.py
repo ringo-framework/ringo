@@ -4,7 +4,7 @@ from operator import itemgetter
 from formbar.config import Config, load
 from sqlalchemy.orm import joinedload
 from ringo.lib.helpers import get_path_to_form_config, get_app_name
-from ringo.model import DBSession
+from ringo.lib.sql import DBSession
 
 log = logging.getLogger(__name__)
 

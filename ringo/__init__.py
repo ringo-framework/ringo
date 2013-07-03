@@ -13,8 +13,10 @@ log = logging.getLogger(__name__)
 from ringo.resources import (
     get_resource_factory,
 )
-from ringo.model import (
+from ringo.lib.sql import (
     DBSession,
+)
+from ringo.model import (
     Base,
 )
 from ringo.model.user import (

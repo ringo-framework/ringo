@@ -15,7 +15,8 @@ from shutil import move
 
 from ringo  import modul_template_dir
 from ringo.lib.i18n import _
-from ringo.model import DBSession, Base
+from ringo.lib.sql import DBSession
+from ringo.model import Base
 from ringo.model.modul import ModulItem, _create_default_actions
 
 from pyramid.paster import (

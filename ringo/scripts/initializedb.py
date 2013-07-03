@@ -9,8 +9,11 @@ from pyramid.paster import (
     setup_logging,
 )
 
-from ringo.model import (
+from ringo.lib.sql import (
     DBSession,
+)
+
+from ringo.model import (
     Base,
 )
 

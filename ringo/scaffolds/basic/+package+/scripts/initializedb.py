@@ -9,7 +9,7 @@ from pyramid.paster import (
     setup_logging,
     )
 
-from ringo import DBSession
+from ringo.lib.sql import DBSession
 from ringo.scripts.initializedb import inititializedb
 from ringo.model import Base
 

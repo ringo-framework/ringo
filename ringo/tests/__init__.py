@@ -9,7 +9,7 @@ from pyramid import testing
 from sqlalchemy import engine_from_config
 from sqlalchemy.orm import sessionmaker
 
-from ringo.model import DBSession
+from ringo.lib.sql import DBSession
 from ringo import main
 from ringo.lib.i18n import locale_negotiator
 
