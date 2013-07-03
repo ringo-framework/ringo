@@ -81,7 +81,7 @@ def get_path_to_form_config(filename, app=None):
 def get_saved_searches(request, name):
     searches_dic = request.user.settings.get('searches', {})
     if searches_dic:
-        searches_dic_search = searches_dic.get(name)
+        searches_dic_search = searches_dic.get(name, {})
         return searches_dic_search
     return {}
 
