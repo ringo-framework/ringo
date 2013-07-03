@@ -4,7 +4,8 @@ from pyramid.httpexceptions import HTTPFound
 
 from formbar.form import Form
 
-from ringo.model.base import BaseList
+from ringo.model.base import BaseList, BaseFactory
+from ringo.model.user import User
 from ringo.lib.renderer import ListRenderer, ConfirmDialogRenderer
 from ringo.lib.sql import invalidate_cache
 from ringo.views import handle_history
@@ -47,6 +48,9 @@ def get_search(clazz, request):
     # Check if there is already a saved search in the session
     saved_search = request.session.get('%s.list.search' % name, [])
 
+    if request.params.has_key('reset'):
+        return []
+
     # If the request is not a equest from the search form then
     # abort here and return the saved search params if there are any.
     form_name = request.params.get('form')
@@ -55,9 +59,14 @@ def get_search(clazz, request):
 
     saved_search_id = request.params.get('saved')
     if saved_search_id:
-        search_dic = request.session.get('%s.list.saved_search' % name, {})
-        return search_dic.get(saved_search_id, [])
+        searches_dic = request.user.settings.get('searches', {})
+        if searches_dic:
+            searches_dic_search = searches_dic.get(name)
+            if searches_dic_search:
+                return searches_dic_search.get(saved_search_id, [[], None])[0]
     elif request.params.has_key('save'):
+        return saved_search
+    elif request.params.has_key('delete'):
         return saved_search
     else:
         search = request.params.get('search')
@@ -93,11 +102,36 @@ def list_(clazz, request):
     # Only save the search if there are items
     if len(listing.items) > 0:
         request.session['%s.list.search' % clazz.__tablename__] = search
-        if (request.params.get('form') == "search"
-           and request.params.has_key('save')):
-            search_dic = request.session.get('%s.list.saved_search' % clazz.__tablename__, {})
-            search_dic[str(uuid.uuid1())] = search
-            request.session['%s.list.saved_search' % clazz.__tablename__] = search_dic
+        if (request.params.get('form') == "search"):
+            if request.params.has_key('save'):
+                query_name = request.params.get('save')
+                user = BaseFactory(User).load(request.user.id)
+                searches_dic = user.settings.get('searches', {})
+                searches_dic_search = searches_dic.get(clazz.__tablename__, {})
+
+                # Check if there is already a search saved with the name
+                found = False
+                for xxx in searches_dic_search.values():
+                    if xxx[1] == query_name:
+                        found = True
+                        break
+                if not found:
+                    searches_dic_search[str(uuid.uuid1())] = (search, query_name)
+                searches_dic[clazz.__tablename__] = searches_dic_search
+                user.settings.set('searches', searches_dic)
+                request.db.flush()
+            elif request.params.has_key('delete'):
+                query_key = request.params.get('delete')
+                user = BaseFactory(User).load(request.user.id)
+                searches_dic = user.settings.get('searches', {})
+                searches_dic_search = searches_dic.get(clazz.__tablename__, {})
+                try:
+                    del searches_dic_search[query_key]
+                except:
+                    pass
+                searches_dic[clazz.__tablename__] = searches_dic_search
+                user.settings.set('searches', searches_dic)
+                request.db.flush()
         request.session.save()
 
 
