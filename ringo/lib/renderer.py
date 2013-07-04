@@ -1,12 +1,84 @@
 import logging
+import json
 from mako.lookup import TemplateLookup
 from ringo import template_dir
-from ringo.lib.helpers import get_saved_searches
+from ringo.lib.helpers import (
+    get_saved_searches,
+    get_path_to_overview_config,
+)
 
 template_lookup = TemplateLookup(directories=[template_dir],
                                  module_directory='/tmp/ringo_modules')
 
 log = logging.getLogger(__name__)
+
+
+def _load_overview_config(clazz):
+        """Return a datastructure representing the overview
+        configuration. The configuration is loaded from a JSON
+        configuration file under /view/overviews relative to the
+        application root. If no configuration can be found return
+        None."""
+        cfile = "%s.json" % clazz.__tablename__
+        # Try to load the configuration for the overview first.
+        config = None
+        try:
+            config = open(get_path_to_overview_config(cfile), "r")
+        except IOError:
+            try:
+                config = open(get_path_to_overview_config(cfile, 'ringo'), "r")
+            except IOError:
+                log.warning('Can not load overview configuration for "%s" '
+                            'Configuring the overview now based on the form '
+                            'configuration' % clazz)
+
+        if config:
+            return json.load(config)
+        return None
+
+
+def _form2overview(formconfig):
+    """Converts a the form configuration of the given clazz into a
+    datastructure representing the overview configuration."""
+    fields = []
+    for key, field in formconfig.get_fields().iteritems():
+        fields.append({'name': field.name, 'label': field.label})
+    return {'fields': fields}
+
+
+class OverviewConfig:
+    """The TableConfig clazz provides an interface for configuring the
+    overview of the the given clazz. The configuration includes
+
+    * Enabled features of the overview
+    * Which fields should be enabled in the overview
+    * Labeling of the fields
+    * Rendering of the fields
+    * Layout of the table (column width etc.)
+
+    The configuration of the overview is loaded from a an JSON
+    configuration file which is located under view/overviews relative to
+    the application root.
+    If no configuration file can be found, then add all fields
+    configured in the form configuration to the overview.
+    """
+
+    def __init__(self, clazz):
+        """Will initialize the configuration of the overview for the
+        clazz."""
+        self.clazz = clazz
+        config = _load_overview_config(clazz)
+        if config:
+            self.config = config
+        else:
+            form_config = clazz.get_form_config('create')
+            self.config = _form2overview(form_config)
+
+    def get_fields(self):
+        fields = []
+        for field in self.config.get('fields'):
+            fields.append((field.get('name'), field.get('label')))
+        return fields
 
 
 class Renderer(object):
