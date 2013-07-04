@@ -1,11 +1,6 @@
 Ringo
 =====
-
 `Ringo` is a small Python based high level web application framework build with
-Pyramid . It provides basic functionality which is often used in modern web
-applications.
-
-Ringo is a small Python based high level web application framework build with
 Pyramid . It provides basic functionality which is often used in modern web
 applications. See the list of features for more details.
 
