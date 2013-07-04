@@ -43,9 +43,12 @@ web application based on Ringo:
  * Authentication with email registration and password reminders
  * Authorisation with a role based permission System
  * Basic CRUD actions
- * Basic item sortable item listings
- * Layoutable forms
- * Extendable, Configurable
+ * Layout and validation of forms using the `Formbar <https://pypi.python.org/pypi/formbar>`_ library
+ * Support for caching expensive SQL queries
+ * Regular expression based searching (storeable)
+ * Sorting
+ * User Profiles
+ * Extendible, Configurable
 
 .. _installation_production:
 
