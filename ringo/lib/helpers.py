@@ -78,6 +78,18 @@ def get_path_to_form_config(filename, app=None):
     return get_path_to(os.path.join(location, filename), app)
 
 
+def get_path_to_overview_config(filename, app=None):
+    """Returns the path the the given overview configuration. The file name
+    should be realtive to the default location for the configurations.
+
+    :file: filename
+    :returns: Absolute path to the configuration file
+
+    """
+    location = "views/overviews"
+    return get_path_to(os.path.join(location, filename), app)
+
+
 def get_saved_searches(request, name):
     searches_dic = request.user.settings.get('searches', {})
     if searches_dic:
