@@ -31,7 +31,7 @@
             </table>
           </li>
         <li class="divider"></li>
-        <li><a tabindex="-1" href="#" data-toggle="modal" data-target="#savequerymodal">Save current search filter</a></li>
+        <li><a tabindex="-1" href="#" data-toggle="modal" data-target="#savequerydialog">Save current search filter</a></li>
         <li><a tabindex="-1" href="${request.current_route_url()}?form=search&reset">Reset current search filter</a></li>
       </ul>
     </div>
@@ -96,7 +96,7 @@ table-bordered">
 </table>
 </form>
 
-<div id="savequerymodal" class="modal hide fade">
+<div id="savequerydialog" class="modal hide fade">
   <form id="savequery" action="${request.current_route_url()}">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

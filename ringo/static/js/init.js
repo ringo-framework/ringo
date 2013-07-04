@@ -1,7 +1,7 @@
 $( document ).ready(function() {
-    $('.modal').modal();
-    $('.alert').delay(3 * 1000).fadeOut()
-    $('#savequerymodal').modal({
-      show: false;
-    })
+    $('.dialog').modal();
+    $('.alert').delay(3 * 1000).fadeOut();
+    $('#savequerydialog').modal({
+      show: false
+    });
 });
