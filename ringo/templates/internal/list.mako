@@ -75,7 +75,12 @@ table-bordered">
     % endif
     % for field in headers:
     <td>
-        <% value = getattr(item, field[0]) %>
+        <%
+          try:
+            value = getattr(item, field[0]) 
+          except AttributeError:
+            value = "NaF"
+        %>
         ## Escape value here
         % if isinstance(value, list):
           ${", ".join(unicode(render_filter_link(v, field)) for v in value) | h}
