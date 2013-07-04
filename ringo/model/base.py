@@ -47,7 +47,11 @@ class BaseItem(object):
 
     @classmethod
     def get_table_config(cls):
-        return cls._table_fields
+        from ringo.lib.renderer import OverviewConfig
+        # Test try to initialze a Overview configurations
+        # TODO: Remove _table_fields configuration.
+        # return cls._table_fields
+        return OverviewConfig(cls).get_fields()
 
     @classmethod
     def get_form_config(cls, formname):
