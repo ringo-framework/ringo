@@ -112,7 +112,7 @@ class TableConfig:
         if config:
             self.config = config
         else:
-            form_config = clazz.get_form_config('create')
+            form_config = self.get_form_config()
             self.config = _form2overview(form_config)
 
     def get_columns(self):
@@ -124,6 +124,9 @@ class TableConfig:
         for col in config.get('columns'):
             cols.append(col)
         return cols
+
+    def get_form_config(self, name="create"):
+        return self.clazz.get_form_config(name)
 
     def get_default_sort_column(self):
         """Returns the name of the attribute of the clazz which is
