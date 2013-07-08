@@ -68,7 +68,8 @@ class TableConfig:
                     {
                         "name": "fieldname",
                         "label": "Label",
-                        "width": "width"
+                        "width": "width",
+                        "expand": true
                     }
                 ]
                 "settings": {
@@ -88,6 +89,11 @@ class TableConfig:
     * *label*: The label of the field.
     * *width*: The width of the field. If not units are given the pixel
       are assumed.
+    * *expand*: The expand option is used to expand the referneces
+      values in selections into the literal value of the corrispondig
+      option. Note that this option is only usefull for selection fields
+      in *formbar* which do not have a real relation attached. In all
+      other cases the reference values are expanded automatically.
 
     If no configuration file can be found, then add all fields
     configured in the form configuration to the overview.
