@@ -59,6 +59,33 @@ class OverviewConfig:
     The configuration of the overview is loaded from a an JSON
     configuration file which is located under view/overviews relative to
     the application root.
+
+    The configuration has the following form and options::
+
+        {
+            "overview": {
+                "columns": [
+                    {
+                        "name": "fieldname",
+                        "label": "Label",
+                        "width": "width"
+                    }
+                ]
+            }
+        }
+
+    The configuration can have configurations for more than one table
+    configuration. The default name of a configuration is *overview*.
+    The next sections defines the *columns* of the table. The columns
+    are rendered in the order they are defined. Each column can have the
+    following options:
+
+    * *name*: The name of the attribute within clazz which should be
+      listed here.
+    * *label*: The label of the field.
+    * *width": The width of the field. If not units are given the pixel
+      are assumed.
+
     If no configuration file can be found, then add all fields
     configured in the form configuration to the overview.
     """
