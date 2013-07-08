@@ -4,7 +4,7 @@
     <input name="search" type="text" class="input-large" value="${search}" placeholder="Search for (Regexpr) in ..."/>
     <select name="field" class="input-small">
       <option value="">All fields</option>
-      % for field in headers:
+      % for field in tableconfig.get_columns():
         % if field.get('name') == search_field:
           <option value="${field.get('name')}" selected>${field.get('label')}</option>
         % else:
@@ -49,7 +49,7 @@ table-bordered">
       <input type="checkbox" name="check_all" onclick="checkAll('id');">
     </th>
   % endif
-  % for field in headers:
+  % for field in tableconfig.get_columns():
     <th width="${field.get('width')}">
       % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
         <a href="${request.current_route_url()}?sort_field=${field.get('name')}&sort_order=desc">${field.get('label')}</a>
@@ -73,7 +73,7 @@ table-bordered">
       <input type="checkbox" name="id" value="${item.id}">
     </td>
     % endif
-    % for field in headers:
+    % for field in tableconfig.get_columns():
     <td>
         <%
           try:

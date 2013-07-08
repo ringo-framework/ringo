@@ -179,7 +179,7 @@ class ListRenderer(Renderer):
                   'search': search,
                   'search_field': search_field,
                   'saved_searches': get_saved_searches(request, self.listing.clazz.__tablename__),
-                  'headers': self.listing.clazz.get_table_config().get_columns()}
+                  'tableconfig': self.listing.clazz.get_table_config()}
         return self.template.render(**values)
 
 
