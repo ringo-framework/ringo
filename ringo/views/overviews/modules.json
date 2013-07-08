@@ -1,0 +1,9 @@
+{
+    "overview": {
+        "columns": [
+            {"name": "label", "label": "Label"},
+            {"name": "name", "label": "Name"},
+            {"name": "display", "label": "Display Location", "width": "150"}
+        ]
+    }
+}

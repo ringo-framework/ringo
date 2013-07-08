@@ -1,0 +1,10 @@
+{
+    "overview": {
+        "columns": [
+            {"name": "login", "label": "Login"},
+            {"name": "roles", "label": "Roles"},
+            {"name": "groups", "label": "Groups"},
+            {"name": "activated", "label": "Activated", "width": "100"}
+        ]
+    }
+}

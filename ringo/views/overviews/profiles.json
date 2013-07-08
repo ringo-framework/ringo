@@ -1,0 +1,10 @@
+{
+    "overview": {
+        "columns": [
+            {"name": "first_name", "label": "Firstname"},
+            {"name": "last_name", "label": "Lastname"},
+            {"name": "email", "label": "Email"},
+            {"name": "birthday", "label": "Birthday", "width": "100"}
+        ]
+    }
+}
