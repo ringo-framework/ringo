@@ -71,6 +71,9 @@ class TableConfig:
                         "width": "width"
                     }
                 ]
+                "settings": {
+                    "default-sorting": "name"
+                }
             }
         }
 
@@ -116,6 +119,19 @@ class TableConfig:
             cols.append(col)
         return cols
 
+    def get_default_sort_column(self):
+        """Returns the name of the attribute of the clazz which is
+        marked as field for default sorting in the *settings* section of
+        the configuration. If no default sorting is configured then
+        return the name of the attribute in the first column which is
+        configured in the table"""
+        settings = self.config.get('settings')
+        if settings:
+            def_sort = settings.get('default-sorting')
+            if def_sort:
+                return def_sort
+        return self.get_columns()[0].get('name')
+
 
 class Renderer(object):
     """Baseclass for all renderers"""
@@ -154,7 +170,7 @@ class ListRenderer(Renderer):
                   'search': search,
                   'search_field': search_field,
                   'saved_searches': get_saved_searches(request, self.listing.clazz.__tablename__),
-                  'headers': self.listing.clazz.get_table_config()}
+                  'headers': self.listing.clazz.get_table_config().get_columns()}
         return self.template.render(**values)
 
 

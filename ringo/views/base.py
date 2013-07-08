@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 
 def handle_sorting(clazz, request):
     name = clazz.__tablename__
-    default_sort_field = clazz._table_fields[0][0]
+    default_sort_field = clazz.get_table_config().get_default_sort_column()
     field = request.GET.get('sort_field', default_sort_field)
     order = request.GET.get('sort_order', 'asc')
     request.session['%s.list.sort_field' % name] = field
