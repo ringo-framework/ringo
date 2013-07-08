@@ -105,7 +105,7 @@ table-bordered">
   % endfor
   % if len(items) == 0:
   <tr>
-    <td colspan="${len(headers)}">
+    <td colspan="${len(tableconfig.get_columns())}">
     No items found
     </td>
   </tr>
