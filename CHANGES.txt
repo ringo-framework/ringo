@@ -1,3 +1,11 @@
+Development
+-----------
+
+- Added a new TableConfig class. This clazz provides an interface to a JSON
+  file which is used to configure various aspects to the rendering of the
+  overview tables. This new configuration directive will replace to old
+  _table_fields configuration attribute.
+
 0.3.0
 -----
 
