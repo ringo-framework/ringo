@@ -86,7 +86,7 @@ def get_path_to_overview_config(filename, app=None):
     :returns: Absolute path to the configuration file
 
     """
-    location = "views/overviews"
+    location = "views/tables"
     return get_path_to(os.path.join(location, filename), app)
 
 
