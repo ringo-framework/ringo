@@ -122,7 +122,8 @@ class BaseList(object):
             if search_field != "":
                 fields = [search_field]
             else:
-                fields = [field[0] for field in self.clazz._table_fields]
+                table_config = self.clazz.get_table_config()
+                fields = [field.get('name') for field in table_config.get_columns()]
             for item in self.items:
                 for field in fields:
                     value = getattr(item, field)
