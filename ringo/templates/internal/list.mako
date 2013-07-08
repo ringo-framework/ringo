@@ -76,16 +76,28 @@ table-bordered">
     % for field in tableconfig.get_columns():
     <td>
         <%
+          form_config = tableconfig.get_form_config()
           try:
-            value = getattr(item, field.get('name')) 
+            ## TODO: Move this code into the baselist? As long as the
+            ## expandation is only done on rendering the table things like
+            ## searching or sorting will behavei odd as this is still done
+            ## on the unexpanded values.
+            raw_value = getattr(item, field.get('name'))
+            value = raw_value
+            if field.get('expand'):
+              form_field = form_config.get_field(field.get('name'))
+              for option in form_field.options:
+                if option[1] == value:
+                  value = option[0]
+                  break
           except AttributeError:
-            value = "NaF"
+            raw_value = "NaF"
         %>
         ## Escape value here
-        % if isinstance(value, list):
-          ${", ".join(unicode(render_filter_link(v, field)) for v in value) | h}
+        % if isinstance(raw_value, list):
+          ${", ".join(unicode(render_filter_link(raw_value, v, field)) for v in value) | h}
         % else:
-          ${render_filter_link(value, field)}
+          ${render_filter_link(raw_value, value, field)}
         % endif
     </td>
     % endfor
@@ -122,8 +134,8 @@ table-bordered">
 </div>
 
 
-<%def name="render_filter_link(value, field)">
-  <a href="${request.current_route_url()}?form=search&search=${value | h}&field=${field.get('name')}" class="filter" title="${'Filter %s on %s in %s' % (clazz.get_item_modul().get_label(plural=True), value, field.get('label'))}">${value | h}</a>
+<%def name="render_filter_link(raw_value, value, field)">
+  <a href="${request.current_route_url()}?form=search&search=${raw_value | h}&field=${field.get('name')}" class="filter" title="${'Filter %s on %s in %s' % (clazz.get_item_modul().get_label(plural=True), value, field.get('label'))}">${value | h}</a>
 </%def>
 
 <script type="text/javascript">
