@@ -526,6 +526,13 @@ Change the name of the application
 
 API
 ***
+lib
+===
+.. automodule:: ringo.lib.renderer
+   :members:
+   :inherited-members:
+
+
 Tests
 *****
 Scaffolds
