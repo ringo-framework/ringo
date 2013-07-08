@@ -17,8 +17,6 @@ class ActionItem(BaseItem, Base):
     icon = sa.Column(sa.Text, nullable=False)
     description = sa.Column(sa.Text)
 
-    _table_fields = [('modul', 'Modul'), ('name', 'Name'), ('url', 'Url')]
-
     def __unicode__(self):
         return u"%s (%s/%s)" % (self.name, self.modul, self.url)
 
@@ -37,7 +35,6 @@ class ModulItem(BaseItem, Base):
 
     actions = sa.orm.relationship("ActionItem", backref="modul")
 
-    _table_fields = [('name', 'Name')]
     _sql_joined_relations = ['actions']
 
     def __unicode__(self):

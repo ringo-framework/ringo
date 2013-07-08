@@ -113,11 +113,6 @@ class User(BaseItem, Base):
     default_group = sa.orm.relationship("Usergroup", uselist=False)
     settings = sa.orm.relationship("UserSetting", uselist=False)
 
-    # Configuration
-    _table_fields = [('login', 'Login'),
-                     ('roles', 'Roles'),
-                     ('groups', 'Groups')]
-
     @classmethod
     def get_item_factory(cls):
         return UserFactory(cls)
@@ -141,10 +136,6 @@ class Usergroup(BaseItem, Base):
     # Relations
     roles = sa.orm.relationship("Role", secondary=nm_usergroup_roles)
 
-    # Configuration
-    _table_fields = [('name', 'Login'),
-                     ('roles', 'Roles')]
-
     def __unicode__(self):
         return self.name
 
@@ -158,9 +149,6 @@ class Role(BaseItem, Base):
     """Flag to set the role as administrational role which means that
     the user will gain the assigned permissions irrespective from
     checking the ownership"""
-
-    # Configuration
-    _table_fields = [('name', 'Name')]
 
     permissions = sa.orm.relation(ActionItem, secondary=nm_action_roles)
 
@@ -184,9 +172,6 @@ class Profile(BaseItem, Owned, Base):
     user = sa.orm.relation("User", cascade="all, delete-orphan",
                            backref="profile", single_parent=True,
                            uselist=False)
-
-    # Configuration
-    _table_fields = [('first_name', 'last_name', 'email')]
 
     def __unicode__(self):
         return "%s %s" % (self.first_name, self.last_name)
