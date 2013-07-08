@@ -46,8 +46,8 @@ class BaseItem(object):
 
     @classmethod
     def get_table_config(cls):
-        from ringo.lib.renderer import OverviewConfig
-        return OverviewConfig(cls).get_columns()
+        from ringo.lib.renderer import TableConfig
+        return TableConfig(cls)
 
     @classmethod
     def get_form_config(cls, formname):

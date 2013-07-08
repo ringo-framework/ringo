@@ -46,7 +46,7 @@ def _form2overview(formconfig):
     return {'overview': {'columns': fields}}
 
 
-class OverviewConfig:
+class TableConfig:
     """The TableConfig clazz provides an interface for configuring the
     overview of the the given clazz. The configuration includes
 
