@@ -5,10 +5,10 @@
     <select name="field" class="input-small">
       <option value="">All fields</option>
       % for field in headers:
-        % if field[0] == search_field:
-          <option value="${field[0]}" selected>${field[1]}</option>
+        % if field.get('name') == search_field:
+          <option value="${field.get('name')}" selected>${field.get('label')}</option>
         % else:
-          <option value="${field[0]}">${field[1]}</option>
+          <option value="${field.get('name')}">${field.get('label')}</option>
         % endif
       % endfor
     </select>
@@ -50,13 +50,13 @@ table-bordered">
     </th>
   % endif
   % for field in headers:
-    <th>
+    <th width="${field.get('width')}">
       % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
-        <a href="${request.current_route_url()}?sort_field=${field[0]}&sort_order=desc">${field[1]}</a>
+        <a href="${request.current_route_url()}?sort_field=${field.get('name')}&sort_order=desc">${field.get('label')}</a>
       % else:
-        <a href="${request.current_route_url()}?sort_field=${field[0]}&sort_order=asc">${field[1]}</a>
+        <a href="${request.current_route_url()}?sort_field=${field.get('name')}&sort_order=asc">${field.get('label')}</a>
       % endif
-      % if request.session['%s.list.sort_field' % clazz.__tablename__] == field[0]:
+      % if request.session['%s.list.sort_field' % clazz.__tablename__] == field.get('name'):
         % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
           <i class="pull-right icon-arrow-up"></i>
         % else:
@@ -77,7 +77,7 @@ table-bordered">
     <td>
         <%
           try:
-            value = getattr(item, field[0]) 
+            value = getattr(item, field.get('name')) 
           except AttributeError:
             value = "NaF"
         %>
@@ -123,7 +123,7 @@ table-bordered">
 
 
 <%def name="render_filter_link(value, field)">
-  <a href="${request.current_route_url()}?form=search&search=${value | h}&field=${field[0]}" class="filter" title="${'Filter %s on %s in %s' % (clazz.get_item_modul().get_label(plural=True), value, field[1])}">${value | h}</a>
+  <a href="${request.current_route_url()}?form=search&search=${value | h}&field=${field.get('name')}" class="filter" title="${'Filter %s on %s in %s' % (clazz.get_item_modul().get_label(plural=True), value, field.get('label'))}">${value | h}</a>
 </%def>
 
 <script type="text/javascript">

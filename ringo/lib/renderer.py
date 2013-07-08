@@ -43,7 +43,7 @@ def _form2overview(formconfig):
     fields = []
     for key, field in formconfig.get_fields().iteritems():
         fields.append({'name': field.name, 'label': field.label})
-    return {'fields': fields}
+    return {'overview': {'columns': fields}}
 
 
 class OverviewConfig:
@@ -90,10 +90,15 @@ class OverviewConfig:
     configured in the form configuration to the overview.
     """
 
-    def __init__(self, clazz):
+    def __init__(self, clazz, name="overview"):
         """Will initialize the configuration of the overview for the
-        clazz."""
+        clazz.
+
+        :clazz: The clazz for which the overview configuration should be loaded.
+        :name: name of the configuration. Defaults to the "overview" configuration.
+        """
         self.clazz = clazz
+        self.name = name
         config = _load_overview_config(clazz)
         if config:
             self.config = config
@@ -101,11 +106,12 @@ class OverviewConfig:
             form_config = clazz.get_form_config('create')
             self.config = _form2overview(form_config)
 
-    def get_fields(self):
-        fields = []
-        for field in self.config.get('fields'):
-            fields.append((field.get('name'), field.get('label')))
-        return fields
+    def get_columns(self):
+        cols = []
+        config = self.config.get(self.name)
+        for col in config.get('columns'):
+            cols.append(col)
+        return cols
 
 
 class Renderer(object):
