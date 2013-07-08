@@ -1,7 +1,5 @@
 import logging
 import hashlib
-import random
-import string
 import json
 import sqlalchemy as sa
 from datetime import datetime
