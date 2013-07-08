@@ -83,7 +83,7 @@ class OverviewConfig:
     * *name*: The name of the attribute within clazz which should be
       listed here.
     * *label*: The label of the field.
-    * *width": The width of the field. If not units are given the pixel
+    * *width*: The width of the field. If not units are given the pixel
       are assumed.
 
     If no configuration file can be found, then add all fields
@@ -107,6 +107,9 @@ class OverviewConfig:
             self.config = _form2overview(form_config)
 
     def get_columns(self):
+        """Return a list of configured columns within the configuration.
+        Each colum is a dictionary containing the one or more available
+        conifguration attributes."""
         cols = []
         config = self.config.get(self.name)
         for col in config.get('columns'):
