@@ -6,6 +6,7 @@ Development
   overview tables. This new configuration directive will replace to old
   _table_fields configuration attribute.
 - #26: Expand values of relations in the overview from form configuration
+- #27: Save current sorting in the session
 
 0.3.0
 -----

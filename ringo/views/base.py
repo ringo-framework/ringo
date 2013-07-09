@@ -14,13 +14,33 @@ log = logging.getLogger(__name__)
 
 
 def handle_sorting(clazz, request):
+    """Return a tuple of *fieldname* and *sortorder* (asc, desc). The
+    sorting is determined in the follwoing order: First try to get the
+    sorting from the current request (GET-Param). If there are no
+    sorting params try to get the params saved in the session. As last
+    fallback use the default sorting for the table.
+    """
     name = clazz.__tablename__
-    default_sort_field = clazz.get_table_config().get_default_sort_column()
-    field = request.GET.get('sort_field', default_sort_field)
-    order = request.GET.get('sort_order', 'asc')
+
+    # Default sorting options
+    field = clazz.get_table_config().get_default_sort_column()
+    order = 'asc'
+
+    # Get sorting from the session. If there is no saved sorting use the
+    # default value.
+    field = request.session.get('%s.list.sort_field' % name, field)
+    order = request.session.get('%s.list.sort_order' % name, order)
+
+    # Get sorting from the request. If there is no sorting option in
+    # the request then use the saved sorting options.
+    field = request.GET.get('sort_field', field)
+    order = request.GET.get('sort_order', order)
+
+    # Save current sorting in the session
     request.session['%s.list.sort_field' % name] = field
     request.session['%s.list.sort_order' % name] = order
     request.session.save()
+
     return field, order
 
 
