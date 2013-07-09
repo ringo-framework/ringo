@@ -5,6 +5,7 @@ Development
   file which is used to configure various aspects to the rendering of the
   overview tables. This new configuration directive will replace to old
   _table_fields configuration attribute.
+- #26: Expand values of relations in the overview from form configuration
 
 0.3.0
 -----
