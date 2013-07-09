@@ -17,19 +17,29 @@ def handle_sorting(clazz, request):
     """Return a tuple of *fieldname* and *sortorder* (asc, desc). The
     sorting is determined in the follwoing order: First try to get the
     sorting from the current request (GET-Param). If there are no
-    sorting params try to get the params saved in the session. As last
+    sorting params try to get the params saved in the session or if
+    requested from a saved search. As last
     fallback use the default sorting for the table.
     """
     name = clazz.__tablename__
 
     # Default sorting options
-    field = clazz.get_table_config().get_default_sort_column()
-    order = 'asc'
+    default_field = clazz.get_table_config().get_default_sort_column()
+    default_order = 'asc'
 
     # Get sorting from the session. If there is no saved sorting use the
     # default value.
-    field = request.session.get('%s.list.sort_field' % name, field)
-    order = request.session.get('%s.list.sort_order' % name, order)
+    field = request.session.get('%s.list.sort_field' % name, default_field)
+    order = request.session.get('%s.list.sort_order' % name, default_order)
+
+    # Get saved sorting from the the saved search.
+    saved_search_id = request.params.get('saved')
+    if saved_search_id:
+        searches_dic = request.user.settings.get('searches', {})
+        if searches_dic:
+            search = searches_dic.get(name)
+            if search:
+                field, order = search.get(saved_search_id, [[], [], None])[1]
 
     # Get sorting from the request. If there is no sorting option in
     # the request then use the saved sorting options.
@@ -37,8 +47,12 @@ def handle_sorting(clazz, request):
     order = request.GET.get('sort_order', order)
 
     # Save current sorting in the session
-    request.session['%s.list.sort_field' % name] = field
-    request.session['%s.list.sort_order' % name] = order
+    if request.params.has_key('reset'):
+        request.session['%s.list.sort_field' % name] = default_field
+        request.session['%s.list.sort_order' % name] = default_order
+    else:
+        request.session['%s.list.sort_field' % name] = field
+        request.session['%s.list.sort_order' % name] = order
     request.session.save()
 
     return field, order
@@ -83,7 +97,7 @@ def get_search(clazz, request):
         if searches_dic:
             searches_dic_search = searches_dic.get(name)
             if searches_dic_search:
-                return searches_dic_search.get(saved_search_id, [[], None])[0]
+                return searches_dic_search.get(saved_search_id, [[], [], None])[0]
     elif request.params.has_key('save'):
         return saved_search
     elif request.params.has_key('delete'):
@@ -115,10 +129,10 @@ def list_(clazz, request):
     handle_history(request)
     rvalue = {}
     search = get_search(clazz, request)
-    field, order = handle_sorting(clazz, request)
+    sorting = handle_sorting(clazz, request)
     listing = BaseList(clazz, request.db)
     listing.transform()
-    listing.sort(field, order)
+    listing.sort(sorting[0], sorting[1])
     listing.filter(search)
     # Only save the search if there are items
     if len(listing.items) > 0:
@@ -137,7 +151,7 @@ def list_(clazz, request):
                         found = True
                         break
                 if not found:
-                    searches_dic_search[str(uuid.uuid1())] = (search, query_name)
+                    searches_dic_search[str(uuid.uuid1())] = (search, sorting, query_name)
                 searches_dic[clazz.__tablename__] = searches_dic_search
                 user.settings.set('searches', searches_dic)
                 request.db.flush()
