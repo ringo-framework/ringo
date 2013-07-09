@@ -94,6 +94,40 @@ class BaseList(object):
         self.items = q.all()
         self.search_filter = None
 
+    def transform(self, form_id="create"):
+        """Will transform the values of the items in the list. This will
+        apply all configured expandation of values or other
+        transformations like custom renderings etc. If there is any
+        expandation configured for a column in the table then the form
+        configuration for the clazz is loaded to get the expanded value
+        (options for selection).
+
+        :form_id: The id of the form configuration which is used for
+        expandation.
+        """
+        # Check if there are any expandations configured
+        expand = []
+        table_config = self.clazz.get_table_config()
+        for col in table_config.get_columns():
+            if col.get('expand'):
+                expand.append(col.get('name'))
+        if len(expand) == 0:
+            # Nothing to expand here. So break here.
+            return
+        else:
+            # Load form configuration used for the mapping
+            form_config = self.clazz.get_form_config(form_id)
+
+        # Iterate over over all fields and replace to raw_value with the
+        # expanded value from the form configuration.
+        for item in self.items:
+            for field in expand:
+                raw_value = getattr(item, field)
+                field_config = form_config.get_field(field)
+                for option in field_config.options:
+                    if raw_value == option[1]:
+                        setattr(item, field, option[0])
+
     def sort(self, field, order):
         sorted_items = sorted(self.items, key=itemgetter(field))
         if order == "desc":
