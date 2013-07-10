@@ -17,9 +17,6 @@ class ${clazz}(BaseItem, Owned, Base):
     _modul_id = ${id}
     id = sa.Column(sa.Integer, primary_key=True)
 
-    # Configuration
-    _table_fields = [('id', 'ID')]
-
     def __unicode__(self):
         return str(self.id)
 
