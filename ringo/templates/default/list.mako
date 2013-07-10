@@ -6,7 +6,7 @@
   <div class="span6">
     <div class="pull-right context-menu btn-group">
       % if clazz.get_item_modul().has_action('create'):
-      <a href="${request.route_url(clazz.get_action_routename('create'))}" class="btn btn-primary">New</a>
+      <a href="${request.route_url(clazz.get_action_routename('create'))}" class="btn btn-primary">${_('New')}</a>
       % endif
     </div>
   </div>

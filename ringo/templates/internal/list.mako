@@ -1,9 +1,9 @@
 <div class="well well-small search-widget">
   <form name="search" class="form-inline" action="${request.current_route_url()}" method="POST">
     <input name="form" type="hidden" value="search">
-    <input name="search" type="text" class="input-large" value="${search}" placeholder="Search for (Regexpr) in ..."/>
+    <input name="search" type="text" class="input-large" value="${search}" placeholder="${_('Search for (Regexpr) in ...')}"/>
     <select name="field" class="input-small">
-      <option value="">All fields</option>
+      <option value="">${_('All columns')}</option>
       % for field in tableconfig.get_columns():
         % if field.get('name') == search_field:
           <option value="${field.get('name')}" selected>${field.get('label')}</option>
@@ -12,9 +12,9 @@
         % endif
       % endfor
     </select>
-    <button class="btn">Search</button>
+    <button class="btn">${_('Search')}</button>
     <div class="btn-group">
-      <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">Options <span class="caret"></span></button>
+      <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">${_('Options ')}<span class="caret"></span></button>
       <ul class="dropdown-menu">
           <li>
             <table class="table table-condensed">
@@ -31,12 +31,12 @@
             </table>
           </li>
         <li class="divider"></li>
-        <li><a tabindex="-1" href="#" data-toggle="modal" data-target="#savequerydialog">Save current search filter</a></li>
-        <li><a tabindex="-1" href="${request.current_route_url()}?form=search&reset">Reset current search filter</a></li>
+        <li><a tabindex="-1" href="#" data-toggle="modal" data-target="#savequerydialog">${_('Save current search filter')}</a></li>
+        <li><a tabindex="-1" href="${request.current_route_url()}?form=search&reset">${_('Reset current search filter')}</a></li>
       </ul>
     </div>
     % if len(listing.search_filter) > 0:
-      <span class="muted"><small>(${len(listing.search_filter)} filter applied)</small></span>
+      <span class="muted"><small>(${_('%s filter applied' % len(listing.search_filter))})</small></span> 
     % endif
   </form>
 </div>
@@ -95,7 +95,7 @@ table-bordered">
   % if len(items) == 0:
   <tr>
     <td colspan="${len(tableconfig.get_columns())}">
-    No items found
+    ${_('No items found')}
     </td>
   </tr>
   % endif
@@ -106,18 +106,17 @@ table-bordered">
   <form id="savequery" action="${request.current_route_url()}">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>Save current search filter</h3>
+    <h3>${_('Save current search filter')}</h3>
   </div>
   <div class="modal-body">
-    <label for="save">Queryname</label>
+    <label for="save">${_('Queryname')}</label>
     <input type="textfield" id="save" name="save"/>
     <input type="hidden" name="form" value="search"/>
-    <p><small>Please insert a name for your query. It it will be selectable under
-    this name in the options menu of the search after saving.</small></p>
+    <p><small>${_('Please insert a name for your query. It it will be selectable under this name in the options menu of the search after saving.')}</small></p>
   </div>
   <div class="modal-footer">
-    <a href="#" class="btn" data-dismiss="modal">Close</a>
-    <input class="btn btn-primary" type="button" onclick="formSubmit()" value="Save Query">
+    <a href="#" class="btn" data-dismiss="modal">${_('Close')}</a>
+    <input class="btn btn-primary" type="button" onclick="formSubmit()" value="${_('Save Query')}">
   </div>
   </form>
 </div>

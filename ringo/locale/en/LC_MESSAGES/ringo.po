@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-06-25 22:42+0200\n"
+"POT-Creation-Date: 2013-07-10 07:55+0200\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -17,56 +17,56 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: ringo/model/modul.py:90
+#: ringo/model/modul.py:94
 msgid "Modul"
 msgstr ""
 
-#: ringo/model/modul.py:91 ringo/templates/footer.mako:8
+#: ringo/model/modul.py:95
 msgid "Modules"
 msgstr ""
 
-#: ringo/model/modul.py:96
+#: ringo/model/modul.py:102
 msgid "Action"
 msgstr ""
 
-#: ringo/model/modul.py:97
+#: ringo/model/modul.py:103
 msgid "Actions"
 msgstr ""
 
-#: ringo/model/modul.py:104
+#: ringo/model/modul.py:113
 msgid "User"
 msgstr ""
 
-#: ringo/model/modul.py:105 ringo/templates/footer.mako:10
+#: ringo/model/modul.py:114
 msgid "Users"
 msgstr ""
 
-#: ringo/model/modul.py:110
+#: ringo/model/modul.py:120
 msgid "Usergroup"
 msgstr ""
 
-#: ringo/model/modul.py:111 ringo/templates/footer.mako:11
+#: ringo/model/modul.py:121
 msgid "Usergroups"
 msgstr ""
 
-#: ringo/model/modul.py:116
+#: ringo/model/modul.py:128
 msgid "Role"
 msgstr ""
 
-#: ringo/model/modul.py:117 ringo/templates/footer.mako:12
+#: ringo/model/modul.py:129
 msgid "Roles"
 msgstr ""
 
-#: ringo/model/modul.py:122 ringo/templates/header.mako:27
+#: ringo/model/modul.py:136 ringo/templates/header.mako:31
 msgid "Profile"
 msgstr ""
 
-#: ringo/model/modul.py:123
+#: ringo/model/modul.py:137
 msgid "Profiles"
 msgstr ""
 
 #: ringo/templates/about.mako:4 ringo/templates/about.mako:6
-#: ringo/templates/footer.mako:19
+#: ringo/templates/footer.mako:17
 msgid "About"
 msgstr ""
 
@@ -93,7 +93,7 @@ msgstr ""
 msgid "Authors"
 msgstr ""
 
-#: ringo/templates/contact.mako:4 ringo/templates/footer.mako:22
+#: ringo/templates/contact.mako:4 ringo/templates/footer.mako:20
 msgid "Contact"
 msgstr ""
 
@@ -127,7 +127,7 @@ msgstr ""
 msgid "Administration"
 msgstr ""
 
-#: ringo/templates/footer.mako:25
+#: ringo/templates/footer.mako:23
 msgid "Show version information"
 msgstr ""
 
@@ -135,11 +135,11 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: ringo/templates/header.mako:29
+#: ringo/templates/header.mako:33
 msgid "Logout"
 msgstr ""
 
-#: ringo/templates/header.mako:33 ringo/templates/index.mako:15
+#: ringo/templates/header.mako:37 ringo/templates/index.mako:15
 #: ringo/templates/auth/confirm_user.mako:17
 #: ringo/templates/auth/confirm_user.mako:22
 #: ringo/templates/auth/reset_password.mako:17
@@ -292,7 +292,7 @@ msgstr ""
 msgid "Password not resetted"
 msgstr ""
 
-#: ringo/templates/default/create.mako:4
+#: ringo/templates/default/create.mako:4 ringo/templates/default/list.mako:9
 msgid "New"
 msgstr ""
 
@@ -302,6 +302,57 @@ msgstr ""
 
 #: ringo/templates/default/update.mako:5
 msgid "Edit"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:4
+msgid "Search for (Regexpr) in ..."
+msgstr ""
+
+#: ringo/templates/internal/list.mako:6
+msgid "All columns"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:15
+msgid "Search"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:17
+msgid "Options "
+msgstr ""
+
+#: ringo/templates/internal/list.mako:34 ringo/templates/internal/list.mako:109
+msgid "Save current search filter"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:35
+msgid "Reset current search filter"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:39
+#, python-format
+msgid "%s filter applied"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:98
+msgid "No items found"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:112
+msgid "Queryname"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:115
+msgid ""
+"Please insert a name for your query. It it will be selectable under this "
+"name in the options menu of the search after saving."
+msgstr ""
+
+#: ringo/templates/internal/list.mako:118
+msgid "Close"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:119
+msgid "Save Query"
 msgstr ""
 
 #: ringo/views/auth.py:42
@@ -363,23 +414,23 @@ msgstr ""
 msgid "Password was not resetted. Maybe the request token was not valid?"
 msgstr ""
 
-#: ringo/views/base.py:66
+#: ringo/views/base.py:204
 msgid "Created new ${item_type} successfull."
 msgstr ""
 
-#: ringo/views/base.py:80
+#: ringo/views/base.py:220
 msgid "Error on validation the data for new ${item_type}"
 msgstr ""
 
-#: ringo/views/base.py:102
+#: ringo/views/base.py:242
 msgid "Edited ${item_type} \"${item}\" successfull."
 msgstr ""
 
-#: ringo/views/base.py:111
+#: ringo/views/base.py:253
 msgid "Error on validation the data for ${item_type} \"${item}\"."
 msgstr ""
 
-#: ringo/views/base.py:147
+#: ringo/views/base.py:289
 msgid "Deleted ${item_type} \"${item}\" successfull."
 msgstr ""
 
@@ -400,11 +451,4 @@ msgid ""
 "Authorisation error! Sorry, you are not allowed to access to requested "
 "ressource!"
 msgstr ""
-
-#~ msgid ""
-#~ "Below you find some options to get"
-#~ " in touch with the developers or "
-#~ "how to file new tickets in the "
-#~ "issue tracker."
-#~ msgstr ""
 
