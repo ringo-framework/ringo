@@ -1,3 +1,4 @@
+import json
 from pyramid.events import NewRequest
 from pyramid.events import subscriber
 from pyramid.i18n import get_localizer, TranslationStringFactory
@@ -20,6 +21,31 @@ def add_localizer(event):
 def locale_negotiator(request):
     accepted = request.accept_language
     return accepted.best_match(('en', 'fr', 'de'), 'en')
+
+def extract_i18n_tableconfig(fileobj, keywords, comment_tags, options):
+    """Extract messages from JSON table configuration files.
+    :param fileobj: the file-like object the messages should be extracted
+                    from
+    :param keywords: a list of keywords (i.e. function names) that should
+                     be recognized as translation functions
+    :param comment_tags: a list of translator tags to search for and
+                         include in the results
+    :param options: a dictionary of additional options (optional)
+    :return: an iterator over ``(lineno, funcname, message, comments)``
+             tuples
+    :rtype: ``iterator``
+    """
+    config = json.load(fileobj)
+    lineno = 0
+    for key, tc in config.iteritems():
+        lineno += 1
+        for col in tc.get('columns'):
+            lineno += 1
+            yield (lineno,
+                   "_",
+                   col.get('label'),
+                   ["Label for %s column in %s table config" 
+                    % (col.get('name'), key)])
 
 #@subscriber(NewRequest)
 #def setAcceptedLanguagesLocale(event):
