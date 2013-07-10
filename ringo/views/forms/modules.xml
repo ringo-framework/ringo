@@ -24,7 +24,7 @@
       <options>
         <option i18n:translate="" value="none">Hide modul</option>
         <option i18n:translate="" value="header-menu">Header menu</option>
-        <option i18n:translate="" value="admin-menu">Admininistraion menu</option>
+        <option i18n:translate="" value="admin-menu">Administration menu</option>
       </options>
     </entity>
   </source>

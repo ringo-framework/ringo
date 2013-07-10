@@ -10,7 +10,7 @@
     </entity>
     <entity i18n:attributes="label" id="e3" name="retype_password" label="Retype Password" type="password"/>
     <entity i18n:attributes="label" id="e4" name="roles" label="Roles"/>
-    <entity i18n:attributes="label" id="e5" name="groups" label="Groups"/>
+    <entity i18n:attributes="label" id="e5" name="groups" label="Usergroups"/>
     <entity i18n:attributes="label" id="e6" name="default_group" label="Default group"/>
     <entity i18n:attributes="label" id="e7" name="activated" label="Activated"/>
     <entity i18n:attributes="label" id="e8" name="activation_token" label="Activation Token">
