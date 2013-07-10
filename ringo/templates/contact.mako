@@ -7,7 +7,7 @@
 <p>${_('If you have any questions do not hestitate to contact me.')}</p>
 <address>
   <strong>Torsten Irländer</strong><br>
-  ${_('Mail')}: <span class="muted">torsten (at) irlaender (dot) de</span><br>
+  ${_('E-Mail')}: <span class="muted">torsten (at) irlaender (dot) de</span><br>
   ${_('IM')}: </abbr> <span class="muted">torsten.irlaender (at) googlemail (dot) com</span><br>
 </address>
 <h2>${_('Bugs')}</h2>
