@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.3.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-07-10 09:04+0200\n"
+"POT-Creation-Date: 2013-07-10 19:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,51 +31,52 @@ msgid ""
 "the action."
 msgstr ""
 
-#: ringo/model/modul.py:94
+#: ringo/model/modul.py:95
 msgid "Modul"
 msgstr ""
 
-#: ringo/model/modul.py:95
+#: ringo/model/modul.py:96
 msgid "Modules"
 msgstr ""
 
-#: ringo/model/modul.py:102
+#: ringo/model/modul.py:103
 msgid "Action"
 msgstr ""
 
-#: ringo/model/modul.py:103
+#: ringo/model/modul.py:104 ringo/views/forms/modules.xml:19
 msgid "Actions"
 msgstr ""
 
-#: ringo/model/modul.py:113
+#: ringo/model/modul.py:114
 msgid "User"
 msgstr ""
 
-#: ringo/model/modul.py:114
+#: ringo/model/modul.py:115
 msgid "Users"
 msgstr ""
 
-#: ringo/model/modul.py:120
+#: ringo/model/modul.py:121
 msgid "Usergroup"
 msgstr ""
 
-#: ringo/model/modul.py:121
+#: ringo/model/modul.py:122 ringo/views/forms/users.xml:13
 msgid "Usergroups"
 msgstr ""
 
-#: ringo/model/modul.py:128
+#: ringo/model/modul.py:129
 msgid "Role"
 msgstr ""
 
-#: ringo/model/modul.py:129
+#: ringo/model/modul.py:130 ringo/views/forms/usergroups.xml:7
+#: ringo/views/forms/users.xml:12
 msgid "Roles"
 msgstr ""
 
-#: ringo/model/modul.py:136 ringo/templates/header.mako:31
+#: ringo/model/modul.py:137 ringo/templates/header.mako:31
 msgid "Profile"
 msgstr ""
 
-#: ringo/model/modul.py:137
+#: ringo/model/modul.py:138
 msgid "Profiles"
 msgstr ""
 
@@ -119,8 +120,8 @@ msgstr ""
 msgid "If you have any questions do not hestitate to contact me."
 msgstr ""
 
-#: ringo/templates/contact.mako:10
-msgid "Mail"
+#: ringo/templates/contact.mako:10 ringo/views/forms/profiles.xml:9
+msgid "E-Mail"
 msgstr ""
 
 #: ringo/templates/contact.mako:11
@@ -157,7 +158,8 @@ msgstr ""
 #: ringo/templates/auth/confirm_user.mako:17
 #: ringo/templates/auth/confirm_user.mako:22 ringo/templates/auth/login.mako:4
 #: ringo/templates/auth/reset_password.mako:17
-#: ringo/templates/auth/reset_password.mako:22
+#: ringo/templates/auth/reset_password.mako:22 ringo/views/forms/auth.xml:5
+#: ringo/views/forms/auth.xml:12 ringo/views/forms/users.xml:5
 msgid "Login"
 msgstr ""
 
@@ -188,7 +190,8 @@ msgstr ""
 msgid "Loginname"
 msgstr ""
 
-#: ringo/templates/index.mako:12
+#: ringo/templates/index.mako:12 ringo/views/forms/auth.xml:8
+#: ringo/views/forms/users.xml:8
 msgid "Password"
 msgstr ""
 
@@ -464,5 +467,162 @@ msgstr ""
 msgid ""
 "Authorisation error! Sorry, you are not allowed to access to requested "
 "ressource!"
+msgstr ""
+
+#: ringo/views/forms/auth.xml:6
+msgid "Login is required"
+msgstr ""
+
+#: ringo/views/forms/auth.xml:9
+msgid "Password is required"
+msgstr ""
+
+#: ringo/views/forms/auth.xml:10
+msgid "Password must be at least 6 chars long"
+msgstr ""
+
+#: ringo/views/forms/auth.xml:13
+msgid "Loginname is required"
+msgstr ""
+
+#: ringo/views/forms/auth.xml:15
+msgid "Retype password"
+msgstr ""
+
+#: ringo/views/forms/auth.xml:16
+msgid "Password are not equal"
+msgstr ""
+
+#: ringo/views/forms/auth.xml:18
+msgid "Email"
+msgstr ""
+
+#: ringo/views/forms/auth.xml:19
+msgid "Email is required"
+msgstr ""
+
+#: ringo/views/forms/modules.xml:5 ringo/views/forms/roles.xml:5
+#: ringo/views/forms/usergroups.xml:5
+msgid "Name"
+msgstr ""
+
+#: ringo/views/forms/modules.xml:6
+msgid "Internal name for the modul."
+msgstr ""
+
+#: ringo/views/forms/modules.xml:8 ringo/views/forms/modules.xml:11
+msgid "Label"
+msgstr ""
+
+#: ringo/views/forms/modules.xml:9
+msgid "Label of the modul in singular form. Used in the UI"
+msgstr ""
+
+#: ringo/views/forms/modules.xml:12
+msgid "Label of the modul in plural form. Used in the UI"
+msgstr ""
+
+#: ringo/views/forms/modules.xml:14
+msgid "Description"
+msgstr ""
+
+#: ringo/views/forms/modules.xml:15
+msgid "String represention"
+msgstr ""
+
+#: ringo/views/forms/modules.xml:16
+msgid ""
+"Whenever an item of the modul is displayed as simple string it will be "
+"displayed in the following form."
+msgstr ""
+
+#: ringo/views/forms/modules.xml:20
+msgid "Select the actions which should be enabled for this modul"
+msgstr ""
+
+#: ringo/views/forms/modules.xml:22
+msgid "Display location"
+msgstr ""
+
+#: ringo/views/forms/modules.xml:23
+msgid "Select the menu where the modul should be displayed"
+msgstr ""
+
+#: ringo/views/forms/modules.xml:25
+msgid "Hide modul"
+msgstr ""
+
+#: ringo/views/forms/modules.xml:26
+msgid "Header menu"
+msgstr ""
+
+#: ringo/views/forms/modules.xml:27
+msgid "Administration menu"
+msgstr ""
+
+#: ringo/views/forms/profiles.xml:5
+msgid "Firstname"
+msgstr ""
+
+#: ringo/views/forms/profiles.xml:6
+msgid "Lastname"
+msgstr ""
+
+#: ringo/views/forms/profiles.xml:7
+msgid "Birthday"
+msgstr ""
+
+#: ringo/views/forms/profiles.xml:8
+msgid "Address"
+msgstr ""
+
+#: ringo/views/forms/profiles.xml:10
+msgid "Web"
+msgstr ""
+
+#: ringo/views/forms/profiles.xml:11
+msgid "Phone"
+msgstr ""
+
+#: ringo/views/forms/roles.xml:6
+msgid "Permissions"
+msgstr ""
+
+#: ringo/views/forms/roles.xml:7
+msgid "Administrational role"
+msgstr ""
+
+#: ringo/views/forms/usergroups.xml:6
+msgid "Members"
+msgstr ""
+
+#: ringo/views/forms/users.xml:6
+msgid "Login must have a length of greater or equal than 2"
+msgstr ""
+
+#: ringo/views/forms/users.xml:9
+msgid "Passwords must be equal"
+msgstr ""
+
+#: ringo/views/forms/users.xml:11
+msgid "Retype Password"
+msgstr ""
+
+#: ringo/views/forms/users.xml:14
+msgid "Default group"
+msgstr ""
+
+#: ringo/views/forms/users.xml:15
+msgid "Activated"
+msgstr ""
+
+#: ringo/views/forms/users.xml:16
+msgid "Activation Token"
+msgstr ""
+
+#: ringo/views/forms/users.xml:17
+msgid ""
+"The activation token can be used to (re)activate a deactivated or new "
+"registered user. Please call /auth/activate_user/$token to active the user."
 msgstr ""
 
