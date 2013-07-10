@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-07-10 08:05+0200\n"
-"PO-Revision-Date: 2013-07-10 08:06+0200\n"
+"POT-Creation-Date: 2013-07-10 09:04+0200\n"
+"PO-Revision-Date: 2013-07-10 09:08+0200\n"
 "Last-Translator: Torsten Irlaender <torsten@irlaender.de>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -16,6 +16,20 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
+
+#: ringo/lib/renderer.py:225
+msgid "Confirm ${Action}"
+msgstr "Bestätigen ${Action}"
+
+#: ringo/lib/renderer.py:239
+msgid "Do you really want to ${action} the following ${item} items?"
+msgstr "Wollen Sie wirklich die folgenden ${item} Einträge ${action}?"
+
+#: ringo/lib/renderer.py:253
+msgid ""
+"Please press \"${Action}\" to ${action} the item. Press \"Cancel\" to "
+"cancel the action."
+msgstr "Bitte klicken Sie auf \"${Action}\", um den Eintrag zu ${action}. Klicken sie auf \"Abbrechen\", um den Vorgang zuzubrechen."
 
 #: ringo/model/modul.py:94
 msgid "Modul"
@@ -147,7 +161,7 @@ msgstr "Abmelden"
 
 #: ringo/templates/header.mako:37 ringo/templates/index.mako:15
 #: ringo/templates/auth/confirm_user.mako:17
-#: ringo/templates/auth/confirm_user.mako:22
+#: ringo/templates/auth/confirm_user.mako:22 ringo/templates/auth/login.mako:4
 #: ringo/templates/auth/reset_password.mako:17
 #: ringo/templates/auth/reset_password.mako:22
 msgid "Login"
@@ -304,7 +318,7 @@ msgid "Try again"
 msgstr "Versuche es erneut"
 
 #: ringo/templates/auth/forgot_password.mako:4
-#: ringo/templates/auth/login.mako:11
+#: ringo/templates/auth/login.mako:10
 msgid "Reset Password"
 msgstr "Passwort zurücksetzen"
 
@@ -315,7 +329,7 @@ msgstr ""
 "\"weiteren Informationen zum zurücksetzen des Passworts wird Ihnen "
 "zugesendet"
 
-#: ringo/templates/auth/login.mako:10 ringo/templates/auth/register_user.mako:4
+#: ringo/templates/auth/login.mako:9 ringo/templates/auth/register_user.mako:4
 msgid "Register Account"
 msgstr "Zugang registrieren"
 
@@ -349,6 +363,10 @@ msgstr "Lesen"
 #: ringo/templates/default/update.mako:5
 msgid "Edit"
 msgstr "Bearbeiten"
+
+#: ringo/templates/internal/confirm.mako:10
+msgid "Cancel"
+msgstr "Abbrechen"
 
 #: ringo/templates/internal/list.mako:4
 msgid "Search for (Regexpr) in ..."
