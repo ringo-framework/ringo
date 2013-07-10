@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-07-10 22:28+0200\n"
-"PO-Revision-Date: 2013-07-10 22:28+0200\n"
+"POT-Creation-Date: 2013-07-10 23:11+0200\n"
+"PO-Revision-Date: 2013-07-10 23:17+0200\n"
 "Last-Translator: Torsten Irlaender <torsten@irlaender.de>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -45,7 +45,8 @@ msgstr "Module"
 msgid "Action"
 msgstr "Aktion"
 
-#: ringo/model/modul.py:104 ringo/views/forms/modules.xml:18
+#. Label for actions field in form config
+#: ringo/model/modul.py:104 ringo/views/forms/modules.xml:6
 msgid "Actions"
 msgstr "Aktionen"
 
@@ -61,7 +62,8 @@ msgstr "Benutzer"
 msgid "Usergroup"
 msgstr "Benutzergruppe"
 
-#: ringo/model/modul.py:122 ringo/views/forms/users.xml:13
+#. Label for groups field in form config
+#: ringo/model/modul.py:122 ringo/views/forms/users.xml:5
 msgid "Usergroups"
 msgstr "Benutzergruppen"
 
@@ -69,10 +71,11 @@ msgstr "Benutzergruppen"
 msgid "Role"
 msgstr "Rolle"
 
+#. Label for roles field in form config
 #. Label for permissions column in overview table config
 #. Label for roles column in overview table config
-#: ringo/model/modul.py:130 ringo/views/forms/usergroups.xml:7
-#: ringo/views/forms/users.xml:12 ringo/views/tables/roles.json:3
+#: ringo/model/modul.py:130 ringo/views/forms/usergroups.xml:3
+#: ringo/views/forms/users.xml:4 ringo/views/tables/roles.json:3
 #: ringo/views/tables/usergroups.json:3 ringo/views/tables/users.json:3
 msgid "Roles"
 msgstr "Rollen"
@@ -129,7 +132,8 @@ msgstr "Author"
 msgid "If you have any questions do not hestitate to contact me."
 msgstr "Wenn Sie fragen haben, dann zögen Sie nicht mich zu kontaktieren."
 
-#: ringo/templates/contact.mako:10 ringo/views/forms/profiles.xml:9
+#. Label for email field in form config
+#: ringo/templates/contact.mako:10 ringo/views/forms/profiles.xml:5
 msgid "E-Mail"
 msgstr "E-Mail"
 
@@ -165,13 +169,14 @@ msgstr "Home"
 msgid "Logout"
 msgstr "Abmelden"
 
+#. Label for login field in form config
 #. Label for login column in overview table config
 #: ringo/templates/header.mako:37 ringo/templates/index.mako:15
 #: ringo/templates/auth/confirm_user.mako:17
 #: ringo/templates/auth/confirm_user.mako:22 ringo/templates/auth/login.mako:4
 #: ringo/templates/auth/reset_password.mako:17
-#: ringo/templates/auth/reset_password.mako:22 ringo/views/forms/auth.xml:5
-#: ringo/views/forms/auth.xml:12 ringo/views/forms/users.xml:5
+#: ringo/templates/auth/reset_password.mako:22 ringo/views/forms/auth.xml:1
+#: ringo/views/forms/auth.xml:3 ringo/views/forms/users.xml:1
 #: ringo/views/tables/users.json:2
 msgid "Login"
 msgstr "Anmelden"
@@ -211,8 +216,10 @@ msgstr ""
 msgid "Loginname"
 msgstr "Anmeldekennung"
 
-#: ringo/templates/index.mako:12 ringo/views/forms/auth.xml:8
-#: ringo/views/forms/users.xml:8
+#. Label for pass field in form config
+#. Label for password field in form config
+#: ringo/templates/index.mako:12 ringo/views/forms/auth.xml:2
+#: ringo/views/forms/users.xml:2
 msgid "Password"
 msgstr "Passwort"
 
@@ -543,73 +550,86 @@ msgstr ""
 "Authorisierung fehlgeschlagen. Es tut mir leid, aber Sie haben nicht\"\n"
 "\" die erforderlichen Rechte, um auf die Ressource zuzugreifen."
 
+#. Label for pass2 field in form config
+#: ringo/views/forms/auth.xml:4
+msgid "Retype password"
+msgstr "Passwort wiederholen"
+
+#. Label for email field in form config
+#. Label for email column in overview table config
+#: ringo/views/forms/auth.xml:5 ringo/views/tables/profiles.json:4
+msgid "Email"
+msgstr "E-Mail"
+
 #: ringo/views/forms/auth.xml:6
 msgid "Login is required"
 msgstr "Anmeldekennung ist ein Pflichtfeld"
 
-#: ringo/views/forms/auth.xml:9
+#: ringo/views/forms/auth.xml:7
 msgid "Password is required"
 msgstr "Passwort ist ein Pflichtfeld"
 
-#: ringo/views/forms/auth.xml:10
+#: ringo/views/forms/auth.xml:8
 msgid "Password must be at least 6 chars long"
 msgstr "Passwort muss mindestens 6 Zeichen lang sein"
 
-#: ringo/views/forms/auth.xml:13
+#: ringo/views/forms/auth.xml:9
 msgid "Loginname is required"
 msgstr "Anmeldekennung ist ein Pflichtfeld"
 
-#: ringo/views/forms/auth.xml:15
-msgid "Retype password"
-msgstr "Passwort wiederholen"
-
-#: ringo/views/forms/auth.xml:16
+#: ringo/views/forms/auth.xml:10
 msgid "Password are not equal"
 msgstr "Passwörter sind nicht identisch"
 
-#. Label for email column in overview table config
-#: ringo/views/forms/auth.xml:18 ringo/views/tables/profiles.json:4
-msgid "Email"
-msgstr "E-Mail"
-
-#: ringo/views/forms/auth.xml:19
+#: ringo/views/forms/auth.xml:11
 msgid "Email is required"
 msgstr "Email ist ein Pflichtfeld"
 
+#. Label for name field in form config
 #. Label for name column in overview table config
-#: ringo/views/forms/modules.xml:5 ringo/views/forms/roles.xml:5
-#: ringo/views/forms/usergroups.xml:5 ringo/views/tables/modules.json:3
+#: ringo/views/forms/modules.xml:1 ringo/views/forms/roles.xml:1
+#: ringo/views/forms/usergroups.xml:1 ringo/views/tables/modules.json:3
 #: ringo/views/tables/roles.json:2 ringo/views/tables/usergroups.json:2
 msgid "Name"
 msgstr "Name"
 
-#: ringo/views/forms/modules.xml:6
-msgid "Internal name for the modul."
-msgstr "Interner Name für das Modul"
-
+#. Label for label field in form config
+#. Label for label_plural field in form config
 #. Label for label column in overview table config
-#: ringo/views/forms/modules.xml:8 ringo/views/forms/modules.xml:11
+#: ringo/views/forms/modules.xml:2 ringo/views/forms/modules.xml:3
 #: ringo/views/tables/modules.json:2
 msgid "Label"
 msgstr "Bezeichnung"
+
+#. Label for description field in form config
+#: ringo/views/forms/modules.xml:4
+msgid "Description"
+msgstr "Beschreibung"
+
+#. Label for str_repr field in form config
+#: ringo/views/forms/modules.xml:5
+msgid "String represention"
+msgstr "Textdarstellung"
+
+#. Label for display field in form config
+#. Label for display column in overview table config
+#: ringo/views/forms/modules.xml:7 ringo/views/tables/modules.json:4
+msgid "Display location"
+msgstr "Darstellungsort"
+
+#: ringo/views/forms/modules.xml:8
+msgid "Internal name for the modul."
+msgstr "Interner Name für das Modul"
 
 #: ringo/views/forms/modules.xml:9
 msgid "Label of the modul in singular form. Used in the UI"
 msgstr "Bezeichnung des Moduls in Singularform"
 
-#: ringo/views/forms/modules.xml:12
+#: ringo/views/forms/modules.xml:10
 msgid "Label of the modul in plural form. Used in the UI"
 msgstr "Bezeichnung des Moduls in Pluralform"
 
-#: ringo/views/forms/modules.xml:14
-msgid "Description"
-msgstr "Beschreibung"
-
-#: ringo/views/forms/modules.xml:15
-msgid "String represention"
-msgstr "Textdarstellung"
-
-#: ringo/views/forms/modules.xml:16
+#: ringo/views/forms/modules.xml:11
 msgid ""
 "Whenever an item of the modul is displayed as simple string it will be "
 "displayed in the following form."
@@ -617,98 +637,98 @@ msgstr ""
 "Wann immer ein Eintrag dieses Moduls in einfacher Textform dargestellt "
 "werden soll, wird dies in der folgenden Form geschehen."
 
-#: ringo/views/forms/modules.xml:19
+#: ringo/views/forms/modules.xml:12
 msgid "Select the actions which should be enabled for this modul"
 msgstr "Wählen Sie die Aktionen, die für dieses Modul verfügbar sein sollen"
 
-#. Label for display column in overview table config
-#: ringo/views/forms/modules.xml:21 ringo/views/tables/modules.json:4
-msgid "Display location"
-msgstr "Darstellungsort"
-
-#: ringo/views/forms/modules.xml:22
+#: ringo/views/forms/modules.xml:13
 msgid "Select the menu where the modul should be displayed"
 msgstr "Wählen Sie in welchem Menü das Modul dargestellt werden soll"
 
-#: ringo/views/forms/modules.xml:24
+#: ringo/views/forms/modules.xml:14
 msgid "Hide modul"
-msgstr "Verstecke Modul"
+msgstr "Nicht anzeigen"
 
-#: ringo/views/forms/modules.xml:25
+#: ringo/views/forms/modules.xml:15
 msgid "Header menu"
 msgstr "Kopf-Menü"
 
-#: ringo/views/forms/modules.xml:26
+#: ringo/views/forms/modules.xml:16
 msgid "Administration menu"
-msgstr "Administrations-Menü"
+msgstr "Administration-Menü"
 
+#. Label for first_name field in form config
 #. Label for first_name column in overview table config
-#: ringo/views/forms/profiles.xml:5 ringo/views/tables/profiles.json:2
+#: ringo/views/forms/profiles.xml:1 ringo/views/tables/profiles.json:2
 msgid "Firstname"
 msgstr "Vorname"
 
+#. Label for last_name field in form config
 #. Label for last_name column in overview table config
-#: ringo/views/forms/profiles.xml:6 ringo/views/tables/profiles.json:3
+#: ringo/views/forms/profiles.xml:2 ringo/views/tables/profiles.json:3
 msgid "Lastname"
 msgstr "Nachname"
 
+#. Label for birthday field in form config
 #. Label for birthday column in overview table config
-#: ringo/views/forms/profiles.xml:7 ringo/views/tables/profiles.json:5
+#: ringo/views/forms/profiles.xml:3 ringo/views/tables/profiles.json:5
 msgid "Birthday"
 msgstr "Geburtstag"
 
-#: ringo/views/forms/profiles.xml:8
+#. Label for address field in form config
+#: ringo/views/forms/profiles.xml:4
 msgid "Address"
 msgstr "Adresse"
 
-#: ringo/views/forms/profiles.xml:10
+#. Label for url field in form config
+#: ringo/views/forms/profiles.xml:6
 msgid "Web"
 msgstr "Web"
 
-#: ringo/views/forms/profiles.xml:11
+#. Label for phone field in form config
+#: ringo/views/forms/profiles.xml:7
 msgid "Phone"
 msgstr "Telefon"
 
-#: ringo/views/forms/roles.xml:6
+#. Label for permissions field in form config
+#: ringo/views/forms/roles.xml:2
 msgid "Permissions"
 msgstr "Befugnisse"
 
+#. Label for admin field in form config
 #. Label for admin column in overview table config
-#: ringo/views/forms/roles.xml:7 ringo/views/tables/roles.json:4
+#: ringo/views/forms/roles.xml:3 ringo/views/tables/roles.json:4
 msgid "Administrational role"
 msgstr "Adminrolle"
 
+#. Label for members field in form config
 #. Label for members column in overview table config
-#: ringo/views/forms/usergroups.xml:6 ringo/views/tables/usergroups.json:4
+#: ringo/views/forms/usergroups.xml:2 ringo/views/tables/usergroups.json:4
 msgid "Members"
 msgstr "Mitglieder"
 
-#: ringo/views/forms/users.xml:6
-msgid "Login must have a length of greater or equal than 2"
-msgstr "Die Anmeldekennung muss größer oder gleich 2 Zeichen lang sein."
-
-#: ringo/views/forms/users.xml:9
-msgid "Passwords must be equal"
-msgstr "Passwörter müssen gleich sein"
-
-#: ringo/views/forms/users.xml:11
+#. Label for retype_password field in form config
+#: ringo/views/forms/users.xml:3
 msgid "Retype Password"
 msgstr "Passwort wiederholen"
 
-#: ringo/views/forms/users.xml:14
+#. Label for default_group field in form config
+#: ringo/views/forms/users.xml:6
 msgid "Default group"
 msgstr "Vorgabe Gruppe"
 
+#. Label for activated field in form config
 #. Label for activated column in overview table config
-#: ringo/views/forms/users.xml:15 ringo/views/tables/users.json:5
+#: ringo/views/forms/users.xml:7 ringo/views/tables/users.json:5
 msgid "Activated"
 msgstr "Aktiviert"
 
-#: ringo/views/forms/users.xml:16
+#. Label for activation_token field in form config
+#: ringo/views/forms/users.xml:8
 msgid "Activation Token"
 msgstr "Aktivierungs-Token"
 
-#: ringo/views/forms/users.xml:17
+#: ringo/views/forms/users.xml:9
 msgid ""
 "The activation token can be used to (re)activate a deactivated or new "
 "registered user. Please call /auth/activate_user/$token to active the "
@@ -718,7 +738,16 @@ msgstr ""
 "neuen Nutzer zu (re)aktivieren. Bitte rufen Sie hierfür "
 "/auth/activate_user/$token auf."
 
+#: ringo/views/forms/users.xml:10
+msgid "Login must have a length of greater or equal than 2"
+msgstr "Die Anmeldekennung muss größer oder gleich 2 Zeichen lang sein."
+
+#: ringo/views/forms/users.xml:11
+msgid "Passwords must be equal"
+msgstr "Passwörter müssen gleich sein"
+
 #. Label for groups column in overview table config
 #: ringo/views/tables/users.json:4
 msgid "Groups"
 msgstr "Gruppen"
+
