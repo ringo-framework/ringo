@@ -195,7 +195,7 @@ def create_(clazz, request, callback=None):
     rvalue = {}
     factory = clazz.get_item_factory()
     item = factory.create(request.user)
-    form = Form(item.get_form_config('create'), item, request.db)
+    form = Form(item.get_form_config('create'), item, request.db, translate=_)
     if request.POST:
         item_label = clazz.get_item_modul().get_label()
         mapping = {'item_type': item_label}
@@ -233,7 +233,7 @@ def update_(clazz, request):
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
     item = factory.load(id, request.db)
-    form = Form(item.get_form_config('update'), item)
+    form = Form(item.get_form_config('update'), item, translate=_)
     if request.POST:
         item_label = clazz.get_item_modul().get_label()
         mapping = {'item_type': item_label, 'item': item}
@@ -262,11 +262,12 @@ def update_(clazz, request):
 
 def read_(clazz, request):
     handle_history(request)
+    _ = request.translate
     rvalue = {}
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
     item = factory.load(id, request.db)
-    form = Form(item.get_form_config('read'), item)
+    form = Form(item.get_form_config('read'), item, translate=_)
     rvalue['clazz'] = clazz
     rvalue['item'] = item
     rvalue['form'] = form.render()
