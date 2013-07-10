@@ -67,7 +67,7 @@ def register_user(request):
     handle_history(request)
     _ = request.translate
     settings = request.registry.settings
-    config = Config(load(get_path_to_form_config('auth.xml')))
+    config = Config(load(get_path_to_form_config('auth.xml', 'ringo')))
     form_config = config.get_form('register_user')
     form = Form(form_config)
     # Do extra validation which is not handled by formbar.
@@ -146,7 +146,7 @@ def forgot_password(request):
     handle_history(request)
     _ = request.translate
     settings = request.registry.settings
-    config = Config(load(get_path_to_form_config('auth.xml')))
+    config = Config(load(get_path_to_form_config('auth.xml', 'ringo')))
     form_config = config.get_form('forgot_password')
     form = Form(form_config)
     if request.POST:
