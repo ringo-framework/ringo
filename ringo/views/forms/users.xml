@@ -14,9 +14,7 @@
     <entity i18n:attributes="label" id="e6" name="default_group" label="Default group"/>
     <entity i18n:attributes="label" id="e7" name="activated" label="Activated"/>
     <entity i18n:attributes="label" id="e8" name="activation_token" label="Activation Token">
-      <help i18n:translate="">The activation token can be used to (re)activate a deactivated or
-      new registered user. Please call /auth/activate_user/$token to active
-      the user.</help>
+      <help i18n:translate="">The activation token can be used to (re)activate a deactivated or new registered user. Please call /auth/activate_user/$token to active the user.</help>
     </entity>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">

@@ -13,8 +13,7 @@
     </entity>
     <entity i18n:attributes="label" id="e4" name="description" label="Description" type="textarea"/>
     <entity i18n:attributes="label" id="e5" name="str_repr" label="String represention">
-      <help i18n:translate="">Whenever an item of the modul is displayed as simple string it
-      will be displayed in the following form.</help>
+      <help i18n:translate="">Whenever an item of the modul is displayed as simple string it will be displayed in the following form.</help>
     </entity>
      <entity i18n:attributes="label" id="e6" name="actions" label="Actions">
       <help i18n:translate="">Select the actions which should be enabled for this modul</help>
