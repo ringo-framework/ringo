@@ -36,15 +36,19 @@ def extract_i18n_tableconfig(fileobj, keywords, comment_tags, options):
     :rtype: ``iterator``
     """
     config = json.load(fileobj)
+    # FIXME: Fix linenumbering. No real linenummer, just iterate somehow
     lineno = 0
     for key, tc in config.iteritems():
         lineno += 1
         for col in tc.get('columns'):
             lineno += 1
+            # "_" is one of the default keywords which marks a string
+            # for extraction. As the json file does not have any
+            # keywords. Set a dummy funcname here.
             yield (lineno,
                    "_",
                    col.get('label'),
-                   ["Label for %s column in %s table config" 
+                   ["Label for %s column in %s table config"
                     % (col.get('name'), key)])
 
 #@subscriber(NewRequest)
