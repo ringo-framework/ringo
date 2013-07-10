@@ -3,6 +3,7 @@ Development
 i18n Support:
 - Added custom extractor for translation string in XML form configuration. No
   need to mark strings in the configurations as translatable.
+- Removed lingua requirement
 
 0.3.1
 -----

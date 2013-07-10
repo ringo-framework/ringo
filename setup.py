@@ -19,7 +19,6 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'babel',
-    'lingua',
     'Sphinx',
     'formbar>=0.2.1',
     'nose',
