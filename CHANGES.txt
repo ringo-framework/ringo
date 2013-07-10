@@ -9,6 +9,7 @@ Development
 - #27: Save current sorting in the session
 - #28: Save sorting together with the search query in the saved searches
 - #23: I18n Support in renderes
+- #19: Login should be in a Popup window
 
 0.3.0
 -----
