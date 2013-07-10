@@ -5,10 +5,12 @@ Development
   file which is used to configure various aspects to the rendering of the
   overview tables. This new configuration directive will replace to old
   _table_fields configuration attribute.
-- #26: Expand values of relations in the overview from form configuration
-- #27: Save current sorting in the session
-- #28: Save sorting together with the search query in the saved searches
+- #26: Expand values of relations in the overview from form configuration.
+- #27: Save current sorting in the session.
+- #28: Save sorting together with the search query in the saved searches.
 - #23: I18n Support in renderes. Added more translations.
+- Added lingua as requirement. Needed for message extraction for i18n Support
+- Marked form configurations as translateable.
 - #19: Login should be in a Popup window
 
 0.3.0
