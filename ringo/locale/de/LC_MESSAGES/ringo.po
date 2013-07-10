@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-07-10 19:31+0200\n"
-"PO-Revision-Date: 2013-07-10 19:32+0200\n"
+"POT-Creation-Date: 2013-07-10 21:12+0200\n"
+"PO-Revision-Date: 2013-07-10 21:10+0200\n"
 "Last-Translator: Torsten Irlaender <torsten@irlaender.de>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -45,7 +45,7 @@ msgstr "Module"
 msgid "Action"
 msgstr "Aktion"
 
-#: ringo/model/modul.py:104 ringo/views/forms/modules.xml:19
+#: ringo/model/modul.py:104 ringo/views/forms/modules.xml:18
 msgid "Actions"
 msgstr "Aktionen"
 
@@ -389,27 +389,27 @@ msgstr "Suche"
 msgid "Options "
 msgstr "Optionen "
 
-#: ringo/templates/internal/list.mako:34 ringo/templates/internal/list.mako:109
+#: ringo/templates/internal/list.mako:35 ringo/templates/internal/list.mako:112
 msgid "Save current search filter"
 msgstr "Speichere aktuellen Suchfilter"
 
-#: ringo/templates/internal/list.mako:35
+#: ringo/templates/internal/list.mako:36
 msgid "Reset current search filter"
 msgstr "Aktuellen Suchfilter zurücksetzen"
 
-#: ringo/templates/internal/list.mako:39
+#: ringo/templates/internal/list.mako:40
 msgid "${num_filter} filter applied"
 msgstr "${num_filters} Filter angewendet"
 
-#: ringo/templates/internal/list.mako:98
+#: ringo/templates/internal/list.mako:101
 msgid "No items found"
 msgstr "Keine Einträge gefunden"
 
-#: ringo/templates/internal/list.mako:112
+#: ringo/templates/internal/list.mako:115
 msgid "Queryname"
 msgstr "Abfragename"
 
-#: ringo/templates/internal/list.mako:115
+#: ringo/templates/internal/list.mako:118
 msgid ""
 "Please insert a name for your query. It it will be selectable under this "
 "name in the options menu of the search after saving."
@@ -417,11 +417,11 @@ msgstr ""
 "Bitte geben Sie einen Namen für ihre Abfrage an. Die Abfrag wird nach dem"
 " Speichern unter diesem Namen im Optionsmenü auswählbar sein."
 
-#: ringo/templates/internal/list.mako:118
+#: ringo/templates/internal/list.mako:121
 msgid "Close"
 msgstr "Schließen"
 
-#: ringo/templates/internal/list.mako:119
+#: ringo/templates/internal/list.mako:122
 msgid "Save Query"
 msgstr "Abfrage speichern"
 
@@ -512,7 +512,7 @@ msgstr "${item_type} \"${item}\" wurde erfolgreich bearbeitet."
 msgid "Error on validation the data for ${item_type} \"${item}\"."
 msgstr "Fehler bei der Überprüfung der Daten für ${item_type} \"${item}\""
 
-#: ringo/views/base.py:289
+#: ringo/views/base.py:290
 msgid "Deleted ${item_type} \"${item}\" successfull."
 msgstr "${item_type} wurde erfolgreich gelöscht."
 
@@ -577,7 +577,7 @@ msgstr "Name"
 
 #: ringo/views/forms/modules.xml:6
 msgid "Internal name for the modul."
-msgstr "Interner name für das Modul"
+msgstr "Interner Name für das Modul"
 
 #: ringo/views/forms/modules.xml:8 ringo/views/forms/modules.xml:11
 msgid "Label"
@@ -607,27 +607,27 @@ msgstr ""
 "Wann immer ein Eintrag dieses Moduls in einfacher Textform dargestellt "
 "werden soll, wird dies in der folgenden Form geschehen."
 
-#: ringo/views/forms/modules.xml:20
+#: ringo/views/forms/modules.xml:19
 msgid "Select the actions which should be enabled for this modul"
 msgstr "Wählen Sie die Aktionen, die für dieses Modul verfügbar sein sollen"
 
-#: ringo/views/forms/modules.xml:22
+#: ringo/views/forms/modules.xml:21
 msgid "Display location"
 msgstr "Darstellungsort"
 
-#: ringo/views/forms/modules.xml:23
+#: ringo/views/forms/modules.xml:22
 msgid "Select the menu where the modul should be displayed"
 msgstr "Wählen Sie in welchem Menü das Modul dargestellt werden soll"
 
-#: ringo/views/forms/modules.xml:25
+#: ringo/views/forms/modules.xml:24
 msgid "Hide modul"
 msgstr "Verstecke Modul"
 
-#: ringo/views/forms/modules.xml:26
+#: ringo/views/forms/modules.xml:25
 msgid "Header menu"
 msgstr "Kopf-Menü"
 
-#: ringo/views/forms/modules.xml:27
+#: ringo/views/forms/modules.xml:26
 msgid "Administration menu"
 msgstr "Administrations-Menü"
 
@@ -700,3 +700,4 @@ msgstr ""
 "Das Aktivierungs-Token kann genutzt werden um einen deaktivierten oder "
 "neuen Nutzer zu (re)aktivieren. Bitte rufen Sie hierfür "
 "/auth/activate_user/$token auf."
+

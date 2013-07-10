@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.3.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-07-10 19:31+0200\n"
+"POT-Creation-Date: 2013-07-10 21:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,7 +43,7 @@ msgstr ""
 msgid "Action"
 msgstr ""
 
-#: ringo/model/modul.py:104 ringo/views/forms/modules.xml:19
+#: ringo/model/modul.py:104 ringo/views/forms/modules.xml:18
 msgid "Actions"
 msgstr ""
 
@@ -338,37 +338,37 @@ msgstr ""
 msgid "Options "
 msgstr ""
 
-#: ringo/templates/internal/list.mako:34 ringo/templates/internal/list.mako:109
+#: ringo/templates/internal/list.mako:35 ringo/templates/internal/list.mako:112
 msgid "Save current search filter"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:35
+#: ringo/templates/internal/list.mako:36
 msgid "Reset current search filter"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:39
+#: ringo/templates/internal/list.mako:40
 msgid "${num_filter} filter applied"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:98
+#: ringo/templates/internal/list.mako:101
 msgid "No items found"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:112
+#: ringo/templates/internal/list.mako:115
 msgid "Queryname"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:115
+#: ringo/templates/internal/list.mako:118
 msgid ""
 "Please insert a name for your query. It it will be selectable under this name"
 " in the options menu of the search after saving."
 msgstr ""
 
-#: ringo/templates/internal/list.mako:118
+#: ringo/templates/internal/list.mako:121
 msgid "Close"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:119
+#: ringo/templates/internal/list.mako:122
 msgid "Save Query"
 msgstr ""
 
@@ -447,7 +447,7 @@ msgstr ""
 msgid "Error on validation the data for ${item_type} \"${item}\"."
 msgstr ""
 
-#: ringo/views/base.py:289
+#: ringo/views/base.py:290
 msgid "Deleted ${item_type} \"${item}\" successfull."
 msgstr ""
 
@@ -536,27 +536,27 @@ msgid ""
 "displayed in the following form."
 msgstr ""
 
-#: ringo/views/forms/modules.xml:20
+#: ringo/views/forms/modules.xml:19
 msgid "Select the actions which should be enabled for this modul"
 msgstr ""
 
-#: ringo/views/forms/modules.xml:22
+#: ringo/views/forms/modules.xml:21
 msgid "Display location"
 msgstr ""
 
-#: ringo/views/forms/modules.xml:23
+#: ringo/views/forms/modules.xml:22
 msgid "Select the menu where the modul should be displayed"
 msgstr ""
 
-#: ringo/views/forms/modules.xml:25
+#: ringo/views/forms/modules.xml:24
 msgid "Hide modul"
 msgstr ""
 
-#: ringo/views/forms/modules.xml:26
+#: ringo/views/forms/modules.xml:25
 msgid "Header menu"
 msgstr ""
 
-#: ringo/views/forms/modules.xml:27
+#: ringo/views/forms/modules.xml:26
 msgid "Administration menu"
 msgstr ""
 
