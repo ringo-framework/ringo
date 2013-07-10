@@ -217,21 +217,28 @@ class ConfirmDialogRenderer(DialogRenderer):
         self.template = template_lookup.get_template("internal/confirm.mako")
 
     def render(self):
+        _ = self._request.translate
+        mapping = {'Action': self._action.capitalize()}
         values = {}
         values['icon'] = self._request.static_url(
             'ringo:static/images/icons/32x32/dialog-warning.png')
-        values['header'] = "Confirm %s" % self._action
+        values['header'] = _("Confirm ${Action}", mapping=mapping)
         values['body'] = self._render_body()
         values['action'] = self._action.capitalize()
         values['ok_url'] = self._request.current_route_url()
+        values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
         return self.template.render(**values)
 
     def _render_body(self):
         out = []
+        _ = self._request.translate
         item_label = self._item.get_item_modul().get_label()
-        out.append("Do you really want to %s"
-                   " the following %s items?" % (self._action, item_label))
+        mapping = {'action': self._action, 'item': item_label,
+                   'Action': self._action.capitalize()}
+        out.append(_("Do you really want to ${action}"
+                     " the following ${item} items?",
+                     mapping=mapping))
         out.append("<br>")
         out.append("<ol>")
         if isinstance(self._item, list):
@@ -243,9 +250,9 @@ class ConfirmDialogRenderer(DialogRenderer):
             out.append(unicode(item))
             out.append("</li>")
         out.append("</ol>")
-        out.append('Please press "%s" to %s the item.'
-                   ' Press "Cancel" to cancel the action.'
-                   % (self._action.capitalize(), self._action))
+        out.append(_('Please press "${Action}" to ${action} the item.'
+                     ' Press "Cancel" to cancel the action.',
+                     mapping = mapping))
 
         return "".join(out)
 
