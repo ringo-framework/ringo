@@ -21,7 +21,7 @@ requires = [
     'babel',
     'lingua',
     'Sphinx',
-    'formbar',
+    'formbar>=0.2.1',
     'nose',
     'coverage',
     'webtest',
