@@ -21,7 +21,8 @@
               % for key, value in saved_searches.iteritems():
               <tr>
                 <td>
-                  <a tabindex="-1" href="${request.current_route_url()}?form=search&saved=${key}">${value[2]}</a>
+                  <a tabindex="-1"
+                  href="${request.current_route_url()}?form=search&saved=${key}">$_({value[2])}</a>
                 </td>
                 <td width="20">
                   <a class="pull-right" tabindex="-1" href="${request.current_route_url()}?form=search&delete=${key}"><i class="icon-remove"></i></a>
@@ -52,9 +53,11 @@ table-bordered">
   % for field in tableconfig.get_columns():
     <th width="${field.get('width')}">
       % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
-        <a href="${request.current_route_url()}?sort_field=${field.get('name')}&sort_order=desc">${field.get('label')}</a>
+        <a
+        href="${request.current_route_url()}?sort_field=${field.get('name')}&sort_order=desc">${_(field.get('label'))}</a>
       % else:
-        <a href="${request.current_route_url()}?sort_field=${field.get('name')}&sort_order=asc">${field.get('label')}</a>
+        <a
+        href="${request.current_route_url()}?sort_field=${field.get('name')}&sort_order=asc">${_(field.get('label'))}</a>
       % endif
       % if request.session['%s.list.sort_field' % clazz.__tablename__] == field.get('name'):
         % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
