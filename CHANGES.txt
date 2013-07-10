@@ -14,6 +14,9 @@ i18n Support:
 - Added lingua as requirement. Needed for message extraction for i18n Support
 - Marked form configurations as translateable.
 - Added support for translating forms. Requires formbar >= 0.2.1
+- Added support to translate headers in the overview.
+
+Misc:
 - #19: Login should be in a Popup window
 
 0.3.0
