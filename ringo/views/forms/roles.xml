@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<configuration>
+<configuration xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:tal="http://xml.zope.org/namespaces/tal" xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="ringo">
   <source>
     <!-- Define different entity types -->
-    <entity id="e1" name="name" label="Name" type="string"/>
-    <entity id="e2" name="permissions" label="Permissions"/>
-    <entity id="e3" name="admin" label="Administrational role"/>
+    <entity i18n:attributes="label" id="e1" name="name" label="Name" type="string"/>
+    <entity i18n:attributes="label" id="e2" name="permissions" label="Permissions"/>
+    <entity i18n:attributes="label" id="e3" name="admin" label="Administrational role"/>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>

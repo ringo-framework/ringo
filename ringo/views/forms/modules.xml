@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<configuration>
+<configuration xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:tal="http://xml.zope.org/namespaces/tal" xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="ringo">
   <source>
     <!-- Define different entity types -->
-    <entity id="e1" name="name" label="Name" type="string">
-      <help>Internal name for the modul.</help>
+    <entity i18n:attributes="label" id="e0" name="name" label="Name" type="string">
+      <help i18n:translate="">Internal name for the modul.</help>
     </entity>
-    <entity id="e2" name="label" label="Label">
-      <help>Label of the modul in singular form. Used in the UI</help>
+    <entity i18n:attributes="label" id="e2" name="label" label="Label">
+      <help i18n:translate="">Label of the modul in singular form. Used in the UI</help>
     </entity>
-    <entity id="e3" name="label_plural" label="Label">
-      <help>Label of the modul in plural form. Used in the UI</help>
+    <entity i18n:attributes="label" id="e3" name="label_plural" label="Label">
+      <help i18n:translate="">Label of the modul in plural form. Used in the UI</help>
     </entity>
-    <entity id="e4" name="description" label="Description" type="textarea"/>
-    <entity id="e5" name="str_repr" label="String represention">
-      <help>Whenever an item of the modul is displayed as simple string it
+    <entity i18n:attributes="label" id="e4" name="description" label="Description" type="textarea"/>
+    <entity i18n:attributes="label" id="e5" name="str_repr" label="String represention">
+      <help i18n:translate="">Whenever an item of the modul is displayed as simple string it
       will be displayed in the following form.</help>
     </entity>
-    <entity id="e6" name="actions" label="Actions">
-      <help>Select the actions which should be enabled for this modul</help>
+     <entity i18n:attributes="label" id="e6" name="actions" label="Actions">
+      <help i18n:translate="">Select the actions which should be enabled for this modul</help>
     </entity>
-    <entity id="e7" name="display" label="Display location">
-      <help>Select the menu where the modul should be displayed</help>
+    <entity i18n:attributes="label" id="e7" name="display" label="Display location">
+      <help i18n:translate="">Select the menu where the modul should be displayed</help>
       <options>
-        <option value="none">Hide modul</option>
-        <option value="header-menu">Header menu</option>
-        <option value="admin-menu">Admininistraion menu</option>
+        <option i18n:translate="" value="none">Hide modul</option>
+        <option i18n:translate="" value="header-menu">Header menu</option>
+        <option i18n:translate="" value="admin-menu">Admininistraion menu</option>
       </options>
     </entity>
   </source>
@@ -54,8 +54,7 @@
     </row>
     <row>
       <col><field ref="e4"/></col>
-    </row>
-    <row>
+    </row> <row>
       <col><field ref="e5"/></col>
       <col><field ref="e7"/></col>
     </row>
