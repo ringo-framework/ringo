@@ -3,7 +3,7 @@
         "columns": [
             {"name": "name", "label": "Name", "width": "200"},
             {"name": "permissions", "label": "Roles"},
-            {"name": "admin", "label": "Admin Role", "width": "100"}
+            {"name": "admin", "label": "Administrational role", "width": "100"}
         ]
     }
 }
