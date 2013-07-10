@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<configuration xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:tal="http://xml.zope.org/namespaces/tal" xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="ringo">
+<configuration xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="ringo">
   <source>
     <!-- Define different entity types -->
     <entity i18n:attributes="label" id="e0" name="name" label="Name" type="string">
