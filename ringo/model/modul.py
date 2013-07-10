@@ -55,6 +55,7 @@ class ModulItem(BaseItem, Base):
 
 
 def _create_default_actions(dbsession, ignore=[]):
+    # TODO: Translate the name of the Action (torsten) <2013-07-10 09:32> 
     a0 = ActionItem(name="List", url="list", icon="icon-list-alt")
     a1 = ActionItem(name="Create", url="create", icon=" icon-plus")
     a2 = ActionItem(name="Read", url="read/{id}", icon="icon-eye-open")

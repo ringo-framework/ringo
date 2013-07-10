@@ -293,6 +293,8 @@ def delete_(clazz, request):
         invalidate_cache()
         return HTTPFound(location=url)
     else:
+        # FIXME: Get the ActionItem here and provide this in the Dialog to get
+        # the translation working (torsten) <2013-07-10 09:32> 
         renderer = ConfirmDialogRenderer(request, item, 'delete')
         rvalue['dialog'] = renderer.render()
         rvalue['clazz'] = clazz
