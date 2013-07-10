@@ -1,5 +1,11 @@
 Development
 -----------
+i18n Support:
+- Added custom extractor for translation string in XML form configuration. No
+  need to mark strings in the configurations as translatable.
+
+0.3.1
+-----
 Search:
 - Added a new TableConfig class. This clazz provides an interface to a JSON
   file which is used to configure various aspects to the rendering of the

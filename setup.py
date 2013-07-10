@@ -58,6 +58,7 @@ setup(name='ringo',
       add_ringo_modul = ringo.scripts.add_modul:main
       [babel.extractors]
       tableconfig = ringo.lib.i18n:extract_i18n_tableconfig
+      formconfig = ringo.lib.i18n:extract_i18n_formconfig
       [pyramid.scaffold]
       ringo=ringo.scaffolds:BasicRingoTemplate
       """,
@@ -65,7 +66,7 @@ setup(name='ringo',
             ('**.py', 'python', None),
             ('templates/**.html', 'mako', None),
             ('templates/**.mako', 'mako', None),
-            ('views/**.xml', 'lingua_xml', None),
+            ('views/**.xml', 'formconfig', None),
             ('views/**.json', 'tableconfig', None),
             ('static/**', 'ignore', None)]},
       )
