@@ -6,9 +6,9 @@
       <option value="">${_('All columns')}</option>
       % for field in tableconfig.get_columns():
         % if field.get('name') == search_field:
-          <option value="${field.get('name')}" selected>${field.get('label')}</option>
+          <option value="${field.get('name')}" selected>${_(field.get('label'))}</option>
         % else:
-          <option value="${field.get('name')}">${field.get('label')}</option>
+          <option value="${field.get('name')}">${_(field.get('label'))}</option>
         % endif
       % endfor
     </select>
