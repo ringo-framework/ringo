@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import json
 
 from setuptools import setup, find_packages
 
@@ -55,6 +56,8 @@ setup(name='ringo',
       [console_scripts]
       initialize_ringo_db = ringo.scripts.initializedb:main
       add_ringo_modul = ringo.scripts.add_modul:main
+      [babel.extractors]
+      tableconfig = ringo.lib.i18n:extract_i18n_tableconfig
       [pyramid.scaffold]
       ringo=ringo.scaffolds:BasicRingoTemplate
       """,
@@ -63,5 +66,11 @@ setup(name='ringo',
             ('templates/**.html', 'mako', None),
             ('templates/**.mako', 'mako', None),
             ('views/**.xml', 'lingua_xml', None),
+            ('views/**.json', 'tableconfig', None),
             ('static/**', 'ignore', None)]},
       )
+
+
+
+
+
