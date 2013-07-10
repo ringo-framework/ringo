@@ -175,6 +175,7 @@ class ListRenderer(Renderer):
                   'clazz': self.listing.clazz,
                   'listing': self.listing,
                   'request': request,
+                  '_': request.translate,
                   'enable_bundled_actions': False,
                   'search': search,
                   'search_field': search_field,
