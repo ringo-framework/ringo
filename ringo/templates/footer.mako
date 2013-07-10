@@ -6,7 +6,7 @@
         <a href="#" data-toggle="dropdown"><img src="${request.static_url('ringo:static/images/icons/16x16/applications-system.png')}"/>${_('Administration')}<b class="caret"></b></a>
         <ul class="dropdown-menu dropup-menu" role="menu">
           % for modul in h.get_modules(request, 'admin-menu'):
-            <li><a href="${request.route_url(modul.name+'-list')}">${modul.get_label(plural=True)}</a></li>
+            <li><a href="${request.route_url(modul.name+'-list')}">${_(modul.get_label(plural=True))}</a></li>
           % endfor
         </ul>
       </li>
