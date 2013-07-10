@@ -46,7 +46,7 @@
   <!-- Modul -->
   <snippet id="s1">
     <row>
-      <col><field ref="e1"/></col>
+      <col><field ref="e0"/></col>
     </row>
     <row>
       <col><field ref="e2"/></col>
