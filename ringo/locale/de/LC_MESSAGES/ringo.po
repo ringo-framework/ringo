@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-07-10 21:12+0200\n"
-"PO-Revision-Date: 2013-07-10 21:10+0200\n"
+"POT-Creation-Date: 2013-07-10 22:28+0200\n"
+"PO-Revision-Date: 2013-07-10 22:28+0200\n"
 "Last-Translator: Torsten Irlaender <torsten@irlaender.de>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -69,8 +69,11 @@ msgstr "Benutzergruppen"
 msgid "Role"
 msgstr "Rolle"
 
+#. Label for permissions column in overview table config
+#. Label for roles column in overview table config
 #: ringo/model/modul.py:130 ringo/views/forms/usergroups.xml:7
-#: ringo/views/forms/users.xml:12
+#: ringo/views/forms/users.xml:12 ringo/views/tables/roles.json:3
+#: ringo/views/tables/usergroups.json:3 ringo/views/tables/users.json:3
 msgid "Roles"
 msgstr "Rollen"
 
@@ -162,12 +165,14 @@ msgstr "Home"
 msgid "Logout"
 msgstr "Abmelden"
 
+#. Label for login column in overview table config
 #: ringo/templates/header.mako:37 ringo/templates/index.mako:15
 #: ringo/templates/auth/confirm_user.mako:17
 #: ringo/templates/auth/confirm_user.mako:22 ringo/templates/auth/login.mako:4
 #: ringo/templates/auth/reset_password.mako:17
 #: ringo/templates/auth/reset_password.mako:22 ringo/views/forms/auth.xml:5
 #: ringo/views/forms/auth.xml:12 ringo/views/forms/users.xml:5
+#: ringo/views/tables/users.json:2
 msgid "Login"
 msgstr "Anmelden"
 
@@ -562,7 +567,8 @@ msgstr "Passwort wiederholen"
 msgid "Password are not equal"
 msgstr "Passwörter sind nicht identisch"
 
-#: ringo/views/forms/auth.xml:18
+#. Label for email column in overview table config
+#: ringo/views/forms/auth.xml:18 ringo/views/tables/profiles.json:4
 msgid "Email"
 msgstr "E-Mail"
 
@@ -570,8 +576,10 @@ msgstr "E-Mail"
 msgid "Email is required"
 msgstr "Email ist ein Pflichtfeld"
 
+#. Label for name column in overview table config
 #: ringo/views/forms/modules.xml:5 ringo/views/forms/roles.xml:5
-#: ringo/views/forms/usergroups.xml:5
+#: ringo/views/forms/usergroups.xml:5 ringo/views/tables/modules.json:3
+#: ringo/views/tables/roles.json:2 ringo/views/tables/usergroups.json:2
 msgid "Name"
 msgstr "Name"
 
@@ -579,7 +587,9 @@ msgstr "Name"
 msgid "Internal name for the modul."
 msgstr "Interner Name für das Modul"
 
+#. Label for label column in overview table config
 #: ringo/views/forms/modules.xml:8 ringo/views/forms/modules.xml:11
+#: ringo/views/tables/modules.json:2
 msgid "Label"
 msgstr "Bezeichnung"
 
@@ -611,7 +621,8 @@ msgstr ""
 msgid "Select the actions which should be enabled for this modul"
 msgstr "Wählen Sie die Aktionen, die für dieses Modul verfügbar sein sollen"
 
-#: ringo/views/forms/modules.xml:21
+#. Label for display column in overview table config
+#: ringo/views/forms/modules.xml:21 ringo/views/tables/modules.json:4
 msgid "Display location"
 msgstr "Darstellungsort"
 
@@ -631,15 +642,18 @@ msgstr "Kopf-Menü"
 msgid "Administration menu"
 msgstr "Administrations-Menü"
 
-#: ringo/views/forms/profiles.xml:5
+#. Label for first_name column in overview table config
+#: ringo/views/forms/profiles.xml:5 ringo/views/tables/profiles.json:2
 msgid "Firstname"
 msgstr "Vorname"
 
-#: ringo/views/forms/profiles.xml:6
+#. Label for last_name column in overview table config
+#: ringo/views/forms/profiles.xml:6 ringo/views/tables/profiles.json:3
 msgid "Lastname"
 msgstr "Nachname"
 
-#: ringo/views/forms/profiles.xml:7
+#. Label for birthday column in overview table config
+#: ringo/views/forms/profiles.xml:7 ringo/views/tables/profiles.json:5
 msgid "Birthday"
 msgstr "Geburtstag"
 
@@ -659,11 +673,13 @@ msgstr "Telefon"
 msgid "Permissions"
 msgstr "Befugnisse"
 
-#: ringo/views/forms/roles.xml:7
+#. Label for admin column in overview table config
+#: ringo/views/forms/roles.xml:7 ringo/views/tables/roles.json:4
 msgid "Administrational role"
 msgstr "Adminrolle"
 
-#: ringo/views/forms/usergroups.xml:6
+#. Label for members column in overview table config
+#: ringo/views/forms/usergroups.xml:6 ringo/views/tables/usergroups.json:4
 msgid "Members"
 msgstr "Mitglieder"
 
@@ -683,7 +699,8 @@ msgstr "Passwort wiederholen"
 msgid "Default group"
 msgstr "Vorgabe Gruppe"
 
-#: ringo/views/forms/users.xml:15
+#. Label for activated column in overview table config
+#: ringo/views/forms/users.xml:15 ringo/views/tables/users.json:5
 msgid "Activated"
 msgstr "Aktiviert"
 
@@ -701,3 +718,7 @@ msgstr ""
 "neuen Nutzer zu (re)aktivieren. Bitte rufen Sie hierfür "
 "/auth/activate_user/$token auf."
 
+#. Label for groups column in overview table config
+#: ringo/views/tables/users.json:4
+msgid "Groups"
+msgstr "Gruppen"
