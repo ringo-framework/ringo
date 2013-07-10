@@ -36,7 +36,7 @@
       </ul>
     </div>
     % if len(listing.search_filter) > 0:
-      <span class="muted"><small>(${_('%s filter applied' % len(listing.search_filter))})</small></span> 
+      <span class="muted"><small>(${_('${num_filter} filter applied', mapping={'num_filters': len(listing.search_filter)})})</small></span>
     % endif
   </form>
 </div>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-07-10 07:55+0200\n"
+"POT-Creation-Date: 2013-07-10 08:05+0200\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -329,8 +329,7 @@ msgid "Reset current search filter"
 msgstr ""
 
 #: ringo/templates/internal/list.mako:39
-#, python-format
-msgid "%s filter applied"
+msgid "${num_filter} filter applied"
 msgstr ""
 
 #: ringo/templates/internal/list.mako:98
@@ -451,4 +450,7 @@ msgid ""
 "Authorisation error! Sorry, you are not allowed to access to requested "
 "ressource!"
 msgstr ""
+
+#~ msgid "%s filter applied"
+#~ msgstr ""
 

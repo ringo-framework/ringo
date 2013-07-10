@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-07-10 07:55+0200\n"
-"PO-Revision-Date: 2013-07-10 07:56+0200\n"
+"POT-Creation-Date: 2013-07-10 08:05+0200\n"
+"PO-Revision-Date: 2013-07-10 08:06+0200\n"
 "Last-Translator: Torsten Irlaender <torsten@irlaender.de>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -375,9 +375,8 @@ msgid "Reset current search filter"
 msgstr "Aktuellen Suchfilter zurücksetzen"
 
 #: ringo/templates/internal/list.mako:39
-#, python-format
-msgid "%s filter applied"
-msgstr "%s Filter angewendet"
+msgid "${num_filter} filter applied"
+msgstr "${num_filters} Filter angewendet"
 
 #: ringo/templates/internal/list.mako:98
 msgid "No items found"
