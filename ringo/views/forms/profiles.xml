@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<configuration xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="ringo">
+<configuration>
   <source>
     <!-- Define different entity types -->
-    <entity i18n:attributes="label" id="e1" name="first_name" label="Firstname" type="string"/>
-    <entity i18n:attributes="label" id="e2" name="last_name" label="Lastname" type="string"/>
-    <entity i18n:attributes="label" id="e3" name="birthday" label="Birthday" type="date"/>
-    <entity i18n:attributes="label" id="e4" name="address" label="Address" type="textarea"/>
-    <entity i18n:attributes="label" id="e5" name="email" label="E-Mail" type="email"/>
-    <entity i18n:attributes="label" id="e6" name="url" label="Web" type="url"/>
-    <entity i18n:attributes="label" id="e7" name="phone" label="Phone" type="string"/>
+    <entity id="e1" name="first_name" label="Firstname" type="string"/>
+    <entity id="e2" name="last_name" label="Lastname" type="string"/>
+    <entity id="e3" name="birthday" label="Birthday" type="date"/>
+    <entity id="e4" name="address" label="Address" type="textarea"/>
+    <entity id="e5" name="email" label="E-Mail" type="email"/>
+    <entity id="e6" name="url" label="Web" type="url"/>
+    <entity id="e7" name="phone" label="Phone" type="string"/>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>
