@@ -56,7 +56,7 @@ setup(name='ringo',
       add_ringo_modul = ringo.scripts.add_modul:main
       [babel.extractors]
       tableconfig = ringo.lib.i18n:extract_i18n_tableconfig
-      formconfig = ringo.lib.i18n:extract_i18n_formconfig
+      formconfig = formbar.i18n:extract_i18n_formconfig
       [pyramid.scaffold]
       ringo=ringo.scaffolds:BasicRingoTemplate
       """,
