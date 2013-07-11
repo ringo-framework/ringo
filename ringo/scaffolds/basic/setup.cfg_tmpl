@@ -7,7 +7,7 @@ cover-erase=1
 
 [compile_catalog]
 directory = {{package}}/locale
-domain = {{package}}
+domain = ringo
 statistics = true
 
 [extract_messages]
@@ -16,12 +16,12 @@ output_file = {{package}}/locale/{{package}}.pot
 width = 80
 
 [init_catalog]
-domain = {{package}}
+domain = ringo
 input_file = {{package}}/locale/{{package}}.pot
 output_dir = {{package}}/locale
 
 [update_catalog]
-domain = {{package}}
+domain = ringo
 input_file = {{package}}/locale/{{package}}.pot
 output_dir = {{package}}/locale
 previous = true

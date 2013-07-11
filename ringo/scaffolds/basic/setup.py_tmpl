@@ -35,5 +35,15 @@ setup(name='{{package}}',
       [console_scripts]
       initialize_{{package}}_db = {{package}}.scripts.initializedb:main
       add_{{package}}_modul = ringo.scripts.add_modul:main
+      [babel.extractors]
+      tableconfig = ringo.lib.i18n:extract_i18n_tableconfig
+      formconfig = formbar.i18n:extract_i18n_formconfig
       """,
+      message_extractors = {'{{package}}': [
+            ('**.py', 'python', None),
+            ('templates/**.html', 'mako', None),
+            ('templates/**.mako', 'mako', None),
+            ('views/**.xml', 'formconfig', None),
+            ('views/**.json', 'tableconfig', None),
+            ('static/**', 'ignore', None)]},
       )

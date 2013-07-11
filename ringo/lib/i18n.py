@@ -6,6 +6,10 @@ from pyramid.i18n import get_localizer, TranslationStringFactory
 _ = TranslationStringFactory('ringo')
 
 
+# TODO: Make this function overwriteable. auto_translate should the try
+# to translate one or more configured domains. Additional domains next
+# to the defualt ringo domain can be then be added by the derived
+# application (torsten) <2013-07-11 14:49>
 @subscriber(NewRequest)
 def add_localizer(event):
     request = event.request
