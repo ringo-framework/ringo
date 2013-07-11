@@ -2,7 +2,6 @@ import logging
 import sqlalchemy as sa
 from ringo.model import Base
 from ringo.model.user import BaseItem
-from ringo.lib.i18n import _
 
 log = logging.getLogger(__name__)
 
@@ -92,16 +91,16 @@ def init_model(dbsession):
     # ID 1
     modul = ModulItem(name='modules')
     modul.clazzpath = "ringo.model.modul.ModulItem"
-    modul.label = _("Modul")
-    modul.label_plural = _("Modules")
+    modul.label = "Modul"
+    modul.label_plural = "Modules"
     modul.display = "admin-menu"
     modul.actions.extend(_create_default_actions(dbsession, ignore=['create', 'delete']))
     dbsession.add(modul)
     # ID 2
     modul = ModulItem(name='actions')
     modul.clazzpath = "ringo.model.modul.ActionItem"
-    modul.label = _("Action")
-    modul.label_plural = _("Actions")
+    modul.label = "Action"
+    modul.label_plural = "Actions"
     modul.display = "admin-menu"
     # Actions modul is not meant to be callable from anybody (There is
     # now view at all). So do not add any actions here.
@@ -111,31 +110,31 @@ def init_model(dbsession):
     modul = ModulItem(name='users')
     modul.clazzpath = "ringo.model.user.User"
     modul.display = "admin-menu"
-    modul.label = _("User")
-    modul.label_plural = _("Users")
+    modul.label = "User"
+    modul.label_plural = "Users"
     modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
     # ID 4
     modul = ModulItem(name='usergroups')
     modul.clazzpath = "ringo.model.user.Usergroup"
-    modul.label = _("Usergroup")
-    modul.label_plural = _("Usergroups")
+    modul.label = "Usergroup"
+    modul.label_plural = "Usergroups"
     modul.display = "admin-menu"
     modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
     # ID 5
     modul = ModulItem(name='roles')
     modul.clazzpath = "ringo.model.user.Role"
-    modul.label = _("Role")
-    modul.label_plural = _("Roles")
+    modul.label = "Role"
+    modul.label_plural = "Roles"
     modul.display = "admin-menu"
     modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
     # ID 6
     modul = ModulItem(name='profiles')
     modul.clazzpath = "ringo.model.user.Profile"
-    modul.label = _("Profile")
-    modul.label_plural = _("Profiles")
+    modul.label = "Profile"
+    modul.label_plural = "Profiles"
     modul.display = "admin-menu"
     modul.actions.extend(_create_default_actions(dbsession, ignore=['create', 'delete']))
     dbsession.add(modul)

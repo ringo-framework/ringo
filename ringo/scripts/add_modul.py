@@ -14,7 +14,6 @@ from tempfile import mkstemp
 from shutil import move
 
 from ringo  import modul_template_dir
-from ringo.lib.i18n import _
 from ringo.lib.sql import DBSession
 from ringo.model import Base
 from ringo.model.modul import ModulItem, _create_default_actions
@@ -71,8 +70,8 @@ def add_db_entry(package, name, engine):
         with transaction.manager:
             modul = ModulItem(name=modul_name)
             modul.clazzpath = clazzpath
-            modul.label = _(label)
-            modul.label_plural = _(label_plural)
+            modul.label = label
+            modul.label_plural = label_plural
             modul.display = "header-menu"
             modul.actions.extend(_create_default_actions(DBSession))
             DBSession.add(modul)
