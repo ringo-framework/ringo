@@ -1,6 +1,8 @@
 Development
 -----------
 
+- Added "Nested" Mixin class to allow nested items.
+
 0.3.2
 -----
 i18n Support:
