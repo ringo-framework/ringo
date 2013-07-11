@@ -3,20 +3,35 @@ from pyramid.events import NewRequest
 from pyramid.events import subscriber
 from pyramid.i18n import get_localizer, TranslationStringFactory
 
-_ = TranslationStringFactory('ringo')
+translators = []
+translators.append(TranslationStringFactory('ringo'))
+"""The translators variable holds a list of available
+TranslationStringFactory. Usually there is one factory per i18n domain
+which needs to be translated. On translation the availabe translation
+strings will be iterated until one of them returns a translated string.
+On default there is only on factory for ringo available, but derived
+applications can append their own translation factory."""
 
 
-# TODO: Make this function overwriteable. auto_translate should the try
-# to translate one or more configured domains. Additional domains next
-# to the defualt ringo domain can be then be added by the derived
-# application (torsten) <2013-07-11 14:49>
 @subscriber(NewRequest)
 def add_localizer(event):
     request = event.request
     localizer = get_localizer(request)
 
     def auto_translate(string, default=None, mapping={}):
-        return localizer.translate(_(string, default=default, mapping=mapping))
+        """The translation function will iterate over the available
+        TranslationStringFactorys in the translators varibale and try to
+        translate the given string. TranslationsStrings will be iterated
+        in reversed order and iteration stops as soon as the
+        TranslationsString returns a string different from the given
+        string (msgid)"""
+        for _ in translators[::-1]:
+            ts = localizer.translate(_(string,
+                                       default=default,
+                                       mapping=mapping))
+            if ts != string:
+                break
+        return ts
 
     request.localizer = localizer
     request.translate = auto_translate
