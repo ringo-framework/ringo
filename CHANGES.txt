@@ -1,10 +1,14 @@
 Development
 -----------
+
+0.3.2
+-----
 i18n Support:
 - User custom extractor from formbar for translation string in XML form
   configuration. No need to mark strings in the configurations as
   translatable.
-- Removed lingua requirement
+- Removed lingua requirement.
+- Added support for translations in the basic scaffold.
 
 0.3.1
 -----
