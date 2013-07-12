@@ -1,7 +1,7 @@
 import os
 import pkg_resources
 from pyramid.threadlocal import get_current_registry
-from formbar.helpers import get_css
+from formbar.helpers import get_css, get_js
 
 
 def dynamic_import(cl):
@@ -120,4 +120,8 @@ def get_modules(request, display):
     return user_moduls
 
 def get_formbar_css():
+    return get_css()
+
+def get_formbar_js():
+    return get_js()
     return get_css()
