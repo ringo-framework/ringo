@@ -34,6 +34,9 @@
     <script src="/static/js/jquery.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
     <script src="/static/js/init.js"></script>
+    <script>
+      ${h.get_formbar_js() | n}
+    </script>
   </body>
 </html>
 
