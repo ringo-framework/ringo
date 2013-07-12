@@ -2,6 +2,8 @@ Development
 -----------
 
 - Added "Nested" Mixin class to allow nested items.
+- Use new get_formbar_js method in inject js code needed for formbar. Neededs
+  recent formbar lib.
 
 0.3.2
 -----
