@@ -235,7 +235,10 @@ def create_(clazz, request, callback=None):
     rvalue = {}
     factory = clazz.get_item_factory()
     item = factory.create(request.user)
-    form = Form(item.get_form_config('create'), item, request.db, translate=_)
+    form = Form(item.get_form_config('create'), item, request.db, translate=_,
+                change_page_callback={'url': 'set_current_form_page',
+                                      'item': clazz.__tablename__,
+                                      'itemid': None})
     if request.POST:
         item_label = clazz.get_item_modul().get_label()
         mapping = {'item_type': item_label}
@@ -262,7 +265,7 @@ def create_(clazz, request, callback=None):
             request.session.flash(msg, 'error')
     rvalue['clazz'] = clazz
     rvalue['item'] = item
-    rvalue['form'] = form.render()
+    rvalue['form'] = form.render(page=get_current_form_page(clazz, request))
     return rvalue
 
 
@@ -273,7 +276,10 @@ def update_(clazz, request):
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
     item = factory.load(id, request.db)
-    form = Form(item.get_form_config('update'), item, translate=_)
+    form = Form(item.get_form_config('update'), item, translate=_,
+                change_page_callback={'url': 'set_current_form_page',
+                                      'item': clazz.__tablename__,
+                                      'itemid': id})
     if request.POST:
         item_label = clazz.get_item_modul().get_label()
         mapping = {'item_type': item_label, 'item': item}
@@ -294,9 +300,10 @@ def update_(clazz, request):
                     '${item_type} "${item}".', mapping=mapping)
             log.info(msg)
             request.session.flash(msg, 'error')
+
     rvalue['clazz'] = clazz
     rvalue['item'] = item
-    rvalue['form'] = form.render()
+    rvalue['form'] = form.render(page=get_current_form_page(clazz, request))
     return rvalue
 
 
@@ -307,10 +314,13 @@ def read_(clazz, request):
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
     item = factory.load(id, request.db)
-    form = Form(item.get_form_config('read'), item, translate=_)
+    form = Form(item.get_form_config('read'), item, translate=_,
+                change_page_callback={'url': 'set_current_form_page',
+                                      'item': clazz.__tablename__,
+                                      'itemid': id})
     rvalue['clazz'] = clazz
     rvalue['item'] = item
-    rvalue['form'] = form.render()
+    rvalue['form'] = form.render(page=get_current_form_page(clazz, request))
     return rvalue
 
 

@@ -164,6 +164,10 @@ def setup_static_views(config):
 def setup_routes(config):
     """Function which will setup the routes of the ringo application"""
 
+    # Helpers
+    #########
+    config.add_route('set_current_form_page', 'set_current_form_page')
+
     # SINGLE PAGES
     ##############
     config.add_route('login', 'auth/login')
