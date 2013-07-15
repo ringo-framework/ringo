@@ -1,6 +1,8 @@
 import uuid
 import logging
 from pyramid.httpexceptions import HTTPFound
+from pyramid.response import Response
+from pyramid.view import view_config
 
 from formbar.form import Form
 
@@ -11,6 +13,44 @@ from ringo.lib.sql import invalidate_cache
 from ringo.views import handle_history
 
 log = logging.getLogger(__name__)
+
+
+def get_current_form_page(clazz, request):
+    """Returns the id of the currently selected page. The currently
+    selected page is saved in the session. If there is no saved value
+    then the the first page is returned
+
+    :clazz: The clazz for which the form is displayed
+    :request: Current request
+    :returns: id of the currently selected page. Default: 1
+    """
+    itemid = request.matchdict.get('id')
+    item = clazz.__tablename__
+    page = request.session.get('%s.%s.form.page' % (item, itemid))
+    if page:
+        return int(page)
+    else:
+        return 1
+
+
+@view_config(route_name='set_current_form_page')
+def set_current_form_page(request):
+    """Will save the currently selected page of a form in the session.
+    The request will have some attributes in the GET request which will
+    config which page, of which item is currently shown. This function
+    is used as a callback function within formbar.
+
+    :request: Current request
+    :returns: Response
+    """
+    page = request.GET.get('page')
+    item = request.GET.get('item')
+    itemid = request.GET.get('itemid')
+    if page and item and itemid:
+        #request.session['%s.form.page' % key] = page_id
+        request.session['%s.%s.form.page' % (item, itemid)] = page
+        request.session.save()
+    return Response(body='OK', content_type='text/plain')
 
 
 def handle_sorting(clazz, request):
