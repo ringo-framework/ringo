@@ -67,6 +67,25 @@ def connect_on_request(event):
 def close_db_connection(request):
     request.db.close()
 
+def add_rest_service(config, clazz):
+    """Set routes for basic RESTfull service on CRUD operations on the item
+
+    :config: Pylons config instance
+    :clazz: The clazz of the module for which the new routes will be set up.
+    :returns: config
+
+    """
+    # load modul to get the enabled actions
+    factory = ModulItem.get_item_factory()
+    modul = factory.load(clazz._modul_id)
+    name = clazz.__tablename__
+    for action in [action for action in modul.actions if action.name.lower() in ['list', 'create', 'read', 'update', 'delete']]:
+        route_name = "rest-%s-%s" % (name, action.name.lower())
+        route_url = "rest/%s/%s" % (name, action.url)
+        log.debug("Adding route: %s, %s" % (route_name, route_url))
+        config.add_route(route_name, route_url,
+                         factory=get_resource_factory(clazz))
+    return config
 
 def add_route(config, clazz):
     """Setup routes for the activates actions of the given modul.
