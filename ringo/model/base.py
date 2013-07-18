@@ -30,6 +30,9 @@ class BaseItem(object):
     def __getitem__(self, name):
         return getattr(self, name)
 
+    def __json__(self, request):
+        return {'id': self.id}
+
     @classmethod
     def get_item_factory(cls):
         return BaseFactory(cls)
@@ -93,6 +96,9 @@ class BaseList(object):
 
         self.items = q.all()
         self.search_filter = None
+
+    def __json__(self, request):
+        return self.items
 
     def transform(self, form_id="create"):
         """Will transform the values of the items in the list. This will
