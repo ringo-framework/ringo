@@ -66,8 +66,11 @@ class BaseItem(object):
         return config.get_form(formname)
 
     @classmethod
-    def get_action_routename(cls, action):
-        return "%s-%s" % (cls.__tablename__, action)
+    def get_action_routename(cls, action, prefix=None):
+        routename = "%s-%s" % (cls.__tablename__, action)
+        if prefix:
+            return "%s-%s" % (prefix, routename)
+        return routename
 
 
 class BaseList(object):
