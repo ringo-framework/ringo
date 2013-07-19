@@ -1,11 +1,14 @@
 Development
 -----------
 
+- Added REST-full service. The service is reachable for all modules on the
+  known url with the prefix "rest". Eg rest/users/list. Using the interface
+  requires Authorisation and Authentification which needs to be supplied.
 - Added "Nested" Mixin class to allow nested items.
-- Use new get_formbar_js method in inject js code needed for formbar. Neededs
-  recent formbar lib.
 - When a form has multiple pages the currently selected page is now saved in
   the user session. Needs recent formbar version.
+- Use new get_formbar_js method in inject js code needed for formbar. Neededs
+  recent formbar lib.
 
 0.3.2
 -----
