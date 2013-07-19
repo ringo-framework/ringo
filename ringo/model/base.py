@@ -31,7 +31,11 @@ class BaseItem(object):
         return getattr(self, name)
 
     def __json__(self, request):
-        return {'id': self.id}
+        rvalue = {}
+        for col in self.get_columns():
+            rvalue[col] = getattr(self, col)
+        return rvalue
+
     @classmethod
     def get_columns(cls):
         return [prop.key for prop in class_mapper(cls).iterate_properties
