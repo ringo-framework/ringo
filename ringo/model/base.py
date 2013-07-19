@@ -2,7 +2,7 @@ import logging
 import re
 from operator import itemgetter
 from formbar.config import Config, load
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, ColumnProperty, class_mapper
 from ringo.lib.helpers import get_path_to_form_config
 from ringo.lib.sql import DBSession, regions
 from ringo.lib.sql.query import FromCache, set_relation_caching
@@ -32,6 +32,10 @@ class BaseItem(object):
 
     def __json__(self, request):
         return {'id': self.id}
+    @classmethod
+    def get_columns(cls):
+        return [prop.key for prop in class_mapper(cls).iterate_properties
+            if isinstance(prop, ColumnProperty)]
 
     @classmethod
     def get_item_factory(cls):
