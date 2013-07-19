@@ -14,6 +14,21 @@ from ringo.views import handle_history
 
 log = logging.getLogger(__name__)
 
+def _load_item(clazz, request):
+    """Will load an item from the given clazz. The id of the item to
+    load is taken from the request matchdict. If no item can be found an
+    Exception is raised.
+
+    :clazz: Class of the item to load
+    :request: Current request having the id in the matchdict
+    :returns: Loaded item
+
+    """
+    id = request.matchdict.get('id')
+    factory = clazz.get_item_factory()
+    item = factory.load(id, request.db)
+    return item
+
 
 def get_current_form_page(clazz, request):
     """Returns the id of the currently selected page. The currently
