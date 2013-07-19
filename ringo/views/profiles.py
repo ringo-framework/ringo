@@ -1,7 +1,7 @@
 import logging
 from pyramid.view import view_config
 
-from ringo.views.base import list_, create_, update_, read_, delete_
+from ringo.views.base import list_, update_, read_
 from ringo.model.user import Profile
 
 log = logging.getLogger(__name__)
