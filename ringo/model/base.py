@@ -1,5 +1,6 @@
 import logging
 import re
+import datetime
 from operator import itemgetter
 from formbar.config import Config, load
 from sqlalchemy.orm import joinedload, ColumnProperty, class_mapper
@@ -33,7 +34,11 @@ class BaseItem(object):
     def __json__(self, request):
         rvalue = {}
         for col in self.get_columns():
-            rvalue[col] = getattr(self, col)
+            value = getattr(self, col)
+            # FIXME: If value is type date it can not be serialized.
+            if isinstance(value, datetime.date):
+                value = str(value)
+            rvalue[col] = value
         return rvalue
 
     @classmethod
