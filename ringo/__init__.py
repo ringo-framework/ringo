@@ -79,7 +79,9 @@ def add_rest_service(config, clazz):
     factory = ModulItem.get_item_factory()
     modul = factory.load(clazz._modul_id)
     name = clazz.__tablename__
-    for action in [action for action in modul.actions if action.name.lower() in ['list', 'create', 'read', 'update', 'delete']]:
+    for action in [action for action in modul.actions
+                   if action.name.lower() in
+                   ['list', 'create', 'read', 'update', 'delete']]:
         route_name = "rest-%s-%s" % (name, action.name.lower())
         route_url = "rest/%s/%s" % (name, action.url)
         log.debug("Adding route: %s, %s" % (route_name, route_url))
