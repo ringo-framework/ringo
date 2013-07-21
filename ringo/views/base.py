@@ -14,6 +14,7 @@ from ringo.views import handle_history
 
 log = logging.getLogger(__name__)
 
+
 def _load_item(clazz, request):
     """Will load an item from the given clazz. The id of the item to
     load is taken from the request matchdict. If no item can be found an
@@ -232,7 +233,7 @@ def list_(clazz, request):
     return rvalue
 
 
-def create_(clazz, request, callback=None):
+def create_(clazz, request, callback=None, renderers={}):
     """Base view to create a new item of type clazz. This view will
     render a create form to create new items. It the user submits the
     data (POST) that the data will be validated and the new item will be
@@ -243,6 +244,8 @@ def create_(clazz, request, callback=None):
     :request: The current request
     :callback: A callback function [function(request, item)] which
     returns the item again.
+    :renderers: A optional dictionary of custom renderers which are
+    provided to the form to render specific formelements.
     :returns: Dictionary with the following keys 'clazz', 'item', 'form'
     """
     handle_history(request)
@@ -251,6 +254,7 @@ def create_(clazz, request, callback=None):
     factory = clazz.get_item_factory()
     item = factory.create(request.user)
     form = Form(item.get_form_config('create'), item, request.db, translate=_,
+                renderers=renderers,
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,
                                       'itemid': None})
@@ -284,7 +288,7 @@ def create_(clazz, request, callback=None):
     return rvalue
 
 
-def update_(clazz, request):
+def update_(clazz, request, callback=None, renderers={}):
     handle_history(request)
     _ = request.translate
     rvalue = {}
@@ -292,6 +296,7 @@ def update_(clazz, request):
     factory = clazz.get_item_factory()
     item = factory.load(id, request.db)
     form = Form(item.get_form_config('update'), item, translate=_,
+                renderers=renderers,
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,
                                       'itemid': id})
@@ -306,6 +311,8 @@ def update_(clazz, request):
             request.session.flash(msg, 'success')
             route_name = item.get_action_routename('update')
             url = request.route_url(route_name, id=item.id)
+            if callback:
+                item = callback(request, item)
             # Invalidate cache
             invalidate_cache()
             # Redirect to the update view.
@@ -322,7 +329,7 @@ def update_(clazz, request):
     return rvalue
 
 
-def read_(clazz, request):
+def read_(clazz, request, renderers={}):
     handle_history(request)
     _ = request.translate
     rvalue = {}
@@ -330,6 +337,7 @@ def read_(clazz, request):
     factory = clazz.get_item_factory()
     item = factory.load(id, request.db)
     form = Form(item.get_form_config('read'), item, translate=_,
+                renderers=renderers,
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,
                                       'itemid': id})
