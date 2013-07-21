@@ -9,6 +9,12 @@ Development
   the user session. Needs recent formbar version.
 - Use new get_formbar_js method in inject js code needed for formbar. Neededs
   recent formbar lib.
+- Items with the MetaMixin will have a default created und updated date of
+  utcnow now.
+- #25: Added support for custom renderes. Renderers can now be defined and
+  provied to the view functions. The renderer must be derived from the Formbar
+  FieldRenderer) The view functions will give the renderer to the formbar lib.
+  Need a recent Formbar version (>=0.3.0)
 
 0.3.2
 -----
