@@ -1,6 +1,5 @@
-Development
------------
-
+0.4.0
+-----
 - Added REST-full service. The service is reachable for all modules on the
   known url with the prefix "rest". Eg rest/users/list. Using the interface
   requires Authorisation and Authentification which needs to be supplied.
