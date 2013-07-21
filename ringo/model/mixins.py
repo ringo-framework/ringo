@@ -1,3 +1,4 @@
+import datetime
 from sqlalchemy.ext.declarative import declared_attr
 
 from sqlalchemy import (
@@ -14,8 +15,8 @@ from sqlalchemy.orm import (
 
 
 class Meta(object):
-    created = Column(DateTime)
-    updated = Column(DateTime)
+    created = Column(DateTime, default=datetime.datetime.utcnow)
+    updated = Column(DateTime, default=datetime.datetime.utcnow)
 
 
 class Owned(object):
