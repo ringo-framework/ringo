@@ -20,7 +20,7 @@ requires = [
     'waitress',
     'babel',
     'Sphinx',
-    'formbar>=0.2.1',
+    'formbar>=0.3.0',
     'nose',
     'coverage',
     'webtest',
