@@ -20,6 +20,7 @@
     </entity>
     <entity id="e7" name="display" label="Display location">
       <help>Select the menu where the modul should be displayed</help>
+      <renderer type="dropdown"/>
       <options>
         <option value="none">Hide modul</option>
         <option value="header-menu">Header menu</option>
