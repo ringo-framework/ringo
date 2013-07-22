@@ -295,7 +295,7 @@ def update_(clazz, request, callback=None, renderers={}):
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
     item = factory.load(id, request.db)
-    form = Form(item.get_form_config('update'), item, translate=_,
+    form = Form(item.get_form_config('update'), item, request.db, translate=_,
                 renderers=renderers,
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,
@@ -336,7 +336,7 @@ def read_(clazz, request, renderers={}):
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
     item = factory.load(id, request.db)
-    form = Form(item.get_form_config('read'), item, translate=_,
+    form = Form(item.get_form_config('read'), item, request.db, translate=_,
                 renderers=renderers,
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,
