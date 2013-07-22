@@ -1,3 +1,8 @@
+0.4.1
+-----
+- Added a Ringo specific renderer for dropdown lists which add a small link
+  next to the label of the dropdownlist.
+
 0.4.0
 -----
 - Added REST-full service. The service is reachable for all modules on the
