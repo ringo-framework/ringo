@@ -5,7 +5,7 @@
     <entity id="e1" name="login" label="Login" type="string">
       <rule expr="bool($login)" msg="Login is required" method="pre"/>
     </entity>
-    <entity id="e2" name="pass" label="Password" type="password">
+    <entity id="e2" name="pass" label="Password">
       <renderer type="password"/>
       <rule expr="bool($pass)" msg="Password is required" method="pre"/>
       <rule expr="len($pass) >= 6" msg="Password must be at least 6 chars long" method="pre"/>
@@ -13,7 +13,7 @@
     <entity id="e3" name="login" label="Login" type="string">
       <rule expr="bool($login)" msg="Loginname is required" method="pre"/>
     </entity>
-    <entity id="e4" name="pass2" label="Retype password" type="password">
+    <entity id="e4" name="pass2" label="Retype password">
       <renderer type="password"/>
       <rule expr="$pass==$pass2" msg="Password are not equal" method="pre"/>
     </entity>
