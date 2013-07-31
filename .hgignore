@@ -17,6 +17,7 @@ syntax: glob
 dist
 build
 data
+dogpile_data
 eggs
 parts
 bin
