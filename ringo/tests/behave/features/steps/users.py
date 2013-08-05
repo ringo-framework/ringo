@@ -10,13 +10,19 @@ def login(context, username, password):
     )
     return response
 
-def logout(contex):
+def logout(context):
     'Logout the currently logged in user (if any)' 
     response = context.app.get('/auth/logout',
         params={}
     )
     return response
 
-@given(u'a anonymous user')
-def step_impl(context):
-    assert True
+@given(u'a {role} user')
+def step_impl(context, role):
+    if role == "anonymous":
+        assert (logout(context).status_int == 302)
+    elif role == "admin":
+        resp = login(context, "admin", "secret")
+        assert (resp.status_int == 302)
+    else:
+        assert False
