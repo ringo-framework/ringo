@@ -1,5 +1,6 @@
 import uuid
 import logging
+import transaction
 from pyramid.httpexceptions import HTTPFound
 from pyramid.response import Response
 from pyramid.view import view_config
@@ -183,6 +184,12 @@ def get_search(clazz, request):
 
 
 def list_(clazz, request):
+    # Important! Prevent any write access on the database for this
+    # request. This is needed as transform would modify the items values
+    # else.
+    # TODO: Fix transform call to not modify the items in the
+    # list.(None) <2013-08-12 21:26> 
+    transaction.doom()
     handle_history(request)
     rvalue = {}
     search = get_search(clazz, request)

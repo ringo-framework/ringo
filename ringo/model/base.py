@@ -1,4 +1,5 @@
 import logging
+import transaction
 import re
 import datetime
 from operator import itemgetter
@@ -124,9 +125,20 @@ class BaseList(object):
         configuration for the clazz is loaded to get the expanded value
         (options for selection).
 
+        Please note that calling this function is only allowed for a
+        "doomed" db request (transaction) as the function modifies the
+        data of the items which would be written to the database
+        otherwise.
+
         :form_id: The id of the form configuration which is used for
         expandation.
         """
+
+        if transaction.isDoomed() is False:
+            raise Exception("Calling transform on a item list is only "
+                            "allowed if the current request is doomed to "
+                            "prevent accidential data modifications.")
+
         # Check if there are any expandations configured
         expand = []
         table_config = self.clazz.get_table_config()
