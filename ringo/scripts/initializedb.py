@@ -23,6 +23,9 @@ from ringo.model.user import (
 from ringo.model.modul import (
     init_model as init_modul_model,
 )
+from ringo.model.appointment import (
+    init_model as init_appointment_model
+)
 
 
 def usage(argv):
@@ -47,4 +50,5 @@ def inititializedb(engine):
     with transaction.manager:
         init_modul_model(DBSession)
         init_user_model(DBSession)
+        init_appointment_model(DBSession)
 

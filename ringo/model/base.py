@@ -112,7 +112,7 @@ class BaseList(object):
             q = q.options(joinedload(relation))
 
         self.items = q.all()
-        self.search_filter = None
+        self.search_filter = []
 
     def __json__(self, request):
         return self.items

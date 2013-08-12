@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="ringo">
+  <source>
+    <entity id="start" name="start" label="Begin" type="date" required="true">
+      <renderer type="datepicker"/>
+    </entity>
+    <entity id="end" name="end" label="End" type="date" required="true">
+      <renderer type="datepicker"/>
+    </entity>
+    <entity id="day" name="day" label="Whole day" type="boolean">
+      <renderer type="dropdown"/>
+      <options>
+        <option value="0">no</option>
+        <option value="1">yes</option>
+      </options>
+    </entity>
+    <entity id="reminder" name="reminder" label="Reminder" type="integer">
+      <renderer type="dropdown"/>
+      <options>
+        <option value="0">no</option>
+        <option value="5">5 Minutes</option>
+        <option value="15">15 Minutes</option>
+        <option value="30">30 Minutes</option>
+        <option value="60">1 Hour</option>
+        <option value="120">2 Hours</option>
+        <option value="360">6 Hours</option>
+        <option value="720">12 Hours</option>
+        <option value="1440">1 Day</option>
+        <option value="2880">2 Days</option>
+        <option value="10080">1 Week</option>
+      </options>
+    </entity>
+    <entity id="email" name="email" label="Send a reminder email" type="integer">
+      <renderer type="dropdown"/>
+      <options>
+        <option value="0">no</option>
+        <option value="1">yes</option>
+      </options>
+    </entity>
+
+    <entity id="title" name="title" label="Title" type="string" required="true"/>
+    <entity id="description" name="description" label="Description" type="string">
+      <renderer type="textarea"/>
+    </entity>
+  </source>
+  <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
+    <snippet ref="create_snippet"/>
+  </form>
+  <form id="update" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
+    <snippet ref="create_snippet"/>
+  </form>
+  <form id="read" readonly="true">
+    <snippet ref="create_snippet"/>
+  </form>
+
+  <!-- Create-->
+  <snippet id="create_snippet">
+    <snippet ref="s1"/>
+  </snippet>
+
+  <snippet id="s1">
+    <row>
+      <col><field ref="title"/></col>
+    </row>
+    <row>
+      <col><field ref="start"/></col>
+      <col><field ref="end"/></col>
+      <col><field ref="day"/></col>
+    </row>
+    <row>
+      <col><field ref="reminder"/></col>
+      <col><field ref="email"/></col>
+    </row>
+    <row>
+      <col><field ref="description"/></col>
+    </row>
+  </snippet>
+</configuration>

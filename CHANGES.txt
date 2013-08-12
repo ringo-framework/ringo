@@ -1,3 +1,7 @@
+0.5.0
+-----
+- Added Appointment module
+
 0.4.1
 -----
 - Added a Ringo specific renderer for dropdown lists which add a small link

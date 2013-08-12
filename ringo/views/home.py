@@ -8,14 +8,20 @@ from ringo.lib.helpers import (
     get_app_name,
     get_app_title
 )
+from ringo.lib.renderer import ListRenderer
 
+from ringo.model.appointment import Reminders
 from ringo.views import handle_history
 
 
 @view_config(route_name='home', renderer='/index.mako')
 def index_view(request):
+    reminders = Reminders(request.db)
+    reminder_renderer = ListRenderer(reminders)
     handle_history(request)
-    return {}
+    values = {}
+    values['reminders'] = reminder_renderer.render(request)
+    return values
 
 
 @view_config(route_name='about', renderer='/about.mako')
