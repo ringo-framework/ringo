@@ -26,6 +26,19 @@
   color: black;
 }
 
+.dataTables_filter input {
+    margin-bottom: 0px;
+}
+.dataTables_filter {
+    background-color: #F5F5F5;
+    border: 1px solid #E3E3E3;
+    border-radius: 3px 3px 3px 3px;
+    padding: 9px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+    margin-bottom: 10px;
+    min-height: 20px;
+}
+
 /* Search
  * *************************************************************************/
 /* Change the mouse cursor to a pointer when hovering the rows of the

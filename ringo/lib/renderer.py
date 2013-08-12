@@ -185,6 +185,12 @@ class ListRenderer(Renderer):
                   'tableconfig': self.listing.clazz.get_table_config()}
         return self.template.render(**values)
 
+class DTListRenderer(ListRenderer):
+    """Docstring for a ListRenderer using the DataTables Jquery Plugin"""
+    def __init__(self, listing):
+        ListRenderer.__init__(self, listing)
+        self.template = template_lookup.get_template("internal/dtlist.mako")
+
 
 class DialogRenderer(Renderer):
     """Renderer for Dialogs"""

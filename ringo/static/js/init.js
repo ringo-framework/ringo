@@ -4,4 +4,14 @@ $( document ).ready(function() {
     $('#savequerydialog').modal({
       show: false
     });
+     $('.datatable-simple').dataTable(
+        {
+           "bPaginate": false,
+           "bLengthChange": false,
+           "bFilter": true,
+           "bSort": true,
+           "bInfo": false,
+           "bAutoWidth": false
+        }
+     );
 });
