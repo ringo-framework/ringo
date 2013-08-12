@@ -2,6 +2,8 @@
 -----
 - Added a Ringo specific renderer for dropdown lists which add a small link
   next to the label of the dropdownlist.
+- Added Behaviour Driven Test infrastructure based on "behave"
+- Small bugfixes.
 
 0.4.0
 -----
