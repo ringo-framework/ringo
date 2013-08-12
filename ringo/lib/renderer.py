@@ -298,7 +298,13 @@ class DropdownFieldRenderer(FormbarDropDown):
     def _render_link(self):
         html = []
         form = self._field._form
-        item = getattr(form._item, self._field.name)
+        try:
+            item = getattr(form._item, self._field.name)
+        except AttributeError:
+            # Can happen when designing forms an the model of the item
+            # is not yet configured.
+            log.warning("Missing %s attribute in %s" % (form._item, self._field.name))
+            item = None
         if isinstance(item, BaseItem):
             url = "/%s/read/%s" % (item.__tablename__, item.id)
             html.append('<a href="%s">&nbsp;[%s]</a>' % (url, item))
