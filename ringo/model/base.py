@@ -159,7 +159,7 @@ class BaseList(object):
                 raw_value = getattr(item, field)
                 field_config = form_config.get_field(field)
                 for option in field_config.options:
-                    if raw_value == option[1]:
+                    if str(raw_value) == str(option[1]):
                         setattr(item, field, option[0])
 
     def sort(self, field, order):
