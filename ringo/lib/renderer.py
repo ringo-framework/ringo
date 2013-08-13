@@ -104,7 +104,7 @@ class TableConfig:
     configured in the form configuration to the overview.
     """
 
-    def __init__(self, clazz, name="overview"):
+    def __init__(self, clazz, name):
         """Will initialize the configuration of the overview for the
         clazz.
 
@@ -114,7 +114,7 @@ class TableConfig:
         "overview" configuration.
         """
         self.clazz = clazz
-        self.name = name
+        self.name = name or "overview"
         config = _load_overview_config(clazz)
         if config:
             self.config = config
