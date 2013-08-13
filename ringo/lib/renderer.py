@@ -380,5 +380,9 @@ class ListingFieldRenderer(FormbarSelectionField):
     def render(self):
         """Initialize renderer"""
         values = {'items': self.all_items.items,
+                  'field': self._field,
+                  'clazz': self._field._get_sa_mapped_class(),
+                  'request': self._field._form._request,
+                  '_': self._field._form._translate,
                   'tableconfig': self.all_items.clazz.get_table_config()}
         return self.template.render(**values)
