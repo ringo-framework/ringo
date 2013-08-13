@@ -380,7 +380,11 @@ class ListingFieldRenderer(FormbarSelectionField):
     def render(self):
         """Initialize renderer"""
         config = self._field._config.renderer.config
-        values = {'items': self.all_items.items,
+        if self._field.is_readonly():
+            items = self._get_selected_items()
+        else:
+            items = self.all_items.items
+        values = {'items': items,
                   'field': self._field,
                   'clazz': self._field._get_sa_mapped_class(),
                   'request': self._field._form._request,
