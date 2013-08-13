@@ -14,4 +14,14 @@ $( document ).ready(function() {
            "bAutoWidth": false
         }
      );
+     $('.datatable-blank').dataTable(
+        {
+           "bPaginate": false,
+           "bLengthChange": false,
+           "bFilter": false,
+           "bSort": true,
+           "bInfo": false,
+           "bAutoWidth": false
+        }
+     );
 });
