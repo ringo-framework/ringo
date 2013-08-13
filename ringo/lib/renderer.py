@@ -108,8 +108,10 @@ class TableConfig:
         """Will initialize the configuration of the overview for the
         clazz.
 
-        :clazz: The clazz for which the overview configuration should be loaded.
-        :name: name of the configuration. Defaults to the "overview" configuration.
+        :clazz: The clazz for which the overview configuration should be
+        loaded.
+        :name: name of the configuration. Defaults to the
+        "overview" configuration.
         """
         self.clazz = clazz
         self.name = name
@@ -188,9 +190,11 @@ class ListRenderer(Renderer):
                   'enable_bundled_actions': False,
                   'search': search,
                   'search_field': search_field,
-                  'saved_searches': get_saved_searches(request, self.listing.clazz.__tablename__),
+                  'saved_searches': get_saved_searches(request,
+                                                       self.listing.clazz.__tablename__),
                   'tableconfig': self.listing.clazz.get_table_config()}
         return self.template.render(**values)
+
 
 class DTListRenderer(Renderer):
     """Docstring for a ListRenderer using the DataTables Jquery Plugin"""
@@ -208,9 +212,11 @@ class DTListRenderer(Renderer):
                   'tableconfig': self.listing.clazz.get_table_config()}
         return self.template.render(**values)
 
+
 ###########################################################################
 #                         Renderers for dialogs                           #
 ###########################################################################
+
 
 class DialogRenderer(Renderer):
     """Renderer for Dialogs"""
@@ -280,7 +286,7 @@ class ConfirmDialogRenderer(DialogRenderer):
         out.append("</ol>")
         out.append(_('Please press "${Action}" to ${action} the item.'
                      ' Press "Cancel" to cancel the action.',
-                     mapping = mapping))
+                     mapping=mapping))
 
         return "".join(out)
 
@@ -311,9 +317,11 @@ class ErrorDialogRenderer(DialogRenderer):
         out.append(self._body)
         return "".join(out)
 
+
 ###########################################################################
 #                         Renderers for form elements                     #
 ###########################################################################
+
 
 class DropdownFieldRenderer(FormbarDropdown):
     """Ringo specific DropdownFieldRenderer. This renderer add a small
@@ -332,7 +340,8 @@ class DropdownFieldRenderer(FormbarDropdown):
         except AttributeError:
             # Can happen when designing forms an the model of the item
             # is not yet configured.
-            log.warning("Missing %s attribute in %s" % (form._item, self._field.name))
+            log.warning("Missing %s attribute in %s" % (form._item,
+                                                        self._field.name))
             item = None
         if isinstance(item, BaseItem):
             url = "/%s/read/%s" % (item.__tablename__, item.id)
@@ -351,7 +360,7 @@ class ListingFieldRenderer(FormbarSelectionField):
     def __init__(self, field, translate):
         FormbarSelectionField.__init__(self, field, translate)
         self.all_items = self._get_all_items()
-        self.template = template_lookup.get_template("internal/dtlist.mako")
+        self.template = template_lookup.get_template("internal/listfield.mako")
 
     def _get_all_items(self):
         clazz = self._field._get_sa_mapped_class()
@@ -363,7 +372,8 @@ class ListingFieldRenderer(FormbarSelectionField):
         except AttributeError:
             # Can happen when designing forms an the model of the item
             # is not yet configured.
-            log.warning("Missing %s attribute in %s" % (self._field._form._item, self._field.name))
+            log.warning("Missing %s attribute in %s" % (self._field._form._item,
+                                                        self._field.name))
             items = []
         return items
 
