@@ -270,7 +270,8 @@ def create_(clazz, request, callback=None, renderers={}):
                 renderers=renderers,
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,
-                                      'itemid': None})
+                                      'itemid': None},
+                request=request)
     if request.POST:
         item_label = clazz.get_item_modul().get_label()
         mapping = {'item_type': item_label}
@@ -317,7 +318,8 @@ def update_(clazz, request, callback=None, renderers={}):
                 renderers=renderers,
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,
-                                      'itemid': id})
+                                      'itemid': id},
+                request=request)
     if request.POST:
         item_label = clazz.get_item_modul().get_label()
         mapping = {'item_type': item_label, 'item': item}
@@ -363,7 +365,8 @@ def read_(clazz, request, renderers={}):
                 renderers=renderers,
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,
-                                      'itemid': id})
+                                      'itemid': id},
+                request=request)
     rvalue['clazz'] = clazz
     rvalue['item'] = item
     rvalue['form'] = form.render(page=get_current_form_page(clazz, request))
