@@ -6,5 +6,12 @@
             {"name": "end", "label": "End"},
             {"name": "reminder", "label": "Reminder", "expand": true}
         ]
+    },
+    "fieldlist": {
+        "columns": [
+            {"name": "title", "label": "Title", "width": "60%"},
+            {"name": "start", "label": "Begin"},
+            {"name": "end", "label": "End"}
+        ]
     }
 }
