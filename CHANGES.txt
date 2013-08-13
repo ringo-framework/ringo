@@ -1,7 +1,10 @@
 0.5.0
 -----
 - Added Appointment module
-- Added Rederer for a query DataTable Renderer.
+- Added Renderer for a query DataTable Renderer.
+- Added Renderer for ListFields. ListFields are Basically listings of related
+  items in tabular from providing a checkbox to select and deselect items.
+  Selected items will get linked.
 
 0.4.1
 -----
