@@ -62,9 +62,9 @@ class BaseItem(object):
         return factory.load(cls._modul_id)
 
     @classmethod
-    def get_table_config(cls):
+    def get_table_config(cls, tablename=None):
         from ringo.lib.renderer import TableConfig
-        return TableConfig(cls)
+        return TableConfig(cls, tablename)
 
     @classmethod
     def get_form_config(cls, formname):
