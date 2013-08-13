@@ -41,12 +41,18 @@
   </tbody>
 </table>
 % if not field.is_readonly():
-  <a href="${request.route_url(clazz.get_action_routename('create'))}" class="btn btn-primary">${_('Add')}</a>
+  <a href="#" onclick="addItem('${request.route_url(clazz.get_action_routename("create"))}')" class="btn btn-primary">${_('Add')}</a>
 % endif
 
 <script type="text/javascript">
 function openItem(url) {
-  location.href = url;
+  //var activetab = $('.tab-pane.active');
+  location.href = url + '?backurl=' + document.URL;
+};
+
+function addItem(url) {
+  //var activetab = $('.tab-pane.active');
+  location.href = url + '?backurl=' + document.URL;
 };
 
 function checkAll(checkId) {
