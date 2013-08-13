@@ -1,5 +1,14 @@
 <table class="table table-condensed table-striped table-bordered datatable-blank">
   <thead>
+    % if not field.is_readonly():
+    <tr class="table-toolbar">
+      <th colspan="${len(tableconfig.get_columns())+1}">
+      <a href="#"
+      onclick="addItem('${request.route_url(clazz.get_action_routename("create"))}')"
+      class="btn btn-small">${_('Add')}</a>
+      </th>
+    </tr>
+    % endif
     <tr>
     % if not field.is_readonly():
       <th width="2em">
@@ -40,9 +49,6 @@
     % endfor
   </tbody>
 </table>
-% if not field.is_readonly():
-  <a href="#" onclick="addItem('${request.route_url(clazz.get_action_routename("create"))}')" class="btn btn-primary">${_('Add')}</a>
-% endif
 
 <script type="text/javascript">
 function openItem(url) {

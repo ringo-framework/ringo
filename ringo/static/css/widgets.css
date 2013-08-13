@@ -39,6 +39,10 @@
     min-height: 20px;
 }
 
+.table .table-toolbar {
+    background-color: #F5F5F5;
+}
+
 /* Search
  * *************************************************************************/
 /* Change the mouse cursor to a pointer when hovering the rows of the
