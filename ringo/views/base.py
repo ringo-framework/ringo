@@ -283,6 +283,7 @@ def create_(clazz, request, callback=None, renderers={}):
     :returns: Dictionary with the following keys 'clazz', 'item', 'form'
     """
     handle_history(request)
+    handle_params(clazz, request)
     _ = request.translate
     rvalue = {}
     # Add ringo specific renderers
@@ -316,8 +317,16 @@ def create_(clazz, request, callback=None, renderers={}):
                 sitem = callback(request, sitem)
             # Invalidate cache
             invalidate_cache()
-            # Redirect to the update view.
-            return HTTPFound(location=url)
+            # Handle redirect after success.
+            backurl = request.session.get('%s.backurl' % clazz)
+            if backurl:
+                # Redirect to the configured backurl.
+                del request.session['%s.backurl' % clazz]
+                request.session.save()
+                return HTTPFound(location=backurl)
+            else:
+                # Redirect to the update view.
+                return HTTPFound(location=url)
         else:
             msg = _('Error on validation the data'
                     ' for new ${item_type}', mapping=mapping)
@@ -330,6 +339,7 @@ def create_(clazz, request, callback=None, renderers={}):
 
 def update_(clazz, request, callback=None, renderers={}):
     handle_history(request)
+    handle_params(clazz, request)
     _ = request.translate
     rvalue = {}
     # Add ringo specific renderers
@@ -361,8 +371,16 @@ def update_(clazz, request, callback=None, renderers={}):
                 item = callback(request, item)
             # Invalidate cache
             invalidate_cache()
-            # Redirect to the update view.
-            return HTTPFound(location=url)
+            # Handle redirect after success.
+            backurl = request.session.get('%s.backurl' % clazz)
+            if backurl:
+                # Redirect to the configured backurl.
+                del request.session['%s.backurl' % clazz]
+                request.session.save()
+                return HTTPFound(location=backurl)
+            else:
+                # Redirect to the update view.
+                return HTTPFound(location=url)
         else:
             msg = _('Error on validation the data for '
                     '${item_type} "${item}".', mapping=mapping)
@@ -377,6 +395,7 @@ def update_(clazz, request, callback=None, renderers={}):
 
 def read_(clazz, request, renderers={}):
     handle_history(request)
+    handle_params(clazz, request)
     _ = request.translate
     rvalue = {}
     # Add ringo specific renderers
@@ -401,6 +420,7 @@ def read_(clazz, request, renderers={}):
 
 def delete_(clazz, request):
     handle_history(request)
+    handle_params(clazz, request)
     _ = request.translate
     rvalue = {}
     id = request.matchdict.get('id')
@@ -417,7 +437,16 @@ def delete_(clazz, request):
         request.session.flash(msg, 'success')
         # Invalidate cache
         invalidate_cache()
-        return HTTPFound(location=url)
+        # Handle redirect after success.
+        backurl = request.session.get('%s.backurl' % clazz)
+        if backurl:
+            # Redirect to the configured backurl.
+            del request.session['%s.backurl' % clazz]
+            request.session.save()
+            return HTTPFound(location=backurl)
+        else:
+            # Redirect to the update view.
+            return HTTPFound(location=url)
     else:
         # FIXME: Get the ActionItem here and provide this in the Dialog to get
         # the translation working (torsten) <2013-07-10 09:32> 
