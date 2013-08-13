@@ -207,6 +207,16 @@ def list_(clazz, request):
     # list.(None) <2013-08-12 21:26> 
     transaction.doom()
     handle_history(request)
+
+    # If the user enters the overview page of an item we assume that the
+    # user actually leaves any context where a former set backurl is
+    # relevant anymore. So delete it.
+    backurl = request.session.get('%s.backurl' % clazz)
+    if backurl:
+        # Redirect to the configured backurl.
+        del request.session['%s.backurl' % clazz]
+        request.session.save()
+
     rvalue = {}
     search = get_search(clazz, request)
     sorting = handle_sorting(clazz, request)
