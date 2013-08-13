@@ -156,6 +156,10 @@ class Renderer(object):
         pass
 
 
+###########################################################################
+#                         Renderers for overviews                         #
+###########################################################################
+
 class ListRenderer(Renderer):
     """Docstring for ListRenderer """
 
@@ -191,6 +195,9 @@ class DTListRenderer(ListRenderer):
         ListRenderer.__init__(self, listing)
         self.template = template_lookup.get_template("internal/dtlist.mako")
 
+###########################################################################
+#                         Renderers for dialogs                           #
+###########################################################################
 
 class DialogRenderer(Renderer):
     """Renderer for Dialogs"""
@@ -291,6 +298,9 @@ class ErrorDialogRenderer(DialogRenderer):
         out.append(self._body)
         return "".join(out)
 
+###########################################################################
+#                         Renderers for form elements                     #
+###########################################################################
 
 class DropdownFieldRenderer(FormbarDropDown):
     """Ringo specific DropdownFieldRenderer. This renderer add a small
