@@ -1,7 +1,10 @@
 import logging
 import json
 from mako.lookup import TemplateLookup
-from formbar.renderer import DropdownFieldRenderer as FormbarDropDown
+from formbar.renderer import (
+    DropdownFieldRenderer as FormbarDropdown,
+    SelectionFieldRenderer as FormbarSelectionField
+)
 from ringo import template_dir
 from ringo.lib.helpers import (
     get_saved_searches,
@@ -302,14 +305,14 @@ class ErrorDialogRenderer(DialogRenderer):
 #                         Renderers for form elements                     #
 ###########################################################################
 
-class DropdownFieldRenderer(FormbarDropDown):
+class DropdownFieldRenderer(FormbarDropdown):
     """Ringo specific DropdownFieldRenderer. This renderer add a small
     link next to the label to make it possible to jump to the selected
     item in the dropdown list."""
 
     def __init__(self, field, translate):
         """@todo: to be defined"""
-        FormbarDropDown.__init__(self, field, translate)
+        FormbarDropdown.__init__(self, field, translate)
 
     def _render_link(self):
         html = []
@@ -328,6 +331,6 @@ class DropdownFieldRenderer(FormbarDropDown):
 
     def _render_label(self):
         html = []
-        html.append(FormbarDropDown._render_label(self))
+        html.append(FormbarDropdown._render_label(self))
         html.append(self._render_link())
         return "".join(html)
