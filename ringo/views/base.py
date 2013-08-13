@@ -10,7 +10,7 @@ from formbar.form import Form
 from ringo.model.base import BaseList, BaseFactory
 from ringo.model.user import User
 from ringo.lib.renderer import ListRenderer, ConfirmDialogRenderer,\
-DropdownFieldRenderer
+DropdownFieldRenderer, ListingFieldRenderer
 from ringo.lib.sql import invalidate_cache
 from ringo.views import handle_history
 
@@ -262,6 +262,8 @@ def create_(clazz, request, callback=None, renderers={}):
     # Add ringo specific renderers
     if not "dropdown" in renderers:
         renderers["dropdown"] = DropdownFieldRenderer
+    if not "listing" in renderers:
+        renderers["listing"] = ListingFieldRenderer
     factory = clazz.get_item_factory()
     item = factory.create(request.user)
     form = Form(item.get_form_config('create'), item, request.db, translate=_,
@@ -306,6 +308,8 @@ def update_(clazz, request, callback=None, renderers={}):
     # Add ringo specific renderers
     if not "dropdown" in renderers:
         renderers["dropdown"] = DropdownFieldRenderer
+    if not "listing" in renderers:
+        renderers["listing"] = ListingFieldRenderer
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
     item = factory.load(id, request.db)
@@ -350,6 +354,8 @@ def read_(clazz, request, renderers={}):
     # Add ringo specific renderers
     if not "dropdown" in renderers:
         renderers["dropdown"] = DropdownFieldRenderer
+    if not "listing" in renderers:
+        renderers["listing"] = ListingFieldRenderer
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
     item = factory.load(id, request.db)
