@@ -71,6 +71,22 @@ def set_current_form_page(request):
     return Response(body='OK', content_type='text/plain')
 
 
+def handle_params(clazz, request):
+    """Handles varios sytem GET params comming with the request
+    Known params are:
+
+     * backurl: A url which should be called instead of the default
+       action after the next request succeeds. The backurl will be saved
+       in the session and stays there until it is deleted on a
+       successfull request. So take care to delete it to not mess up
+       with the application logic.
+    """
+    backurl = request.GET.get('backurl')
+    if backurl:
+        request.session['%s.backurl' % clazz] = backurl
+    request.session.save()
+
+
 def handle_sorting(clazz, request):
     """Return a tuple of *fieldname* and *sortorder* (asc, desc). The
     sorting is determined in the follwoing order: First try to get the
