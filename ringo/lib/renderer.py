@@ -192,11 +192,21 @@ class ListRenderer(Renderer):
                   'tableconfig': self.listing.clazz.get_table_config()}
         return self.template.render(**values)
 
-class DTListRenderer(ListRenderer):
+class DTListRenderer(Renderer):
     """Docstring for a ListRenderer using the DataTables Jquery Plugin"""
     def __init__(self, listing):
-        ListRenderer.__init__(self, listing)
+        Renderer.__init__(self)
+        self.listing = listing
         self.template = template_lookup.get_template("internal/dtlist.mako")
+
+    def render(self, request):
+        """Initialize renderer"""
+        values = {'items': self.listing.items,
+                  'listing': self.listing,
+                  'request': request,
+                  '_': request.translate,
+                  'tableconfig': self.listing.clazz.get_table_config()}
+        return self.template.render(**values)
 
 ###########################################################################
 #                         Renderers for dialogs                           #
