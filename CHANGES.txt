@@ -5,6 +5,9 @@
 - Added Renderer for ListFields. ListFields are Basically listings of related
   items in tabular from providing a checkbox to select and deselect items.
   Selected items will get linked.
+- Added "backurl" GET parameter. This parameter can be used to define a URL
+  which should be called instead of the default redirect action after create,
+  update or delete succeeds. The parameter is saved in a session.
 
 0.4.1
 -----
