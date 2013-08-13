@@ -91,6 +91,8 @@ def get_path_to_overview_config(filename, app=None):
 
 
 def get_saved_searches(request, name):
+    if not request.user:
+        return {}
     searches_dic = request.user.settings.get('searches', {})
     if searches_dic:
         searches_dic_search = searches_dic.get(name, {})
