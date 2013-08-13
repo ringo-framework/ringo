@@ -91,6 +91,11 @@ def get_path_to_overview_config(filename, app=None):
 
 
 def get_saved_searches(request, name):
+    """Returns a dictionary with the saved searches for the named overview.
+    :request: Current request
+    :name: Name of the overview
+    :returns: Dictionary with the saved seaerches.
+    """
     if not request.user:
         return {}
     searches_dic = request.user.settings.get('searches', {})
