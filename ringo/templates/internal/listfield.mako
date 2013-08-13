@@ -7,7 +7,7 @@
       </th>
     % endif
       % for col in tableconfig.get_columns():
-      <th>${col.get('label')}</th>
+      <th width="${col.get('width')}">${col.get('label')}</th>
       % endfor
     </tr>
   </thead>
