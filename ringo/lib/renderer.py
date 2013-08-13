@@ -344,3 +344,31 @@ class DropdownFieldRenderer(FormbarDropdown):
         html.append(FormbarDropdown._render_label(self))
         html.append(self._render_link())
         return "".join(html)
+
+
+class ListingFieldRenderer(FormbarSelectionField):
+
+    def __init__(self, field, translate):
+        FormbarSelectionField.__init__(self, field, translate)
+        self.all_items = self._get_all_items()
+        self.template = template_lookup.get_template("internal/dtlist.mako")
+
+    def _get_all_items(self):
+        clazz = self._field._get_sa_mapped_class()
+        return clazz.get_item_list(self._field._form._dbsession)
+
+    def _get_selected_items(self):
+        try:
+            items = getattr(self._field._form._item, self._field.name)
+        except AttributeError:
+            # Can happen when designing forms an the model of the item
+            # is not yet configured.
+            log.warning("Missing %s attribute in %s" % (self._field._form._item, self._field.name))
+            items = []
+        return items
+
+    def render(self):
+        """Initialize renderer"""
+        values = {'items': self.all_items.items,
+                  'tableconfig': self.all_items.clazz.get_table_config()}
+        return self.template.render(**values)
