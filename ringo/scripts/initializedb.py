@@ -26,6 +26,9 @@ from ringo.model.modul import (
 from ringo.model.appointment import (
     init_model as init_appointment_model
 )
+from ringo.model.file import (
+    init_model as init_file_model
+)
 
 
 def usage(argv):
@@ -44,6 +47,7 @@ def main(argv=sys.argv):
     engine = engine_from_config(settings, 'sqlalchemy.')
     inititializedb(engine)
 
+
 def inititializedb(engine):
     Base.metadata.create_all(engine)
     DBSession.configure(bind=engine)
@@ -51,4 +55,5 @@ def inititializedb(engine):
         init_modul_model(DBSession)
         init_user_model(DBSession)
         init_appointment_model(DBSession)
+        init_file_model(DBSession)
 
