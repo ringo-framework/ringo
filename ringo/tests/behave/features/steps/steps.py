@@ -24,8 +24,16 @@ def get_modul_path(modul):
     path = []
     if modul == "user":
         path.append("users")
+    elif modul == "usergroup":
+        path.append("usergroups")
     elif modul == "role":
         path.append("roles")
+    elif modul == "profil":
+        path.append("profiles")
+    elif modul == "modul":
+        path.append("modules")
+    elif modul == "appointment":
+        path.append("appointments")
     return path
 
 @when(u'opens the create page of modul {modul}')
