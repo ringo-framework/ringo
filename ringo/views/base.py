@@ -1,9 +1,10 @@
 import uuid
 import logging
 import transaction
-from pyramid.httpexceptions import HTTPFound
+from pyramid.httpexceptions import HTTPFound, HTTPBadRequest
 from pyramid.response import Response
 from pyramid.view import view_config
+import sqlalchemy as sa
 
 from formbar.form import Form
 
@@ -349,7 +350,13 @@ def update_(clazz, request, callback=None, renderers={}):
         renderers["listing"] = ListingFieldRenderer
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
-    item = factory.load(id, request.db)
+
+    # Load the item return 400 if the item can not be found.
+    try:
+        item = factory.load(id, request.db)
+    except sa.orm.exc.NoResultFound:
+        raise HTTPBadRequest()
+
     form = Form(item.get_form_config('update'), item, request.db, translate=_,
                 renderers=renderers,
                 change_page_callback={'url': 'set_current_form_page',
@@ -405,7 +412,13 @@ def read_(clazz, request, renderers={}):
         renderers["listing"] = ListingFieldRenderer
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
-    item = factory.load(id, request.db)
+
+    # Load the item return 400 if the item can not be found.
+    try:
+        item = factory.load(id, request.db)
+    except sa.orm.exc.NoResultFound:
+        raise HTTPBadRequest()
+
     form = Form(item.get_form_config('read'), item, request.db, translate=_,
                 renderers=renderers,
                 change_page_callback={'url': 'set_current_form_page',
@@ -425,7 +438,13 @@ def delete_(clazz, request):
     rvalue = {}
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
-    item = factory.load(id, request.db)
+
+    # Load the item return 400 if the item can not be found.
+    try:
+        item = factory.load(id, request.db)
+    except sa.orm.exc.NoResultFound:
+        raise HTTPBadRequest()
+
     if request.method == 'POST' and confirmed(request):
         request.db.delete(item)
         route_name = clazz.get_action_routename('list')
