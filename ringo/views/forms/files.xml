@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <configuration xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="ringo">
   <source>
-    <!-- Define different entity types -->
-    <!-- This field is only a Dummy field as example which is not really in the database -->
-    <entity i18n:attributes="label" id="e1" name="dummy" label="Dummy" type="string"/>
+    <entity id="name" name="name" label="Name" type="string">
+      <help>You can define an alternative name for the file. If left blank
+      than the origin filename will be used as name.</help>
+    </entity>
+    <entity id="filename" name="file" label="File" type="file"/>
+    <entity id="data" name="data" label="Data" type="blob"/>
+    <entity id="description" name="description" label="Description" type="string">
+      <renderer type="textarea"/>
+    </entity>
+    <entity id="size" name="size" label="size" type="integer"/>
+    <entity id="mime" name="mime" label="mime" type="string"/>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>
@@ -17,13 +25,15 @@
 
   <!-- Create-->
   <snippet id="create_snippet">
-    <snippet ref="s1"/>
-  </snippet>
-
-  <!-- Role -->
-  <snippet id="s1">
     <row>
-      <col><field ref="e1"/></col>
+      <col><field ref="filename"/></col>
+    </row>
+    <row>
+      <col><field ref="name"/></col>
+    </row>
+    <row>
+      <col><field ref="description"/></col>
     </row>
   </snippet>
+
 </configuration>
