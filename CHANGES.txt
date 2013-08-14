@@ -1,3 +1,7 @@
+0.5.1
+-----
+- Added support for alembic for database migrations.
+
 0.5.0
 -----
 - Added Appointment module
