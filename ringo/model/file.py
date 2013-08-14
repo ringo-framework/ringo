@@ -17,6 +17,13 @@ class File(BaseItem, Owned, Base):
     _modul_id = 8
     id = sa.Column(sa.Integer, primary_key=True)
 
+    name = sa.Column('name', sa.Text, nullable=True, default=None)
+    file = sa.Column('file', sa.Text, nullable=True, default=None)
+    data = sa.Column('data', sa.LargeBinary, nullable=True, default=None)
+    description = sa.Column('description', sa.Text, nullable=True, default=None)
+    size = sa.Column('size', sa.Integer, nullable=True, default=None)
+    mime = sa.Column('mime', sa.Text, nullable=True, default=None)
+
     def __unicode__(self):
         return str(self.id)
 
