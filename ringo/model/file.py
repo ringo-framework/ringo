@@ -1,7 +1,7 @@
 import sqlalchemy as sa
 from ringo.model import Base
 from ringo.model.base import BaseItem, BaseFactory
-from ringo.model.modul import ModulItem, _create_default_actions
+from ringo.model.modul import ModulItem, _create_default_actions, ActionItem
 from ringo.model.mixins import Owned
 
 
@@ -39,3 +39,10 @@ def init_model(dbsession):
     modul.display = "header-menu"
     modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
+    dbsession.flush()
+    # Add download action
+    action = ActionItem()
+    action.mid = modul.id
+    action.url = 'download/{id}'
+    action.icon = 'icon-download'
+    modul.actions.append(action)

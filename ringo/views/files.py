@@ -1,6 +1,8 @@
 import logging
 import mimetypes
+from pyramid.response import Response
 from pyramid.view import view_config
+
 
 from ringo.views.base import list_, create_, update_, read_, delete_
 from ringo.views.json import (
@@ -63,6 +65,15 @@ def read(request):
 def delete(request):
     return delete_(File, request)
 
+
+@view_config(route_name=File.get_action_routename('download'),
+             permission='download')
+def download(request):
+    result = read_(File, request)
+    response = Response(content_type='application/force-download',
+                        content_disposition='attachment; filename=' + result['item'].name)
+    response.app_iter = result['item'].data
+    return response
 #                               REST SERVICE                              #
 
 @view_config(route_name=File.get_action_routename('list', prefix="rest"),
