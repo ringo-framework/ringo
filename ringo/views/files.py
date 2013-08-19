@@ -1,6 +1,6 @@
 import logging
 import mimetypes
-from pyramid.response import Response
+from pyramid.response import FileIter
 from pyramid.view import view_config
 
 
@@ -22,6 +22,8 @@ def save_file(request, item):
     request and set it in the model including size and mime type.
     Addiotionally it will set the filename based on the uploaded file if
     no other name is given."""
+    # Rewind file
+    request.POST.get('file').file.seek(0)
     data = request.POST.get('file').file.read()
     filename = request.POST.get('file').filename
     item.data = data
@@ -70,10 +72,13 @@ def delete(request):
              permission='download')
 def download(request):
     result = read_(File, request)
-    response = Response(content_type='application/force-download',
-                        content_disposition='attachment; filename=' + result['item'].name)
-    response.app_iter = result['item'].data
+    item = result['item']
+    response = request.response
+    response.content_type = str(item.mime)
+    response.content_disposition = 'attachment; filename=%s' % item.name
+    response.body = item.data
     return response
+
 #                               REST SERVICE                              #
 
 @view_config(route_name=File.get_action_routename('list', prefix="rest"),
