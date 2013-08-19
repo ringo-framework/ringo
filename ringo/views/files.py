@@ -1,4 +1,5 @@
 import logging
+import mimetypes
 from pyramid.view import view_config
 
 from ringo.views.base import list_, create_, update_, read_, delete_
@@ -13,7 +14,20 @@ from ringo.model.file import File
 
 log = logging.getLogger(__name__)
 
-#                                HTML VIEW                                #
+def save_file(request, item):
+    """Helper function which is called after the validation of the form
+    succeeds. The function will get the data from the file from the
+    request and set it in the model including size and mime type.
+    Addiotionally it will set the filename based on the uploaded file if
+    no other name is given."""
+    data = request.POST.get('file').file.read()
+    filename = request.POST.get('file').filename
+    item.data = data
+    item.size = len(data)
+    item.mime = mimetypes.guess_type(filename)[0]
+    if not request.POST.get('name'):
+        item.name = filename
+    return item
 
 @view_config(route_name=File.get_action_routename('list'),
              renderer='/default/list.mako',
@@ -26,14 +40,14 @@ def list(request):
              renderer='/default/create.mako',
              permission='create')
 def create(request):
-    return create_(File, request)
+    return create_(File, request, callback=save_file)
 
 
 @view_config(route_name=File.get_action_routename('update'),
              renderer='/default/update.mako',
              permission='update')
 def update(request):
-    return update_(File, request)
+    return update_(File, request, callback=save_file)
 
 
 @view_config(route_name=File.get_action_routename('read'),
