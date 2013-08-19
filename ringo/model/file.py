@@ -43,6 +43,7 @@ def init_model(dbsession):
     # Add download action
     action = ActionItem()
     action.mid = modul.id
+    action.name = 'Download'
     action.url = 'download/{id}'
     action.icon = 'icon-download'
     modul.actions.append(action)
