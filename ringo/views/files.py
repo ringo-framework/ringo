@@ -22,15 +22,19 @@ def save_file(request, item):
     request and set it in the model including size and mime type.
     Addiotionally it will set the filename based on the uploaded file if
     no other name is given."""
-    # Rewind file
-    request.POST.get('file').file.seek(0)
-    data = request.POST.get('file').file.read()
-    filename = request.POST.get('file').filename
-    item.data = data
-    item.size = len(data)
-    item.mime = mimetypes.guess_type(filename)[0]
-    if not request.POST.get('name'):
-        item.name = filename
+    try:
+        # Rewind file
+        request.POST.get('file').file.seek(0)
+        data = request.POST.get('file').file.read()
+        filename = request.POST.get('file').filename
+        item.data = data
+        item.size = len(data)
+        item.mime = mimetypes.guess_type(filename)[0]
+        if not request.POST.get('name'):
+            item.name = filename
+    except AttributeError:
+        # Will be raised if the user submits no file.
+        pass
     return item
 
 @view_config(route_name=File.get_action_routename('list'),
