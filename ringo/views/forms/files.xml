@@ -9,17 +9,17 @@
     <entity id="description" name="description" label="Description" type="string">
       <renderer type="textarea"/>
     </entity>
-    <entity id="size" name="size" label="size" type="integer"/>
-    <entity id="mime" name="mime" label="mime" type="string"/>
+    <entity id="size" name="size" label="Size" type="integer" readonly="true"/>
+    <entity id="mime" name="mime" label="Mime" type="string" readonly="true"/>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>
   </form>
   <form id="update" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
-    <snippet ref="create_snippet"/>
+    <snippet ref="edit_snippet"/>
   </form>
   <form id="read" readonly="true">
-    <snippet ref="create_snippet"/>
+    <snippet ref="read_snippet"/>
   </form>
 
   <!-- Create-->
@@ -29,6 +29,35 @@
     </row>
     <row>
       <col><field ref="name"/></col>
+    </row>
+    <row>
+      <col><field ref="description"/></col>
+    </row>
+  </snippet>
+
+  <snippet id="read_snippet">
+    <row>
+      <col><field ref="name"/></col>
+    </row>
+    <row>
+      <col><field ref="size"/></col>
+      <col><field ref="mime"/></col>
+    </row>
+    <row>
+      <col><field ref="description"/></col>
+    </row>
+  </snippet>
+
+  <snippet id="edit_snippet">
+    <row>
+      <col><field ref="file"/></col>
+    </row>
+    <row>
+      <col><field ref="name"/></col>
+    </row>
+    <row>
+      <col><field ref="size"/></col>
+      <col><field ref="mime"/></col>
     </row>
     <row>
       <col><field ref="description"/></col>
