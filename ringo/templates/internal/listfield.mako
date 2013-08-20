@@ -4,7 +4,7 @@
     <tr class="table-toolbar">
       <th colspan="${len(tableconfig.get_columns())+1}">
       <a href="#"
-      onclick="addItem('${request.route_url(clazz.get_action_routename("create"))}')"
+      onclick="addItem('${request.route_url(clazz.get_action_routename("create"))}', '${field.renderer.foreignkey}', '${field._form._item.id}')"
       class="btn btn-small">${_('Add')}</a>
       </th>
     </tr>
@@ -56,9 +56,9 @@ function openItem(url) {
   location.href = url + '?backurl=' + document.URL;
 };
 
-function addItem(url) {
+function addItem(url, foreignkey, id) {
   //var activetab = $('.tab-pane.active');
-  location.href = url + '?backurl=' + document.URL;
+  location.href = url + '?values=' + foreignkey + ':' + id + '&backurl=' + document.URL;
 };
 
 function checkAll(checkId) {
