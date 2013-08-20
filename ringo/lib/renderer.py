@@ -379,7 +379,9 @@ class ListingFieldRenderer(FormbarSelectionField):
 
     def render(self):
         """Initialize renderer"""
+        html = []
         config = self._field._config.renderer.config
+        html.append(self._render_label())
         if self._field.is_readonly():
             items = self._get_selected_items()
         else:
@@ -390,4 +392,5 @@ class ListingFieldRenderer(FormbarSelectionField):
                   'request': self._field._form._request,
                   '_': self._field._form._translate,
                   'tableconfig': self.all_items.clazz.get_table_config(config)}
-        return self.template.render(**values)
+        html.append(self.template.render(**values))
+        return "".join(html)
