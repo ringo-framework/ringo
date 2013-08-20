@@ -295,7 +295,7 @@ def create_(clazz, request, callback=None, renderers={}):
     :returns: Dictionary with the following keys 'clazz', 'item', 'form'
     """
     handle_history(request)
-    handle_params(clazz, request)
+    params = handle_params(clazz, request)
     _ = request.translate
     rvalue = {}
     # Add ringo specific renderers
@@ -345,7 +345,8 @@ def create_(clazz, request, callback=None, renderers={}):
             request.session.flash(msg, 'error')
     rvalue['clazz'] = clazz
     rvalue['item'] = item
-    rvalue['form'] = form.render(page=get_current_form_page(clazz, request))
+    rvalue['form'] = form.render(values=params.get('values', {}),
+                                 page=get_current_form_page(clazz, request))
     return rvalue
 
 
