@@ -89,6 +89,12 @@ def handle_params(clazz, request):
     if backurl:
         request.session['%s.backurl' % clazz] = backurl
         params['backurl'] = backurl
+    values = request.GET.get('values')
+    if values:
+        params['values'] = {}
+        for kvpair in values.split(','):
+            key, value = kvpair.split(':')
+            params['values'][key] = value
     request.session.save()
     return params
 
