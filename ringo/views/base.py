@@ -81,11 +81,16 @@ def handle_params(clazz, request):
        in the session and stays there until it is deleted on a
        successfull request. So take care to delete it to not mess up
        with the application logic.
+     * values: A comma separated list of key/value pair. Key and value
+       are separated with an ":"
     """
+    params = {}
     backurl = request.GET.get('backurl')
     if backurl:
         request.session['%s.backurl' % clazz] = backurl
+        params['backurl'] = backurl
     request.session.save()
+    return params
 
 
 def handle_sorting(clazz, request):
