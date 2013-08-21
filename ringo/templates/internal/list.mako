@@ -1,3 +1,6 @@
+<%
+mapping = {'num_filters': len(listing.search_filter)}
+%>
 <div class="well well-small search-widget">
   <form name="search" class="form-inline" action="${request.current_route_url()}" method="POST">
     <input name="form" type="hidden" value="search">
@@ -37,7 +40,7 @@
       </ul>
     </div>
     % if len(listing.search_filter) > 0:
-      <span class="muted"><small>(${_('${num_filter} filter applied', mapping={'num_filters': len(listing.search_filter)})})</small></span>
+      <span class="muted"><small>(${_('${num_filter} filter applied', mapping=mapping )})</small></span>
     % endif
   </form>
 </div>

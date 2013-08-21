@@ -1,8 +1,11 @@
 <%inherit file="/main.mako" />
+<%
+mapping={'app_title': h.get_app_title()}
+%>
 <div class="page-header">
 <h1>Home</h1>
 </div>
-<h2>${_('Welcome to ${app_title}!', mapping={'app_title': h.get_app_title()})}</h2>
+<h2>${_('Welcome to ${app_title}!', mapping=mapping)}</h2>
 <p>${_('What you see here is the default dashboard and layout based on the Ringo application framework. This is your home. Your dashboard. Usually this page is used to give and overview on the most important things like appointments, news and more in this application.')}</p>
 % if not request.user:
 <h2>${_('Next stop: Login!')}</h2>
