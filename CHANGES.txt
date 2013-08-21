@@ -1,3 +1,7 @@
+0.6.2
+-----
+- Updated translations (missing translations for file and appointment modul)
+
 0.6.1
 -----
 - Bugfixe on File modul initialisation (missing name)
