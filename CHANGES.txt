@@ -1,3 +1,11 @@
+0.6.1
+-----
+- Bugfixe on File modul initialisation (missing name)
+- Added "values" GET param for views. Can be used to prefill forms with given
+  values.
+- Improved rendering of the ListField Renderer. (Added label, Use new "values"
+  parameter)
+
 0.6.0
 -----
 - Added File module
