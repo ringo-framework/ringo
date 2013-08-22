@@ -61,7 +61,7 @@ class RessourceFactory(object):
         If it is not an administrational role, the "list" and "create"
         actions are added in all cases. Item related action like "edit",
         "delete" or "read" are only added if the current user is
-        actually the owner.
+        actually the owner or the user is member of the items group.
 
         :request: current request
         :returns: List of Action items (Permissions)
@@ -75,13 +75,13 @@ class RessourceFactory(object):
             log.debug("Setting permissions for role %s" % role)
             for perm in role.permissions:
                 if perm.modul.id == self.__model__._modul_id:
-                    permission = None
                     if role.admin == True:
                         # Set administrational role based permissions. For
                         # administrational roles no ownership is
                         # checked an the user will get all permissions which are
                         # assigned to the role.
                         permission = (Allow, 'role:%s' % role, perm.name.lower())
+                        permissions.append(permission)
                     else:
                         # Set user roles based permission. In contrast to the
                         # administrational roles the user will only get the permissions
@@ -89,11 +89,15 @@ class RessourceFactory(object):
                         # item or if the action is "list" of "create".
                         if perm.name.lower() in ['list', 'create']:
                             permission = (Allow, 'role:%s' % role, perm.name.lower())
+                            permissions.append(permission)
                         elif self.item:
                             permission = (Allow, 'uid:%s' % self.item.uid, perm.name.lower())
-                    if permission:
-                        log.debug("adding new permission: %s" % str(permission))
-                        permissions.append(permission)
+                            permissions.append(permission)
+                            permission = (Allow, 'group:%s' % self.item.gid, perm.name.lower())
+                            permissions.append(permission)
+        # Debugging output.
+        for perm in permissions:
+            log.debug("adding new permission: %s" % str(permission))
         return permissions
 
     def _set_acl(self, request):

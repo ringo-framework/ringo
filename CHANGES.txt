@@ -1,8 +1,12 @@
 0.6.2
 -----
-- Updated translations (missing translations for file and appointment modul)
 - Fixed user form configuration which leads to an error in password generation
   while creating a new user.
+- Changed authorisation. Now access to items are also granted if the user is
+  member of the items group.
+- Changed authorisation in Itemlists. Only items are included in the overview
+  if the user has access to read the item.
+- Updated translations (missing translations for file and appointment modul)
 
 0.6.1
 -----
