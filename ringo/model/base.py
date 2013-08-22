@@ -88,12 +88,14 @@ class BaseItem(object):
 
 
 class BaseList(object):
-    def __init__(self, clazz, db, cache=""):
+    def __init__(self, clazz, db, user=None, cache=""):
         """
         A List object of. A list can be filterd, and sorted.
 
         :clazz: Class of items which will be loaded.
         :db: DB session to load the item
+        :user: If provided only items readable for the
+        given user are included in the list
         :cache: Name of the cache region. If empty then no caching is
         done.
         """
@@ -111,8 +113,41 @@ class BaseList(object):
         for relation in self.clazz._sql_cached_realtions:
             q = q.options(joinedload(relation))
 
-        self.items = q.all()
+        self.items = self._filter_for_user(q.all(), user)
         self.search_filter = []
+
+    def _filter_for_user(self, items, user):
+        """Returns a filterd item list. The items are filterd based on
+        the permission of the given user. Only items are included where
+        the given user has read access. This means:
+
+         1. The user has aproriate role (read access)
+         2. Is owner or member of the items group 
+
+        If no user is provided the list is not filtered and all origin
+        items are included in the returned list.
+        """
+        # Filter items based on the uid
+        filtered_items = []
+        if user:
+            # TODO: Check if the user has the role to read items of the
+            # clazz. If not then we do not need to check any further as
+            # the user isn't allowed to see the item anyway. (torsten)
+            # <2013-08-22 08:06>
+            groups = [g.id for g in user.groups]
+
+            # Iterate over all items and check if the user has generally
+            # access to the item.
+            for item in items:
+                # Is owner?
+                if item.uid == user.id:
+                    filtered_items.append(item)
+                # Is in group?
+                elif item.gid in groups:
+                    filtered_items.append(item)
+            return filtered_items
+        else:
+            return items
 
     def __json__(self, request):
         return self.items
