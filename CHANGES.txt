@@ -1,6 +1,8 @@
 0.6.2
 -----
 - Updated translations (missing translations for file and appointment modul)
+- Fixed user form configuration which leads to an error in password generation
+  while creating a new user.
 
 0.6.1
 -----
