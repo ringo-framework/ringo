@@ -1,3 +1,10 @@
+0.6.2
+-----
+- Changed authorisation. Now access to items are also granted if the user is
+  member of the items group.
+- Changed authorisation in Itemlists. Only items are included in the overview
+  if the user has access to read the item.
+
 0.6.1
 -----
 - Bugfixe on File modul initialisation (missing name)
