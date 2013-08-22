@@ -61,7 +61,7 @@ class RessourceFactory(object):
         If it is not an administrational role, the "list" and "create"
         actions are added in all cases. Item related action like "edit",
         "delete" or "read" are only added if the current user is
-        actually the owner.
+        actually the owner or the user is member of the items group.
 
         :request: current request
         :returns: List of Action items (Permissions)
