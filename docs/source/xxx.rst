@@ -402,6 +402,8 @@ Commands
 ********
 Ringo implements some additional commands which can be used on the shell.
 
+.. _commands_add_modul:
+
 add_modul
 =========
 The "add_modul" command is used to add :ref:`modules` to your application. The
@@ -411,6 +413,9 @@ within your projects as boilerplate for further development.
 Usage::
 
         add_ringo_modul --config /path/to/your/application-config.ini NameOfModul
+
+.. important::
+The name of the modul should be the singular form of a noun.
 
 The actual name of the command may vary if you want to add a modul your a
 Ringo based application. Please call the command with "--help" option to get a
@@ -518,6 +523,44 @@ the instructions provided in the README file with the application folder::
         cat README.rst
 
 Your application is ready for development :)
+
+Add a new modul to your application
+===================================
+If you want to add a new modul to your ringo based application or the the
+ringo base then you should follow the steps described below.
+
+ 1. Call the :ref:commands_add_modul_ add_modul command to add the new modul.
+
+.. important::
+
+        Make sure your application codebase is up to date. This includes the
+        application code, ringo and the database. Are all changes commited?
+
+This was easy, ey?
+But this is only the quick shot. For more advanced usage proceed to the next
+section.
+
+Using alembic for database migration.
+------------------------------------
+In order to be able to migrate your database also, the precedure of creating a
+new modul gets a little bit more complex.
+
+ 1. Back a backup of your Database.
+ 2. Call the :ref:commands_add_modul_ add_modul command to add the new modul.
+ 3. Backup temporily the database with the new created modul. We need the
+ INSERTS statements later. Alternatively you can dump the data. We are not
+ interested in the schema here as this can be regenerated from the model.
+ 4. Restore old database to restore the unmodified database.
+ 5. Autogenerate a migration script using alembic. Alembic will generate a
+ migration script to migrate the old (restored) database to the new model.
+ 6. As alemembic only recognizes schema changes all inserts made while adding
+ the modul are lost. No you can grep the needed Inserts from the saved
+ database and add them to the migration script.
+ 7. Upgrade the database by applying the fresh generated migration script.
+
+ After these steps you should be able to migrate your application by using
+ your SCM to versionize the application code base and by using alembic your
+ the database versioning.
 
 Change various aspects in my Ringo based application
 ====================================================
