@@ -27,10 +27,6 @@
     <link href="../assets/ico/apple-touch-icon-72-precomposed.png" sizes="72x72" rel="apple-touch-icon-precomposed">
     <link href="../assets/ico/apple-touch-icon-57-precomposed.png" rel="apple-touch-icon-precomposed">
     <link href="../assets/ico/favicon.png" rel="shortcut icon">
-  </head>
-  <body>
-  ${next.body()}
-    <!-- Move JS to the bottom of the page -->
     <script src="/static/js/jquery.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
     <script src="/static/js/dataTables.js"></script>
@@ -38,6 +34,9 @@
     <script>
       ${h.get_formbar_js() | n}
     </script>
+  </head>
+  <body>
+  ${next.body()}
   </body>
 </html>
 
