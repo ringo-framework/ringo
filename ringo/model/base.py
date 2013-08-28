@@ -136,14 +136,18 @@ class BaseList(object):
             # <2013-08-22 08:06>
             groups = [g.id for g in user.groups]
 
+
             # Iterate over all items and check if the user has generally
             # access to the item.
             for item in items:
-                # Is owner?
-                if item.uid == user.id:
-                    filtered_items.append(item)
-                # Is in group?
-                elif item.gid in groups:
+                if hasattr(item, 'uid'):
+                    # Is owner?
+                    if item.uid == user.id:
+                        filtered_items.append(item)
+                    # Is in group?
+                    elif item.gid in groups:
+                        filtered_items.append(item)
+                else:
                     filtered_items.append(item)
             return filtered_items
         else:
