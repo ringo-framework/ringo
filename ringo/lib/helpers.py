@@ -29,7 +29,7 @@ def import_model(clazzpath):
     if modul.clazzpath == clazzpath:
         return orig_clazz
     else:
-        return import_modul(modul.clazzpath)
+        return import_model(modul.clazzpath)
 
 def get_ringo_version():
     return pkg_resources.get_distribution('ringo').version
