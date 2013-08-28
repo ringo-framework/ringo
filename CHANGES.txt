@@ -7,6 +7,9 @@
 - Changed authorisation in Itemlists. Only items are included in the overview
   if the user has access to read the item.
 - Updated translations (missing translations for file and appointment modul)
+- Changed imports of models. Now use specific import_modul function to import
+  models in the application to be able to import overwritten clazzes in other
+  applications.
 
 0.6.1
 -----
