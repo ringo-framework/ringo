@@ -10,6 +10,26 @@ def dynamic_import(cl):
     m = __import__(cl[0:d], globals(), locals(), [classname])
     return getattr(m, classname)
 
+def import_model(clazzpath):
+    """Will return the clazz defined by modul entry in the database of
+    the given model. The clazzpath defines the base clazz which which
+    defines the ID of the modul it belongs to.
+    The function will first import the clazz and load the related modul
+    entry for the model from the database. The we look for the clazzpath
+    entry of the modul. If the moduls clazzpath is the same as the model
+    clazzpath the return the imported model.
+    If the clazzpath differs then import the model defined by the moduls
+    clazzpath."""
+    from ringo.lib.sql import DBSession
+    from ringo.model.modul import ModulItem
+    orig_clazz = dynamic_import(clazzpath)
+    # Load entry from the database for the given modul
+    mid = orig_clazz._modul_id
+    modul = DBSession.query(ModulItem).filter_by(id=mid).one()
+    if modul.clazzpath == clazzpath:
+        return orig_clazz
+    else:
+        return import_modul(modul.clazzpath)
 
 def get_ringo_version():
     return pkg_resources.get_distribution('ringo').version
