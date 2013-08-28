@@ -600,7 +600,8 @@ A new migration script should now be generated including the new added fields.
 
 Finallay we must tell the appplication to use the new created profile. The
 information where to find the model clazz of the modul is stored in the
-database in the field "clazzpath" for each modul. By changing this value to
+database in the field "clazzpath" for each modul. This field can't be changed
+in the UI. You must to the change on the database directly. By changing this value to
 the path of your new modul the application will now use the new model.
 
 Change form
