@@ -9,7 +9,8 @@ import sqlalchemy as sa
 from formbar.form import Form
 
 from ringo.model.base import BaseList, BaseFactory
-from ringo.model.user import User
+from ringo.lib.helpers import import_model
+User = import_model('ringo.model.user.User')
 from ringo.lib.renderer import ListRenderer, ConfirmDialogRenderer,\
 DropdownFieldRenderer, ListingFieldRenderer
 from ringo.lib.sql import invalidate_cache

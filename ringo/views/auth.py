@@ -10,7 +10,11 @@ from pyramid_mailer.message import Message
 
 from ringo.lib.sql import DBSession
 from ringo.model.base import BaseFactory
-from ringo.model.user import User, Profile, Usergroup, USER_GROUP_ID
+from ringo.model.user import USER_GROUP_ID
+from ringo.lib.helpers import import_model
+User = import_model('ringo.model.user.User')
+Profile = import_model('ringo.model.user.Profile')
+Usergroup = import_model('ringo.model.user.Usergroup')
 from formbar.config import Config, load
 from formbar.form import Form, Validator
 

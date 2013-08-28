@@ -7,7 +7,8 @@ from ringo.views.json import (
     update_ as json_update,
     read_   as json_read
     )
-from ringo.model.modul import ModulItem
+from ringo.lib.helpers import import_model
+ModulItem = import_model('ringo.model.modul.ModulItem')
 
 log = logging.getLogger(__name__)
 

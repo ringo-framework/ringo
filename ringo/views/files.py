@@ -12,7 +12,8 @@ from ringo.views.json import (
     read_   as json_read,
     delete_ as json_delete
     )
-from ringo.model.file import File
+from ringo.lib.helpers import import_model
+File = import_model('ringo.model.file.File')
 
 log = logging.getLogger(__name__)
 

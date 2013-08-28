@@ -7,7 +7,6 @@ from ringo.views.json import (
     update_ as json_update,
     read_   as json_read
     )
-
 from ringo.lib.helpers import import_model
 Profile = import_model('ringo.model.user.Profile')
 

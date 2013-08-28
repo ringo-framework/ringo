@@ -9,7 +9,8 @@ from ringo.views.json import (
     read_   as json_read,
     delete_ as json_delete
     )
-from ringo.model.appointment import Appointment
+from ringo.lib.helpers import import_model
+Appointment = import_model('ringo.model.appointment.Appointment')
 
 log = logging.getLogger(__name__)
 

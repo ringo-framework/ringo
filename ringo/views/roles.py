@@ -9,7 +9,8 @@ from ringo.views.json import (
     read_   as json_read,
     delete_ as json_delete
     )
-from ringo.model.user import Role
+from ringo.lib.helpers import import_model
+Role = import_model('ringo.model.user.Role')
 
 log = logging.getLogger(__name__)
 
