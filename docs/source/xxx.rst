@@ -573,7 +573,10 @@ options to modifiy the view, model or logic of the modul.
 
 Extend the model
 ----------------
-First you need to create a new model file in your application. In this file create a model which inherits from the base modul and add attributes and extend or overwrite functions as needed. In the following example we add two additional columns to the base Profile modul::
+First you need to create a new model file in your application. In this file
+create a model which inherits from the base modul and add attributes and
+extend or overwrite functions as needed. In the following example we add two
+additional columns to the base Profile modul::
 
         import sqlalchemy as sa
         from ringo.model.user import Profile
@@ -583,6 +586,9 @@ First you need to create a new model file in your application. In this file crea
             col1 = sa.Column(sa.Text)
             col2 = sa.Column(sa.Text)
             ...
+
+            def __unicode__(self):
+                return "%s" % (self.col1)
 
 Next we need to import the new model in the __init__.py file of the application::
 
@@ -597,15 +603,20 @@ we generate a migration script with the following command::
         alembic revision --autogenerate -m "Added new fields to the Profile modul"
 
 A new migration script should now be generated including the new added fields.
+Before adding the new fields to the database please backup your old database.
+Then the new fields can be added with the following command::
 
-Finallay we must tell the appplication to use the new created profile. The
+        alembic upgrade head
+
+Finally we must tell the application to use the new created profile. The
 information where to find the model clazz of the modul is stored in the
-database in the field "clazzpath" for each modul. This field can't be changed
-in the UI. You must to the change on the database directly. By changing this value to
-the path of your new modul the application will now use the new model.
+database in the field "clazzpath" for each modul.
+This field can't be changed in the UI. You must to the change on the database
+directly. By changing this value to the path of your new modul the application
+will now use the new model.
 
-Change form
------------
+Change form and table config
+----------------------------
 Simply overwrite the form and table configuration in your application
 
 Change logic
@@ -618,6 +629,17 @@ of your application.
 
 Change various aspects in my Ringo based application
 ====================================================
+The behaviour of the application can be modified by different ways. You can
+change aspects in the view like the form definitions, overviews and or the
+page layout. Further you can modify the models to add attributes to store more
+informations or add methods to give more functionallity to your model. Finally
+you can change the application logic. So nearly all aspects can be changed
+more or less easily.
+
+First you need to know if you are about to change something coming from the
+ringo base application.
+If so then you can change most things by simply "overwriting" the
+configuration files, templates or static files in your application
 Change the name of the application
 ----------------------------------
 
