@@ -140,6 +140,8 @@ class BaseList(object):
             # Iterate over all items and check if the user has generally
             # access to the item.
             for item in items:
+                # Only check ownership if the item provides a uid.
+                # Is owner?
                 if hasattr(item, 'uid'):
                     # Is owner?
                     if item.uid == user.id:
