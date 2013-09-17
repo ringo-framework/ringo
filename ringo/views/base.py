@@ -52,6 +52,20 @@ def get_current_form_page(clazz, request):
     else:
         return 1
 
+def render_ownership_form(item, request, readonly=True):
+    """Returns the renderered form to show/edit the ownership of the
+    given item. If the current user has the role "admin" or is the owner
+    of the item then the form will be editable. Else the form will be
+    renderered as readonly.bit_length(
+
+    :item: The item for which the ownership form will be rendered.
+    :request: The current request.
+    :readonly: Flag to indicate that the form should be rendererd as
+    readonly. This flag will set the form to readonly in all cases. E.g
+    when rendered in the read form.
+    """
+    return "Needs to be implemented"
+
 
 @view_config(route_name='set_current_form_page')
 def set_current_form_page(request):
