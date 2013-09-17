@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration>
+  <source>
+    <!-- Define different entity types -->
+    <entity id="e1" name="owner" label="Owner">
+      <renderer type="dropdown"/>
+    </entity>
+    <entity id="e2" name="group" label="Group">
+      <renderer type="dropdown"/>
+    </entity>
+  </source>
+  <form id="ownership" autocomplete="off" method="POST" enctype="multipart/form-data">
+    <row>
+      <col><field ref="e1"/></col>
+    </row>
+    <row>
+      <col><field ref="e2"/></col>
+    </row>
+  </form>
+</configuration>
