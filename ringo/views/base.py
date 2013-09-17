@@ -6,10 +6,11 @@ from pyramid.response import Response
 from pyramid.view import view_config
 import sqlalchemy as sa
 
+from formbar.config import Config, load
 from formbar.form import Form
 
 from ringo.model.base import BaseList, BaseFactory
-from ringo.lib.helpers import import_model
+from ringo.lib.helpers import import_model, get_path_to_form_config
 User = import_model('ringo.model.user.User')
 from ringo.lib.renderer import ListRenderer, ConfirmDialogRenderer,\
 DropdownFieldRenderer, ListingFieldRenderer
@@ -64,7 +65,10 @@ def render_ownership_form(item, request, readonly=True):
     readonly. This flag will set the form to readonly in all cases. E.g
     when rendered in the read form.
     """
-    return "Needs to be implemented"
+    config = Config(load(get_path_to_form_config('ownership.xml', 'ringo')))
+    form_config = config.get_form('ownership')
+    form = Form(form_config, item, request.db)
+    return form.render()
 
 
 @view_config(route_name='set_current_form_page')
