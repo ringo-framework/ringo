@@ -423,6 +423,7 @@ def update_(clazz, request, callback=None, renderers={}):
 
     rvalue['clazz'] = clazz
     rvalue['item'] = item
+    rvalue['owner'] = render_ownership_form(item, request, readonly=True)
     rvalue['form'] = form.render(page=get_current_form_page(clazz, request))
     return rvalue
 
@@ -454,6 +455,7 @@ def read_(clazz, request, renderers={}):
                 request=request)
     rvalue['clazz'] = clazz
     rvalue['item'] = item
+    rvalue['owner'] = render_ownership_form(item, request, readonly=True)
     rvalue['form'] = form.render(page=get_current_form_page(clazz, request))
     return rvalue
 
