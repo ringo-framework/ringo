@@ -10,7 +10,9 @@ from formbar.config import Config, load
 from formbar.form import Form
 
 from ringo.model.base import BaseList, BaseFactory
+from ringo.model.mixins import Owned
 from ringo.lib.helpers import import_model, get_path_to_form_config
+from ringo.lib.security import has_role
 User = import_model('ringo.model.user.User')
 from ringo.lib.renderer import ListRenderer, ConfirmDialogRenderer,\
 DropdownFieldRenderer, ListingFieldRenderer
@@ -430,7 +432,16 @@ def update_(clazz, request, callback=None, renderers={}):
 
     rvalue['clazz'] = clazz
     rvalue['item'] = item
-    rvalue['owner'] = render_ownership_form(item, request, readonly=True)
+
+    # Check if the ownership form should be renderer as readonly. The
+    # form is editable if the current user owns the item to edit or the
+    # current user has the role "admin"
+    readonly = True
+    if (isinstance(item, Owned)
+        and (item.is_owner(request.user) 
+        or has_role(request.user, "admin"))):
+        readonly = False
+    rvalue['owner'] = render_ownership_form(item, request, readonly=readonly)
     rvalue['form'] = form.render(page=get_current_form_page(clazz, request))
     return rvalue
 
