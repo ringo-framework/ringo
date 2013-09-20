@@ -66,7 +66,10 @@ def render_ownership_form(item, request, readonly=True):
     when rendered in the read form.
     """
     config = Config(load(get_path_to_form_config('ownership.xml', 'ringo')))
-    form_config = config.get_form('ownership-form')
+    if readonly:
+        form_config = config.get_form('ownership-form-read')
+    else:
+        form_config = config.get_form('ownership-form-update')
     form = Form(form_config, item, request.db)
     return form.render()
 
