@@ -437,6 +437,8 @@ def update_(clazz, request, callback=None, renderers={}):
     # form is editable if the current user owns the item to edit or the
     # current user has the role "admin"
     readonly = True
+    # TODO: Only render the ownership form if the item is an instance of
+    # the Owned Mixin. (torsten) <2013-09-20 11:30> 
     if (isinstance(item, Owned)
         and (item.is_owner(request.user) 
         or has_role(request.user, "admin"))):
