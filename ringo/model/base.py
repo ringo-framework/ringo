@@ -129,7 +129,7 @@ class BaseList(object):
         """
         # Filter items based on the uid
         filtered_items = []
-        if user:
+        if user and not user.has_role("admin"):
             # TODO: Check if the user has the role to read items of the
             # clazz. If not then we do not need to check any further as
             # the user isn't allowed to see the item anyway. (torsten)
