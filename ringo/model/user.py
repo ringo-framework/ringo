@@ -118,6 +118,36 @@ class User(BaseItem, Base):
     def __unicode__(self):
         return self.login
 
+    def has_role(self, role):
+        """Return True if the user has the given role. Else False"
+        :user: User instance
+        :returns: True or False
+        """
+        roles = [r.name for r in self.get_roles()]
+        return role in roles
+
+    def get_roles(self):
+        """Returns a list of roles the user has. The list contains
+        `Role` object and are collected by loading roles directly
+        attached to the user plus roles attached to the groups the user
+        is member of
+
+        :returns: List of `Role` instances
+        """
+        tmp_roles = {}
+
+        # Add roles directly attached to the user.
+        for role in self.roles:
+            if role.name not in tmp_roles:
+                tmp_roles[role.name] = role
+
+        # Add roles directly attached to the user.
+        for group in self.groups:
+            for role in group.roles:
+                if role.name not in tmp_roles:
+                    tmp_roles[role.name] = role
+
+        return list(tmp_roles.values())
 
 ADMIN_GROUP_ID = 1
 """Role ID your the system administration group"""
