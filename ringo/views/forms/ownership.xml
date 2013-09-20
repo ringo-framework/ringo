@@ -9,7 +9,7 @@
       <renderer type="dropdown"/>
     </entity>
   </source>
-  <form id="ownership" autocomplete="off" method="POST" enctype="multipart/form-data">
+  <form id="ownership-form" autocomplete="off" method="POST" enctype="multipart/form-data">
     <row>
       <col><field ref="e1"/></col>
     </row>
