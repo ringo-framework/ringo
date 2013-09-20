@@ -84,9 +84,7 @@ def has_role(user, role):
     :user: User instance
     :returns: True or False
     """
-
-    roles = [r.name for r in get_roles(user)]
-    return role in roles
+    return user.has_role(role)
 
 
 def get_roles(user):
@@ -99,20 +97,7 @@ def get_roles(user):
     :returns: List of `Role` instances
 
     """
-    tmp_roles = {}
-
-    # Add roles directly attached to the user.
-    for role in user.roles:
-        if role.name not in tmp_roles:
-            tmp_roles[role.name] = role
-
-    # Add roles directly attached to the user.
-    for group in user.groups:
-        for role in group.roles:
-            if role.name not in tmp_roles:
-                tmp_roles[role.name] = role
-
-    return list(tmp_roles.values())
+    return user.get_roles()
 
 # GROUPS
 ########
