@@ -39,6 +39,10 @@ class Owned(object):
         return relationship("Usergroup",
                             primaryjoin="Usergroup.id==%s.gid" % cls.__name__)
 
+    def is_owner(self, user):
+        """Returns true if the Item is owned by the given user."""
+        return user.id == self.uid
+
 
 class Nested(object):
     """Mixin to make nested (self-reference) Items possible. Each item
