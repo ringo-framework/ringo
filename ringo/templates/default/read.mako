@@ -21,15 +21,19 @@
   <div class="span12">
     <ul class="nav nav-tabs">
       <li class="active"><a href="#form" data-toggle="tab">${_(clazz.get_item_modul().get_label())}</a></li>
-      <li><a href="#ownership" data-toggle="tab">${_('Owner')}</a></li>
+      % if owner:
+        <li><a href="#ownership" data-toggle="tab">${_('Owner')}</a></li>
+      % endif
     </ul>
     <div class="tab-content">
       <div class="tab-pane active" id="form">
         ${form | n}
       </div>
-      <div class="tab-pane" id="ownership">
-        ${owner| n}
-      </div>
+      % if owner:
+        <div class="tab-pane" id="ownership">
+          ${owner| n}
+        </div>
+      % endif
     </div>
   </div>
 </div>
