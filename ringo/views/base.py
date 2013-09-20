@@ -55,25 +55,16 @@ def get_current_form_page(clazz, request):
     else:
         return 1
 
-def render_ownership_form(item, request, readonly=True):
-    """Returns the renderered form to show/edit the ownership of the
-    given item. If the current user has the role "admin" or is the owner
-    of the item then the form will be editable. Else the form will be
-    renderered as readonly.bit_length(
-
-    :item: The item for which the ownership form will be rendered.
-    :request: The current request.
-    :readonly: Flag to indicate that the form should be rendererd as
-    readonly. This flag will set the form to readonly in all cases. E.g
-    when rendered in the read form.
-    """
+def get_ownership_form(item, request, readonly=None):
+    if (readonly is None and isinstance(item, Owned)):
+        readonly = not (item.is_owner(request.user)
+                    or has_role(request.user, "admin"))
     config = Config(load(get_path_to_form_config('ownership.xml', 'ringo')))
     if readonly:
         form_config = config.get_form('ownership-form-read')
     else:
         form_config = config.get_form('ownership-form-update')
-    form = Form(form_config, item, request.db)
-    return form.render()
+    return Form(form_config, item, request.db)
 
 
 @view_config(route_name='set_current_form_page')
@@ -393,13 +384,22 @@ def update_(clazz, request, callback=None, renderers={}):
     except sa.orm.exc.NoResultFound:
         raise HTTPBadRequest()
 
-    form = Form(item.get_form_config('update'), item, request.db, translate=_,
+    owner_form = get_ownership_form(item, request)
+    item_form = Form(item.get_form_config('update'), item, request.db, translate=_,
                 renderers=renderers,
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,
                                       'itemid': id},
                 request=request)
+
     if request.POST:
+        # Check which form should handled. If the submitted data has the
+        # key "owner" than handle the ownership form.
+        if request.params.has_key('owner'):
+            form = owner_form
+        else:
+            form = item_form
+
         item_label = clazz.get_item_modul().get_label()
         mapping = {'item_type': item_label, 'item': item}
         if form.validate(request.params):
@@ -432,19 +432,11 @@ def update_(clazz, request, callback=None, renderers={}):
 
     rvalue['clazz'] = clazz
     rvalue['item'] = item
-
-    # Check if the ownership form should be renderer as readonly. The
-    # form is editable if the current user owns the item to edit or the
-    # current user has the role "admin"
-    readonly = True
-    # TODO: Only render the ownership form if the item is an instance of
-    # the Owned Mixin. (torsten) <2013-09-20 11:30> 
-    if (isinstance(item, Owned)
-        and (item.is_owner(request.user) 
-        or has_role(request.user, "admin"))):
-        readonly = False
-    rvalue['owner'] = render_ownership_form(item, request, readonly=readonly)
-    rvalue['form'] = form.render(page=get_current_form_page(clazz, request))
+    if isinstance(item, Owned):
+        rvalue['owner'] = owner_form.render()
+    else:
+        rvalue['owner'] = ""
+    rvalue['form'] = item_form.render(page=get_current_form_page(clazz, request))
     return rvalue
 
 
@@ -467,16 +459,21 @@ def read_(clazz, request, renderers={}):
     except sa.orm.exc.NoResultFound:
         raise HTTPBadRequest()
 
-    form = Form(item.get_form_config('read'), item, request.db, translate=_,
-                renderers=renderers,
-                change_page_callback={'url': 'set_current_form_page',
-                                      'item': clazz.__tablename__,
-                                      'itemid': id},
-                request=request)
+    owner_form = get_ownership_form(item, request, readonly=True)
+    item_form = Form(item.get_form_config('read'), item, request.db,
+                     translate=_,
+                     renderers=renderers,
+                     change_page_callback={'url': 'set_current_form_page',
+                                           'item': clazz.__tablename__,
+                                           'itemid': id},
+                     request=request)
     rvalue['clazz'] = clazz
     rvalue['item'] = item
-    rvalue['owner'] = render_ownership_form(item, request)
-    rvalue['form'] = form.render(page=get_current_form_page(clazz, request))
+    if isinstance(item, Owned):
+        rvalue['owner'] = owner_form.render()
+    else:
+        rvalue['owner'] = ""
+    rvalue['form'] = item_form.render(page=get_current_form_page(clazz, request))
     return rvalue
 
 
