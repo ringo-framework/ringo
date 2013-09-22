@@ -86,6 +86,27 @@ class BaseItem(object):
             return "%s-%s" % (prefix, routename)
         return routename
 
+    def get_value(self, name, form_id="create"):
+        """Return the value of the given attribe of the item. Unlike
+        accessing the raw value through the attribite directly this
+        function will apply all configured transformations to the value
+        before returing it."""
+        raw_value = getattr(self, name)
+        expand = []
+        table_config = self.get_table_config()
+        # TODO: Iterating again and again over the columns might be
+        # expensive. Do some caching here? (None) <2013-09-22 20:33> 
+        for col in table_config.get_columns():
+            if col.get('expand'):
+                expand.append(col.get('name'))
+        if name in expand:
+            form_config = self.clazz.get_form_config(form_id)
+            field_config = form_config.get_field(name)
+            for option in field_config.options:
+                if str(raw_value) == str(option[1]):
+                    return option[0]
+        return raw_value
+
 
 class BaseList(object):
     def __init__(self, clazz, db, user=None, cache=""):
