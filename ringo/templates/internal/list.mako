@@ -25,7 +25,7 @@ mapping = {'num_filters': len(listing.search_filter)}
               <tr>
                 <td>
                   <a tabindex="-1"
-                  href="${request.current_route_url()}?form=search&saved=${key}">$_({value[2])}</a>
+                  href="${request.current_route_url()}?form=search&saved=${key}">${_(value[2])}</a>
                 </td>
                 <td width="20">
                   <a class="pull-right" tabindex="-1" href="${request.current_route_url()}?form=search&delete=${key}"><i class="icon-remove"></i></a>
