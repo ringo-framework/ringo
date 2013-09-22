@@ -32,7 +32,7 @@ class BaseItem(object):
         return self.__unicode__()
 
     def __getitem__(self, name):
-        return getattr(self, name)
+        return self.get_value(name)
 
     def __json__(self, request):
         rvalue = {}
@@ -261,7 +261,7 @@ class BaseList(object):
                 fields = [field.get('name') for field in table_config.get_columns()]
             for item in self.items:
                 for field in fields:
-                    value = getattr(item, field)
+                    value = item.get_value(field)
                     if isinstance(value, list):
                         value = ", ".join([unicode(x) for x in value])
                     else:
@@ -270,7 +270,6 @@ class BaseList(object):
                         filtered_items.append(item)
                         break
             self.items = filtered_items
-
 
 class BaseFactory(object):
 
