@@ -230,9 +230,6 @@ def list_(clazz, request):
     # Important! Prevent any write access on the database for this
     # request. This is needed as transform would modify the items values
     # else.
-    # TODO: Fix transform call to not modify the items in the
-    # list.(None) <2013-08-12 21:26> 
-    transaction.doom()
     handle_history(request)
 
     # If the user enters the overview page of an item we assume that the
@@ -248,7 +245,6 @@ def list_(clazz, request):
     search = get_search(clazz, request)
     sorting = handle_sorting(clazz, request)
     listing = BaseList(clazz, request.db, user=request.user)
-    listing.transform()
     listing.sort(sorting[0], sorting[1])
     listing.filter(search)
     # Only save the search if there are items
