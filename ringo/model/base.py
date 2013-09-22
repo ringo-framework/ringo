@@ -25,6 +25,8 @@ class BaseItem(object):
     """Configure a list of relations which are configured to be
     cached"""
     _sql_cached_realtions = []
+    """Cached table config for the class"""
+    _cache_table_config = None
 
     def __str__(self):
         return self.__unicode__()
@@ -64,7 +66,10 @@ class BaseItem(object):
     @classmethod
     def get_table_config(cls, tablename=None):
         from ringo.lib.renderer import TableConfig
-        return TableConfig(cls, tablename)
+        if not cls._cache_table_config:
+            cls._cache_table_config = TableConfig(cls, tablename)
+        return cls._cache_table_config
+
 
     @classmethod
     def get_form_config(cls, formname):
