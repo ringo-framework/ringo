@@ -184,51 +184,6 @@ class BaseList(object):
     def __json__(self, request):
         return self.items
 
-    def transform(self, form_id="create"):
-        """Will transform the values of the items in the list. This will
-        apply all configured expandation of values or other
-        transformations like custom renderings etc. If there is any
-        expandation configured for a column in the table then the form
-        configuration for the clazz is loaded to get the expanded value
-        (options for selection).
-
-        Please note that calling this function is only allowed for a
-        "doomed" db request (transaction) as the function modifies the
-        data of the items which would be written to the database
-        otherwise.
-
-        :form_id: The id of the form configuration which is used for
-        expandation.
-        """
-
-        if transaction.isDoomed() is False:
-            raise Exception("Calling transform on a item list is only "
-                            "allowed if the current request is doomed to "
-                            "prevent accidential data modifications.")
-
-        # Check if there are any expandations configured
-        expand = []
-        table_config = self.clazz.get_table_config()
-        for col in table_config.get_columns():
-            if col.get('expand'):
-                expand.append(col.get('name'))
-        if len(expand) == 0:
-            # Nothing to expand here. So break here.
-            return
-        else:
-            # Load form configuration used for the mapping
-            form_config = self.clazz.get_form_config(form_id)
-
-        # Iterate over over all fields and replace to raw_value with the
-        # expanded value from the form configuration.
-        for item in self.items:
-            for field in expand:
-                raw_value = getattr(item, field)
-                field_config = form_config.get_field(field)
-                for option in field_config.options:
-                    if str(raw_value) == str(option[1]):
-                        setattr(item, field, option[0])
-
     def sort(self, field, order):
         sorted_items = sorted(self.items, key=itemgetter(field))
         if order == "desc":
