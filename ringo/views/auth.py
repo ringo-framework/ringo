@@ -36,7 +36,7 @@ def login(request):
     _ = request.translate
     config = Config(load(get_path_to_form_config('auth.xml', 'ringo')))
     form_config = config.get_form('loginform')
-    form = Form(form_config)
+    form = Form(form_config, csrf_token=request.session.get_csrf_token())
     if request.POST:
         form.validate(request.params.mixed())
         username = form.data.get('login')
@@ -73,7 +73,7 @@ def register_user(request):
     settings = request.registry.settings
     config = Config(load(get_path_to_form_config('auth.xml', 'ringo')))
     form_config = config.get_form('register_user')
-    form = Form(form_config)
+    form = Form(form_config, csrf_token=request.session.get_csrf_token())
     # Do extra validation which is not handled by formbar.
     # Is the login unique?
     validator = Validator('login',
@@ -152,7 +152,7 @@ def forgot_password(request):
     settings = request.registry.settings
     config = Config(load(get_path_to_form_config('auth.xml', 'ringo')))
     form_config = config.get_form('forgot_password')
-    form = Form(form_config)
+    form = Form(form_config, csrf_token=request.session.get_csrf_token())
     if request.POST:
         if form.validate(request.params.mixed()):
             username = form.data.get('login')

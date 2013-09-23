@@ -3,6 +3,7 @@ mapping = {'num_filters': len(listing.search_filter)}
 %>
 <div class="well well-small search-widget">
   <form name="search" class="form-inline" action="${request.current_route_url()}" method="POST">
+    <input name="csrf_token" type="hidden" value="${request.session.get_csrf_token()}">
     <input name="form" type="hidden" value="search">
     <input name="search" type="text" class="input-large" value="${search}" placeholder="${_('Search for (Regexpr) in ...')}"/>
     <select name="field" class="input-small">
@@ -110,6 +111,7 @@ table-bordered">
 
 <div id="savequerydialog" class="modal hide fade">
   <form id="savequery" action="${request.current_route_url()}">
+  <input name="csrf_token" type="hidden" value="${request.session.get_csrf_token()}">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     <h3>${_('Save current search filter')}</h3>

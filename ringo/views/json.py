@@ -95,7 +95,8 @@ def create_(clazz, request):
     # Initialise the create form for the item to be able to validate the
     # submitted data.
     form = Form(item.get_form_config('create'), 
-                item, request.db, translate=request.translate)
+                item, request.db, translate=request.translate,
+                csrf_token=request.session.get_csrf_token())
     if form.validate(request.params):
             sitem = form.save()
             return JSONResponse(True, sitem)
@@ -131,7 +132,8 @@ def update_(clazz, request):
     """
     item = _load_item(clazz, request)
     form = Form(item.get_form_config('update'),
-                item, request.db, translate=request.translate)
+                item, request.db, translate=request.translate,
+                csrf_token=request.session.get_csrf_token())
     if form.validate(request.params):
             sitem = form.save()
             return JSONResponse(True, sitem)
