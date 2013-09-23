@@ -5,10 +5,12 @@ import string
 import random
 from datetime import datetime
 
+from pyramid.events import ContextFound
 from pyramid.security import unauthenticated_userid,\
     has_permission as has_permission_
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
+from pyramid.httpexceptions import HTTPUnauthorized
 
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -21,6 +23,12 @@ log = logging.getLogger(__name__)
 def password_generator(size=8, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
+def csrf_token_validation(event):
+    request = event.request
+    csrf = request.params.get('csrf_token')
+    if (request.method == 'POST'):
+        if (csrf != unicode(request.session.get_csrf_token())):
+            raise HTTPUnauthorized
 
 def setup_ringo_security(config):
     authn_policy = AuthTktAuthenticationPolicy('seekrit',
@@ -34,6 +42,9 @@ def setup_ringo_security(config):
     #            pyramid_cookbook/en/latest/auth/ \
     #            user_object.html
     config.set_request_property(get_user, 'user', reify=True)
+
+    # Add subscriber to check the CSRF token in POST requests.
+    config.add_subscriber(csrf_token_validation, ContextFound)
 
 
 def get_user(request):
