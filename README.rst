@@ -37,6 +37,7 @@ web application based on Ringo:
  * Regular expression based searching (storeable)
  * Sorting
  * User Profiles
+ * Basic CSRF protection on POST requests
  * Extendible, Configurable
 
 Documentation
