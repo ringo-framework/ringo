@@ -12,6 +12,9 @@
   applications.
 - Added CSRF protection on POST request. On every POST request now a special
   csrf token is checked. If check fails a Authorisation error is thrown.
+- Added tab to change the ownership informatio in update and read forms if
+  ownership information is available.
+- Removed "transform" funtion from lists.
 
 0.6.1
 -----
