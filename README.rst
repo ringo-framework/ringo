@@ -42,13 +42,22 @@ web application based on Ringo:
 
 Documentation
 =============
-Documentation is available on `<http://pythonhosted.org/ringo/>`_
+The source of documentation comes with the source of ringo and can be found in the
+"docs" folder. To generate the HTML version of the documentation please invoke the
+following command::
+
+        cd docs
+        make html
+
+You need to have the sphinx package installed in order to generate the documentation.
+A generated  (and maybe outdated) version of the documentation is available on
+`<http://pythonhosted.org/ringo/>`_
 
 
 Getting Started
 ---------------
-The fastest way to get an impression of Ringo`s core functionallity is to to
-the following steps:
+The fastest way to get an impression of Ringo`s core functionallity is to
+start the standalone application of ringo with the following steps:
 
 - cd <directory containing this file>
 
