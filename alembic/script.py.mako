@@ -14,9 +14,20 @@ from alembic import op
 import sqlalchemy as sa
 ${imports if imports else ""}
 
+INSERTS = """"""
+DELETES = """"""
+
+
+def iter_statements(stmts):
+    for st in stmts.split('\n'):
+        op.execute(st)
+
+
 def upgrade():
     ${upgrades if upgrades else "pass"}
+    iter_statements(INSERTS)
 
 
 def downgrade():
     ${downgrades if downgrades else "pass"}
+    iter_statements(DELETES)
