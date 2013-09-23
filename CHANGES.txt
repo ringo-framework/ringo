@@ -10,6 +10,8 @@
 - Changed imports of models. Now use specific import_modul function to import
   models in the application to be able to import overwritten clazzes in other
   applications.
+- Added CSRF protection on POST request. On every POST request now a special
+  csrf token is checked. If check fails a Authorisation error is thrown.
 
 0.6.1
 -----
