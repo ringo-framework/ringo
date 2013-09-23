@@ -55,5 +55,6 @@ the following steps:
 - $venv/bin/python setup.py develop
 
 - $venv/bin/initialize_ringo_db development.ini
+  or $venv/bin/alembic upgrade head
 
 - $venv/bin/pserve development.ini

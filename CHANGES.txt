@@ -15,6 +15,7 @@
 - Added tab to change the ownership informatio in update and read forms if
   ownership information is available.
 - Removed "transform" funtion from lists.
+- Added new alembic scripts to initialise the database.
 
 0.6.1
 -----
