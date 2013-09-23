@@ -1,5 +1,14 @@
 <%
 mapping = {'num_filters': len(listing.search_filter)}
+def render_filter_link(request, field, value, clazz):
+  out = []
+  url = request.current_route_url()
+  params = "form=search&search=%s&field=%s" % (value, field.get('name'))
+  out.append('<a href="%s?%s"' % (url, params))
+  out.append('class="filter"')
+  out.append('title="Filter %s on %s in %s">' % (clazz.get_item_modul().get_label(plural=True), value, field.get('label')))
+  out.append('%s</a>' % value)
+  return " ".join(out)
 %>
 <div class="well well-small search-widget">
   <form name="search" class="form-inline" action="${request.current_route_url()}" method="POST">
@@ -89,11 +98,15 @@ table-bordered">
           except AttributeError:
             value = "NaF"
         %>
-        ## Escape value here
         % if isinstance(value, list):
-          ${", ".join(unicode(render_filter_link(v, field)) for v in value) | h}
+          <%
+            links = []
+            for v in value:
+              links.append(render_filter_link(request, field, v, clazz))
+          %>
+          ${", ".join(links)}
         % else:
-          ${render_filter_link(value, field)}
+          ${render_filter_link(request, field, value, clazz)}
         % endif
     </td>
     % endfor
@@ -128,11 +141,6 @@ table-bordered">
   </div>
   </form>
 </div>
-
-
-<%def name="render_filter_link(value, field)">
-  <a href="${request.current_route_url()}?form=search&search=${value | h}&field=${field.get('name')}" class="filter" title="${'Filter %s on %s in %s' % (clazz.get_item_modul().get_label(plural=True), value, field.get('label'))}">${value | h}</a>
-</%def>
 
 <script type="text/javascript">
 function openItem(url) {
