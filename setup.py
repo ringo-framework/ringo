@@ -8,7 +8,7 @@ README = open(os.path.join(here, 'README.rst')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
-    'pyramid',
+    'pyramid<=1.4.5',
     'SQLAlchemy',
     'alembic',
     'transaction',
