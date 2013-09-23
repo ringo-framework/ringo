@@ -64,7 +64,8 @@ def get_ownership_form(item, request, readonly=None):
         form_config = config.get_form('ownership-form-read')
     else:
         form_config = config.get_form('ownership-form-update')
-    return Form(form_config, item, request.db)
+    return Form(form_config, item, request.db,
+                csrf_token=request.session.get_csrf_token())
 
 
 @view_config(route_name='set_current_form_page')
@@ -321,7 +322,7 @@ def create_(clazz, request, callback=None, renderers={}):
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,
                                       'itemid': None},
-                request=request)
+                request=request, csrf_token=request.session.get_csrf_token())
     if request.POST:
         item_label = clazz.get_item_modul().get_label()
         mapping = {'item_type': item_label}
@@ -386,7 +387,7 @@ def update_(clazz, request, callback=None, renderers={}):
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,
                                       'itemid': id},
-                request=request)
+                request=request, csrf_token=request.session.get_csrf_token())
 
     if request.POST:
         # Check which form should handled. If the submitted data has the
@@ -462,7 +463,7 @@ def read_(clazz, request, renderers={}):
                      change_page_callback={'url': 'set_current_form_page',
                                            'item': clazz.__tablename__,
                                            'itemid': id},
-                     request=request)
+                     request=request, csrf_token=request.session.get_csrf_token())
     rvalue['clazz'] = clazz
     rvalue['item'] = item
     if isinstance(item, Owned):
