@@ -9,6 +9,7 @@
 <form action="${ok_url}" method="POST">
   <a class="btn" href="${cancel_url}">${_('Cancel')}</a>
   <input type="hidden" name="confirmed" value="1"/>
+  <input type="hidden" name="csrf_token" value="${request.session.get_csrf_token()}"/>
   <button type"submit" class="btn btn-primary">${action}</button>
 </form>
 </div>

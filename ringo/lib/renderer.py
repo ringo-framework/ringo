@@ -254,6 +254,7 @@ class ConfirmDialogRenderer(DialogRenderer):
         _ = self._request.translate
         mapping = {'Action': self._action.capitalize()}
         values = {}
+        values['request'] = self._request
         values['icon'] = self._request.static_url(
             'ringo:static/images/icons/32x32/dialog-warning.png')
         values['header'] = _("Confirm ${Action}", mapping=mapping)
