@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2013-08-21 10:32+0200\n"
-"PO-Revision-Date: 2013-08-21 10:39+0200\n"
+"PO-Revision-Date: 2013-09-25 07:46+0200\n"
 "Last-Translator: Torsten Irlaender <torsten@irlaender.de>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -471,7 +471,7 @@ msgstr "${item_type} wurde erfolgreich angelegt."
 
 #: ringo/views/base.py:343
 msgid "Error on validation the data for new ${item_type}"
-msgstr "Fehler bei der Überprüfung der Daten für ${item_type} \"${item}\""
+msgstr "Fehler bei der Überprüfung der Daten für ${item_type}"
 
 #: ringo/views/base.py:383
 msgid "Edited ${item_type} \"${item}\" successfull."
@@ -483,7 +483,7 @@ msgstr "Fehler bei der Überprüfung der Daten für ${item_type} \"${item}\""
 
 #: ringo/views/base.py:466
 msgid "Deleted ${item_type} \"${item}\" successfull."
-msgstr "${item_type} wurde erfolgreich gelöscht."
+msgstr "${item_type} \"${item}\" wurde erfolgreich gelöscht."
 
 #: ringo/views/errors.py:10
 msgid "Error 404"
