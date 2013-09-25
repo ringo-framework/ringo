@@ -367,15 +367,16 @@ def update_(clazz, request, callback=None, renderers={}):
     handle_params(clazz, request)
     _ = request.translate
     rvalue = {}
+
     # Add ringo specific renderers
     if not "dropdown" in renderers:
         renderers["dropdown"] = DropdownFieldRenderer
     if not "listing" in renderers:
         renderers["listing"] = ListingFieldRenderer
-    id = request.matchdict.get('id')
-    factory = clazz.get_item_factory()
 
     # Load the item return 400 if the item can not be found.
+    id = request.matchdict.get('id')
+    factory = clazz.get_item_factory()
     try:
         item = factory.load(id, request.db)
     except sa.orm.exc.NoResultFound:
