@@ -6,6 +6,8 @@ def walk(state, found=[]):
     :returns: List of all states
 
     """
+    if state not in found:
+        found.append(state)
     for transition in state.get_transitions():
         if transition._end_state in found:
             continue
