@@ -34,6 +34,9 @@ class Statemachine(object):
         self._current = current
         if not current:
             self._current = start
+    def setup(self):
+        """Need to be implemented"""
+        return None
 
     def get_states(self):
         """Returns a list of all states in the statemachine
