@@ -53,14 +53,14 @@ class Statemachine(object):
     def set_state(self, state):
         """Will set the current state of the state machine
 
-        :state: State to be set as current state
+        :state: State id of the state to be set as current state
         :returns: None
 
         """
         for transition in self._current.get_transitions():
-            if transition._end_state == state:
+            if transition._end_state._id == state:
                 transition._handler(self._item)
-                self._current = state
+                self._current = transition._end_state
                 return self._current
         raise Exception('No fitting transition to transition found')
 
