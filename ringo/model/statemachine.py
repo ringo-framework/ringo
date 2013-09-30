@@ -24,16 +24,21 @@ def null_handler(item):
 class Statemachine(object):
     """Statemachine class"""
 
-    def __init__(self, item, start, current=None):
+    def __init__(self, item, state=None):
         """Initialise the statemachine for the given item and provide
         the start state of the machine and optionally the current state.
         If the current state is not set then the start state is set as
         current state."""
         self._item = item
-        self._start = start
-        self._current = current
-        if not current:
-            self._current = start
+        self._root = self.setup()
+        self._current = self._root
+
+        if state is not None:
+            for st in self.get_states():
+                if st._id == int(state):
+                    self._current = st
+                    break
+
     def setup(self):
         """Need to be implemented"""
         return None
@@ -43,7 +48,7 @@ class Statemachine(object):
         :returns: List of states.
 
         """
-        return walk(self._start)
+        return walk(self._root)
 
     def set_state(self, state):
         """Will set the current state of the state machine
