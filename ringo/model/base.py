@@ -27,6 +27,8 @@ class BaseItem(object):
     _sql_cached_realtions = []
     """Cached table config for the class"""
     _cache_table_config = None
+    """Mapping of statemachines to attributes"""
+    _statemachines = {}
 
     def __str__(self):
         return self.__unicode__()
@@ -70,7 +72,6 @@ class BaseItem(object):
             cls._cache_table_config = TableConfig(cls, tablename)
         return cls._cache_table_config
 
-
     @classmethod
     def get_form_config(cls, formname):
         """Return the Configuration for a given form. The configuration
@@ -90,6 +91,11 @@ class BaseItem(object):
         if prefix:
             return "%s-%s" % (prefix, routename)
         return routename
+
+    @classmethod
+    def get_statemachine(cls, name):
+        """Returns the attached statemachine to the given attribute name"""
+        return cls._statemachines[name]
 
     def get_value(self, name, form_id="create"):
         """Return the value of the given attribe of the item. Unlike
