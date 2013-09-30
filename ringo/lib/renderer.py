@@ -355,6 +355,42 @@ class DropdownFieldRenderer(FormbarDropdown):
         return "".join(html)
 
 
+class StateFieldRenderer(FormbarDropdown):
+    """Ringo specific DropdownFieldRenderer to change the current state
+    of an item.  This renderer will render a combined widget containing
+    a textfield showing the current state of the item and a dropdown
+    with available actions which can be done from this state."""
+
+    def __init__(self, field, translate):
+        """@todo: to be defined"""
+        FormbarDropdown.__init__(self, field, translate)
+        self.template = template_lookup.get_template("internal/statefield.mako")
+
+    def render(self):
+        """Initialize renderer"""
+        html = []
+        config = self._field._config.renderer.config
+
+        # Get all available transitions from the current state for this
+        # item and request.
+        item = self._field._form._item
+        sm = item.get_statemachine(self._field.name)
+        state_id = getattr(item, self._field.name)
+        statemachine = sm(item, state_id)
+        state = statemachine.get_state()
+        transitions = [t._end_state._id for t in state.get_transitions()]
+
+        html.append(self._render_label())
+        values = {'field': self._field,
+                  'request': self._field._form._request,
+                  'transitions': transitions,
+                  '_': self._field._form._translate}
+        html.append(self.template.render(**values))
+        return "".join(html)
+
+
+
+
 class ListingFieldRenderer(FormbarSelectionField):
 
     def __init__(self, field, translate):
