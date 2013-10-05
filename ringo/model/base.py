@@ -34,6 +34,22 @@ class BaseItem(object):
     def __getitem__(self, name):
         return self.get_value(name)
 
+    def __unicode__(self):
+        """Will return the string representation for the item based on a
+        configured format string in the modul settings. If no format str
+        can be found return the id of the item.
+
+        The format string must have the following syntax:
+        format_str|field1,field2,....fieldN. where format_str in a
+        string with %s placeholders and fields is a comma separated list
+        of fields of the item"""
+        modul = self.get_item_modul()
+        format_str, fields = modul.get_str_repr()
+        if format_str:
+            return format_str % tuple([self.get_value(f) for f in fields])
+        else:
+            return "%s" % str(self.id)
+
     def __json__(self, request):
         rvalue = {}
         for col in self.get_columns():
@@ -100,12 +116,12 @@ class BaseItem(object):
         expand = []
         table_config = self.get_table_config()
         # TODO: Iterating again and again over the columns might be
-        # expensive. Do some caching here? (None) <2013-09-22 20:33> 
+        # expensive. Do some caching here? (None) <2013-09-22 20:33>
         for col in table_config.get_columns():
             if col.get('expand'):
                 expand.append(col.get('name'))
         if name in expand:
-            form_config = self.clazz.get_form_config(form_id)
+            form_config = self.get_form_config(form_id)
             field_config = form_config.get_field(name)
             for option in field_config.options:
                 if str(raw_value) == str(option[1]):
@@ -148,7 +164,7 @@ class BaseList(object):
         the given user has read access. This means:
 
          1. The user has aproriate role (read access)
-         2. Is owner or member of the items group 
+         2. Is owner or member of the items group
 
         If no user is provided the list is not filtered and all origin
         items are included in the returned list.
