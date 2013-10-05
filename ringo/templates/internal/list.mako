@@ -99,14 +99,17 @@ table-bordered">
             value = "NaF"
         %>
         % if isinstance(value, list):
+          ## TODO: Expandation needed here? As this are very likely
+          ## linked items and the representation is determined by the
+          ## items __unicode__ method (ti) <2013-10-05 12:31> -->
           <%
             links = []
             for v in value:
-              links.append(render_filter_link(request, field, v, clazz))
+             links.append(render_filter_link(request, field, v, clazz))
           %>
           ${", ".join(links)}
         % else:
-          ${render_filter_link(request, field, value, clazz)}
+          ${render_filter_link(request, field, item.get_value(field.get('name')), clazz)}
         % endif
     </td>
     % endfor
