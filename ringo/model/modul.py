@@ -52,6 +52,12 @@ class ModulItem(BaseItem, Base):
                 return True
         return False
 
+    def get_str_repr(self):
+        """Return a tupel with format str and a list of fields."""
+        # "%s - %s"|field1, field2 -> ("%s - %s", ["field1", "field2"])
+        format_str, fields = self.str_repr.split("|")
+        return (format_str, fields.split(","))
+
 
 def _create_default_actions(dbsession, ignore=[]):
     # TODO: Translate the name of the Action (torsten) <2013-07-10 09:32> 
