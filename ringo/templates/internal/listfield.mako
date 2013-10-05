@@ -10,7 +10,7 @@
     </tr>
     % endif
     <tr>
-    % if not field.is_readonly():
+    % if not field.is_readonly() and not field.renderer.onlylinked == "true":
       <th width="2em">
         <input type="checkbox" name="check_all" onclick="checkAll('${field.name}');">
       </th>
@@ -23,7 +23,7 @@
   <tbody>
     % for item in items:
     <tr>
-      % if not field.is_readonly():
+      % if not field.is_readonly() and not field.renderer.onlylinked == "true":
         <td>
           <input type="checkbox" value="${item.id}" name="${field.name}"/>
         </td>

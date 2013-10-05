@@ -357,6 +357,10 @@ class DropdownFieldRenderer(FormbarDropdown):
 
 
 class ListingFieldRenderer(FormbarSelectionField):
+    """Renderer to render a listing of linked items. Used attributes:
+    * foreignkey: name of the foreignkey in the database
+    * onlylinked: "true" or "false". If true only linked items will be
+      rendered"""
 
     def __init__(self, field, translate):
         FormbarSelectionField.__init__(self, field, translate)
@@ -383,7 +387,7 @@ class ListingFieldRenderer(FormbarSelectionField):
         html = []
         config = self._field._config.renderer.config
         html.append(self._render_label())
-        if self._field.is_readonly():
+        if self._field.is_readonly() or self.onlylinked == "true":
             items = self._get_selected_items()
         else:
             items = self.all_items.items
