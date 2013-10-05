@@ -1,3 +1,8 @@
+0.6.3
+-----
+- Implemented configurable str representation of items in the modul setting.
+- Fixed value expandation in the listings.
+
 0.6.2
 -----
 - Fixed user form configuration which leads to an error in password generation
