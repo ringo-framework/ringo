@@ -70,8 +70,8 @@ class BaseItem(object):
         return BaseFactory(cls)
 
     @classmethod
-    def get_item_list(cls, db):
-        return BaseList(cls, db)
+    def get_item_list(cls, db, user=None, cache=None):
+        return BaseList(cls, db, user, cache)
 
     @classmethod
     def get_item_modul(cls):
