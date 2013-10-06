@@ -2,7 +2,7 @@ import logging
 import transaction
 import re
 import datetime
-from operator import itemgetter
+from operator import itemgetter, attrgetter
 from formbar.config import Config, load
 from sqlalchemy.orm import joinedload, ColumnProperty, class_mapper
 from ringo.lib.helpers import get_path_to_form_config
@@ -200,8 +200,19 @@ class BaseList(object):
     def __json__(self, request):
         return self.items
 
-    def sort(self, field, order):
-        sorted_items = sorted(self.items, key=itemgetter(field))
+    def sort(self, field, order, expand=True):
+        """Will return a sorted item list.
+
+        :field: Name of the field on which the sort will be done
+        :order: If "desc" then the order will be reverted.
+        :expand: If True, then the sorting will be done on the expanded values.
+        :returns: Sorted item list
+
+        """
+        if expand:
+            sorted_items = sorted(self.items, key=itemgetter(field))
+        else:
+            sorted_items = sorted(self.items, key=attrgetter(field))
         if order == "desc":
             sorted_items.reverse()
         self.items = sorted_items
