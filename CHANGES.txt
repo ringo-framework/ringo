@@ -2,6 +2,8 @@
 -----
 - Implemented configurable str representation of items in the modul setting.
 - Fixed value expandation in the listings.
+- Handle "onlylinked" config var in FieldListRenderer.
+- Added option to List to do the sorted on the expanded or raw value.
 
 0.6.2
 -----
