@@ -148,7 +148,7 @@ class BaseList(object):
         # not what if have been expected.
         #self.items = db.query(clazz).options(joinedload('*')).all()
 
-        if not items:
+        if items is None:
             q = db.query(self.clazz)
             if cache in regions.keys():
                 q = set_relation_caching(q, self.clazz, cache)
