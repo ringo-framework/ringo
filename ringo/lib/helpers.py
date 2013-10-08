@@ -1,4 +1,5 @@
 import os
+from datetime import datetime, timedelta
 import pkg_resources
 from pyramid.threadlocal import get_current_registry
 from formbar.helpers import get_css, get_js
@@ -152,3 +153,32 @@ def get_formbar_css():
 def get_formbar_js():
     return get_js()
     return get_css()
+
+###########################################################################
+#                               Times & Dates                             #
+###########################################################################
+
+def get_week(current_datetime):
+    """Returns a tuple definig the start and end datetime for the week of
+    the given date. Time from 00:00:00 -> 23:59:59"""
+    last_day = 6
+    current_day = current_datetime.weekday()
+    _ws = current_datetime - timedelta(days=(current_day))
+    _we = current_datetime + timedelta(days=(last_day - current_day))
+    week_start = _ws.replace(hour=0, minute=0,
+                             second=0, microsecond=0)
+    week_end = _we.replace(hour=23, minute=59,
+                           second=59, microsecond=0)
+    return (week_start, week_end)
+
+
+def format_timedelta(td):
+    """Returns a formtted out put of a given timedelta in the form
+    00:00:00"""
+    if td < datetime.timedelta(0):
+        return '-' + format_timedelta(-td)
+    else:
+        hours = td.total_seconds() // 3600
+        minutes = (td.seconds % 3600) // 60
+        seconds = td.seconds % 60
+    return '%02d:%02d:%02d' % (hours, minutes, seconds)
