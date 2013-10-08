@@ -16,6 +16,8 @@ from sqlalchemy.orm import (
 
 class Meta(object):
     created = Column(DateTime, default=datetime.datetime.utcnow)
+    # TODO: Make sure that the updated attribute gets updated on every
+    # update. (torsten) <2013-10-07 18:00> 
     updated = Column(DateTime, default=datetime.datetime.utcnow)
 
 
