@@ -30,6 +30,7 @@
     <script src="/static/js/jquery.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
     <script src="/static/js/dataTables.js"></script>
+    <script src="/static/js/jquery.jcountdown.min.js"></script>
   </head>
   <body>
   ${next.body()}
