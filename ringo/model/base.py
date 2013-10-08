@@ -26,7 +26,7 @@ class BaseItem(object):
     cached"""
     _sql_cached_realtions = []
     """Cached table config for the class"""
-    _cache_table_config = None
+    _cache_table_config = {}
 
     def __str__(self):
         return self.__unicode__()
@@ -82,9 +82,9 @@ class BaseItem(object):
     @classmethod
     def get_table_config(cls, tablename=None):
         from ringo.lib.renderer import TableConfig
-        if not cls._cache_table_config:
-            cls._cache_table_config = TableConfig(cls, tablename)
-        return cls._cache_table_config
+        if not cls._cache_table_config.get(tablename):
+            cls._cache_table_config[tablename] = TableConfig(cls, tablename)
+        return cls._cache_table_config[tablename]
 
 
     @classmethod
