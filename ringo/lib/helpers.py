@@ -175,7 +175,7 @@ def get_week(current_datetime):
 def format_timedelta(td):
     """Returns a formtted out put of a given timedelta in the form
     00:00:00"""
-    if td < datetime.timedelta(0):
+    if td < timedelta(0):
         return '-' + format_timedelta(-td)
     else:
         hours = td.total_seconds() // 3600
