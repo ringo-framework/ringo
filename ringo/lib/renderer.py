@@ -172,6 +172,7 @@ class ListRenderer(Renderer):
         """@todo: to be defined """
         Renderer.__init__(self)
         self.listing = listing
+        self.config = self.listing.clazz.get_table_config()
         self.template = template_lookup.get_template("internal/list.mako")
 
     def render(self, request):
@@ -192,7 +193,7 @@ class ListRenderer(Renderer):
                   'search_field': search_field,
                   'saved_searches': get_saved_searches(request,
                                                        self.listing.clazz.__tablename__),
-                  'tableconfig': self.listing.clazz.get_table_config()}
+                  'tableconfig': self.config}
         return self.template.render(**values)
 
 
@@ -201,6 +202,7 @@ class DTListRenderer(Renderer):
     def __init__(self, listing):
         Renderer.__init__(self)
         self.listing = listing
+        self.config = self.listing.clazz.get_table_config()
         self.template = template_lookup.get_template("internal/dtlist.mako")
 
     def render(self, request):
@@ -209,7 +211,7 @@ class DTListRenderer(Renderer):
                   'listing': self.listing,
                   'request': request,
                   '_': request.translate,
-                  'tableconfig': self.listing.clazz.get_table_config()}
+                  'tableconfig': self.config}
         return self.template.render(**values)
 
 
