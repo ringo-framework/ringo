@@ -130,7 +130,7 @@ class BaseItem(object):
 
 
 class BaseList(object):
-    def __init__(self, clazz, db, user=None, cache=""):
+    def __init__(self, clazz, db, user=None, cache="", items=None):
         """
         A List object of. A list can be filterd, and sorted.
 
@@ -148,14 +148,16 @@ class BaseList(object):
         # not what if have been expected.
         #self.items = db.query(clazz).options(joinedload('*')).all()
 
-        q = db.query(self.clazz)
-        if cache in regions.keys():
-            q = set_relation_caching(q, self.clazz, cache)
-            q = q.options(FromCache(cache))
-        for relation in self.clazz._sql_cached_realtions:
-            q = q.options(joinedload(relation))
-
-        self.items = self._filter_for_user(q.all(), user)
+        if not items:
+            q = db.query(self.clazz)
+            if cache in regions.keys():
+                q = set_relation_caching(q, self.clazz, cache)
+                q = q.options(FromCache(cache))
+            for relation in self.clazz._sql_cached_realtions:
+                q = q.options(joinedload(relation))
+            self.items = self._filter_for_user(q.all(), user)
+        else:
+            self.items = items
         self.search_filter = []
 
     def _filter_for_user(self, items, user):
