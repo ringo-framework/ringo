@@ -1,17 +1,24 @@
 from behave import *
 
+def get_csrf_token(res):
+    return res.form.get('csrf_token').value
+
 def login(context, username, password):
     '''Will login the user with username and password. On default we we do
     a check on a successfull login'''
     logout(context)
+    response = context.app.get('/auth/login')
+    csrf = get_csrf_token(response)
+    print csrf
     response = context.app.post('/auth/login',
         params={'login': username,
-                'pass': password},
+                'pass': password,
+                'csrf_token': csrf},
     )
     return response
 
 def logout(context):
-    'Logout the currently logged in user (if any)' 
+    'Logout the currently logged in user (if any)'
     response = context.app.get('/auth/logout',
         params={}
     )
