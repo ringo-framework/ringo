@@ -11,6 +11,12 @@ from ringo.lib.sql.query import FromCache, set_relation_caching
 
 log = logging.getLogger(__name__)
 
+def clear_cache():
+    """Helper function to clear some caching. This function should be
+    called per request."""
+    BaseItem._cache_table_config = {}
+    BaseItem._cache_form_config = {}
+    BaseItem._cache_item_modul = {}
 
 class BaseItem(object):
 
