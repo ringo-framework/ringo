@@ -27,6 +27,8 @@ class BaseItem(object):
     _sql_cached_realtions = []
     """Cached table config for the class"""
     _cache_table_config = {}
+    _cache_form_config = {}
+    _cache_item_modul = {}
 
     def __str__(self):
         return self.__unicode__()
@@ -76,8 +78,11 @@ class BaseItem(object):
     @classmethod
     def get_item_modul(cls):
         from ringo.model.modul import ModulItem
-        factory = BaseFactory(ModulItem)
-        return factory.load(cls._modul_id)
+        if not cls._cache_item_modul.get(cls._modul_id):
+            factory = BaseFactory(ModulItem)
+            modul = factory.load(cls._modul_id)
+            cls._cache_item_modul[cls._modul_id] = modul
+        return cls._cache_item_modul[cls._modul_id]
 
     @classmethod
     def get_table_config(cls, tablename=None):
@@ -100,12 +105,15 @@ class BaseItem(object):
         tried to be loaded from the application first. If this fails it
         tries to load it from the ringo application."""
         cfile = "%s.xml" % cls.__tablename__
-        try:
-            loaded_config = load(get_path_to_form_config(cfile))
-        except IOError:
-            loaded_config = load(get_path_to_form_config(cfile, 'ringo'))
-        config = Config(loaded_config)
-        return config.get_form(formname)
+        cachename = "%s.%s" % (cls.__name__, formname)
+        if not cls._cache_form_config.get(cachename):
+            try:
+                loaded_config = load(get_path_to_form_config(cfile))
+            except IOError:
+                loaded_config = load(get_path_to_form_config(cfile, 'ringo'))
+            config = Config(loaded_config)
+            cls._cache_form_config[cachename] = config.get_form(formname)
+        return cls._cache_form_config[cachename]
 
     @classmethod
     def get_action_routename(cls, action, prefix=None):
