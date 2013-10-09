@@ -19,6 +19,9 @@ from ringo.lib.sql import (
 from ringo.model import (
     Base,
 )
+from ringo.model.base import (
+    clear_cache,
+)
 from ringo.model.user import (
     User,
     Profile,
@@ -66,6 +69,8 @@ def connect_on_request(event):
     request = event.request
     request.db = DBSession
     request.add_finished_callback(close_db_connection)
+    # Try to clear the cache on every request
+    clear_cache()
 
 
 def close_db_connection(request):
