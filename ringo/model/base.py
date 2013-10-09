@@ -1,5 +1,4 @@
 import logging
-import transaction
 import re
 import datetime
 from operator import itemgetter, attrgetter
