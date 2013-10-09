@@ -57,7 +57,7 @@ class RessourceFactory(object):
 
         If the a role of a user is an administrational role thean all
         permissions to this role are added to the returned list without
-        checking any ownership. 
+        checking any ownership.
         If it is not an administrational role, the "list" and "create"
         actions are added in all cases. Item related action like "edit",
         "delete" or "read" are only added if the current user is
