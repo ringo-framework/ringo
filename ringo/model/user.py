@@ -109,7 +109,8 @@ class User(BaseItem, Base):
                                  secondary=nm_user_usergroups,
                                  backref='members')
     default_group = sa.orm.relationship("Usergroup", uselist=False)
-    settings = sa.orm.relationship("UserSetting", uselist=False)
+    settings = sa.orm.relationship("UserSetting", uselist=False,
+                                   cascade="all,delete")
 
     @classmethod
     def get_item_factory(cls):
