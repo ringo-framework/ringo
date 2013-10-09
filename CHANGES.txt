@@ -5,6 +5,7 @@
 - Handle "onlylinked" config var in FieldListRenderer.
 - Added option to List to do the sorted on the expanded or raw value.
 - Added new date related helper functions.
+- Delete usersettings too if the user gets deleted.
 
 0.6.2
 -----
