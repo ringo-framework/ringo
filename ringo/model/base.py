@@ -81,10 +81,17 @@ class BaseItem(object):
 
     @classmethod
     def get_table_config(cls, tablename=None):
+        """Returns the table (overview, listing) configuration with the
+        name 'tablename' of this Item from the configuration file. If
+        the default table configuration will be returned. The table
+        configuration is cached for later requests."""
+        # As this is a class method of the BaseItem we need to build a
+        # unique cachename for tableconfigs among all inherited classes.
+        cachename = "%s.%s" % (cls.__name__, tablename)
         from ringo.lib.renderer import TableConfig
-        if not cls._cache_table_config.get(tablename):
-            cls._cache_table_config[tablename] = TableConfig(cls, tablename)
-        return cls._cache_table_config[tablename]
+        if not cls._cache_table_config.get(cachename):
+            cls._cache_table_config[cachename] = TableConfig(cls, tablename)
+        return cls._cache_table_config[cachename]
 
 
     @classmethod
