@@ -27,6 +27,9 @@
         <td>
           <input type="checkbox" value="${item.id}" name="${field.name}"/>
         </td>
+      % else:
+          ## Render a hidden checkbox field as we need to submit the values in
+          <input style="display:none" type="checkbox" value="${item.id}" name="${field.name}"/>
       % endif
       % for col in tableconfig.get_columns():
         <td onclick="openItem('${request.route_url(clazz.get_action_routename("read"), id=item.id)}')">
