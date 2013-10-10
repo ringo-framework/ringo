@@ -6,6 +6,7 @@
 - Added option to List to do the sorted on the expanded or raw value.
 - Added new date related helper functions.
 - Delete usersettings too if the user gets deleted.
+- Added caching on modules, table and form configs to improve the performance.
 
 0.6.2
 -----
