@@ -127,6 +127,11 @@ class BaseItem(object):
             return "%s-%s" % (prefix, routename)
         return routename
 
+    # TODO: Expandation should not be done based on the table
+    # configuration. As this function is also usefull for values which
+    # are not visible in the default table. It should be an optional
+    # parameter of the function!
+    # (ti) <2013-10-10 21:29>
     def get_value(self, name, form_id="create"):
         """Return the value of the given attribe of the item. Unlike
         accessing the raw value through the attribite directly this
