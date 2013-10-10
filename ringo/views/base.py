@@ -97,6 +97,8 @@ def handle_params(clazz, request):
        in the session and stays there until it is deleted on a
        successfull request. So take care to delete it to not mess up
        with the application logic.
+     * form: The name of a alternative form configuration which is
+       used for the request.
      * values: A comma separated list of key/value pair. Key and value
        are separated with an ":"
     """
@@ -111,6 +113,10 @@ def handle_params(clazz, request):
         for kvpair in values.split(','):
             key, value = kvpair.split(':')
             params['values'][key] = value
+    form = request.GET.get('form')
+    if form:
+        request.session['%s.form' % clazz] = form
+        params['form'] = form
     request.session.save()
     return params
 
@@ -317,7 +323,9 @@ def create_(clazz, request, callback=None, renderers={}):
         renderers["listing"] = ListingFieldRenderer
     factory = clazz.get_item_factory()
     item = factory.create(request.user)
-    form = Form(item.get_form_config('create'), item, request.db, translate=_,
+
+    formname = request.session.get('%s.form' % clazz, 'create')
+    form = Form(item.get_form_config(formname), item, request.db, translate=_,
                 renderers=renderers,
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,
@@ -341,6 +349,10 @@ def create_(clazz, request, callback=None, renderers={}):
                 sitem = callback(request, sitem)
             # Invalidate cache
             invalidate_cache()
+            formname = request.session.get('%s.form' % clazz)
+            if formname:
+                del request.session['%s.form' % clazz]
+                request.session.save()
             # Handle redirect after success.
             backurl = request.session.get('%s.backurl' % clazz)
             if backurl:
@@ -512,7 +524,7 @@ def delete_(clazz, request):
             return HTTPFound(location=url)
     else:
         # FIXME: Get the ActionItem here and provide this in the Dialog to get
-        # the translation working (torsten) <2013-07-10 09:32> 
+        # the translation working (torsten) <2013-07-10 09:32>
         renderer = ConfirmDialogRenderer(request, item, 'delete')
         rvalue['dialog'] = renderer.render()
         rvalue['clazz'] = clazz

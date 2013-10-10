@@ -7,6 +7,9 @@
 - Added new date related helper functions.
 - Delete usersettings too if the user gets deleted.
 - Added caching on modules, table and form configs to improve the performance.
+- Introduced new "form" GET parameter to optionally change the default
+  rendered.
+
 
 0.6.2
 -----
