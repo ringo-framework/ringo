@@ -324,7 +324,12 @@ def create_(clazz, request, callback=None, renderers={}):
     factory = clazz.get_item_factory()
     item = factory.create(request.user)
 
-    formname = request.session.get('%s.form' % clazz, 'create')
+    # TODO: Check why here is "None" in the session! This should not
+    # happen. (ti) <2013-10-11 19:12>
+    formname = request.session.get('%s.form' % clazz)
+    if formname and formname == 'None':
+        formname = 'create'
+
     form = Form(item.get_form_config(formname), item, request.db, translate=_,
                 renderers=renderers,
                 change_page_callback={'url': 'set_current_form_page',
