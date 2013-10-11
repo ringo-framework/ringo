@@ -22,12 +22,6 @@
   </thead>
   <tbody>
     % for item in items:
-    <%
-    ## Do not list the item itself in the list. The item can not be the
-    ## parent of its own.
-    if item == field._form._item:
-      continue
-    %>
     <tr>
       % if not field.is_readonly() and not field.renderer.onlylinked == "true":
         <td>
