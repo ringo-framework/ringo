@@ -36,7 +36,7 @@
           <%
             form_config = tableconfig.get_form_config()
             try:
-              value = getattr(item, col.get('name'))
+              value = item.get_value(col.get('name'))
             except AttributeError:
               value = "NaF"
           %>
