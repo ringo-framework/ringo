@@ -1,10 +1,10 @@
 <%inherit file="/main.mako" />
 <%namespace name="main" file="/main.mako"/>
 <div class="row-fluid page-header">
-  <div class="span6">
-    <h1>${_('Edit')} ${N_(clazz.get_item_modul().get_label())}</h1>
+  <div class="span8">
+    <h1>${_(clazz.get_item_modul().get_label())}: ${item}</h1>
   </div>
-  <div class="span6">
+  <div class="span4">
     <div class="btn-toolbar pull-right">
       <div class="context-menu btn-group">
         <!-- Item specific actions -->

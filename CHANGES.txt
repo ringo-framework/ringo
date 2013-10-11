@@ -1,6 +1,7 @@
 0.6.3
 -----
 - Implemented configurable str representation of items in the modul setting.
+- Show the item representation string on every update and read page.
 - Added new date related helper functions.
 - Delete usersettings too if the user gets deleted.
 - Added caching on modules, table and form configs to improve the performance.
