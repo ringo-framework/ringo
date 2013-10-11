@@ -335,6 +335,26 @@ class DropdownFieldRenderer(FormbarDropdown):
         """@todo: to be defined"""
         FormbarDropdown.__init__(self, field, translate)
 
+    def _get_template_values(self):
+        values = FormbarDropdown._get_template_values(self)
+        options = values['options']
+
+        # Filter options
+        filtered_items = []
+        hirachy = None
+        # Check if this listing is used to list items to build a
+        # hirachically parent child structure.
+        if hirachy is None and len(options) > 0:
+            if (type(options[-1][0]) == type(self._field._form._item)):
+                hirachy = True
+                children = self._field._form._item.get_children()
+        if hirachy:
+            for option in options:
+                if option[1] not in [x.id for x in children]:
+                    filtered_items.append(option)
+            values['options'] = filtered_items
+        return values
+
     def _render_link(self):
         html = []
         form = self._field._form
