@@ -384,6 +384,46 @@ class ListingFieldRenderer(FormbarSelectionField):
             items = []
         return items
 
+    def _filter_items(self, items):
+        """Will filter the items to only show valid items in the list"""
+        filtered_items = []
+        # Collect filters defined in the form to ignore certian items in
+        # the list.
+        ignore_filter = {}
+        if self._field.renderer.ignore:
+            for fexpr in self._field.renderer.ignore.split(","):
+                key, value = fexpr.split(":")
+                ignore_filter[key] = value
+        # Check if this listing is used to list items to build a
+        # hirachically parent child structure.
+        hirachy = None
+        if hirachy is None and len(items) > 0:
+            if (type(items[0]) == type(self._field._form._item)):
+                hirachy = True
+                children = self._field._form._item.children
+        # Now start filtering the items
+        for item in items:
+            # Filter for items based on the form configuration
+            ignore = False
+            for key in ignore_filter.keys():
+                if str(ignore_filter[key]) == str(getattr(item, key)):
+                    ignore = True
+                    break
+            if ignore:
+                continue
+            # If this list lists item in a hirachy then only list items
+            # which are direct childs of the current item or are
+            # do not have prevent
+            if hirachy:
+                if ((item.parent_id is None
+                    or item.id in [x.id for x in children])
+                    and item.id != self._field._form._item.id):
+                        filtered_items.append(item)
+            else:
+                filtered_items.append(item)
+        return filtered_items
+
+
     def render(self):
         """Initialize renderer"""
         html = []
@@ -392,7 +432,7 @@ class ListingFieldRenderer(FormbarSelectionField):
         if self._field.is_readonly() or self.onlylinked == "true":
             items = self._get_selected_items()
         else:
-            items = self.all_items.items
+            items = self._filter_items(self.all_items.items)
         values = {'items': items,
                   'field': self._field,
                   'clazz': self._field._get_sa_mapped_class(),
