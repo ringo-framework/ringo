@@ -10,7 +10,7 @@
     - Fixed value expandation in the listings.
     - Added option to List to do the sorted on the expanded or raw value.
 - ListingFieldRenderer
-    - When using listing in context with Nested Objects to build
+      When using listing in context with Nested Objects to build
       hirachies then take care to only show valid items in the list to
       prevent building broken hirachies.
     - Handle "onlylinked" config var in FieldListRenderer.
