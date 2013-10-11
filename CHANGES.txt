@@ -1,15 +1,20 @@
 0.6.3
 -----
 - Implemented configurable str representation of items in the modul setting.
-- Fixed value expandation in the listings.
-- Handle "onlylinked" config var in FieldListRenderer.
-- Added option to List to do the sorted on the expanded or raw value.
 - Added new date related helper functions.
 - Delete usersettings too if the user gets deleted.
 - Added caching on modules, table and form configs to improve the performance.
 - Introduced new "form" GET parameter to optionally change the default
   rendered.
-
+- Listings
+    - Fixed value expandation in the listings.
+    - Added option to List to do the sorted on the expanded or raw value.
+- ListingFieldRenderer
+    - When using listing in context with Nested Objects to build
+      hirachies then take care to only show valid items in the list to
+      prevent building broken hirachies.
+    - Handle "onlylinked" config var in FieldListRenderer.
+    - Handle "ignore" config var in FieldListRenderer.
 
 0.6.2
 -----
