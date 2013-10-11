@@ -17,7 +17,7 @@ from sqlalchemy.orm import (
 class Meta(object):
     created = Column(DateTime, default=datetime.datetime.utcnow)
     # TODO: Make sure that the updated attribute gets updated on every
-    # update. (torsten) <2013-10-07 18:00> 
+    # update. (torsten) <2013-10-07 18:00>
     updated = Column(DateTime, default=datetime.datetime.utcnow)
 
 
@@ -65,3 +65,27 @@ class Nested(object):
         return relationship(name,
                             primaryjoin=join,
                             backref=backref('parent', remote_side=[cls.id]))
+
+    def get_parents(self):
+        """Return a list of all parents of the current item
+        :returns: List of BaseItems
+
+        """
+        parents = []
+        if not self.parent_id:
+            return parents
+        else:
+            parents.append(self.parent)
+            parents.extend(self.parent.get_parents())
+        return parents
+
+    def get_children(self):
+        """Returns a list of all children und subchildren
+        :returns: List of BaseItems
+
+        """
+        childs = []
+        for child in self.children:
+            childs.append(child)
+            childs.extend(child.get_children())
+        return childs
