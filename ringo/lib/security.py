@@ -15,10 +15,10 @@ from pyramid.httpexceptions import HTTPUnauthorized
 from sqlalchemy.orm.exc import NoResultFound
 
 from ringo.lib.sql import DBSession
+from ringo.model.base import BaseItem
 from ringo.model.user import User, PasswordResetRequest
 
 log = logging.getLogger(__name__)
-
 
 def password_generator(size=8, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
@@ -55,6 +55,36 @@ def get_user(request):
 
 
 def has_permission(permission, context, request):
+    """Wrapper for pyramid's buitin has_permission function.  This
+    wrapper sets dynamically the __acl__ attribute of the given context
+    and then  .  check if the user has the given permission in the
+    current context using pyramid's has_permission function.
+
+    Context can be:
+    * Instance of BaseItem
+    * Subclass of BaseItem
+    * Ressource, built from a RessourceFactory
+
+    If context is an instance or subclass of BaseItem the wrapper will
+    dynamically set the __acl__ attribute. This attribute is used by the
+    pyramid's has_permission function the check the permission. If the
+    context is a resource the function does nothing as the resource
+    already has the __acl__ attribute set.
+
+    If the user has the permission the it returns True, else False
+    (Actually it returns a boolean like object, see pyramids
+    has_permission doc for more details.)
+
+    :permission: String. Name of the permission. E.g list, create, read
+    :context: Either Resource, Instance of BaseItem or Subclass of BaseItem
+    :request: current request
+    :returns: True or False (Boolean like object)
+
+    """
+    if isinstance(context, BaseItem):
+        context.__acl__ = context.__instance_acl__()
+    elif issubclass(context.__class__, BaseItem):
+        context.__acl__ = context.__class_acl__()
     return has_permission_(permission, context, request)
 
 
