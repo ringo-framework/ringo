@@ -53,6 +53,7 @@
     ${h.get_formbar_js() | n}
   </script>
   <script src="/static/js/init.js"></script>
+  <%include file="/custom-js.mako" />
   </body>
 </html>
 
