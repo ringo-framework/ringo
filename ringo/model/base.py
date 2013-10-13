@@ -2,10 +2,6 @@ import logging
 import re
 import datetime
 from operator import itemgetter, attrgetter
-from pyramid.security import (
-    Allow,
-    ALL_PERMISSIONS
-)
 from formbar.config import Config, load
 from sqlalchemy.orm import joinedload, ColumnProperty, class_mapper
 from ringo.lib.helpers import get_path_to_form_config
@@ -21,7 +17,6 @@ def clear_cache():
     BaseItem._cache_table_config = {}
     BaseItem._cache_form_config = {}
     BaseItem._cache_item_modul = {}
-
 
 class BaseItem(object):
 
@@ -41,39 +36,6 @@ class BaseItem(object):
     _cache_form_config = {}
     _cache_item_modul = {}
 
-    __default_acl__ = [(Allow, 'role:admin', ALL_PERMISSIONS)]
-    """Default ACL for Items. All Items will have this ACL. Usually it
-    allows users with the role 'admin' to have all permissions."""
-
-    def __class_acl__(cls):
-        """Returns dynamically loaded ACL on a class level.
-        This are typically permissions for the 'list' or
-        'create' actions.'"""
-        acl = []
-        modul = cls.get_item_modul()
-        for action in modul.actions:
-            actionname = action.name.lower()
-            if actionname not in ['list', 'create']:
-                continue
-            for role in action.roles:
-                acl.append((Allow, 'role:%s' % role.name, actionname))
-        # Finally add the default ACL
-        acl.extend(cls.__default_acl__)
-        return acl
-
-    def __instance_acl__(self):
-        """Returns dynamically loaded ACL on a item level."""
-        acl = []
-        modul = self.get_item_modul()
-        for action in modul.actions:
-            actionname = action.name.lower()
-            if actionname in ['list', 'create']:
-                continue
-            for role in action.roles:
-                acl.append((Allow, 'role:%s' % role.name, actionname))
-        # Finally add the class level ACL
-        acl.extend(self.__class_acl__())
-        return acl
 
     def __str__(self):
         return self.__unicode__()
