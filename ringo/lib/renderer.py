@@ -350,6 +350,8 @@ class DropdownFieldRenderer(FormbarDropdown):
                 children = self._field._form._item.get_children()
         if hirachy:
             for option in options:
+                if option[1] == self._field._form._item.id:
+                    continue
                 if option[1] not in [x.id for x in children]:
                     filtered_items.append(option)
             values['options'] = filtered_items
