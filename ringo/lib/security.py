@@ -160,9 +160,12 @@ def get_principals(userid, request):
         # Add roles the user have
         for role in get_roles(user):
             principals.append('role:%s' % role.name)
+            principals.append('role:%s;uid:%s' % (role.name, user.id))
         # Add groups the user member of
         for group in user.groups:
             principals.append('group:%s' % group.id)
+            for role in get_roles(user):
+                principals.append('role:%s;group:%s' % (role.name, group.id))
         # Finally add the user itself
         principals.append('uid:%s' % user.id)
 
