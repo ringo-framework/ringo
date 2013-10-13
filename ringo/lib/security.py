@@ -86,9 +86,11 @@ def has_permission(permission, context, request):
 
     """
     if isinstance(context, BaseItem):
-        context.__acl__ = context.__instance_acl__()
+        modul = context.get_item_modul()
+        context.__acl__ = get_permissions(modul, context)
     elif issubclass(context.__class__, BaseItem):
-        context.__acl__ = context.__class_acl__()
+        modul = context.get_item_modul()
+        context.__acl__ = get_permissions(modul)
     return has_permission_(permission, context, request)
 
 
