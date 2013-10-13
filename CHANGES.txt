@@ -1,5 +1,6 @@
 0.6.3
 -----
+- Improved authorisation system. Make building ACL more simple and robust.
 - Implemented configurable str representation of items in the modul setting.
 - Show the item representation string on every update and read page.
 - Added new date related helper functions.
