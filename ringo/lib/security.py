@@ -7,7 +7,8 @@ from datetime import datetime
 
 from pyramid.events import ContextFound
 from pyramid.security import unauthenticated_userid,\
-    has_permission as has_permission_
+    has_permission as has_permission_,\
+    Allow, ALL_PERMISSIONS
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.httpexceptions import HTTPUnauthorized
@@ -20,8 +21,10 @@ from ringo.model.user import User, PasswordResetRequest
 
 log = logging.getLogger(__name__)
 
+
 def password_generator(size=8, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
+
 
 def csrf_token_validation(event):
     request = event.request
@@ -29,6 +32,7 @@ def csrf_token_validation(event):
     if (request.method == 'POST'):
         if (csrf != unicode(request.session.get_csrf_token())):
             raise HTTPUnauthorized
+
 
 def setup_ringo_security(config):
     authn_policy = AuthTktAuthenticationPolicy('seekrit',
@@ -88,6 +92,56 @@ def has_permission(permission, context, request):
     return has_permission_(permission, context, request)
 
 
+def get_permissions(modul, item=None):
+    """Will return a list permissions attached to the modul and
+    optionally to particular item of the modul. The returned list is
+    suitable for using it as ACL in pyramid's authorization system.  The
+    function will at least return class based permissions. If a item is
+    provided then additional item level permissions are returned.
+
+    The function will iterate over all available actions of the given
+    modul and tries to adds a permission entry to the for every role
+    which has granted access to the action.
+
+    For every role it will check the following things:
+
+    1. If the role is marked as "administrational" role, then add the
+       permission for role and action.
+    2. Elif action is either "list" or "create" (permissons on class
+       level) then add the permission for the role and action.
+    3. Elif an item is provided add item level permissions for the role
+       _and_ only the owner or users which are member of the items group.
+
+    :model: The modul for which the permissions are returned
+    :item: Optional: Item of the model for which the permissons as
+           returned
+    :returns: List of permissions
+    """
+    perms = []
+    # Default permisson. Admins should be allowed to to everything.
+    perms.append((Allow, 'role:admin', ALL_PERMISSIONS))
+    if not modul:
+        return perms
+    for action in modul.actions:
+        for role in action.roles:
+            default_principal = 'role:%s' % role
+            # administrational role means allow without further
+            # ownership checks.
+            if role.admin is True:
+                perms.append((Allow, default_principal, action.name.lower()))
+            # class level permissions
+            elif action.name.lower() in ['create', 'list']:
+                perms.append((Allow, default_principal, action.name.lower()))
+            # item level permissions. Only allow the owner or members of
+            # the items group.
+            elif item:
+                principal = default_principal + ';uid:%s' % item.uid
+                perms.append((Allow, principal, action.name.lower()))
+                principal = default_principal + ';group:%s' % item.gid
+                perms.append((Allow, principal, action.name.lower()))
+    return perms
+
+
 def get_principals(userid, request):
     """Returns a list of pricipals for the user with userid for the
     given request.
@@ -111,7 +165,6 @@ def get_principals(userid, request):
             principals.append('group:%s' % group.id)
         # Finally add the user itself
         principals.append('uid:%s' % user.id)
-
 
     log.debug('Principals for user "%s": %s' % (user.login, principals))
     return principals
