@@ -9,7 +9,6 @@
   <div id="main">
     ${next.body()}
   </div>
-  <div id="push"></div>
 </div>
 <div id="footer">
   <%include file="/footer.mako" />
