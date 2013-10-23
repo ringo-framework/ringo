@@ -60,7 +60,21 @@
 <%def name="render_item_base_actions(item)">
   % for action in item.get_item_modul().actions:
     % if s.has_permission(action.name.lower(), request.context, request):
-      <a href="${h.get_action_url(request, item, action.name.lower())}" class="btn"><i class="${action.icon}"></i></a>
+      <%
+      icon = action.icon.strip()
+      if icon == "icon-list-alt":
+        icon = "glyphicon glyphicon-list-alt"
+      elif icon == "icon-plus":
+        icon = "glyphicon glyphicon-plus"
+      elif icon == "icon-eye-open":
+        icon = "glyphicon glyphicon-eye-open"
+      elif icon == "icon-edit":
+        icon = "glyphicon glyphicon-edit"
+      elif icon == "icon-trash":
+        icon = "glyphicon glyphicon-trash"
+      %>
+      <a href="${h.get_action_url(request, item, action.name.lower())}"
+      class="btn btn-default"><i class="${icon}"></i></a>
     % endif
   % endfor
 </%def>
