@@ -3,7 +3,7 @@
 /* Chane positon to align the menu with the page header on the left side. */
 .context-menu {
   position: relative;
-  top: 5px;
+  top: 7px;
 }
 
 /* Status message
