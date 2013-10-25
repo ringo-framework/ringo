@@ -32,6 +32,7 @@
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
     <script src="/static/js/dataTables.js"></script>
     <script src="/static/js/jquery.jcountdown.min.js"></script>
+    <%include file="/custom-header.mako" />
   </head>
   <body>
   ${next.body()}
@@ -54,7 +55,6 @@
     ${h.get_formbar_js() | n}
   </script>
   <script src="/static/js/init.js"></script>
-  <%include file="/custom-js.mako" />
   </body>
 </html>
 
