@@ -16,11 +16,11 @@ def render_filter_link(request, field, value, clazz):
     <input name="form" type="hidden" value="search">
     <div class="form-group">
       <label class="sr-only" for="search">${_('Search')}</label>
-      <input name="search" type="text" class="input-large" value="${search}" placeholder="${_('Search for (Regexpr) in ...')}"/>
+      <input name="search" class="form-control" type="text" class="input-large" value="${search}" placeholder="${_('Search for (Regexpr) in ...')}"/>
     </div>
     <div class="form-group">
       <label class="sr-only" for="field">${_('Fields')}</label>
-      <select name="field" class="input-small">
+      <select name="field"  class="form-control" class="input-small">
         <option value="">${_('All columns')}</option>
         % for field in tableconfig.get_columns():
           % if field.get('name') == search_field:
@@ -31,9 +31,9 @@ def render_filter_link(request, field, value, clazz):
         % endfor
       </select>
     </div>
-    <button class="btn">${_('Search')}</button>
+    <button class="btn btn-default">${_('Search')}</button>
     <div class="btn-group">
-      <button class="btn dropdown-toggle" data-toggle="dropdown" tabindex="-1">${_('Options ')}<span class="caret"></span></button>
+      <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">${_('Options ')}<span class="caret"></span></button>
       <ul class="dropdown-menu">
           <li>
             <table class="table table-condensed">
