@@ -173,8 +173,7 @@ def get_principals(userid, request):
                 principals.append('role:%s;group:%s' % (role.name, group.id))
         # Finally add the user itself
         principals.append('uid:%s' % user.id)
-
-    log.debug('Principals for user "%s": %s' % (user.login, principals))
+    log.debug('Principals for userid "%s": %s' % (userid, principals))
     return principals
 
 # ROLES
