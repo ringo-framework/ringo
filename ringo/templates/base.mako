@@ -72,6 +72,8 @@
         icon = "glyphicon glyphicon-edit"
       elif icon == "icon-trash":
         icon = "glyphicon glyphicon-trash"
+      elif icon == "icon-download":
+        icon = "glyphicon glyphicon-download"
       %>
       <a href="${h.get_action_url(request, item, action.name.lower())}"
       class="btn btn-default"><i class="${icon}"></i></a>
