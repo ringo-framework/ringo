@@ -11,8 +11,6 @@
           <div class="btn-group btn-group-justified">
             <!-- Item specific actions -->
             ${main.render_item_specific_actions(item)}
-          </div>
-          <div class="btn-group btn-group-justified">
             <!-- Base ringo actions -->
             ${main.render_item_base_actions(item)}
           </div>
@@ -25,8 +23,6 @@
           <div class="btn-group">
             <!-- Item specific actions -->
             ${main.render_item_specific_actions(item)}
-          </div>
-          <div class="btn-group">
             <!-- Base ringo actions -->
             ${main.render_item_base_actions(item)}
           </div>
