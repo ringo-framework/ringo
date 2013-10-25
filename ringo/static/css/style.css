@@ -24,3 +24,13 @@ img.icon {
 .page-header h1 {
   margin: 5px 0;
 }
+
+#footer  {
+  margin: 5px 0;
+  padding: 17px 0px;
+}
+
+#footer a {
+  color: rgb(119, 119, 119);
+  text-decoration: none;
+}
