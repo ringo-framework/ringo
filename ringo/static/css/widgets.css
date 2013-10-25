@@ -28,6 +28,8 @@
 
 .dataTables_filter input {
     margin-bottom: 0px;
+    width: 200px;
+    display: inline;
 }
 .dataTables_filter {
     background-color: #F5F5F5;

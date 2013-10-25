@@ -24,4 +24,7 @@ $( document ).ready(function() {
            "bAutoWidth": false
         }
      );
+     // Add form-controll class to search fields, needed for BS3
+     $('.dataTables_filter input').addClass("form-control");
+     $('.dataTables_filter input').addClass("form-control");
 });
