@@ -5,7 +5,7 @@
       <th colspan="${len(tableconfig.get_columns())+1}">
       <a href="#"
       onclick="addItem('${request.route_url(clazz.get_action_routename("create"))}', '${field.renderer.foreignkey}', '${field.renderer.form}', '${field._form._item.id}')"
-      class="btn btn-small">${_('Add')}</a>
+      class="btn btn-default btn-small">${_('Add')}</a>
       </th>
     </tr>
     % endif
