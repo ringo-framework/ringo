@@ -17,6 +17,10 @@ body {
   padding: 0 0 60px;
 }
 
+#main {
+	margin-top: -20px;
+}
+
 /* Set the fixed height of the footer here */
 #footer {
   height: 60px;
