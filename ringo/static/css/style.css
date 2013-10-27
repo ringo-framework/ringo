@@ -34,3 +34,14 @@ img.icon {
   color: rgb(119, 119, 119);
   text-decoration: none;
 }
+
+/* BS3 seems to make the th 2px hight which i do not like. So set it back to
+ * 1px */
+.table-bordered > thead > tr > th, .table-bordered > thead > tr > td {
+    border-bottom-width: 1px;
+}
+.table thead > tr > th {
+
+    vertical-align: bottom;
+    border-bottom: 1px solid rgb(221, 221, 221);
+}
