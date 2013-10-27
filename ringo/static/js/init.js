@@ -2,28 +2,24 @@ $( document ).ready(function() {
     $('.dialog').modal();
     $('.alert').delay(3 * 1000).fadeOut();
     $('#savequerydialog').modal({
-      show: false
+        show: false
     });
-     $('.datatable-simple').dataTable(
-        {
+    $('.datatable-simple').dataTable( {
            "bPaginate": false,
            "bLengthChange": false,
            "bFilter": true,
            "bSort": true,
            "bInfo": false,
            "bAutoWidth": false
-        }
-     );
-     $('.datatable-blank').dataTable(
-        {
+     });
+     $('.datatable-blank').dataTable({
            "bPaginate": false,
            "bLengthChange": false,
            "bFilter": false,
            "bSort": true,
            "bInfo": false,
            "bAutoWidth": false
-        }
-     );
+      });
      // Add form-controll class to search fields, needed for BS3
      $('.dataTables_filter input').addClass("form-control");
      $('.dataTables_filter input').addClass("form-control");
