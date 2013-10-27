@@ -6,6 +6,22 @@ def render_filter_link(request, field, value, clazz):
   params = "form=search&search=%s&field=%s" % (value, field.get('name'))
   out.append('<a href="%s?%s"' % (url, params))
   out.append('class="filter"')
+  out.append('title="Filter %s on %s in %s">' % (clazz.get_item_modul().get_label(plural=True), value, field.get('label')))
+  out.append('%s</a>' % value)
+  return " ".join(out)
+%>
+<div class="well well-small search-widget">
+  <form name="search" class="form-inline" role="form" action="${request.current_route_url()}" method="POST">
+    <input name="csrf_token" type="hidden" value="${request.session.get_csrf_token()}">
+    <input name="form" type="hidden" value="search">
+    <div class="form-group">
+      <label class="sr-only" for="search">${_('Search')}</label>
+      <input name="search" class="form-control" type="text" class="input-large" value="${search}" placeholder="${_('Search for (Regexpr) in ...')}"/>
+    </div>
+    <div class="form-group">
+      <label class="sr-only" for="field">${_('Fields')}</label>
+      <select name="field"  class="form-control" class="input-small">
+        <option value="">${_('All columns')}</option>
         % for field in tableconfig.get_columns():
           % if field.get('name') == search_field:
             <option value="${field.get('name')}" selected>${_(field.get('label'))}</option>
