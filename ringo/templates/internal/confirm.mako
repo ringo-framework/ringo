@@ -1,16 +1,19 @@
-<div class="dialog modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-<div class="modal-header">
-<h3 id="myModalLabel"><img src="${icon}"> ${header}</h3>
-</div>
-<div class="modal-body">
-<p>${body}</p>
-</div>
-<div class="modal-footer">
-<form action="${ok_url}" method="POST">
-  <a class="btn" href="${cancel_url}">${_('Cancel')}</a>
-  <input type="hidden" name="confirmed" value="1"/>
-  <input type="hidden" name="csrf_token" value="${request.session.get_csrf_token()}"/>
-  <button type"submit" class="btn btn-primary">${action}</button>
-</form>
-</div>
+<div class="dialog modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="panel panel-warning">
+      <div class="panel-heading"><img src="${icon}"> <strong>${header}</strong></div>
+        <div class="panel-body">
+          <p>${body}</p>
+        </div>
+        <div class="panel-footer">
+          <form action="${ok_url}" method="POST">
+            <button type"submit" class="btn btn-warning">${action}</button>
+            <a class="btn btn-default" href="${cancel_url}">${_('Cancel')}</a>
+            <input type="hidden" name="confirmed" value="1"/>
+            <input type="hidden" name="csrf_token" value="${request.session.get_csrf_token()}"/>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

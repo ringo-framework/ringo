@@ -6,22 +6,6 @@ def render_filter_link(request, field, value, clazz):
   params = "form=search&search=%s&field=%s" % (value, field.get('name'))
   out.append('<a href="%s?%s"' % (url, params))
   out.append('class="filter"')
-  out.append('title="Filter %s on %s in %s">' % (clazz.get_item_modul().get_label(plural=True), value, field.get('label')))
-  out.append('%s</a>' % value)
-  return " ".join(out)
-%>
-<div class="well well-small search-widget">
-  <form name="search" class="form-inline" role="form" action="${request.current_route_url()}" method="POST">
-    <input name="csrf_token" type="hidden" value="${request.session.get_csrf_token()}">
-    <input name="form" type="hidden" value="search">
-    <div class="form-group">
-      <label class="sr-only" for="search">${_('Search')}</label>
-      <input name="search" class="form-control" type="text" class="input-large" value="${search}" placeholder="${_('Search for (Regexpr) in ...')}"/>
-    </div>
-    <div class="form-group">
-      <label class="sr-only" for="field">${_('Fields')}</label>
-      <select name="field"  class="form-control" class="input-small">
-        <option value="">${_('All columns')}</option>
         % for field in tableconfig.get_columns():
           % if field.get('name') == search_field:
             <option value="${field.get('name')}" selected>${_(field.get('label'))}</option>
@@ -131,24 +115,25 @@ table-bordered">
 </table>
 </form>
 
-<div id="savequerydialog" class="modal hide fade">
+<div class="modal fade" id="savequerydialog">
   <form id="savequery" action="${request.current_route_url()}">
   <input name="csrf_token" type="hidden" value="${request.session.get_csrf_token()}">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>${_('Save current search filter')}</h3>
+  <div class="modal-dialog">
+    <div class="panel panel-default">
+      <div class="panel-heading"><strong>${_('Save current search filter')}</strong></div>
+        <div class="panel-body">
+          <label for="save">${_('Queryname')}</label>
+          <input type="textfield" id="save" name="save"/>
+          <input type="hidden" name="form" value="search"/>
+          <p><small>${_('Please insert a name for your query. It it will be selectable under this name in the options menu of the search after saving.')}</small></p>
+        </div>
+        <div class="panel-footer">
+          <input class="btn btn-primary" type="button" onclick="formSubmit()" value="${_('Save Query')}">
+          <a href="#" class="btn btn-default" data-dismiss="modal">${_('Close')}</a>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="modal-body">
-    <label for="save">${_('Queryname')}</label>
-    <input type="textfield" id="save" name="save"/>
-    <input type="hidden" name="form" value="search"/>
-    <p><small>${_('Please insert a name for your query. It it will be selectable under this name in the options menu of the search after saving.')}</small></p>
-  </div>
-  <div class="modal-footer">
-    <a href="#" class="btn" data-dismiss="modal">${_('Close')}</a>
-    <input class="btn btn-primary" type="button" onclick="formSubmit()" value="${_('Save Query')}">
-  </div>
-  </form>
 </div>
 
 <script type="text/javascript">
