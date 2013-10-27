@@ -25,11 +25,14 @@ $( document ).ready(function() {
      $('.dataTables_filter input').addClass("form-control");
 
      // Make the formbar navigation sticky when the user scrolls down.
-     $('.formbar-outline').affix({
-        offset: {
-        //top: $('header').height()
-        top: 185 }
-     });
+     var width = $( document ).width();
+     if ( width > 768 ) {
+         $('.formbar-outline').affix({
+            offset: {
+            //top: $('header').height()
+            top: 170 }
+         });
+     }
 
      // First hide all main panes
      $('#context-menu-options a').click(function() {
