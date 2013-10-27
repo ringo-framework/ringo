@@ -1,3 +1,11 @@
+0.6.4
+-----
+- Improved Layout
+  - Use Bootstrap 3
+  - Use new formbar lib (bootstrap 3 compatible)
+  - Optimized space. Removed tabs. Added advanved menu to the context menu for
+    accessing other content which was formerly placed in tabs.
+
 0.6.3
 -----
 - Improved authorisation system. Make building ACL more simple and robust.
