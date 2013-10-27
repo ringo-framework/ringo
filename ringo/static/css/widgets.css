@@ -6,6 +6,16 @@
   top: 2px;
 }
 
+/***************************************************************************
+ *                               Main panes                                *
+ ***************************************************************************/
+.main-pane {
+    display: none
+}
+.main-pane.active {
+  display: inline;
+}
+
 /* Status message
  * *************************************************************************/
 /* Push the status message a littlebit down from the page header. */
@@ -70,3 +80,4 @@ ul.dropdown-menu li table {
 ul.dropdown-menu li table td {
     vertical-align: middle;
 }
+

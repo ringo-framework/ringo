@@ -16,6 +16,10 @@ img.icon {
   display:none;
 }
 
+.context-menu.pull-right button {
+  min-height: 35px;
+}
+
 /* Reduce bottom margin from 30 to 20 (was 20 0 30) to make the content
  * under the page-header more compact. */
 .page-header {

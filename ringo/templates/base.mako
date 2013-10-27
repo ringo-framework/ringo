@@ -80,6 +80,17 @@
       class="btn btn-default"><i class="${icon}"></i></a>
     % endif
   % endfor
+  <div class="btn-group">
+    <button type="button" class="btn btn-default dropdown-toggle"
+    data-toggle="dropdown"> ${_('Advanced')} <span class="caret"></span></button>
+    <ul id="context-menu-options" class="dropdown-menu  pull-right" role="menu">
+      <li><a href="#form">${_('Back to')} ${item.get_item_modul().get_label()}: ${item}</a></li>
+      % if owner:
+        <li class="divider"></li>
+        <li><a href="#ownership">Change ownership</a></li>
+      % endif
+    </ul>
+  </div>
 </%def>
 
 <%def name="render_item_specific_actions(item)">

@@ -30,4 +30,12 @@ $( document ).ready(function() {
         //top: $('header').height()
         top: 185 }
      });
+
+     // First hide all main panes
+     $('#context-menu-options a').click(function() {
+        var pane = $(this).attr('href').split('#')[1];
+        $('.main-pane').hide();
+        $('#'+pane).show();
+    });
+
 });
