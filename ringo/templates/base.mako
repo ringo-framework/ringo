@@ -14,7 +14,7 @@
     <link href="/css/widgets.css" rel="stylesheet" media="screen">
     <link href="/css/style.css" rel="stylesheet" media="screen">
     <style>
-      ${h.get_formbar_css()}
+      ${h.get_formbar_css() | n}
     </style>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
