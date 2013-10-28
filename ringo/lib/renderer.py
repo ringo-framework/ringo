@@ -462,6 +462,7 @@ class ListingFieldRenderer(FormbarSelectionField):
                   'clazz': self._field._get_sa_mapped_class(),
                   'request': self._field._form._request,
                   '_': self._field._form._translate,
+                  's': ringo.lib.security,
                   'tableconfig': self.all_items.clazz.get_table_config(config)}
         html.append(self.template.render(**values))
         return "".join(html)

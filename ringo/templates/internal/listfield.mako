@@ -32,7 +32,12 @@
           <input style="display:none" type="checkbox" value="${item.id}" name="${field.name}"/>
       % endif
       % for num, col in enumerate(tableconfig.get_columns()):
-        <td class="${num > 0 and 'hidden-xs'}" onclick="openItem('${request.route_url(clazz.get_action_routename("read"), id=item.id)}')">
+        % if s.has_permission("update", item, request):
+          <td class="${num > 0 and 'hidden-xs'}"
+          onclick="openItem('${request.route_url(clazz.get_action_routename("update"), id=item.id)}')">
+        % else:
+          <td class="${num > 0 and 'hidden-xs'}" onclick="openItem('${request.route_url(clazz.get_action_routename("read"), id=item.id)}')">
+        % endif 
           <%
             form_config = tableconfig.get_form_config()
             try:
