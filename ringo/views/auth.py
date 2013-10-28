@@ -65,12 +65,9 @@ def login(request):
             target_url = request.route_url('home')
             return HTTPFound(location=target_url, headers=headers)
 
-    registration_enabled = is_registration_enabled(settings)
-    pwreminder_enabled = is_pwreminder_enabled(settings)
-
     return {'form': form.render(),
-            'registration_enabled': registration_enabled,
-            'pwreminder_enabled': pwreminder_enabled}
+            'registration_enabled': is_registration_enabled(settings),
+            'pwreminder_enabled': is_pwreminder_enabled(settings)}
 
 
 @view_config(route_name='logout', renderer='/auth/logout.mako')
