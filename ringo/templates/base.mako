@@ -60,7 +60,7 @@
 
 <%def name="render_item_base_actions(item)">
   % for action in item.get_item_modul().actions:
-    % if s.has_permission(action.name.lower(), request.context, request):
+    % if (request.url.find(action.name.lower()) < 0) and s.has_permission(action.name.lower(), request.context, request):
       <%
       icon = action.icon.strip()
       if icon == "icon-list-alt":
