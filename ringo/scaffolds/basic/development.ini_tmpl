@@ -16,6 +16,7 @@ pyramid.default_locale_name = en
 pyramid.includes =
     pyramid_debugtoolbar
     pyramid_tm
+    pyramid_mailer
 
 sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
 
@@ -27,6 +28,14 @@ mako.directories =
 # By default, the toolbar only appears for clients from IP addresses
 # '127.0.0.1' and '::1'.
 # debugtoolbar.hosts = 127.0.0.1 ::1
+
+###
+# Mailserver settings
+###
+mail.host =
+mail.default_sender =
+#mail.username =
+#mail.password =
 
 ###
 # wsgi server configuration
