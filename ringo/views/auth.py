@@ -1,6 +1,7 @@
 import hashlib
 import uuid
 
+import pyramid.httpexceptions as exc
 from pyramid.security import remember, forget
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
@@ -30,6 +31,16 @@ def is_login_unique(field, data):
     return len(users) == 0
 
 
+def is_registration_enabled(settings):
+    return (bool(settings.get('mail.host'))
+            and settings.get('auth.register_user') == "true")
+
+
+def is_pwreminder_enabled(settings):
+    return (bool(settings.get('mail.host'))
+            and settings.get('auth.password_reminder') == "true")
+
+
 @view_config(route_name='login', renderer='/auth/login.mako')
 def login(request):
     handle_history(request)
@@ -52,8 +63,13 @@ def login(request):
             headers = remember(request, user.id, max_age='86400')
             target_url = request.route_url('home')
             return HTTPFound(location=target_url, headers=headers)
+
+    registration_enabled = is_registration_enabled(settings)
+    pwreminder_enabled = is_pwreminder_enabled(settings)
+
     return {'form': form.render(),
-            'mailer_enabled': bool(settings.get('mail.host'))}
+            'registration_enabled': registration_enabled,
+            'pwreminder_enabled': pwreminder_enabled}
 
 
 @view_config(route_name='logout', renderer='/auth/logout.mako')
@@ -70,9 +86,11 @@ def logout(request):
 @view_config(route_name='register_user',
              renderer='/auth/register_user.mako')
 def register_user(request):
+    settings = request.registry.settings
+    if not is_registration_enabled(settings):
+        raise exc.exception_response(503)
     handle_history(request)
     _ = request.translate
-    settings = request.registry.settings
     config = Config(load(get_path_to_form_config('auth.xml', 'ringo')))
     form_config = config.get_form('register_user')
     form = Form(form_config, csrf_token=request.session.get_csrf_token())
@@ -132,6 +150,9 @@ def register_user(request):
 @view_config(route_name='confirm_user',
              renderer='/auth/confirm_user.mako')
 def confirm_user(request):
+    settings = request.registry.settings
+    if not is_registration_enabled(settings):
+        raise exc.exception_response(503)
     handle_history(request)
     _ = request.translate
     success = False
@@ -149,9 +170,11 @@ def confirm_user(request):
 @view_config(route_name='forgot_password',
              renderer='/auth/forgot_password.mako')
 def forgot_password(request):
+    settings = request.registry.settings
+    if not is_pwreminder_enabled(settings):
+        raise exc.exception_response(503)
     handle_history(request)
     _ = request.translate
-    settings = request.registry.settings
     config = Config(load(get_path_to_form_config('auth.xml', 'ringo')))
     form_config = config.get_form('forgot_password')
     form = Form(form_config, csrf_token=request.session.get_csrf_token())
@@ -182,9 +205,11 @@ def forgot_password(request):
 @view_config(route_name='reset_password',
              renderer='/auth/reset_password.mako')
 def reset_password(request):
+    settings = request.registry.settings
+    if not is_pwreminder_enabled(settings):
+        raise exc.exception_response(503)
     handle_history(request)
     _ = request.translate
-    settings = request.registry.settings
     success = False
     token = request.matchdict.get('token')
     user, password = password_reset(token, request.db)
