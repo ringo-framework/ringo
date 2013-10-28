@@ -5,6 +5,11 @@
   - Use new formbar lib (bootstrap 3 compatible)
   - Optimized space. Removed tabs. Added advanved menu to the context menu for
     accessing other content which was formerly placed in tabs.
+- Only show links for registering users or password reminders if the mail
+  system is configured and registering and reminders are enabled in the auth
+  system. See ini file. Defaults to not enabled.
+- Implemented a message library. Currently it is used to generate based on
+  mako templating and send mails.
 
 0.6.3
 -----
