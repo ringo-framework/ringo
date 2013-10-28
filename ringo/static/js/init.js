@@ -30,7 +30,7 @@ $( document ).ready(function() {
          $('.formbar-outline').affix({
             offset: {
             //top: $('header').height()
-            top: 170 }
+            top: 140 }
          });
      }
 
