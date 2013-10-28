@@ -23,6 +23,7 @@ from ringo.views import handle_history
 from ringo.lib.helpers import get_path_to_form_config
 from ringo.lib.security import login as user_login, request_password_reset, \
     password_reset, activate_user
+from ringo.lib.message import Mailer, Mail
 
 
 def is_login_unique(field, data):
@@ -183,16 +184,14 @@ def forgot_password(request):
             username = form.data.get('login')
             user = request_password_reset(username, request.db)
             if user:
-                # Generate email with the password request token.
-                sender = settings['mail.default_sender']
-                # TODO: Why profile is a InstrumentedList? For now take
-                # the only profile of the user
+                mailer = Mailer(request)
                 recipient = user.profile[0].email
                 subject = _('Password reset request for xxx')
-                message = "Visit this URL to confirm a password reset: %s" \
-                          % request.route_url('reset_password',
-                                              token=user.reset_tokens[-1])
-                _send_mail(request, recipient, sender, subject, message)
+                values = {'url': request.route_url('reset_password', token=user.reset_tokens[-1]),
+                          'app_name': "XXX",
+                          'email': "support@xxx.de"}
+                mail = Mail([recipient], subject, template="password_reminder", values=values)
+                mailer.send(mail)
             target_url = request.route_url('login')
             headers = forget(request)
             msg = _("Password reset token has been sent to the users "
