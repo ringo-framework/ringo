@@ -34,6 +34,7 @@ def is_login_unique(field, data):
 def login(request):
     handle_history(request)
     _ = request.translate
+    settings = request.registry.settings
     config = Config(load(get_path_to_form_config('auth.xml', 'ringo')))
     form_config = config.get_form('loginform')
     form = Form(form_config, csrf_token=request.session.get_csrf_token())
@@ -51,7 +52,8 @@ def login(request):
             headers = remember(request, user.id, max_age='86400')
             target_url = request.route_url('home')
             return HTTPFound(location=target_url, headers=headers)
-    return {'form': form.render()}
+    return {'form': form.render(),
+            'mailer_enabled': bool(settings.get('mail.host'))}
 
 
 @view_config(route_name='logout', renderer='/auth/logout.mako')
