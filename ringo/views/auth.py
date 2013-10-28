@@ -20,7 +20,7 @@ from formbar.config import Config, load
 from formbar.form import Form, Validator
 
 from ringo.views import handle_history
-from ringo.lib.helpers import get_path_to_form_config
+from ringo.lib.helpers import get_path_to_form_config, get_app_name
 from ringo.lib.security import login as user_login, request_password_reset, \
     password_reset, activate_user
 from ringo.lib.message import Mailer, Mail
@@ -186,9 +186,9 @@ def forgot_password(request):
             if user:
                 mailer = Mailer(request)
                 recipient = user.profile[0].email
-                subject = _('Password reset request for xxx')
+                subject = _('Password reset request for %s' % get_app_name())
                 values = {'url': request.route_url('reset_password', token=user.reset_tokens[-1]),
-                          'app_name': "XXX",
+                          'app_name': get_app_name(),
                           'email': "support@xxx.de"}
                 mail = Mail([recipient], subject, template="password_reminder", values=values)
                 mailer.send(mail)
