@@ -69,8 +69,8 @@ table-bordered">
       <input type="checkbox" name="check_all" onclick="checkAll('id');">
     </th>
   % endif
-  % for field in tableconfig.get_columns():
-    <th width="${field.get('width')}">
+  % for num, field in enumerate(tableconfig.get_columns()):
+    <th width="${field.get('width')}" class="${num > 0 and 'hidden-xs'}"</th>
       % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
         <a
         href="${request.current_route_url()}?sort_field=${field.get('name')}&sort_order=desc">${_(field.get('label'))}</a>
@@ -95,8 +95,8 @@ table-bordered">
       <input type="checkbox" name="id" value="${item.id}">
     </td>
     % endif
-    % for field in tableconfig.get_columns():
-    <td>
+    % for num, field in enumerate(tableconfig.get_columns()):
+    <td class="${num > 0 and 'hidden-xs'}">
         <%
           form_config = tableconfig.get_form_config()
           try:

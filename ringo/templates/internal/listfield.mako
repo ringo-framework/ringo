@@ -11,12 +11,12 @@
     % endif
     <tr>
     % if not field.is_readonly() and not field.renderer.onlylinked == "true":
-      <th width="2em">
+      <th width="20px">
         <input type="checkbox" name="check_all" onclick="checkAll('${field.name}');">
       </th>
     % endif
-      % for col in tableconfig.get_columns():
-      <th width="${col.get('width')}">${col.get('label')}</th>
+      % for num, col in enumerate(tableconfig.get_columns()):
+      <th class="${num > 0 and 'hidden-xs'}" width="${col.get('width')}">${col.get('label')}</th>
       % endfor
     </tr>
   </thead>
@@ -31,8 +31,8 @@
           ## Render a hidden checkbox field as we need to submit the values in
           <input style="display:none" type="checkbox" value="${item.id}" name="${field.name}"/>
       % endif
-      % for col in tableconfig.get_columns():
-        <td onclick="openItem('${request.route_url(clazz.get_action_routename("read"), id=item.id)}')">
+      % for num, col in enumerate(tableconfig.get_columns()):
+        <td class="${num > 0 and 'hidden-xs'}" onclick="openItem('${request.route_url(clazz.get_action_routename("read"), id=item.id)}')">
           <%
             form_config = tableconfig.get_form_config()
             try:
