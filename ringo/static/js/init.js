@@ -33,6 +33,12 @@ $( document ).ready(function() {
             top: 140 }
          });
      }
+     // Enable tooltips on the text elements in datatables 
+     //$('#data-table td a').tooltip(
+     //   {
+     //       delay: { show: 50, hide: 500 }
+     //   }
+     //);
 
      // First hide all main panes
      $('#context-menu-options a').click(function() {

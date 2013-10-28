@@ -4,7 +4,7 @@ def render_filter_link(request, field, value, clazz):
   out = []
   url = request.current_route_url()
   params = "form=search&search=%s&field=%s" % (value, field.get('name'))
-  out.append('<a href="%s?%s"' % (url, params))
+  out.append('<a href="%s?%s" data-toggle="tooltip"' % (url, params))
   out.append('class="filter"')
   out.append('title="Filter %s on %s in %s">' % (clazz.get_item_modul().get_label(plural=True), value, field.get('label')))
   out.append('%s</a>' % value)
