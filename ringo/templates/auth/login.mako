@@ -5,13 +5,18 @@
       <div class="panel-heading">${_('Login')}</div>
         <div class="panel-body">
           <p>${form | n}</p>
-          <p>${_('If you forgot your password or do not have a account yet please select one of the following options:')}</p>
-          <ul class="list-unstyled">
-            % if mailer_enabled:
-            <li><a href="${request.route_url("register_user")}">${_('Register Account')}</a></li>
-            <li><a href="${request.route_url("forgot_password")}">${_('Reset Password')}</a></li>
-            % endif
-          </ul>
+          <small>
+          % if registration_enabled:
+          <p>${_('New here? Register a new account!')}<br>
+          <a href="${request.route_url("register_user")}">${_('Register Account')}</a>
+          </p>
+          % endif
+          % if pwreminder_enabled:
+          <p>${_('Forgot your password? Reset your password here.')}<br>
+          <a href="${request.route_url("forgot_password")}">${_('Reset Password')}</a>
+          </p>
+          % endif
+          </small>
         </div>
       </div>
     </div>
