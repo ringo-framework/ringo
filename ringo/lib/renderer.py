@@ -11,6 +11,7 @@ from ringo.lib.helpers import (
     get_path_to_overview_config,
 )
 from ringo.model.base import BaseItem
+import ringo.lib.security
 
 template_lookup = TemplateLookup(directories=[template_dir],
                                  module_directory='/tmp/ringo_modules')
@@ -188,6 +189,7 @@ class ListRenderer(Renderer):
                   'listing': self.listing,
                   'request': request,
                   '_': request.translate,
+                  's': ringo.lib.security,
                   'enable_bundled_actions': False,
                   'search': search,
                   'search_field': search_field,

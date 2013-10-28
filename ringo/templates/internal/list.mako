@@ -89,7 +89,13 @@ table-bordered">
   % endfor
   </tr>
   % for item in items:
-  <tr onclick="openItem('${request.route_url(clazz.get_action_routename("read"), id=item.id)}')">
+
+
+  % if s.has_permission("update", item, request):
+    <tr onclick="openItem('${request.route_url(clazz.get_action_routename("update"), id=item.id)}')">
+  % else:
+    <tr onclick="openItem('${request.route_url(clazz.get_action_routename("read"), id=item.id)}')">
+  % endif
     % if enable_bundled_actions:
     <td>
       <input type="checkbox" name="id" value="${item.id}">
