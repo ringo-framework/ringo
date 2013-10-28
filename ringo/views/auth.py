@@ -129,16 +129,18 @@ def register_user(request):
             profile.email = form.data['email']
             profile.user = user
             DBSession.add(profile)
+
             # 3. Send confirmation email. The user will be activated
             #    after the user clicks on the confirmation link
-            sender = settings['mail.default_sender']
+            mailer = Mailer(request)
             recipient = profile.email
-            subject = _('Confirm user registration for ringo')
-            message = _('Please confirm the user registration by clicking'
-                        ' on the following link: %s'
-                        % request.route_url('confirm_user',
-                                            token=atoken))
-            _send_mail(request, recipient, sender, subject, message)
+            subject = _('Confirm user registration for %s' % get_app_name())
+            values = {'url': request.route_url('confirm_user', token=atoken),
+                      'app_name': get_app_name(),
+                      'email': "support@xxx.de"}
+            mail = Mail([recipient], subject, template="register_user", values=values)
+            mailer.send(mail)
+
             target_url = request.route_url('login')
             headers = forget(request)
             msg = _("User has been created and a confirmation mail was sent"
