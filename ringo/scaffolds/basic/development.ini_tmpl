@@ -30,6 +30,12 @@ mako.directories =
 # debugtoolbar.hosts = 127.0.0.1 ::1
 
 ###
+# Settings for the auth system
+###
+auth.register_user = false
+auth.password_reminder = false
+
+###
 # Mailserver settings
 ###
 mail.host =
