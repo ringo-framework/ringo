@@ -158,15 +158,14 @@ class BaseItem(object):
 
 class BaseList(object):
     def __init__(self, clazz, db, user=None, cache="", items=None):
-        """
-        A List object of. A list can be filterd, and sorted.
+        """A List object of. A list can be filterd, and sorted.
 
         :clazz: Class of items which will be loaded.
         :db: DB session to load the item
         :user: If provided only items readable for the
-        given user are included in the list
+               given user are included in the list
         :cache: Name of the cache region. If empty then no caching is
-        done.
+                done.
         """
         self.clazz = clazz
         # TODO: Check which is the best loading strategy here for large
@@ -317,7 +316,7 @@ class BaseFactory(object):
         :id: ID of the item to be loaded
         :db: DB session to load the item
         :cache: Name of the cache region. If empty then no caching is
-        done.
+                done.
         :returns: Instance of clazz
 
         """
