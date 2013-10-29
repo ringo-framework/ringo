@@ -29,8 +29,7 @@ class Mailer:
                           sender=mail.sender or self.default_sender,
                           recipients=mail.recipients,
                           body=mail.body)
-        print mail.body
-        #self.mailer.send(message)
+        self.mailer.send(message)
 
 
 class Mail:
