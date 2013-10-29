@@ -17,13 +17,13 @@ import md5
 
 # dogpile cache regions.  A home base for cache configurations.
 regions = {}
-root = "./dogpile_data/"
+root = "/tmp/dogpile_data/"
 
 if not os.path.exists(root):
-    raw_input("Will create datafiles in %r.\n"
-                "To reset the cache + database, delete this directory.\n"
-                "Press enter to continue.\n" % root
-                )
+    #raw_input("Will create datafiles in %r.\n"
+    #            "To reset the cache + database, delete this directory.\n"
+    #            "Press enter to continue.\n" % root
+    #            )
     os.makedirs(root)
 
 def md5_key_mangler(key):

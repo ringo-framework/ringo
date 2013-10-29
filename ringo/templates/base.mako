@@ -8,11 +8,11 @@
     <meta content="" name="author">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
-    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
-    <link href="/css/layout.css" rel="stylesheet" media="screen">
-    <link href="/css/widgets.css" rel="stylesheet" media="screen">
-    <link href="/css/style.css" rel="stylesheet" media="screen">
+    <link href="${request.static_url('ringo:static/bootstrap/css/bootstrap.min.css')}" rel="stylesheet" media="screen">
+    <link href="${request.static_url('ringo:static/bootstrap/css/bootstrap-theme.min.css')}" rel="stylesheet" media="screen">
+    <link href="${request.static_url('ringo:static/css/layout.css')}" rel="stylesheet" media="screen">
+    <link href="${request.static_url('ringo:static/css/widgets.css')}" rel="stylesheet" media="screen">
+    <link href="${request.static_url('ringo:static/css/style.css')}" rel="stylesheet" media="screen">
     <style>
       ${h.get_formbar_css() | n}
     </style>
@@ -28,10 +28,10 @@
     <link href="../assets/ico/apple-touch-icon-72-precomposed.png" sizes="72x72" rel="apple-touch-icon-precomposed">
     <link href="../assets/ico/apple-touch-icon-57-precomposed.png" rel="apple-touch-icon-precomposed">
     <link href="../assets/ico/favicon.png" rel="shortcut icon">
-    <script src="/static/js/jquery.js"></script>
-    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/static/js/dataTables.js"></script>
-    <script src="/static/js/jquery.jcountdown.min.js"></script>
+    <script src="${request.static_url('ringo:static/js/jquery.js')}"></script>
+    <script src="${request.static_url('ringo:static/bootstrap/js/bootstrap.min.js')}"></script>
+    <script src="${request.static_url('ringo:static/js/dataTables.js')}"></script>
+    <script src="${request.static_url('ringo:static/js/jquery.jcountdown.min.js')}"></script>
     <%include file="/custom-header.mako" />
   </head>
   <body>
@@ -54,7 +54,7 @@
     };
     ${h.get_formbar_js() | n}
   </script>
-  <script src="/static/js/init.js"></script>
+  <script src="${request.static_url('ringo:static/js/init.js')}"></script>
   </body>
 </html>
 

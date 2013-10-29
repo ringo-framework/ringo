@@ -21,16 +21,16 @@
       <rule expr="bool($email)" msg="Email is required" method="pre"/>
     </entity>
   </source>
-  <form id="loginform" autocomplete="off" method="POST" action="/auth/login" enctype="multipart/form-data">
+  <form id="loginform" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="s1"/>
   </form>
-  <form id="forgot_password" autocomplete="off" method="POST" action="/auth/forgot_password" enctype="multipart/form-data">
+  <form id="forgot_password" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <row>
       <col><field ref="e3"/></col>
       <col></col>
     </row>
   </form>
-  <form id="register_user" method="POST" action="/auth/register_user" enctype="multipart/form-data">
+  <form id="register_user" method="POST" action="" enctype="multipart/form-data">
     <row>
       <col><field ref="e1"/></col>
     </row>
