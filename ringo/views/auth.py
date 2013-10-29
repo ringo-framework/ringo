@@ -134,7 +134,8 @@ def register_user(request):
             subject = _('Confirm user registration for %s' % get_app_name())
             values = {'url': request.route_url('confirm_user', token=atoken),
                       'app_name': get_app_name(),
-                      'email': "support@xxx.de"}
+                      'email': settings['mail.default_sender'],
+                      '_': _}
             mail = Mail([recipient], subject, template="register_user", values=values)
             mailer.send(mail)
 
@@ -188,8 +189,9 @@ def forgot_password(request):
                 subject = _('Password reset request for %s' % get_app_name())
                 values = {'url': request.route_url('reset_password', token=user.reset_tokens[-1]),
                           'app_name': get_app_name(),
-                          'email': "support@xxx.de"}
-                mail = Mail([recipient], subject, template="password_reminder", values=values)
+                          'email': settings['mail.default_sender'],
+                          '_': _}
+                mail = Mail([recipient], subject, template="password_reset_request", values=values)
                 mailer.send(mail)
             target_url = request.route_url('login')
             headers = forget(request)
@@ -212,16 +214,16 @@ def reset_password(request):
     token = request.matchdict.get('token')
     user, password = password_reset(token, request.db)
     if password:
-        success = True
-        # Generate email with the password request token.
-        sender = settings['mail.default_sender']
+        mailer = Mailer(request)
         recipient = user.profile[0].email
-        subject = _('Password has been resetted')
-        message = "Your password has been resetted tp: %s" % password
-        _send_mail(request, recipient, sender, subject, message)
-        msg = _("Password has been successfull resetted. "
-                "The new password was sent to the users email address."
-                " Please check your email.")
+        subject = _('Password has been reseted')
+        values = {'password': password,
+                  'app_name': get_app_name(),
+                  'email': settings['mail.default_sender'],
+                  '_': _}
+        mail = Mail([recipient], subject, template="password_reminder", values=values)
+        mailer.send(mail)
+        success = True
     else:
         msg = _("Password was not resetted. Maybe the request"
                 " token was not valid?")
