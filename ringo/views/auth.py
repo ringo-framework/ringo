@@ -5,9 +5,9 @@ import pyramid.httpexceptions as exc
 from pyramid.security import remember, forget
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
-from pyramid_mailer import get_mailer
-from pyramid_mailer.message import Message
 
+from formbar.config import Config, load
+from formbar.form import Form, Validator
 
 from ringo.lib.sql import DBSession
 from ringo.model.base import BaseFactory
@@ -16,8 +16,6 @@ from ringo.lib.helpers import import_model
 User = import_model('ringo.model.user.User')
 Profile = import_model('ringo.model.user.Profile')
 Usergroup = import_model('ringo.model.user.Usergroup')
-from formbar.config import Config, load
-from formbar.form import Form, Validator
 
 from ringo.views import handle_history
 from ringo.lib.helpers import get_path_to_form_config, get_app_name
@@ -228,22 +226,3 @@ def reset_password(request):
         msg = _("Password was not resetted. Maybe the request"
                 " token was not valid?")
     return {'msg': msg, 'success': success}
-
-
-def _send_mail(request, recipient, sender, subject, message):
-    """Will send and email with the subject and body to the recipient
-    from the sender
-
-    :recipient: The recipients mail address
-    :sender: The senders mail address
-    :subject: String of subject
-    :message: Mails body.
-    :returns: True or False
-
-    """
-    message = Message(subject=subject,
-                      sender=sender,
-                      recipients=[recipient],
-                      body=message)
-    mailer = get_mailer(request)
-    mailer.send(message)
