@@ -4,6 +4,7 @@ import datetime
 from operator import itemgetter, attrgetter
 from formbar.config import Config, load
 from sqlalchemy.orm import joinedload, ColumnProperty, class_mapper
+from sqlalchemy.orm.attributes import get_history
 from ringo.lib.helpers import get_path_to_form_config
 from ringo.lib.sql import DBSession, regions
 from ringo.lib.sql.query import FromCache, set_relation_caching
@@ -128,6 +129,32 @@ class BaseItem(object):
         if prefix:
             return "%s-%s" % (prefix, routename)
         return routename
+
+    def get_changes(self):
+        """Will return dictionary which attributes which have been
+        changes. The value for each attribute is a tuple with the old
+        and new value.
+
+        The function uses sqlalchemy history object which has
+        information on changed attributes of the item to check which
+        attributes have changed.  See
+        http://docs.sqlalchemy.org/en/rel_0_8/orm/session.html \
+        ?highlight=get_history#sqlalchemy.orm.attributes.get_history
+        for more details.
+
+        :returns: Dictionary whith changes.
+        """
+
+        # FIXME: History is empty if the item as relations set.
+        # Reproduce: Task item in plorma. Set more than one member in
+        # the team. (None) <2013-10-31 23:14>
+        changes = {}
+        for col in self.get_columns():
+            history = get_history(self, col)
+            if history.has_changes():
+                changes[col] = (history.deleted, history.added)
+        return changes
+
 
     # TODO: Expandation should not be done based on the table
     # configuration. As this function is also usefull for values which
