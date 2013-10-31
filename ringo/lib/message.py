@@ -1,4 +1,5 @@
 """Modul for the messanging system in ringo"""
+import logging
 import os
 import pkg_resources
 from pyramid_mailer import get_mailer
@@ -8,11 +9,19 @@ from mako.lookup import TemplateLookup
 from ringo import template_dir as ringo_template_dir
 from ringo.lib.helpers import get_app_name
 
+log = logging.getLogger(__name__)
+
 
 class Mailer:
     def __init__(self, request):
         self.mailer = get_mailer(request)
         self.default_sender = request.registry.settings['mail.default_sender']
+        settings = request.registry.settings
+        if (bool(settings.get('mail.host')) and
+           bool(settings.get('mail.default_sender'))):
+            self.enabled = True
+        else:
+            self.enabled = False
 
     def send(self, mail):
         """Will send and email with the subject and body to the recipient
@@ -29,7 +38,10 @@ class Mailer:
                           sender=mail.sender or self.default_sender,
                           recipients=mail.recipients,
                           body=mail.body)
-        self.mailer.send(message)
+        if self.enabled:
+            self.mailer.send(message)
+        else:
+            log.warning("Sending mail aborted. Mail system not configured")
 
 
 class Mail:
@@ -56,3 +68,4 @@ class Mail:
         else:
             raise Exception("Mail is missing either a"
                             " template and values or a msg")
+        log.debug(self.body)
