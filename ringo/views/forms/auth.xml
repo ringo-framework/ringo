@@ -8,7 +8,6 @@
     <entity id="e2" name="pass" label="Password">
       <renderer type="password"/>
       <rule expr="bool($pass)" msg="Password is required" method="pre"/>
-      <rule expr="len($pass) >= 6" msg="Password must be at least 6 chars long" method="pre"/>
     </entity>
     <entity id="e3" name="login" label="Login" type="string">
       <rule expr="bool($login)" msg="Loginname is required" method="pre"/>
