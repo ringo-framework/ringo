@@ -1,3 +1,13 @@
+TODO
+----
+See Ringo tracker on bitbucket for more feature requests!
+
+The following list is only an incomplete reminder. Items here should be moved
+to the tracker.
+
+- Send notification mail when a new user registers a new account.
+- Send notification mail when a new user confirms the new account.
+
 0.6.4
 -----
 - Improved Layout
