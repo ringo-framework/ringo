@@ -5,6 +5,10 @@
     <entity id="e1" name="login" label="Login" type="string">
       <rule expr="len($login) ge 2" msg="Login must have a length of greater or equal than 2"></rule>
     </entity>
+    <entity id="e2o" name="oldpassword" label="Old Password">
+      <renderer type="password"/>
+      <rule expr="$password == $retype_password" msg="Passwords must be equal"></rule>
+    </entity>
     <entity id="e2" name="password" label="Password">
       <renderer type="password"/>
       <rule expr="$password == $retype_password" msg="Passwords must be equal"></rule>
@@ -23,11 +27,18 @@
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>
   </form>
-  <form id="update" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
+  <form id="update" autocomplete="off" >
     <snippet ref="update_snippet"/>
   </form>
   <form id="read" readonly="true">
     <snippet ref="update_snippet"/>
+  </form>
+  <form id="changepassword" method="POST" action="" enctype="multipart/form-data">
+    <row>
+      <col><field ref="e2"></field></col>
+      <col><field ref="e2"></field></col>
+      <col><field ref="e3"></field></col>
+    </row>
   </form>
 
   <!-- Create-->
