@@ -2,7 +2,7 @@
 <configuration>
   <source>
     <!-- Define different entity types -->
-    <entity id="e1" name="login" label="Login" type="string">
+    <entity id="e1" name="login" label="Login" type="string" required="true">
       <rule expr="len($login) ge 2" msg="Login must have a length of greater or equal than 2"></rule>
     </entity>
     <entity id="e1o" name="login" label="Login" type="string">
