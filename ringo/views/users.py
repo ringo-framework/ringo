@@ -1,9 +1,9 @@
 import logging
 import hashlib
 import sqlalchemy as sa
-from pyramid.httpexceptions import HTTPBadRequest
+from pyramid.httpexceptions import HTTPBadRequest, HTTPForbidden, HTTPFound
 from pyramid.view import view_config
-from formbar.form import Form
+from formbar.form import Form, Validator
 
 from ringo.views.base import (list_, create_, update_, read_, delete_,
                               handle_history, handle_params,
@@ -18,6 +18,8 @@ from ringo.views.json import (
     delete_ as json_delete
     )
 from ringo.lib.helpers import import_model
+from ringo.lib.security import login
+from ringo.lib.sql import invalidate_cache
 User = import_model('ringo.model.user.User')
 
 log = logging.getLogger(__name__)
@@ -32,6 +34,12 @@ def encrypt_password(request, user):
     pw.update(unencryped_pw)
     user.password = pw.hexdigest()
     return user
+
+def check_password(field, data):
+    """Validator function as helper for formbar validators"""
+    password = data[field]
+    username = data["login"]
+    return bool(login(username, password))
 
 ###########################################################################
 #                               HTML VIEWS                                #
@@ -78,7 +86,8 @@ def delete(request):
              permission='read')
 def changepassword(request):
     """Method to change the users password by the user. The user user
-    musst provide his old and the new pasword"""
+    musst provide his old and the new pasword. Users are only allowed to
+    change their own password."""
     clazz = User
     handle_history(request)
     handle_params(clazz, request)
@@ -90,10 +99,13 @@ def changepassword(request):
     factory = clazz.get_item_factory()
     try:
         item = factory.load(id, request.db)
+        # Check if the user is allowed to change the password for the user.
+        if item.id != request.user.id:
+            raise HTTPForbidden()
     except sa.orm.exc.NoResultFound:
         raise HTTPBadRequest()
 
-    item_form = Form(item.get_form_config('changepassword'), item, request.db, translate=_,
+    form = Form(item.get_form_config('changepassword'), item, request.db, translate=_,
                 renderers={},
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,
@@ -101,11 +113,36 @@ def changepassword(request):
                 request=request, csrf_token=request.session.get_csrf_token())
 
     if request.POST:
-        pass
+        mapping = {'item': item}
+        # Do extra validation which is not handled by formbar.
+        # Is the provided old password correct?
+        validator = Validator('oldpassword',
+                              _('The given password is not correct'),
+                              check_password)
+        form.add_validator(validator)
+        if form.validate(request.params):
+            form.save()
+            # Actually save the password. This is not done in the form
+            # as the password needs to be encrypted.
+            encrypt_password(request, item)
+            msg = _('Changed password for "${item}" successfull.',
+                    mapping=mapping)
+            log.info(msg)
+            request.session.flash(msg, 'success')
+            route_name = item.get_action_routename('update')
+            url = request.route_url(route_name, id=item.id)
+            # Invalidate cache
+            invalidate_cache()
+            return HTTPFound(location=url)
+        else:
+            msg = _('Error on changing the password for '
+                    '"${item}".', mapping=mapping)
+            log.info(msg)
+            request.session.flash(msg, 'error')
 
     rvalue['clazz'] = clazz
     rvalue['item'] = item
-    rvalue['form'] = item_form.render(page=get_current_form_page(clazz, request))
+    rvalue['form'] = form.render(page=get_current_form_page(clazz, request))
     return rvalue
 
 ###########################################################################

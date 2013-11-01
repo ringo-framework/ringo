@@ -10,6 +10,7 @@
   system. See ini file. Defaults to not enabled.
 - Implemented a message library. Currently it is used to generate based on
   mako templating and send mails.
+- Added option for users to change their password.
 
 0.6.3
 -----
