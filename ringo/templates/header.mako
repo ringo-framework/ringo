@@ -29,6 +29,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">${request.user.login}<b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a href="${request.route_url('profiles-read', id=request.user.profile[0].id)}"><img class="icon" src="${request.static_url('ringo:static/images/icons/16x16/profile.png')}"/>${_('Profile')}</a></li>
+              <li><a href="${request.route_url('users-changepassword', id=request.user.id)}"><img class="icon" src="${request.static_url('ringo:static/images/icons/16x16/application-certificate.png')}"/>${_('Change Password')}</a></li>
               <li class="divider"></li>
               <li><a href="${request.route_url('logout')}"><img class="icon" src="${request.static_url('ringo:static/images/icons/16x16/system-log-out.png')}"/>${_('Logout')}</a></li>
             </ul>

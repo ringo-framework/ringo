@@ -205,7 +205,6 @@ def setup_routes(config):
     config.add_route('confirm_user', 'auth/confirm_user/{token}')
     config.add_route('forgot_password', 'auth/forgot_password')
     config.add_route('reset_password', 'auth/reset_password/{token}')
-    config.add_route('users-changepassword', 'users/changepassword')
     config.add_route('logout', 'auth/logout')
     config.add_route('version', 'version')
     config.add_route('contact', 'contact')
@@ -219,6 +218,9 @@ def setup_routes(config):
     add_route(config, ActionItem)
     # Users
     add_route(config, User)
+    config.add_route('users-changepassword',
+                     'users/changepassword/{id}',
+                     factory=get_resource_factory(User))
     # Usergroups
     add_route(config, Usergroup)
     # Roles

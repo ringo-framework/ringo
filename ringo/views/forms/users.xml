@@ -35,7 +35,7 @@
   </form>
   <form id="changepassword" method="POST" action="" enctype="multipart/form-data">
     <row>
-      <col><field ref="e2"></field></col>
+      <col><field ref="e2o"></field></col>
       <col><field ref="e2"></field></col>
       <col><field ref="e3"></field></col>
     </row>

@@ -94,7 +94,7 @@ def changepassword(request):
         raise HTTPBadRequest()
 
     item_form = Form(item.get_form_config('changepassword'), item, request.db, translate=_,
-                renderers=renderers,
+                renderers={},
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,
                                       'itemid': id},
