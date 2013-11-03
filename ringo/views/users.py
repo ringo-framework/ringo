@@ -82,8 +82,7 @@ def delete(request):
 
 
 @view_config(route_name=User.get_action_routename('changepassword'),
-             renderer='/users/changepassword.mako',
-             permission='read')
+             renderer='/users/changepassword.mako')
 def changepassword(request):
     """Method to change the users password by the user. The user user
     musst provide his old and the new pasword. Users are only allowed to
@@ -129,7 +128,7 @@ def changepassword(request):
                     mapping=mapping)
             log.info(msg)
             request.session.flash(msg, 'success')
-            route_name = item.get_action_routename('update')
+            route_name = item.get_action_routename('changepassword')
             url = request.route_url(route_name, id=item.id)
             # Invalidate cache
             invalidate_cache()
