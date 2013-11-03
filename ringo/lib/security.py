@@ -139,7 +139,7 @@ def get_permissions(modul, item=None):
                 perms.append((Allow, default_principal, action.name.lower()))
             # item level permissions. Only allow the owner or members of
             # the items group.
-            elif item:
+            elif item and hasattr(item, 'uid'):
                 principal = default_principal + ';uid:%s' % item.uid
                 perms.append((Allow, principal, action.name.lower()))
                 principal = default_principal + ';group:%s' % item.gid
