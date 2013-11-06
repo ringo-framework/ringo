@@ -452,7 +452,7 @@ def update_(clazz, request, callback=None, renderers={}):
     return rvalue
 
 
-def read_(clazz, request, renderers={}):
+def read_(clazz, request, callback=None, renderers={}):
     handle_history(request)
     handle_params(clazz, request)
     _ = request.translate
@@ -468,6 +468,8 @@ def read_(clazz, request, renderers={}):
     # Load the item return 400 if the item can not be found.
     try:
         item = factory.load(id, request.db)
+        if callback:
+            item = callback(request, item)
     except sa.orm.exc.NoResultFound:
         raise HTTPBadRequest()
 
