@@ -30,7 +30,7 @@ requires = [
 ]
 
 setup(name='ringo',
-      version='0.6.4',
+      version='0.7.0',
       description='A simple web framework with base functionality to build web applications.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
