@@ -11,6 +11,7 @@ to the tracker.
 0.7.0
 -----
 - Added news modul
+- Use "width" from tableconfig also in DTListings.
 
 0.6.4
 -----
