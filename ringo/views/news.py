@@ -64,7 +64,7 @@ def update(request):
              renderer='/default/read.mako',
              permission='read')
 def read(request):
-    return read_(News, request)
+    return read_(News, request, callback=read_callback)
 
 
 @view_config(route_name=News.get_action_routename('delete'),
@@ -95,7 +95,7 @@ def rest_create(request):
              request_method="GET",
              permission='read')
 def rest_read(request):
-    return json_read(News, request)
+    return json_read(News, request, callback=read_callback)
 
 @view_config(route_name=News.get_action_routename('update', prefix="rest"),
              renderer='json',
