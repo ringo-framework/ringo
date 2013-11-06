@@ -213,6 +213,7 @@ class DTListRenderer(Renderer):
                   'listing': self.listing,
                   'request': request,
                   '_': request.translate,
+                  's': ringo.lib.security,
                   'tableconfig': self.config}
         return self.template.render(**values)
 
