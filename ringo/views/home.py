@@ -10,17 +10,28 @@ from ringo.lib.helpers import (
 )
 from ringo.lib.renderer import DTListRenderer
 
+from ringo.model.base import BaseList
 from ringo.model.appointment import Reminders
+from ringo.model.news import News
 from ringo.views import handle_history
 
 
 @view_config(route_name='home', renderer='/index.mako')
 def index_view(request):
     reminders = Reminders(request.db)
+
+    if request.user:
+        news_for_user = request.user.news
+    else:
+        news_for_user = []
+    news = BaseList(News, request.db, items=news_for_user)
+
     reminder_renderer = DTListRenderer(reminders)
+    news_renderer = DTListRenderer(news)
     handle_history(request)
     values = {}
     values['reminders'] = reminder_renderer.render(request)
+    values['news'] = news_renderer.render(request)
     return values
 
 
