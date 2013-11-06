@@ -12,6 +12,8 @@ to the tracker.
 -----
 - Added news modul
 - Use "width" from tableconfig also in DTListings.
+- Rows in DTLists are now clickable to if the user is allowed to update the
+  item then the update action will be called on click. Else call the read action.
 
 0.6.4
 -----

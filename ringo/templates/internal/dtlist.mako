@@ -8,7 +8,11 @@
   </thead>
   <tbody>
     % for item in items:
-    <tr>
+    % if s.has_permission("update", item, request):
+      <tr onclick="openItem('${request.route_url(item.get_action_routename("update"), id=item.id)}')">
+    % else:
+      <tr onclick="openItem('${request.route_url(item.get_action_routename("read"), id=item.id)}')">
+    % endif
       % for field in tableconfig.get_columns():
       <td>
           <%
