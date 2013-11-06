@@ -2,7 +2,7 @@
   <thead>
     <tr>
       % for field in tableconfig.get_columns():
-      <th>${field.get('label')}</th>
+      <th width="${field.get('width')}">${field.get('label')}</th>
       % endfor
     </tr>
   </thead>
