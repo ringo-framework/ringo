@@ -13,6 +13,30 @@ from ringo.model.news import News
 
 log = logging.getLogger(__name__)
 
+def _mark_news_as_read(request, item):
+    """Will mark the given news item as read for the current user of the request.
+
+    :request: current request
+    :item: news item
+    :returns: news item
+
+    """
+    users = item.users
+    users.remove(request.user)
+    return item
+
+def read_callback(request, item):
+    """Callback which is called right after the news item has been loaded.
+
+    :request: current request
+    :item: the news item
+    :returns: news item
+
+    """
+    item = _mark_news_as_read(request, item)
+    return item
+
+
 #                                HTML VIEW                                #
 
 @view_config(route_name=News.get_action_routename('list'),
