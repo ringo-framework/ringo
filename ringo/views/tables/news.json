@@ -1,0 +1,8 @@
+{
+    "overview": {
+        "columns": [
+            {"name": "created", "label": "Created"},
+            {"name": "subject", "label": "Subject"}
+        ]
+    }
+}
