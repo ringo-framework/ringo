@@ -8,8 +8,12 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
-0.7.1
+0.7.0
 -----
+- Added news modul
+- Use "width" from tableconfig also in DTListings.
+- Rows in DTLists are now clickable to if the user is allowed to update the
+  item then the update action will be called on click. Else call the read action.
 - Fix URLs for the ReST-Api to match basically the typical URL Schema for CRUD
   actions:
 
@@ -22,13 +26,6 @@ to the tracker.
 
   Note, that not all actions are actually implemented yet, but for now the url
   schema has beed adapted.
-
-0.7.0
------
-- Added news modul
-- Use "width" from tableconfig also in DTListings.
-- Rows in DTLists are now clickable to if the user is allowed to update the
-  item then the update action will be called on click. Else call the read action.
 
 0.6.4
 -----
