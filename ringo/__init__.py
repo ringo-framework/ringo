@@ -93,7 +93,13 @@ def add_rest_service(config, clazz):
                    if action.name.lower() in
                    ['list', 'create', 'read', 'update', 'delete']]:
         route_name = "rest-%s-%s" % (name, action.name.lower())
-        route_url = "rest/%s/%s" % (name, action.url)
+
+        url = action.url.split("/")
+        if len(url) > 1:
+            route_url = "rest/%s/%s" % (name, url[1])
+        else:
+            route_url = "rest/%s" % (name)
+        #route_url = "rest/%s/%s" % (name, action.url)
         log.debug("Adding route: %s, %s" % (route_name, route_url))
         config.add_route(route_name, route_url,
                          factory=get_resource_factory(clazz))

@@ -8,6 +8,21 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
+0.7.1
+-----
+- Fix URLs for the ReST-Api to match basically the typical URL Schema for CRUD
+  actions:
+
+    * GET /items - Retrieves a list of items
+    * GET /items/12 - Retrieves a specific item
+    * POST /items - Creates a new item
+    * PUT /items/12 - Updates item #12
+    * PATCH /items/12 - Partially updates item #12
+    * DELETE /items/12 - Deletes #12
+
+  Note, that not all actions are actually implemented yet, but for now the url
+  schema has beed adapted.
+
 0.7.0
 -----
 - Added news modul
