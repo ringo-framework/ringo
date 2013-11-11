@@ -41,6 +41,11 @@ Feature: Check the modul
   | anonymous | file  | 403      |
   | admin     | file  | 200      |
 
+  Examples: News
+  | role      | modul | response |
+  | anonymous | news  | 403      |
+  | admin     | news  | 200      |
+
   Scenario Outline: Read GET
     Given a <role> user
      When opens the read page for item <id> of modul <modul>
@@ -81,6 +86,13 @@ Feature: Check the modul
   | anonymous | file  | 1  | 403      |
   | admin     | file  | 1  | 400      |
 
+  Examples: File
+  | role      | modul | id | response |
+  | anonymous | news  | 1  | 403      |
+  | admin     | news  | 1  | 400      |
+
+
+
   Scenario Outline: Edit GET
     Given a <role> user
      When opens the edit page for item <id> of modul <modul>
@@ -120,3 +132,8 @@ Feature: Check the modul
   | role      | modul | id | response |
   | anonymous | file  | 1  | 403      |
   | admin     | file  | 1  | 400      |
+
+  Examples: File
+  | role      | modul | id | response |
+  | anonymous | news  | 1  | 403      |
+  | admin     | news  | 1  | 400      |

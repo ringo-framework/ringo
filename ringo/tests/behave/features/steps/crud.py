@@ -36,6 +36,8 @@ def get_modul_path(modul):
         path.append("appointments")
     elif modul == "file":
         path.append("files")
+    elif modul == "news":
+        path.append("news")
     return path
 
 @when(u'opens the create page of modul {modul}')
