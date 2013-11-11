@@ -1,6 +1,6 @@
 import sqlalchemy as sa
 from ringo.model import Base
-from ringo.model.base import BaseItem, BaseFactory
+from ringo.model.base import BaseItem
 from ringo.model.modul import ModulItem, _create_default_actions
 from ringo.model.mixins import Owned, Meta
 
@@ -28,6 +28,7 @@ class News(BaseItem, Meta, Owned, Base):
 
     def __unicode__(self):
         return str(self.id)
+
 
 def init_model(dbsession):
     """Will setup the initial model for the news.
