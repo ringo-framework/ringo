@@ -15,13 +15,6 @@ nm_news_user = sa.Table(
 the news the entry in this table can be removed"""
 
 
-class NewsFactory(BaseFactory):
-
-    def create(self, user=None):
-        new_item = BaseFactory.create(self, user)
-        return new_item
-
-
 class News(BaseItem, Meta, Owned, Base):
     __tablename__ = 'news'
     _modul_id = 9
