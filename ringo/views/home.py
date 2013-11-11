@@ -8,7 +8,7 @@ from ringo.lib.helpers import (
     get_app_name,
     get_app_title
 )
-from ringo.lib.renderer import DTListRenderer
+from ringo.lib.renderer import DTListRenderer, NewsListRenderer
 
 from ringo.model.base import BaseList
 from ringo.model.appointment import Reminders
@@ -27,7 +27,7 @@ def index_view(request):
     news = BaseList(News, request.db, items=news_for_user)
 
     reminder_renderer = DTListRenderer(reminders)
-    news_renderer = DTListRenderer(news)
+    news_renderer = NewsListRenderer(news)
     handle_history(request)
     values = {}
     values['reminders'] = reminder_renderer.render(request)

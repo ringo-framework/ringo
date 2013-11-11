@@ -218,6 +218,10 @@ class DTListRenderer(Renderer):
         return self.template.render(**values)
 
 
+class NewsListRenderer(DTListRenderer):
+    pass
+
+
 ###########################################################################
 #                         Renderers for dialogs                           #
 ###########################################################################
