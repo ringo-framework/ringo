@@ -14,6 +14,18 @@ to the tracker.
 - Use "width" from tableconfig also in DTListings.
 - Rows in DTLists are now clickable to if the user is allowed to update the
   item then the update action will be called on click. Else call the read action.
+- Fix URLs for the ReST-Api to match basically the typical URL Schema for CRUD
+  actions:
+
+    * GET /items - Retrieves a list of items
+    * GET /items/12 - Retrieves a specific item
+    * POST /items - Creates a new item
+    * PUT /items/12 - Updates item #12
+    * PATCH /items/12 - Partially updates item #12
+    * DELETE /items/12 - Deletes #12
+
+  Note, that not all actions are actually implemented yet, but for now the url
+  schema has beed adapted.
 
 0.6.4
 -----
