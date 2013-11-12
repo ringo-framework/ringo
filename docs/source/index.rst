@@ -5,12 +5,13 @@
 
 Welcome to Ringo's documentation!
 =================================
-
-Contents:
+This is the documentation of the Ringo application framework. After a short overview we
+will explain the user interface and some basic concepts in Ringo.
 
 .. toctree::
    :maxdepth: 3
 
+   overview
    xxx
 
 Indices and tables
