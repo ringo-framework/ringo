@@ -12,6 +12,8 @@ will explain the user interface and some basic concepts in Ringo.
    :maxdepth: 3
 
    overview
+   ui
+   development
    xxx
 
 Indices and tables
