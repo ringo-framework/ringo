@@ -5,9 +5,6 @@
 Development
 ***********
 
-Application layout
-==================
-
 .. _installation_development:
 
 Setup a developmet environment

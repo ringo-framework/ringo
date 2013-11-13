@@ -19,15 +19,24 @@ bottom the footer and in the middle there is the content.
 
 Modules
 *******
+.. image:: images/database.png
+   :alt: Basic database model.
+
 Ringo uses the term "Modul" to describe different data (data types) in your
 application.  Ringo comes with some predefined modules for users, usergroups,
 roles and the modules itself.  Each of those moduls provide an interface with
 basic CRUD functionality of work witch items of a modul.
 
+.. image:: images/applayers.png
+   :alt: Schema of a modul.
+
 Moduls also define some meta data on the data like which actions (Create,
 Read, Update, Delete...) are available, labels, visibility etc.  Further the
 authorisation is bound to the moduls too and defines and which users are
 allowed to use the configured actions.
+
+.. image:: images/modules.png
+   :alt: Schema of a modul.
 
 If there is any data in the application which needs to be created by the user
 and stored permanently in the database it is very likely done within a modul.

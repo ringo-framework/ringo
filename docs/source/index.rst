@@ -13,8 +13,8 @@ will explain the user interface and some basic concepts in Ringo.
 
    overview
    ui
+   architecture
    development
-   xxx
 
 Indices and tables
 ==================
