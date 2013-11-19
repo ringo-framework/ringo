@@ -89,6 +89,9 @@
         <li class="divider"></li>
         <li><a href="#ownership">Change ownership</a></li>
       % endif
+      % if logbook:
+        <li><a href="#logbook">${_('Show logbook')}</a></li>
+      % endif
     </ul>
   </div>
 </%def>
