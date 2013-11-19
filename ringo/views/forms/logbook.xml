@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration>
+  <source>
+    <!-- Define different entity types -->
+    <entity id="e1" name="logs" label="Logs">
+      <renderer type="logbook"/>
+    </entity>
+  </source>
+  <form id="logbook-form-read" readonly="true">
+    <row>
+      <col><field ref="e1"/></col>
+    </row>
+  </form>
+  <form id="logbook-form-update" autocomplete="off" method="POST" enctype="multipart/form-data">
+    <row>
+      <col><field ref="e1"/></col>
+    </row>
+  </form>
+</configuration>
