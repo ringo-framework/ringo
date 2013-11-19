@@ -1,0 +1,10 @@
+{
+    "overview": {
+        "columns": [
+            {"name": "created", "label": "Created", "width": "200"},
+            {"name": "category", "label": "Category", "expand": "true"},
+            {"name": "author", "label": "Author"},
+            {"name": "subject", "label": "Subject"}
+        ]
+    }
+}

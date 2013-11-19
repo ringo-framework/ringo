@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="ringo">
+  <source>
+    <entity id="e1" name="author" label="Author" type="string"/>
+    <entity id="e2" name="created" label="Created" type="datetime"/>
+    <entity id="e3" name="category" label="Category" type="integer">
+      <renderer type="dropdown"/>
+      <options>
+        <option value="0">System</option>
+        <option value="1">User</option>
+      </options>
+    </entity>
+    <entity id="e4" name="subject" label="Subject" type="string" required="true"/>
+    <entity id="e5" name="text" label="Text" type="string">
+      <renderer type="textarea"/>
+    </entity>
+  </source>
+  <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
+    <snippet ref="create_snippet"/>
+  </form>
+  <form id="update" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
+    <snippet ref="create_snippet"/>
+  </form>
+  <form id="read" readonly="true">
+    <snippet ref="create_snippet"/>
+  </form>
+
+  <!-- Create-->
+  <snippet id="create_snippet">
+    <snippet ref="s1"/>
+  </snippet>
+
+  <!-- Role -->
+  <snippet id="s1">
+    <row>
+      <col><field ref="e3"/></col>
+      <col><field ref="e1"/></col>
+    </row>
+    <row>
+      <col><field ref="e4"/></col>
+    </row>
+    <row>
+      <col><field ref="e5"/></col>
+    </row>
+  </snippet>
+</configuration>
