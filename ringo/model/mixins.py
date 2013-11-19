@@ -6,6 +6,7 @@ from sqlalchemy import (
     Integer,
     DateTime,
     ForeignKey,
+    Table
 )
 
 from sqlalchemy.orm import (
@@ -13,12 +14,32 @@ from sqlalchemy.orm import (
     backref
 )
 
+from ringo.model import Base
+
 
 class Meta(object):
     created = Column(DateTime, default=datetime.datetime.utcnow)
     # TODO: Make sure that the updated attribute gets updated on every
     # update. (torsten) <2013-10-07 18:00>
     updated = Column(DateTime, default=datetime.datetime.utcnow)
+
+
+class Logged(object):
+    """Mixin to add logging functionallity to a modul. Adding this Mixin
+    the item of a modul will have a "logs" relationship containing all
+    the log entries for this item. Log entries can be created
+    automatically by the system or may be created manual by the user.
+    Manual log entries. Needs to be configured (Permissions)"""
+
+    @declared_attr
+    def logs(cls):
+        from ringo.model.log import Log
+        tbl_name = "nm_%s_logs" % cls.__name__.lower()
+        nm_table = Table(tbl_name, Base.metadata,
+                         Column('iid', Integer, ForeignKey(cls.id)),
+                         Column('lid', Integer, ForeignKey("logs.id")))
+        logs = relationship(Log, secondary=nm_table)
+        return logs
 
 
 class Owned(object):
