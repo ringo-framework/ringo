@@ -10,7 +10,7 @@ from formbar.config import Config, load
 from formbar.form import Form
 
 from ringo.model.base import BaseList, BaseFactory
-from ringo.model.mixins import Owned
+from ringo.model.mixins import Owned, Logged
 from ringo.lib.helpers import import_model, get_path_to_form_config
 from ringo.lib.security import has_role
 User = import_model('ringo.model.user.User')
@@ -65,6 +65,16 @@ def get_ownership_form(item, request, readonly=None):
     else:
         form_config = config.get_form('ownership-form-update')
     return Form(form_config, item, request.db,
+                csrf_token=request.session.get_csrf_token())
+
+def get_logbook_form(item, request, readonly=None, renderers={}):
+    config = Config(load(get_path_to_form_config('logbook.xml', 'ringo')))
+    if readonly:
+        form_config = config.get_form('logbook-form-read')
+    else:
+        form_config = config.get_form('logbook-form-update')
+    return Form(form_config, item, request.db,
+                renderers=renderers,
                 csrf_token=request.session.get_csrf_token())
 
 
@@ -401,6 +411,8 @@ def update_(clazz, request, callback=None, renderers={}):
         raise HTTPBadRequest()
 
     owner_form = get_ownership_form(item, request)
+    logbook_form = get_logbook_form(item, request, readonly=True,
+                                    renderers=renderers)
     item_form = Form(item.get_form_config('update'), item, request.db, translate=_,
                 renderers=renderers,
                 change_page_callback={'url': 'set_current_form_page',
@@ -452,6 +464,10 @@ def update_(clazz, request, callback=None, renderers={}):
         rvalue['owner'] = owner_form.render()
     else:
         rvalue['owner'] = ""
+    if isinstance(item, Logged):
+        rvalue['logbook'] = logbook_form.render()
+    else:
+        rvalue['logbook'] = ""
     rvalue['form'] = item_form.render(page=get_current_form_page(clazz, request))
     return rvalue
 
@@ -480,6 +496,8 @@ def read_(clazz, request, callback=None, renderers={}):
         raise HTTPBadRequest()
 
     owner_form = get_ownership_form(item, request, readonly=True)
+    logbook_form = get_logbook_form(item, request, readonly=True,
+                                    renderers=renderers)
     item_form = Form(item.get_form_config('read'), item, request.db,
                      translate=_,
                      renderers=renderers,
@@ -493,6 +511,11 @@ def read_(clazz, request, callback=None, renderers={}):
         rvalue['owner'] = owner_form.render()
     else:
         rvalue['owner'] = ""
+    if isinstance(item, Logged):
+        rvalue['logbook'] = logbook_form.render()
+    else:
+        rvalue['logbook'] = ""
+    rvalue['form'] = item_form.render(page=get_current_form_page(clazz, request))
     rvalue['form'] = item_form.render(page=get_current_form_page(clazz, request))
     return rvalue
 
