@@ -1,4 +1,5 @@
 import datetime
+import logging
 from sqlalchemy.ext.declarative import declared_attr
 
 from sqlalchemy import (
@@ -6,22 +7,59 @@ from sqlalchemy import (
     Integer,
     DateTime,
     ForeignKey,
+    event,
     Table
 )
 
 from sqlalchemy.orm import (
     relationship,
+    mapper,
     backref
 )
 
 from ringo.model import Base
 
+log = logging.getLogger(__name__)
+
+
+@event.listens_for(mapper, "mapper_configured")
+def setup_event_listeners(mapper, class_):
+    """Will iterate over all mapped classes and setup event listeners for
+    certain ORM events for each class"""
+    for cls in class_.__bases__:
+        if cls == Meta:
+            log.debug('Adding event listener for %s' % class_)
+            event.listen(class_,
+                         'before_update',
+                         cls.before_update_event_listener)
+        elif cls == Logged:
+            log.debug('Adding event listener for %s' % class_)
+            event.listen(class_,
+                         'before_update',
+                         cls.before_update_event_listener)
+
 
 class Meta(object):
+    """Mixin to add a created and a updated datefield to items. The
+    updated datefield will be updated on every update of the item with
+    the datetime of the update."""
     created = Column(DateTime, default=datetime.datetime.utcnow)
     # TODO: Make sure that the updated attribute gets updated on every
     # update. (torsten) <2013-10-07 18:00>
     updated = Column(DateTime, default=datetime.datetime.utcnow)
+
+    @classmethod
+    def before_update_event_listener(cls, mapper, connection, target):
+        """Will update the updated attribute to the current datetime.
+        The mapper and the target parameter will be the item which
+        iherits this meta mixin.
+
+        :mapper: Mapper item for the target class
+        :connection: Current connection
+        :target: Target class.
+
+        """
+        target.updated = datetime.datetime.now()
 
 
 class Logged(object):
@@ -30,6 +68,7 @@ class Logged(object):
     the log entries for this item. Log entries can be created
     automatically by the system or may be created manual by the user.
     Manual log entries. Needs to be configured (Permissions)"""
+
 
     @declared_attr
     def logs(cls):
@@ -41,8 +80,29 @@ class Logged(object):
         logs = relationship(Log, secondary=nm_table)
         return logs
 
+    @classmethod
+    def before_update_event_listener(cls, mapper, connection, target):
+        """Will add a log entry for the updated item.
+        The mapper and the target parameter will be the item which
+        iherits this logged mixin.
+
+        :mapper: Mapper item for the target class
+        :connection: Current connection
+        :target: Target class.
+
+        """
+        from ringo.model.log import Log
+        factory = Log.get_item_factory()
+        log = factory.create(user=None)
+        log.subject = "Update: %s" % target
+        target.logs.append(log)
+        print target.logs
+
 
 class Owned(object):
+    """Mixin to add references to a user and a usergroup. This
+    references are used to build some kind of ownership of the item. The
+    ownership is used from the permission system."""
 
     @declared_attr
     def uid(cls):
