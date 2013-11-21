@@ -11,6 +11,11 @@ to the tracker.
 0.8.0
 -----
 - Added log modul
+- Added simple mechanism to call handlers for certain events in the model.
+  This is currently used to:
+	- Update the updated attribute on every change of a item which has the
+	  meta mixin.
+	- Create a simple log entry on updating or creating a item.
 
 0.7.0
 -----
