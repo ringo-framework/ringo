@@ -30,17 +30,16 @@ class Meta(object):
     updated = Column(DateTime, default=datetime.datetime.utcnow)
 
     @classmethod
-    def before_update_event_listener(cls, mapper, connection, target):
+    def update_handler(cls, request, item):
         """Will update the updated attribute to the current datetime.
         The mapper and the target parameter will be the item which
         iherits this meta mixin.
 
-        :mapper: Mapper item for the target class
-        :connection: Current connection
-        :target: Target class.
+        :request: Current request
+        :item: Item handled in the update.
 
         """
-        target.updated = datetime.datetime.now()
+        item.updated = datetime.datetime.now()
 
 
 class Logged(object):
@@ -62,22 +61,28 @@ class Logged(object):
         return logs
 
     @classmethod
-    def before_update_event_listener(cls, mapper, connection, target):
+    def create_handler(cls, request, item):
+        cls.update_handler(request, item)
+
+    @classmethod
+    def update_handler(cls, request, item):
         """Will add a log entry for the updated item.
         The mapper and the target parameter will be the item which
         iherits this logged mixin.
 
-        :mapper: Mapper item for the target class
-        :connection: Current connection
-        :target: Target class.
+        :request: Current request
+        :item: Item handled in the update.
 
         """
         from ringo.model.log import Log
         factory = Log.get_item_factory()
         log = factory.create(user=None)
-        log.subject = "Update: %s" % target
-        target.logs.append(log)
-        print target.logs
+        log.subject = "Update: %s" % item
+        log.text = ""
+        log.uid = request.user.id
+        log.gid = request.user.gid
+        log.author = str(request.user)
+        item.logs.append(log)
 
 
 class Owned(object):
