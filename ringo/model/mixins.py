@@ -25,8 +25,6 @@ class Meta(object):
     updated datefield will be updated on every update of the item with
     the datetime of the update."""
     created = Column(DateTime, default=datetime.datetime.utcnow)
-    # TODO: Make sure that the updated attribute gets updated on every
-    # update. (torsten) <2013-10-07 18:00>
     updated = Column(DateTime, default=datetime.datetime.utcnow)
 
     @classmethod
