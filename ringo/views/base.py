@@ -97,6 +97,13 @@ def set_current_form_page(request):
         request.session.save()
     return Response(body='OK', content_type='text/plain')
 
+def handle_event(event, request, item):
+    """Will call the event listeners for the given event on every base
+    class of the given item."""
+    for class_ in item.__class__.__bases__:
+        if hasattr(class_, event+'_handler'):
+            handler = getattr(class_, event+'_handler')
+            handler(request, item)
 
 def handle_params(clazz, request):
     """Handles varios sytem GET params comming with the request
@@ -361,6 +368,8 @@ def create_(clazz, request, callback=None, renderers={}):
             url = request.route_url(route_name, id=sitem.id)
             if callback:
                 sitem = callback(request, sitem)
+            # handle create events
+            handle_event('create', request, item)
             # Invalidate cache
             invalidate_cache()
             formname = request.session.get('%s.form' % clazz)
@@ -440,6 +449,8 @@ def update_(clazz, request, callback=None, renderers={}):
             url = request.route_url(route_name, id=item.id)
             if callback:
                 item = callback(request, item)
+            # handle update events
+            handle_event('update', request, item)
             # Invalidate cache
             invalidate_cache()
             # Handle redirect after success.
