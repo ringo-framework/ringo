@@ -7,36 +7,17 @@ from sqlalchemy import (
     Integer,
     DateTime,
     ForeignKey,
-    event,
     Table
 )
 
 from sqlalchemy.orm import (
     relationship,
-    mapper,
     backref
 )
 
 from ringo.model import Base
 
 log = logging.getLogger(__name__)
-
-
-@event.listens_for(mapper, "mapper_configured")
-def setup_event_listeners(mapper, class_):
-    """Will iterate over all mapped classes and setup event listeners for
-    certain ORM events for each class"""
-    for cls in class_.__bases__:
-        if cls == Meta:
-            log.debug('Adding event listener for %s' % class_)
-            event.listen(class_,
-                         'before_update',
-                         cls.before_update_event_listener)
-        elif cls == Logged:
-            log.debug('Adding event listener for %s' % class_)
-            event.listen(class_,
-                         'before_update',
-                         cls.before_update_event_listener)
 
 
 class Meta(object):
