@@ -22,13 +22,6 @@ def clear_cache():
 class BaseItem(object):
 
     _modul_id = None
-    """Configure a list of relations which are configured to be joined
-    in the query"""
-    _sql_joined_relations = []
-    # TODO: Defining relations which should be cached seems to be
-    # ignored for lazy load. So the only way of caching those
-    # relations too is to put them in the SQL-JOIN and to a cached
-    # query. This way all relations are cached to.
     """Configure a list of relations which are configured to be
     cached"""
     _sql_cached_realtions = []
@@ -353,6 +346,4 @@ class BaseFactory(object):
         if cache in regions.keys():
             q = set_relation_caching(q, self._clazz, cache)
             q = q.options(FromCache(cache))
-        for relation in self._clazz._sql_joined_relations:
-            q = q.options(joinedload(relation))
         return q.filter(self._clazz.id == id).one()
