@@ -179,7 +179,9 @@ class Role(BaseItem, Base):
     the user will gain the assigned permissions irrespective from
     checking the ownership"""
 
-    permissions = sa.orm.relation(ActionItem, secondary=nm_action_roles, backref='roles')
+    permissions = sa.orm.relation(ActionItem,
+                                  secondary=nm_action_roles,
+                                  backref='roles')
 
     def __unicode__(self):
         return self.name
