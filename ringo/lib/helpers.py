@@ -131,20 +131,20 @@ def get_modules(request, display):
     from ringo.model.modul import ModulItem
     from ringo.resources import get_resource_factory
     from ringo.lib.security import has_permission
-    listing = ModulItem.get_item_list(request.db)
+    modules = ModulItem.get_item_list(request.db)
     user_moduls = []
-    for item in listing.items:
+    for modul in modules.items:
         # Only show the modul if it matches the desired display location
         # and if the modul has an "list" action which usually is used as
         # entry point into a modul.
-        if (item.display == display and item.has_action('list')):
+        if (modul.display == display and modul.has_action('list')):
             # Build a ressource and to be able to check the current user
             # permissions against it.
-            clazz = dynamic_import(item.clazzpath)
             factory = get_resource_factory(clazz)
+            clazz = dynamic_import(modul.clazzpath)
             resource = factory(request)
             if has_permission('list', resource, request):
-                user_moduls.append(item)
+                user_moduls.append(modul)
     return user_moduls
 
 def get_formbar_css():
