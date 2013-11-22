@@ -5,10 +5,14 @@ from ringo.lib.security import get_permissions
 log = logging.getLogger(__name__)
 
 
-def get_resource_factory(clazz):
-    """Dynamically create a Resource factory"""
+def get_resource_factory(clazz, modul=None):
+    """Dynamically create a Resource factory. The modul can be provided
+    optionally to optimize loading additional data from the database. It
+    prevents extra loading of the modul later."""
     name = clazz.__name__
-    factory = type(name, (RessourceFactory, ), {'__model__': clazz})
+    factory = type(name,
+                   (RessourceFactory, ),
+                   {'__model__': clazz, '__modul__': modul})
     return factory
 
 
@@ -42,8 +46,9 @@ class RessourceFactory(object):
             return None
 
     def _get_item_permissions(self, request):
-        modul = self.__model__.get_item_modul()
-        return get_permissions(modul, self.item)
+        if not self.__modul__:
+            self.__modul__ = self.__model__.get_item_modul()
+        return get_permissions(self.__modul__, self.item)
 
 
 class Resource(object):

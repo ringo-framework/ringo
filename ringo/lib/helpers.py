@@ -140,8 +140,8 @@ def get_modules(request, display):
         if (modul.display == display and modul.has_action('list')):
             # Build a ressource and to be able to check the current user
             # permissions against it.
-            factory = get_resource_factory(clazz)
             clazz = dynamic_import(modul.clazzpath)
+            factory = get_resource_factory(clazz, modul)
             resource = factory(request)
             if has_permission('list', resource, request):
                 user_moduls.append(modul)
