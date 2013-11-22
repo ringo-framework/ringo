@@ -32,7 +32,9 @@ class ModulItem(BaseItem, Base):
     str_repr = sa.Column(sa.Text)
     display = sa.Column(sa.Text)
 
-    actions = sa.orm.relationship("ActionItem", backref="modul")
+    actions = sa.orm.relationship("ActionItem",
+                                  backref="modul",
+                                  lazy="joined")
 
     def __unicode__(self):
         return self.name
