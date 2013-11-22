@@ -94,6 +94,8 @@ def has_permission(permission, context, request):
     elif hasattr(context, "get_item_modul"):
         modul = context.get_item_modul()
         context.__acl__ = get_permissions(modul)
+    # TODO: Call of has_permission will trigger 4 additional SQL-Queries
+    # per call. So we might think about caching the result.
     return has_permission_(permission, context, request)
 
 
