@@ -18,26 +18,28 @@ def walk(state, found=[]):
 
 
 def null_handler(item):
-    pass
+    return item
+
+
+def null_condition(item):
+    return True
 
 
 class Statemachine(object):
     """Statemachine class"""
 
-    def __init__(self, item, state=None):
-        """Initialise the statemachine for the given item and provide
-        the start state of the machine and optionally the current state.
-        If the current state is not set then the start state is set as
-        current state."""
+    def __init__(self, item):
+        """Initialise the statemachine for the given item."""
         self._item = item
         self._root = self.setup()
         self._current = self._root
 
-        if state is not None:
-            for st in self.get_states():
-                if st._id == int(state):
-                    self._current = st
-                    break
+        # Try to set the current state of the statemaching by getting
+        # the current state from the item.
+        for st in self.get_states():
+            if st._id == self._item.state:
+                self._current = st
+                break
 
     def setup(self):
         """Need to be implemented"""
@@ -58,7 +60,8 @@ class Statemachine(object):
 
         """
         for transition in self._current.get_transitions():
-            if transition._end_state._id == state:
+            if (transition._end_state._id == state or
+               transition._end_state == state):
                 transition._handler(self._item)
                 self._current = transition._end_state
                 return self._current
@@ -75,18 +78,21 @@ class Statemachine(object):
 class Transition(object):
     """A class for transitions between to states"""
 
-    def __init__(self, start_state, end_state, label=None, handler=None):
+    def __init__(self, start_state, end_state,
+                 label=None, handler=None, condition=None):
         """Creates a transition between to states.
 
         :start_state: @todo
         :end_state: @todo
         :handler: @todo
+        :condition: @todo
 
         """
         self._label = label
         self._start_state = start_state
         self._end_state = end_state
         self._handler = handler
+        self._condition = condition
 
     def get_start(self):
         """Returns the start state of the transition
@@ -115,27 +121,47 @@ class Transition(object):
     def exchange(self):
         """Exchanges the start state to the end state.
         :returns: End state of the transtion.
-
         """
-        return self.get_end()
+        if self.is_available():
+            state = self.get_end()
+            self._handler(state._statemachine._item)
+            return state
+        else:
+            raise Exception("Change of state failed")
+
+    def is_available(self):
+        """Check is the transition is available for the item in the
+        statemachine. The function will call the condition function with
+        the item of the statemachine. It returns true if the state is
+        available (check succeeds) and returns False if the conditions
+        for a state change are not met."""
+        if self._condition:
+            return self._condition(self.get_start()._statemachine._item)
+        else:
+            return True
 
 
 class State(object):
     """Docstring for State """
 
-    def __init__(self, id, label):
+    def __init__(self, statemachine, id, label, description=None):
         """@todo: to be defined
 
+        :statemachine: @todo
         :id: @todo
         :label: @todo
+        :description: @todo
 
         """
+        self._statemachine = statemachine
         self._id = id
         self._label = label
+        self._description = description
         self._transitions = []
 
-    def add_transition(self, to_state, label=None, handler=None):
-        trans = Transition(self, to_state, label, handler)
+    def add_transition(self, to_state, label=None,
+                       handler=None, condition=None):
+        trans = Transition(self, to_state, label, handler, condition)
         self._transitions.append(trans)
 
     def get_transitions(self):
@@ -143,4 +169,9 @@ class State(object):
         :returns:  List of Transitions.
 
         """
-        return self._transitions
+        # Check if the
+        transitions = []
+        for trans in self._transitions:
+            if trans.is_available():
+                transitions.append(trans)
+        return transitions
