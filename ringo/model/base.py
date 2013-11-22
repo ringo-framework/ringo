@@ -27,7 +27,9 @@ class BaseItem(object):
     _sql_cached_realtions = []
     """Cached table config for the class"""
     _cache_table_config = {}
+    """Cached form config for the class"""
     _cache_form_config = {}
+    """Cached modul for the class"""
     _cache_item_modul = {}
 
 
