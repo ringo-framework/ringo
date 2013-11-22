@@ -18,6 +18,7 @@ def clear_cache():
     BaseItem._cache_table_config = {}
     BaseItem._cache_form_config = {}
     BaseItem._cache_item_modul = {}
+    BaseItem._cache_item_list = {}
 
 class BaseItem(object):
 
@@ -31,6 +32,8 @@ class BaseItem(object):
     _cache_form_config = {}
     """Cached modul for the class"""
     _cache_item_modul = {}
+    """Cached item list for the class"""
+    _cache_item_list = {}
 
 
     def __str__(self):
@@ -76,7 +79,10 @@ class BaseItem(object):
 
     @classmethod
     def get_item_list(cls, db, user=None, cache=None):
-        return BaseList(cls, db, user, cache)
+        if not cls._cache_item_list.get(cls._modul_id):
+            listing = BaseList(cls, db, user, cache)
+            cls._cache_item_list[cls._modul_id] = listing
+        return cls._cache_item_list[cls._modul_id]
 
     @classmethod
     def get_item_modul(cls):
