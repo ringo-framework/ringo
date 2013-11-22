@@ -16,6 +16,7 @@ to the tracker.
 	- Update the updated attribute on every change of a item which has the
 	  meta mixin.
 	- Create a simple log entry on updating or creating a item.
+- Worked on caching the result of SQL queries to improbe the performance.
 
 0.7.0
 -----
