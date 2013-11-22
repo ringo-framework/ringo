@@ -24,8 +24,8 @@ class BaseItem(object):
 
     _modul_id = None
     """Configure a list of relations which are configured to be
-    cached"""
-    _sql_cached_realtions = []
+    eager loaded."""
+    _sql_eager_loads = []
     """Cached table config for the class"""
     _cache_table_config = {}
     """Cached form config for the class"""
@@ -207,7 +207,7 @@ class BaseList(object):
             if cache in regions.keys():
                 q = set_relation_caching(q, self.clazz, cache)
                 q = q.options(FromCache(cache))
-            for relation in self.clazz._sql_cached_realtions:
+            for relation in self.clazz._sql_eager_loads:
                 q = q.options(joinedload(relation))
             self.items = self._filter_for_user(q.all(), user)
         else:
@@ -354,4 +354,6 @@ class BaseFactory(object):
         if cache in regions.keys():
             q = set_relation_caching(q, self._clazz, cache)
             q = q.options(FromCache(cache))
+        for relation in self._clazz._sql_eager_loads:
+            q = q.options(joinedload(relation))
         return q.filter(self._clazz.id == id).one()

@@ -36,6 +36,8 @@ class ModulItem(BaseItem, Base):
                                   backref="modul",
                                   lazy="joined")
 
+    _sql_eager_loads = ['actions.roles']
+
     def __unicode__(self):
         return self.name
 
