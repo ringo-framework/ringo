@@ -18,20 +18,15 @@ from ringo.views import handle_history
 
 @view_config(route_name='home', renderer='/index.mako')
 def index_view(request):
-    reminders = Reminders(request.db)
-
-    if request.user:
-        news_for_user = request.user.news
-    else:
-        news_for_user = []
-    news = BaseList(News, request.db, items=news_for_user)
-
-    reminder_renderer = DTListRenderer(reminders)
-    news_renderer = NewsListRenderer(news)
     handle_history(request)
     values = {}
-    values['reminders'] = reminder_renderer.render(request)
-    values['news'] = news_renderer.render(request)
+    if request.user:
+        news = BaseList(News, request.db, items=request.user.news)
+        news_renderer = NewsListRenderer(news)
+        values['news'] = news_renderer.render(request)
+        reminders = Reminders(request.db)
+        reminder_renderer = DTListRenderer(reminders)
+        values['reminders'] = reminder_renderer.render(request)
     return values
 
 
