@@ -14,6 +14,23 @@ from sqlalchemy.orm import (
 )
 
 
+class State(object):
+    """Mapping of statemachines to attributes"""
+    _statemachines = {}
+
+    @classmethod
+    def add_statemachine(cls, key, statemachine):
+        """@todo: Docstring for add.
+
+        :statemachine: @todo
+        :returns: @todo
+
+        """
+        cls._statemachines[key] = statemachine
+        id_key = key + "_state_id"
+        setattr(cls, id_key, Column(Integer))
+
+
 class Meta(object):
     created = Column(DateTime, default=datetime.datetime.utcnow)
     updated = Column(DateTime, default=datetime.datetime.utcnow)

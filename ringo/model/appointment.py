@@ -3,7 +3,7 @@ import sqlalchemy as sa
 from ringo.model import Base
 from ringo.model.base import BaseItem, BaseFactory, BaseList
 from ringo.model.modul import ModulItem, _create_default_actions
-from ringo.model.mixins import Owned
+from ringo.model.mixins import Owned, State
 
 
 class AppointmentFactory(BaseFactory):
