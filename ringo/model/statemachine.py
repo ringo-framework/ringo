@@ -56,7 +56,8 @@ class Statemachine(object):
     def set_state(self, state):
         """Will set the current state of the state machine
 
-        :state: State id of the state to be set as current state
+        :state: State id of the state or state item to be set as current
+        state
         :returns: None
 
         """
