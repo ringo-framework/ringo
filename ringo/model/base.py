@@ -90,11 +90,6 @@ class BaseItem(object):
             return "%s-%s" % (prefix, routename)
         return routename
 
-    @classmethod
-    def get_statemachine(cls, name):
-        """Returns the attached statemachine to the given attribute name"""
-        return cls._statemachines[name]
-
     def get_value(self, name, form_id="create"):
         """Return the value of the given attribe of the item. Unlike
         accessing the raw value through the attribite directly this
