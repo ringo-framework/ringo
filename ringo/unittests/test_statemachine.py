@@ -51,7 +51,7 @@ class DummyStatemachine(Statemachine):
 class TestSequenceFunctions(unittest.TestCase):
 
     def setUp(self):
-        self.sm = DummyStatemachine(DummyItem())
+        self.sm = DummyStatemachine(DummyItem(), 'state')
 
     def test_num_states(self):
         self.assertTrue(len(self.sm.get_states()) == 7)
@@ -65,23 +65,23 @@ class TestSequenceFunctions(unittest.TestCase):
             self.sm.set_state(3)
 
     def test_s6s7(self):
-        self.sm = DummyStatemachine(DummyItem(6))
+        self.sm = DummyStatemachine(DummyItem(6), 'state')
         state = self.sm._current
         self.assertEqual(state._id, 6)
         transitions = state.get_transitions()
         state = self.sm.set_state(transitions[0].exchange())
         self.assertEqual(state._id, 7)
-        self.assertEqual(state._statemachine._item.testdata, 'bar')
+        self.assertEqual(self.sm._item.testdata, 'bar')
 
     def test_s6s8(self):
-        self.sm = DummyStatemachine(DummyItem(6))
+        self.sm = DummyStatemachine(DummyItem(6), 'state')
         state = self.sm._current
         self.assertEqual(state._id, 6)
         transitions = state.get_transitions()
         self.assertTrue(len(transitions) == 1)
 
     def test_start_state(self):
-        self.sm = DummyStatemachine(DummyItem(2))
+        self.sm = DummyStatemachine(DummyItem(2), 'state')
         state = self.sm.get_state()
         self.assertEqual("New", state._label)
 
