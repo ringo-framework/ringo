@@ -63,7 +63,7 @@ class Statemachine(object):
         for transition in self._current.get_transitions():
             if (transition._end_state._id == state or
                transition._end_state == state):
-                transition._handler(self._item)
+                self._item = transition._handler(self._item)
                 self._current = transition._end_state
                 setattr(self._item, self._key_state_id, self._current._id)
                 return self._current
