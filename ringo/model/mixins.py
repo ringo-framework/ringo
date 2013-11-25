@@ -13,22 +13,33 @@ from sqlalchemy.orm import (
     backref
 )
 
+class StateMixin(object):
+    """Mixin to add one or more Statemachines to an item.  The
+    statemachines are stored in a internal '_statemachines' dictionary.
+    The current state is stored as integer value per item. This field
+    must be created manually.  The name of the field which stores the
+    value for the current state must be the keyname of the
+    '_statemachines' dictionary."""
 
-class State(object):
-    """Mapping of statemachines to attributes"""
+    """Mapping of statemachines to attributes. The key in the dictionary
+    must be the name of the field which stores the integer value of the
+    current state of the statemachine."""
     _statemachines = {}
 
     @classmethod
-    def add_statemachine(cls, key, statemachine):
-        """@todo: Docstring for add.
+    def list_statemachines(cls):
+        """Returns a list keys of configured statemachines"""
+        return self._statemachines.keys()
 
-        :statemachine: @todo
-        :returns: @todo
+
+    def get_statemachine(self, key):
+        """Returns a statemachine instance for the given key
+
+        :key: Name of the key of the statemachine
+        :returns: Statemachine instance
 
         """
-        cls._statemachines[key] = statemachine
-        id_key = key + "_state_id"
-        setattr(cls, id_key, Column(Integer))
+        return self._statemachines[key](self, key)
 
 
 class Meta(object):
