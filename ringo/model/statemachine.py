@@ -28,16 +28,17 @@ def null_condition(item):
 class Statemachine(object):
     """Statemachine class"""
 
-    def __init__(self, item):
+    def __init__(self, item, key_state_id):
         """Initialise the statemachine for the given item."""
         self._item = item
+        self._key_state_id = key_state_id
         self._root = self.setup()
         self._current = self._root
 
         # Try to set the current state of the statemaching by getting
         # the current state from the item.
         for st in self.get_states():
-            if st._id == self._item.state:
+            if st._id == getattr(self._item, self._key_state_id):
                 self._current = st
                 break
 
@@ -64,6 +65,7 @@ class Statemachine(object):
                transition._end_state == state):
                 transition._handler(self._item)
                 self._current = transition._end_state
+                setattr(self._item, self._key_state_id, self._current._id)
                 return self._current
         raise Exception('No fitting transition to transition found')
 
@@ -124,7 +126,6 @@ class Transition(object):
         """
         if self.is_available():
             state = self.get_end()
-            self._handler(state._statemachine._item)
             return state
         else:
             raise Exception("Change of state failed")
