@@ -12,12 +12,14 @@ from sqlalchemy import (
 
 from sqlalchemy.orm import (
     relationship,
-    backref
+    backref,
+    attributes
 )
 
 from ringo.model import Base
 
 log = logging.getLogger(__name__)
+
 
 class StateMixin(object):
     """Mixin to add one or more Statemachines to an item.  The
@@ -35,8 +37,7 @@ class StateMixin(object):
     @classmethod
     def list_statemachines(cls):
         """Returns a list keys of configured statemachines"""
-        return self._statemachines.keys()
-
+        return cls._statemachines.keys()
 
     def get_statemachine(self, key):
         """Returns a statemachine instance for the given key
@@ -46,6 +47,7 @@ class StateMixin(object):
 
         """
         return self._statemachines[key](self, key)
+
 
 class Meta(object):
     """Mixin to add a created and a updated datefield to items. The
@@ -74,7 +76,6 @@ class Logged(object):
     automatically by the system or may be created manual by the user.
     Manual log entries. Needs to be configured (Permissions)"""
 
-
     @declared_attr
     def logs(cls):
         from ringo.model.log import Log
@@ -85,25 +86,58 @@ class Logged(object):
         logs = relationship(Log, secondary=nm_table)
         return logs
 
-    @classmethod
-    def create_handler(cls, request, item):
-        cls.update_handler(request, item)
+    def _build_changes(self, allfields=False):
+        diff = []
+        for field in self.get_columns(include_relations=True):
+            history = attributes.get_history(self, field)
+            try:
+                newv = history[0][0]
+            except IndexError:
+                newv = ""
+            try:
+                curv = history[1][0]
+            except IndexError:
+                curv = ""
+            try:
+                oldv = history[2][0]
+            except IndexError:
+                oldv = ""
+
+            if newv:
+                diff.append('%s: "%s" -> "%s"' % (field, oldv, newv))
+            elif allfields:
+                diff.append('%s: "%s"' % (field, curv))
+        return "\n".join(diff)
 
     @classmethod
-    def update_handler(cls, request, item):
+    def create_handler(cls, request, item):
+        subject = "Create: %s" % item
+        text = item._build_changes(allfields=True)
+        cls.update_handler(request, item, subject, text)
+
+    @classmethod
+    def update_handler(cls, request, item, subject=None, text=None):
         """Will add a log entry for the updated item.
         The mapper and the target parameter will be the item which
         iherits this logged mixin.
 
         :request: Current request
         :item: Item handled in the update.
+        :subject: Subject of the logentry.
+        :text: Text of the logentry.
 
         """
         from ringo.model.log import Log
         factory = Log.get_item_factory()
         log = factory.create(user=None)
-        log.subject = "Update: %s" % item
-        log.text = ""
+        if not subject:
+            log.subject = "Update: %s" % item
+        else:
+            log.subject = subject
+        if not text:
+            log.text = item._build_changes()
+        else:
+            log.text = text
         log.uid = request.user.id
         log.gid = request.user.gid
         log.author = str(request.user)
