@@ -1,14 +1,24 @@
-% if field.is_readonly():
-  <div class="readonlyfield" name="${field.name}">
-    ${field.get_value(expand=True) or "&nbsp;"}
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <label for="${field.id}">${field.label}</strong>
   </div>
-% else:
-  <select id="${field.id}" name="${field.name}">
-    % for option in field.get_options():
-      ## Only render avaialble options:
-      % if ((int(option[1]) in transitions) or (option[1] == field.get_value())):
-        <option value="${option[1]}">${option[0]}</option>
-      % endif
-    % endfor
-  </select>
-% endif
+  <div class="panel-body">
+    <p>
+      <strong>Current state:</strong> ${state._label}</br>
+      <small>${state._description}</small>
+    </p>
+    % if not field.is_readonly():
+    <p>
+      <strong>State transition:</strong></br>
+      <select id="${field.id}" name="${field.name}" class="form-control">
+        <option value="${state._id}">No Transition</option>
+        % for trans in transitions:
+            <option value="${trans._end_state._id}">${trans._label}</option>
+        % endfor
+      </select>
+      <small><strong>Resulting State:</strong></br>
+      Description of resulting State</small>
+    </p>
+    % endif
+  </div>
+</div>

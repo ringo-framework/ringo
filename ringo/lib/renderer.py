@@ -399,23 +399,23 @@ class StateFieldRenderer(FormbarDropdown):
         FormbarDropdown.__init__(self, field, translate)
         self.template = template_lookup.get_template("internal/statefield.mako")
 
+    def _render_label(self):
+        return ""
+
     def render(self):
         """Initialize renderer"""
         html = []
-        config = self._field._config.renderer.config
-
         # Get all available transitions from the current state for this
         # item and request.
         item = self._field._form._item
         sm = item.get_statemachine(self._field.name)
-        state_id = getattr(item, self._field.name)
-        statemachine = sm(item, state_id)
-        state = statemachine.get_state()
-        transitions = [t._end_state._id for t in state.get_transitions()]
+        state = sm.get_state()
+        transitions = state.get_transitions()
 
         html.append(self._render_label())
         values = {'field': self._field,
                   'request': self._field._form._request,
+                  'state': state,
                   'transitions': transitions,
                   '_': self._field._form._translate}
         html.append(self.template.render(**values))
