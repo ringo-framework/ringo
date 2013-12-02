@@ -516,26 +516,22 @@ class LogRenderer(FieldRenderer):
     def __init__(self, field, translate):
         FieldRenderer.__init__(self, field, translate)
 
-    def _render_info(self, log):
-        html = []
-        html.append("<small>")
-        html.append('<a href="/logs/read/%s">#%s</a>'
-                    % (log.id, log.id))
-        html.append(" | ")
-        html.append("<bold>" + unicode(log.author) + "</bold>")
-        html.append(" | ")
-        str_updated = log.updated.strftime("%y.%m.%d %H:%M")
-        str_created = log.created.strftime("%y.%m.%d %H:%M")
-        html.append(str_created)
-        if str_updated != str_created:
-            html.append(" | (")
-            html.append(str_updated)
-            html.append(")</small>")
-        return html
-
     def _render_body(self, log):
         html = []
+        html.append("<tr>")
+        html.append("<td>")
+        html.append(log.created.strftime("%y.%m.%d %H:%M"))
+        html.append("</td>")
+        html.append("<td>")
+        html.append(unicode(log.author))
+        html.append("</td>")
+        html.append("<td>")
+        if log.subject:
+            html.append('<strong>%s</strong>' % log.subject)
+            html.append('<br>')
         html.append(log.text.replace('\n', '<br>') or "")
+        html.append("</td>")
+        html.append("</tr>")
         return html
 
     def render(self):
@@ -543,21 +539,16 @@ class LogRenderer(FieldRenderer):
         logs = self._field._form._item.logs
         html.append('<label for="">%s (%s)</label>'
                     % (self._field.label, len(logs)))
+        html.append('<table class="table table-densed">')
+        html.append('<tr>')
+        html.append('<th width="150px">%s</th>' % 'Date')
+        html.append('<th width="150px">%s</th>' % 'Author')
+        html.append('<th>%s</th>' % 'Log')
+        html.append('</tr>')
         for log in logs[::-1]:
             html.append('<input type="checkbox" name="%s" value="%s"'
                         ' style="display:none"/>'
                         % (self._field.name, log.id))
-            html.append('<div class="readonlyfield">')
-            html.append("<table>")
-            html.append("<tr >")
-            html.append("<td>")
             html.extend(self._render_body(log))
-            html.append("</td>")
-            html.append("<tr>")
-            html.append('<td>')
-            html.extend(self._render_info(log))
-            html.append("</td>")
-            html.append("</tr>")
-            html.append("</table>")
-            html.append("</div>")
+        html.append('</table>')
         return "".join(html)
