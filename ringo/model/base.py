@@ -69,9 +69,9 @@ class BaseItem(object):
         return rvalue
 
     @classmethod
-    def get_columns(cls):
+    def get_columns(cls, include_relations=False):
         return [prop.key for prop in class_mapper(cls).iterate_properties
-            if isinstance(prop, ColumnProperty)]
+            if isinstance(prop, ColumnProperty) or include_relations]
 
     @classmethod
     def get_item_factory(cls):
