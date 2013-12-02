@@ -107,7 +107,6 @@ class BaseItem(object):
             cls._cache_table_config[cachename] = TableConfig(cls, tablename)
         return cls._cache_table_config[cachename]
 
-
     @classmethod
     def get_form_config(cls, formname):
         """Return the Configuration for a given form. The configuration

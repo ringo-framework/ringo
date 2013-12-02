@@ -15,7 +15,7 @@ from ringo.lib.helpers import import_model, get_path_to_form_config
 from ringo.lib.security import has_role
 User = import_model('ringo.model.user.User')
 from ringo.lib.renderer import ListRenderer, ConfirmDialogRenderer,\
-DropdownFieldRenderer, ListingFieldRenderer, LogRenderer
+DropdownFieldRenderer, ListingFieldRenderer, LogRenderer, StateFieldRenderer
 from ringo.lib.sql import invalidate_cache
 from ringo.views import handle_history
 
@@ -340,6 +340,8 @@ def create_(clazz, request, callback=None, renderers={}):
         renderers["listing"] = ListingFieldRenderer
     if not "logbook" in renderers:
         renderers["logbook"] = LogRenderer
+    if not "state" in renderers:
+        renderers["state"] = StateFieldRenderer
     factory = clazz.get_item_factory()
     item = factory.create(request.user)
 
@@ -410,6 +412,8 @@ def update_(clazz, request, callback=None, renderers={}):
         renderers["listing"] = ListingFieldRenderer
     if not "logbook" in renderers:
         renderers["logbook"] = LogRenderer
+    if not "state" in renderers:
+        renderers["state"] = StateFieldRenderer
 
     # Load the item return 400 if the item can not be found.
     id = request.matchdict.get('id')
@@ -495,6 +499,8 @@ def read_(clazz, request, callback=None, renderers={}):
         renderers["listing"] = ListingFieldRenderer
     if not "logbook" in renderers:
         renderers["logbook"] = LogRenderer
+    if not "state" in renderers:
+        renderers["state"] = StateFieldRenderer
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
 
