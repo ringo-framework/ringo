@@ -7,7 +7,7 @@
     <entity id="end" name="end" label="End" type="date" required="true">
       <renderer type="datepicker"/>
     </entity>
-    <entity id="day" name="day" label="Whole day" type="boolean">
+    <entity id="day" name="day" label="Whole day">
       <renderer type="dropdown"/>
       <options>
         <option value="0">no</option>
