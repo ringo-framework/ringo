@@ -16,11 +16,11 @@ def render_filter_link(request, field, value, clazz):
     <input name="form" type="hidden" value="search">
     <div class="form-group">
       <label class="sr-only" for="search">${_('Search')}</label>
-      <input name="search" class="form-control" type="text" class="input-large" value="${search}" placeholder="${_('Search for (Regexpr) in ...')}"/>
+      <input name="search" class="form-control input-large" type="text" value="${search}" placeholder="${_('Search for (Regexpr) in ...')}"/>
     </div>
     <div class="form-group">
       <label class="sr-only" for="field">${_('Fields')}</label>
-      <select name="field"  class="form-control" class="input-small">
+      <select name="field"  class="form-control input-small">
         <option value="">${_('All columns')}</option>
         % for field in tableconfig.get_columns():
           % if field.get('name') == search_field:
