@@ -77,3 +77,41 @@ Modules
 
 .. image:: images/modules.png
    :alt: Schema of a modul.
+
+Mixins
+======
+Mixins can be used to add certain functionality to the BaseItems. Mixins are
+used in multiple inheritance. The ensure the the item will have all needed
+fields in the database and have the right interface to work with the
+functionality which is added by the mixin. Example::
+
+        class Comment(BaseItem, Nested, Meta, Owned, Base):
+            __tablename__ = 'comments'
+            _modul_id = 99
+            id = sa.Column(sa.Integer, primary_key=True)
+            comment = sa.Column('comment', sa.Text)
+
+            ...
+
+
+The comment class in the example only defines the two fields 'id' and
+'comment' but as it inherits from 'Logged', 'Meta' and 'Owned' it also will
+have date fields with the creation and date of the last update, references to
+the user and group which ownes the Comment. Further the 'Nested' mixin will
+ensure the comments can reference each other to be able to build a hierarchy
+structure (e.g Threads in the example of the comments).
+
+Meta
+----
+
+Owned
+-----
+
+Nested
+------
+
+Logged
+------
+
+StateMixin
+----------
