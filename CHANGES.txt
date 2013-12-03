@@ -18,6 +18,7 @@ to the tracker.
 	- Create a simple log entry on updating or creating a item.
 - Worked on caching the result of SQL queries to improbe the performance.
 - Added statemachines
+- API Change: BaseLists are not initialized with request instead of request.db
 
 0.7.0
 -----
