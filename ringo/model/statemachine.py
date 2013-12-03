@@ -146,25 +146,33 @@ class Transition(object):
 class State(object):
     """Docstring for State """
 
-    def __init__(self, statemachine, id, label, description=None):
+    def __init__(self, statemachine, id, label,
+                 description=None, disabled_actions={}):
         """@todo: to be defined
 
         :statemachine: @todo
         :id: @todo
         :label: @todo
         :description: @todo
+        :disabled_actions: @todo
 
         """
         self._statemachine = statemachine
         self._id = id
         self._label = label
         self._description = description
+        self._disabled_actions= disabled_actions
         self._transitions = []
 
     def add_transition(self, to_state, label=None,
                        handler=None, condition=None):
         trans = Transition(self, to_state, label, handler, condition)
         self._transitions.append(trans)
+
+    def get_disabled_actions(self, role):
+        """Returns a list of disabled actions of the state for the given
+        role"""
+        return self._disabled_actions.get(role, [])
 
     def get_transitions(self):
         """Returns the available transitions to other states.
