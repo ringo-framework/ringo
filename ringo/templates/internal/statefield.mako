@@ -18,8 +18,9 @@
       </select>
       % for trans in transitions:
         <div class="result-state" id="result-state-${trans._end_state._id}">
-          <small><strong>Resulting State:</strong>
+          <strong>Resulting State:</strong>
           ${trans._end_state._label}</br>
+          <small>
           ${trans._end_state._description}
           </small>
         </div>
