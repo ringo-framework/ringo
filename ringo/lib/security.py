@@ -131,21 +131,38 @@ def get_permissions(modul, item=None):
         return perms
     for action in modul.actions:
         for role in action.roles:
+            add_perm = True
             default_principal = 'role:%s' % role
+
+            # Check if the actions is available in the current state of
+            # the item if the item has states.
+            if item and hasattr(item, '_statemachines'):
+                actionname = action.name.lower()
+                for smname in item._statemachines:
+                    sm = item.get_statemachine(smname)
+                    state = sm.get_state()
+                    if str(actionname) in state.get_disabled_actions(role.name):
+                        add_perm = False
+                        print "Ignoring...", action
+                        continue
+
+
             # administrational role means allow without further
             # ownership checks.
             if role.admin is True:
                 perms.append((Allow, default_principal, action.name.lower()))
+
             # class level permissions
             elif action.name.lower() in ['create', 'list']:
                 perms.append((Allow, default_principal, action.name.lower()))
             # item level permissions. Only allow the owner or members of
             # the items group.
-            elif item and hasattr(item, 'uid'):
+            elif item and hasattr(item, 'uid') and add_perm:
                 principal = default_principal + ';uid:%s' % item.uid
                 perms.append((Allow, principal, action.name.lower()))
                 principal = default_principal + ';group:%s' % item.gid
                 perms.append((Allow, principal, action.name.lower()))
+        print perms
     return perms
 
 
