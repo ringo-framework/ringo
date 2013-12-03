@@ -78,6 +78,22 @@ Modules
 .. image:: images/modules.png
    :alt: Schema of a modul.
 
+Event Handlers
+==============
+Each class can implement one of the following event handlers to realize
+automatic modifications of the items:
+
+ * create_event_handler(request, item, \**kwargs)
+ * update_event_handler(request, item, \**kwargs)
+ * delete_event_handler(request, item, \**kwargs)
+
+The functions will be called for all base classes of the item
+automatically in the base controller if the specific view function for
+the event (update, create, delete) is excecuted.
+
+Some of the Mixin classes do already have some predefined event_handlers
+configured.
+
 Mixins
 ======
 Mixins can be used to add certain functionality to the BaseItems. Mixins are
