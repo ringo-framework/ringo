@@ -143,7 +143,6 @@ def get_permissions(modul, item=None):
                     state = sm.get_state()
                     if str(actionname) in state.get_disabled_actions(role.name):
                         add_perm = False
-                        print "Ignoring...", action
                         continue
 
 
@@ -162,7 +161,6 @@ def get_permissions(modul, item=None):
                 perms.append((Allow, principal, action.name.lower()))
                 principal = default_principal + ';group:%s' % item.gid
                 perms.append((Allow, principal, action.name.lower()))
-        print perms
     return perms
 
 
