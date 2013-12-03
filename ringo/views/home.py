@@ -21,10 +21,10 @@ def index_view(request):
     handle_history(request)
     values = {}
     if request.user:
-        news = BaseList(News, request.db, items=request.user.news)
+        news = BaseList(News, request, items=request.user.news)
         news_renderer = NewsListRenderer(news)
         values['news'] = news_renderer.render(request)
-        reminders = Reminders(request.db)
+        reminders = Reminders(request)
         reminder_renderer = DTListRenderer(reminders)
         values['reminders'] = reminder_renderer.render(request)
     return values

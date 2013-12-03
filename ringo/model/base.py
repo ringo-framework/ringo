@@ -78,9 +78,9 @@ class BaseItem(object):
         return BaseFactory(cls)
 
     @classmethod
-    def get_item_list(cls, db, user=None, cache=None):
+    def get_item_list(cls, request, user=None, cache=None):
         if not cls._cache_item_list.get(cls._modul_id):
-            listing = BaseList(cls, db, user, cache)
+            listing = BaseList(cls, request, user, cache)
             cls._cache_item_list[cls._modul_id] = listing
         return cls._cache_item_list[cls._modul_id]
 
@@ -184,17 +184,18 @@ class BaseItem(object):
 
 
 class BaseList(object):
-    def __init__(self, clazz, db, user=None, cache="", items=None):
+    def __init__(self, clazz, request, user=None, cache="", items=None):
         """A List object of. A list can be filterd, and sorted.
 
         :clazz: Class of items which will be loaded.
-        :db: DB session to load the item
+        :request: Current request
         :user: If provided only items readable for the
                given user are included in the list
         :cache: Name of the cache region. If empty then no caching is
                 done.
         """
         self.clazz = clazz
+        self.request = request
         # TODO: Check which is the best loading strategy here for large
         # collections. Tests with 100k datasets rendering only 100 shows
         # that the usual lazyload method seems to be the fastest which is
@@ -202,7 +203,7 @@ class BaseList(object):
         #self.items = db.query(clazz).options(joinedload('*')).all()
 
         if items is None:
-            q = db.query(self.clazz)
+            q = request.db.query(self.clazz)
             if cache in regions.keys():
                 q = set_relation_caching(q, self.clazz, cache)
                 q = q.options(FromCache(cache))
@@ -225,6 +226,7 @@ class BaseList(object):
         items are included in the returned list.
         """
         # Filter items based on the uid
+        from ringo.lib.security import has_permission
         filtered_items = []
         if user and not user.has_role("admin"):
             # TODO: Check if the user has the role to read items of the
@@ -239,15 +241,17 @@ class BaseList(object):
             for item in items:
                 # Only check ownership if the item provides a uid.
                 # Is owner?
-                if hasattr(item, 'uid'):
-                    # Is owner?
-                    if item.uid == user.id:
-                        filtered_items.append(item)
-                    # Is in group?
-                    elif item.gid in groups:
-                        filtered_items.append(item)
-                else:
+                if has_permission('read', item, self.request):
                     filtered_items.append(item)
+                #if hasattr(item, 'uid'):
+                #    # Is owner?
+                #    if item.uid == user.id:
+                #        filtered_items.append(item)
+                #    # Is in group?
+                #    elif item.gid in groups:
+                #        filtered_items.append(item)
+                #else:
+                #    filtered_items.append(item)
             return filtered_items
         else:
             return items

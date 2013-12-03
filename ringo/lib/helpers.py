@@ -131,7 +131,7 @@ def get_modules(request, display):
     from ringo.model.modul import ModulItem
     from ringo.resources import get_resource_factory
     from ringo.lib.security import has_permission
-    modules = ModulItem.get_item_list(request.db)
+    modules = ModulItem.get_item_list(request)
     user_moduls = []
     for modul in modules.items:
         # Only show the modul if it matches the desired display location
