@@ -16,9 +16,25 @@
             <option value="${trans._end_state._id}">${trans._label}</option>
         % endfor
       </select>
-      <small><strong>Resulting State:</strong></br>
-      Description of resulting State</small>
+      % for trans in transitions:
+        <div class="result-state" id="result-state-${trans._end_state._id}">
+          <small><strong>Resulting State:</strong>
+          ${trans._end_state._label}</br>
+          ${trans._end_state._description}
+          </small>
+        </div>
+      % endfor
     </p>
     % endif
   </div>
 </div>
+
+<script>
+  $("#${field.id}").change(function() {
+    var selected = $(this).val();
+    $(".result-state").each(function(selected) {
+      $(this).hide();
+    });
+    $("#result-state-"+selected).show();
+  });
+</script>
