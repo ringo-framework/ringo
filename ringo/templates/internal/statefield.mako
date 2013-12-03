@@ -3,10 +3,6 @@
     <label for="${field.id}">${field.label}</strong>
   </div>
   <div class="panel-body">
-    <p>
-      <strong>Current state:</strong> ${state._label}</br>
-      <small>${state._description}</small>
-    </p>
     % if not field.is_readonly():
     <p>
       <strong>State transition:</strong></br>
@@ -16,17 +12,27 @@
             <option value="${trans._end_state._id}">${trans._label}</option>
         % endfor
       </select>
-      % for trans in transitions:
-        <div class="result-state" id="result-state-${trans._end_state._id}">
-          <strong>Resulting State:</strong>
-          ${trans._end_state._label}</br>
-          <small>
-          ${trans._end_state._description}
-          </small>
-        </div>
-      % endfor
     </p>
     % endif
+    <div class="row">
+      <div class="col-sm-6">
+        <p>
+          <strong>Current state:</strong> ${state._label}</br>
+          <small>${state._description}</small>
+        </p>
+      </div>
+      <div class="col-sm-6">
+        % for trans in transitions:
+          <div class="result-state" id="result-state-${trans._end_state._id}">
+            <strong>Resulting State:</strong>
+            ${trans._end_state._label}</br>
+            <small>
+            ${trans._end_state._description}
+            </small>
+          </div>
+        % endfor
+      </div>
+    </div>
   </div>
 </div>
 
