@@ -96,7 +96,7 @@ class BaseFunctionalTest(BaseTestCase):
         return response
 
     def logout(self):
-        'Logout the currently logged in user (if any)' 
+        'Logout the currently logged in user (if any)'
         response = self.app.get('/auth/logout',
             params={},
             status=302

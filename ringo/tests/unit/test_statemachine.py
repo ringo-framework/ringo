@@ -6,11 +6,11 @@ from ringo.model.statemachine import Statemachine, State, \
     null_handler as handler, null_condition as condition
 
 
-def testhandler(item):
+def _testhandler(item):
     item.testdata = "bar"
     return item
 
-def testcondition(item):
+def _testcondition(item):
     return False
 
 class DummyItem(object):
@@ -41,8 +41,8 @@ class DummyStatemachine(Statemachine):
         s5.add_transition(s4, "Revise", handler, condition)
         s5.add_transition(s6, "Verify", handler, condition)
 
-        s6.add_transition(s7, "Close", testhandler, condition)
-        s6.add_transition(s5, "Reopen", handler, testcondition)
+        s6.add_transition(s7, "Close", _testhandler, condition)
+        s6.add_transition(s5, "Reopen", handler, _testcondition)
 
         s7.add_transition(s3, "Reopen", handler, condition)
         return s1
