@@ -85,3 +85,9 @@ ul.dropdown-menu li table td {
     vertical-align: middle;
 }
 
+/* Statefield */
+
+/* Hide infos on the resulting state on default. */
+.result-state {
+  display: none
+}
