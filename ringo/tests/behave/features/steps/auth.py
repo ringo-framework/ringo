@@ -21,6 +21,7 @@ def step_impl(context):
 
 @when(u'submits invalid login data')
 def step_impl(context):
+    response = context.app.get('/auth/login')
     csrf = get_csrf_token(response)
     response = context.app.post('/auth/login',
         params={'login': 'admin',
