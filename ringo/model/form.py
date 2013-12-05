@@ -2,7 +2,7 @@ import sqlalchemy as sa
 from ringo.model import Base
 from ringo.model.base import BaseItem, BaseFactory
 from ringo.model.modul import ModulItem, _create_default_actions
-from ringo.model.mixins import Owned
+from ringo.model.mixins import Owned, Meta, Logged
 
 
 class FormFactory(BaseFactory):
@@ -12,10 +12,14 @@ class FormFactory(BaseFactory):
         return new_item
 
 
-class Form(BaseItem, Owned, Base):
+class Form(BaseItem, Owned, Meta, Logged, Base):
     __tablename__ = 'forms'
     _modul_id = 11
     id = sa.Column(sa.Integer, primary_key=True)
+    category = sa.Column(sa.Integer, nullable=False)
+    title = sa.Column(sa.String, nullable=False)
+    description = sa.Column(sa.Text)
+    definiton = sa.Column(sa.Text, nullable=False)
 
     def __unicode__(self):
         return str(self.id)
@@ -30,6 +34,6 @@ def init_model(dbsession):
     modul.clazzpath = "ringo.model.form.Form"
     modul.label = "Form"
     modul.label_plural = "Forms"
-    modul.display = "header-menu"
+    modul.display = "admin-menu"
     modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
