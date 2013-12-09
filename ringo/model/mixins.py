@@ -4,6 +4,7 @@ from sqlalchemy.ext.declarative import declared_attr
 
 from sqlalchemy import (
     Column,
+    Text,
     Integer,
     DateTime,
     ForeignKey,
@@ -67,6 +68,23 @@ class Meta(object):
 
         """
         item.updated = datetime.datetime.now()
+
+class Blobform(object):
+    """Mixin to add a data fields to store form data as JSON in a single
+    field. Further the fid references the form definiton. The mixin will
+    overwrite the way how to get the form definiton and how to get
+    values from the item."""
+    data = Column(Text, default="{}")
+
+    @declared_attr
+    def fid(cls):
+        return Column(Integer, ForeignKey('forms.id'))
+
+    @declared_attr
+    def form(cls):
+        from ringo.model.form import Form
+        form = relationship(Form, uselist=False)
+        return form
 
 
 class Logged(object):
