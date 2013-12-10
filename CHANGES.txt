@@ -8,6 +8,14 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
+Blobform
+- write save method for items like the save method of formbar. Overwrite the
+  method in Blobforms.
+- Overwrite get_attr, get_value method in blobform to handle getting values
+  from the datafield.
+- Think about how to handle multiple forms for one item. Currently this is
+  hardcoded on itemlevel which form should be used.
+
 0.9.0
 -----
 - Added forms module
