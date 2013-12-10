@@ -9,7 +9,7 @@
         <option value="0">Default</option>
       </options>
     </entity>
-    <entity id="e4" name="definiton" label="Formdefiniton" type="string">
+    <entity id="e4" name="definition" label="Formdefiniton" type="string" required="true">
       <renderer type="textarea"></renderer>
     </entity>
   </source>

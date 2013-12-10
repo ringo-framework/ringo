@@ -19,7 +19,7 @@ class Form(BaseItem, Owned, Meta, Logged, Base):
     category = sa.Column(sa.Integer, nullable=False)
     title = sa.Column(sa.String, nullable=False)
     description = sa.Column(sa.Text)
-    definiton = sa.Column(sa.Text, nullable=False)
+    definition = sa.Column(sa.Text)
 
     def __unicode__(self):
         return str(self.id)
