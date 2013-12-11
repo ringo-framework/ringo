@@ -164,6 +164,12 @@ class State(object):
         self._disabled_actions= disabled_actions
         self._transitions = []
 
+    def __str__(self):
+        return self.__unicode__()
+
+    def __unicode__(self):
+        return self._label
+
     def add_transition(self, to_state, label=None,
                        handler=None, condition=None):
         trans = Transition(self, to_state, label, handler, condition)
