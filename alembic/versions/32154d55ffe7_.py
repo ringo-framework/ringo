@@ -34,7 +34,7 @@ def upgrade():
     )
     op.add_column(u'forms', sa.Column('category', sa.Integer()))
     op.add_column(u'forms', sa.Column('created', sa.DateTime()))
-    op.add_column(u'forms', sa.Column('definiton', sa.Text()))
+    op.add_column(u'forms', sa.Column('definition', sa.Text()))
     op.add_column(u'forms', sa.Column('description', sa.Text()))
     op.add_column(u'forms', sa.Column('title', sa.String()))
     op.add_column(u'forms', sa.Column('updated', sa.DateTime()))
