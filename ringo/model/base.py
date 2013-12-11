@@ -182,6 +182,34 @@ class BaseItem(object):
                     return option[0]
         return raw_value
 
+    def save(self, data, dbsession=None):
+        """Will save the given data into the item. If the current item
+        has no value for the id attribute it is assumed that this item
+        must be added to the database as a new item. In this case you
+        need to provide a dbsession as the new item is not linked to any
+        dbsession yet.
+
+        Please note, that you must ensure that the submitted values are
+        validated. This function does no validation on the submitted
+        data.
+
+        :data: Dictionary with key value pairs.
+        :dbsession: Current db session. Used when saving new items.
+        :returns: item with new data.
+
+        """
+        for key, value in data.iteritems():
+            if hasattr(self, key):
+                setattr(self, key, value)
+            else:
+                log.warning('Not saving "%s". Attribute not found' % key)
+
+        # If the item has no id, then we assume it is a new item. So
+        # add it to the database session.
+        if not self.id and dbsession:
+            dbsession.add(self)
+        return self
+
 
 class BaseList(object):
     def __init__(self, clazz, request, user=None, cache="", items=None):
