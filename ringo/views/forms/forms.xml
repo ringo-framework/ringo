@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <configuration xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="ringo">
   <source>
-    <entity id="e1" name="title" label="Title" type="string"/>
+    <entity id="e1" name="title" label="Title" type="string" required="true"/>
     <entity id="e2" name="description" label="Description" type="string"/>
     <entity id="e3" name="category" label="Category" type="integer">
       <renderer type="dropdown"></renderer>
