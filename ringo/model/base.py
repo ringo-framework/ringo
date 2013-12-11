@@ -42,6 +42,17 @@ class BaseItem(object):
     def __getitem__(self, name):
         return self.get_value(name)
 
+    def __getattr__(self, name):
+        """This function tries to get the given attribute of the item if
+        it can not be found using the usual way to get attributes. In
+        this case we will split the attribute name by "." and try to get
+        the attribute along the "." separated attribute name."""
+        element = self
+        attributes = name.split('.')
+        for attr in attributes:
+            element = object.__getattribute__(element, attr)
+        return element
+
     def __unicode__(self):
         """Will return the string representation for the item based on a
         configured format string in the modul settings. If no format str
