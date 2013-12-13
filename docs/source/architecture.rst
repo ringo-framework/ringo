@@ -32,6 +32,8 @@ All this magic is already done in a pyramid scaffold which comes with ringo. Usi
 proper way. See :ref:`create_ringo_based_application` for information on how
 to create an application using this scaffold.
 
+.. _modules:
+
 Modules
 =======
 The term "Module" is central and often used in ringo. Therefore it is important
@@ -51,15 +53,30 @@ users. Further it has templates which define how the pages in the application
 will look like. Finally there are configuration files to define how the forms
 and overview tables will look like.
 
-Ringo already come with many modules. One module per item. There is a module
-for the user management, a module for appointment and so on. There is also a module to handle the modules itself. So we can say in general: ringos functionality is the sum of all modules functionality. Ringo or a ringo based application can be extended by adding new modules.  Fortunately you will not need to create this infrastructure for you own. See :ref:`add_modules` for more information.
+Ringo already come with many modules. One module per item. There is a module for the user management, a module for appointment and so on. There is also a module to handle the modules itself. So we can say in general: ringos functionality is the sum of all modules functionality. Ringo or a ringo based application can be extended by adding new modules.  Fortunately you will not need to create this infrastructure for you own. See :ref:`add_modules` for more information.
 
 Each module has a common set of configuration options which can be done
 directly in the web interface. See the modules entry in the administion menu
 for more information.
 
+.. _module_actions:
 
+Modul actions
+-------------
+Modules provide actions which can be used to manipulate the item of a module.
+Ringo provides some basic CRUD [#]_ actions which are available on default for every module.
 
+* Create: Create new items.
+* Read: Show the item in detail in readonly mode.
+* Update: Edit items of the module.
+* Delete: Deleting items.
+* List: Listing all items of the module. This is slightly different to the action to read a single item.
+
+Every time you want to do something different to your items you will likely
+want to implement another action for the module. See :ref:`add_action` for
+more details how to add actions to a module.
+
+.. [#] CRUD means: Create, Read, Update, Delete
 
 
 Filesystem
@@ -126,9 +143,92 @@ ringo/views/tables
 
 Database
 ========
+Below you see the basic schema of the ringo database. The schema only lists
+some central tables which help to understand how the things are wired together
+in ringo. The table colored orange `example` table in the top left is an
+example for any other table which will store items of a modul.
+Every item of an item has a reference to the module it belogs to. Further the
+current example has a reference to a user and a usergroup which defines the
+ownership [#]_ per item is is important for the authorisation.
 
 .. image:: images/database.png
    :alt: Basic database model.
+
+Let us begin with the `modules` table. This table will store information on
+all available modules in the system. It basically stores the configuration per
+modul.  As described in the :ref:`modules` section each modul has
+(:ref:`module_actions`) which are stored in the `actions` table. The NM-table
+`nm_actions_roles` define which `roles` are allowed to use the actions in the
+module. See :ref:`permissionsystem` for more information on how the
+:ref:`authorisation` is implemented in ringo.
+
+The `users` table stores all the users in ringo. The users table only holds
+minimal data which is required for authentification and authorisation.
+Additional information like the name, email etc. is stored in the `profiles`
+table. Every user has a profile.
+
+Users can be organised in groups using the `nm_user_groups` table. All
+usergroups are stored in the `usergroups` table. Roles can be assigned to
+usergroups and users. This is done with the NM-table `nm_user_roles` and
+`nm_usergroup_roles`.
+
+The table `user_settings` and `password_reset_request` are helper tables to
+save user settings like saved search queries or store the tokens to trigger
+the password reset.
+
+.. [#] The ownership feature can be added by using the :ref:`mixin_owned`
+   mixin.
+
+Mixins
+======
+.. automodule:: ringo.model.mixins
+
+.. _mixin_meta:
+
+Meta
+----
+.. autoclass:: ringo.model.mixins.Meta
+
+.. _mixin_owned:
+
+Owned
+-----
+.. autoclass:: ringo.model.mixins.Owned
+
+.. _mixin_nested:
+
+Nested
+------
+.. autoclass:: ringo.model.mixins.Nested
+
+.. _mixin_logged:
+
+Logged
+------
+.. autoclass:: ringo.model.mixins.Logged
+
+StateMixin
+----------
+.. autoclass:: ringo.model.mixins.StateMixin
+
+Statemachine
+============
+.. automodule:: ringo.model.statemachine
+
+.. _permissionsystem:
+
+Permission System
+=================
+
+.. _authendtification:
+
+Authentification
+----------------
+
+.. _authorisation:
+
+Authorisation
+-------------
 
 Event Handlers
 ==============
@@ -146,44 +246,3 @@ the event (update, create, delete) is excecuted.
 Some of the Mixin classes do already have some predefined event_handlers
 configured.
 
-Mixins
-======
-Mixins can be used to add certain functionality to the BaseItems. Mixins are
-used in multiple inheritance. The ensure the the item will have all needed
-fields in the database and have the right interface to work with the
-functionality which is added by the mixin. Example::
-
-        class Comment(BaseItem, Nested, Meta, Owned, Base):
-            __tablename__ = 'comments'
-            _modul_id = 99
-            id = sa.Column(sa.Integer, primary_key=True)
-            comment = sa.Column('comment', sa.Text)
-
-            ...
-
-
-The comment class in the example only defines the two fields 'id' and
-'comment' but as it inherits from 'Logged', 'Meta' and 'Owned' it also will
-have date fields with the creation and date of the last update, references to
-the user and group which ownes the Comment. Further the 'Nested' mixin will
-ensure the comments can reference each other to be able to build a hierarchy
-structure (e.g Threads in the example of the comments).
-
-Meta
-----
-
-Owned
------
-
-Nested
-------
-
-Logged
-------
-
-StateMixin
-----------
-
-Statemachine
-============
-Write me

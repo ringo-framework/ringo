@@ -167,6 +167,11 @@ mapped functions on URLs.
 In the next sections I will give some examples on how to customise things in a
 ringo application.
 
+.. _add_action:
+
+Adding new actions to a module
+------------------------------
+
 Overwriting static files
 ------------------------
 
