@@ -1,3 +1,25 @@
+"""
+Mixins can be used to add certain functionality to the items of a
+module.  Mixins are used in multiple inheritance. The mixin ensures that
+the item will have all needed fields in the database and provides the
+proper interface to use the added functionality. Example::
+
+        class Comment(BaseItem, Nested, Meta, Owned, Base):
+            __tablename__ = 'comments'
+            _modul_id = 99
+            id = sa.Column(sa.Integer, primary_key=True)
+            comment = sa.Column('comment', sa.Text)
+
+            ...
+
+The comment class in the example only defines the two fields `id` and
+`comment`. But as it inherits from :ref:`mixin_nested`, :ref:`mixin_meta` and
+:ref:`mixin_owned` it also will have date fields with the creation and date of
+the last update, references to the user and group which ownes the Comment.
+Further the 'Nested' mixin will ensure the comments can reference each other
+to be able to build a hierarchy structure (e.g Threads in the example of the
+comments).
+"""
 import datetime
 import logging
 from sqlalchemy.ext.declarative import declared_attr

@@ -1,3 +1,12 @@
+"""A state machine, is a mathematical model of computation used to
+design sequential logic circuits for items of a module. It is conceived
+as an abstract machine that can be in one of a finite number of states.
+The machine is in only one state at a time; the state it is in at any
+given time is called the current state. It can change from one state to
+another when initiated by a triggering event or condition; this is
+called a transition.
+"""
+
 def walk(state, found=[]):
     """Helper function to collect all available states in the states
     graph beginning from the given start state
@@ -26,7 +35,7 @@ def null_condition(item):
 
 
 class Statemachine(object):
-    """Statemachine class"""
+    """The class for the statemachine"""
 
     def __init__(self, item, key_state_id):
         """Initialise the statemachine for the given item."""
@@ -43,7 +52,15 @@ class Statemachine(object):
                 break
 
     def setup(self):
-        """Need to be implemented"""
+        """Need to be implemented in the inherited class. Example::
+
+            s1 = State(self, 1, "On")
+            s2 = State(self, 2, "Off")
+
+            s1.add_transition(s2, "Turn on", handler, condition)
+            s2.add_transition(s1, "Turn off", handler, condition)
+            return s1
+        """
         return None
 
     def get_states(self):
@@ -79,7 +96,20 @@ class Statemachine(object):
 
 
 class Transition(object):
-    """A class for transitions between to states"""
+    """A transitions is used to switch from one state into another. The
+    two states are called start state and end state where the end state
+    is the state of the state machine after the transtions has been
+    done.
+
+    Every transtion can have a handler and a condition. The handler can
+    be used to add some logic which should be trigger after the
+    transition has been finished. The handler is a simple callable which
+    is called with the item of the state machine.
+
+    The condition is also a callable and can be used to restrict the
+    availability to whatever want. The function is called with the item
+    of the state machine and returns true or false. If the condition
+    returns true then a transition is available."""
 
     def __init__(self, start_state, end_state,
                  label=None, handler=None, condition=None):
@@ -144,7 +174,7 @@ class Transition(object):
 
 
 class State(object):
-    """Docstring for State """
+    """A single state in a statemachine."""
 
     def __init__(self, statemachine, id, label,
                  description=None, disabled_actions={}):
