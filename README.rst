@@ -13,11 +13,6 @@ provides basic functionality. In most cases this basic functionality should
 fit the needs in easy usecases. If it fits not, then it can be extended and
 configured to your need in an easy way.
 
-Ringo is also a standalone application which is under steady development. This
-is a benefit if you use Ringo as base for your application. Your application
-will get bug fixes, new features or improved functionality in most cases by simply
-updating Ringo to a new version.
-
 License
 =======
 Ringo is Free Software. It is licensed under the GPL license in version 2 or
@@ -37,6 +32,8 @@ web application based on Ringo:
  * Regular expression based searching (storeable)
  * Sorting
  * User Profiles
+ * Logging of Changes in items
+ * Statemachines. Items can have states
  * Basic CSRF protection on POST requests
  * Extendible, Configurable
 
@@ -63,7 +60,6 @@ start the standalone application of ringo with the following steps:
 
 - $venv/bin/python setup.py develop
 
-- $venv/bin/initialize_ringo_db development.ini
-  or $venv/bin/alembic upgrade head
+- $venv/bin/alembic upgrade head
 
 - $venv/bin/pserve development.ini
