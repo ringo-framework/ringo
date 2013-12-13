@@ -99,6 +99,7 @@ the instructions provided in the README file with the application folder::
 
 Your application is ready for development :)
 
+.. _add_modules:
 
 Add a new modul to your application
 ===================================
