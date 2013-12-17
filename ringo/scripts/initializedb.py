@@ -32,6 +32,9 @@ from ringo.model.file import (
 from ringo.model.news import (
     init_model as init_news_model
 )
+from ringo.model.log import (
+    init_model as init_log_model
+)
 
 
 def usage(argv):
@@ -60,4 +63,5 @@ def inititializedb(engine):
         init_appointment_model(DBSession)
         init_file_model(DBSession)
         init_news_model(DBSession)
+        init_log_model(DBSession)
 
