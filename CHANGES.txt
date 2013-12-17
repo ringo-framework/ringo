@@ -11,13 +11,13 @@ to the tracker.
 0.8.0
 -----
 - Added log modul
+- Added statemachines
 - Added simple mechanism to call handlers for certain events in the model.
   This is currently used to:
 	- Update the updated attribute on every change of a item which has the
 	  meta mixin.
 	- Create a simple log entry on updating or creating a item.
 - Worked on caching the result of SQL queries to improbe the performance.
-- Added statemachines
 - API Change: BaseLists are not initialized with request instead of request.db
 - Added alembic folders to basic scaffold
 - Worked on documentation
