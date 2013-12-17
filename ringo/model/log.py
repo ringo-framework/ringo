@@ -36,6 +36,6 @@ def init_model(dbsession):
     modul.clazzpath = "ringo.model.log.Log"
     modul.label = "Log"
     modul.label_plural = "Logs"
-    modul.display = "header-menu"
+    modul.display = "admin-menu"
     modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
