@@ -19,6 +19,8 @@ to the tracker.
 - Worked on caching the result of SQL queries to improbe the performance.
 - Added statemachines
 - API Change: BaseLists are not initialized with request instead of request.db
+- Added alembic folders to basic scaffold
+- Worked on documentation
 
 0.7.0
 -----
