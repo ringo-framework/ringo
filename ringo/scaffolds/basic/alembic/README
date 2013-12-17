@@ -1,0 +1,24 @@
+Generic single-database configuration.
+
+Alembis generates migration scripts by comparing the data model against the
+database. The migration only works if the model is newer as the database.
+
+How to use:
+
+1. Adding new modul
+
+* Backup the database
+* Add new modul -> Database will be changed
+* Restore database -> Revert changes in the database, leave changes in the
+  python model
+* Run "alembic upgrade head" to mark the table having all all migrations
+  included
+* Run "alembic revision --autogenerate -m "Added file table"" to generate a
+  migration script which has the migration from the newer model to the older
+  database
+
+2. Manual changes in the model
+
+* Run "alembic revision --autogenerate -m "Added file table"" to generate a
+  migration script which has the migration from the newer model to the older
+  database
