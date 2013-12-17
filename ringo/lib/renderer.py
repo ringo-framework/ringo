@@ -437,7 +437,7 @@ class ListingFieldRenderer(FormbarSelectionField):
 
     def _get_all_items(self):
         clazz = self._field._get_sa_mapped_class()
-        return clazz.get_item_list(self._field._form._dbsession)
+        return clazz.get_item_list(self._field._form._request)
 
     def _get_selected_items(self):
         try:

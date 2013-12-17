@@ -8,6 +8,10 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
+0.8.1
+-----
+- Bugfixes for API Change: BaseLists are not initialized with request instead of request.db
+
 0.8.0
 -----
 - Added log modul
