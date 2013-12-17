@@ -1,10 +1,24 @@
-"""A state machine, is a mathematical model of computation used to
-design sequential logic circuits for items of a module. It is conceived
-as an abstract machine that can be in one of a finite number of states.
-The machine is in only one state at a time; the state it is in at any
-given time is called the current state. It can change from one state to
-another when initiated by a triggering event or condition; this is
-called a transition.
+"""
+Ringo offers the option to equip items of the modules with a
+one or more state machines to model statefull workflows.
+
+An classical example for a statefull workflow is a process where an item
+can be in an `draft`, `review` and `published` state.
+
+The statemachine offers features like
+
+ * Restrictions on access
+ * Conditional transitions
+ * Handlers.
+
+Depending on the state the state machine can be configured to restrict
+access to the item for certain users. Further you can define conditions
+which must be true before the state can switch into another. Finally you
+can write certain handlers which are called right after the state has
+changed.
+
+A state machine can be attached to the items using a :ref:`mixin_state`
+which organises the state machines an provides a unique interface.
 """
 
 def walk(state, found=[]):
@@ -27,18 +41,58 @@ def walk(state, found=[]):
 
 
 def null_handler(item):
+    """Null handler"""
     return item
 
 
 def null_condition(item):
+    """Null condition"""
     return True
 
+class TransitionHandler(object):
+
+    """Handler callable which will be called if the transition between
+    to :class:`State` objects has been finished."""
+
+    def __call__(self, item):
+        """Implement me!
+
+        :item: :class:`BaseItem` instance
+        :returns: :class:`BaseItem` instance
+
+        """
+        return null_handler(item)
+
+class TransitionCondition(object):
+
+    """Condition callable which must be true to make the :class:`Transition`
+    between two :class:`State` objects applicable."""
+
+    def __call__(self, item):
+        """Implement me!
+
+        :item: :class:`BaseItem` instance
+        :returns: True or False
+
+        """
+        return null_condition(item)
 
 class Statemachine(object):
-    """The class for the statemachine"""
+    """A state machine, is a mathematical model of computation used to
+    design sequential logic circuits for items of a module. It is
+    conceived as an abstract machine that can be in one of a finite
+    number of states.  The machine is in only one state at a time; the
+    state it is in at any given time is called the current state. It can
+    change from one state to another when initiated by a triggering
+    event or condition; this is called a transition."""
 
     def __init__(self, item, key_state_id):
-        """Initialise the statemachine for the given item."""
+        """Initialise the statemachine for the given item.
+
+        :item: Attach the state machine to this :class:`BaseItem`
+        :key_state_id: initialize with the given state id
+
+        """
         self._item = item
         self._key_state_id = key_state_id
         self._root = self.setup()
@@ -52,7 +106,9 @@ class Statemachine(object):
                 break
 
     def setup(self):
-        """Need to be implemented in the inherited class. Example::
+        """Need to be implemented in the inherited class.
+
+        Example::
 
             s1 = State(self, 1, "On")
             s2 = State(self, 2, "Off")
@@ -65,7 +121,8 @@ class Statemachine(object):
 
     def get_states(self):
         """Returns a list of all states in the statemachine
-        :returns: List of states.
+
+        :returns: List of :class:`State` objects.
 
         """
         return walk(self._root)
@@ -73,8 +130,8 @@ class Statemachine(object):
     def set_state(self, state):
         """Will set the current state of the state machine
 
-        :state: State id of the state or state item to be set as current
-        state
+        :state: Id of the :class:`State` or the :class:`State` object to
+        be set as current state
         :returns: None
 
         """
@@ -89,7 +146,8 @@ class Statemachine(object):
 
     def get_state(self):
         """Returns the current state of the Statemachine
-        :returns: State
+
+        :returns: Current :class:`State`
 
         """
         return self._current
@@ -115,10 +173,12 @@ class Transition(object):
                  label=None, handler=None, condition=None):
         """Creates a transition between to states.
 
-        :start_state: @todo
-        :end_state: @todo
-        :handler: @todo
-        :condition: @todo
+        :start_state: Start :class:`State` of the transition
+        :end_state: End of the transition
+        :handler: :class:`TransitionHandler` which will be called if the state has
+                  been changed
+        :condition: :class:`TransitionCondition` which must be true to make the
+                    transition available
 
         """
         self._label = label
@@ -129,13 +189,17 @@ class Transition(object):
 
     def get_start(self):
         """Returns the start state of the transition
-        :returns: State
+
+        :returns: Start :class:`State`
+
         """
         return self._start_state
 
     def get_end(self):
         """Returns the end state of the transition
-        :returns: State
+
+        :returns: End :class:`State`
+
         """
         return self._end_state
 
@@ -143,7 +207,9 @@ class Transition(object):
         """Returns the label of the transtion. If no label was set
         return the two lables of the start and end state separated with
         a "->".
-        :returns: String of the label
+
+        :returns: Label of the :class:`State`
+
         """
         if self._label:
             return self._label
@@ -152,8 +218,10 @@ class Transition(object):
                                  self._end_state._label)
 
     def exchange(self):
-        """Exchanges the start state to the end state.
-        :returns: End state of the transtion.
+        """Do the transition! Exchanges the start state to the end state.
+
+        :returns: End :class:`State` of the transtion.
+
         """
         if self.is_available():
             state = self.get_end()
@@ -178,13 +246,14 @@ class State(object):
 
     def __init__(self, statemachine, id, label,
                  description=None, disabled_actions={}):
-        """@todo: to be defined
+        """Initialise the State
 
-        :statemachine: @todo
-        :id: @todo
-        :label: @todo
-        :description: @todo
-        :disabled_actions: @todo
+        :statemachine: Statemachine
+        :id: Id of the state
+        :label: Label of the Statemachine (short description)
+        :description: Long description of the state.
+        :disabled_actions: Dictionary with a list of actions which are
+        disabled for a role.
 
         """
         self._statemachine = statemachine
@@ -194,19 +263,35 @@ class State(object):
         self._disabled_actions= disabled_actions
         self._transitions = []
 
-    def add_transition(self, to_state, label=None,
-                       handler=None, condition=None):
+    def add_transtion(self, to_state, label=None,
+                      handler=None, condition=None):
+        """Will add a transtion to the given state
+
+        :to_state: End state of the transition
+        :label: Label of the transition. Is usually a verb.
+        :handler: :class:`TransitionHandler` which will be called if the state has
+                  been changed
+        :condition: :class:`TransitionCondition` which must be true to make the
+                    transition available
+        :returns: None
+
+        """
         trans = Transition(self, to_state, label, handler, condition)
         self._transitions.append(trans)
 
     def get_disabled_actions(self, role):
         """Returns a list of disabled actions of the state for the given
-        role"""
+        role
+
+        :returns: List of disabled actions
+
+        """
         return self._disabled_actions.get(role, [])
 
     def get_transitions(self):
         """Returns the available transitions to other states.
-        :returns:  List of Transitions.
+
+        :returns:  List of :class:`Transition` objects.
 
         """
         # Check if the

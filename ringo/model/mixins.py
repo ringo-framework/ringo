@@ -19,6 +19,12 @@ the last update, references to the user and group which ownes the Comment.
 Further the 'Nested' mixin will ensure the comments can reference each other
 to be able to build a hierarchy structure (e.g Threads in the example of the
 comments).
+
+.. important::
+
+    As most of the mixins will add additional tables and database fields
+    to your item it is needed to migrate your database to the new model.
+    See :ref:`alembic_migration` section for more information.
 """
 import datetime
 import logging
@@ -49,7 +55,29 @@ class StateMixin(object):
     The current state is stored as integer value per item. This field
     must be created manually.  The name of the field which stores the
     value for the current state must be the keyname of the
-    '_statemachines' dictionary."""
+    '_statemachines' dictionary.
+
+    Example Mixin usage::
+
+        class FooMixin(StateMixin):
+            # Mixin inherited from the StateMixin to add the Foobar
+            # state machine
+
+            # Attach the statemachines to an internal dictionary
+            _statemachines = {'foo_state_id': FooStatemachine}
+
+            # Configue a field in the model which saves the current
+            # state per state machine
+            foo_state_id = sa.Column(sa.Integer, default=1)
+
+            # Optional. Create a property to access the statemachine
+            # like an attribute. This gets usefull if you want to access
+            # the state in overview lists.
+            @property
+            def foo_state(self):
+                state = self.get_statemachine('foo_state_id')
+                return state.get_state()
+    """
 
     """Mapping of statemachines to attributes. The key in the dictionary
     must be the name of the field which stores the integer value of the
