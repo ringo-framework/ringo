@@ -207,13 +207,33 @@ Logged
 ------
 .. autoclass:: ringo.model.mixins.Logged
 
+.. _mixin_state:
+
 StateMixin
 ----------
 .. autoclass:: ringo.model.mixins.StateMixin
 
-Statemachine
-============
+States and Workflows
+====================
 .. automodule:: ringo.model.statemachine
+
+Statemachine
+------------
+.. autoclass:: ringo.model.statemachine.Statemachine
+   :members:
+
+State
+-----
+.. autoclass:: ringo.model.statemachine.State
+   :members:
+
+Transition
+----------
+.. autoclass:: ringo.model.statemachine.Transition
+   :members:
+
+.. autoclass:: ringo.model.statemachine.TransitionHandler
+.. autoclass:: ringo.model.statemachine.TransitionCondition
 
 .. _permissionsystem:
 

@@ -117,6 +117,8 @@ This was easy, ey?
 But this is only the quick shot. For more advanced usage proceed to the next
 section.
 
+.. _alembic_migration:
+
 Using alembic for database migration
 ------------------------------------
 In order to be able to migrate your database also, the precedure of creating a
