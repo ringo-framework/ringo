@@ -145,6 +145,21 @@ def add_form_file(package, modul):
     except:
         print 'Failed.'
 
+def add_table_file(package, modul):
+    filename = modul+"s"
+    target_file= os.path.join(get_app_path(package), package, 'views', 'tables', '%s.json' % filename)
+    print 'Adding new table configuration file "%s"... ' % target_file,
+    try:
+        values = {}
+        template = template_lookup.get_template("table.json")
+        generated = template.render(**values)
+        outfile = open(target_file, 'w+')
+        outfile.write(generated)
+        outfile.close()
+        print 'Ok.'
+    except:
+        print 'Failed.'
+
 def add_routes(package, modul, clazz):
     target_file = os.path.join(get_app_path(package), package, '__init__.py')
     print 'Adding routes to "%s"... ' % target_file,
@@ -200,8 +215,9 @@ def add_modul(name, package, config):
     add_model_file(package, modul, modul_id, clazz)
     # 3. Adding a new view file.
     add_view_file(package, modul, clazz)
-    # 4. Adding a new form configuration
+    # 4. Adding a new form and table configuration
     add_form_file(package, modul)
+    add_table_file(package, modul)
     # 5. Configure Routes for the new modul.
     add_routes(package, modul, clazz)
     # 6. Configure Routes for the new modul.
