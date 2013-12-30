@@ -1,7 +1,7 @@
 {
     "overview": {
         "columns": [
-            {"name": "id", "label": "ID"},
+            {"name": "id", "label": "ID"}
         ]
     }
 }
