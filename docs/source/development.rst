@@ -122,24 +122,38 @@ section.
 Using alembic for database migration
 ------------------------------------
 In order to be able to migrate your database also, the precedure of creating a
-new modul gets a little bit more complex.
+new modul gets a little bit more complex::
 
- 1. Back a backup of your Database.
- 2. Call the :ref:commands_add_modul_ add_modul command to add the new modul.
- 3. Backup temporily the database with the new created modul. We need the
- INSERTS statements later. Alternatively you can dump the data. We are not
- interested in the schema here as this can be regenerated from the model.
- 4. Restore old database to restore the unmodified database.
- 5. Autogenerate a migration script using alembic. Alembic will generate a
- migration script to migrate the old (restored) database to the new model.
- 6. As alemembic only recognizes schema changes all inserts made while adding
- the modul are lost. No you can grep the needed Inserts from the saved
- database and add them to the migration script.
- 7. Upgrade the database by applying the fresh generated migration script.
+        # 1. Backup your database to be able to generate the new added INSERTS
+        # statements.
+        cp myproject.sqlite myproject.sqlite.orig
+        sqlite3 myproject.sqlite.orig .dump | grep INSERT > inserts.orig
 
- After these steps you should be able to migrate your application by using
- your SCM to versionize the application code base and by using alembic your
- the database versioning.
+        # 2. Call the :ref:commands_add_modul_ add_modul command to add the
+        # new modul.
+        add_myproject_modul mymodul --config=development.ini
+
+        # 3. Generate new new added INSERTS statements.
+        sqlite3 myproject.sqlite .dump | grep INSERT > inserts.modified
+        diff -n inserts.orig inserts.modified | grep INSERT > inserts.new
+
+        # 4. Now revert the database and generate a migration file.
+        cp myproject.sqlite.orig myproject.sqlite
+        alembic revision --autogenerate
+
+        # 5. Add the statements from inserts.new into the genrated migration
+        # file. If you need any modifications, make sure you also modificate the
+        # init_modul method in the model file of the new added modul.
+
+        # 6. Finally remove temporary files
+        rm myproject.sqlite.orig
+        rm inserts.orig
+        rm inserts.modified
+        rm inserts.new
+
+After these steps you should be able to migrate your application by using
+your SCM to versionize the application code base and by using alembic your
+the database versioning.
 
 Customisation
 =============
