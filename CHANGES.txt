@@ -11,6 +11,8 @@ to the tracker.
 0.8.1
 -----
 - Bugfixes for API Change: BaseLists are not initialized with request instead of request.db
+- Improved documentation
+- Some fixes in the basic scaffold. Improved alembic integration.
 
 0.8.0
 -----
