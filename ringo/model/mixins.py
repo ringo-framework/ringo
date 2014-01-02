@@ -266,6 +266,7 @@ class Nested(object):
             childs.extend(child.get_children())
         return childs
 
+
 class Commented(object):
     """Mixin to add comment functionallity to a modul. Adding this Mixin
     the item of a modul will have a "comments" relationship containing all
@@ -296,7 +297,7 @@ class Commented(object):
         """
         from ringo.model.comment import Comment
         log.debug("Called update_handler for %s" % cls)
-        user_comment = request.params.get('comment');
+        user_comment = request.params.get('comment')
         if user_comment:
             factory = Comment.get_item_factory()
             comment = factory.create(request.user)
