@@ -14,7 +14,7 @@ class CommentFactory(BaseFactory):
 
 class Comment(BaseItem, Meta, Nested, Owned, Base):
     __tablename__ = 'comments'
-    _modul_id = 10
+    _modul_id = 11
     id = sa.Column(sa.Integer, primary_key=True)
     text = sa.Column(sa.Text)
 
@@ -33,6 +33,5 @@ def init_model(dbsession):
     modul.label = "Comment"
     modul.label_plural = "Comments"
     modul.display = "hidden"
-    modul.actions.extend(_create_default_actions(dbsession,
-                                                 ignore=['list', 'create']))
+    modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
