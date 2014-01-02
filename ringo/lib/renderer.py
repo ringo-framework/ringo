@@ -552,3 +552,62 @@ class LogRenderer(FieldRenderer):
             html.extend(self._render_body(log))
         html.append('</table>')
         return "".join(html)
+
+class CommentRenderer(FieldRenderer):
+    """Custom Renderer for the comment listing"""
+
+    def __init__(self, field, translate):
+        FieldRenderer.__init__(self, field, translate)
+
+    def _render_info(self, comment):
+        html = []
+        html.append("<small>")
+        html.append('<a href="/comments/read/%s">#%s</a>'
+                    % (comment.id, comment.id))
+        html.append(" | ")
+        html.append("<bold>" + unicode(comment.owner.profile[0]) + "</bold>")
+        html.append(" | ")
+        str_updated = comment.updated.strftime("%y.%m.%d %H:%M")
+        str_created = comment.created.strftime("%y.%m.%d %H:%M")
+        html.append(str_created)
+        if str_updated != str_created:
+            html.append(" | (")
+            html.append(str_updated)
+            html.append(")</small>")
+        return html
+
+    def _render_body(self, comment):
+        html = []
+        html.append(comment.text.replace('\n', '<br>') or "")
+        return html
+
+    def render(self):
+        _ = self.translate
+        html = []
+        comments = self._field._form._item.comments
+        if not self._field.is_readonly():
+            html.append('<label for="new-comment" class="control-label">')
+            html.append(_('New entry'))
+            html.append('</label>')
+            html.append('<textarea class="form-control" id="new-comment" name="comment"></textarea>')
+            html.append('</br>')
+        html.append('<label for="">%s (%s)</label>'
+                    % (self._field.label, len(comments)))
+        for comment in comments[::-1]:
+            html.append('<input type="checkbox" name="%s" value="%s"'
+                        ' style="display:none"/>'
+                        % (self._field.name, comment.id))
+            html.append('<div class="readonlyfield">')
+            html.append("<table>")
+            html.append("<tr >")
+            html.append("<td>")
+            html.extend(self._render_body(comment))
+            html.append("</td>")
+            html.append("<tr>")
+            html.append('<td>')
+            html.extend(self._render_info(comment))
+            html.append("</td>")
+            html.append("</tr>")
+            html.append("</table>")
+            html.append("</div>")
+        return "".join(html)
