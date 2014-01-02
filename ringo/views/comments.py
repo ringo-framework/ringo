@@ -19,18 +19,18 @@ log = logging.getLogger(__name__)
 ###########################################################################
 
 
-#@view_config(route_name=Comment.get_action_routename('list'),
-#             renderer='/default/list.mako',
-#             permission='list')
-#def list(request):
-#    return list_(Comment, request)
+@view_config(route_name=Comment.get_action_routename('list'),
+             renderer='/default/list.mako',
+             permission='list')
+def list(request):
+    return list_(Comment, request)
 
 
-#@view_config(route_name=Comment.get_action_routename('create'),
-#             renderer='/default/create.mako',
-#             permission='create')
-#def create(request):
-#    return create_(Comment, request)
+@view_config(route_name=Comment.get_action_routename('create'),
+             renderer='/default/create.mako',
+             permission='create')
+def create(request):
+    return create_(Comment, request)
 
 
 @view_config(route_name=Comment.get_action_routename('update'),
@@ -58,21 +58,21 @@ def delete(request):
 ###########################################################################
 
 
-#@view_config(route_name=Comment.get_action_routename('list', prefix="rest"),
-#             renderer='json',
-#             request_method="GET",
-#             permission='list'
-#             )
-#def rest_list(request):
-#    return json_list(Comment, request)
+@view_config(route_name=Comment.get_action_routename('list', prefix="rest"),
+             renderer='json',
+             request_method="GET",
+             permission='list'
+             )
+def rest_list(request):
+    return json_list(Comment, request)
 
 
-#@view_config(route_name=Comment.get_action_routename('create', prefix="rest"),
-#             renderer='json',
-#             request_method="POST",
-#             permission='create')
-#def rest_create(request):
-#    return json_create(Comment, request)
+@view_config(route_name=Comment.get_action_routename('create', prefix="rest"),
+             renderer='json',
+             request_method="POST",
+             permission='create')
+def rest_create(request):
+    return json_create(Comment, request)
 
 
 @view_config(route_name=Comment.get_action_routename('read', prefix="rest"),
