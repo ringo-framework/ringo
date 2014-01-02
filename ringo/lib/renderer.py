@@ -422,8 +422,6 @@ class StateFieldRenderer(FormbarDropdown):
         return "".join(html)
 
 
-
-
 class ListingFieldRenderer(FormbarSelectionField):
     """Renderer to render a listing of linked items. Used attributes:
 
@@ -492,7 +490,6 @@ class ListingFieldRenderer(FormbarSelectionField):
                 filtered_items.append(item)
         return filtered_items
 
-
     def render(self):
         """Initialize renderer"""
         html = []
@@ -555,6 +552,7 @@ class LogRenderer(FieldRenderer):
             html.extend(self._render_body(log))
         html.append('</table>')
         return "".join(html)
+
 
 class CommentRenderer(FieldRenderer):
     """Custom Renderer for the comment listing"""
