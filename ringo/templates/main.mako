@@ -15,7 +15,7 @@
     </div>
   % endfor
   % for message in request.session.pop_flash('error'):
-    <div class="alert alert-error fade in">
+    <div class="alert alert-danger fade in">
       <button type="button" class="close" data-dismiss="alert">&times;</button>
       ${message}
     </div>
