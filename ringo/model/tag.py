@@ -20,8 +20,20 @@ class Tag(BaseItem, Owned, Base):
     description = sa.Column('description', sa.Text, default=None)
     tagtype = sa.Column('type', sa.Integer, default=None)
 
+    def render(self):
+        mapping = {
+            0: "label label-default",
+            1: "label label-prinary",
+            2: "label label-success",
+            3: "label label-info",
+            4: "label label-warning",
+            5: "label label-danger"}
+        return '<span class="%s">%s</span>' % (mapping.get(self.tagtype),
+                                               self.name)
+
     def __unicode__(self):
-        return str(self.id)
+        return self.name
+
 
 def init_model(dbsession):
     """Will setup the initial model for the tag.
