@@ -426,7 +426,10 @@ class StateFieldRenderer(FormbarDropdown):
 
 class ListingFieldRenderer(FormbarSelectionField):
     """Renderer to render a listing of linked items. Used attributes:
+
     * foreignkey: name of the foreignkey in the database
+    * form: Name of the form which is used to add new items
+    * table: Name of the table configuration which is used to list items
     * onlylinked: "true" or "false". If true only linked items will be
       rendered"""
 
@@ -493,7 +496,7 @@ class ListingFieldRenderer(FormbarSelectionField):
     def render(self):
         """Initialize renderer"""
         html = []
-        config = self._field._config.renderer.config
+        config = self._field._config.renderer
         html.append(self._render_label())
         if self._field.is_readonly() or self.onlylinked == "true":
             items = self._get_selected_items()
@@ -505,7 +508,7 @@ class ListingFieldRenderer(FormbarSelectionField):
                   'request': self._field._form._request,
                   '_': self._field._form._translate,
                   's': ringo.lib.security,
-                  'tableconfig': self.all_items.clazz.get_table_config(config)}
+                  'tableconfig': self.all_items.clazz.get_table_config(config.table)}
         html.append(self.template.render(**values))
         return "".join(html)
 
