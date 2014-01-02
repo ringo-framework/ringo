@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="ringo">
+  <source>
+    <!-- Define different entity types -->
+    <!-- This field is only a Dummy field as example which is not really in the database -->
+    <entity id="e1" name="text" label="Comment" type="string">
+      <renderer type="textarea"></renderer>
+    </entity>
+    <entity id="e2" name="updated" label="Updated" type="datetime" readonly="true"/>
+    <entity id="e3" name="created" label="Created" type="datetime" readonly="true"/>
+  </source>
+  <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
+    <snippet ref="create_snippet"/>
+  </form>
+  <form id="update" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
+    <snippet ref="edit_snippet"/>
+  </form>
+  <form id="read" readonly="true">
+    <snippet ref="edit_snippet"/>
+  </form>
+
+  <!-- Create-->
+  <snippet id="create_snippet">
+    <snippet ref="s1"/>
+  </snippet>
+  <!-- Edit / Read  -->
+  <snippet id="edit_snippet">
+    <snippet ref="s2"/>
+  </snippet>
+
+  <!-- Role -->
+  <snippet id="s1">
+    <row>
+      <col><field ref="e1"/></col>
+    </row>
+  </snippet>
+  <snippet id="s2">
+    <row>
+      <col><field ref="e3"/></col>
+      <col><field ref="e2"/></col>
+    </row>
+    <snippet ref="s1"/>
+  </snippet>
+</configuration>
