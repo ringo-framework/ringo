@@ -265,3 +265,18 @@ class Nested(object):
             childs.append(child)
             childs.extend(child.get_children())
         return childs
+
+class Commented(object):
+    """Mixin to add comment functionallity to a modul. Adding this Mixin
+    the item of a modul will have a "comments" relationship containing all
+    the comment entries for this item."""
+
+    @declared_attr
+    def comments(cls):
+        from ringo.model.comment import Comment
+        tbl_name = "nm_%s_comments" % cls.__name__.lower()
+        nm_table = Table(tbl_name, Base.metadata,
+                         Column('iid', Integer, ForeignKey(cls.id)),
+                         Column('cid', Integer, ForeignKey("comments.id")))
+        comments = relationship(Comment, secondary=nm_table)
+        return comments
