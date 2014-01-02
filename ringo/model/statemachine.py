@@ -263,7 +263,7 @@ class State(object):
         self._disabled_actions= disabled_actions
         self._transitions = []
 
-    def add_transtion(self, to_state, label=None,
+    def add_transition(self, to_state, label=None,
                       handler=None, condition=None):
         """Will add a transtion to the given state
 
