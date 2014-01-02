@@ -280,3 +280,26 @@ class Commented(object):
                          Column('cid', Integer, ForeignKey("comments.id")))
         comments = relationship(Comment, secondary=nm_table)
         return comments
+
+    @classmethod
+    def create_handler(cls, request, item):
+        cls.update_handler(request, item)
+
+    @classmethod
+    def update_handler(cls, request, item):
+        """Will add a comment entry for the updated item if the request
+        contains a parameter 'comment'.  The mapper and the target
+        parameter will be the item which inherits this commented mixin.
+
+        :request: Current request
+        :item: Item handled in the update.
+        """
+        from ringo.model.comment import Comment
+        log.debug("Called update_handler for %s" % cls)
+        user_comment = request.params.get('comment');
+        if user_comment:
+            factory = Comment.get_item_factory()
+            comment = factory.create(request.user)
+            comment.text = user_comment
+            item.comments.append(comment)
+        return item
