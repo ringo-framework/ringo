@@ -213,27 +213,19 @@ StateMixin
 ----------
 .. autoclass:: ringo.model.mixins.StateMixin
 
+Commented
+---------
+.. autoclass:: ringo.model.mixins.Commented
+
+Tagged
+------
+.. autoclass:: ringo.model.mixins.Tagged
+
 States and Workflows
 ====================
 .. automodule:: ringo.model.statemachine
 
-Statemachine
-------------
-.. autoclass:: ringo.model.statemachine.Statemachine
-   :members:
-
-State
------
-.. autoclass:: ringo.model.statemachine.State
-   :members:
-
-Transition
-----------
-.. autoclass:: ringo.model.statemachine.Transition
-   :members:
-
-.. autoclass:: ringo.model.statemachine.TransitionHandler
-.. autoclass:: ringo.model.statemachine.TransitionCondition
+For detailed descriptione of the involved classes see API documentation of :ref:`api-statemachine`
 
 .. _permissionsystem:
 

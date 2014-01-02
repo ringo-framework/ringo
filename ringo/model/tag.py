@@ -13,6 +13,7 @@ class TagFactory(BaseFactory):
 
 
 class Tag(BaseItem, Owned, Base):
+    """Tags (keywords) can be used to mark items."""
     __tablename__ = 'tags'
     _modul_id = 12
     id = sa.Column(sa.Integer, primary_key=True)
