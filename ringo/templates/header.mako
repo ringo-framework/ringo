@@ -27,9 +27,12 @@
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">${request.user.login}<b class="caret"></b></a>
             <ul class="dropdown-menu">
+              <li role="presentation" class="dropdown-header">${_('Settings')}</li>
+              ##<li role="presentation" class="dropdown-header">${_('Roles')}: ${", ".join([r.name for r in request.user.get_roles()])}</li>
               <li><a href="${request.route_url('profiles-read', id=request.user.profile[0].id)}"><img class="icon" src="${request.static_url('ringo:static/images/icons/16x16/profile.png')}"/>${_('Profile')}</a></li>
               <li><a href="${request.route_url('users-changepassword', id=request.user.id)}"><img class="icon" src="${request.static_url('ringo:static/images/icons/16x16/application-certificate.png')}"/>${_('Change Password')}</a></li>
               <li class="divider"></li>
+              <li role="presentation" class="dropdown-header">${_('Service')}</li>
               ## Render entries for the user-menue
               % for modul in h.get_modules(request, 'user-menu'):
                 <li><a href="${request.route_url(modul.name+'-list')}">${_(modul.get_label(plural=True))}</a></li>
