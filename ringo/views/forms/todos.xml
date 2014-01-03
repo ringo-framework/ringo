@@ -2,8 +2,39 @@
 <configuration xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="ringo">
   <source>
     <!-- Define different entity types -->
-    <!-- This field is only a Dummy field as example which is not really in the database -->
-    <entity i18n:attributes="label" id="e1" name="dummy" label="Dummy" type="string"/>
+    <entity id="e1" name="name" label="Title" type="string" required="true"/>
+    <entity id="e2" name="deadline" label="Deadline" type="datetime">
+      <renderer type="datepicker"/>
+      <help>Please give the date and time until this task must be finished.</help>
+    </entity>
+    <entity id="e3" name="reminder" label="Do you want a reminder?" type="integer">
+      <renderer type="dropdown"/>
+      <options>
+        <option value="0">No</option>
+        <option value="1">Yes, after the deadline exeeds</option>
+        <option value="2">Yes, I will define a remind date</option>
+      </options>
+    </entity>
+    <entity id="e4" name="reminddate" label="Remind me from this date on" type="datetime">
+      <renderer type="datepicker"/>
+      <help>Please give the date from which you will be reminded (e.g on the dashboad) for this task.</help>
+    </entity>
+    <entity id="e5" name="priority" label="Priority" type="integer">
+      <renderer type="dropdown"/>
+      <options>
+        <option value="0">Very low</option>
+        <option value="1">Low</option>
+        <option value="2">Normal</option>
+        <option value="3">High</option>
+        <option value="4">Very high</option>
+      </options>
+    </entity>
+    <entity id="e6" name="description" label="Description">
+      <renderer type="textarea"/>
+    </entity>
+    <entity id="todostatus" name="todo_state_id" label="Status">
+      <renderer type="state"/>
+    </entity>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>
@@ -23,7 +54,33 @@
   <!-- Role -->
   <snippet id="s1">
     <row>
-      <col><field ref="e1"/></col>
+      <col width="8">
+        <row>
+          <col width="10"><field ref="e1"/></col>
+          <col width="2"><field ref="e5"/></col>
+        </row>
+        <row>
+          <col><field ref="e2"/></col>
+          <col>
+            <row>
+              <col><field ref="e3"/></col>
+            </row>
+            <row>
+              <col>
+                <if expr="$reminder == 2" type="readonly">
+                  <field ref="e4"/>
+                </if>
+              </col>
+            </row>
+          </col>
+        </row>
+      </col>
+      <col width="4">
+        <field ref="todostatus"/>
+      </col>
+    </row>
+    <row>
+      <col><field ref="e6"/></col>
     </row>
   </snippet>
 </configuration>
