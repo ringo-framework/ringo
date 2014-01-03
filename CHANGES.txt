@@ -13,6 +13,8 @@ to the tracker.
 - Added comment modul
 - Added tags modul
 - Small layout fixes (flash messages)
+- Modules can now be placed in the "user menu" in the top right. Improved
+  layout of this menu with textual headers.
 
 0.8.1
 -----
