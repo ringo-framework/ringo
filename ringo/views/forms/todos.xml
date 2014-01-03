@@ -35,6 +35,11 @@
     <entity id="todostatus" name="todo_state_id" label="Status">
       <renderer type="state"/>
     </entity>
+    <entity id="assigned" name="assigned" label="Assigned">
+      <help>Please select the users which are responsibly for this task.
+      The task will be listed for this users in their Todo
+      overview.</help>
+    </entity>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>
@@ -54,33 +59,40 @@
   <!-- Role -->
   <snippet id="s1">
     <row>
-      <col width="8">
-        <row>
-          <col width="10"><field ref="e1"/></col>
-          <col width="2"><field ref="e5"/></col>
-        </row>
-        <row>
-          <col><field ref="e2"/></col>
-          <col>
-            <row>
-              <col><field ref="e3"/></col>
-            </row>
-            <row>
-              <col>
-                <if expr="$reminder == 2" type="readonly">
-                  <field ref="e4"/>
-                </if>
-              </col>
-            </row>
-          </col>
-        </row>
-      </col>
-      <col width="4">
+      <col width="10"><field ref="e1"/></col>
+      <col width="2"><field ref="e5"/></col>
+    </row>
+    <row>
+      <col><field ref="e6"/></col>
+    </row>
+    <row>
+      <col>
         <field ref="todostatus"/>
       </col>
     </row>
     <row>
-      <col><field ref="e6"/></col>
+      <col>
+        <row>
+          <col>
+            <field ref="e2"/>
+          </col>
+          <col>
+            <field ref="assigned"/>
+          </col>
+        </row>
+      </col>
+      <col>
+        <row>
+          <col><field ref="e3"/></col>
+        </row>
+        <row>
+          <col>
+            <if expr="$reminder == 2" type="readonly">
+              <field ref="e4"/>
+            </if>
+          </col>
+        </row>
+      </col>
     </row>
   </snippet>
 </configuration>

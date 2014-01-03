@@ -269,7 +269,7 @@ def list_(clazz, request):
     rvalue = {}
     search = get_search(clazz, request)
     sorting = handle_sorting(clazz, request)
-    listing = BaseList(clazz, request, user=request.user)
+    listing = clazz.get_item_list(request, user=request.user)
     listing.sort(sorting[0], sorting[1])
     listing.filter(search)
     # Only save the search if there are items
