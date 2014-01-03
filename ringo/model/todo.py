@@ -16,6 +16,12 @@ class Todo(BaseItem, Owned, Base):
     __tablename__ = 'todos'
     _modul_id = 13
     id = sa.Column(sa.Integer, primary_key=True)
+    name = sa.Column('name', sa.Text, nullable=True, default=None)
+    deadline = sa.Column('deadline', sa.DateTime, default=None)
+    reminder = sa.Column('reminder', sa.Integer, default=None)
+    reminddate = sa.Column('reminddate', sa.DateTime, default=None)
+    priority = sa.Column('priority', sa.Integer, default=None)
+    description = sa.Column('description', sa.Text, default=None)
 
     def __unicode__(self):
         return str(self.id)
