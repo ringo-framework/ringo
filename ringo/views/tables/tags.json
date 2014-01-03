@@ -1,0 +1,8 @@
+{
+    "overview": {
+        "columns": [
+            {"name": "name", "label": "name"},
+            {"name": "tagtype", "label": "Type", "expand": "true"}
+        ]
+    }
+}

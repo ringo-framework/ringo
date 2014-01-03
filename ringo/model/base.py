@@ -35,6 +35,12 @@ class BaseItem(object):
     """Cached item list for the class"""
     _cache_item_list = {}
 
+    def render(self):
+        """This function can be used to render a different
+        representation of the item. On default it also returns the
+        simple string representation. Usefull to build some HTML used in
+        links e.g overviews and lists"""
+        return self.__str__()
 
     def __str__(self):
         return self.__unicode__()

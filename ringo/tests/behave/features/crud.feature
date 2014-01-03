@@ -51,6 +51,11 @@ Feature: Check the modul
   | anonymous | comments  | 403      |
   | admin     | comments  | 200      |
 
+  Examples: Tag
+  | role      | modul | response |
+  | anonymous | tags  | 403      |
+  | admin     | tags  | 200      |
+
   Scenario Outline: Read GET
     Given a <role> user
      When opens the read page for item <id> of modul <modul>
@@ -101,6 +106,11 @@ Feature: Check the modul
   | anonymous | comments  | 1  | 403      |
   | admin     | comments  | 1  | 400      |
 
+  Examples: Tag
+  | role      | modul | id | response |
+  | anonymous | tags  | 1  | 403      |
+  | admin     | tags  | 1  | 400      |
+
   Scenario Outline: Edit GET
     Given a <role> user
      When opens the edit page for item <id> of modul <modul>
@@ -150,3 +160,8 @@ Feature: Check the modul
   | role      | modul | id | response |
   | anonymous | comments  | 1  | 403      |
   | admin     | comments  | 1  | 400      |
+
+  Examples: Tag
+  | role      | modul | id | response |
+  | anonymous | tags  | 1  | 403      |
+  | admin     | tags  | 1  | 400      |

@@ -266,6 +266,7 @@ class Nested(object):
             childs.extend(child.get_children())
         return childs
 
+
 class Commented(object):
     """Mixin to add comment functionallity to a modul. Adding this Mixin
     the item of a modul will have a "comments" relationship containing all
@@ -296,10 +297,26 @@ class Commented(object):
         """
         from ringo.model.comment import Comment
         log.debug("Called update_handler for %s" % cls)
-        user_comment = request.params.get('comment');
+        user_comment = request.params.get('comment')
         if user_comment:
             factory = Comment.get_item_factory()
             comment = factory.create(request.user)
             comment.text = user_comment
             item.comments.append(comment)
         return item
+
+
+class Tagged(object):
+    """Mixin to add tag (keyword) functionallity to a modul. Adding this Mixin
+    the item of a modul will have a "tags" relationship containing all
+    the tag entries for this item."""
+
+    @declared_attr
+    def tags(cls):
+        from ringo.model.tag import Tag
+        tbl_name = "nm_%s_tags" % cls.__name__.lower()
+        nm_table = Table(tbl_name, Base.metadata,
+                         Column('iid', Integer, ForeignKey(cls.id)),
+                         Column('tid', Integer, ForeignKey("tags.id")))
+        tags = relationship(Tag, secondary=nm_table)
+        return tags

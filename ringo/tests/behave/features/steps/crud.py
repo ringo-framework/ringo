@@ -40,6 +40,8 @@ def get_modul_path(modul):
         path.append("news")
     elif modul == "comments":
         path.append("comments")
+    elif modul == "tags":
+        path.append("tags")
     return path
 
 @when(u'opens the create page of modul {modul}')

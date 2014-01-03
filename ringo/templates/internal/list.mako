@@ -7,7 +7,10 @@ def render_filter_link(request, field, value, clazz):
   out.append('<a href="%s?%s" data-toggle="tooltip"' % (url, params))
   out.append('class="filter"')
   out.append('title="Filter %s on %s in %s">' % (clazz.get_item_modul().get_label(plural=True), value, field.get('label')))
-  out.append('%s</a>' % value)
+  if hasattr(value, "render"):
+    out.append('%s</a>' % value.render())
+  else:
+    out.append('%s</a>' % value)
   return " ".join(out)
 %>
 <div class="well well-small search-widget">
