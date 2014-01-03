@@ -25,6 +25,7 @@
         <option value="none">Hide modul</option>
         <option value="header-menu">Header menu</option>
         <option value="admin-menu">Administration menu</option>
+        <option value="user-menu">User menu</option>
       </options>
     </entity>
   </source>
