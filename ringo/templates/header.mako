@@ -30,6 +30,11 @@
               <li><a href="${request.route_url('profiles-read', id=request.user.profile[0].id)}"><img class="icon" src="${request.static_url('ringo:static/images/icons/16x16/profile.png')}"/>${_('Profile')}</a></li>
               <li><a href="${request.route_url('users-changepassword', id=request.user.id)}"><img class="icon" src="${request.static_url('ringo:static/images/icons/16x16/application-certificate.png')}"/>${_('Change Password')}</a></li>
               <li class="divider"></li>
+              ## Render entries for the user-menue
+              % for modul in h.get_modules(request, 'user-menu'):
+                <li><a href="${request.route_url(modul.name+'-list')}">${_(modul.get_label(plural=True))}</a></li>
+              % endfor
+              <li class="divider"></li>
               <li><a href="${request.route_url('logout')}"><img class="icon" src="${request.static_url('ringo:static/images/icons/16x16/system-log-out.png')}"/>${_('Logout')}</a></li>
             </ul>
           </li>
