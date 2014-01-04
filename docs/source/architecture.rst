@@ -221,6 +221,10 @@ Tagged
 ------
 .. autoclass:: ringo.model.mixins.Tagged
 
+Todo
+----
+.. autoclass:: ringo.model.mixins.Todo
+
 States and Workflows
 ====================
 .. automodule:: ringo.model.statemachine

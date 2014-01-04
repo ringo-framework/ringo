@@ -40,6 +40,10 @@ Tag
 ---
 .. autoclass:: ringo.model.tag.Tag
 
+Todo
+----
+.. autoclass:: ringo.model.tag.Todo
+
 Comment
 -------
 .. autoclass:: ringo.model.comment.Comment
