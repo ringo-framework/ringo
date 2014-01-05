@@ -502,6 +502,7 @@ class ListingFieldRenderer(FormbarSelectionField):
         values = {'items': items,
                   'field': self._field,
                   'clazz': self._field._get_sa_mapped_class(),
+                  'pclazz': self._field._form._item.__class__,
                   'request': self._field._form._request,
                   '_': self._field._form._translate,
                   's': ringo.lib.security,
