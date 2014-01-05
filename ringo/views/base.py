@@ -119,6 +119,8 @@ def handle_params(clazz, request):
        used for the request.
      * values: A comma separated list of key/value pair. Key and value
        are separated with an ":"
+     * addrelation: A ":" separated string 'relation:class:id' to identify that
+       a item with id should be linked to the relation of this item.
     """
     params = {}
     backurl = request.GET.get('backurl')
@@ -135,6 +137,10 @@ def handle_params(clazz, request):
     if form:
         request.session['%s.form' % clazz] = form
         params['form'] = form
+    relation = request.GET.get('addrelation')
+    if relation:
+        request.session['%s.addrelation' % clazz] = relation
+        params['addrelation'] = relation
     request.session.save()
     return params
 
@@ -381,6 +387,16 @@ def create_(clazz, request, callback=None, renderers={}):
             if formname:
                 del request.session['%s.form' % clazz]
                 request.session.save()
+            # Link the item_type
+            addrelation = request.session.get('%s.addrelation' % clazz)
+            if addrelation:
+                rrel, rclazz, rid = addrelation.split(':')
+                parent = import_model(rclazz)
+                pfactory = parent.get_item_factory()
+                pitem = pfactory.load(rid)
+                log.debug('Linking %s to %s in %s' % (sitem, pitem, rrel))
+                tmpattr = getattr(pitem, rrel)
+                tmpattr.append(sitem)
             # Handle redirect after success.
             backurl = request.session.get('%s.backurl' % clazz)
             if backurl:
