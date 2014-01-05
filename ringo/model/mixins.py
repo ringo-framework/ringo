@@ -330,9 +330,10 @@ class Todo(object):
     @declared_attr
     def todo(cls):
         from ringo.model.todo import Todo
-        tbl_name = "nm_%s_todos" % cls.__name__.lower()
+        clsname = cls.__name__.lower()
+        tbl_name = "nm_%s_todos" % clsname
         nm_table = Table(tbl_name, Base.metadata,
                          Column('iid', Integer, ForeignKey(cls.id)),
                          Column('tid', Integer, ForeignKey("todos.id")))
-        rel = relationship(Todo, secondary=nm_table)
+        rel = relationship(Todo, secondary=nm_table, backref=clsname+"s")
         return rel
