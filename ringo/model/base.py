@@ -354,13 +354,14 @@ class BaseFactory(object):
             item.gid = user.gid
         return item
 
-    def load(self, id, db=None, cache=""):
+    def load(self, id, db=None, cache="", uuid=False):
         """Loads the item with id from the database and returns it.
 
         :id: ID of the item to be loaded
         :db: DB session to load the item
         :cache: Name of the cache region. If empty then no caching is
                 done.
+        :uuid: If true the given id is a uuid. Default to false
         :returns: Instance of clazz
 
         """
@@ -372,4 +373,8 @@ class BaseFactory(object):
             q = q.options(FromCache(cache))
         for relation in self._clazz._sql_eager_loads:
             q = q.options(joinedload(relation))
-        return q.filter(self._clazz.id == id).one()
+        if uuid:
+            return q.filter(self._clazz.uuid == id).one()
+        else:
+            return q.filter(self._clazz.id == id).one()
+
