@@ -16,6 +16,7 @@ to the tracker.
 - Small layout fixes (flash messages)
 - Modules can now be placed in the "user menu" in the top right. Improved
   layout of this menu with textual headers.
+- Some code cleanup
 
 0.8.1
 -----
