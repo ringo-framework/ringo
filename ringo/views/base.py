@@ -357,9 +357,11 @@ def create_(clazz, request, callback=None, renderers={}):
     params = handle_params(clazz, request)
     _ = request.translate
     rvalue = {}
+
     # Add ringo specific renderers
     renderers = _add_renderers(renderers)
 
+    # Create a new item
     factory = clazz.get_item_factory()
     item = factory.create(request.user)
 
@@ -435,7 +437,6 @@ def update_(clazz, request, callback=None, renderers={}):
 
     # Add ringo specific renderers
     renderers = _add_renderers(renderers)
-
     # Load the item return 400 if the item can not be found.
     item = _load_item(clazz, request)
 
@@ -446,7 +447,7 @@ def update_(clazz, request, callback=None, renderers={}):
                 renderers=renderers,
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,
-                                      'itemid': id},
+                                      'itemid': item.id},
                 request=request, csrf_token=request.session.get_csrf_token())
 
     if request.POST:
@@ -508,12 +509,9 @@ def read_(clazz, request, callback=None, renderers={}):
     handle_params(clazz, request)
     _ = request.translate
     rvalue = {}
+
     # Add ringo specific renderers
     renderers = _add_renderers(renderers)
-
-    id = request.matchdict.get('id')
-    factory = clazz.get_item_factory()
-
     # Load the item return 400 if the item can not be found.
     item = _load_item(clazz, request)
 
@@ -525,7 +523,7 @@ def read_(clazz, request, callback=None, renderers={}):
                      renderers=renderers,
                      change_page_callback={'url': 'set_current_form_page',
                                            'item': clazz.__tablename__,
-                                           'itemid': id},
+                                           'itemid': item.id},
                      request=request, csrf_token=request.session.get_csrf_token())
     rvalue['clazz'] = clazz
     rvalue['item'] = item
@@ -538,7 +536,6 @@ def read_(clazz, request, callback=None, renderers={}):
     else:
         rvalue['logbook'] = ""
     rvalue['form'] = item_form.render(page=get_current_form_page(clazz, request))
-    rvalue['form'] = item_form.render(page=get_current_form_page(clazz, request))
     return rvalue
 
 
@@ -547,8 +544,6 @@ def delete_(clazz, request):
     handle_params(clazz, request)
     _ = request.translate
     rvalue = {}
-    id = request.matchdict.get('id')
-    factory = clazz.get_item_factory()
 
     # Load the item return 400 if the item can not be found.
     item = _load_item(clazz, request)
