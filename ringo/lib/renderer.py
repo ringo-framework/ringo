@@ -6,10 +6,13 @@ from formbar.renderer import (
     DropdownFieldRenderer as FormbarDropdown,
     SelectionFieldRenderer as FormbarSelectionField
 )
+from formbar.config import Config, load
+from formbar.form import Form
 from ringo import template_dir
 from ringo.lib.helpers import (
     get_saved_searches,
     get_path_to_overview_config,
+    get_path_to_form_config,
 )
 from ringo.model.base import BaseItem
 import ringo.lib.security
@@ -325,6 +328,63 @@ class ErrorDialogRenderer(DialogRenderer):
     def _render_body(self):
         out = []
         out.append(self._body)
+        return "".join(out)
+
+
+class ExportDialogRenderer(DialogRenderer):
+    """Docstring for ExportDialogRenderer"""
+
+    def __init__(self, request, item):
+        """@todo: to be defined """
+        DialogRenderer.__init__(self, request, item, "export")
+        self.template = template_lookup.get_template("internal/export.mako")
+        config = Config(load(get_path_to_form_config('export.xml', 'ringo')))
+        form_config = config.get_form('default')
+        self.form = Form(form_config,
+                         csrf_token=self._request.session.get_csrf_token())
+
+    def render(self):
+        values = {}
+        values['request'] = self._request
+        values['body'] = self._render_body()
+        values['modul'] = self._item.get_item_modul().get_label(plural=True)
+        values['action'] = self._action.capitalize()
+        values['ok_url'] = self._request.current_route_url()
+        values['_'] = self._request.translate
+        values['cancel_url'] = self._request.referrer
+        return self.template.render(**values)
+
+    def _render_body(self):
+        out = []
+        out.append(self.form.render(buttons=False))
+        return "".join(out)
+
+class ImportDialogRenderer(DialogRenderer):
+    """Docstring for ImportDialogRenderer"""
+
+    def __init__(self, request, clazz):
+        """@todo: to be defined """
+        DialogRenderer.__init__(self, request, clazz, "import")
+        self.template = template_lookup.get_template("internal/import.mako")
+        config = Config(load(get_path_to_form_config('import.xml', 'ringo')))
+        form_config = config.get_form('default')
+        self.form = Form(form_config,
+                         csrf_token=self._request.session.get_csrf_token())
+
+    def render(self):
+        values = {}
+        values['request'] = self._request
+        values['body'] = self._render_body()
+        values['modul'] = self._item.get_item_modul().get_label(plural=True)
+        values['action'] = self._action.capitalize()
+        values['ok_url'] = self._request.current_route_url()
+        values['_'] = self._request.translate
+        values['cancel_url'] = self._request.referrer
+        return self.template.render(**values)
+
+    def _render_body(self):
+        out = []
+        out.append(self.form.render(buttons=False))
         return "".join(out)
 
 
