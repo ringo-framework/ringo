@@ -49,8 +49,11 @@ def _load_item(clazz, request):
     """
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
-    item = factory.load(id, request.db)
-    return item
+    try:
+        item = factory.load(id, request.db)
+        return item
+    except sa.orm.exc.NoResultFound:
+        raise HTTPBadRequest()
 
 
 def get_current_form_page(clazz, request):
@@ -434,12 +437,7 @@ def update_(clazz, request, callback=None, renderers={}):
     renderers = _add_renderers(renderers)
 
     # Load the item return 400 if the item can not be found.
-    id = request.matchdict.get('id')
-    factory = clazz.get_item_factory()
-    try:
-        item = factory.load(id, request.db)
-    except sa.orm.exc.NoResultFound:
-        raise HTTPBadRequest()
+    item = _load_item(clazz, request)
 
     owner_form = get_ownership_form(item, request)
     logbook_form = get_logbook_form(item, request, readonly=True,
@@ -517,12 +515,7 @@ def read_(clazz, request, callback=None, renderers={}):
     factory = clazz.get_item_factory()
 
     # Load the item return 400 if the item can not be found.
-    try:
-        item = factory.load(id, request.db)
-        if callback:
-            item = callback(request, item)
-    except sa.orm.exc.NoResultFound:
-        raise HTTPBadRequest()
+    item = _load_item(clazz, request)
 
     owner_form = get_ownership_form(item, request, readonly=True)
     logbook_form = get_logbook_form(item, request, readonly=True,
@@ -558,10 +551,7 @@ def delete_(clazz, request):
     factory = clazz.get_item_factory()
 
     # Load the item return 400 if the item can not be found.
-    try:
-        item = factory.load(id, request.db)
-    except sa.orm.exc.NoResultFound:
-        raise HTTPBadRequest()
+    item = _load_item(clazz, request)
 
     if request.method == 'POST' and confirmed(request):
         request.db.delete(item)
