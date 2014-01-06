@@ -59,6 +59,7 @@
 </html>
 
 <%def name="render_item_base_actions(item)">
+  <% context_actions = [] %>
   % for action in item.get_item_modul().actions:
     % if (request.url.find(action.name.lower()) < 0) and s.has_permission(action.name.lower(), request.context, request):
       <%
@@ -75,6 +76,13 @@
         icon = "glyphicon glyphicon-trash"
       elif icon == "icon-download":
         icon = "glyphicon glyphicon-download"
+      elif icon == "icon-export":
+        icon = "glyphicon glyphicon-export"
+      elif icon == "icon-import":
+        icon = "glyphicon glyphicon-import"
+      if action.name.lower() in ['import', 'export']:
+        context_actions.append((action, icon))
+        continue
       %>
       <a href="${h.get_action_url(request, item, action.name.lower())}"
       class="btn btn-default"><i class="${icon}"></i></a>
@@ -87,10 +95,21 @@
       <li><a href="#form">${_('Back to')} ${item.get_item_modul().get_label()}: ${item}</a></li>
       % if owner:
         <li class="divider"></li>
+        <li role="presentation" class="dropdown-header">${_('Administration')}</li>
         <li><a href="#ownership">Change ownership</a></li>
       % endif
       % if logbook:
         <li><a href="#logbook">${_('Show logbook')}</a></li>
+      % endif
+      % if len(context_actions) > 0:
+        <li class="divider"></li>
+        <li role="presentation" class="dropdown-header">${_('Advanced actions')}</li>
+        % for action, icon in context_actions:
+          <li>
+            <a href="${h.get_action_url(request, item,
+            action.name.lower())}"><i class="${icon}">&nbsp;</i>${action.name}</a>
+          </li>
+        % endfor
       % endif
     </ul>
   </div>
