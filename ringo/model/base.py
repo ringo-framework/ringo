@@ -1,8 +1,10 @@
 import logging
 import re
 import datetime
+import uuid
 from operator import itemgetter, attrgetter
 from formbar.config import Config, load
+from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload, ColumnProperty, class_mapper
 from sqlalchemy.orm.attributes import get_history
 from ringo.lib.helpers import get_path_to_form_config
@@ -34,6 +36,11 @@ class BaseItem(object):
     _cache_item_modul = {}
     """Cached item list for the class"""
     _cache_item_list = {}
+
+    # Added UUID column for every BaseItem. This is needed to identify
+    # item on imports and exports.
+    uuid = Column('uuid', CHAR(32),
+                  default=lambda x: '%.32x' % uuid.uuid4())
 
     def render(self):
         """This function can be used to render a different

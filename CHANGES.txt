@@ -17,6 +17,7 @@ to the tracker.
 - Modules can now be placed in the "user menu" in the top right. Improved
   layout of this menu with textual headers.
 - Some code cleanup
+- Add UUID field for each BaseItem
 
 0.8.1
 -----
