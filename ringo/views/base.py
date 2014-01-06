@@ -22,6 +22,20 @@ from ringo.views import handle_history
 
 log = logging.getLogger(__name__)
 
+def _add_renderers(renderers):
+    """Helper function to add ringo ringo specific renderers for form
+    rendering."""
+    if not "dropdown" in renderers:
+        renderers["dropdown"] = DropdownFieldRenderer
+    if not "listing" in renderers:
+        renderers["listing"] = ListingFieldRenderer
+    if not "logbook" in renderers:
+        renderers["logbook"] = LogRenderer
+    if not "state" in renderers:
+        renderers["state"] = StateFieldRenderer
+    if not "comments" in renderers:
+        renderers["comments"] = CommentRenderer
+    return renderers
 
 def _load_item(clazz, request):
     """Will load an item from the given clazz. The id of the item to
@@ -341,16 +355,8 @@ def create_(clazz, request, callback=None, renderers={}):
     _ = request.translate
     rvalue = {}
     # Add ringo specific renderers
-    if not "dropdown" in renderers:
-        renderers["dropdown"] = DropdownFieldRenderer
-    if not "listing" in renderers:
-        renderers["listing"] = ListingFieldRenderer
-    if not "logbook" in renderers:
-        renderers["logbook"] = LogRenderer
-    if not "state" in renderers:
-        renderers["state"] = StateFieldRenderer
-    if not "comments" in renderers:
-        renderers["comments"] = CommentRenderer
+    renderers = _add_renderers(renderers)
+
     factory = clazz.get_item_factory()
     item = factory.create(request.user)
 
@@ -425,16 +431,7 @@ def update_(clazz, request, callback=None, renderers={}):
     rvalue = {}
 
     # Add ringo specific renderers
-    if not "dropdown" in renderers:
-        renderers["dropdown"] = DropdownFieldRenderer
-    if not "listing" in renderers:
-        renderers["listing"] = ListingFieldRenderer
-    if not "logbook" in renderers:
-        renderers["logbook"] = LogRenderer
-    if not "state" in renderers:
-        renderers["state"] = StateFieldRenderer
-    if not "comments" in renderers:
-        renderers["comments"] = CommentRenderer
+    renderers = _add_renderers(renderers)
 
     # Load the item return 400 if the item can not be found.
     id = request.matchdict.get('id')
@@ -514,16 +511,8 @@ def read_(clazz, request, callback=None, renderers={}):
     _ = request.translate
     rvalue = {}
     # Add ringo specific renderers
-    if not "dropdown" in renderers:
-        renderers["dropdown"] = DropdownFieldRenderer
-    if not "listing" in renderers:
-        renderers["listing"] = ListingFieldRenderer
-    if not "logbook" in renderers:
-        renderers["logbook"] = LogRenderer
-    if not "state" in renderers:
-        renderers["state"] = StateFieldRenderer
-    if not "comments" in renderers:
-        renderers["comments"] = CommentRenderer
+    renderers = _add_renderers(renderers)
+
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
 

@@ -19,7 +19,6 @@ template_lookup = TemplateLookup(directories=[template_dir],
 
 log = logging.getLogger(__name__)
 
-
 def _load_overview_config(clazz):
         """Return a datastructure representing the overview
         configuration. The configuration is loaded from a JSON
