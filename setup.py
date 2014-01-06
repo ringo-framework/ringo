@@ -24,6 +24,7 @@ requires = [
     'formbar>=0.4.2',
     'nose',
     'behave',
+    'invoke',
     'coverage',
     'webtest',
     'dogpile.cache'
