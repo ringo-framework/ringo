@@ -25,6 +25,7 @@ var
 sdist
 develop-eggs
 .installed.cfg
+ringo/.ropeproject
 
 # Installer logs
 pip-log.txt
