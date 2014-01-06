@@ -42,6 +42,8 @@ def get_modul_path(modul):
         path.append("comments")
     elif modul == "tags":
         path.append("tags")
+    elif modul == "todos":
+        path.append("todos")
     return path
 
 @when(u'opens the create page of modul {modul}')

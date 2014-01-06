@@ -56,6 +56,11 @@ Feature: Check the modul
   | anonymous | tags  | 403      |
   | admin     | tags  | 200      |
 
+  Examples: Todo
+  | role      | modul | response |
+  | anonymous | todos  | 403      |
+  | admin     | todos | 200      |
+
   Scenario Outline: Read GET
     Given a <role> user
      When opens the read page for item <id> of modul <modul>
@@ -111,6 +116,11 @@ Feature: Check the modul
   | anonymous | tags  | 1  | 403      |
   | admin     | tags  | 1  | 400      |
 
+  Examples: Todo
+  | role      | modul | id | response |
+  | anonymous | todos  | 1  | 403      |
+  | admin     | todos  | 1  | 400      |
+
   Scenario Outline: Edit GET
     Given a <role> user
      When opens the edit page for item <id> of modul <modul>
@@ -165,3 +175,8 @@ Feature: Check the modul
   | role      | modul | id | response |
   | anonymous | tags  | 1  | 403      |
   | admin     | tags  | 1  | 400      |
+
+  Examples: Todo
+  | role      | modul | id | response |
+  | anonymous | todos  | 1  | 403      |
+  | admin     | todos  | 1  | 400      |
