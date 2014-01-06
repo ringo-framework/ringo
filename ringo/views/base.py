@@ -13,10 +13,12 @@ from ringo.model.base import BaseList, BaseFactory
 from ringo.model.mixins import Owned, Logged
 from ringo.lib.helpers import import_model, get_path_to_form_config
 from ringo.lib.security import has_role
+from ringo.lib.imexport import JSONImporter
 User = import_model('ringo.model.user.User')
 from ringo.lib.renderer import ListRenderer, ConfirmDialogRenderer,\
 DropdownFieldRenderer, ListingFieldRenderer, LogRenderer,\
-StateFieldRenderer, CommentRenderer
+StateFieldRenderer, CommentRenderer, ExportDialogRenderer,\
+ImportDialogRenderer
 from ringo.lib.sql import invalidate_cache
 from ringo.views import handle_history
 
@@ -578,6 +580,76 @@ def delete_(clazz, request):
         rvalue['item'] = item
         return rvalue
 
+
+def export_(clazz, request):
+    handle_history(request)
+    handle_params(clazz, request)
+    rvalue = {}
+
+    # Load the item return 400 if the item can not be found.
+    item = _load_item(clazz, request)
+    renderer = ExportDialogRenderer(request, item)
+    form = renderer.form
+    if (request.method == 'POST'
+       and confirmed(request)
+       and form.validate(request.params)):
+        ef = form.data.get('format')
+        resp = request.response
+        resp.content_type = str('application/%s' % ef)
+        resp.content_disposition = 'attachment; filename=export.%s' % ef
+        resp.body = str(item.__json__(request)).replace("'", '"')
+        print resp.text
+        return resp
+    else:
+        # FIXME: Get the ActionItem here and provide this in the Dialog to get
+        # the translation working (torsten) <2013-07-10 09:32>
+        rvalue['dialog'] = renderer.render()
+        rvalue['clazz'] = clazz
+        rvalue['item'] = item
+        return rvalue
+
+
+def import_(clazz, request, callback=None):
+    import json
+    handle_history(request)
+    handle_params(clazz, request)
+    rvalue = {}
+
+    # Load the item return 400 if the item can not be found.
+    renderer = ImportDialogRenderer(request, clazz)
+    form = renderer.form
+    if (request.method == 'POST'
+       and confirmed(request)
+       and form.validate(request.params)):
+        request.POST.get('file').file.seek(0)
+        importer = JSONImporter(clazz)
+        items = importer.perform(request, request.POST.get('file').file.read())
+
+        item = items[0]
+        route_name = item.get_action_routename('update')
+        url = request.route_url(route_name, id=item.id)
+        if callback:
+            item = callback(request, item)
+        # handle update events
+        handle_event('import', request, item)
+        # Invalidate cache
+        invalidate_cache()
+        # Handle redirect after success.
+        backurl = request.session.get('%s.backurl' % clazz)
+        if backurl:
+            # Redirect to the configured backurl.
+            del request.session['%s.backurl' % clazz]
+            request.session.save()
+            return HTTPFound(location=backurl)
+        else:
+            # Redirect to the update view.
+            return HTTPFound(location=url)
+    else:
+        # FIXME: Get the ActionItem here and provide this in the Dialog to get
+        # the translation working (torsten) <2013-07-10 09:32>
+        rvalue['dialog'] = renderer.render()
+        rvalue['clazz'] = clazz
+        return rvalue
 
 def confirmed(request):
     """Returns True id the request is confirmed"""
