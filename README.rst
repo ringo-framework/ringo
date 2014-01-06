@@ -33,6 +33,7 @@ web application based on Ringo:
  * Sorting
  * User Profiles
  * Logging of Changes in items
+ * Todos, Comment, Tags
  * Statemachines. Items can have states
  * Basic CSRF protection on POST requests
  * Extendible, Configurable
@@ -43,8 +44,7 @@ The source of documentation comes with the source of ringo and can be found in t
 "docs" folder. To generate the HTML version of the documentation please invoke the
 following command::
 
-        cd docs
-        make html
+        invoke docs
 
 You need to have the sphinx package installed in order to generate the documentation.
 A generated  (and maybe outdated) version of the documentation is available on
