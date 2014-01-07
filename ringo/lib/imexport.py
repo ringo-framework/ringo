@@ -1,8 +1,64 @@
 """Modul for the messanging system in ringo"""
 import logging
+import datetime
+from time import mktime
 import json
 
 log = logging.getLogger(__name__)
+
+class RingoJSONEncoder(json.JSONEncoder):
+
+    def default(self, obj):
+        if (isinstance(obj, datetime.datetime)
+           or isinstance(obj, datetime.date)):
+            return obj.isoformat()
+            #return int(mktime(obj.timetuple()))
+
+class Exporter(object):
+
+    """Docstring for Exporter. """
+
+    def __init__(self, clazz):
+        """@todo: to be defined1.
+
+        :clazz: @todo
+
+        """
+        self._clazz = clazz
+
+    def _get_data(self, item):
+        data = {}
+        for col in item.get_columns():
+            data[col] = getattr(item, col)
+        return data
+
+
+    def serialize(self, data):
+        """Will convert the given python data dictionary into a string
+        containing JSON data
+
+        :data: Dictionary containing Python data.
+        :returns: String representing the data
+
+        """
+        return ""
+
+    def perform(self, item):
+        """Returns the serialized item as string
+
+        :item: @todo
+        :returns: @todo
+
+        """
+        data = self._get_data(item)
+        return self.serialize(data)
+
+class JSONExporter(Exporter):
+
+    """Docstring for JSONExporter. """
+
+    def serialize(self, data):
+        return json.dumps(data, cls = RingoJSONEncoder)
 
 class Importer(object):
     """Docstring for Importer."""
