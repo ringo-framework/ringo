@@ -31,6 +31,7 @@ def upgrade():
     res = conn.execute("select * from modules")
     results = res.fetchall()
     for r in results:
+        if r.name in ['modules']: continue
         stmnt = "INSERT into actions (mid, name, url, icon) VALUES (%s, 'Export', 'export/{id}', 'icon-export')" % r[0]
         op.execute(stmnt)
         stmnt = "INSERT into actions (mid, name, url, icon) VALUES (%s, 'Import', 'import', 'icon-import')" % r[0]
