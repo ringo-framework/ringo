@@ -16,8 +16,8 @@ to the tracker.
 - Added UUID field for each BaseItem
 - Implement simple Import and Export. Only single items. No relations.
 	- Added JSON Importer and Exporter
-	- Added import and export functions in the view for appointments,
-	  news, tags, and todo
+	- Added import and export functions in the view for ringo modules
+	  except for the modul modul
 - Small layout fixes (flash messages)
 - Modules can now be placed in the "user menu" in the top right. Improved
   layout of this menu with textual headers.
