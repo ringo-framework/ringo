@@ -3,6 +3,7 @@ import logging
 import datetime
 from time import mktime
 import json
+from sqlalchemy.orm import ColumnProperty, class_mapper
 
 log = logging.getLogger(__name__)
 
@@ -70,8 +71,16 @@ class Importer(object):
 
         """
         self._clazz = clazz
+        self._clazz_type = self._get_types(clazz)
 
-    def _convert(self, data):
+    def _get_types(self, clazz):
+        type_mapping = {}
+        for col in clazz.get_columns():
+            prop = getattr(clazz, col)
+            type_mapping[col] = str(prop.type)
+        return type_mapping
+
+    def deserialize(self, data):
         """Will convert the string data into a dictionary like data.
 
         :data: Importdata as string (JSON, XML...)
@@ -89,6 +98,7 @@ class Importer(object):
 
         """
         for key, value in values.iteritems():
+            if key == "id": continue
             setattr(item, key, value)
         return item
 
@@ -100,26 +110,40 @@ class Importer(object):
         :returns: List of imported items
 
         """
-        convdata = self._convert(data)
+        values = self.deserialize(data)
         factory = self._clazz.get_item_factory()
-        items = []
-        for values in convdata:
-            uuid = values.get('uuid')
-            try:
-                item = factory.load(uuid, uuid=True)
-            except:
-                item = factory.create(user=request.user)
-            self._set_values(item, values)
-            items.append(item)
-        return items
-
+        uuid = values.get('uuid')
+        try:
+            item = factory.load(uuid, uuid=True)
+        except:
+            item = factory.create(user=request.user)
+        self._set_values(item, values)
+        return item
 
 class JSONImporter(Importer):
     """Docstring for JSONImporter."""
 
-    def _convert(self, data):
-        conv = json.loads(data)
-        if isinstance(conv, list):
-            return conv
-        else:
-            return [conv]
+    def _deserialize_hook(self, obj):
+        """This function is called after the basic deserialisation has
+        finished. It is used to convert data and datetime objects which
+        is not supported by the defauls JSON decoder
+
+        :obj: Deserialized dictionary from basic deserialisation
+        :returns: Deserialized dictionary with additional date and
+        datetime deserialisation
+        """
+        for field in obj:
+            if self._clazz_type[field] == "DATE":
+                obj[field] = datetime.datetime.strptime(obj[field], "%Y-%m-%d").date()
+            elif self._clazz_type[field] == "DATETIME":
+                obj[field] = datetime.datetime.strptime(obj[field], "%Y-%m-%dT%H:%M:%S.Z")
+        return obj
+
+    def deserialize(self, data):
+        """Will convert the JSON data back into a dictionary with python values
+
+        :data: String JSON data
+        :returns: Python dictionary with python values
+        """
+        conv = json.loads(data, object_hook=self._deserialize_hook)
+        return conv
