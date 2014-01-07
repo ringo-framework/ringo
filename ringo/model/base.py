@@ -9,6 +9,7 @@ from sqlalchemy.orm import joinedload, ColumnProperty, class_mapper
 from sqlalchemy.orm.attributes import get_history
 from ringo.lib.helpers import get_path_to_form_config
 from ringo.lib.sql import DBSession, regions
+from ringo.lib.imexport import JSONExporter
 from ringo.lib.sql.query import FromCache, set_relation_caching
 
 log = logging.getLogger(__name__)
@@ -72,14 +73,8 @@ class BaseItem(object):
             return "%s" % str(self.id)
 
     def __json__(self, request):
-        rvalue = {}
-        for col in self.get_columns():
-            value = getattr(self, col)
-            # FIXME: If value is type date it can not be serialized.
-            if isinstance(value, datetime.date):
-                value = str(value)
-            rvalue[col] = value
-        return rvalue
+        exporter = JSONExporter(self.__class__)
+        return exporter.perform(self)
 
     @classmethod
     def get_columns(cls, include_relations=False):
