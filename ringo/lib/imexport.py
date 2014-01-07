@@ -136,7 +136,7 @@ class JSONImporter(Importer):
             if self._clazz_type[field] == "DATE":
                 obj[field] = datetime.datetime.strptime(obj[field], "%Y-%m-%d").date()
             elif self._clazz_type[field] == "DATETIME":
-                obj[field] = datetime.datetime.strptime(obj[field], "%Y-%m-%dT%H:%M:%S.Z")
+                obj[field] = datetime.datetime.strptime(obj[field], "%Y-%m-%dT%H:%M:%S.%f")
         return obj
 
     def deserialize(self, data):
