@@ -4,7 +4,8 @@ from pyramid.response import FileIter
 from pyramid.view import view_config
 
 
-from ringo.views.base import list_, create_, update_, read_, delete_
+from ringo.views.base import list_, create_, update_, read_, delete_,\
+export_, import_
 from ringo.views.json import (
     list_   as json_list,
     create_ as json_create,
@@ -83,6 +84,18 @@ def download(request):
     response.content_disposition = 'attachment; filename=%s' % item.name
     response.body = item.data
     return response
+
+@view_config(route_name=File.get_action_routename('export'),
+             renderer='/default/export.mako',
+             permission='export')
+def export(request):
+    return export_(File, request)
+
+@view_config(route_name=File.get_action_routename('import'),
+             renderer='/default/import.mako',
+             permission='import')
+def myimport(request):
+    return import_(File, request)
 
 #                               REST SERVICE                              #
 

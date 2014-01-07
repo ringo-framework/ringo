@@ -7,7 +7,7 @@ from formbar.form import Form, Validator
 
 from ringo.views.base import (list_, create_, update_, read_, delete_,
                               handle_history, handle_params,
-                              get_current_form_page)
+                              get_current_form_page, export_, import_)
 from ringo.model.mixins import Owned
 
 from ringo.views.json import (
@@ -143,6 +143,18 @@ def changepassword(request):
     rvalue['item'] = item
     rvalue['form'] = form.render(page=get_current_form_page(clazz, request))
     return rvalue
+
+@view_config(route_name=User.get_action_routename('export'),
+             renderer='/default/export.mako',
+             permission='export')
+def export(request):
+    return export_(User, request)
+
+@view_config(route_name=User.get_action_routename('import'),
+             renderer='/default/import.mako',
+             permission='import')
+def myimport(request):
+    return import_(User, request)
 
 ###########################################################################
 #                               REST SERVICE                              #
