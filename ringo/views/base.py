@@ -13,7 +13,7 @@ from ringo.model.base import BaseList, BaseFactory
 from ringo.model.mixins import Owned, Logged
 from ringo.lib.helpers import import_model, get_path_to_form_config
 from ringo.lib.security import has_role
-from ringo.lib.imexport import JSONImporter
+from ringo.lib.imexport import JSONImporter, JSONExporter
 User = import_model('ringo.model.user.User')
 from ringo.lib.renderer import ListRenderer, ConfirmDialogRenderer,\
 DropdownFieldRenderer, ListingFieldRenderer, LogRenderer,\
@@ -593,12 +593,15 @@ def export_(clazz, request):
     if (request.method == 'POST'
        and confirmed(request)
        and form.validate(request.params)):
+        # Setup exporter
         ef = form.data.get('format')
+        exporter = JSONExporter(clazz)
+        export = exporter.perform(item)
+        # Build response
         resp = request.response
         resp.content_type = str('application/%s' % ef)
         resp.content_disposition = 'attachment; filename=export.%s' % ef
-        resp.body = str(item.__json__(request)).replace("'", '"')
-        print resp.text
+        resp.body = export
         return resp
     else:
         # FIXME: Get the ActionItem here and provide this in the Dialog to get
@@ -623,9 +626,9 @@ def import_(clazz, request, callback=None):
        and form.validate(request.params)):
         request.POST.get('file').file.seek(0)
         importer = JSONImporter(clazz)
-        items = importer.perform(request, request.POST.get('file').file.read())
-
-        item = items[0]
+        item = importer.perform(request, request.POST.get('file').file.read())
+        # TODO: If the item has be created on import it must be added to
+        # the current db session to make it persistent. (ti) <2014-01-07 17:44>
         route_name = item.get_action_routename('update')
         url = request.route_url(route_name, id=item.id)
         if callback:
