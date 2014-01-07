@@ -13,11 +13,15 @@ to the tracker.
 - Added comment modul
 - Added tags modul
 - Added todo modul
+- Implement simple Import and Export. Only single items. No relations.
+	- Add UUID field for each BaseItem
+	- Added JSON Importer and Exporter
+	- Added import and export functions in the view for appointments,
+	  news, tags, and todo
 - Small layout fixes (flash messages)
 - Modules can now be placed in the "user menu" in the top right. Improved
   layout of this menu with textual headers.
 - Some code cleanup
-- Add UUID field for each BaseItem
 
 0.8.1
 -----
