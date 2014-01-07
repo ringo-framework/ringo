@@ -133,10 +133,13 @@ class JSONImporter(Importer):
         datetime deserialisation
         """
         for field in obj:
-            if self._clazz_type[field] == "DATE":
-                obj[field] = datetime.datetime.strptime(obj[field], "%Y-%m-%d").date()
-            elif self._clazz_type[field] == "DATETIME":
-                obj[field] = datetime.datetime.strptime(obj[field], "%Y-%m-%dT%H:%M:%S.%f")
+            if self._clazz_type[field] == "DATE" and obj[field] is not None:
+                obj[field] = datetime.datetime.strptime(obj[field],
+                                                        "%Y-%m-%d").date()
+            elif (self._clazz_type[field] == "DATETIME"
+                  and obj[field] is not None):
+                obj[field] = datetime.datetime.strptime(obj[field],
+                                                        "%Y-%m-%dT%H:%M:%S.%f")
         return obj
 
     def deserialize(self, data):
