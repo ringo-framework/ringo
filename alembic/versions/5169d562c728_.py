@@ -1,4 +1,4 @@
-"""empty message
+"""Add fields to todo modul
 
 Revision ID: 5169d562c728
 Revises: 15133f9f1931
