@@ -1,8 +1,7 @@
 import logging
 from pyramid.view import view_config
 
-from ringo.views.base import list_, create_, update_, read_, delete_,\
-export_, import_
+from ringo.views.base import list_, create_, update_, read_, delete_
 from ringo.views.json import (
     list_   as json_list,
     update_ as json_update,
@@ -36,18 +35,6 @@ def update(request):
              permission='read')
 def read(request):
     return read_(Profile, request)
-
-@view_config(route_name=Profile.get_action_routename('export'),
-             renderer='/default/export.mako',
-             permission='export')
-def export(request):
-    return export_(Profile, request)
-
-@view_config(route_name=Profile.get_action_routename('import'),
-             renderer='/default/import.mako',
-             permission='import')
-def myimport(request):
-    return import_(Profile, request)
 
 ###########################################################################
 #                               REST SERVICE                              #
