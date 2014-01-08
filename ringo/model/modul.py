@@ -71,6 +71,8 @@ def _create_default_actions(dbsession, ignore=[]):
     a2 = ActionItem(name="Read", url="read/{id}", icon="icon-eye-open")
     a3 = ActionItem(name="Update", url="update/{id}", icon="icon-edit")
     a4 = ActionItem(name="Delete", url="delete/{id}", icon="icon-trash")
+    a5 = ActionItem(name="Import", url="import", icon="icon-import")
+    a6 = ActionItem(name="Export", url="export/{id}", icon="icon-export")
     actions = []
     if not "list" in ignore:
         dbsession.add(a0)
@@ -87,6 +89,12 @@ def _create_default_actions(dbsession, ignore=[]):
     if not "delete" in ignore:
         dbsession.add(a4)
         actions.append(a4)
+    if not "import" in ignore:
+        dbsession.add(a5)
+        actions.append(a5)
+    if not "export" in ignore:
+        dbsession.add(a6)
+        actions.append(a6)
     return actions
 
 
@@ -105,7 +113,9 @@ def init_model(dbsession):
     modul.label = "Modul"
     modul.label_plural = "Modules"
     modul.display = "admin-menu"
-    modul.actions.extend(_create_default_actions(dbsession, ignore=['create', 'delete']))
+    modul.actions.extend(_create_default_actions(dbsession,
+                                                 ignore=['create', 'delete',
+                                                         'import', 'export']))
     dbsession.add(modul)
     # ID 2
     modul = ModulItem(name='actions')
@@ -147,5 +157,7 @@ def init_model(dbsession):
     modul.label = "Profile"
     modul.label_plural = "Profiles"
     modul.display = "admin-menu"
-    modul.actions.extend(_create_default_actions(dbsession, ignore=['create', 'delete']))
+    modul.actions.extend(_create_default_actions(dbsession,
+                                                 ignore=['create', 'delete',
+                                                         'import', 'export']))
     dbsession.add(modul)
