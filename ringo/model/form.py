@@ -46,7 +46,7 @@ class FormFactory(BaseFactory):
 
 class Form(BaseItem, ReviewStateMixin, Owned, Meta, Logged, Base):
     __tablename__ = 'forms'
-    _modul_id = 11
+    _modul_id = 14
     id = sa.Column(sa.Integer, primary_key=True)
     category = sa.Column(sa.Integer)
     title = sa.Column(sa.String)

@@ -1,4 +1,4 @@
-"""empty message
+"""Add fields to form modul
 
 Revision ID: 32154d55ffe7
 Revises: 1b9688e1cc97
