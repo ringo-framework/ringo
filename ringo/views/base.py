@@ -385,9 +385,6 @@ def create_(clazz, request, callback=None, renderers={}):
                     mapping=mapping)
             log.info(msg)
             request.session.flash(msg, 'success')
-            # flush the session to make the new id in the element
-            # presistent.
-            request.db.flush()
             route_name = sitem.get_action_routename('update')
             url = request.route_url(route_name, id=sitem.id)
             if callback:

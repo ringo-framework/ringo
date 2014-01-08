@@ -227,6 +227,9 @@ class BaseItem(object):
         # add it to the database session.
         if not self.id and dbsession:
             dbsession.add(self)
+            # flush the session to make the new id in the element
+            # presistent.
+            dbsession.flush()
         return self
 
 
