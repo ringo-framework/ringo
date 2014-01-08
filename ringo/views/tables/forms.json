@@ -1,0 +1,10 @@
+{
+    "overview": {
+        "columns": [
+            {"name": "title", "label": "Title"},
+            {"name": "description", "label": "Description"},
+            {"name": "category", "label": "Category", "expand": "true", "width": "150"},
+            {"name": "review_state", "label": "State", "width": "150"}
+        ]
+    }
+}

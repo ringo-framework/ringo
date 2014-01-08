@@ -56,6 +56,17 @@ class BaseItem(object):
     def __getitem__(self, name):
         return self.get_value(name)
 
+    def __getattr__(self, name):
+        """This function tries to get the given attribute of the item if
+        it can not be found using the usual way to get attributes. In
+        this case we will split the attribute name by "." and try to get
+        the attribute along the "." separated attribute name."""
+        element = self
+        attributes = name.split('.')
+        for attr in attributes:
+            element = object.__getattribute__(element, attr)
+        return element
+
     def __unicode__(self):
         """Will return the string representation for the item based on a
         configured format string in the modul settings. If no format str
@@ -189,6 +200,34 @@ class BaseItem(object):
                 if str(raw_value) == str(option[1]):
                     return option[0]
         return raw_value
+
+    def save(self, data, dbsession=None):
+        """Will save the given data into the item. If the current item
+        has no value for the id attribute it is assumed that this item
+        must be added to the database as a new item. In this case you
+        need to provide a dbsession as the new item is not linked to any
+        dbsession yet.
+
+        Please note, that you must ensure that the submitted values are
+        validated. This function does no validation on the submitted
+        data.
+
+        :data: Dictionary with key value pairs.
+        :dbsession: Current db session. Used when saving new items.
+        :returns: item with new data.
+
+        """
+        for key, value in data.iteritems():
+            if hasattr(self, key):
+                setattr(self, key, value)
+            else:
+                log.warning('Not saving "%s". Attribute not found' % key)
+
+        # If the item has no id, then we assume it is a new item. So
+        # add it to the database session.
+        if not self.id and dbsession:
+            dbsession.add(self)
+        return self
 
 
 class BaseList(object):

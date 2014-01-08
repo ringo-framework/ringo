@@ -27,11 +27,14 @@ comments).
     See :ref:`alembic_migration` section for more information.
 """
 import datetime
+import json
 import logging
+from formbar.config import Config, parse
 from sqlalchemy.ext.declarative import declared_attr
 
 from sqlalchemy import (
     Column,
+    Text,
     Integer,
     DateTime,
     ForeignKey,
@@ -117,6 +120,90 @@ class Meta(object):
 
         """
         item.updated = datetime.datetime.now()
+
+class Blobform(object):
+    """Mixin to add a data fields to store form data as JSON in a single
+    field. Further the fid references the form definiton. The mixin will
+    overwrite the way how to get the form definiton and how to get
+    values from the item."""
+    data = Column(Text, default="{}")
+    _form_id = 1
+
+    @declared_attr
+    def fid(cls):
+        return Column(Integer, ForeignKey('forms.id'))
+
+    @declared_attr
+    def form(cls):
+        from ringo.model.form import Form
+        form = relationship(Form, uselist=False)
+        return form
+
+    @classmethod
+    def get_form_config(cls, formname):
+        """Return the Configuration for a given form. This function
+        overwrites the default get_form_config method from the BaseItem
+        to load the configuration from the database. Please take care
+        for the inheritance order to enabled overloading of this method."""
+        from ringo.model.form import Form
+        factory = Form.get_item_factory()
+        form = factory.load(cls._form_id)
+        cachename = "%s.%s.%s" % (cls.__name__, form.id, formname)
+        if not cls._cache_form_config.get(cachename):
+            config = Config(parse(form.definition.encode('utf-8')))
+            cls._cache_form_config[cachename] = config.get_form(formname)
+        return cls._cache_form_config[cachename]
+
+    def __getattr__(self, name):
+        """This function tries to get the given attribute of the item if
+        it can not be found using the usual way to get attributes. In
+        this case we will split the attribute name by "." and try to get
+        the attribute along the "." separated attribute name."""
+        json_data = json.loads(getattr(self, 'data'))
+        if json_data.has_key(name):
+            return json_data[name]
+
+        element = self
+        attributes = name.split('.')
+        for attr in attributes:
+            element = object.__getattribute__(element, attr)
+        return element
+
+    def save(self, data, dbsession=None):
+        """Will save the given data into Blobform items. This function
+        overwrites the default behavior of the BaseItem and takes care
+        that the data will be saved in the data attribute as JSON
+        string. If the current item has no value for the id attribute it
+        is assumed that this item must be added to the database as a new
+        item. In this case you need to provide a dbsession as the new
+        item is not linked to any dbsession yet.
+
+        Please note, that you must ensure that the submitted values are
+        validated. This function does no validation on the submitted
+        data.
+
+        :data: Dictionary with key value pairs.
+        :dbsession: Current db session. Used when saving new items.
+        :returns: item with new data.
+
+        """
+        json_data = {}
+        columns = self.get_columns(self)
+        for key, value in data.iteritems():
+            if key in columns:
+                setattr(self, key, value)
+            else:
+                if isinstance(value, datetime.date):
+                    value = str(value)
+                json_data[key] = value
+        setattr(self, 'data', json.dumps(json_data))
+
+        # If the item has no id, then we assume it is a new item. So
+        # add it to the database session.
+        if not self.id and dbsession:
+            dbsession.add(self)
+        return self
+
 
 
 class Logged(object):

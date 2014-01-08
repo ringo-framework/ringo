@@ -380,7 +380,7 @@ def create_(clazz, request, callback=None, renderers={}):
         item_label = clazz.get_item_modul().get_label()
         mapping = {'item_type': item_label}
         if form.validate(request.params):
-            sitem = form.save()
+            sitem = item.save(form.data, request.db)
             msg = _('Created new ${item_type} successfull.',
                     mapping=mapping)
             log.info(msg)
@@ -463,7 +463,7 @@ def update_(clazz, request, callback=None, renderers={}):
         item_label = clazz.get_item_modul().get_label()
         mapping = {'item_type': item_label, 'item': item}
         if form.validate(request.params):
-            form.save()
+            item.save(form.data, request.db)
             msg = _('Edited ${item_type} "${item}" successfull.',
                     mapping=mapping)
             log.info(msg)
