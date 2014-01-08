@@ -624,8 +624,7 @@ def import_(clazz, request, callback=None):
         request.POST.get('file').file.seek(0)
         importer = JSONImporter(clazz)
         item = importer.perform(request, request.POST.get('file').file.read())
-        # TODO: If the item has be created on import it must be added to
-        # the current db session to make it persistent. (ti) <2014-01-07 17:44>
+        item.save({}, request.db)
         route_name = item.get_action_routename('update')
         url = request.route_url(route_name, id=item.id)
         if callback:
