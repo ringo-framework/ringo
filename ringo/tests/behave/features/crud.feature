@@ -4,7 +4,7 @@ Feature: Check the modul
   Scenario Outline: Create GET
     Given a <role> user
      When opens the create page of modul <modul>
-     Then the user should get a <response> http respone
+     Then the user should get a <response> http response
 
   Examples: User
   | role      | modul | response |
@@ -64,7 +64,7 @@ Feature: Check the modul
   Scenario Outline: Read GET
     Given a <role> user
      When opens the read page for item <id> of modul <modul>
-     Then the user should get a <response> http respone
+     Then the user should get a <response> http response
 
   Examples: User
   | role      | modul | id | response |
@@ -124,7 +124,7 @@ Feature: Check the modul
   Scenario Outline: Edit GET
     Given a <role> user
      When opens the edit page for item <id> of modul <modul>
-     Then the user should get a <response> http respone
+     Then the user should get a <response> http response
 
   Examples: User
   | role      | modul | id | response |
