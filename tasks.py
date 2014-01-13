@@ -11,7 +11,7 @@ def test():
     run("coverage erase")
     run("alembic -c alembic-test.ini upgrade head")
     run("python setup.py nosetests")
-    run("behave ringo/tests/behave/features --tags=-needs_mail_setup --logging-level=ERROR")
     run("coverage report -m --include='ringo*' --omit='ringo/test*'")
+    run("behave ringo/tests/behave/features --tags=-wip --tags=-needs_mail_setup --logging-level=ERROR")
     run("rm -r test-data")
     run("rm test.sqlite")
