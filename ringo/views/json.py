@@ -72,7 +72,7 @@ def list_(clazz, request):
     :returns: JSON object.
 
     """
-    listing = clazz.get_item_list(request.db)
+    listing = clazz.get_item_list(request)
     return JSONResponse(True, listing)
 
 def create_(clazz, request):
