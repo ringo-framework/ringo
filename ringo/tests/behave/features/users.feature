@@ -4,7 +4,7 @@ Feature: Check POST requests of the users module.
 
   Scenario Outline: Create POST
     Given a <role> user
-     When opens the create page of modul <modul>
+     When calls the create web-url of modul <modul>
      When submits data (<error>) to create a item of modul <modul>
      Then the user should get a <response> http response
 
@@ -16,7 +16,7 @@ Feature: Check POST requests of the users module.
 
   Scenario Outline: Edit POST
     Given a <role> user
-     When opens the edit page for item <id> of modul <modul>
+     When calls the edit web-url for item <id> of modul <modul>
      When submits data (<error>) to edit item <id> of modul <modul>
      Then the user should get a <response> http response
 
@@ -27,7 +27,7 @@ Feature: Check POST requests of the users module.
 
   Scenario Outline: Delete POST
     Given a <role> user
-     When opens the delete page for item <id> of modul <modul>
+     When calls the delete web-url for item <id> of modul <modul>
      When confirms deletion for item <id> of modul <modul>
      Then the user should get a <response> http response
 
