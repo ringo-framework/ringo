@@ -104,16 +104,20 @@ def create_(clazz, request):
         # Validation fails! return item
         return JSONResponse(False, sitem)
 
-def read_(clazz, request):
+def read_(clazz, request, callback=None):
     """Returns a JSON object of a specific item of type clazz. The
     loaded item is determined by the id provided in the matchdict object
     of the current request.
 
     :clazz: Class of item to load
     :request: Current request
+    :callback: Current function which is called after the item has been read.
     :returns: JSON object.
     """
-    return JSONResponse(True, _load_item(clazz, request))
+    item = _load_item(clazz, request)
+    if callback is not None:
+        item = callback(request, item)
+    return JSONResponse(True, item)
 
 def update_(clazz, request):
     """Updates an item of type clazz. The item is loaded based on the
