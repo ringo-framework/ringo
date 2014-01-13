@@ -1,5 +1,15 @@
 Feature: Check the user modul
-  Will check if the basic CRUD operations for the user are working
+  Will check if the basic CRUD operations for the user modul are working
+
+  Scenario Outline: List GET
+    Given a <role> user
+     When opens the overview page of modul <modul>
+     Then the user should get a <response> http response
+
+  Examples: Get overview page
+  | role      | modul  | response |
+  | anonymous | users  | 403      |
+  | admin     | users  | 200      |
 
   Scenario Outline: Create GET
     Given a <role> user
@@ -32,6 +42,7 @@ Feature: Check the user modul
   | role      | modul | id | response |
   | anonymous | user  | 1  | 403      |
   | admin     | user  | 1  | 200      |
+  | admin     | user  | 99 | 400      |
 
   Scenario Outline: Edit GET
     Given a <role> user

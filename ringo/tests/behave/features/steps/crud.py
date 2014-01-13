@@ -21,6 +21,12 @@ def step_impl(context):
 def step_impl(context):
     context.resp = context.app.get('/')
 
+@when(u'opens the overview page of modul {modul}')
+def step_impl(context, modul):
+    path = get_modul_path(modul)
+    path.append("list")
+    context.resp = context.app.get("/%s" % "/".join(path), status="*")
+
 @when(u'opens the create page of modul {modul}')
 def step_impl(context, modul):
     path = get_modul_path(modul)
