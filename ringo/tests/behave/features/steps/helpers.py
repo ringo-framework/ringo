@@ -1,5 +1,5 @@
 def get_csrf_token(res):
-    return res.form.get('csrf_token').value
+    return res.forms[0].get('csrf_token').value
 
 def get_modul_path(modul):
     path = []

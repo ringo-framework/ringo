@@ -1,63 +1,65 @@
-Feature: Check the modul
-  Will check if the basic CRUD oprations for the modul are working
+Feature: Default GET requests of various actions of the modules.
+  Will check if the basic default GET requests on the CRUD operations for
+  different modules are working.
+
+  Scenario Outline: List GET
+    Given a <role> user
+     When opens the overview page of modul <modul>
+     Then the user should get a <response> http response
+
+  Examples: User
+  | role      | modul  | response |
+  | anonymous | users  | 403      |
+  | admin     | users  | 200      |
+  | anonymous | usergroup | 403      |
+  | admin     | usergroup | 200      |
+  | anonymous | role  | 403      |
+  | admin     | role  | 200      |
+  | anonymous | profil | 403      |
+  | admin     | profil | 200      |
+  | anonymous | modul  | 403      |
+  | admin     | modul  | 200      |
+  | anonymous | appointment  | 403      |
+  | admin     | appointment  | 200      |
+  | anonymous | file  | 403      |
+  | admin     | file  | 200      |
+  | anonymous | news  | 403      |
+  | admin     | news  | 200      |
+  | anonymous | comments  | 403      |
+  | admin     | comments  | 200      |
+  | anonymous | tags  | 403      |
+  | admin     | tags  | 200      |
+  | anonymous | todos  | 403      |
+  | admin     | todos | 200      |
+
 
   Scenario Outline: Create GET
     Given a <role> user
      When opens the create page of modul <modul>
      Then the user should get a <response> http response
 
-  Examples: User
-  | role      | modul | response |
-  | anonymous | user  | 403      |
-  | admin     | user  | 200      |
-
-  Examples: Usergroup
-  | role      | modul     | response |
+  Examples: Create GET
+  | role      | modul  | response |
+  | anonymous | users  | 403      |
+  | admin     | users  | 200      |
   | anonymous | usergroup | 403      |
   | admin     | usergroup | 200      |
-
-  Examples: Rolemodul
-  | role      | modul | response |
   | anonymous | role  | 403      |
   | admin     | role  | 200      |
-
-  Examples: Profil
-  | role      | modul  | response |
   | anonymous | profil | 404      |
   | admin     | profil | 404      |
-
-  Examples: Modul
-  | role      | modul  | response |
   | anonymous | modul  | 404      |
   | admin     | modul  | 404      |
-
-  Examples: Appointment
-  | role      | modul        | response |
   | anonymous | appointment  | 403      |
   | admin     | appointment  | 200      |
-
-  Examples: File
-  | role      | modul | response |
   | anonymous | file  | 403      |
   | admin     | file  | 200      |
-
-  Examples: News
-  | role      | modul | response |
   | anonymous | news  | 403      |
   | admin     | news  | 200      |
-
-  Examples: Comment
-  | role      | modul | response |
   | anonymous | comments  | 403      |
   | admin     | comments  | 200      |
-
-  Examples: Tag
-  | role      | modul | response |
   | anonymous | tags  | 403      |
   | admin     | tags  | 200      |
-
-  Examples: Todo
-  | role      | modul | response |
   | anonymous | todos  | 403      |
   | admin     | todos | 200      |
 
@@ -66,58 +68,29 @@ Feature: Check the modul
      When opens the read page for item <id> of modul <modul>
      Then the user should get a <response> http response
 
-  Examples: User
+  Examples: Read GET
   | role      | modul | id | response |
   | anonymous | user  | 1  | 403      |
   | admin     | user  | 1  | 200      |
-
-  Examples: Usergroup
-  | role      | modul     | id | response |
+  | admin     | user  | 99  | 400 |
   | anonymous | usergroup | 1  | 403      |
   | admin     | usergroup | 1  | 200      |
-
-  Examples: Rolemodul
-  | role      | modul | id | response |
   | anonymous | role  | 1  | 403      |
   | admin     | role  | 1  | 200      |
-
-  Examples: Profil
-  | role      | modul  | id | response |
   | anonymous | profil | 1  | 403      |
   | admin     | profil | 1  | 200      |
-
-  Examples: Modul
-  | role      | modul  | id | response |
   | anonymous | modul  | 1  | 403      |
   | admin     | modul  | 1  | 200      |
-
-  Examples: Appointment
-  | role      | modul        | id | response |
   | anonymous | appointment  | 1  | 403      |
   | admin     | appointment  | 1  | 400      |
-
-  Examples: File
-  | role      | modul | id | response |
   | anonymous | file  | 1  | 403      |
   | admin     | file  | 1  | 400      |
-
-  Examples: File
-  | role      | modul | id | response |
   | anonymous | news  | 1  | 403      |
   | admin     | news  | 1  | 400      |
-
-  Examples: Comment
-  | role      | modul | id | response |
   | anonymous | comments  | 1  | 403      |
   | admin     | comments  | 1  | 400      |
-
-  Examples: Tag
-  | role      | modul | id | response |
   | anonymous | tags  | 1  | 403      |
   | admin     | tags  | 1  | 400      |
-
-  Examples: Todo
-  | role      | modul | id | response |
   | anonymous | todos  | 1  | 403      |
   | admin     | todos  | 1  | 400      |
 
@@ -126,57 +99,58 @@ Feature: Check the modul
      When opens the edit page for item <id> of modul <modul>
      Then the user should get a <response> http response
 
-  Examples: User
+  Examples: Edit GET
   | role      | modul | id | response |
   | anonymous | user  | 1  | 403      |
   | admin     | user  | 1  | 200      |
-
-  Examples: Usergroup
-  | role      | modul     | id | response |
   | anonymous | usergroup | 1  | 403      |
   | admin     | usergroup | 1  | 200      |
-
-  Examples: Rolemodul
-  | role      | modul | id | response |
   | anonymous | role  | 1  | 403      |
   | admin     | role  | 1  | 200      |
-
-  Examples: Profil
-  | role      | modul  | id | response |
   | anonymous | profil | 1  | 403      |
   | admin     | profil | 1  | 200      |
-
-  Examples: Modul
-  | role      | modul  | id | response |
   | anonymous | modul  | 1  | 403      |
   | admin     | modul  | 1  | 200      |
-
-  Examples: Appointment
-  | role      | modul        | id | response |
   | anonymous | appointment  | 1  | 403      |
   | admin     | appointment  | 1  | 400      |
-
-  Examples: File
-  | role      | modul | id | response |
   | anonymous | file  | 1  | 403      |
   | admin     | file  | 1  | 400      |
-
-  Examples: File
-  | role      | modul | id | response |
   | anonymous | news  | 1  | 403      |
   | admin     | news  | 1  | 400      |
-
-  Examples: Comment
-  | role      | modul | id | response |
   | anonymous | comments  | 1  | 403      |
   | admin     | comments  | 1  | 400      |
-
-  Examples: Tag
-  | role      | modul | id | response |
   | anonymous | tags  | 1  | 403      |
   | admin     | tags  | 1  | 400      |
-
-  Examples: Todo
-  | role      | modul | id | response |
   | anonymous | todos  | 1  | 403      |
   | admin     | todos  | 1  | 400      |
+
+  Scenario Outline: Delete GET
+    Given a <role> user
+     When opens the delete page for item <id> of modul <modul>
+     Then the user should get a <response> http response
+
+  Examples: Delete GET
+  | role      | modul | id | response |
+  | anonymous | user  | 1  | 403      |
+  | admin     | user  | 1  | 200      |
+  | anonymous | usergroup | 1  | 403      |
+  | admin     | usergroup | 1  | 200      |
+  | anonymous | role  | 1  | 403      |
+  | admin     | role  | 1  | 200      |
+  | anonymous | profil | 1  | 404      |
+  | admin     | profil | 1  | 404      |
+  | anonymous | modul  | 1  | 404      |
+  | admin     | modul  | 1  | 404      |
+  | anonymous | appointment  | 1  | 403      |
+  | admin     | appointment  | 1  | 400      |
+  | anonymous | file  | 1  | 403      |
+  | admin     | file  | 1  | 400      |
+  | anonymous | news  | 1  | 403      |
+  | admin     | news  | 1  | 400      |
+  | anonymous | comments  | 1  | 403      |
+  | admin     | comments  | 1  | 400      |
+  | anonymous | tags  | 1  | 403      |
+  | admin     | tags  | 1  | 400      |
+  | anonymous | todos  | 1  | 403      |
+  | admin     | todos  | 1  | 400      |
+

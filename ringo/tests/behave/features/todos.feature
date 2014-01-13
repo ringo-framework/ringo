@@ -1,29 +1,30 @@
-Feature: Check POST requests of the users module.
+Feature: Check POST requests of the todos module.
   Will check if the basic default POST requests on the CRUD operations for
-  the todos users are working.
+  the todos module are working.
 
   Scenario Outline: Create POST
     Given a <role> user
      When opens the create page of modul <modul>
-     When submits data (<error>) to create a item of modul <modul>
+     When submits data (<error>) to create a item of modul todos
      Then the user should get a <response> http response
 
   Examples: Create valid POST
   | role      | modul | response | error              |
-  | admin     | users  | 200      | password-missmatch |
-  | admin     | users  | 200      | missing-login |
-  | admin     | users  | 302      | none |
+  | admin     | todos  | 200      | missing-field |
+  | admin     | todos  | 200      | conditional-required|
+  | admin     | todos  | 302      | none |
 
   Scenario Outline: Edit POST
     Given a <role> user
      When opens the edit page for item <id> of modul <modul>
-     When submits data (<error>) to edit item <id> of modul <modul>
+     When submits data (<error>) to edit item <id> of modul todos
      Then the user should get a <response> http response
 
-  Examples: Create valid POST
+  Examples: Edit valid POST
   | role      | modul  | id | response | error              |
-  | admin     | users  | 2  | 200      | missing-login |
-  | admin     | users  | 2  | 302      | none |
+  | admin     | todos  | 1  | 200      | missing-field |
+  | admin     | todos  | 1  | 200      | conditional-required|
+  | admin     | todos  | 1  | 302      | none |
 
   Scenario Outline: Delete POST
     Given a <role> user
@@ -33,4 +34,4 @@ Feature: Check POST requests of the users module.
 
   Examples: Delete POST
   | role      | modul | id | response |
-  | admin     | user  | 2  | 302      |
+  | admin     | todos | 1  | 302      |
