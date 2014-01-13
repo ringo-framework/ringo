@@ -94,7 +94,7 @@ def create_(clazz, request):
     item = factory.create(request.user)
     # Initialise the create form for the item to be able to validate the
     # submitted data.
-    form = Form(item.get_form_config('create'), 
+    form = Form(item.get_form_config('create'),
                 item, request.db, translate=request.translate,
                 csrf_token=request.session.get_csrf_token())
     if form.validate(request.params):
