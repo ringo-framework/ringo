@@ -4,7 +4,7 @@ Feature: Default GET requests of various actions of the modules.
 
   Scenario Outline: List GET
     Given a <role> user
-     When opens the overview page of modul <modul>
+     When calls the overview web-url of modul <modul>
      Then the user should get a <response> http response
 
   Examples: User
@@ -35,7 +35,7 @@ Feature: Default GET requests of various actions of the modules.
 
   Scenario Outline: Create GET
     Given a <role> user
-     When opens the create page of modul <modul>
+     When calls the create web-url of modul <modul>
      Then the user should get a <response> http response
 
   Examples: Create GET
@@ -65,7 +65,7 @@ Feature: Default GET requests of various actions of the modules.
 
   Scenario Outline: Read GET
     Given a <role> user
-     When opens the read page for item <id> of modul <modul>
+     When calls the read web-url for item <id> of modul <modul>
      Then the user should get a <response> http response
 
   Examples: Read GET
@@ -96,7 +96,7 @@ Feature: Default GET requests of various actions of the modules.
 
   Scenario Outline: Edit GET
     Given a <role> user
-     When opens the edit page for item <id> of modul <modul>
+     When calls the edit web-url for item <id> of modul <modul>
      Then the user should get a <response> http response
 
   Examples: Edit GET
@@ -126,7 +126,7 @@ Feature: Default GET requests of various actions of the modules.
 
   Scenario Outline: Delete GET
     Given a <role> user
-     When opens the delete page for item <id> of modul <modul>
+     When calls the delete web-url for item <id> of modul <modul>
      Then the user should get a <response> http response
 
   Examples: Delete GET
@@ -156,7 +156,7 @@ Feature: Default GET requests of various actions of the modules.
 
   Scenario Outline: Export GET
     Given a <role> user
-     When opens the export page for item <id> of modul <modul>
+     When calls the export web-url for item <id> of modul <modul>
      Then the user should get a <response> http response
 
   Examples: Export GET
@@ -174,7 +174,7 @@ Feature: Default GET requests of various actions of the modules.
 
   Scenario Outline: Import GET
     Given a <role> user
-     When opens the import page for modul <modul>
+     When calls the import web-url for modul <modul>
      Then the user should get a <response> http response
 
   Examples: Import GET
