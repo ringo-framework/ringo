@@ -1,5 +1,6 @@
 from behave import *
 
+from helpers import get_modul_path, get_csrf_token
 
 @when(u'opens the about page')
 def step_impl(context):
@@ -19,32 +20,6 @@ def step_impl(context):
 @when(u'opens the home page')
 def step_impl(context):
     context.resp = context.app.get('/')
-
-def get_modul_path(modul):
-    path = []
-    if modul == "user":
-        path.append("users")
-    elif modul == "usergroup":
-        path.append("usergroups")
-    elif modul == "role":
-        path.append("roles")
-    elif modul == "profil":
-        path.append("profiles")
-    elif modul == "modul":
-        path.append("modules")
-    elif modul == "appointment":
-        path.append("appointments")
-    elif modul == "file":
-        path.append("files")
-    elif modul == "news":
-        path.append("news")
-    elif modul == "comments":
-        path.append("comments")
-    elif modul == "tags":
-        path.append("tags")
-    elif modul == "todos":
-        path.append("todos")
-    return path
 
 @when(u'opens the create page of modul {modul}')
 def step_impl(context, modul):
@@ -66,9 +41,21 @@ def step_impl(context, id, modul):
     path.append(str(id))
     context.resp = context.app.get("/%s" % "/".join(path), status="*")
 
-@when(u'deletes the item {id} of modul {modul}')
+@when(u'opens the delete page for item {id} of modul {modul}')
 def step_impl(context, id, modul):
     path = get_modul_path(modul)
     path.append("delete")
     path.append(str(id))
     context.resp = context.app.get("/%s" % "/".join(path), status="*")
+
+@when(u'confirms deletion for item {id} of modul {modul}')
+def step_impl(context, id, modul):
+    path = get_modul_path(modul)
+    path.append("delete")
+    path.append(str(id))
+    csrf = get_csrf_token(context.resp)
+    values = {
+        "confirmed": "1",
+        "csrf_token": csrf
+    }
+    context.resp = context.app.post("/%s" % "/".join(path), values)

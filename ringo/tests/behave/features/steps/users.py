@@ -1,35 +1,36 @@
 from behave import *
+from helpers import get_csrf_token, get_modul_path
 
-def get_csrf_token(res):
-    return res.form.get('csrf_token').value
+@when(u'submits data ({error}) to create a item of modul {modul}')
+def step_impl(context, error, modul):
+    path = get_modul_path(modul)
+    path.append("create")
+    csrf = get_csrf_token(context.resp)
+    values = {
+        "login": "test",
+        "password": "test",
+        "retype_password": "test",
+        "csrf_token": csrf
+    }
+    if error == "password-missmatch":
+        values['retype_password'] = "test2"
+    if error == "missing-login":
+        values['login'] = ""
+    context.resp = context.app.post("/%s" % "/".join(path), values, status="*")
 
-def login(context, username, password):
-    '''Will login the user with username and password. On default we we do
-    a check on a successfull login'''
-    logout(context)
-    response = context.app.get('/auth/login')
-    csrf = get_csrf_token(response)
-    print csrf
-    response = context.app.post('/auth/login',
-        params={'login': username,
-                'pass': password,
-                'csrf_token': csrf},
-    )
-    return response
-
-def logout(context):
-    'Logout the currently logged in user (if any)'
-    response = context.app.get('/auth/logout',
-        params={}
-    )
-    return response
-
-@given(u'a {role} user')
-def step_impl(context, role):
-    if role == "anonymous":
-        assert (logout(context).status_int == 302)
-    elif role == "admin":
-        resp = login(context, "admin", "secret")
-        assert (resp.status_int == 302)
-    else:
-        assert False
+@when(u'submits data ({error}) to edit item {id} of modul {modul}')
+def step_impl(context, error, id, modul):
+    path = get_modul_path(modul)
+    path.append("update")
+    path.append(str(id))
+    csrf = get_csrf_token(context.resp)
+    values = {
+        "id": id,
+        "login": "test2",
+        "password": "test",
+        "retype_password": "test",
+        "csrf_token": csrf
+    }
+    if error == "missing-login":
+        values['login'] = ""
+    context.resp = context.app.post("/%s" % "/".join(path), values, status="*")
