@@ -60,7 +60,7 @@ def export(request):
              renderer='/default/import.mako',
              permission='import')
 def myimport(request):
-    return import_(News, request)
+    return import_(Tag, request)
 
 #                               REST SERVICE                              #
 
