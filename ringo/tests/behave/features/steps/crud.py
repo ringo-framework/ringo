@@ -46,3 +46,16 @@ def step_impl(context, id, modul):
         "csrf_token": csrf
     }
     context.resp = context.app.post("/%s" % "/".join(path), values)
+
+@when(u'opens the export page for item {id} of modul {modul}')
+def step_impl(context, id, modul):
+    path = get_modul_path(modul)
+    path.append("export")
+    path.append(str(id))
+    context.resp = context.app.get("/%s" % "/".join(path), status="*")
+
+@when(u'opens the import page for modul {modul}')
+def step_impl(context, modul):
+    path = get_modul_path(modul)
+    path.append("import")
+    context.resp = context.app.get("/%s" % "/".join(path), status="*")

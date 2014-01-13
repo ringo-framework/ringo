@@ -154,3 +154,50 @@ Feature: Default GET requests of various actions of the modules.
   | anonymous | todos  | 1  | 403      |
   | admin     | todos  | 1  | 400      |
 
+  Scenario Outline: Export GET
+    Given a <role> user
+     When opens the export page for item <id> of modul <modul>
+     Then the user should get a <response> http response
+
+  Examples: Export GET
+  | role      | modul | id | response |
+  | anonymous | user  | 1  | 403      |
+  | admin     | user  | 1  | 200      |
+  | anonymous | usergroup | 1  | 403      |
+  | admin     | usergroup | 1  | 200      |
+  | anonymous | role  | 1  | 403      |
+  | admin     | role  | 1  | 200      |
+  | anonymous | profil | 1  | 404      |
+  | admin     | profil | 1  | 404      |
+  | anonymous | modul  | 1  | 404      |
+  | admin     | modul  | 1  | 404      |
+
+  Scenario Outline: Import GET
+    Given a <role> user
+     When opens the import page for modul <modul>
+     Then the user should get a <response> http response
+
+  Examples: Import GET
+  | role      | modul | id | response |
+  | anonymous | user  | 1  | 403      |
+  | admin     | user  | 1  | 200      |
+  | anonymous | usergroup | 1  | 403      |
+  | admin     | usergroup | 1  | 200      |
+  | anonymous | role  | 1  | 403      |
+  | admin     | role  | 1  | 200      |
+  | anonymous | profil | 1  | 404      |
+  | admin     | profil | 1  | 404      |
+  | anonymous | modul  | 1  | 404      |
+  | admin     | modul  | 1  | 404      |
+  | anonymous | appointment  | 1  | 403      |
+  | admin     | appointment  | 1  | 200      |
+  | anonymous | file  | 1  | 403      |
+  | admin     | file  | 1  | 200      |
+  | anonymous | news  | 1  | 403      |
+  | admin     | news  | 1  | 200      |
+  | anonymous | comments  | 1  | 403      |
+  | admin     | comments  | 1  | 200 |
+  | anonymous | tags  | 1  | 403      |
+  | admin     | tags  | 1  | 200 |
+  | anonymous | todos  | 1  | 403      |
+  | admin     | todos  | 1  | 200 |
