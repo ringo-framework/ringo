@@ -387,8 +387,6 @@ def create_(clazz, request, callback=None, renderers={}):
             request.session.flash(msg, 'success')
             route_name = sitem.get_action_routename('update')
             url = request.route_url(route_name, id=sitem.id)
-            if callback:
-                sitem = callback(request, sitem)
             # handle create events
             handle_event('create', request, item)
             # Invalidate cache
@@ -407,6 +405,8 @@ def create_(clazz, request, callback=None, renderers={}):
                 log.debug('Linking %s to %s in %s' % (sitem, pitem, rrel))
                 tmpattr = getattr(pitem, rrel)
                 tmpattr.append(sitem)
+            if callback:
+                sitem = callback(request, sitem)
             # Handle redirect after success.
             backurl = request.session.get('%s.backurl' % clazz)
             if backurl:
