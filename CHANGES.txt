@@ -8,6 +8,11 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
+0.9.1
+-----
+- Replaced route_url with route_path.
+- Fixed rendering of links in the dropdown renderer. Consider user permission
+  on link generation (read/update).
 0.9.0
 -----
 - Added comment modul
