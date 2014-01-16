@@ -436,7 +436,11 @@ class DropdownFieldRenderer(FormbarDropdown):
                                                         self._field.name))
             item = None
         if isinstance(item, BaseItem):
-            url = "/%s/read/%s" % (item.__tablename__, item.id)
+            if security.has_permission("update", item, self._field._form._request):
+                route_name = item.get_action_routename('update')
+            else:
+                route_name = item.get_action_routename('read')
+            url = self._field._form._request.route_path(route_name, id=item.id)
             html.append('<a href="%s">&nbsp;[%s]</a>' % (url, item))
         return "".join(html)
 
