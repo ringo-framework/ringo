@@ -15,7 +15,7 @@ from ringo.lib.helpers import (
     get_path_to_form_config,
 )
 from ringo.model.base import BaseItem
-import ringo.lib.security
+import ringo.lib.security as security
 
 template_lookup = TemplateLookup(directories=[template_dir],
                                  module_directory='/tmp/ringo_modules')
@@ -192,7 +192,7 @@ class ListRenderer(Renderer):
                   'listing': self.listing,
                   'request': request,
                   '_': request.translate,
-                  's': ringo.lib.security,
+                  's': security,
                   'enable_bundled_actions': False,
                   'search': search,
                   'search_field': search_field,
@@ -216,7 +216,7 @@ class DTListRenderer(Renderer):
                   'listing': self.listing,
                   'request': request,
                   '_': request.translate,
-                  's': ringo.lib.security,
+                  's': security,
                   'tableconfig': self.config}
         return self.template.render(**values)
 
@@ -564,7 +564,7 @@ class ListingFieldRenderer(FormbarSelectionField):
                   'pclazz': self._field._form._item.__class__,
                   'request': self._field._form._request,
                   '_': self._field._form._translate,
-                  's': ringo.lib.security,
+                  's': security,
                   'tableconfig': self.all_items.clazz.get_table_config(config.table)}
         html.append(self.template.render(**values))
         return "".join(html)
