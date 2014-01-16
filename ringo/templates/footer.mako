@@ -7,7 +7,7 @@
             <a href="#" data-toggle="dropdown"><img src="${request.static_url('ringo:static/images/icons/16x16/applications-system.png')}"/>${_('Administration')}<b class="caret"></b></a>
             <ul class="dropdown-menu dropup-menu" role="menu">
               % for modul in h.get_modules(request, 'admin-menu'):
-                <li><a href="${request.route_url(modul.name+'-list')}">${_(modul.get_label(plural=True))}</a></li>
+                <li><a href="${request.route_path(modul.name+'-list')}">${_(modul.get_label(plural=True))}</a></li>
               % endfor
             </ul>
           </li>
@@ -17,13 +17,13 @@
     <div class="col-sd-6">
       <ul class="list-inline pull-right">
         <li>
-          <a href="${request.route_url('about')}">${_('About')}</a>
+          <a href="${request.route_path('about')}">${_('About')}</a>
         </li>
         <li>
-          <a href="${request.route_url('contact')}">${_('Contact')}</a>
+          <a href="${request.route_path('contact')}">${_('Contact')}</a>
         </li>
         <li>
-          <a href="${request.route_url('version')}" title="${_('Show version information')}">${h.get_app_title()} ver. ${h.get_app_version()}</a>
+          <a href="${request.route_path('version')}" title="${_('Show version information')}">${h.get_app_title()} ver. ${h.get_app_version()}</a>
         </li>
       </ul>
     </div>

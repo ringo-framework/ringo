@@ -322,7 +322,7 @@ class ErrorDialogRenderer(DialogRenderer):
         if history:
             values['ok_url'] = self._request.session['history'].pop()
         else:
-            values['ok_url'] = self._request.route_url('home')
+            values['ok_url'] = self._request.route_path('home')
         return self.template.render(**values)
 
     def _render_body(self):

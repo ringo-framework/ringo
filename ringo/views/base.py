@@ -386,7 +386,7 @@ def create_(clazz, request, callback=None, renderers={}):
             log.info(msg)
             request.session.flash(msg, 'success')
             route_name = sitem.get_action_routename('update')
-            url = request.route_url(route_name, id=sitem.id)
+            url = request.route_path(route_name, id=sitem.id)
             if callback:
                 sitem = callback(request, sitem)
             # handle create events
@@ -466,7 +466,7 @@ def update_(clazz, request, callback=None, renderers={}):
             log.info(msg)
             request.session.flash(msg, 'success')
             route_name = item.get_action_routename('update')
-            url = request.route_url(route_name, id=item.id)
+            url = request.route_path(route_name, id=item.id)
             if callback:
                 item = callback(request, item)
             # handle update events
@@ -550,7 +550,7 @@ def delete_(clazz, request):
     if request.method == 'POST' and confirmed(request):
         request.db.delete(item)
         route_name = clazz.get_action_routename('list')
-        url = request.route_url(route_name)
+        url = request.route_path(route_name)
         item_label = clazz.get_item_modul().get_label()
         mapping = {'item_type': item_label, 'item': item}
         msg = _('Deleted ${item_type} "${item}" successfull.', mapping=mapping)
@@ -626,7 +626,7 @@ def import_(clazz, request, callback=None):
         item = importer.perform(request, request.POST.get('file').file.read())
         item.save({}, request.db)
         route_name = item.get_action_routename('update')
-        url = request.route_url(route_name, id=item.id)
+        url = request.route_path(route_name, id=item.id)
         if callback:
             item = callback(request, item)
         # handle update events

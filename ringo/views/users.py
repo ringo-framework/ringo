@@ -129,7 +129,7 @@ def changepassword(request):
             log.info(msg)
             request.session.flash(msg, 'success')
             route_name = item.get_action_routename('changepassword')
-            url = request.route_url(route_name, id=item.id)
+            url = request.route_path(route_name, id=item.id)
             # Invalidate cache
             invalidate_cache()
             return HTTPFound(location=url)

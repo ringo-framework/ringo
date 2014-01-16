@@ -70,8 +70,8 @@ def get_action_url(request, item, action):
     base_name = item.__tablename__
     route_name = "%s-%s" % (base_name, action)
     if isinstance(item, object):
-        return request.route_url(route_name, id=item.id)
-    return request.route_url(route_name)
+        return request.route_path(route_name, id=item.id)
+    return request.route_path(route_name)
 
 
 def get_path_to(location, app=None):
