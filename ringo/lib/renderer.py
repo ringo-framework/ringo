@@ -150,7 +150,7 @@ class TableConfig:
 
     def is_autoresponsive(self):
         settings = self.get_settings()
-        return settings.get("auto-responsive", False)
+        return settings.get("auto-responsive", True)
 
     def get_columns(self):
         """Return a list of configured columns within the configuration.
