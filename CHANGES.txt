@@ -13,6 +13,10 @@ to the tracker.
 - Replaced route_url with route_path.
 - Fixed rendering of links in the dropdown renderer. Consider user permission
   on link generation (read/update).
+- Added options to the Table renderer to configure the responsive behaviour of
+  table columns. You can now define which columns should be visible on which
+  screenwidth. Defaults to show only the first column.
+
 0.9.0
 -----
 - Added comment modul

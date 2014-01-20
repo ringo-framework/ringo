@@ -78,11 +78,13 @@ class TableConfig:
                         "name": "fieldname",
                         "label": "Label",
                         "width": "width",
+                        "screen": "xlarge",
                         "expand": true
                     }
                 ]
                 "settings": {
                     "default-sorting": "name"
+                    "auto-responsive": true
                 }
             }
         }
@@ -98,11 +100,23 @@ class TableConfig:
     * *label*: The label of the field.
     * *width*: The width of the field. If not units are given the pixel
       are assumed.
+    * *screen*: Define from which size on this field will be displayed.
+      Defaults to "small" which means rendering on all sizes.
+      Available media sizes: (xlarge, large, medium, small).
     * *expand*: The expand option is used to expand the referneces
       values in selections into the literal value of the corrispondig
       option. Note that this option is only usefull for selection fields
       in *formbar* which do not have a real relation attached. In all
       other cases the reference values are expanded automatically.
+
+
+    Further the table has some table wide configuration options:
+
+    * *default-sorting*: Name of the column which should be used as
+      default sorting on the table. Defaults to the first column in the table.
+    * *auto-responsive*: If True than only the first column of a table
+      will be displayed on small devices. Else you need to configure the
+      "screen" attribute for the fields.
 
     If no configuration file can be found, then add all fields
     configured in the form configuration to the overview.
@@ -126,6 +140,18 @@ class TableConfig:
             form_config = self.get_form_config()
             self.config = _form2overview(form_config)
 
+    def get_settings(self):
+        """Returns the settings for the table as dictionary
+        :returns: Settings dictionary 
+
+        """
+        config = self.config.get(self.name)
+        return config.get('settings', {})
+
+    def is_autoresponsive(self):
+        settings = self.get_settings()
+        return settings.get("auto-responsive", False)
+
     def get_columns(self):
         """Return a list of configured columns within the configuration.
         Each colum is a dictionary containing the one or more available
@@ -145,7 +171,7 @@ class TableConfig:
         the configuration. If no default sorting is configured then
         return the name of the attribute in the first column which is
         configured in the table"""
-        settings = self.config.get('settings')
+        settings = self.get_settings()
         if settings:
             def_sort = settings.get('default-sorting')
             if def_sort:
