@@ -217,8 +217,10 @@ class BaseItem(object):
         :returns: item with new data.
 
         """
+        log.debug("Saving %s" % self)
         for key, value in data.iteritems():
             if hasattr(self, key):
+                log.debug("Setting value '%s' in %s" % (value, key))
                 setattr(self, key, value)
             else:
                 log.warning('Not saving "%s". Attribute not found' % key)

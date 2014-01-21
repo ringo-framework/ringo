@@ -193,12 +193,15 @@ class Blobform(object):
         """
         json_data = {}
         columns = self.get_columns(self)
+        log.debug("Saving %s" % self)
         for key, value in data.iteritems():
             if key in columns:
+                log.debug("Setting value '%s' for '%s' in DB" % (value, key))
                 setattr(self, key, value)
             else:
                 if isinstance(value, datetime.date):
                     value = str(value)
+                log.debug("Setting value '%s' for '%s' in JSON" % (value, key))
                 json_data[key] = value
         setattr(self, 'data', json.dumps(json_data))
 
