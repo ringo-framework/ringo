@@ -127,7 +127,6 @@ class Blobform(object):
     overwrite the way how to get the form definiton and how to get
     values from the item."""
     data = Column(Text, default="{}")
-    _form_id = 1
 
     @declared_attr
     def fid(cls):
@@ -139,20 +138,25 @@ class Blobform(object):
         form = relationship(Form, uselist=False)
         return form
 
-    @classmethod
-    def get_form_config(cls, formname):
+    def get_form_config(self, formname):
         """Return the Configuration for a given form. This function
         overwrites the default get_form_config method from the BaseItem
         to load the configuration from the database. Please take care
         for the inheritance order to enabled overloading of this method."""
         from ringo.model.form import Form
-        factory = Form.get_item_factory()
-        form = factory.load(cls._form_id)
-        cachename = "%s.%s.%s" % (cls.__name__, form.id, formname)
-        if not cls._cache_form_config.get(cachename):
-            config = Config(parse(form.definition.encode('utf-8')))
-            cls._cache_form_config[cachename] = config.get_form(formname)
-        return cls._cache_form_config[cachename]
+        if self.fid:
+            # A reference to a form has been set. Load the references value
+            factory = Form.get_item_factory()
+            form = factory.load(self.fid)
+            cachename = "%s.%s.%s" % (self.__class__.__name__,
+                                      form.id, formname)
+            if not self._cache_form_config.get(cachename):
+                config = Config(parse(form.definition.encode('utf-8')))
+                self._cache_form_config[cachename] = config.get_form(formname)
+            return self._cache_form_config[cachename]
+        else:
+            # Fallback! Should not happen. Load default form.
+            return super(Blobform, self).get_form_config(formname)
 
     def __getattr__(self, name):
         """This function tries to get the given attribute of the item if
