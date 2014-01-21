@@ -39,7 +39,6 @@
           <td class="${num > 0 and 'hidden-xs'}" onclick="openItem('${request.route_path(clazz.get_action_routename("read"), id=item.id)}')">
         % endif 
           <%
-            form_config = tableconfig.get_form_config()
             try:
               value = item.get_value(col.get('name'))
             except AttributeError:

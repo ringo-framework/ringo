@@ -131,7 +131,6 @@ table-bordered">
         <td class="${render_responsive_class(field.get('screen'))}"</th>
       % endif
         <%
-          form_config = tableconfig.get_form_config()
           try:
             value = getattr(item, field.get('name'))
           except AttributeError:
