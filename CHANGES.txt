@@ -16,6 +16,8 @@ to the tracker.
 - Added options to the Table renderer to configure the responsive behaviour of
   table columns. You can now define which columns should be visible on which
   screenwidth. Defaults to show only the first column.
+- Workded on Formeditor. Implemented selecting a form when creating new
+  (blobform) items.
 
 0.9.0
 -----
