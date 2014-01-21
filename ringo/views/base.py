@@ -6,11 +6,12 @@ from pyramid.response import Response
 from pyramid.view import view_config
 import sqlalchemy as sa
 
-from formbar.config import Config, load
+from formbar.config import Config, load, parse
 from formbar.form import Form
 
 from ringo.model.base import BaseList, BaseFactory
-from ringo.model.mixins import Owned, Logged
+from ringo.model.form import Form as BlobformForm
+from ringo.model.mixins import Owned, Logged, Blobform
 from ringo.lib.helpers import import_model, get_path_to_form_config
 from ringo.lib.security import has_role
 from ringo.lib.imexport import JSONImporter, JSONExporter
@@ -116,6 +117,44 @@ def set_current_form_page(request):
         request.session['%s.%s.form.page' % (item, itemid)] = page
         request.session.save()
     return Response(body='OK', content_type='text/plain')
+
+
+def get_blobform_config(request, item, formname):
+    """Helper function used in the create_ method to setup the create
+    forms for blogform items. To create a new blogform item the
+    creation is done in three steps:
+
+    1. Stage 1: The user selects a form from a list
+    2. Stage 2: The create dialog is rendered with the selected form
+    3. Stage 3: The item is validated and saved.
+
+    :request: current request
+    :item: item to build the form
+    :formname: name of the form in the formconfig
+    :returns: formconfig, item used to build a form.
+
+    """
+    # First check if the fid parameter is provided
+    fid = request.params.get('fid')
+    blobform = request.params.get('blobforms')
+    if fid:
+        log.debug("Stage 3: User has submitted data to create a new item")
+        setattr(item, 'fid', fid)
+        formfactory = BlobformForm.get_item_factory()
+        formconfig = Config(parse(formfactory.load(fid).definition))
+        return item, formconfig.get_form(formname)
+    elif blobform:
+        log.debug("Stage 2: User has selected a blobform %s " % blobform)
+        setattr(item, 'fid', blobform)
+        formfactory = BlobformForm.get_item_factory()
+        formconfig = Config(parse(formfactory.load(blobform).definition))
+        return item, formconfig.get_form(formname)
+    else:
+        log.debug("Stage 1: User is selecting a blobform")
+        modul = item.get_item_modul()
+        formconfig = modul.get_form_config("blobform")
+        return modul, formconfig
+
 
 def handle_event(event, request, item):
     """Will call the event listeners for the given event on every base
