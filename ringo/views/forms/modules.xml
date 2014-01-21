@@ -15,7 +15,7 @@
     <entity id="e5" name="str_repr" label="String represention">
       <help>Whenever an item of the modul is displayed as simple string it will be displayed in the following form.</help>
     </entity>
-     <entity id="e6" name="actions" label="Actions">
+    <entity id="e6" name="actions" label="Actions">
       <help>Select the actions which should be enabled for this modul</help>
     </entity>
     <entity id="e7" name="display" label="Display location">
@@ -28,6 +28,10 @@
         <option value="user-menu">User menu</option>
       </options>
     </entity>
+    <entity id="forms" name="blobforms" label="Forms">
+      <help>Select a forms which will be used to create the new item</help>
+      <renderer type="dropdown"/>
+    </entity>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>
@@ -37,6 +41,11 @@
   </form>
   <form id="read" readonly="true">
     <snippet ref="create_snippet"/>
+  </form>
+  <form id="blobform">
+    <row>
+      <col><field ref="forms"/></col>
+    </row>
   </form>
 
   <!-- Create-->
