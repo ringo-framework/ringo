@@ -52,9 +52,12 @@ class Form(BaseItem, ReviewStateMixin, Owned, Meta, Logged, Base):
     title = sa.Column(sa.String)
     description = sa.Column(sa.Text)
     definition = sa.Column(sa.Text)
+    mid = sa.Column(sa.Integer, sa.ForeignKey('modules.id'))
 
     def __unicode__(self):
         return str(self.id)
+    # relations
+    modul = sa.orm.relationship("ModulItem", backref="blobforms")
 
 def init_model(dbsession):
     """Will setup the initial model for the form.
