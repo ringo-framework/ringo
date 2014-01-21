@@ -142,7 +142,7 @@ class TableConfig:
 
     def get_settings(self):
         """Returns the settings for the table as dictionary
-        :returns: Settings dictionary 
+        :returns: Settings dictionary
 
         """
         config = self.config.get(self.name)
