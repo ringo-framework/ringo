@@ -54,8 +54,6 @@ class Form(BaseItem, ReviewStateMixin, Owned, Meta, Logged, Base):
     definition = sa.Column(sa.Text)
     mid = sa.Column(sa.Integer, sa.ForeignKey('modules.id'))
 
-    def __unicode__(self):
-        return str(self.id)
     # relations
     modul = sa.orm.relationship("ModulItem", backref="blobforms")
 
