@@ -45,7 +45,7 @@ def setup_ringo_security(config):
     # See http://docs.pylonsproject.org/projects/ \
     #            pyramid_cookbook/en/latest/auth/ \
     #            user_object.html
-    config.set_request_property(get_user, 'user', reify=True)
+    config.add_request_method(get_user, 'user', reify=True)
 
     # Add subscriber to check the CSRF token in POST requests.
     config.add_subscriber(csrf_token_validation, ContextFound)
