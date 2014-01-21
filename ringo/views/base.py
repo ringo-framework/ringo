@@ -409,13 +409,24 @@ def create_(clazz, request, callback=None, renderers={}):
     formname = request.session.get('%s.form' % clazz)
     if not formname:
         formname = 'create'
-    form = Form(item.get_form_config(formname), item, request.db, translate=_,
+
+    # handle blobforms
+    if isinstance(item, Blobform):
+        item, formconfig = get_blobform_config(request, item, formname)
+        do_validate = "blobforms" not in request.params
+    else:
+        formconfig = item.get_form_config(formname)
+
+    form = Form(formconfig, item,
+                request.db, translate=_,
                 renderers=renderers,
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,
                                       'itemid': None},
-                request=request, csrf_token=request.session.get_csrf_token())
-    if request.POST:
+                request=request,
+                csrf_token=request.session.get_csrf_token())
+
+    if request.POST and do_validate:
         item_label = clazz.get_item_modul().get_label()
         mapping = {'item_type': item_label}
         if form.validate(request.params):
