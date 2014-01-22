@@ -163,9 +163,11 @@ class Blobform(object):
         it can not be found using the usual way to get attributes. In
         this case we will split the attribute name by "." and try to get
         the attribute along the "." separated attribute name."""
-        json_data = json.loads(getattr(self, 'data'))
-        if json_data.has_key(name):
-            return json_data[name]
+        data = getattr(self, 'data')
+        if data:
+            json_data = json.loads(getattr(self, 'data'))
+            if json_data.has_key(name):
+                return json_data[name]
 
         element = self
         attributes = name.split('.')
