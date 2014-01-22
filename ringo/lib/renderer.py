@@ -1,4 +1,5 @@
 import logging
+import cgi
 import json
 from mako.lookup import TemplateLookup
 from formbar.renderer import (
@@ -619,7 +620,10 @@ class LogRenderer(FieldRenderer):
         if log.subject:
             html.append('<strong>%s</strong>' % log.subject)
             html.append('<br>')
-        html.append(log.text.replace('\n', '<br>') or "")
+        logentry = []
+        for logtoken in log.text.split('\n'):
+            logentry.append(cgi.escape(logtoken))
+        html.append("<br>".join(logentry))
         html.append("</td>")
         html.append("</tr>")
         return html
