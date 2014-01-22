@@ -18,6 +18,8 @@ to the tracker.
   screenwidth. Defaults to show only the first column.
 - Workded on Formeditor. Implemented selecting a form when creating new
   (blobform) items.
+- Introduced warnings (formbar 393:bbd7a5192e29). Validate the item on loading
+  to generate warning.
 
 0.9.0
 -----
