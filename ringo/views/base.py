@@ -411,6 +411,7 @@ def create_(clazz, request, callback=None, renderers={}):
         formname = 'create'
 
     # handle blobforms
+    do_validate = True
     if isinstance(item, Blobform):
         item, formconfig = get_blobform_config(request, item, formname)
         do_validate = "blobforms" not in request.params
