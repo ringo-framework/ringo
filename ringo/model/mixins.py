@@ -146,11 +146,11 @@ class Blobform(object):
         from ringo.model.form import Form
         if self.fid:
             # A reference to a form has been set. Load the references value
-            factory = Form.get_item_factory()
-            form = factory.load(self.fid)
             cachename = "%s.%s.%s" % (self.__class__.__name__,
-                                      form.id, formname)
+                                      fid, formname)
             if not self._cache_form_config.get(cachename):
+                factory = Form.get_item_factory()
+                form = factory.load(self.fid)
                 config = Config(parse(form.definition.encode('utf-8')))
                 self._cache_form_config[cachename] = config.get_form(formname)
             return self._cache_form_config[cachename]
