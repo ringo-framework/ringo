@@ -147,7 +147,7 @@ class Blobform(object):
         if self.fid:
             # A reference to a form has been set. Load the references value
             cachename = "%s.%s.%s" % (self.__class__.__name__,
-                                      fid, formname)
+                                      self.fid, formname)
             if not self._cache_form_config.get(cachename):
                 factory = Form.get_item_factory()
                 form = factory.load(self.fid)
