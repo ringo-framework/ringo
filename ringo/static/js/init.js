@@ -9,6 +9,8 @@ $( document ).ready(function() {
            "bLengthChange": false,
            "bFilter": true,
            "bSort": true,
+           /* Disable initial sort */
+           "aaSorting": [],
            "bInfo": false,
            "bAutoWidth": false
      });
@@ -17,6 +19,8 @@ $( document ).ready(function() {
            "bLengthChange": false,
            "bFilter": false,
            "bSort": true,
+           /* Disable initial sort */
+           "aaSorting": [],
            "bInfo": false,
            "bAutoWidth": false
       });
