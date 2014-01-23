@@ -4,6 +4,17 @@ $( document ).ready(function() {
     $('#savequerydialog').modal({
         show: false
     });
+    $('.datatable-pageinated').dataTable( {
+           "bPaginate": true,
+           "sPaginationType": "full_numbers",
+           "bLengthChange": true,
+           "bFilter": true,
+           "bSort": true,
+           /* Disable initial sort */
+           "aaSorting": [],
+           "bInfo": true,
+           "bAutoWidth": true
+     });
     $('.datatable-simple').dataTable( {
            "bPaginate": false,
            "bLengthChange": false,
