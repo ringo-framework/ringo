@@ -92,14 +92,36 @@ class StateMixin(object):
         """Returns a list keys of configured statemachines"""
         return cls._statemachines.keys()
 
-    def get_statemachine(self, key):
+    @classmethod
+    def update_handler(cls, request, item):
+        """Will check if the state of any of the statemachines has been
+        changed. If so it will perform a virtual change of a state to trigger
+        the call of the handlers.
+
+        :request: Current request
+        :item: Item handled in the update.
+
+        """
+        for key in cls.list_statemachines():
+            new_state_id = item.get_value(key)
+            # old state can be None in case the state has not changed.
+            old_state_id = attributes.get_history(item, key)[2] # old values
+            if old_state_id:
+                # Perform state change in the statemachine to call the
+                # handlers
+                log.debug("%s -> %s" % (old_state_id, new_state_id))
+                sm = item.get_statemachine(key, old_state_id[0])
+                sm.set_state(new_state_id)
+
+    def get_statemachine(self, key, state_id=None):
         """Returns a statemachine instance for the given key
 
         :key: Name of the key of the statemachine
+        :state_id: initial state of the statemachine
         :returns: Statemachine instance
 
         """
-        return self._statemachines[key](self, key)
+        return self._statemachines[key](self, key, state_id)
 
 
 class Meta(object):
