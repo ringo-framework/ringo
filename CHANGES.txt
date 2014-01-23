@@ -20,6 +20,11 @@ to the tracker.
   (blobform) items.
 - Introduced warnings (formbar 393:bbd7a5192e29). Validate the item on loading
   to generate warning.
+- Handlers in the statemachine now get the transition as additional parameter.
+  This is usefull das the transformation gives access to the state,
+  statemachine and optionally the request.
+- Use sorting configuration from table config in DTLists.
+- Added paginated DTList.
 
 0.9.0
 -----
