@@ -182,3 +182,8 @@ def format_timedelta(td):
         minutes = (td.seconds % 3600) // 60
         seconds = td.seconds % 60
     return '%02d:%02d:%02d' % (hours, minutes, seconds)
+
+def format_datetime(dt):
+    """Returns a prettyfied version of a datetime in the form YYYY-MM-DD
+    hh:ss"""
+    return dt.strftime("%Y-%m-%d %H:%M")
