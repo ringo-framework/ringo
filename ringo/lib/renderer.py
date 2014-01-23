@@ -246,6 +246,11 @@ class DTListRenderer(Renderer):
         Renderer.__init__(self)
         self.listing = listing
         self.config = self.listing.clazz.get_table_config()
+
+        # Do sort
+        sort_field = self.config.get_default_sort_column()
+        sort_order = self.config.get_default_sort_order()
+        self.listing.sort(sort_field, sort_order)
         self.template = template_lookup.get_template("internal/dtlist.mako")
 
     def render(self, request):
