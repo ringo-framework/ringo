@@ -1,8 +1,13 @@
 {
     "overview": {
         "columns": [
-            {"name": "created", "label": "Created", "width": "200"},
+            {"name": "created", "label": "Created"},
             {"name": "subject", "label": "Subject"}
-        ]
+        ],
+        "settings": {
+            "default-sort-field": "created",
+            "default-sort-order": "desc",
+            "auto-responsive": false
+        }
     }
 }
