@@ -85,6 +85,7 @@ class TableConfig:
                 ]
                 "settings": {
                     "default-sort-field": "name"
+                    "default-sort-order": "desc"
                     "auto-responsive": true
                 }
             }
@@ -115,6 +116,7 @@ class TableConfig:
 
     * *default-sort-field*: Name of the column which should be used as
       default sorting on the table. Defaults to the first column in the table.
+    * *default-sort-order*: Sort order (desc, asc) Defaults to desc.
     * *auto-responsive*: If True than only the first column of a table
       will be displayed on small devices. Else you need to configure the
       "screen" attribute for the fields.
@@ -178,6 +180,15 @@ class TableConfig:
             if def_sort:
                 return def_sort
         return self.get_columns()[0].get('name')
+
+    def get_default_sort_order(self):
+        """Returns the ordering of the sort in the table """
+        settings = self.get_settings()
+        if settings:
+            def_order = settings.get('default-sort-order')
+            if def_order:
+                return def_order
+        return "desc"
 
 
 class Renderer(object):
