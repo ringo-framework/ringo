@@ -236,7 +236,6 @@ class Transition(object):
         print self._handler
         if self.is_available():
             state = self.get_end()
-            print self._handler
             return state
         else:
             raise Exception("Change of state failed")
