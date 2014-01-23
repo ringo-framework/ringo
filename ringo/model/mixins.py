@@ -106,14 +106,14 @@ class StateMixin(object):
             new_state_id = item.get_value(key)
             # old state can be None in case the state has not changed.
             old_state_id = attributes.get_history(item, key)[2] # old values
-            if old_state_id:
+            if old_state_id and new_state_id:
                 # Perform state change in the statemachine to call the
                 # handlers
                 log.debug("%s -> %s" % (old_state_id, new_state_id))
-                sm = item.get_statemachine(key, old_state_id[0])
+                sm = item.get_statemachine(key, old_state_id[0], request)
                 sm.set_state(new_state_id)
 
-    def get_statemachine(self, key, state_id=None):
+    def get_statemachine(self, key, state_id=None, request=None):
         """Returns a statemachine instance for the given key
 
         :key: Name of the key of the statemachine
@@ -121,7 +121,7 @@ class StateMixin(object):
         :returns: Statemachine instance
 
         """
-        return self._statemachines[key](self, key, state_id)
+        return self._statemachines[key](self, key, state_id, request)
 
 
 class Meta(object):

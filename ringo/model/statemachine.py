@@ -88,7 +88,7 @@ class Statemachine(object):
     change from one state to another when initiated by a triggering
     event or condition; this is called a transition."""
 
-    def __init__(self, item, item_state_attr, init_state=None):
+    def __init__(self, item, item_state_attr, init_state=None, request=None):
         """Initialise the statemachine for the given item.
 
         :item: Attach the state machine to this :class:`BaseItem`
@@ -96,12 +96,14 @@ class Statemachine(object):
         the current state of the statemachine in the given item.
         :init_state: Initialize the statemachine with an alternative
         state. (Not the value coming from item_state_attr)
+        :request: Current request.
 
         """
         self._item = item
         self._item_state_attr = item_state_attr
         self._root = self.setup()
         self._current = self._root
+        self._request = request
 
         # Try to set the current state of the statemaching by getting
         # the current state from the item.
