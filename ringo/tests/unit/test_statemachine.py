@@ -6,11 +6,11 @@ from ringo.model.statemachine import Statemachine, State, \
     null_handler as handler, null_condition as condition
 
 
-def _testhandler(item):
+def _testhandler(item, transition):
     item.testdata = "bar"
     return item
 
-def _testcondition(item):
+def _testcondition(item, transition):
     return False
 
 class DummyItem(object):

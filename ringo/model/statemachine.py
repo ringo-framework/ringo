@@ -42,12 +42,12 @@ def walk(state, found=None):
     return found
 
 
-def null_handler(item):
+def null_handler(item, transition):
     """Null handler"""
     return item
 
 
-def null_condition(item):
+def null_condition(item, transition):
     """Null condition"""
     return True
 
@@ -56,14 +56,14 @@ class TransitionHandler(object):
     """Handler callable which will be called if the transition between
     to :class:`State` objects has been finished."""
 
-    def __call__(self, item):
+    def __call__(self, item, transition):
         """Implement me!
 
         :item: :class:`BaseItem` instance
         :returns: :class:`BaseItem` instance
 
         """
-        return null_handler(item)
+        return null_handler(item, transition)
 
 class TransitionCondition(object):
 
@@ -77,7 +77,7 @@ class TransitionCondition(object):
         :returns: True or False
 
         """
-        return null_condition(item)
+        return null_condition(item, transition)
 
 class Statemachine(object):
     """A state machine, is a mathematical model of computation used to
@@ -148,7 +148,7 @@ class Statemachine(object):
         for transition in self._current.get_transitions():
             if (transition._end_state._id == state or
                transition._end_state == state):
-                self._item = transition._handler(self._item)
+                self._item = transition._handler(self._item, transition)
                 self._current = transition._end_state
                 setattr(self._item, self._item_state_attr, self._current._id)
                 return self._current
@@ -248,7 +248,7 @@ class Transition(object):
         available (check succeeds) and returns False if the conditions
         for a state change are not met."""
         if self._condition:
-            return self._condition(self.get_start()._statemachine._item)
+            return self._condition(self.get_start()._statemachine._item, self)
         else:
             return True
 
