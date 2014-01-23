@@ -219,6 +219,14 @@ class ListRenderer(Renderer):
 
     def render(self, request):
         """Initialize renderer"""
+        # TODO: Enabled sorting of lists. Mind that these lists might be
+        # presorted if the user clicked on the header. In this case some
+        # get params with sort configurations are in the session. This
+        # logic is currently in base/view. (ti) <2014-01-23 23:15>
+        # sort_field = self.config.get_default_sort_column()
+        # sort_order = self.config.get_default_sort_order()
+        # self.listing.sort(sort_field, sort_order)
+
         if len(self.listing.search_filter) > 0:
             search = self.listing.search_filter[-1][0]
             search_field = self.listing.search_filter[-1][1]
