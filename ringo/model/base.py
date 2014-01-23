@@ -217,7 +217,9 @@ class BaseItem(object):
         :returns: item with new data.
 
         """
-        log.debug("Saving %s" % self)
+        # Use repr here a the __unicode__ method default to self.id
+        # which might not be available here
+        log.debug("Saving %s" % repr(self))
         for key, value in data.iteritems():
             if hasattr(self, key):
                 log.debug("Setting value '%s' in %s" % (value, key))
