@@ -273,7 +273,9 @@ class DTListRenderer(Renderer):
 
 
 class NewsListRenderer(DTListRenderer):
-    pass
+    def __init__(self, listing):
+        DTListRenderer.__init__(self, listing)
+        self.template = template_lookup.get_template("internal/newslist.mako")
 
 
 ###########################################################################
