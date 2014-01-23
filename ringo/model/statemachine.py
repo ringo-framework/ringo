@@ -21,7 +21,7 @@ A state machine can be attached to the items using a :ref:`mixin_state`
 which organises the state machines an provides a unique interface.
 """
 
-def walk(state, found=[]):
+def walk(state, found=None):
     """Helper function to collect all available states in the states
     graph beginning from the given start state
 
@@ -29,6 +29,8 @@ def walk(state, found=[]):
     :returns: List of all states
 
     """
+    if not found:
+        found = []
     if state not in found:
         found.append(state)
     for transition in state.get_transitions():
