@@ -37,7 +37,7 @@ $( document ).ready(function() {
       });
      // Add form-controll class to search fields, needed for BS3
      $('.dataTables_filter input').addClass("form-control");
-     $('.dataTables_filter input').addClass("form-control");
+     $('.dataTables_length select').addClass("form-control");
 
      // Make the formbar navigation sticky when the user scrolls down.
      var width = $( document ).width();
