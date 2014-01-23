@@ -88,22 +88,28 @@ class Statemachine(object):
     change from one state to another when initiated by a triggering
     event or condition; this is called a transition."""
 
-    def __init__(self, item, key_state_id):
+    def __init__(self, item, item_state_attr, init_state=None):
         """Initialise the statemachine for the given item.
 
         :item: Attach the state machine to this :class:`BaseItem`
-        :key_state_id: initialize with the given state id
+        :item_state_attr: name of the attribute which store the value of
+        the current state of the statemachine in the given item.
+        :init_state: Initialize the statemachine with an alternative
+        state. (Not the value coming from item_state_attr)
 
         """
         self._item = item
-        self._key_state_id = key_state_id
+        self._item_state_attr = item_state_attr
         self._root = self.setup()
         self._current = self._root
 
         # Try to set the current state of the statemaching by getting
         # the current state from the item.
+        current_id = getattr(self._item, self._item_state_attr)
+        if init_state:
+            current_id = init_state
         for st in self.get_states():
-            if st._id == getattr(self._item, self._key_state_id):
+            if st._id == current_id:
                 self._current = st
                 break
 
@@ -142,7 +148,7 @@ class Statemachine(object):
                transition._end_state == state):
                 self._item = transition._handler(self._item)
                 self._current = transition._end_state
-                setattr(self._item, self._key_state_id, self._current._id)
+                setattr(self._item, self._item_state_attr, self._current._id)
                 return self._current
         raise Exception('No fitting transition to transition found')
 
@@ -225,8 +231,10 @@ class Transition(object):
         :returns: End :class:`State` of the transtion.
 
         """
+        print self._handler
         if self.is_available():
             state = self.get_end()
+            print self._handler
             return state
         else:
             raise Exception("Change of state failed")
