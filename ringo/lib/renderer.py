@@ -84,7 +84,7 @@ class TableConfig:
                     }
                 ]
                 "settings": {
-                    "default-sorting": "name"
+                    "default-sort-field": "name"
                     "auto-responsive": true
                 }
             }
@@ -113,7 +113,7 @@ class TableConfig:
 
     Further the table has some table wide configuration options:
 
-    * *default-sorting*: Name of the column which should be used as
+    * *default-sort-field*: Name of the column which should be used as
       default sorting on the table. Defaults to the first column in the table.
     * *auto-responsive*: If True than only the first column of a table
       will be displayed on small devices. Else you need to configure the
@@ -174,7 +174,7 @@ class TableConfig:
         configured in the table"""
         settings = self.get_settings()
         if settings:
-            def_sort = settings.get('default-sorting')
+            def_sort = settings.get('default-sort-field')
             if def_sort:
                 return def_sort
         return self.get_columns()[0].get('name')
