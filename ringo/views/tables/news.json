@@ -1,7 +1,7 @@
 {
     "overview": {
         "columns": [
-            {"name": "created", "label": "Created"},
+            {"name": "created", "label": "Created", "width": "150"},
             {"name": "subject", "label": "Subject"}
         ],
         "settings": {

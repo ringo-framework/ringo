@@ -8,7 +8,7 @@ from ringo.lib.helpers import format_datetime
       % for field in tableconfig.get_columns():
       <th width="${field.get('width')}">${field.get('label')}</th>
       % endfor
-      <th><span class="glyphicon glyphicon-check"></span></th>
+      <th width="10"><span class="glyphicon glyphicon-check"></span></th>
     </tr>
   </thead>
   <tbody>

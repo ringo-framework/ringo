@@ -100,6 +100,18 @@ div.dataTables_paginate span>a {
     width: 15px;
     text-align: center;
 }
+
+/* Self clearing - */
+div.dataTables_wrapper:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+html[xmlns] .dataTables_wrapper { display: block; }
+* html .dataTables_wrapper { height: 1%; }
  
 .table .table-toolbar {
     background-color: #F5F5F5;
