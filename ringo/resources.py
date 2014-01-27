@@ -46,9 +46,8 @@ class RessourceFactory(object):
             return None
 
     def _get_item_permissions(self, request):
-        if not self.__modul__:
-            self.__modul__ = self.__model__.get_item_modul()
-        return get_permissions(self.__modul__, self.item)
+        modul = self.__model__.get_item_modul()
+        return get_permissions(modul, self.item)
 
 
 class Resource(object):
