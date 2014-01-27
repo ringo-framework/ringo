@@ -269,7 +269,7 @@ class State(object):
         :label: Label of the Statemachine (short description)
         :description: Long description of the state.
         :disabled_actions: Dictionary with a list of actions which are
-        disabled for a role.
+        disabled for a role. {'rolename': ['read', 'update']}
 
         """
         self._statemachine = statemachine
