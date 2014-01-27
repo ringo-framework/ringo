@@ -35,6 +35,18 @@ from ringo.model.news import (
 from ringo.model.log import (
     init_model as init_log_model
 )
+from ringo.model.tag import (
+    init_model as init_tag_model
+)
+from ringo.model.comment import (
+    init_model as init_comment_model
+)
+from ringo.model.todo import (
+    init_model as init_todo_model
+)
+from ringo.model.form import (
+    init_model as init_form_model
+)
 
 
 def usage(argv):
@@ -64,4 +76,8 @@ def inititializedb(engine):
         init_file_model(DBSession)
         init_news_model(DBSession)
         init_log_model(DBSession)
+        init_comment_model(DBSession)
+        init_tag_model(DBSession)
+        init_todo_model(DBSession)
+        init_form_model(DBSession)
 
