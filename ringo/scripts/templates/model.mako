@@ -17,9 +17,6 @@ class ${clazz}(BaseItem, Owned, Base):
     _modul_id = ${id}
     id = sa.Column(sa.Integer, primary_key=True)
 
-    def __unicode__(self):
-        return str(self.id)
-
 def init_model(dbsession):
     """Will setup the initial model for the ${modul}.
 
@@ -31,5 +28,6 @@ def init_model(dbsession):
     modul.label = "${label}"
     modul.label_plural = "${label_plural}"
     modul.display = "header-menu"
+    modul.str_repr = "%%s|id"
     modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
