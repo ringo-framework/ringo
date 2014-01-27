@@ -26,8 +26,6 @@ from ringo.lib.helpers import format_datetime
               value = getattr(item, field.get('name'))
               if isinstance(value, datetime.datetime):
                 value = format_datetime(value)
-              else:
-                print type(value), value
             except AttributeError:
               value = "NaF"
           %>
