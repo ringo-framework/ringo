@@ -233,7 +233,6 @@ class Transition(object):
         :returns: End :class:`State` of the transtion.
 
         """
-        print self._handler
         if self.is_available():
             state = self.get_end()
             return state
@@ -317,7 +316,6 @@ class State(object):
         :returns:  List of :class:`Transition` objects.
 
         """
-        # Check if the
         transitions = []
         for trans in self._transitions:
             if trans.is_available():
