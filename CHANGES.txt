@@ -25,6 +25,8 @@ to the tracker.
   statemachine and optionally the request.
 - Use sorting configuration from table config in DTLists.
 - Added paginated DTList.
+- Check if the user is still allowed to edit the item after he edited it
+  (Statechange). If not call alternative read URL.
 
 0.9.0
 -----
