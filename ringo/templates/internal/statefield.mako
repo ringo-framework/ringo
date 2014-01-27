@@ -8,7 +8,7 @@
       <strong>State transition:</strong></br>
       <select id="${field.id}" name="${field.name}" class="form-control">
         <option value="${state._id}">No Transition</option>
-        % for trans in transitions:
+        % for trans in state.get_transitions():
             <option value="${trans._end_state._id}">${trans._label}</option>
         % endfor
       </select>
@@ -22,7 +22,7 @@
         </p>
       </div>
       <div class="col-sm-6">
-        % for trans in transitions:
+        % for trans in state.get_transitions():
           <div class="result-state" id="result-state-${trans._end_state._id}">
             <strong>Resulting State:</strong>
             ${trans._end_state._label}</br>

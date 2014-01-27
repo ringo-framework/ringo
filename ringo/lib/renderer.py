@@ -526,13 +526,11 @@ class StateFieldRenderer(FormbarDropdown):
         item = self._field._form._item
         sm = item.get_statemachine(self._field.name)
         state = sm.get_state()
-        transitions = state.get_transitions()
 
         html.append(self._render_label())
         values = {'field': self._field,
                   'request': self._field._form._request,
                   'state': state,
-                  'transitions': transitions,
                   '_': self._field._form._translate}
         html.append(self.template.render(**values))
         return "".join(html)
