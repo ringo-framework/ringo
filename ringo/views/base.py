@@ -13,7 +13,7 @@ from ringo.model.base import BaseList, BaseFactory
 from ringo.model.form import Form as BlobformForm
 from ringo.model.mixins import Owned, Logged, Blobform
 from ringo.lib.helpers import import_model, get_path_to_form_config
-from ringo.lib.security import has_role
+from ringo.lib.security import has_role, has_permission
 from ringo.lib.imexport import JSONImporter, JSONExporter
 User = import_model('ringo.model.user.User')
 from ringo.lib.renderer import ListRenderer, ConfirmDialogRenderer,\
@@ -436,8 +436,15 @@ def create_(clazz, request, callback=None, renderers={}):
                     mapping=mapping)
             log.info(msg)
             request.session.flash(msg, 'success')
-            route_name = sitem.get_action_routename('update')
-            url = request.route_path(route_name, id=sitem.id)
+
+            # Check if the user is allowed to call the url after saving
+            if has_permission("update", item, request):
+                route_name = item.get_action_routename('update')
+                url = request.route_path(route_name, id=item.id)
+            else:
+                route_name = item.get_action_routename('read')
+                url = request.route_path(route_name, id=item.id)
+
             if callback:
                 sitem = callback(request, sitem)
             # handle create events
@@ -516,8 +523,15 @@ def update_(clazz, request, callback=None, renderers={}):
                     mapping=mapping)
             log.info(msg)
             request.session.flash(msg, 'success')
-            route_name = item.get_action_routename('update')
-            url = request.route_path(route_name, id=item.id)
+
+            # Check if the user is allowed to call the url after saving
+            if has_permission("update", item, request):
+                route_name = item.get_action_routename('update')
+                url = request.route_path(route_name, id=item.id)
+            else:
+                route_name = item.get_action_routename('read')
+                url = request.route_path(route_name, id=item.id)
+
             if callback:
                 item = callback(request, item)
             # handle update events
