@@ -33,12 +33,12 @@ def walk(state, found=None):
         found = []
     if state not in found:
         found.append(state)
-    for transition in state.get_transitions():
-        if transition._end_state in found:
-            continue
-        else:
-            found.append(transition._end_state)
-            found = walk(transition._end_state, found)
+        for transition in state.get_transitions():
+            if transition._end_state in found:
+                continue
+            else:
+                found.append(transition._end_state)
+                found = walk(transition._end_state, found)
     return found
 
 
