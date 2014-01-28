@@ -18,13 +18,13 @@ def get_resource_factory(clazz, modul=None):
 
 class RessourceFactory(object):
 
-    def __init__(self, request):
+    def __init__(self, request, item=None):
         # Reset ACL
         self.__acl__ = []
-        self.item = None
+        self.item = item
 
         item_id = request.matchdict.get('id')
-        if item_id:
+        if item_id and not self.item:
             self.item = self._load_item(item_id)
         self.__acl__ = self._get_item_permissions(request)
 
