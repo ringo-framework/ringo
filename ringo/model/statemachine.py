@@ -37,8 +37,7 @@ def walk(state, found=None):
             if transition._end_state in found:
                 continue
             else:
-                found.append(transition._end_state)
-                found = walk(transition._end_state, found)
+                walk(transition._end_state, found)
     return found
 
 
