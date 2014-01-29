@@ -94,6 +94,7 @@ class UserFactory(BaseFactory):
 class User(BaseItem, Base):
     __tablename__ = 'users'
     _modul_id = 3
+    _sql_eager_loads = ['roles', 'groups']
     id = sa.Column(sa.Integer, primary_key=True)
     login = sa.Column(sa.Text, unique=True, nullable=False)
     password = sa.Column(sa.Text, nullable=False)
