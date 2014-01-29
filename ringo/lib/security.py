@@ -45,7 +45,7 @@ def setup_ringo_security(config):
     # See http://docs.pylonsproject.org/projects/ \
     #            pyramid_cookbook/en/latest/auth/ \
     #            user_object.html
-    config.set_request_property(get_user, 'user', reify=True)
+    config.add_request_method(get_user, 'user', reify=True)
 
     # Add subscriber to check the CSRF token in POST requests.
     config.add_subscriber(csrf_token_validation, ContextFound)
@@ -129,6 +129,16 @@ def get_permissions(modul, item=None):
     perms.append((Allow, 'role:admin', ALL_PERMISSIONS))
     if not modul:
         return perms
+
+    # Load current states for the item as we need to check which
+    # permissions the user has depending on the current states of the item.
+    current_states = []
+    if item and hasattr(item, '_statemachines'):
+        for smname in item._statemachines:
+            sm = item.get_statemachine(smname)
+            state = sm.get_state()
+            current_states.append(state)
+
     for action in modul.actions:
         for role in action.roles:
             add_perm = True
@@ -136,19 +146,14 @@ def get_permissions(modul, item=None):
 
             # Check if the actions is available in the current state of
             # the item if the item has states.
-            if item and hasattr(item, '_statemachines'):
-                actionname = action.name.lower()
-                for smname in item._statemachines:
-                    sm = item.get_statemachine(smname)
-                    state = sm.get_state()
-                    if str(actionname) in state.get_disabled_actions(role.name):
-                        add_perm = False
-                        continue
-
+            for state in current_states:
+                if str(action.name) in state.get_disabled_actions(role.name):
+                    add_perm = False
+                    continue
 
             # administrational role means allow without further
             # ownership checks.
-            if role.admin is True:
+            if role.admin is True and add_perm:
                 perms.append((Allow, default_principal, action.name.lower()))
 
             # class level permissions

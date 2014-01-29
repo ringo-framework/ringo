@@ -12,6 +12,24 @@ def render_filter_link(request, field, value, clazz):
   else:
     out.append('%s</a>' % value)
   return " ".join(out)
+
+def render_responsive_class(visibleonsize):
+  """Will return a string containing BS3 responsve classes to hide
+  elements on different screen sizes."""
+  if not visibleonsize:
+    return ""
+  elif visibleonsize == "small":
+    return ""
+  elif visibleonsize == "medium":
+    return "hidden-xs"
+  elif visibleonsize == "large":
+    return "hidden-sm hidden-xs"
+  elif visibleonsize == "xlarge":
+    return "hidden-md hidden-sm hidden-xs"
+  else:
+    return ""
+
+autoresponsive = tableconfig.is_autoresponsive()
 %>
 <div class="well well-small search-widget">
   <form name="search" class="form-inline" role="form" action="${request.current_route_url()}" method="POST">
@@ -73,7 +91,11 @@ table-bordered">
     </th>
   % endif
   % for num, field in enumerate(tableconfig.get_columns()):
-    <th width="${field.get('width')}" class="${num > 0 and 'hidden-xs'}"</th>
+    % if autoresponsive:
+      <th width="${field.get('width')}" class="${num > 0 and 'hidden-xs'}"</th>
+    % else:
+      <th width="${field.get('width')}" class="${render_responsive_class(field.get('screen'))}"</th>
+    % endif
       % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
         <a
         href="${request.current_route_url()}?sort_field=${field.get('name')}&sort_order=desc">${_(field.get('label'))}</a>
@@ -93,9 +115,9 @@ table-bordered">
   </tr>
   % for item in items:
     % if s.has_permission("update", item, request):
-      <tr onclick="openItem('${request.route_url(clazz.get_action_routename("update"), id=item.id)}')">
+      <tr onclick="openItem('${request.route_path(clazz.get_action_routename("update"), id=item.id)}')">
     % else:
-      <tr onclick="openItem('${request.route_url(clazz.get_action_routename("read"), id=item.id)}')">
+      <tr onclick="openItem('${request.route_path(clazz.get_action_routename("read"), id=item.id)}')">
     % endif
     % if enable_bundled_actions:
     <td>
@@ -103,9 +125,12 @@ table-bordered">
     </td>
     % endif
     % for num, field in enumerate(tableconfig.get_columns()):
-    <td class="${num > 0 and 'hidden-xs'}">
+      % if autoresponsive:
+        <td class="${num > 0 and 'hidden-xs'}">
+      % else:
+        <td class="${render_responsive_class(field.get('screen'))}"</th>
+      % endif
         <%
-          form_config = tableconfig.get_form_config()
           try:
             value = getattr(item, field.get('name'))
           except AttributeError:

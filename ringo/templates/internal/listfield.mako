@@ -4,7 +4,7 @@
     <tr class="table-toolbar">
       <th colspan="${len(tableconfig.get_columns())+1}">
       <a href="#"
-      onclick="addItem('${request.route_url(clazz.get_action_routename("create"))}', '${field.name}', '${field.renderer.form}', '${field._form._item.id}', '${pclazz.get_item_modul().clazzpath}')"
+      onclick="addItem('${request.route_path(clazz.get_action_routename("create"))}', '${field.name}', '${field.renderer.form}', '${field._form._item.id}', '${pclazz.get_item_modul().clazzpath}')"
       class="btn btn-default btn-small">${_('Add')}</a>
       </th>
     </tr>
@@ -22,7 +22,11 @@
   </thead>
   <tbody>
     % for item in items:
-    <tr>
+      % if s.has_permission("update", item, request):
+        <tr onclick="openItem('${request.route_path(clazz.get_action_routename("update"), id=item.id)}')">
+      % else:
+        <tr onclick="openItem('${request.route_path(clazz.get_action_routename("read"), id=item.id)}')">
+      % endif 
       % if not field.is_readonly() and not field.renderer.onlylinked == "true":
         <td>
           <input type="checkbox" value="${item.id}" name="${field.name}"/>
@@ -32,25 +36,19 @@
           <input style="display:none" type="checkbox" value="${item.id}" name="${field.name}"/>
       % endif
       % for num, col in enumerate(tableconfig.get_columns()):
-        % if s.has_permission("update", item, request):
-          <td class="${num > 0 and 'hidden-xs'}"
-          onclick="openItem('${request.route_url(clazz.get_action_routename("update"), id=item.id)}')">
+        <td class="${num > 0 and 'hidden-xs'}">
+        <%
+          try:
+            value = item.get_value(col.get('name'))
+          except AttributeError:
+            value = "NaF"
+        %>
+        ## Escape value here
+        % if isinstance(value, list):
+          ${", ".join(unicode(v) for v in value) | h}
         % else:
-          <td class="${num > 0 and 'hidden-xs'}" onclick="openItem('${request.route_url(clazz.get_action_routename("read"), id=item.id)}')">
-        % endif 
-          <%
-            form_config = tableconfig.get_form_config()
-            try:
-              value = item.get_value(col.get('name'))
-            except AttributeError:
-              value = "NaF"
-          %>
-          ## Escape value here
-          % if isinstance(value, list):
-            ${", ".join(unicode(v) for v in value) | h}
-          % else:
-            ${value}
-          % endif
+          ${value}
+        % endif
       </td>
       % endfor
     </tr>

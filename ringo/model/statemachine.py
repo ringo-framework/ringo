@@ -21,7 +21,7 @@ A state machine can be attached to the items using a :ref:`mixin_state`
 which organises the state machines an provides a unique interface.
 """
 
-def walk(state, found=[]):
+def walk(state, found=None):
     """Helper function to collect all available states in the states
     graph beginning from the given start state
 
@@ -29,23 +29,25 @@ def walk(state, found=[]):
     :returns: List of all states
 
     """
+    if not found:
+        found = []
     if state not in found:
         found.append(state)
-    for transition in state.get_transitions():
-        if transition._end_state in found:
-            continue
-        else:
-            found.append(transition._end_state)
-            found = walk(transition._end_state, found)
+        for transition in state.get_transitions():
+            if transition._end_state in found:
+                continue
+            else:
+                found.append(transition._end_state)
+                found = walk(transition._end_state, found)
     return found
 
 
-def null_handler(item):
+def null_handler(item, transition):
     """Null handler"""
     return item
 
 
-def null_condition(item):
+def null_condition(item, transition):
     """Null condition"""
     return True
 
@@ -54,14 +56,14 @@ class TransitionHandler(object):
     """Handler callable which will be called if the transition between
     to :class:`State` objects has been finished."""
 
-    def __call__(self, item):
+    def __call__(self, item, transition):
         """Implement me!
 
         :item: :class:`BaseItem` instance
         :returns: :class:`BaseItem` instance
 
         """
-        return null_handler(item)
+        return null_handler(item, transition)
 
 class TransitionCondition(object):
 
@@ -75,7 +77,7 @@ class TransitionCondition(object):
         :returns: True or False
 
         """
-        return null_condition(item)
+        return null_condition(item, transition)
 
 class Statemachine(object):
     """A state machine, is a mathematical model of computation used to
@@ -86,22 +88,30 @@ class Statemachine(object):
     change from one state to another when initiated by a triggering
     event or condition; this is called a transition."""
 
-    def __init__(self, item, key_state_id):
+    def __init__(self, item, item_state_attr, init_state=None, request=None):
         """Initialise the statemachine for the given item.
 
         :item: Attach the state machine to this :class:`BaseItem`
-        :key_state_id: initialize with the given state id
+        :item_state_attr: name of the attribute which store the value of
+        the current state of the statemachine in the given item.
+        :init_state: Initialize the statemachine with an alternative
+        state. (Not the value coming from item_state_attr)
+        :request: Current request.
 
         """
         self._item = item
-        self._key_state_id = key_state_id
+        self._item_state_attr = item_state_attr
         self._root = self.setup()
         self._current = self._root
+        self._request = request
 
         # Try to set the current state of the statemaching by getting
         # the current state from the item.
+        current_id = getattr(self._item, self._item_state_attr)
+        if init_state:
+            current_id = init_state
         for st in self.get_states():
-            if st._id == getattr(self._item, self._key_state_id):
+            if st._id == current_id:
                 self._current = st
                 break
 
@@ -138,9 +148,9 @@ class Statemachine(object):
         for transition in self._current.get_transitions():
             if (transition._end_state._id == state or
                transition._end_state == state):
-                self._item = transition._handler(self._item)
+                self._item = transition._handler(self._item, transition)
                 self._current = transition._end_state
-                setattr(self._item, self._key_state_id, self._current._id)
+                setattr(self._item, self._item_state_attr, self._current._id)
                 return self._current
         raise Exception('No fitting transition to transition found')
 
@@ -236,7 +246,7 @@ class Transition(object):
         available (check succeeds) and returns False if the conditions
         for a state change are not met."""
         if self._condition:
-            return self._condition(self.get_start()._statemachine._item)
+            return self._condition(self.get_start()._statemachine._item, self)
         else:
             return True
 
@@ -259,7 +269,7 @@ class State(object):
         :label: Label of the Statemachine (short description)
         :description: Long description of the state.
         :disabled_actions: Dictionary with a list of actions which are
-        disabled for a role.
+        disabled for a role. {'rolename': ['read', 'update']}
 
         """
         self._statemachine = statemachine
@@ -306,7 +316,6 @@ class State(object):
         :returns:  List of :class:`Transition` objects.
 
         """
-        # Check if the
         transitions = []
         for trans in self._transitions:
             if trans.is_available():

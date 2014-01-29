@@ -12,6 +12,9 @@
     <entity id="e4" name="definition" label="Formdefiniton" type="string" required="true">
       <renderer type="textarea"></renderer>
     </entity>
+    <entity id="modul" name="modul" label="Modul">
+      <help>Select the modul for which this form will be available</help>
+    </entity>
     <entity id="s1" name="review_state_id" label="Review state" type="integer">
       <renderer type="state"></renderer>
     </entity>
@@ -41,6 +44,7 @@
       <col><field ref="e2"/></col>
     </row>
     <row>
+      <col><field ref="modul"/></col>
       <col><field ref="e3"/></col>
     </row>
     <row>

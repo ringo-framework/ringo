@@ -4,11 +4,24 @@ $( document ).ready(function() {
     $('#savequerydialog').modal({
         show: false
     });
+    $('.datatable-pageinated').dataTable( {
+           "bPaginate": true,
+           "sPaginationType": "full_numbers",
+           "bLengthChange": true,
+           "bFilter": true,
+           "bSort": true,
+           /* Disable initial sort */
+           "aaSorting": [],
+           "bInfo": true,
+           "bAutoWidth": true
+     });
     $('.datatable-simple').dataTable( {
            "bPaginate": false,
            "bLengthChange": false,
            "bFilter": true,
            "bSort": true,
+           /* Disable initial sort */
+           "aaSorting": [],
            "bInfo": false,
            "bAutoWidth": false
      });
@@ -17,12 +30,14 @@ $( document ).ready(function() {
            "bLengthChange": false,
            "bFilter": false,
            "bSort": true,
+           /* Disable initial sort */
+           "aaSorting": [],
            "bInfo": false,
            "bAutoWidth": false
       });
      // Add form-controll class to search fields, needed for BS3
      $('.dataTables_filter input').addClass("form-control");
-     $('.dataTables_filter input').addClass("form-control");
+     $('.dataTables_length select').addClass("form-control");
 
      // Make the formbar navigation sticky when the user scrolls down.
      var width = $( document ).width();

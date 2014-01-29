@@ -60,7 +60,7 @@ def login(request):
             msg = _("Login was successfull :)")
             request.session.flash(msg, 'success')
             headers = remember(request, user.id, max_age='86400')
-            target_url = request.route_url('home')
+            target_url = request.route_path('home')
             return HTTPFound(location=target_url, headers=headers)
 
     return {'form': form.render(),
@@ -72,7 +72,7 @@ def login(request):
 def logout(request):
     handle_history(request)
     _ = request.translate
-    target_url = request.route_url('home')
+    target_url = request.route_path('home')
     headers = forget(request)
     msg = _("Logout was successfull :)")
     request.session.flash(msg, 'success')
@@ -130,14 +130,14 @@ def register_user(request):
             mailer = Mailer(request)
             recipient = profile.email
             subject = _('Confirm user registration for %s' % get_app_name())
-            values = {'url': request.route_url('confirm_user', token=atoken),
+            values = {'url': request.route_path('confirm_user', token=atoken),
                       'app_name': get_app_name(),
                       'email': settings['mail.default_sender'],
                       '_': _}
             mail = Mail([recipient], subject, template="register_user", values=values)
             mailer.send(mail)
 
-            target_url = request.route_url('login')
+            target_url = request.route_path('login')
             headers = forget(request)
             msg = _("User has been created and a confirmation mail was sent"
                     " to the users email adress. Please check your email :)")
@@ -185,13 +185,13 @@ def forgot_password(request):
                 mailer = Mailer(request)
                 recipient = user.profile[0].email
                 subject = _('Password reset request for %s' % get_app_name())
-                values = {'url': request.route_url('reset_password', token=user.reset_tokens[-1]),
+                values = {'url': request.route_path('reset_password', token=user.reset_tokens[-1]),
                           'app_name': get_app_name(),
                           'email': settings['mail.default_sender'],
                           '_': _}
                 mail = Mail([recipient], subject, template="password_reset_request", values=values)
                 mailer.send(mail)
-            target_url = request.route_url('login')
+            target_url = request.route_path('login')
             headers = forget(request)
             msg = _("Password reset token has been sent to the users "
                     "email address. Please check your email :)")

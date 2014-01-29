@@ -1,6 +1,7 @@
 import os
 import logging
 import pkg_resources
+from beaker.cache import cache_regions
 from pyramid.config import Configurator
 from pyramid.events import BeforeRender, NewRequest
 from pyramid_beaker import session_factory_from_settings
@@ -149,6 +150,15 @@ def main(global_config, **settings):
     Base.metadata.bind = engine
     config = Configurator(settings=settings,
                           locale_negotiator=locale_negotiator)
+
+    # configure cache regions
+    cache_regions.update({
+        'short_term':{
+            'expire':'60',
+            'type':'memory'
+        }
+    })
+
     config.set_session_factory(session_factory_from_settings(settings))
     config.include('ringo')
     return config.make_wsgi_app()

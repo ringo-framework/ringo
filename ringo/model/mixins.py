@@ -92,14 +92,43 @@ class StateMixin(object):
         """Returns a list keys of configured statemachines"""
         return cls._statemachines.keys()
 
-    def get_statemachine(self, key):
+    @classmethod
+    def update_handler(cls, request, item):
+        """Will check if the state of any of the statemachines has been
+        changed. If so it will perform a virtual change of a state to trigger
+        the call of the handlers.
+
+        :request: Current request
+        :item: Item handled in the update.
+
+        """
+        for key in cls.list_statemachines():
+            new_state_id = item.get_value(key)
+            # old state can be None in case the state has not changed.
+            old_state_id = attributes.get_history(item, key)[2] # old values
+            if old_state_id and new_state_id:
+                # Perform state change in the statemachine to call the
+                # handlers
+                log.debug("%s -> %s" % (old_state_id, new_state_id))
+                sm = item.get_statemachine(key, old_state_id[0], request)
+                sm.set_state(new_state_id)
+
+    def get_statemachine(self, key, state_id=None, request=None):
         """Returns a statemachine instance for the given key
 
         :key: Name of the key of the statemachine
+        :state_id: initial state of the statemachine
         :returns: Statemachine instance
 
         """
-        return self._statemachines[key](self, key)
+        if not hasattr(self, '_cache_statemachines'):
+            cache = {}
+        else:
+            cache = getattr(self, '_cache_statemachines')
+        if key not in cache:
+            cache[key] = self._statemachines[key](self, key, state_id, request)
+            setattr(self, '_cache_statemachines', cache)
+        return cache[key]
 
 
 class Meta(object):
@@ -127,7 +156,6 @@ class Blobform(object):
     overwrite the way how to get the form definiton and how to get
     values from the item."""
     data = Column(Text, default="{}")
-    _form_id = 1
 
     @declared_attr
     def fid(cls):
@@ -139,29 +167,36 @@ class Blobform(object):
         form = relationship(Form, uselist=False)
         return form
 
-    @classmethod
-    def get_form_config(cls, formname):
+    def get_form_config(self, formname):
         """Return the Configuration for a given form. This function
         overwrites the default get_form_config method from the BaseItem
         to load the configuration from the database. Please take care
         for the inheritance order to enabled overloading of this method."""
         from ringo.model.form import Form
-        factory = Form.get_item_factory()
-        form = factory.load(cls._form_id)
-        cachename = "%s.%s.%s" % (cls.__name__, form.id, formname)
-        if not cls._cache_form_config.get(cachename):
-            config = Config(parse(form.definition.encode('utf-8')))
-            cls._cache_form_config[cachename] = config.get_form(formname)
-        return cls._cache_form_config[cachename]
+        if self.fid:
+            # A reference to a form has been set. Load the references value
+            cachename = "%s.%s.%s" % (self.__class__.__name__,
+                                      self.fid, formname)
+            if not self._cache_form_config.get(cachename):
+                factory = Form.get_item_factory()
+                form = factory.load(self.fid)
+                config = Config(parse(form.definition.encode('utf-8')))
+                self._cache_form_config[cachename] = config.get_form(formname)
+            return self._cache_form_config[cachename]
+        else:
+            # Fallback! Should not happen. Load default form.
+            return super(Blobform, self).get_form_config(formname)
 
     def __getattr__(self, name):
         """This function tries to get the given attribute of the item if
         it can not be found using the usual way to get attributes. In
         this case we will split the attribute name by "." and try to get
         the attribute along the "." separated attribute name."""
-        json_data = json.loads(getattr(self, 'data'))
-        if json_data.has_key(name):
-            return json_data[name]
+        data = getattr(self, 'data')
+        if data:
+            json_data = json.loads(getattr(self, 'data'))
+            if json_data.has_key(name):
+                return json_data[name]
 
         element = self
         attributes = name.split('.')
@@ -189,12 +224,15 @@ class Blobform(object):
         """
         json_data = {}
         columns = self.get_columns(self)
+        log.debug("Saving %s" % self)
         for key, value in data.iteritems():
             if key in columns:
+                log.debug("Setting value '%s' for '%s' in DB" % (value, key))
                 setattr(self, key, value)
             else:
                 if isinstance(value, datetime.date):
                     value = str(value)
+                log.debug("Setting value '%s' for '%s' in JSON" % (value, key))
                 json_data[key] = value
         setattr(self, 'data', json.dumps(json_data))
 

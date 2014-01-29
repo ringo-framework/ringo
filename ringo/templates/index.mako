@@ -15,7 +15,7 @@ mapping={'app_title': h.get_app_title()}
   <li>${_('Password')}: secret</li>
 </ul>
 <p>${_('Please do not forget to change the password after your first login! What are you waiting for?')}</p>
-<a href="${request.route_url('login')}" class="btn btn-primary btn-large" title="${_('Login in the application')}">${_('Login')}</a>
+<a href="${request.route_path('login')}" class="btn btn-primary btn-large" title="${_('Login in the application')}">${_('Login')}</a>
 % else:
 <h2>${_('What to do next?')}</h2>
 <p>${_('The Ringo application framework provides already some basic functionality which is ready for use in your fresh created application. It time to make a tour in your application to get a better impression of what is already included and how things work.') | n}</p>

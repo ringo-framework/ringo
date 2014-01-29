@@ -8,6 +8,26 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
+0.9.1
+-----
+- Replaced route_url with route_path.
+- Fixed rendering of links in the dropdown renderer. Consider user permission
+  on link generation (read/update).
+- Added options to the Table renderer to configure the responsive behaviour of
+  table columns. You can now define which columns should be visible on which
+  screenwidth. Defaults to show only the first column.
+- Workded on Formeditor. Implemented selecting a form when creating new
+  (blobform) items.
+- Introduced warnings (formbar 393:bbd7a5192e29). Validate the item on loading
+  to generate warning.
+- Handlers in the statemachine now get the transition as additional parameter.
+  This is usefull das the transformation gives access to the state,
+  statemachine and optionally the request.
+- Use sorting configuration from table config in DTLists.
+- Added paginated DTList.
+- Check if the user is still allowed to edit the item after he edited it
+  (Statechange). If not call alternative read URL.
+
 0.9.0
 -----
 - Added comment modul

@@ -70,8 +70,8 @@ def get_action_url(request, item, action):
     base_name = item.__tablename__
     route_name = "%s-%s" % (base_name, action)
     if isinstance(item, object):
-        return request.route_url(route_name, id=item.id)
-    return request.route_url(route_name)
+        return request.route_path(route_name, id=item.id)
+    return request.route_path(route_name)
 
 
 def get_path_to(location, app=None):
@@ -182,3 +182,8 @@ def format_timedelta(td):
         minutes = (td.seconds % 3600) // 60
         seconds = td.seconds % 60
     return '%02d:%02d:%02d' % (hours, minutes, seconds)
+
+def format_datetime(dt):
+    """Returns a prettyfied version of a datetime in the form YYYY-MM-DD
+    hh:ss"""
+    return dt.strftime("%Y-%m-%d %H:%M")

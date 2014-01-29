@@ -1,4 +1,5 @@
 import logging
+import cgi
 import json
 from mako.lookup import TemplateLookup
 from formbar.renderer import (
@@ -15,7 +16,7 @@ from ringo.lib.helpers import (
     get_path_to_form_config,
 )
 from ringo.model.base import BaseItem
-import ringo.lib.security
+import ringo.lib.security as security
 
 template_lookup = TemplateLookup(directories=[template_dir],
                                  module_directory='/tmp/ringo_modules')
@@ -78,11 +79,14 @@ class TableConfig:
                         "name": "fieldname",
                         "label": "Label",
                         "width": "width",
+                        "screen": "xlarge",
                         "expand": true
                     }
                 ]
                 "settings": {
-                    "default-sorting": "name"
+                    "default-sort-field": "name"
+                    "default-sort-order": "desc"
+                    "auto-responsive": true
                 }
             }
         }
@@ -98,11 +102,24 @@ class TableConfig:
     * *label*: The label of the field.
     * *width*: The width of the field. If not units are given the pixel
       are assumed.
+    * *screen*: Define from which size on this field will be displayed.
+      Defaults to "small" which means rendering on all sizes.
+      Available media sizes: (xlarge, large, medium, small).
     * *expand*: The expand option is used to expand the referneces
       values in selections into the literal value of the corrispondig
       option. Note that this option is only usefull for selection fields
       in *formbar* which do not have a real relation attached. In all
       other cases the reference values are expanded automatically.
+
+
+    Further the table has some table wide configuration options:
+
+    * *default-sort-field*: Name of the column which should be used as
+      default sorting on the table. Defaults to the first column in the table.
+    * *default-sort-order*: Sort order (desc, asc) Defaults to desc.
+    * *auto-responsive*: If True than only the first column of a table
+      will be displayed on small devices. Else you need to configure the
+      "screen" attribute for the fields.
 
     If no configuration file can be found, then add all fields
     configured in the form configuration to the overview.
@@ -126,6 +143,18 @@ class TableConfig:
             form_config = self.get_form_config()
             self.config = _form2overview(form_config)
 
+    def get_settings(self):
+        """Returns the settings for the table as dictionary
+        :returns: Settings dictionary
+
+        """
+        config = self.config.get(self.name)
+        return config.get('settings', {})
+
+    def is_autoresponsive(self):
+        settings = self.get_settings()
+        return settings.get("auto-responsive", True)
+
     def get_columns(self):
         """Return a list of configured columns within the configuration.
         Each colum is a dictionary containing the one or more available
@@ -145,12 +174,21 @@ class TableConfig:
         the configuration. If no default sorting is configured then
         return the name of the attribute in the first column which is
         configured in the table"""
-        settings = self.config.get('settings')
+        settings = self.get_settings()
         if settings:
-            def_sort = settings.get('default-sorting')
+            def_sort = settings.get('default-sort-field')
             if def_sort:
                 return def_sort
         return self.get_columns()[0].get('name')
+
+    def get_default_sort_order(self):
+        """Returns the ordering of the sort in the table """
+        settings = self.get_settings()
+        if settings:
+            def_order = settings.get('default-sort-order')
+            if def_order:
+                return def_order
+        return "desc"
 
 
 class Renderer(object):
@@ -181,6 +219,14 @@ class ListRenderer(Renderer):
 
     def render(self, request):
         """Initialize renderer"""
+        # TODO: Enabled sorting of lists. Mind that these lists might be
+        # presorted if the user clicked on the header. In this case some
+        # get params with sort configurations are in the session. This
+        # logic is currently in base/view. (ti) <2014-01-23 23:15>
+        # sort_field = self.config.get_default_sort_column()
+        # sort_order = self.config.get_default_sort_order()
+        # self.listing.sort(sort_field, sort_order)
+
         if len(self.listing.search_filter) > 0:
             search = self.listing.search_filter[-1][0]
             search_field = self.listing.search_filter[-1][1]
@@ -192,7 +238,7 @@ class ListRenderer(Renderer):
                   'listing': self.listing,
                   'request': request,
                   '_': request.translate,
-                  's': ringo.lib.security,
+                  's': security,
                   'enable_bundled_actions': False,
                   'search': search,
                   'search_field': search_field,
@@ -208,6 +254,11 @@ class DTListRenderer(Renderer):
         Renderer.__init__(self)
         self.listing = listing
         self.config = self.listing.clazz.get_table_config()
+
+        # Do sort
+        sort_field = self.config.get_default_sort_column()
+        sort_order = self.config.get_default_sort_order()
+        self.listing.sort(sort_field, sort_order)
         self.template = template_lookup.get_template("internal/dtlist.mako")
 
     def render(self, request):
@@ -216,13 +267,15 @@ class DTListRenderer(Renderer):
                   'listing': self.listing,
                   'request': request,
                   '_': request.translate,
-                  's': ringo.lib.security,
+                  's': security,
                   'tableconfig': self.config}
         return self.template.render(**values)
 
 
 class NewsListRenderer(DTListRenderer):
-    pass
+    def __init__(self, listing):
+        DTListRenderer.__init__(self, listing)
+        self.template = template_lookup.get_template("internal/newslist.mako")
 
 
 ###########################################################################
@@ -322,7 +375,7 @@ class ErrorDialogRenderer(DialogRenderer):
         if history:
             values['ok_url'] = self._request.session['history'].pop()
         else:
-            values['ok_url'] = self._request.route_url('home')
+            values['ok_url'] = self._request.route_path('home')
         return self.template.render(**values)
 
     def _render_body(self):
@@ -436,7 +489,11 @@ class DropdownFieldRenderer(FormbarDropdown):
                                                         self._field.name))
             item = None
         if isinstance(item, BaseItem):
-            url = "/%s/read/%s" % (item.__tablename__, item.id)
+            if security.has_permission("update", item, self._field._form._request):
+                route_name = item.get_action_routename('update')
+            else:
+                route_name = item.get_action_routename('read')
+            url = self._field._form._request.route_path(route_name, id=item.id)
             html.append('<a href="%s">&nbsp;[%s]</a>' % (url, item))
         return "".join(html)
 
@@ -469,13 +526,11 @@ class StateFieldRenderer(FormbarDropdown):
         item = self._field._form._item
         sm = item.get_statemachine(self._field.name)
         state = sm.get_state()
-        transitions = state.get_transitions()
 
         html.append(self._render_label())
         values = {'field': self._field,
                   'request': self._field._form._request,
                   'state': state,
-                  'transitions': transitions,
                   '_': self._field._form._translate}
         html.append(self.template.render(**values))
         return "".join(html)
@@ -564,7 +619,7 @@ class ListingFieldRenderer(FormbarSelectionField):
                   'pclazz': self._field._form._item.__class__,
                   'request': self._field._form._request,
                   '_': self._field._form._translate,
-                  's': ringo.lib.security,
+                  's': security,
                   'tableconfig': self.all_items.clazz.get_table_config(config.table)}
         html.append(self.template.render(**values))
         return "".join(html)
@@ -589,7 +644,10 @@ class LogRenderer(FieldRenderer):
         if log.subject:
             html.append('<strong>%s</strong>' % log.subject)
             html.append('<br>')
-        html.append(log.text.replace('\n', '<br>') or "")
+        logentry = []
+        for logtoken in log.text.split('\n'):
+            logentry.append(cgi.escape(logtoken))
+        html.append("<br>".join(logentry))
         html.append("</td>")
         html.append("</tr>")
         return html

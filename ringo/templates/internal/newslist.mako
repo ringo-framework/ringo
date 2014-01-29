@@ -1,9 +1,14 @@
-<table class="table table-condensed table-striped table-bordered datatable-simple">
+<%
+import datetime
+from ringo.lib.helpers import format_datetime
+%>
+<table class="table table-condensed table-striped table-bordered datatable-pageinated">
   <thead>
     <tr>
       % for field in tableconfig.get_columns():
       <th width="${field.get('width')}">${field.get('label')}</th>
       % endfor
+      <th width="10"><span class="glyphicon glyphicon-check"></span></th>
     </tr>
   </thead>
   <tbody>
@@ -19,6 +24,8 @@
             form_config = tableconfig.get_form_config()
             try:
               value = getattr(item, field.get('name'))
+              if isinstance(value, datetime.datetime):
+                value = format_datetime(value)
             except AttributeError:
               value = "NaF"
           %>
@@ -30,6 +37,7 @@
           % endif
       </td>
       % endfor
+      <td><span class="glyphicon glyphicon-check"></span></td>
     </tr>
     % endfor
   </tbody>

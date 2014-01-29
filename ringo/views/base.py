@@ -6,13 +6,14 @@ from pyramid.response import Response
 from pyramid.view import view_config
 import sqlalchemy as sa
 
-from formbar.config import Config, load
+from formbar.config import Config, load, parse
 from formbar.form import Form
 
 from ringo.model.base import BaseList, BaseFactory
-from ringo.model.mixins import Owned, Logged
+from ringo.model.form import Form as BlobformForm
+from ringo.model.mixins import Owned, Logged, Blobform
 from ringo.lib.helpers import import_model, get_path_to_form_config
-from ringo.lib.security import has_role
+from ringo.lib.security import has_role, has_permission
 from ringo.lib.imexport import JSONImporter, JSONExporter
 User = import_model('ringo.model.user.User')
 from ringo.lib.renderer import ListRenderer, ConfirmDialogRenderer,\
@@ -116,6 +117,44 @@ def set_current_form_page(request):
         request.session['%s.%s.form.page' % (item, itemid)] = page
         request.session.save()
     return Response(body='OK', content_type='text/plain')
+
+
+def get_blobform_config(request, item, formname):
+    """Helper function used in the create_ method to setup the create
+    forms for blogform items. To create a new blogform item the
+    creation is done in three steps:
+
+    1. Stage 1: The user selects a form from a list
+    2. Stage 2: The create dialog is rendered with the selected form
+    3. Stage 3: The item is validated and saved.
+
+    :request: current request
+    :item: item to build the form
+    :formname: name of the form in the formconfig
+    :returns: formconfig, item used to build a form.
+
+    """
+    # First check if the fid parameter is provided
+    fid = request.params.get('fid')
+    blobform = request.params.get('blobforms')
+    if fid:
+        log.debug("Stage 3: User has submitted data to create a new item")
+        setattr(item, 'fid', fid)
+        formfactory = BlobformForm.get_item_factory()
+        formconfig = Config(parse(formfactory.load(fid).definition))
+        return item, formconfig.get_form(formname)
+    elif blobform:
+        log.debug("Stage 2: User has selected a blobform %s " % blobform)
+        setattr(item, 'fid', blobform)
+        formfactory = BlobformForm.get_item_factory()
+        formconfig = Config(parse(formfactory.load(blobform).definition))
+        return item, formconfig.get_form(formname)
+    else:
+        log.debug("Stage 1: User is selecting a blobform")
+        modul = item.get_item_modul()
+        formconfig = modul.get_form_config("blobform")
+        return modul, formconfig
+
 
 def handle_event(event, request, item):
     """Will call the event listeners for the given event on every base
@@ -370,13 +409,25 @@ def create_(clazz, request, callback=None, renderers={}):
     formname = request.session.get('%s.form' % clazz)
     if not formname:
         formname = 'create'
-    form = Form(item.get_form_config(formname), item, request.db, translate=_,
+
+    # handle blobforms
+    do_validate = True
+    if isinstance(item, Blobform):
+        item, formconfig = get_blobform_config(request, item, formname)
+        do_validate = "blobforms" not in request.params
+    else:
+        formconfig = item.get_form_config(formname)
+
+    form = Form(formconfig, item,
+                request.db, translate=_,
                 renderers=renderers,
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,
                                       'itemid': None},
-                request=request, csrf_token=request.session.get_csrf_token())
-    if request.POST:
+                request=request,
+                csrf_token=request.session.get_csrf_token())
+
+    if request.POST and do_validate:
         item_label = clazz.get_item_modul().get_label()
         mapping = {'item_type': item_label}
         if form.validate(request.params):
@@ -385,8 +436,17 @@ def create_(clazz, request, callback=None, renderers={}):
                     mapping=mapping)
             log.info(msg)
             request.session.flash(msg, 'success')
-            route_name = sitem.get_action_routename('update')
-            url = request.route_url(route_name, id=sitem.id)
+
+            # Check if the user is allowed to call the url after saving
+            if has_permission("update", item, request):
+                route_name = item.get_action_routename('update')
+                url = request.route_path(route_name, id=item.id)
+            else:
+                route_name = item.get_action_routename('read')
+                url = request.route_path(route_name, id=item.id)
+
+            if callback:
+                sitem = callback(request, sitem)
             # handle create events
             handle_event('create', request, item)
             # Invalidate cache
@@ -465,8 +525,15 @@ def update_(clazz, request, callback=None, renderers={}):
                     mapping=mapping)
             log.info(msg)
             request.session.flash(msg, 'success')
-            route_name = item.get_action_routename('update')
-            url = request.route_url(route_name, id=item.id)
+
+            # Check if the user is allowed to call the url after saving
+            if has_permission("update", item, request):
+                route_name = item.get_action_routename('update')
+                url = request.route_path(route_name, id=item.id)
+            else:
+                route_name = item.get_action_routename('read')
+                url = request.route_path(route_name, id=item.id)
+
             if callback:
                 item = callback(request, item)
             # handle update events
@@ -488,6 +555,11 @@ def update_(clazz, request, callback=None, renderers={}):
                     '${item_type} "${item}".', mapping=mapping)
             log.info(msg)
             request.session.flash(msg, 'error')
+
+    # Validate the form to generate the warnings if the form has not
+    # been alreaded validated.
+    if not item_form.validated:
+        item_form.validate(None)
 
     rvalue['clazz'] = clazz
     rvalue['item'] = item
@@ -524,6 +596,12 @@ def read_(clazz, request, callback=None, renderers={}):
                                            'item': clazz.__tablename__,
                                            'itemid': item.id},
                      request=request, csrf_token=request.session.get_csrf_token())
+
+    # Validate the form to generate the warnings if the form has not
+    # been alreaded validated.
+    if not item_form.validated:
+        item_form.validate(None)
+
     rvalue['clazz'] = clazz
     rvalue['item'] = item
     if isinstance(item, Owned):
@@ -550,7 +628,7 @@ def delete_(clazz, request):
     if request.method == 'POST' and confirmed(request):
         request.db.delete(item)
         route_name = clazz.get_action_routename('list')
-        url = request.route_url(route_name)
+        url = request.route_path(route_name)
         item_label = clazz.get_item_modul().get_label()
         mapping = {'item_type': item_label, 'item': item}
         msg = _('Deleted ${item_type} "${item}" successfull.', mapping=mapping)
@@ -626,7 +704,7 @@ def import_(clazz, request, callback=None):
         item = importer.perform(request, request.POST.get('file').file.read())
         item.save({}, request.db)
         route_name = item.get_action_routename('update')
-        url = request.route_url(route_name, id=item.id)
+        url = request.route_path(route_name, id=item.id)
         if callback:
             item = callback(request, item)
         # handle update events
