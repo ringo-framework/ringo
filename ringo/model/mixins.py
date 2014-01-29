@@ -121,7 +121,14 @@ class StateMixin(object):
         :returns: Statemachine instance
 
         """
-        return self._statemachines[key](self, key, state_id, request)
+        if not hasattr(self, '_cache_statemachines'):
+            cache = {}
+        else:
+            cache = getattr(self, '_cache_statemachines')
+        if key not in cache:
+            cache[key] = self._statemachines[key](self, key, state_id, request)
+            setattr(self, '_cache_statemachines', cache)
+        return cache[key]
 
 
 class Meta(object):
