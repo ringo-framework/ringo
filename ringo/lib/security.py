@@ -181,7 +181,10 @@ def get_principals(userid, request):
     :returns: list with pricipals
 
     """
-    user = _load_user(userid, request)
+    if userid == request.user.id:
+        user = request.user
+    else:
+        user = _load_user(userid, request)
     principals = []
     if user:
         # Add roles the user have
