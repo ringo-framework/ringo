@@ -40,7 +40,10 @@ from ringo.lib.helpers import format_datetime
           % endif
       </td>
       % endfor
-      <td><a href="#" class="linkmarkasread"><span class="glyphicon glyphicon-check"></span></a></td>
+      <td>
+        % if s.has_permission("read", item, request):
+          <a href="#" class="linkmarkasread"><span class="glyphicon glyphicon-check"></span></a></td>
+        % endif
     </tr>
     % endfor
   </tbody>
