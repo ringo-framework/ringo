@@ -602,6 +602,9 @@ def read_(clazz, request, callback=None, renderers={}):
     if not item_form.validated:
         item_form.validate(None)
 
+    if callback:
+        item = callback(request, item)
+
     rvalue['clazz'] = clazz
     rvalue['item'] = item
     if isinstance(item, Owned):
