@@ -512,7 +512,7 @@ def update_(clazz, request, callback=None, renderers={}):
     if request.POST:
         # Check which form should handled. If the submitted data has the
         # key "owner" than handle the ownership form.
-        if request.params.has_key('owner'):
+        if 'owner' in request.params:
             form = owner_form
         else:
             form = item_form
