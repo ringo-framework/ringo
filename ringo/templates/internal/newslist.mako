@@ -8,6 +8,7 @@ from ringo.lib.helpers import format_datetime
       % for field in tableconfig.get_columns():
       <th width="${field.get('width')}">${field.get('label')}</th>
       % endfor
+      ##<th width="10"><a href="#" class="linkmarkallasread"><span class="glyphicon glyphicon-check"></span></a></th>
       <th width="10"><span class="glyphicon glyphicon-check"></span></th>
     </tr>
   </thead>
@@ -58,6 +59,14 @@ var newslist = $('#newslisting').dataTable( {
        "bAutoWidth": true
  });
 
+$('.linkmarkallasread').click( function () {
+  $("#newslisting tbody tr").each(function(index) {
+    var row = $(this);
+    var id = $(row).attr("id").split("_")[1];
+    markNewsAsRead(row, id);
+  });
+});
+
 $('.linkmarkasread').click( function () {
   var row = $(this).closest("tr").get(0);
   var id = $(row).attr("id").split("_")[1];
@@ -76,7 +85,8 @@ function markNewsAsRead(row, id) {
       /* TODO: Try to animate the deletion of the column. Tried to
       call the final deletion as a callback which does not work. (ti)
       <2014-01-30 12:35> */
-      $('#newsentry_'+id).hide(1000, newslist.fnDeleteRow(row));
+      //$('#newsentry_'+id).hide(1000, newslist.fnDeleteRow(row));
+      newslist.fnDeleteRow(row);
       console.log("Venue Successfully Patched!");
     },
     error : function(jqXHR, textStatus, errorThrown) {
