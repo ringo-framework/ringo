@@ -126,7 +126,7 @@ def rest_delete(request):
 
 @view_config(route_name=News.get_action_routename('markasread', prefix="rest"),
              renderer='json',
-             request_method="PATCH",
+             request_method="PUT",
              permission='read')
 def rest_markasread(request):
     return json_read(News, request, callback=read_callback)
