@@ -27,6 +27,7 @@ to the tracker.
 - Added paginated DTList.
 - Check if the user is still allowed to edit the item after he edited it
   (Statechange). If not call alternative read URL.
+- Improved performance. Do some caching here and there.
 
 0.9.0
 -----
