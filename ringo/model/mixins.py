@@ -112,6 +112,8 @@ class StateMixin(object):
                 log.debug("%s -> %s" % (old_state_id, new_state_id))
                 sm = item.get_statemachine(key, old_state_id[0], request)
                 sm.set_state(new_state_id)
+                # clear cached statemachines
+                setattr(item, '_cache_statemachines', {})
 
     def get_statemachine(self, key, state_id=None, request=None):
         """Returns a statemachine instance for the given key
