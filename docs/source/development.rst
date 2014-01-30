@@ -185,8 +185,47 @@ ringo application.
 
 .. _add_action:
 
+Adding a single custom actions to a module
+------------------------------------------
+If you are need specific single action to your modul you need to do the following steps. 
+
+.. note::
+   Adding such an actions is only loose integrated into the ringo framework.
+   So will not be able to configure the permission in the webinterface and the
+   actions will not be listed automatically anywhere in the application.
+
+I will explain it with the example of adding a "Mark as read" operation for
+the news modul. This is a very specific actions which is only used in the
+newslisting. Adding such a specific action as new generic action for the modul
+as described in :ref:`newmodulaction` would be overkill.
+
+ 1. Configure the routes and views
+ 2. Implement action in view.
+
+First configure the route for the new action. Open the __init__ file of your
+application and search for the section where the routing is configured. There
+insert the following line::
+
+    config.add_route(News.get_action_routename(News, 'markasread', prefix='rest'),
+                     'rest/news/{id}/markasread',
+                     factory=get_resource_factory(News))
+
+Now implement the new action in the view. Open 'views/news.py' and add the
+following code::
+
+        @view_config(route_name=News.get_action_routename(News, 'markasread', prefix='rest'),
+                        renderer='json',
+                        request_method="PATCH",
+                        permission='read')
+        def rest_markasread(request):
+            ... your code
+
+
+.. _newmodulactions:
+
 Adding new actions to a module
 ------------------------------
+Write me
 
 Overwriting static files
 ------------------------
