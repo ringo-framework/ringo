@@ -128,6 +128,11 @@ class StateMixin(object):
         if key not in cache:
             cache[key] = self._statemachines[key](self, key, state_id, request)
             setattr(self, '_cache_statemachines', cache)
+        else:
+            # As the statemachine is cached we need to overwrite the
+            # internale _request parameter to have the current request
+            # available in the state.
+            cache[key]._request = request
         return cache[key]
 
 
