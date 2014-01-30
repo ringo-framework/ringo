@@ -526,6 +526,13 @@ def update_(clazz, request, callback=None, renderers={}):
             log.info(msg)
             request.session.flash(msg, 'success')
 
+            if callback:
+                item = callback(request, item)
+            # handle update events
+            handle_event('update', request, item)
+            # Invalidate cache
+            invalidate_cache()
+            # Handle redirect after success.
             # Check if the user is allowed to call the url after saving
             if has_permission("update", item, request):
                 route_name = item.get_action_routename('update')
@@ -534,13 +541,6 @@ def update_(clazz, request, callback=None, renderers={}):
                 route_name = item.get_action_routename('read')
                 url = request.route_path(route_name, id=item.id)
 
-            if callback:
-                item = callback(request, item)
-            # handle update events
-            handle_event('update', request, item)
-            # Invalidate cache
-            invalidate_cache()
-            # Handle redirect after success.
             backurl = request.session.get('%s.backurl' % clazz)
             if backurl:
                 # Redirect to the configured backurl.
