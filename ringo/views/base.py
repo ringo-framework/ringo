@@ -1,6 +1,5 @@
 import uuid
 import logging
-import transaction
 from pyramid.httpexceptions import HTTPFound, HTTPBadRequest
 from pyramid.response import Response
 from pyramid.view import view_config
@@ -9,21 +8,23 @@ import sqlalchemy as sa
 from formbar.config import Config, load, parse
 from formbar.form import Form
 
-from ringo.model.base import BaseList, BaseFactory
+from ringo.model.base import BaseFactory
 from ringo.model.form import Form as BlobformForm
 from ringo.model.mixins import Owned, Logged, Blobform
 from ringo.lib.helpers import import_model, get_path_to_form_config
 from ringo.lib.security import has_role, has_permission
 from ringo.lib.imexport import JSONImporter, JSONExporter
 User = import_model('ringo.model.user.User')
-from ringo.lib.renderer import ListRenderer, ConfirmDialogRenderer,\
-DropdownFieldRenderer, ListingFieldRenderer, LogRenderer,\
-StateFieldRenderer, CommentRenderer, ExportDialogRenderer,\
-ImportDialogRenderer
+from ringo.lib.renderer import (
+    ListRenderer, ConfirmDialogRenderer, DropdownFieldRenderer,
+    ListingFieldRenderer, LogRenderer, StateFieldRenderer,
+    CommentRenderer, ExportDialogRenderer, ImportDialogRenderer
+)
 from ringo.lib.sql import invalidate_cache
 from ringo.views import handle_history
 
 log = logging.getLogger(__name__)
+
 
 def _add_renderers(renderers):
     """Helper function to add ringo ringo specific renderers for form
@@ -39,6 +40,7 @@ def _add_renderers(renderers):
     if not "comments" in renderers:
         renderers["comments"] = CommentRenderer
     return renderers
+
 
 def _load_item(clazz, request):
     """Will load an item from the given clazz. The id of the item to
@@ -76,10 +78,11 @@ def get_current_form_page(clazz, request):
     else:
         return 1
 
+
 def get_ownership_form(item, request, readonly=None):
     if (readonly is None and isinstance(item, Owned)):
         readonly = not (item.is_owner(request.user)
-                    or has_role(request.user, "admin"))
+                        or has_role(request.user, "admin"))
     config = Config(load(get_path_to_form_config('ownership.xml', 'ringo')))
     if readonly:
         form_config = config.get_form('ownership-form-read')
@@ -87,6 +90,7 @@ def get_ownership_form(item, request, readonly=None):
         form_config = config.get_form('ownership-form-update')
     return Form(form_config, item, request.db,
                 csrf_token=request.session.get_csrf_token())
+
 
 def get_logbook_form(item, request, readonly=None, renderers={}):
     config = Config(load(get_path_to_form_config('logbook.xml', 'ringo')))
@@ -160,9 +164,10 @@ def handle_event(event, request, item):
     """Will call the event listeners for the given event on every base
     class of the given item."""
     for class_ in item.__class__.__bases__:
-        if hasattr(class_, event+'_handler'):
-            handler = getattr(class_, event+'_handler')
+        if hasattr(class_, event + '_handler'):
+            handler = getattr(class_, event + '_handler')
             handler(request, item)
+
 
 def handle_params(clazz, request):
     """Handles varios sytem GET params comming with the request
@@ -237,7 +242,7 @@ def handle_sorting(clazz, request):
     order = request.GET.get('sort_order', order)
 
     # Save current sorting in the session
-    if request.params.has_key('reset'):
+    if 'reset' in request.params:
         request.session['%s.list.sort_field' % name] = default_field
         request.session['%s.list.sort_order' % name] = default_order
     else:
@@ -272,7 +277,7 @@ def get_search(clazz, request):
     # Check if there is already a saved search in the session
     saved_search = request.session.get('%s.list.search' % name, [])
 
-    if request.params.has_key('reset'):
+    if 'reset' in request.params:
         return []
 
     # If the request is not a equest from the search form then
@@ -287,10 +292,11 @@ def get_search(clazz, request):
         if searches_dic:
             searches_dic_search = searches_dic.get(name)
             if searches_dic_search:
-                return searches_dic_search.get(saved_search_id, [[], [], None])[0]
-    elif request.params.has_key('save'):
+                return searches_dic_search.get(saved_search_id, [[],
+                                               [], None])[0]
+    elif "save" in request.params:
         return saved_search
-    elif request.params.has_key('delete'):
+    elif "delete" in request.params:
         return saved_search
     else:
         search = request.params.get('search')
@@ -310,7 +316,8 @@ def get_search(clazz, request):
                 found = True
                 break
         if not found:
-            log.debug('Adding search for "%s" in field "%s"' % (search, search_field))
+            log.debug('Adding search for "%s" in field "%s"' % (search,
+                                                                search_field))
             saved_search.append((search, search_field))
     return saved_search
 
@@ -340,7 +347,7 @@ def list_(clazz, request):
     if len(listing.items) > 0:
         request.session['%s.list.search' % clazz.__tablename__] = search
         if (request.params.get('form') == "search"):
-            if request.params.has_key('save'):
+            if "save" in request.params:
                 query_name = request.params.get('save')
                 user = BaseFactory(User).load(request.user.id)
                 searches_dic = user.settings.get('searches', {})
@@ -357,7 +364,7 @@ def list_(clazz, request):
                 searches_dic[clazz.__tablename__] = searches_dic_search
                 user.settings.set('searches', searches_dic)
                 request.db.flush()
-            elif request.params.has_key('delete'):
+            elif "delete" in request.params:
                 query_key = request.params.get('delete')
                 user = BaseFactory(User).load(request.user.id)
                 searches_dic = user.settings.get('searches', {})
@@ -370,7 +377,6 @@ def list_(clazz, request):
                 user.settings.set('searches', searches_dic)
                 request.db.flush()
         request.session.save()
-
 
     renderer = ListRenderer(listing)
     rendered_page = renderer.render(request)
@@ -691,7 +697,6 @@ def export_(clazz, request):
 
 
 def import_(clazz, request, callback=None):
-    import json
     handle_history(request)
     handle_params(clazz, request)
     rvalue = {}
@@ -730,6 +735,7 @@ def import_(clazz, request, callback=None):
         rvalue['dialog'] = renderer.render()
         rvalue['clazz'] = clazz
         return rvalue
+
 
 def confirmed(request):
     """Returns True id the request is confirmed"""
