@@ -269,7 +269,7 @@ class Logged(object):
         return logs
 
     def _build_changes(self, allfields=False):
-        diff = []
+        diff = {}
         for field in self.get_columns(include_relations=True):
             history = attributes.get_history(self, field)
             try:
@@ -286,10 +286,10 @@ class Logged(object):
                 oldv = ""
 
             if newv:
-                diff.append('%s: "%s" -> "%s"' % (field, oldv, newv))
+                diff[field] = {"old": unicode(oldv), "new": unicode(newv)}
             elif allfields:
-                diff.append('%s: "%s"' % (field, curv))
-        return "\n".join(diff)
+                diff[field] = curv
+        return json.dumps(diff)
 
     @classmethod
     def create_handler(cls, request, item):
