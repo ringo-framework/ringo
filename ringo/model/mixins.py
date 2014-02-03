@@ -291,6 +291,24 @@ class Logged(object):
                 diff[field] = curv
         return json.dumps(diff)
 
+    def get_previous_values(self):
+        """Returns a dictionary parsed from the last log entry of the
+        item containinge the previous values for each field if it has
+        been changed."""
+        if len(self.logs) == 0:
+            return {}
+        else:
+            values = {}
+            last = self.logs[-1]
+            try:
+                logentry = json.loads(last.text)
+                for field in logentry:
+                    values[field] = logentry[field]["old"]
+            except:
+                log.warning(("Could not build previous values dict. "
+                             "Maybe old log format?"))
+        return values
+
     @classmethod
     def create_handler(cls, request, item):
         subject = "Create: %s" % item
