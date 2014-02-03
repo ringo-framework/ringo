@@ -621,7 +621,13 @@ def read_(clazz, request, callback=None, renderers={}):
         rvalue['logbook'] = logbook_form.render()
     else:
         rvalue['logbook'] = ""
-    rvalue['form'] = item_form.render(page=get_current_form_page(clazz, request))
+
+    if isinstance(item, Logged):
+        previous_values = item.get_previous_values()
+    else:
+        previous_values = {}
+    rvalue['form'] = item_form.render(page=get_current_form_page(clazz, request),
+                                      previous_values=previous_values)
     return rvalue
 
 
