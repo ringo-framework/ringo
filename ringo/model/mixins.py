@@ -254,6 +254,8 @@ class Version(Base):
     __tablename__ = 'versions'
     id = Column(Integer, primary_key=True)
     values = Column(Text, default=None)
+    author = Column(Text, default=None)
+    date = Column(DateTime, default=None)
 
 class Versioned(object):
     """Mixin to add version functionallity to a modul. Adding this Mixin
@@ -288,6 +290,8 @@ class Versioned(object):
         for field in item_values:
             values[field] = unicode(item_values[field])
         version.values = json.dumps(values)
+        version.author = request.user.login
+        version.date = datetime.datetime.now()
         item.versions.append(version)
 
     def get_previous_values(self):
