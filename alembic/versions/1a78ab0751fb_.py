@@ -1,4 +1,4 @@
-"""empty message
+"""Add version table for versioned mixin
 
 Revision ID: 1a78ab0751fb
 Revises: 4ee41432a71
