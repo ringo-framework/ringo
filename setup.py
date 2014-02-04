@@ -21,7 +21,7 @@ requires = [
     'waitress',
     'babel',
     'Sphinx',
-    'formbar>=0.4.2',
+    'formbar<=0.6.0',
     'nose',
     'behave',
     'invoke',
@@ -31,7 +31,7 @@ requires = [
 ]
 
 setup(name='ringo',
-      version='0.9.0',
+      version='0.9.1',
       description='A simple web framework with base functionality to build web applications.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
