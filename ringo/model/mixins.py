@@ -38,7 +38,8 @@ from sqlalchemy import (
     Integer,
     DateTime,
     ForeignKey,
-    Table
+    Table,
+    inspect
 )
 
 from sqlalchemy.orm import (
@@ -270,25 +271,26 @@ class Logged(object):
 
     def _build_changes(self, allfields=False):
         diff = {}
+        inspected_attr = inspect(self).attrs
         for field in self.get_columns(include_relations=True):
-            history = attributes.get_history(self, field)
+            history = inspected_attr.get(field).history
             try:
-                newv = history[0][0]
+                newv = history[0]
             except IndexError:
                 newv = ""
             try:
-                curv = history[1][0]
+                curv = history[1]
             except IndexError:
                 curv = ""
             try:
-                oldv = history[2][0]
+                oldv = history[2]
             except IndexError:
                 oldv = ""
 
             if newv:
                 diff[field] = {"old": unicode(oldv), "new": unicode(newv)}
             elif allfields:
-                diff[field] = curv
+                diff[field] = unicode(curv)
         return json.dumps(diff)
 
     def get_previous_values(self):
