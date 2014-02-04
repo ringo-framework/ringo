@@ -250,7 +250,45 @@ class Blobform(object):
             dbsession.add(self)
         return self
 
+class Version(Base):
+    __tablename__ = 'versions'
+    id = Column(Integer, primary_key=True)
+    values = Column(Text, default=None)
 
+class Versioned(object):
+    """Mixin to add version functionallity to a modul. Adding this Mixin
+    the item of a modul will have a "versions" relationship containing all
+    the values of the entries for this item. Version entries are be created
+    automatically by the system."""
+
+    @declared_attr
+    def versions(cls):
+        tbl_name = "nm_%s_versions" % cls.__name__.lower()
+        nm_table = Table(tbl_name, Base.metadata,
+                         Column('iid', Integer, ForeignKey(cls.id)),
+                         Column('vid', Integer, ForeignKey("versions.id")))
+        versions = relationship(Version, secondary=nm_table)
+        return versions
+
+    @classmethod
+    def create_handler(cls, request, item):
+        cls.update_handler(request, item)
+
+    @classmethod
+    def update_handler(cls, request, item):
+        """Will add a the values of the item into the version table.
+
+        :request: Current request
+        :item: Item handled in the update.
+
+        """
+        version = Version()
+        values = {}
+        item_values = item.get_values()
+        for field in item_values:
+            values[field] = unicode(item_values[field])
+        version.values = json.dumps(values)
+        item.versions.append(version)
 
 class Logged(object):
     """Mixin to add logging functionallity to a modul. Adding this Mixin
