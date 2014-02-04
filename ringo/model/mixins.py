@@ -288,9 +288,15 @@ class Logged(object):
                 oldv = ""
 
             if newv:
-                diff[field] = {"old": unicode(oldv), "new": unicode(newv)}
+                if field == "data" and isinstance(self, Logged):
+                    diff[field] = {"old": oldv, "new": newv}
+                else:
+                    diff[field] = {"old": unicode(oldv), "new": unicode(newv)}
             elif allfields:
-                diff[field] = unicode(curv)
+                if field == "data" and isinstance(self, Logged):
+                    diff[field] = curv
+                else:
+                    diff[field] = unicode(curv)
         return json.dumps(diff)
 
     def get_previous_values(self):
@@ -305,6 +311,10 @@ class Logged(object):
             try:
                 logentry = json.loads(last.text)
                 for field in logentry:
+                    if field == "data" and isinstance(self, Logged):
+                        blobdata = json.loads(logentry[field]["old"][0])
+                        for blobfield in blobdata:
+                            values[blobfield] = blobdata[blobfield]
                     values[field] = logentry[field]["old"]
             except:
                 log.warning(("Could not build previous values dict. "
