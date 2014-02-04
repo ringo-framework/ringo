@@ -201,6 +201,15 @@ class BaseItem(object):
                     return option[0]
         return raw_value
 
+    def get_values(self, include_relations=False):
+        """Will return a dictionary with the values of the item. If
+        include_relations is true, than the realtion values are
+        included. Else only scalar values are included"""
+        values = {}
+        for field in self.get_columns(include_relations):
+            values[field] = getattr(self, field)
+        return values
+
     def save(self, data, dbsession=None):
         """Will save the given data into the item. If the current item
         has no value for the id attribute it is assumed that this item
