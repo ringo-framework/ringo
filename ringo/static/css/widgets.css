@@ -34,6 +34,7 @@
 #data td a.filter {
   text-decoration: None;
   color: black;
+  cursor:zoom-in;
 }
 
  /* Datatables
