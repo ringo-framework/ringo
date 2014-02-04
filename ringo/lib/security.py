@@ -147,7 +147,7 @@ def get_permissions(modul, item=None):
             # Check if the actions is available in the current state of
             # the item if the item has states.
             for state in current_states:
-                if str(action.name) in state.get_disabled_actions(role.name):
+                if str(action.name.lower()) in state.get_disabled_actions(role.name):
                     add_perm = False
                     continue
 

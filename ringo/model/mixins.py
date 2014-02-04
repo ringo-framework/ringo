@@ -112,6 +112,8 @@ class StateMixin(object):
                 log.debug("%s -> %s" % (old_state_id, new_state_id))
                 sm = item.get_statemachine(key, old_state_id[0], request)
                 sm.set_state(new_state_id)
+                # clear cached statemachines
+                setattr(item, '_cache_statemachines', {})
 
     def get_statemachine(self, key, state_id=None, request=None):
         """Returns a statemachine instance for the given key
@@ -267,7 +269,7 @@ class Logged(object):
         return logs
 
     def _build_changes(self, allfields=False):
-        diff = []
+        diff = {}
         for field in self.get_columns(include_relations=True):
             history = attributes.get_history(self, field)
             try:
@@ -284,10 +286,28 @@ class Logged(object):
                 oldv = ""
 
             if newv:
-                diff.append('%s: "%s" -> "%s"' % (field, oldv, newv))
+                diff[field] = {"old": unicode(oldv), "new": unicode(newv)}
             elif allfields:
-                diff.append('%s: "%s"' % (field, curv))
-        return "\n".join(diff)
+                diff[field] = curv
+        return json.dumps(diff)
+
+    def get_previous_values(self):
+        """Returns a dictionary parsed from the last log entry of the
+        item containinge the previous values for each field if it has
+        been changed."""
+        if len(self.logs) == 0:
+            return {}
+        else:
+            values = {}
+            last = self.logs[-1]
+            try:
+                logentry = json.loads(last.text)
+                for field in logentry:
+                    values[field] = logentry[field]["old"]
+            except:
+                log.warning(("Could not build previous values dict. "
+                             "Maybe old log format?"))
+        return values
 
     @classmethod
     def create_handler(cls, request, item):

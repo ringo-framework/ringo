@@ -40,7 +40,10 @@ from ringo.lib.helpers import format_datetime
           % endif
       </td>
       % endfor
-      <td><a href="#" class="linkmarkasread"><span class="glyphicon glyphicon-check"></span></a></td>
+      <td>
+        % if s.has_permission("read", item, request):
+          <a href="#" class="linkmarkasread"><span class="glyphicon glyphicon-check"></span></a></td>
+        % endif
     </tr>
     % endfor
   </tbody>
@@ -85,16 +88,15 @@ function markNewsAsRead(row, id) {
       /* TODO: Try to animate the deletion of the column. Tried to
       call the final deletion as a callback which does not work. (ti)
       <2014-01-30 12:35> */
-      //$('#newsentry_'+id).hide(1000, newslist.fnDeleteRow(row));
-      newslist.fnDeleteRow(row);
-      console.log("Venue Successfully Patched!");
+      $('#newsentry_'+id).hide(1000);
+      console.log("News successfully marked as read!");
     },
     error : function(jqXHR, textStatus, errorThrown) {
       // log the error to the console
       console.log("The following error occured: " + textStatus, errorThrown);
     },
     complete : function() {
-      console.log("Venue Patch Ran");
+      newslist.fnDeleteRow(row);
     }
   });
 };
