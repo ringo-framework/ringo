@@ -623,7 +623,7 @@ def read_(clazz, request, callback=None, renderers={}):
         rvalue['logbook'] = ""
 
     if isinstance(item, Versioned):
-        previous_values = item.get_previous_values()
+        previous_values = item.get_previous_values(author=request.user.login)
     else:
         previous_values = {}
     rvalue['form'] = item_form.render(page=get_current_form_page(clazz, request),
