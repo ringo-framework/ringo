@@ -294,15 +294,26 @@ class Versioned(object):
         version.date = datetime.datetime.now()
         item.versions.append(version)
 
-    def get_previous_values(self):
+    def _get_version(self, author, id):
+        if not author and not id:
+            return self.versions[-2]
+        # iterate over the revsersed versions ignoring the last one
+        for version in self.versions[-2::-1]:
+            if id and version.id == id:
+                return version
+            elif author and version.author == author:
+                return version
+        return self.versions[0]
+
+    def get_previous_values(self, author=None, id=None):
         """Returns a dictionary parsed from the last log entry of the
         item containinge the previous values for each field if it has
         been changed."""
-        if len(self.versions) < 2:
+        if len(self.versions) < 1:
             return {}
         else:
             pvalues = {}
-            last = self.versions[-2]
+            last = self._get_version(author, id)
             try:
                 values = json.loads(last.values)
                 for field in values:
