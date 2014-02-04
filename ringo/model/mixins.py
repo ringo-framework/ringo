@@ -290,6 +290,29 @@ class Versioned(object):
         version.values = json.dumps(values)
         item.versions.append(version)
 
+    def get_previous_values(self):
+        """Returns a dictionary parsed from the last log entry of the
+        item containinge the previous values for each field if it has
+        been changed."""
+        if len(self.versions) < 2:
+            return {}
+        else:
+            pvalues = {}
+            last = self.versions[-2]
+            try:
+                values = json.loads(last.values)
+                for field in values:
+                    if field == "data" and isinstance(self, Blobform):
+                        blobdata = json.loads(values[field])
+                        for blobfield in blobdata:
+                            pvalues[blobfield] = blobdata[blobfield]
+                    pvalues[field] = values[field]
+            except:
+                log.warning(("Could not build previous values dict. "
+                             "Maybe old log format?"))
+        return pvalues
+
+
 class Logged(object):
     """Mixin to add logging functionallity to a modul. Adding this Mixin
     the item of a modul will have a "logs" relationship containing all
@@ -336,28 +359,6 @@ class Logged(object):
                 else:
                     diff[field] = unicode(curv)
         return json.dumps(diff)
-
-    def get_previous_values(self):
-        """Returns a dictionary parsed from the last log entry of the
-        item containinge the previous values for each field if it has
-        been changed."""
-        if len(self.logs) == 0:
-            return {}
-        else:
-            values = {}
-            last = self.logs[-1]
-            try:
-                logentry = json.loads(last.text)
-                for field in logentry:
-                    if field == "data" and isinstance(self, Logged):
-                        blobdata = json.loads(logentry[field]["old"][0])
-                        for blobfield in blobdata:
-                            values[blobfield] = blobdata[blobfield]
-                    values[field] = logentry[field]["old"]
-            except:
-                log.warning(("Could not build previous values dict. "
-                             "Maybe old log format?"))
-        return values
 
     @classmethod
     def create_handler(cls, request, item):

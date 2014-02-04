@@ -10,7 +10,7 @@ from formbar.form import Form
 
 from ringo.model.base import BaseFactory
 from ringo.model.form import Form as BlobformForm
-from ringo.model.mixins import Owned, Logged, Blobform
+from ringo.model.mixins import Owned, Logged, Blobform, Versioned
 from ringo.lib.helpers import import_model, get_path_to_form_config
 from ringo.lib.security import has_role, has_permission
 from ringo.lib.imexport import JSONImporter, JSONExporter
@@ -622,7 +622,7 @@ def read_(clazz, request, callback=None, renderers={}):
     else:
         rvalue['logbook'] = ""
 
-    if isinstance(item, Logged):
+    if isinstance(item, Versioned):
         previous_values = item.get_previous_values()
     else:
         previous_values = {}
