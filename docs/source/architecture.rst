@@ -235,16 +235,63 @@ For detailed descriptione of the involved classes see API documentation of :ref:
 
 Permission System
 =================
+The permission system addresses two basic questions:
 
-.. _authendtification:
+1. **Who is allowed** to access some item in general and
+2. **What is allowed** for the user to access, in case he is generally allowed
+   to access the item.
+
+To answer these two questions the permission system of Ringo is a combination
+of concepts of the permission system known from the Unix file system and a
+roles based permission system.
+
+The Unix file system part answers the first question: Who is allowed? Therefor
+every item in the system inherited from the :ref:`mixin_owned` stores
+information to which owner and which group it belongs to. Only the owner,
+members of the group or users with an administrational role are granted access
+to the item in general.
+
+The role bases system answers the second question: What is allowed. Assuming
+the user has general access to the item. The permission system will now check
+which roles the users have and which actions are allowed for this role.
+
+The permission system in Ringo uses the Pyramid `Pyramid Authorisation and
+Authenfication API <http://docs.pylonsproject.org/projects/pyramid/en/latest/api/security.html>`_
+
+.. _authentification:
 
 Authentification
 ----------------
+Authentication is done once in the login process. If the user has logged in
+successful an auth cookie is saved. From then on the user object is loaded
+from the database on every request with the roles and groups attached to the
+user.  This user object is used later for the Authorisation. If the user is
+not logged in the user object is empty.
 
 .. _authorisation:
 
 Authorisation
 -------------
+Authorisation is done on every request. Authorisation is done against
+resources.
+
+A resource is an url or an item which is accessed by calling the url in your
+application.  In all cases this resource is build from a resource factory for
+every request.  The resource will have an ACL which determines if the user of
+the current request (See :ref:`authentification`) is allowed to access the
+resource.
+
+Ringo's part in the authorisation process is to build the ACL. This ACL is
+then used by the Pyramid security API. Therefor ringo implements helper
+functions to build ACL lists which model the ringo permission system.
+
+See `Adding Authorization tutorial
+<http://docs.pylonsproject.org/projects/pyramid/en/latest/tutorials/wiki2/authorization.html>`_
+for more information how things work in general under the hood.
+
+See :ref:`api-security` for documentation on helper functions used to build
+the ACL.
+
 
 Event Handlers
 ==============

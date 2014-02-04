@@ -42,7 +42,7 @@ Tag
 
 Todo
 ----
-.. autoclass:: ringo.model.tag.Todo
+.. autoclass:: ringo.model.todo.Todo
 
 Comment
 -------
@@ -61,3 +61,17 @@ Statemachine
    :members:
 .. autoclass:: ringo.model.statemachine.TransitionHandler
 .. autoclass:: ringo.model.statemachine.TransitionCondition
+
+Lib
+===
+
+.. _api-security:
+
+Security
+--------
+.. autofunction:: ringo.lib.security.has_permission
+.. autofunction:: ringo.lib.security.get_permissions
+.. autofunction:: ringo.lib.security.get_principals
+.. autofunction:: ringo.lib.security.has_role
+.. autofunction:: ringo.lib.security.get_roles
+.. autofunction:: ringo.lib.security.has_group
