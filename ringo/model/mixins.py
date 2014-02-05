@@ -49,7 +49,7 @@ from sqlalchemy.orm import (
 )
 
 from ringo.model import Base
-from ringo.model.base import serialize
+from ringo.lib.helpers import serialize
 
 log = logging.getLogger(__name__)
 
@@ -94,28 +94,24 @@ class StateMixin(object):
         """Returns a list keys of configured statemachines"""
         return cls._statemachines.keys()
 
-    @classmethod
-    def update_handler(cls, request, item):
-        """Will check if the state of any of the statemachines has been
-        changed. If so it will perform a virtual change of a state to trigger
-        the call of the handlers.
+    def change_state(self, request, key, old_state_id, new_state_id):
+        """Changes the state of the given statemachine from old to new.
+        The statemachine is identified by the key in the _statemachines
+        dictionary"""
+        log.debug("%s -> %s" % (old_state_id, new_state_id))
+        sm = self.get_statemachine(key, old_state_id, request)
+        sm.set_state(new_state_id)
+        # clear cached statemachines
+        setattr(self, '_cache_statemachines', {})
+        # Add logentry on statechange if the item is loggend
+        if isinstance(self, Logged):
+            from ringo.model.log import Log
+            factory = Log.get_item_factory()
+            logentry = factory.create(user=request.user)
+            logentry.subject = "State Changed: %s" % self
+            self.logs.append(logentry)
 
-        :request: Current request
-        :item: Item handled in the update.
 
-        """
-        for key in cls.list_statemachines():
-            new_state_id = item.get_value(key)
-            # old state can be None in case the state has not changed.
-            old_state_id = attributes.get_history(item, key)[2] # old values
-            if old_state_id and new_state_id:
-                # Perform state change in the statemachine to call the
-                # handlers
-                log.debug("%s -> %s" % (old_state_id, new_state_id))
-                sm = item.get_statemachine(key, old_state_id[0], request)
-                sm.set_state(new_state_id)
-                # clear cached statemachines
-                setattr(item, '_cache_statemachines', {})
 
     def get_statemachine(self, key, state_id=None, request=None):
         """Returns a statemachine instance for the given key
@@ -238,6 +234,26 @@ class Blobform(object):
         json_data = {}
         columns = self.get_columns(self)
         log.debug("Saving %s" % self)
+
+        old_values = self.get_values()
+        # Handle statechange
+        if isinstance(self, StateMixin):
+            for key in self.list_statemachines():
+                new_state_id = data.get(key)
+                old_state_id = old_values.get(key)
+                if new_state_id != old_state_id:
+                    self.change_state(request, key, old_state_id, new_state_id)
+
+        # Handle logentry
+        if isinstance(self, Logged):
+            if not self.id:
+                subject = "Create"
+                text = json.dumps(self.build_changes(old_values, data))
+            else:
+                subject = "Update"
+                text = json.dumps(self.build_changes(old_values, data))
+            self.add_log_entry(subject, text, request)
+
         for key, value in data.iteritems():
             if key in columns:
                 log.debug("Setting value '%s' for '%s' in DB" % (value, key))
@@ -350,71 +366,48 @@ class Logged(object):
         logs = relationship(Log, secondary=nm_table)
         return logs
 
-    def _build_changes(self, allfields=False):
+    def build_changes(self, old_values, new_values):
+        """Returns a dictionary with the old and new values for each
+        field which has changed"""
         diff = {}
-        inspected_attr = inspect(self).attrs
-        for field in self.get_columns(include_relations=True):
-            history = inspected_attr.get(field).history
-            try:
-                newv = history[0]
-            except IndexError:
-                newv = ""
-            try:
-                curv = history[1]
-            except IndexError:
-                curv = ""
-            try:
-                oldv = history[2]
-            except IndexError:
-                oldv = ""
+        if isinstance(self, Blobform):
+            data = json.loads(old_values.get("data") or "{}")
+            old_values = dict(old_values.items() + data.items())
+        for field in new_values:
+            oldv = serialize(old_values.get(field))
+            newv = serialize(new_values.get(field))
+            print field, newv, oldv, type(newv), type(oldv)
+            if newv == oldv:
+                continue
+            if field == "data":
+                diff[field] = {"old": oldv, "new": newv}
+            else:
+                diff[field] = {"old": serialize(oldv), "new": serialize(newv)}
+        return diff
 
-
-            if newv:
-                # Values has changed
-                if field == "data":
-                    diff[field] = {"old": oldv[0], "new": newv[0]}
-                else:
-                    diff[field] = {"old": serialize(oldv[0]), "new": serialize(newv[0])}
-            elif allfields:
-                if field == "data":
-                    diff[field] = curv[0]
-                else:
-                    diff[field] = serialize(curv[0])
-        return json.dumps(diff)
-
-    @classmethod
-    def create_handler(cls, request, item):
-        subject = "Create: %s" % item
-        text = item._build_changes(allfields=True)
-        cls.update_handler(request, item, subject, text)
-
-    @classmethod
-    def update_handler(cls, request, item, subject=None, text=None):
+    def add_log_entry(self, subject, text, request):
         """Will add a log entry for the updated item.
         The mapper and the target parameter will be the item which
         iherits this logged mixin.
 
         :request: Current request
-        :item: Item handled in the update.
         :subject: Subject of the logentry.
         :text: Text of the logentry.
 
         """
         from ringo.model.log import Log
         factory = Log.get_item_factory()
-        log = factory.create(user=None)
+        log = factory.create(user=request.user)
         if not subject:
-            log.subject = "Update: %s" % item
+            log.subject = "Update: %s" % self
         else:
             log.subject = subject
         if not text:
-            log.text = item._build_changes()
+            log.text = self._build_changes()
         else:
             log.text = text
-        log.uid = request.user.id
-        log.gid = request.user.gid
         log.author = str(request.user)
-        item.logs.append(log)
+        self.logs.append(log)
 
 
 class Owned(object):

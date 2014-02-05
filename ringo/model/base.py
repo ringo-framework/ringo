@@ -237,6 +237,26 @@ class BaseItem(object):
         # Use repr here a the __unicode__ method default to self.id
         # which might not be available here
         log.debug("Saving %s" % repr(self))
+
+        old_values = self.get_values()
+        # Handle statechange
+        if isinstance(self, StateMixin):
+            for key in self.list_statemachines():
+                new_state_id = data.get(key)
+                old_state_id = old_values.get(key)
+                if new_state_id != old_state_id:
+                    self.change_state(request, key, old_state_id, new_state_id)
+
+        # Handle logentry
+        if isinstance(self, Logged):
+            if not self.id:
+                subject = "Create"
+                text = json.dumps(self.build_changes(old_values, data))
+            else:
+                subject = "Update"
+                text = json.dumps(self.build_changes(old_values, data))
+            self.add_log_entry(subject, text, request)
+
         for key, value in data.iteritems():
             if hasattr(self, key):
                 log.debug("Setting value '%s' in %s" % (value, key))
