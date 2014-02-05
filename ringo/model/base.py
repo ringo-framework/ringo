@@ -7,7 +7,7 @@ from formbar.config import Config, load
 from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload, ColumnProperty, class_mapper
 from sqlalchemy.orm.attributes import get_history
-from ringo.lib.helpers import get_path_to_form_config
+from ringo.lib.helpers import get_path_to_form_config, serialize
 from ringo.lib.sql import DBSession, regions
 from ringo.lib.imexport import JSONExporter
 from ringo.lib.sql.query import FromCache, set_relation_caching
@@ -22,13 +22,6 @@ def clear_cache():
     BaseItem._cache_form_config = {}
     BaseItem._cache_item_modul = {}
     BaseItem._cache_item_list = {}
-
-def serialize(value):
-    """Very simple helper function which returns a stringified version
-    of the given python value."""
-    if isinstance(value, datetime.datetime):
-        return value.strftime("%Y-%m-%d %H:%M:%S")
-    return unicode(value)
 
 class BaseItem(object):
 

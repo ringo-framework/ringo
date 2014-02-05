@@ -4,6 +4,13 @@ import pkg_resources
 from pyramid.threadlocal import get_current_registry
 from formbar.helpers import get_css, get_js
 
+def serialize(value):
+    """Very simple helper function which returns a stringified version
+    of the given python value."""
+    if isinstance(value, datetime):
+        return value.strftime("%Y-%m-%d %H:%M:%S")
+    return unicode(value)
+
 
 def dynamic_import(cl):
     d = cl.rfind(".")
