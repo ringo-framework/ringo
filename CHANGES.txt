@@ -14,6 +14,9 @@ to the tracker.
   an item. On each update of the item the serialized values of the item will
   be saved in the version table. The versions are later used to show
   differences between the current and a given prior version in the form.
+- Add get_values function to the BaseItem to return a dictionary containing
+  all values of the item. Optionally the items can be serialized (this
+  is a very simple serialisation).
 
 0.9.1
 -----
