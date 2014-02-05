@@ -258,10 +258,11 @@ class Version(Base):
     date = Column(DateTime, default=None)
 
 class Versioned(object):
-    """Mixin to add version functionallity to a modul. Adding this Mixin
-    the item of a modul will have a "versions" relationship containing all
-    the values of the entries for this item. Version entries are be created
-    automatically by the system."""
+    """Mixin to add version functionallity to a modul. This mixin is
+    used to store different "versions" of an item. On each update of
+    the item, the serialized values of the item will be saved in the
+    version table. Item modul will have a "versions" relationship
+    containing all versions of the values for this item."""
 
     @declared_attr
     def versions(cls):
