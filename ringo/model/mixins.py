@@ -49,6 +49,7 @@ from sqlalchemy.orm import (
 )
 
 from ringo.model import Base
+from ringo.model.base import serialize
 
 log = logging.getLogger(__name__)
 
@@ -363,16 +364,18 @@ class Logged(object):
             except IndexError:
                 oldv = ""
 
+
             if newv:
-                if field == "data" and isinstance(self, Logged):
-                    diff[field] = {"old": oldv, "new": newv}
+                # Values has changed
+                if field == "data":
+                    diff[field] = {"old": oldv[0], "new": newv[0]}
                 else:
-                    diff[field] = {"old": unicode(oldv), "new": unicode(newv)}
+                    diff[field] = {"old": serialize(oldv[0]), "new": serialize(newv[0])}
             elif allfields:
-                if field == "data" and isinstance(self, Logged):
-                    diff[field] = curv
+                if field == "data":
+                    diff[field] = curv[0]
                 else:
-                    diff[field] = unicode(curv)
+                    diff[field] = serialize(curv[0])
         return json.dumps(diff)
 
     @classmethod
