@@ -278,7 +278,8 @@ class Versioned(object):
 
     @classmethod
     def update_handler(cls, request, item):
-        """Will add a the values of the item into the version table.
+        """Will add the serialized values of the item into the version
+        table.
 
         :request: Current request
         :item: Item handled in the update.
@@ -286,10 +287,8 @@ class Versioned(object):
         """
         version = Version()
         values = {}
-        item_values = item.get_values()
-        for field in item_values:
-            values[field] = unicode(item_values[field])
-        version.values = json.dumps(values)
+        item_values = item.get_values(serialized=True)
+        version.values = json.dumps(item_values)
         version.author = request.user.login
         version.date = datetime.datetime.now()
         item.versions.append(version)
