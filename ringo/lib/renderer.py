@@ -645,9 +645,22 @@ class LogRenderer(FieldRenderer):
             html.append('<strong>%s</strong>' % log.subject)
             html.append('<br>')
         logentry = []
-        for logtoken in log.text.split('\n'):
-            logentry.append(cgi.escape(logtoken))
-        html.append("<br>".join(logentry))
+        logdata = json.loads(log.text)
+        logentry.append("<ol>")
+        for field in json.loads(log.text):
+            try:
+                xxx = ("""%s:
+                       <i><span class="formbar-del-value">%s</span>
+                       <span class="formbar-new-value">%s</span></i>"""
+                       % (field, logdata[field]["old"], logdata[field]["new"]))
+            except:
+                xxx = ("""%s: <i><span class="formbar-new-value">%s</span></i>"""
+                       % (field, logdata[field]))
+            logentry.append("<li>")
+            logentry.append(xxx)
+            logentry.append("</li>")
+        logentry.append("</ol>")
+        html.append("".join(logentry))
         html.append("</td>")
         html.append("</tr>")
         return html
