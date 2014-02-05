@@ -201,13 +201,23 @@ class BaseItem(object):
                     return option[0]
         return raw_value
 
-    def get_values(self, include_relations=False):
+    def _serialize(self, value):
+        if isinstance(value, datetime.datetime):
+            return value.strftime("%Y-%m-%d %H:%M:%S")
+        return unicode(value)
+
+
+    def get_values(self, include_relations=False, serialized=False):
         """Will return a dictionary with the values of the item. If
         include_relations is true, than the realtion values are
         included. Else only scalar values are included"""
         values = {}
         for field in self.get_columns(include_relations):
-            values[field] = getattr(self, field)
+            if serialized:
+                value = self._serialize(getattr(self, field))
+            else:
+                value = getattr(self, field)
+            values[field] = value
         return values
 
     def save(self, data, dbsession=None):
