@@ -23,6 +23,13 @@ def clear_cache():
     BaseItem._cache_item_modul = {}
     BaseItem._cache_item_list = {}
 
+def serialize(value):
+    """Very simple helper function which returns a stringified version
+    of the given python value."""
+    if isinstance(value, datetime.datetime):
+        return value.strftime("%Y-%m-%d %H:%M:%S")
+    return unicode(value)
+
 class BaseItem(object):
 
     _modul_id = None
@@ -201,12 +208,6 @@ class BaseItem(object):
                     return option[0]
         return raw_value
 
-    def _serialize(self, value):
-        if isinstance(value, datetime.datetime):
-            return value.strftime("%Y-%m-%d %H:%M:%S")
-        return unicode(value)
-
-
     def get_values(self, include_relations=False, serialized=False):
         """Will return a dictionary with the values of the item. If
         include_relations is true, than the realtion values are
@@ -214,7 +215,7 @@ class BaseItem(object):
         values = {}
         for field in self.get_columns(include_relations):
             if serialized:
-                value = self._serialize(getattr(self, field))
+                value = serialize(getattr(self, field))
             else:
                 value = getattr(self, field)
             values[field] = value
