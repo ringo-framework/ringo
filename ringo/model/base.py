@@ -214,7 +214,7 @@ class BaseItem(object):
             values[field] = value
         return values
 
-    def save(self, data, dbsession=None):
+    def save(self, data, request=None):
         """Will save the given data into the item. If the current item
         has no value for the id attribute it is assumed that this item
         must be added to the database as a new item. In this case you
@@ -226,10 +226,14 @@ class BaseItem(object):
         data.
 
         :data: Dictionary with key value pairs.
-        :dbsession: Current db session. Used when saving new items.
+        :request: Current request session. Used when saving new items.
         :returns: item with new data.
 
         """
+        if request:
+            dbsession = request.db
+        else:
+            dbsession = None
         # Use repr here a the __unicode__ method default to self.id
         # which might not be available here
         log.debug("Saving %s" % repr(self))

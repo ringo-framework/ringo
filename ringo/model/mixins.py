@@ -213,7 +213,7 @@ class Blobform(object):
             element = object.__getattribute__(element, attr)
         return element
 
-    def save(self, data, dbsession=None):
+    def save(self, data, request=None):
         """Will save the given data into Blobform items. This function
         overwrites the default behavior of the BaseItem and takes care
         that the data will be saved in the data attribute as JSON
@@ -227,10 +227,14 @@ class Blobform(object):
         data.
 
         :data: Dictionary with key value pairs.
-        :dbsession: Current db session. Used when saving new items.
+        :request: Current request session. Used when saving new items.
         :returns: item with new data.
 
         """
+        if request:
+            dbsession = request.db
+        else:
+            dbsession = None
         json_data = {}
         columns = self.get_columns(self)
         log.debug("Saving %s" % self)
