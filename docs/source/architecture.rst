@@ -207,6 +207,12 @@ Logged
 ------
 .. autoclass:: ringo.model.mixins.Logged
 
+.. _mixin_versioned:
+
+Versioned
+---------
+.. autoclass:: ringo.model.mixins.Versioned
+
 .. _mixin_state:
 
 StateMixin
