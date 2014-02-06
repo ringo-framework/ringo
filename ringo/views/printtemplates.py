@@ -43,6 +43,16 @@ def update(request):
 def read(request):
     return read_(Printtemplate, request)
 
+@view_config(route_name=Printtemplate.get_action_routename('download'),
+             permission='download')
+def download(request):
+    result = read_(Printtemplate, request)
+    item = result['item']
+    response = request.response
+    response.content_type = str(item.mime)
+    response.content_disposition = 'attachment; filename=%s' % item.name
+    response.body = item.data
+    return response
 
 @view_config(route_name=Printtemplate.get_action_routename('delete'),
              renderer='/default/confirm.mako',

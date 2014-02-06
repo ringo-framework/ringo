@@ -23,6 +23,7 @@ INSERT INTO "actions" VALUES(99,15,'Update','update/{id}','icon-edit',NULL,'19d0
 INSERT INTO "actions" VALUES(100,15,'Delete','delete/{id}','icon-trash',NULL,'59aed4c4f9e8455cbc70d5ee9ebc80c1');
 INSERT INTO "actions" VALUES(101,15,'Import','import','icon-import',NULL,'47f1c8f9ba2d4ec8b363e6b07f44d5cb');
 INSERT INTO "actions" VALUES(102,15,'Export','export/{id}','icon-export',NULL,'bda7f92285ee4dffbf207e9c837b5741');
+INSERT INTO "actions" VALUES(103,15,'Download','download/{id}','icon-download',NULL,'bfa7f92285ee4dffbf207e9c837b5741');
 """
 DELETES = """
 DELETE FROM "actions" WHERE id = 96;
@@ -32,6 +33,7 @@ DELETE FROM "actions" WHERE id = 99;
 DELETE FROM "actions" WHERE id = 100;
 DELETE FROM "actions" WHERE id = 101;
 DELETE FROM "actions" WHERE id = 102;
+DELETE FROM "actions" WHERE id = 103;
 DELETE FROM "modules" WHERE id = 15;
 """
 
