@@ -27,6 +27,7 @@ def step_impl(context, error, id):
     values = {
         "name": "Test",
         "priority": "1",
+        "todo_state_id": "1",
         "description": "Test description",
         "csrf_token": csrf
     }

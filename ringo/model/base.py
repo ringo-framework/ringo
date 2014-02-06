@@ -11,6 +11,7 @@ from ringo.lib.helpers import get_path_to_form_config, serialize
 from ringo.lib.sql import DBSession, regions
 from ringo.lib.imexport import JSONExporter
 from ringo.lib.sql.query import FromCache, set_relation_caching
+from ringo.model.mixins import Logged, StateMixin
 
 log = logging.getLogger(__name__)
 
@@ -244,7 +245,8 @@ class BaseItem(object):
             for key in self.list_statemachines():
                 new_state_id = data.get(key)
                 old_state_id = old_values.get(key)
-                if new_state_id != old_state_id:
+                if ((new_state_id and old_state_id)
+                   and (new_state_id != old_state_id)):
                     self.change_state(request, key, old_state_id, new_state_id)
 
         # Handle logentry
