@@ -17,6 +17,12 @@ to the tracker.
 - Add get_values function to the BaseItem to return a dictionary containing
   all values of the item. Optionally the items can be serialized (this
   is a very simple serialisation).
+- Reorganised automatic logging and changing states. The former version was
+  implemented as update handler in the mixin classes and was based
+  on the SQLAlchemy "history" functionallity. Unfortunately this history
+  wasn't as much reliable as expected in some corner cases. The update handler
+  was removed and changing the states and logging are now implemented directly
+  in the save method of the item.
 
 0.9.1
 -----
