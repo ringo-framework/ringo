@@ -1,29 +1,58 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <configuration xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="ringo">
   <source>
-    <!-- Define different entity types -->
-    <!-- This field is only a Dummy field as example which is not really in the database -->
-    <entity i18n:attributes="label" id="e1" name="dummy" label="Dummy" type="string"/>
+    <entity id="name" name="name" label="Name" type="string">
+    </entity>
+    <entity id="file" name="file" label="File" type="file"/>
+    <entity id="description" name="description" label="Description" type="string">
+      <renderer type="textarea"/>
+    </entity>
+    <entity id="size" name="size" label="Size" type="integer" readonly="true"/>
+    <entity id="mime" name="mime" label="Mime" readonly="true"/>
+    <entity id="mid" name="modul" label="Modul">
+      <renderer type="dropdown"/>
+    </entity>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>
   </form>
   <form id="update" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
-    <snippet ref="create_snippet"/>
+    <snippet ref="edit_snippet"/>
   </form>
   <form id="read" readonly="true">
-    <snippet ref="create_snippet"/>
+    <snippet ref="read_snippet"/>
   </form>
 
   <!-- Create-->
   <snippet id="create_snippet">
-    <snippet ref="s1"/>
+    <snippet ref="edit_snippet"/>
   </snippet>
 
-  <!-- Role -->
-  <snippet id="s1">
+  <snippet id="read_snippet">
     <row>
-      <col><field ref="e1"/></col>
+      <col><field ref="name"/></col>
+      <col><field ref="mid"/></col>
+    </row>
+    <row>
+      <col><field ref="size"/></col>
+      <col><field ref="mime"/></col>
+    </row>
+    <row>
+      <col><field ref="description"/></col>
     </row>
   </snippet>
+
+  <snippet id="edit_snippet">
+    <row>
+      <col><field ref="name"/></col>
+      <col><field ref="mid"/></col>
+    </row>
+    <row>
+      <col><field ref="file"/></col>
+    </row>
+    <row>
+      <col><field ref="description"/></col>
+    </row>
+  </snippet>
+
 </configuration>
