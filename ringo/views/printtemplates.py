@@ -10,6 +10,7 @@ from ringo.views.json import (
     read_   as json_read,
     delete_ as json_delete
     )
+from ringo.views.files import save_file
 from ringo.model.printtemplate import Printtemplate
 
 log = logging.getLogger(__name__)
@@ -27,14 +28,14 @@ def list(request):
              renderer='/default/create.mako',
              permission='create')
 def create(request):
-    return create_(Printtemplate, request)
+    return create_(Printtemplate, request, callback=save_file)
 
 
 @view_config(route_name=Printtemplate.get_action_routename('update'),
              renderer='/default/update.mako',
              permission='update')
 def update(request):
-    return update_(Printtemplate, request)
+    return update_(Printtemplate, request, callback=save_file)
 
 
 @view_config(route_name=Printtemplate.get_action_routename('read'),
@@ -89,7 +90,7 @@ def rest_list(request):
              request_method="POST",
              permission='create')
 def rest_create(request):
-    return json_create(Printtemplate, request, encrypt_password)
+    return json_create(Printtemplate, request, callback=save_file)
 
 @view_config(route_name=Printtemplate.get_action_routename('read', prefix="rest"),
              renderer='json',
@@ -103,7 +104,7 @@ def rest_read(request):
              request_method="PUT",
              permission='update')
 def rest_update(request):
-    return json_update(Printtemplate, request)
+    return json_update(Printtemplate, request, callback=save_file)
 
 @view_config(route_name=Printtemplate.get_action_routename('delete', prefix="rest"),
              renderer='json',
