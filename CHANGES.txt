@@ -8,6 +8,10 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
+0.10.0
+------
+- Add printtemplate modul.
+
 0.9.2
 -----
 - Add versioned mixin. This mixin can be used to store different versions of
