@@ -37,6 +37,6 @@ def init_model(dbsession):
     modul.label = "Printtemplate"
     modul.label_plural = "Printtemplates"
     modul.display = "admin-menu"
-    modul.str_repr = "%%s|id"
+    modul.str_repr = "%s|id"
     modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)

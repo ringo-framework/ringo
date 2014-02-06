@@ -15,7 +15,7 @@ import sqlalchemy as sa
 
 
 INSERTS = """
-INSERT INTO "modules" VALUES(15,'printtemplates','ringo.model.printtemplate.Printtemplate','Printtemplate','Printtemplates',NULL,'%%s|id','admin-menu','8a9fe79593e04159a050f44d038889fd');
+INSERT INTO "modules" VALUES(15,'printtemplates','ringo.model.printtemplate.Printtemplate','Printtemplate','Printtemplates',NULL,'%s|id','admin-menu','8a9fe79593e04159a050f44d038889fd');
 INSERT INTO "actions" VALUES(96,15,'List','list','icon-list-alt',NULL,'87d18e63882a469584133488da7e7120');
 INSERT INTO "actions" VALUES(97,15,'Create','create',' icon-plus',NULL,'dc6e5547927b43b3a7fbcae117a11af2');
 INSERT INTO "actions" VALUES(98,15,'Read','read/{id}','icon-eye-open',NULL,'116a4a668f4b4e6480a6d1f6f9a38228');
