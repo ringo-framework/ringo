@@ -29,6 +29,14 @@ class RessourceFactory(object):
         self.__acl__ = self._get_item_permissions(request)
 
     def _load_item(self, id):
+        """Will load an item from the given clazz. The id of the item to
+        load is taken from the request matchdict. If no item can be found an
+        Exception is raised.
+
+        :id: id of the item to be loaded.
+        :returns: Loaded item
+
+        """
         # TODO: Make loading items more robust in RessourceFactory. This
         # is needed in case that a Ressource is build for a clazz which
         # is not related to the  the current request which has an id. In

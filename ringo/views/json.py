@@ -8,7 +8,7 @@ from pyramid.response import Response
 
 from formbar.form import Form
 
-from ringo.views.base import _load_item
+from ringo.views.base import _get_item_from_context
 
 class JSONResponse(object):
     """Generic response item for JSON responses on the RESTfull api"""
@@ -114,7 +114,7 @@ def read_(clazz, request, callback=None):
     :callback: Current function which is called after the item has been read.
     :returns: JSON object.
     """
-    item = _load_item(clazz, request)
+    item = _get_item_from_context(request)
     if callback is not None:
         item = callback(request, item)
     return JSONResponse(True, item)
@@ -134,7 +134,7 @@ def update_(clazz, request):
     :request: Current request
     :returns: JSON object.
     """
-    item = _load_item(clazz, request)
+    item = _get_item_from_context(request)
     form = Form(item.get_form_config('update'),
                 item, request.db, translate=request.translate,
                 csrf_token=request.session.get_csrf_token())
@@ -154,6 +154,6 @@ def delete_(clazz, request):
     :request: Current request
     :returns: JSON object.
     """
-    item = _load_item(clazz, request)
+    item = _get_item_from_context(request)
     request.db.delete(item)
     return JSONResponse(True, item)

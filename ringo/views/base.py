@@ -45,23 +45,22 @@ def _add_renderers(renderers):
     return renderers
 
 
-def _load_item(clazz, request):
-    """Will load an item from the given clazz. The id of the item to
-    load is taken from the request matchdict. If no item can be found an
-    Exception is raised.
+def _get_item_from_context(request):
+    """On every request pyramid will use a resource factory to load the
+    requested resource for the current request. This resource is the
+    context for the current request. This function will extract the
+    loaded resource from the context. If the context is None, the item
+    could not be loaded. In this case raise a 400 HTTP Status code
+    exception.
 
-    :clazz: Class of the item to load
-    :request: Current request having the id in the matchdict
+    :request: Current request having the item loaded in the current context
     :returns: Loaded item
 
     """
-    id = request.matchdict.get('id')
-    factory = clazz.get_item_factory()
-    try:
-        item = factory.load(id, request.db)
-        return item
-    except sa.orm.exc.NoResultFound:
+    item = request.context.item
+    if not item:
         raise HTTPBadRequest()
+    return item
 
 
 def get_current_form_page(clazz, request):
@@ -496,6 +495,7 @@ def create_(clazz, request, callback=None, renderers={}):
 
 
 def update_(clazz, request, callback=None, renderers={}):
+    item = _get_item_from_context(request)
     handle_history(request)
     handle_params(clazz, request)
     _ = request.translate
@@ -503,8 +503,6 @@ def update_(clazz, request, callback=None, renderers={}):
 
     # Add ringo specific renderers
     renderers = _add_renderers(renderers)
-    # Load the item return 400 if the item can not be found.
-    item = _load_item(clazz, request)
 
     owner_form = get_ownership_form(item, request)
     logbook_form = get_logbook_form(item, request, readonly=True,
@@ -583,6 +581,7 @@ def update_(clazz, request, callback=None, renderers={}):
 
 
 def read_(clazz, request, callback=None, renderers={}):
+    item = _get_item_from_context(request)
     handle_history(request)
     handle_params(clazz, request)
     _ = request.translate
@@ -590,8 +589,6 @@ def read_(clazz, request, callback=None, renderers={}):
 
     # Add ringo specific renderers
     renderers = _add_renderers(renderers)
-    # Load the item return 400 if the item can not be found.
-    item = _load_item(clazz, request)
 
     owner_form = get_ownership_form(item, request, readonly=True)
     logbook_form = get_logbook_form(item, request, readonly=True,
@@ -633,13 +630,11 @@ def read_(clazz, request, callback=None, renderers={}):
 
 
 def delete_(clazz, request):
+    item = _get_item_from_context(request)
     handle_history(request)
     handle_params(clazz, request)
     _ = request.translate
     rvalue = {}
-
-    # Load the item return 400 if the item can not be found.
-    item = _load_item(clazz, request)
 
     if request.method == 'POST' and confirmed(request):
         request.db.delete(item)
@@ -673,12 +668,11 @@ def delete_(clazz, request):
 
 
 def export_(clazz, request):
+    item = _get_item_from_context(request)
     handle_history(request)
     handle_params(clazz, request)
     rvalue = {}
 
-    # Load the item return 400 if the item can not be found.
-    item = _load_item(clazz, request)
     renderer = ExportDialogRenderer(request, item)
     form = renderer.form
     if (request.method == 'POST'
