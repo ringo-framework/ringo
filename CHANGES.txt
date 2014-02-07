@@ -10,11 +10,18 @@ to the tracker.
 
 0.10.0
 ------
-- Add printtemplate modul.
+- Add new requirement of py3o.template library.
+- Add Printtemplate modul. Printtemplates are ODT or ODS documents which are
+  used as templates for generating nice looking documents. On processing the
+  template placeholders in the template will be replaced by values of the
+  item. The template can include basic python expressions. E.g to iterate over
+  lists.
+- Add Printable Mixin. Inheriting from this mixin will add a print action to
+  the item.
 
 0.9.2
 -----
-- Add versioned mixin. This mixin can be used to store different versions of
+- Add Versioned mixin. This mixin can be used to store different versions of
   an item. On each update of the item the serialized values of the item will
   be saved in the version table. The versions are later used to show
   differences between the current and a given prior version in the form.
