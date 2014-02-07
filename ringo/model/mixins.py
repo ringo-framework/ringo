@@ -54,6 +54,28 @@ from ringo.lib.helpers import serialize
 log = logging.getLogger(__name__)
 
 
+class Mixin(object):
+    """Base mixin class"""
+
+    @classmethod
+    def _setup_item_actions(cls):
+        return []
+
+    @classmethod
+    def get_item_actions(cls, include_super=True):
+        """Returns a combined list of actions specific to the mixin and
+        base actions. If include_super is false only the actions
+        specific to this mixin are returned.
+
+        :include_super: Boolean flag. If true only mixin actions are returned
+        :returns: List of ActionItems
+
+        """
+        actions = super(Mixin, cls).get_item_actions()
+        if not include_super:
+            return cls._setup_item_actions()
+        return actions + cls._setup_item_actions()
+
 class StateMixin(object):
     """Mixin to add one or more Statemachines to an item.  The
     statemachines are stored in a internal '_statemachines' dictionary.
