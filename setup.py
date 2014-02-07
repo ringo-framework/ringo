@@ -27,7 +27,8 @@ requires = [
     'invoke',
     'coverage',
     'webtest',
-    'dogpile.cache'
+    'dogpile.cache',
+    'py3o.template'
 ]
 
 setup(name='ringo',
