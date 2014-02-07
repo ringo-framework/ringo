@@ -33,6 +33,9 @@ from ringo.model.modul import (
     ModulItem,
     ActionItem,
 )
+from ringo.views.mixins import (
+    setup_mixin_views
+)
 from ringo.model.appointment import (
     Appointment
 )
@@ -162,6 +165,8 @@ def main(global_config, **settings):
 
     config.set_session_factory(session_factory_from_settings(settings))
     config.include('ringo')
+    config = setup_mixin_views(config)
+    log.info('-> Mixin views finished.')
     return config.make_wsgi_app()
 
 def includeme(config):
