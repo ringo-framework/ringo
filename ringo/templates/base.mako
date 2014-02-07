@@ -80,7 +80,7 @@
         icon = "glyphicon glyphicon-export"
       elif icon == "icon-import":
         icon = "glyphicon glyphicon-import"
-      if action.name.lower() in ['import', 'export']:
+      if action.name.lower() in ['import', 'export'] or action.display == "secondary:
         context_actions.append((action, icon))
         continue
       %>
