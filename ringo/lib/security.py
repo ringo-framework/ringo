@@ -139,7 +139,20 @@ def get_permissions(modul, item=None):
             state = sm.get_state()
             current_states.append(state)
 
-    for action in modul.actions:
+    #get available actions
+    if item:
+        actions = item.get_item_actions()
+    else:
+        # FIXME: Need to load the class related to the modul to get all
+        # actions and not only the base actions. (ti) <2014-02-07 10:43> 
+        actions = modul.actions
+
+    for action in actions:
+        permission = action.permission or action.name.lower()
+        # TODO: Note that actions, which are not inserted into the
+        # database (e.g custom mixin actions.) will not have any roles
+        # and are not considerd on building principals yet. (ti)
+        # <2014-02-07 11:08> 
         for role in action.roles:
             add_perm = True
             default_principal = 'role:%s' % role
@@ -154,18 +167,19 @@ def get_permissions(modul, item=None):
             # administrational role means allow without further
             # ownership checks.
             if role.admin is True and add_perm:
-                perms.append((Allow, default_principal, action.name.lower()))
+                perms.append((Allow, default_principal, permission))
 
             # class level permissions
-            elif action.name.lower() in ['create', 'list']:
-                perms.append((Allow, default_principal, action.name.lower()))
+            elif permission in ['create', 'list']:
+                perms.append((Allow, default_principal, permission))
             # item level permissions. Only allow the owner or members of
             # the items group.
             elif item and hasattr(item, 'uid') and add_perm:
                 principal = default_principal + ';uid:%s' % item.uid
-                perms.append((Allow, principal, action.name.lower()))
+                perms.append((Allow, principal, permission))
                 principal = default_principal + ';group:%s' % item.gid
-                perms.append((Allow, principal, action.name.lower()))
+                perms.append((Allow, principal, permission))
+    print perms
     return perms
 
 
