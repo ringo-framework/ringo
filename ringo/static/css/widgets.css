@@ -48,7 +48,11 @@ div.dataTables_length select {
     display: inline;
     width: 80px;
 }
- 
+
+table.dataTable td:hover {
+	cursor: pointer;
+}
+
 .dataTables_filter input {
     margin-bottom: 0px;
     width: 200px;
