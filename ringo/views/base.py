@@ -1,5 +1,7 @@
 import uuid
+import StringIO
 import logging
+from py3o.template import Template
 from pyramid.httpexceptions import HTTPFound, HTTPBadRequest
 from pyramid.response import Response
 from pyramid.view import view_config
@@ -18,7 +20,8 @@ User = import_model('ringo.model.user.User')
 from ringo.lib.renderer import (
     ListRenderer, ConfirmDialogRenderer, DropdownFieldRenderer,
     ListingFieldRenderer, LogRenderer, StateFieldRenderer,
-    CommentRenderer, ExportDialogRenderer, ImportDialogRenderer
+    CommentRenderer, ExportDialogRenderer, ImportDialogRenderer,
+    PrintDialogRenderer
 )
 from ringo.lib.sql import invalidate_cache
 from ringo.views import handle_history
@@ -740,6 +743,39 @@ def import_(clazz, request, callback=None):
         # the translation working (torsten) <2013-07-10 09:32>
         rvalue['dialog'] = renderer.render()
         rvalue['clazz'] = clazz
+        return rvalue
+
+def print_(request):
+    item = request.context.item
+    clazz = item.__class__
+    handle_history(request)
+    handle_params(clazz, request)
+    rvalue = {}
+
+    renderer = PrintDialogRenderer(request, item)
+    form = renderer.form
+    if (request.method == 'POST'
+       and confirmed(request)
+       and form.validate(request.params)):
+
+        # Render the template
+        template = form.data.get('printtemplates')[0]
+        out = StringIO.StringIO()
+        temp = Template(StringIO.StringIO(template.data), out)
+        temp.render({"item":item.get_values()})
+
+        # Build response
+        resp = request.response
+        resp.content_type = str(template.mime)
+        resp.content_disposition = 'attachment; filename=%s' % template.name
+        resp.body = out.getvalue()
+        return resp
+    else:
+        # FIXME: Get the ActionItem here and provide this in the Dialog to get
+        # the translation working (torsten) <2013-07-10 09:32>
+        rvalue['dialog'] = renderer.render()
+        rvalue['clazz'] = clazz
+        rvalue['item'] = item
         return rvalue
 
 
