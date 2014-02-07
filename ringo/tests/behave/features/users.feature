@@ -1,6 +1,6 @@
 Feature: Check POST requests of the users module.
   Will check if the basic default POST requests on the CRUD operations for
-  the todos users are working.
+  the users are working.
 
   Scenario Outline: Create POST
     Given a <role> user
