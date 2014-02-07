@@ -398,7 +398,6 @@ class Logged(object):
         for field in new_values:
             oldv = serialize(old_values.get(field))
             newv = serialize(new_values.get(field))
-            print field, newv, oldv, type(newv), type(oldv)
             if newv == oldv:
                 continue
             if field == "data":
