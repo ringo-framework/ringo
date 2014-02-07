@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration>
+  <source>
+    <!-- Define different entity types -->
+    <entity id="e1" name="printtemplates" label="Printtemplate">
+      <renderer type="dropdown"/>
+    </entity>
+  </source>
+  <form id="default" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
+    <snippet ref="s1"/>
+  </form>
+  <snippet id="s1">
+    <row>
+      <col><field ref="e1"/></col>
+    </row>
+  </snippet>
+</configuration>
