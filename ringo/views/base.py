@@ -454,8 +454,6 @@ def create_(clazz, request, callback=None, renderers={}):
                 route_name = item.get_action_routename('read')
                 url = request.route_path(route_name, id=item.id)
 
-            if callback:
-                sitem = callback(request, sitem)
             # handle create events
             handle_event('create', request, item)
             # Invalidate cache
