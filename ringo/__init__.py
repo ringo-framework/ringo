@@ -134,7 +134,7 @@ def add_route(config, clazz):
     factory = ModulItem.get_item_factory()
     modul = factory.load(clazz._modul_id)
     name = clazz.__tablename__
-    for action in modul.actions:
+    for action in clazz.get_item_actions():
         route_name = "%s-%s" % (name, action.name.lower())
         route_url = "%s/%s" % (name, action.url)
         log.debug("Adding route: %s, %s" % (route_name, route_url))
