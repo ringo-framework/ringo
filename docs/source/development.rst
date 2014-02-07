@@ -258,6 +258,12 @@ additional columns to the base Profile modul::
             col2 = sa.Column(sa.Text)
             ...
 
+            # Overwrite relation with a new backref name to be able to refer
+            # to the new Profile in the user object. Will raise a SAWarning.
+            user = sa.orm.relation("User", cascade="all, delete-orphan",
+                                   backref="pprofile", single_parent=True,
+                                   uselist=False)
+
             def __unicode__(self):
                 return "%s" % (self.col1)
 
@@ -279,12 +285,16 @@ Then the new fields can be added with the following command::
 
         alembic upgrade head
 
+The form and table configuration can be simply overwritten by placing the form
+and table config file with the same name in your application.
+
 Finally we must tell the application to use the new created profile. The
 information where to find the model clazz of the modul is stored in the
 database in the field "clazzpath" for each modul.
 This field can't be changed in the UI. You must to the change on the database
 directly. By changing this value to the path of your new modul the application
-will now use the new model.
+will now use the new model. Please note, that you my need to overwrite
+existing relations to be able to refer to the overwritten model.
 
 Calling alternative views
 -------------------------
