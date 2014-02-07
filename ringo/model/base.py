@@ -105,6 +105,17 @@ class BaseItem(object):
         return cls._cache_item_list[cls._modul_id]
 
     @classmethod
+    def get_item_actions(cls):
+        """Returns a list of ActionItems which are available for items
+        modul. If you want to add custom actions to the modul please
+        overwrite this method.
+
+        :returns: List of ActionItems.
+        """
+        modul = cls.get_item_modul()
+        return modul.actions
+
+    @classmethod
     def get_item_modul(cls):
         from ringo.model.modul import ModulItem
         if not cls._cache_item_modul.get(cls._modul_id):
