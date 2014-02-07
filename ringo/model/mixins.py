@@ -432,6 +432,34 @@ class Logged(object):
         self.logs.append(log)
 
 
+class Printable(Mixin):
+
+    @classmethod
+    def _setup_item_actions(cls):
+        from ringo.model.modul import ActionItem
+        actions = []
+        # Add Print action
+        action = ActionItem()
+        action.mid = cls.get_item_modul().id
+        action.name = 'Print'
+        action.url = 'print/{id}'
+        action.icon = 'glyphicon glyphicon-print'
+        actions.append(action)
+        action.permission = 'read'
+        action.display = 'secondary'
+        return actions
+
+
+    @declared_attr
+    def printtemplates(cls):
+        from ringo.model.printtemplate import Printtemplate
+        tbl_name = "nm_%s_printtemplates" % cls.__name__.lower()
+        nm_table = Table(tbl_name, Base.metadata,
+                         Column('iid', Integer, ForeignKey(cls.id)),
+                         Column('tid', Integer, ForeignKey("printtemplates.id")))
+        logs = relationship(Printtemplate, secondary=nm_table)
+        return logs
+
 class Owned(object):
     """Mixin to add references to a user and a usergroup. This
     references are used to build some kind of ownership of the item. The
