@@ -146,6 +146,7 @@ def add_route(config, clazz):
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
+    clear_cache()
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
