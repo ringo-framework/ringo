@@ -165,8 +165,7 @@ def main(global_config, **settings):
 
     config.set_session_factory(session_factory_from_settings(settings))
     config.include('ringo')
-    config = setup_mixin_views(config)
-    log.info('-> Mixin views finished.')
+    config = setup_finished_callback(config)
     return config.make_wsgi_app()
 
 def includeme(config):
@@ -185,6 +184,12 @@ def includeme(config):
     log.info('-> Translation finished.')
     config.scan()
     log.info('OK :) Setup of Ringo finished.')
+
+def setup_finished_callback(config):
+    """Callback function which should be called if the setup of the application is finished."""
+    config = setup_mixin_views(config)
+    log.info('-> Mixin views finished.')
+    return config
 
 def setup_pyramid_modules(config):
     config.include('pyramid_handlers')
