@@ -139,14 +139,11 @@ def get_permissions(modul, item=None):
             state = sm.get_state()
             current_states.append(state)
 
-    # get available actions
-    if item:
-        actions = item.get_item_actions()
-    else:
-        # FIXME: Need to load the class related to the modul to get all
-        # actions and not only the base actions. (ti) <2014-02-07 10:43> 
-        actions = modul.actions
-
+    # No need to call get_item_actions. We only need the modul actions
+    # here as all other ActionItem added dynamically to the items clazz
+    # (e.g Mixin actions), will map their permission to one of the
+    # available base modul permissions (create, read, update, delete...)
+    actions = modul.actions
     for action in actions:
         permission = action.permission or action.name.lower()
         # TODO: Note that actions, which are not inserted into the
