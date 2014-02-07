@@ -15,6 +15,15 @@ class ActionItem(BaseItem, Base):
     url = sa.Column(sa.Text, nullable=False)
     icon = sa.Column(sa.Text, nullable=False)
     description = sa.Column(sa.Text)
+    display = sa.Column(sa.Text, default="primary")
+    """Optional. Configure where the action will be displayed. If display is
+    'secondary' the action will be rendererd in the advanced dropdown
+    context menu. Default is 'primary'"""
+    permission = sa.Column(sa.Text)
+    """Optional. Configure an alternative permission the user must have
+    to be allowed to call this action. Known values are 'list', 'create',
+    'read', 'update', 'delete', 'import', 'export'. If empty the
+    permission system will use the the lowered name of the action."""
 
     def __unicode__(self):
         return u"%s (%s/%s)" % (self.name, self.modul, self.url)
