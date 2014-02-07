@@ -133,16 +133,13 @@ def add_route(config, clazz):
     :returns: config
 
     """
-    # load modul to get the enabled actions
-    factory = ModulItem.get_item_factory()
-    modul = factory.load(clazz._modul_id)
     name = clazz.__tablename__
     for action in clazz.get_item_actions():
         route_name = "%s-%s" % (name, action.name.lower())
         route_url = "%s/%s" % (name, action.url)
         log.debug("Adding route: %s, %s" % (route_name, route_url))
         config.add_route(route_name, route_url,
-                         factory=get_resource_factory(clazz, modul))
+                         factory=get_resource_factory(clazz, clazz.get_item_modul()))
     return add_rest_service(config, clazz)
 
 
