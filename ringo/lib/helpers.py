@@ -149,7 +149,7 @@ def get_modules(request, display):
             # permissions against it.
             clazz = dynamic_import(modul.clazzpath)
             factory = get_resource_factory(clazz, modul)
-            resource = factory(request)
+            resource = factory(request, modul)
             if has_permission('list', resource, request):
                 user_moduls.append(modul)
     return user_moduls
