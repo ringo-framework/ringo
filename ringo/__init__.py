@@ -133,6 +133,12 @@ def add_route(config, clazz):
     :returns: config
 
     """
+    # Replace clazz. Clazz may be overwritten in the application. So
+    # reimport the clazz by using the configured clazzpath of the modul.
+    modul = clazz.get_item_modul()
+    clazzpath = modul.clazzpath
+    clazz = helpers.dynamic_import(clazzpath)
+
     name = clazz.__tablename__
     for action in clazz.get_item_actions():
         route_name = "%s-%s" % (name, action.name.lower())
