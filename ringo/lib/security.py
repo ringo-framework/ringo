@@ -139,7 +139,7 @@ def get_permissions(modul, item=None):
             state = sm.get_state()
             current_states.append(state)
 
-    #get available actions
+    # get available actions
     if item:
         actions = item.get_item_actions()
     else:
@@ -179,7 +179,6 @@ def get_permissions(modul, item=None):
                 perms.append((Allow, principal, permission))
                 principal = default_principal + ';group:%s' % item.gid
                 perms.append((Allow, principal, permission))
-    print perms
     return perms
 
 
