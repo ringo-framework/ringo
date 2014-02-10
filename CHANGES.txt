@@ -18,6 +18,8 @@ to the tracker.
   lists.
 - Add Printable Mixin. Inheriting from this mixin will add a print action to
   the item.
+- Fixes on permission checks. Add button to add new items in listing only if
+  the user actually has permission to add new items.
 
 0.9.2
 -----
