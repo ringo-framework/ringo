@@ -114,11 +114,14 @@ table-bordered">
   % endfor
   </tr>
   % for item in items:
-    % if s.has_permission("update", item, request):
-      <tr onclick="openItem('${request.route_path(clazz.get_action_routename("update"), id=item.id)}')">
-    % else:
-      <tr onclick="openItem('${request.route_path(clazz.get_action_routename("read"), id=item.id)}')">
-    % endif
+    <%
+    permission = None
+    if s.has_permission("update", item, request):
+      permission = "update"
+    elif s.has_permission("read", item, request):
+      permission = "read"
+    %>
+    <tr>
     % if enable_bundled_actions:
     <td>
       <input type="checkbox" name="id" value="${item.id}">
@@ -126,9 +129,9 @@ table-bordered">
     % endif
     % for num, field in enumerate(tableconfig.get_columns()):
       % if autoresponsive:
-        <td class="${num > 0 and 'hidden-xs'}">
+        <td onclick="openItem('${request.route_path(clazz.get_action_routename(permission), id=item.id)}')" class="${num > 0 and 'hidden-xs'} link">
       % else:
-        <td class="${render_responsive_class(field.get('screen'))}"</th>
+        <td onclick="openItem('${request.route_path(clazz.get_action_routename(permission), id=item.id)}')" class="${render_responsive_class(field.get('screen'))} link">
       % endif
         <%
           try:

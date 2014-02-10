@@ -27,7 +27,7 @@
  * *************************************************************************/
 /* Change the mouse cursor to a pointer when hovering the rows of the
  * overviewtable to indicate that they are clickable. */
-#data td:hover {
+#data td.link:hover {
 	cursor: pointer;
 }
 
@@ -49,7 +49,7 @@ div.dataTables_length select {
     width: 80px;
 }
 
-table.dataTable td:hover {
+table.dataTable td.link:hover {
 	cursor: pointer;
 }
 

@@ -8,13 +8,17 @@
   </thead>
   <tbody>
     % for item in items:
-    % if s.has_permission("update", item, request):
-      <tr onclick="openItem('${request.route_path(item.get_action_routename("update"), id=item.id)}')">
-    % else:
-      <tr onclick="openItem('${request.route_path(item.get_action_routename("read"), id=item.id)}')">
+      <%
+      permission = None
+      if s.has_permission("update", item, request):
+        permission = "update"
+      elif s.has_permission("read", item, request):
+        permission = "read"
+      %>
+    <tr>
     % endif
       % for field in tableconfig.get_columns():
-      <td>
+      <td onclick="openItem('${request.route_path(clazz.get_action_routename(permission), id=item.id)}')" class="link">
           <%
             form_config = tableconfig.get_form_config()
             try:

@@ -22,11 +22,14 @@
   </thead>
   <tbody>
     % for item in items:
-      % if s.has_permission("update", item, request):
-        <tr onclick="openItem('${request.route_path(clazz.get_action_routename("update"), id=item.id)}')">
-      % else:
-        <tr onclick="openItem('${request.route_path(clazz.get_action_routename("read"), id=item.id)}')">
-      % endif 
+      <%
+      permission = None
+      if s.has_permission("update", item, request):
+        permission = "update"
+      elif s.has_permission("read", item, request):
+        permission = "read"
+      %>
+      <tr>
       % if not field.is_readonly() and not field.renderer.onlylinked == "true":
         <td>
           <input type="checkbox" value="${item.id}" name="${field.name}"/>
@@ -36,7 +39,11 @@
           <input style="display:none" type="checkbox" value="${item.id}" name="${field.name}"/>
       % endif
       % for num, col in enumerate(tableconfig.get_columns()):
-        <td class="${num > 0 and 'hidden-xs'}">
+        % if permission:
+          <td onclick="openItem('${request.route_path(clazz.get_action_routename(permission), id=item.id)}')" class="${num > 0 and 'hidden-xs'} link">
+        % else:
+          <td class="${num > 0 and 'hidden-xs'}">
+        % endif
         <%
           try:
             value = item.get_value(col.get('name'))
