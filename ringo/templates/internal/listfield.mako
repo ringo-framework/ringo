@@ -1,6 +1,6 @@
 <table class="table table-condensed table-striped table-bordered datatable-blank">
   <thead>
-    % if not field.is_readonly():
+    % if not field.is_readonly() and s.has_permission("create", clazz, request):
     <tr class="table-toolbar">
       <th colspan="${len(tableconfig.get_columns())+1}">
       <a href="#"
