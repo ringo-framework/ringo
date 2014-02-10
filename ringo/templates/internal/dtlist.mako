@@ -16,9 +16,12 @@
         permission = "read"
       %>
     <tr>
-    % endif
       % for field in tableconfig.get_columns():
+      % if permission:
       <td onclick="openItem('${request.route_path(clazz.get_action_routename(permission), id=item.id)}')" class="link">
+      % else:
+      <td>
+      % endif
           <%
             form_config = tableconfig.get_form_config()
             try:
