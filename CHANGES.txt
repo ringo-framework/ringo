@@ -22,6 +22,7 @@ to the tracker.
   the user actually has permission to add new items.
 - Add "showsearch", "hideadd", "nolinks" attributes to listfield renderer to
   enhance configuration of rendering.
+- Render permissions of a role as FieldList.
 
 0.9.2
 -----
