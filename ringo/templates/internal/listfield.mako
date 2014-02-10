@@ -1,6 +1,10 @@
+% if field.renderer.showsearch == "true":
+<table class="table table-condensed table-striped table-bordered datatable-simple">
+% else:
 <table class="table table-condensed table-striped table-bordered datatable-blank">
+% endif
   <thead>
-    % if not field.is_readonly() and s.has_permission("create", clazz, request):
+    % if not field.is_readonly() and not field.renderer.hideadd == "true" and s.has_permission("create", clazz, request):
     <tr class="table-toolbar">
       <th colspan="${len(tableconfig.get_columns())+1}">
       <a href="#"
@@ -39,7 +43,7 @@
           <input style="display:none" type="checkbox" value="${item.id}" name="${field.name}"/>
       % endif
       % for num, col in enumerate(tableconfig.get_columns()):
-        % if permission:
+        % if permission and not field.renderer.nolinks == "true":
           <td onclick="openItem('${request.route_path(clazz.get_action_routename(permission), id=item.id)}')" class="${num > 0 and 'hidden-xs'} link">
         % else:
           <td class="${num > 0 and 'hidden-xs'}">

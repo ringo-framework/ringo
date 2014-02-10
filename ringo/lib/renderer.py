@@ -613,6 +613,11 @@ class ListingFieldRenderer(FormbarSelectionField):
     * foreignkey: name of the foreignkey in the database
     * form: Name of the form which is used to add new items
     * table: Name of the table configuration which is used to list items
+    * hideadd: Flag "true" or "false" to configure hiding the add button.
+    * nolinks: Flag "true" or "false" to configure completly disable
+      linking.
+    * showsearch: Flag "true" or "false" to configure rendering a search
+      field.
     * onlylinked: "true" or "false". If true only linked items will be
       rendered"""
 
