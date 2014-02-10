@@ -1,0 +1,9 @@
+{
+    "overview": {
+        "columns": [
+            {"name": "modul.label", "label": "Modul"},
+            {"name": "name", "label": "Action"},
+            {"name": "url", "label": "URL"}
+        ]
+    }
+}

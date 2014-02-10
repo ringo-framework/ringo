@@ -3,7 +3,9 @@
   <source>
     <!-- Define different entity types -->
     <entity id="e1" name="name" label="Name" type="string"/>
-    <entity id="e2" name="permissions" label="Permissions"/>
+    <entity id="e2" name="permissions" label="Permissions">
+      <renderer type="listing" hideadd="true" nolinks="true" showsearch="true"/>
+    </entity>
     <entity id="e3" name="admin" label="Administrational role"/>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
