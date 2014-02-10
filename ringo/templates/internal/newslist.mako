@@ -15,14 +15,19 @@ from ringo.lib.helpers import format_datetime
   <tbody>
     % for item in items:
     <%
+      url = None
       if s.has_permission("update", item, request):
         url = request.route_path(item.get_action_routename("update"), id=item.id)
-      else:
+      elif s.has_permission("read", item, request):
         url = request.route_path(item.get_action_routename("read"), id=item.id)
     %>
     <tr id="newsentry_${item.id}">
       % for field in tableconfig.get_columns():
-      <td onclick="openItem('${url}')">
+      % if url:
+      <td onclick="openItem('${url}')" class="link">
+      % else:
+      <td>
+      % endif
           <%
             form_config = tableconfig.get_form_config()
             try:
