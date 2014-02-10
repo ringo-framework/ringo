@@ -476,6 +476,20 @@ class PrintDialogRenderer(DialogRenderer):
 #                         Renderers for form elements                     #
 ###########################################################################
 
+def add_renderers(renderers):
+    """Helper function to add ringo ringo specific renderers for form
+    rendering."""
+    if not "dropdown" in renderers:
+        renderers["dropdown"] = DropdownFieldRenderer
+    if not "listing" in renderers:
+        renderers["listing"] = ListingFieldRenderer
+    if not "logbook" in renderers:
+        renderers["logbook"] = LogRenderer
+    if not "state" in renderers:
+        renderers["state"] = StateFieldRenderer
+    if not "comments" in renderers:
+        renderers["comments"] = CommentRenderer
+    return renderers
 
 class DropdownFieldRenderer(FormbarDropdown):
     """Ringo specific DropdownFieldRenderer. This renderer add a small

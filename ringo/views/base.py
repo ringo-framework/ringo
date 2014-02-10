@@ -18,31 +18,14 @@ from ringo.lib.security import has_role, has_permission
 from ringo.lib.imexport import JSONImporter, JSONExporter
 User = import_model('ringo.model.user.User')
 from ringo.lib.renderer import (
-    ListRenderer, ConfirmDialogRenderer, DropdownFieldRenderer,
-    ListingFieldRenderer, LogRenderer, StateFieldRenderer,
-    CommentRenderer, ExportDialogRenderer, ImportDialogRenderer,
-    PrintDialogRenderer
+    ListRenderer, ConfirmDialogRenderer,
+    ExportDialogRenderer, ImportDialogRenderer,
+    PrintDialogRenderer, add_renderers
 )
 from ringo.lib.sql import invalidate_cache
 from ringo.views import handle_history
 
 log = logging.getLogger(__name__)
-
-
-def _add_renderers(renderers):
-    """Helper function to add ringo ringo specific renderers for form
-    rendering."""
-    if not "dropdown" in renderers:
-        renderers["dropdown"] = DropdownFieldRenderer
-    if not "listing" in renderers:
-        renderers["listing"] = ListingFieldRenderer
-    if not "logbook" in renderers:
-        renderers["logbook"] = LogRenderer
-    if not "state" in renderers:
-        renderers["state"] = StateFieldRenderer
-    if not "comments" in renderers:
-        renderers["comments"] = CommentRenderer
-    return renderers
 
 
 def _get_item_from_context(request):
@@ -408,7 +391,7 @@ def create_(clazz, request, callback=None, renderers={}):
     rvalue = {}
 
     # Add ringo specific renderers
-    renderers = _add_renderers(renderers)
+    renderers = add_renderers(renderers)
 
     # Create a new item
     factory = clazz.get_item_factory()
@@ -502,7 +485,7 @@ def update_(clazz, request, callback=None, renderers={}):
     rvalue = {}
 
     # Add ringo specific renderers
-    renderers = _add_renderers(renderers)
+    renderers = add_renderers(renderers)
 
     owner_form = get_ownership_form(item, request)
     logbook_form = get_logbook_form(item, request, readonly=True,
@@ -588,7 +571,7 @@ def read_(clazz, request, callback=None, renderers={}):
     rvalue = {}
 
     # Add ringo specific renderers
-    renderers = _add_renderers(renderers)
+    renderers = add_renderers(renderers)
 
     owner_form = get_ownership_form(item, request, readonly=True)
     logbook_form = get_logbook_form(item, request, readonly=True,
