@@ -489,7 +489,41 @@ def add_renderers(renderers):
         renderers["state"] = StateFieldRenderer
     if not "comments" in renderers:
         renderers["comments"] = CommentRenderer
+    if not "link" in renderers:
+        renderers["link"] = LinkFieldRenderer
     return renderers
+
+def get_link_url(field):
+    form = field._form
+    try:
+        item = getattr(form._item, field.name)
+    except AttributeError:
+        # Can happen when designing forms an the model of the item
+        # is not yet configured.
+        log.warning("Missing %s attribute in %s" % (form._item, field.name))
+        item = None
+    if isinstance(item, BaseItem):
+        if security.has_permission("update", item, field._form._request):
+            route_name = item.get_action_routename('update')
+        else:
+            route_name = item.get_action_routename('read')
+        return field._form._request.route_path(route_name, id=item.id)
+    return None
+
+class LinkFieldRenderer(FieldRenderer):
+    def __init__(self, field, translate):
+        """@todo: to be defined"""
+        FieldRenderer.__init__(self, field, translate)
+        self.template = template_lookup.get_template("internal/linkfield.mako")
+
+    def _get_template_values(self):
+        values = FieldRenderer._get_template_values(self)
+        values['link_text'] = self._field.label
+        values['url'] = get_link_url(self._field) or "#"
+        return values
+
+    def _render_label(self):
+        return ""
 
 class DropdownFieldRenderer(FormbarDropdown):
     """Ringo specific DropdownFieldRenderer. This renderer add a small
@@ -524,22 +558,13 @@ class DropdownFieldRenderer(FormbarDropdown):
 
     def _render_link(self):
         html = []
-        form = self._field._form
         try:
-            item = getattr(form._item, self._field.name)
-        except AttributeError:
-            # Can happen when designing forms an the model of the item
-            # is not yet configured.
-            log.warning("Missing %s attribute in %s" % (form._item,
-                                                        self._field.name))
-            item = None
-        if isinstance(item, BaseItem):
-            if security.has_permission("update", item, self._field._form._request):
-                route_name = item.get_action_routename('update')
-            else:
-                route_name = item.get_action_routename('read')
-            url = self._field._form._request.route_path(route_name, id=item.id)
+            item = getattr(self._field._form._item, self._field.name)
+            url = get_link_url(self._field)
             html.append('<a href="%s">&nbsp;[%s]</a>' % (url, item))
+        except AttributeError:
+            log.warning("Missing %s attribute in %s" % (self._field.name,
+                                                        self._field._form.item))
         return "".join(html)
 
     def _render_label(self):
