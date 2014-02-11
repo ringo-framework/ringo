@@ -23,6 +23,7 @@ to the tracker.
 - Add "showsearch", "hideadd", "nolinks" attributes to listfield renderer to
   enhance configuration of rendering.
 - Render permissions of a role as FieldList.
+- Add TodolistRenderer. Render todos in the home view.
 
 0.9.2
 -----

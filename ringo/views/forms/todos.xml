@@ -11,8 +11,9 @@
       <renderer type="dropdown"/>
       <options>
         <option value="0">No</option>
-        <option value="1">Yes, after the deadline exeeds</option>
+        <option value="1">Yes, show it immediately</option>
         <option value="2">Yes, I will define a remind date</option>
+        <option value="3">Yes, after the deadline exeeds (if present or immediately)</option>
       </options>
     </entity>
     <entity id="e4" name="reminddate" label="Remind me from this date on" type="datetime" required="true">
