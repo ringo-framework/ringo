@@ -150,7 +150,11 @@ table-bordered">
           %>
           ${", ".join(links)}
         % else:
-          ${render_filter_link(request, field, item.get_value(field.get('name')), clazz)}
+          % if field.get('expand'):
+            ${render_filter_link(request, field, item.get_value(field.get('name')), clazz)}
+          % else:
+            ${render_filter_link(request, field, value, clazz)}
+          % endif
         % endif
     </td>
     % endfor
