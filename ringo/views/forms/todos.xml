@@ -22,11 +22,11 @@
     <entity id="e5" name="priority" label="Priority" type="integer">
       <renderer type="dropdown"/>
       <options>
-        <option value="0">Very low</option>
-        <option value="1">Low</option>
-        <option value="2">Normal</option>
-        <option value="3">High</option>
-        <option value="4">Very high</option>
+        <option value="1">Very low</option>
+        <option value="2">Low</option>
+        <option value="3">Normal</option>
+        <option value="4">High</option>
+        <option value="5">Very high</option>
       </options>
     </entity>
     <entity id="e6" name="description" label="Description">
