@@ -1,3 +1,4 @@
+from datetime import datetime
 import sqlalchemy as sa
 from ringo.model import Base
 from ringo.model.base import BaseItem, BaseFactory, BaseList
@@ -62,6 +63,39 @@ class TodoList(BaseList):
                     filtered_items.append(item)
             return filtered_items
         return items
+
+class Reminders(TodoList):
+    def __init__(self, db, cache=""):
+        TodoList.__init__(self, Todo, db, cache=cache)
+        self._filter_todo()
+
+    def _filter_todo(self):
+        """Will filter out todo elements which are "done", have no
+        reminders or reminders are not relevant"""
+        filtered_items = []
+        current_date = datetime.now()
+        for item in self.items:
+            # Item is done
+            if item.todo_state_id == 3:
+                continue
+            # Item has no reminder
+            elif item.reminder == 0:
+                continue
+            # Item has immediate reminder
+            elif item.reminder == 1:
+                filtered_items.append(item)
+            # Item has custom reminddate
+            elif item.reminder == 2:
+                if (current_date - item.reminddate).total_seconds() >= 0:
+                    filtered_items.append(item)
+            # Item deadline reminder or immediate
+            elif item.reminder == 3:
+                if not item.deadline:
+                    filtered_items.append(item)
+                elif (current_date - item.deadline).total_seconds() >= 0:
+                    filtered_items.append(item)
+        self.items = filtered_items
+
 
 nm_todo_users = sa.Table(
     'nm_todo_users', Base.metadata,
