@@ -17,7 +17,7 @@ from ringo.lib.renderer import (
 from ringo.model.base import BaseList
 from ringo.model.appointment import Reminders
 from ringo.model.news import News
-from ringo.model.todo import Todo
+from ringo.model.todo import Reminders as TodoReminders
 from ringo.views import handle_history
 
 
@@ -35,7 +35,7 @@ def index_view(request):
         reminder_renderer = DTListRenderer(reminders)
         values['reminders'] = reminder_renderer.render(request)
         # Todos
-        todos = Todo.get_item_list(request)
+        todos = TodoReminders(request)
         todo_renderer = TodoListRenderer(todos)
         values['todos'] = todo_renderer.render(request)
     return values
