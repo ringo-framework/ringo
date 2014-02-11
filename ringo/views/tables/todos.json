@@ -2,9 +2,13 @@
     "overview": {
         "columns": [
             {"name": "name", "label": "Title"},
-            {"name": "priority", "label": "Priority", "expand": "true", "width": "75"},
-            {"name": "deadline", "label": "Deadline", "width": "200"},
-            {"name": "todo_state", "label": "State", "width": "150"}
-        ]
+            {"name": "priority", "label": "Priority", "expand": true, "width": "75"},
+            {"name": "deadline", "label": "Deadline", "width": "115"},
+            {"name": "todo_state", "label": "State", "width": "100"}
+        ],
+        "settings": {
+            "default-sort-field": "priority",
+            "default-sort-order": "asc"
+        }
     }
 }
