@@ -15,7 +15,7 @@ class AppointmentFactory(BaseFactory):
 
 class Reminders(BaseList):
     def __init__(self, db, cache=""):
-        BaseList.__init__(self, Appointment, db, cache)
+        BaseList.__init__(self, Appointment, db, cache=cache)
         self._filter_appointments()
 
     def _filter_appointments(self):
