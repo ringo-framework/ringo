@@ -301,8 +301,36 @@ Calling alternative views
 Application logic is defined in the view function. The view for the model was
 setup on initialisation of the application and uses the default view logic in
 ringo by default.
-But the view for specific actions can be overwritten in the "__init__.py" file
-of your application.
+But the view for specific actions can be overwritten.
+In the following example we will overwrite the default 'index' method of the
+'home' view. So you need to define your custom method in your view file view
+file::
+
+        @view_config(route_name='home', renderer='/index.mako')
+        def index_view(request):
+            # Write your own logic here.
+            handle_history(request)
+            values = {}
+            ...
+            return values
+
+Note, that we reconfigure the view by calling 'view_config' with an already
+configured route_name. This will overwrite the configured view and the
+application will use your custom view now for the route named 'home'.
+
+If you only want to extend the functionallity from the default you can do this
+too. No need to rewrite the default logic again in your custom view::
+
+        from ringo.views.home import index_view as ringo_index_view
+
+        @view_config(route_name='home', renderer='/index.mako')
+        def index_view(request):
+            # First call the default view.
+            values = ringo_index_view(request)
+            # Now extend the logic.
+            ...
+            # Finally return the values.
+            return values
 
 Using callbacks in the views
 ----------------------------
