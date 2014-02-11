@@ -8,11 +8,16 @@ from ringo.lib.helpers import (
     get_app_name,
     get_app_title
 )
-from ringo.lib.renderer import DTListRenderer, NewsListRenderer
+from ringo.lib.renderer import (
+    DTListRenderer,
+    NewsListRenderer,
+    TodoListRenderer
+)
 
 from ringo.model.base import BaseList
 from ringo.model.appointment import Reminders
 from ringo.model.news import News
+from ringo.model.todo import Todo
 from ringo.views import handle_history
 
 
@@ -21,12 +26,18 @@ def index_view(request):
     handle_history(request)
     values = {}
     if request.user:
+        # News
         news = BaseList(News, request, items=request.user.news)
         news_renderer = NewsListRenderer(news)
         values['news'] = news_renderer.render(request)
+        # Reminders
         reminders = Reminders(request)
         reminder_renderer = DTListRenderer(reminders)
         values['reminders'] = reminder_renderer.render(request)
+        # Todos
+        todos = Todo.get_item_list(request)
+        todo_renderer = TodoListRenderer(todos)
+        values['todos'] = todo_renderer.render(request)
     return values
 
 
