@@ -5,7 +5,6 @@ from ringo.model.user import BaseItem
 
 log = logging.getLogger(__name__)
 
-
 class ActionItem(BaseItem, Base):
     __tablename__ = 'actions'
     _modul_id = 2
@@ -52,6 +51,26 @@ ACTIONS = {
                          url="export/{id}",
                          icon="icon-export")
 }
+
+
+def configure_actions(modul, config, dbsession):
+    new_actions = config.get("actions") or []
+    old_actions = [action.name.lower() for action in modul.actions]
+    delete_actions = (set(old_actions) - set(new_actions))
+    add_actions = (set(new_actions) - set(old_actions))
+    for name in delete_actions:
+        log.info("Deleting action %s from modul %s" % (name, modul))
+        action = modul.get_action(name)
+        if action:
+            modul.actions.remove(action)
+    for name in add_actions:
+        log.info("Adding action %s to modul %s" % (name, modul))
+        action = ACTIONS.get(name)
+        if action:
+            modul.actions.append(action)
+        else:
+            log.error("Action %s is not known!" % (name))
+    return modul
 
 
 class ModulItem(BaseItem, Base):
@@ -102,6 +121,57 @@ class ModulItem(BaseItem, Base):
             return (format_str, fields.split(","))
         except AttributeError:
             return ("%s", ["id"])
+
+
+def load_modul(config, dbsession):
+    name = config.get("name") + "s"
+    try:
+        return dbsession.query(ModulItem).filter(ModulItem.name == name).one()
+    except sa.orm.exc.NoResultFound:
+        return None
+
+
+def add_modul(config, dbsession):
+
+    # Set defaults
+    name = config.get("name") + "s"
+    clazzpath = config.get("clazzpath")
+    str_repr = config.get("str_repr") or "%s|id"
+    display = config.get("str_repr") or "hidden"
+    label = config.get("label") or name
+    label_plural = config.get("label_plural") or label
+
+    # Add modul
+    modul = ModulItem(name=name)
+    modul.clazzpath = clazzpath
+    modul.label = label
+    modul.str_repr = str_repr
+    modul.label_plural = label_plural
+    modul.display = display
+    dbsession.add(modul)
+    dbsession.flush()
+    log.info("Adding new modul '%s'" % modul)
+    return modul
+
+
+def register_modul(config, dbsession):
+    """Will add a new modul entry including actions to the moduls table
+    if the modul is not already present.
+
+    :config: Dictionary with the modul configuration
+
+    """
+    # Add or load modul
+    modul = load_modul(config, dbsession)
+    if modul:
+        log.debug("Modul %s already registered" % modul)
+    else:
+        modul = add_modul(config, dbsession)
+
+    # Configure actions
+    modul = configure_actions(modul, config, dbsession)
+
+    return modul
 
 
 def _create_default_actions(dbsession, ignore=[]):
