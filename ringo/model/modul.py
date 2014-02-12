@@ -88,6 +88,12 @@ class ModulItem(BaseItem, Base):
                 return True
         return False
 
+    def get_action(self, name):
+        for action in self.actions:
+            if action.name.lower() == name:
+                return action
+        return None
+
     def get_str_repr(self):
         """Return a tupel with format str and a list of fields."""
         # "%s - %s"|field1, field2 -> ("%s - %s", ["field1", "field2"])
