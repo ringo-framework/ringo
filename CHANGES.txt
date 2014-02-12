@@ -8,6 +8,12 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
+extension_branch
+----------------
+- Added mechanism to add (register) external moduls. External Moduls will include a
+  model, views, and form definitions in the same way as internal extensions do.
+
+
 0.10.0
 ------
 - Add new requirement of py3o.template library.
