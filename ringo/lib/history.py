@@ -7,4 +7,6 @@ class History:
         self.history.append(url)
 
     def pop(self):
-        return self.history.pop()
+        if len(self.history) > 0:
+            return self.history.pop()
+        return None
