@@ -757,3 +757,15 @@ def print_(request):
 def confirmed(request):
     """Returns True id the request is confirmed"""
     return request.params.get('confirmed') == "1"
+
+
+views = {
+    'list': list_,
+    'create': create_,
+    'read': read_,
+    'update': update_,
+    'delete': delete_,
+    'import': import_,
+    'export': export_,
+    'print': print_
+}
