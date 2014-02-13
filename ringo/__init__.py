@@ -149,6 +149,21 @@ def add_route(config, clazz):
     return add_rest_service(config, clazz)
 
 
+def add_view(config, clazz):
+    from ringo.views.base import views
+    for action in clazz.get_item_actions():
+        name = action.name.lower()
+        func = views.get(name)
+        route_name = clazz.get_action_routename(name)
+        renderer = '/default/%s.mako' % name
+        permission = action.permission or name
+        log.debug("Adding view: %s, %s, %s, %s" % (route_name, func,
+                                                   renderer, permission))
+        config.add_view(func, route_name=route_name,
+                        renderer=renderer, permission=permission)
+    return config
+
+
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
