@@ -154,12 +154,13 @@ def get_modules(request, display):
                 user_moduls.append(modul)
     return user_moduls
 
+
 def get_formbar_css():
     return get_css()
 
+
 def get_formbar_js():
-    return get_js()
-    return get_css()
+    return get_js('"/rest/rule/evaluate"')
 
 ###########################################################################
 #                               Times & Dates                             #
