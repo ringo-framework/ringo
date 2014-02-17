@@ -285,6 +285,6 @@ def setup_routes(config):
                      'rest/news/{id}/markasread',
                      factory=get_resource_factory(News))
     # REST Url to evalute formed rules.
-    config.add_route('rules-evaluate', 'rest/rules/evaluate')
+    config.add_route('rules-evaluate', 'rest/rule/evaluate')
 
     return config
