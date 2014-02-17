@@ -4,9 +4,11 @@ items
 """
 from pyramid.view import forbidden_view_config
 from pyramid.view import notfound_view_config
+from pyramid.view import view_config
 from pyramid.response import Response
 
 from formbar.form import Form
+from formbar.rules import Rule
 
 from ringo.views.base import _get_item_from_context
 
@@ -62,6 +64,16 @@ def rest_notfound(request):
     response = Response(body=body, content_type='application/json')
     response.status = '404 Not Found'
     return response
+
+@view_config(route_name='rules-evaluate',
+             renderer='json',
+             request_method="GET")
+def evaluate_(request):
+    rule = Rule(expr=request.GET.get('rule').split(' '))
+    if rule.evaluate({}):
+        return JSONResponse(True, rule.msg)
+    else:
+        return JSONResponse(False, rule.msg)
 
 def list_(clazz, request):
     """Returns a JSON objcet with all item of a clazz. The list does not
