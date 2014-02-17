@@ -559,7 +559,11 @@ def update_(clazz, request, callback=None, renderers={}):
         rvalue['logbook'] = logbook_form.render()
     else:
         rvalue['logbook'] = ""
-    rvalue['form'] = item_form.render(page=get_current_form_page(clazz, request))
+
+    # Add ringo specific values into the renderered form
+    values = {'_roles': [str(r.name) for r in request.user.get_roles()]}
+    rvalue['form'] = item_form.render(values = values,
+                                      page = get_current_form_page(clazz, request))
     return rvalue
 
 
