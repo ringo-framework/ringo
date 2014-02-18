@@ -472,7 +472,9 @@ def create_(clazz, request, callback=None, renderers={}):
             request.session.flash(msg, 'error')
     rvalue['clazz'] = clazz
     rvalue['item'] = item
-    rvalue['form'] = form.render(values=params.get('values', {}),
+    values = {'_roles': [str(r.name) for r in request.user.get_roles()]}
+    values.update(params.get('values', {}))
+    rvalue['form'] = form.render(values=values,
                                  page=get_current_form_page(clazz, request))
     return rvalue
 
@@ -611,7 +613,10 @@ def read_(clazz, request, callback=None, renderers={}):
         previous_values = item.get_previous_values(author=request.user.login)
     else:
         previous_values = {}
+    # Add ringo specific values into the renderered form
+    values = {'_roles': [str(r.name) for r in request.user.get_roles()]}
     rvalue['form'] = item_form.render(page=get_current_form_page(clazz, request),
+                                      values = values,
                                       previous_values=previous_values)
     return rvalue
 
