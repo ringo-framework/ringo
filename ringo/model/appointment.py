@@ -57,6 +57,6 @@ def init_model(dbsession):
     modul.clazzpath = "ringo.model.appointment.Appointment"
     modul.label = "Appointment"
     modul.label_plural = "Appointments"
-    modul.display = "header-menu"
+    modul.display = "hidden"
     modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
