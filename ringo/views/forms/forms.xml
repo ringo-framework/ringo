@@ -2,7 +2,9 @@
 <configuration xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="ringo">
   <source>
     <entity id="e1" name="title" label="Title" type="string" required="true"/>
-    <entity id="e2" name="description" label="Description" type="string"/>
+    <entity id="e2" name="description" label="Description" type="string">
+      <renderer type="textarea"/>
+    </entity>
     <entity id="e3" name="category" label="Category" type="integer">
       <renderer type="dropdown"></renderer>
       <options>
@@ -41,11 +43,8 @@
       <col><field ref="s1"/></col>
     </row>
     <row>
-      <col><field ref="e2"/></col>
-    </row>
-    <row>
       <col><field ref="modul"/></col>
-      <col><field ref="e3"/></col>
+      <col><field ref="e2"/></col>
     </row>
     <row>
       <col><field ref="e4"/></col>
