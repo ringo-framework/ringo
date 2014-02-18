@@ -36,7 +36,7 @@ def init_model(dbsession):
     modul.clazzpath = "ringo.model.file.File"
     modul.label = "File"
     modul.label_plural = "Files"
-    modul.display = "header-menu"
+    modul.display = "hidden"
     modul.actions.extend(_create_default_actions(dbsession))
     dbsession.add(modul)
     dbsession.flush()
