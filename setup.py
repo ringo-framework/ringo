@@ -21,7 +21,7 @@ requires = [
     'waitress',
     'babel',
     'Sphinx',
-    'formbar<=0.6.0',
+    'formbar',
     'nose',
     'behave',
     'invoke',
