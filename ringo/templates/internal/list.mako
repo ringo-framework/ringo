@@ -134,10 +134,7 @@ table-bordered">
         <td onclick="openItem('${request.route_path(clazz.get_action_routename(permission), id=item.id)}')" class="${render_responsive_class(field.get('screen'))} link">
       % endif
         <%
-          try:
-            value = getattr(item, field.get('name'))
-          except AttributeError:
-            value = "NaF"
+            value = h.prettify(request, getattr(item, field.get('name')))
         %>
         % if isinstance(value, list):
           ## TODO: Expandation needed here? As this are very likely
