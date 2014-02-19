@@ -1,7 +1,14 @@
 import os
-from datetime import datetime, timedelta
 import pkg_resources
+from babel.core import Locale
+from babel.dates import (
+format_date as babel_format_date,
+format_datetime as babel_format_datetime,
+format_time as babel_format_time
+)
+from datetime import datetime, timedelta, time, date
 from pyramid.threadlocal import get_current_registry
+from pyramid.i18n import get_locale_name
 from formbar.helpers import get_css, get_js
 
 def serialize(value):
@@ -162,6 +169,27 @@ def get_formbar_css():
 def get_formbar_js():
     return get_js('"/rest/rule/evaluate"')
 
+########################################################################
+#                          Formating content                           #
+########################################################################
+
+def prettify(request, value):
+    """Generic function used in template rendering to prettify a given
+    pythonic value into to a more human readable form. Depending on the
+    datatype the function will call a specialised formatting function
+    which takes care of localisation etc.
+
+    :request: Current request
+    :value: Pythonic value
+    :returns: Prettified (localized) value
+
+    """
+    locale_name = get_locale_name(request)
+    if isinstance(value, datetime):
+        return format_datetime(value, locale_name=locale_name, format="short")
+    return value
+
+
 ###########################################################################
 #                               Times & Dates                             #
 ###########################################################################
@@ -191,7 +219,11 @@ def format_timedelta(td):
         seconds = td.seconds % 60
     return '%02d:%02d:%02d' % (hours, minutes, seconds)
 
-def format_datetime(dt):
-    """Returns a prettyfied version of a datetime in the form YYYY-MM-DD
-    hh:ss"""
+def format_datetime(dt, locale_name=None, format="medium"):
+    """Returns a prettyfied version of a datetime. If a locale_name is
+    provided the datetime will be localized. Without a locale the
+    datetime will be formatted into the form YYYY-MM-DD hh:ss"""
+    if locale_name:
+        locale = Locale(locale_name)
+        return babel_format_datetime(dt, locale=locale, format=format)
     return dt.strftime("%Y-%m-%d %H:%M")
