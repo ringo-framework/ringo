@@ -47,6 +47,9 @@ from ringo.model.todo import (
 from ringo.model.form import (
     init_model as init_form_model
 )
+from ringo.model.printtemplate import (
+    init_model as init_print_model
+)
 
 
 def usage(argv):
@@ -80,4 +83,5 @@ def inititializedb(engine):
         init_tag_model(DBSession)
         init_todo_model(DBSession)
         init_form_model(DBSession)
+        init_print_model(DBSession)
 
