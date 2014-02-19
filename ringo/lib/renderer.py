@@ -10,6 +10,7 @@ from formbar.renderer import (
 from formbar.config import Config, load
 from formbar.form import Form
 from ringo import template_dir
+import ringo.lib.helpers
 from ringo.lib.helpers import (
     get_saved_searches,
     get_path_to_overview_config,
@@ -238,6 +239,7 @@ class ListRenderer(Renderer):
                   'listing': self.listing,
                   'request': request,
                   '_': request.translate,
+                  'h': ringo.lib.helpers,
                   's': security,
                   'enable_bundled_actions': False,
                   'search': search,
