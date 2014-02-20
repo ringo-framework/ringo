@@ -30,6 +30,8 @@ from ringo.model.user import (
     Role
 )
 from ringo.model.modul import (
+    load_modul, add_modul,
+    configure_actions, setup_modul,
     ModulItem,
     ActionItem,
 )
