@@ -462,7 +462,26 @@ class Printable(Mixin):
 class Owned(object):
     """Mixin to add references to a user and a usergroup. This
     references are used to build some kind of ownership of the item. The
-    ownership is used from the permission system."""
+    ownership is used from the permission system.
+   
+    It is posible to configure inhertinace of the owner and group from
+    a given parent element. This information is used only while creating
+    new instances of the modul. If configured, the default group and
+    owner information will be overwritten. This is done at the very end
+    of the creation process. See ''save'' method of the BaseItem. You
+    can configure the inhertiance by setting the name of the relation to
+    the parent item in the ''_inherit_gid'' and ''_inherit_uid'' class
+    variable.
+    """
+
+    _inherit_gid = None
+    """Variable to configure a inheritance of the gid. The variable
+    should be the name of the relation to the parent element from which
+    the gid will be taken"""
+    _inherit_uid = None
+    """Variable to configure a inheritance of the uid. The variable
+    should be the name of the relation to the parent element from which
+    the uid will be taken"""
 
     @declared_attr
     def uid(cls):
