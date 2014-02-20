@@ -198,6 +198,29 @@ def main(global_config, **settings):
     config = setup_finished_callback(config)
     return config.make_wsgi_app()
 
+
+def register_modul(config, modul_config):
+    """Will register an external modul as extension to the application.
+    The function will ensure that the relevant entries in the database
+    are made. Finally the function will setup views and routes for the
+    actions within the given modul.
+
+    :config: Current config of the application
+    :modul_config: Dictionary with the configuration of the modul
+    :returns: registered modul.
+
+    """
+    # Setup the model.
+    modul = setup_modul(modul_config, DBSession)
+    # Set dynamically the modul_id.
+    model = helpers.dynamic_import(modul.clazzpath)
+    model._modul_id = modul.id
+    # Add routes and views.
+    add_route(config, model)
+    add_view(config, model)
+    return modul
+
+
 def includeme(config):
     log.info('Setup of Ringo...')
     config = setup_pyramid_modules(config)
