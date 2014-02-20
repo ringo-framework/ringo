@@ -2,30 +2,23 @@
 <configuration>
   <source>
     <!-- Define different entity types -->
-    <entity id="e1" name="login" label="Login" type="string">
-      <rule expr="bool($login)" msg="Login is required" method="pre"/>
-    </entity>
+    <entity id="e1" name="login" label="Login" type="string" required="true"/>
     <entity id="e2" name="pass" label="Password">
       <renderer type="password"/>
       <rule expr="bool($pass)" msg="Password is required" method="pre"/>
-    </entity>
-    <entity id="e3" name="login" label="Login" type="string">
-      <rule expr="bool($login)" msg="Loginname is required" method="pre"/>
     </entity>
     <entity id="e4" name="pass2" label="Retype password">
       <renderer type="password"/>
       <rule expr="$pass==$pass2" msg="Password are not equal" method="pre"/>
     </entity>
-    <entity id="e5" name="email" label="Email" type="email">
-      <rule expr="bool($email)" msg="Email is required" method="pre"/>
-    </entity>
+    <entity id="e5" name="email" label="Email" type="email" required="true"/>
   </source>
   <form id="loginform" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="s1"/>
   </form>
   <form id="forgot_password" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <row>
-      <col><field ref="e3"/></col>
+      <col><field ref="e1"/></col>
       <col></col>
     </row>
   </form>
