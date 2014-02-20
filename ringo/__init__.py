@@ -10,7 +10,6 @@ from sqlalchemy import engine_from_config
 
 log = logging.getLogger(__name__)
 
-
 from ringo.resources import (
     get_resource_factory,
 )
