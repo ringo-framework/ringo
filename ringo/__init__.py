@@ -153,7 +153,15 @@ def add_view(config, clazz):
     from ringo.views.base import views
     for action in clazz.get_item_actions():
         name = action.name.lower()
-        func = views.get(name)
+        # Check if the user has implemented a custom view for the action
+        # in the extension. The function must be named like the lowered
+        # action name.
+        try:
+            pkg = clazz.__module__.split('.')[0]
+            view = "%s.views.%s" % (pkg, name)
+            func = helpers.dynamic_import(view)
+        except AttributeError:
+            func = views.get(name)
         route_name = clazz.get_action_routename(name)
         renderer = '/default/%s.mako' % name
         permission = action.permission or name
