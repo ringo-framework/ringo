@@ -194,7 +194,7 @@ def main(global_config, **settings):
 
     config.set_session_factory(session_factory_from_settings(settings))
     config.include('ringo')
-    config.include('ringo_extension')
+
     config = setup_finished_callback(config)
     return config.make_wsgi_app()
 
