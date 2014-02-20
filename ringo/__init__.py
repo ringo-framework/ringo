@@ -163,6 +163,12 @@ def add_view(config, clazz):
             func = helpers.dynamic_import(view)
         except AttributeError:
             func = views.get(name)
+            # FIXME: The follwing lambda call is a hack which is
+            # currently needed as the default ringo actions for the crud
+            # actions required the class for which the function is
+            # called as first argument. This isn't needed anymore as the
+            # request already has the class. (ti) <2014-02-21 00:23>
+            func = lambda r: func(r.context.__model__, r)
         route_name = clazz.get_action_routename(name)
         renderer = '/default/%s.mako' % name
         permission = action.permission or name
