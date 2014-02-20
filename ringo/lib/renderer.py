@@ -30,17 +30,24 @@ def _load_overview_config(clazz):
         application root. If no configuration can be found return
         None."""
         cfile = "%s.json" % clazz.__tablename__
+        pkg = clazz.__module__.split('.')[0]
         # Try to load the configuration for the overview first.
         config = None
         try:
-            config = open(get_path_to_overview_config(cfile), "r")
+            path = get_path_to_form_config(cfile)
+            config = open(path, "r")
         except IOError:
             try:
-                config = open(get_path_to_overview_config(cfile, 'ringo'), "r")
+                path = get_path_to_form_config(cfile, 'ringo')
+                config = open(path, "r")
             except IOError:
-                log.warning('Can not load overview configuration for "%s" '
-                            'Configuring the overview now based on the form '
-                            'configuration' % clazz)
+                try:
+                    path = get_path_to_form_config(cfile, pkg, '')
+                    config = open(path, "r")
+                except IOError:
+                    log.warning('Can not load overview configuration for "%s" '
+                                'Configuring the overview now based on the '
+                                ' form configuration' % clazz)
 
         if config:
             return json.load(config)

@@ -145,15 +145,27 @@ class BaseItem(object):
         tried to be loaded from the application first. If this fails it
         tries to load it from the ringo application."""
         cfile = "%s.xml" % cls.__tablename__
+        pkg = cls.__module__.split('.')[0]
+
         cachename = "%s.%s" % (cls.__name__, formname)
         if not cls._cache_form_config.get(cachename):
+            # Load config file from current application
             try:
-                loaded_config = load(get_path_to_form_config(cfile))
+                loaded_config = load(get_path_to_form_config(
+                    cfile, cls.__module__.split('.')[0]))
             except IOError:
-                loaded_config = load(get_path_to_form_config(cfile, 'ringo'))
+                # Load config file from ringo
+                try :
+                    path = get_path_to_form_config(cfile, 'ringo')
+                    loaded_config = load(path)
+                except IOError:
+                    # Load config file from extension
+                    path = get_path_to_form_config(cfile, pkg, '')
+                    loaded_config = load(path)
             config = Config(loaded_config)
             cls._cache_form_config[cachename] = config.get_form(formname)
         return cls._cache_form_config[cachename]
+
 
     @classmethod
     def get_action_routename(cls, action, prefix=None):
