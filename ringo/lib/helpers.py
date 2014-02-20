@@ -94,27 +94,57 @@ def get_path_to(location, app=None):
     return os.path.join(base_path, location)
 
 
-def get_path_to_form_config(filename, app=None):
+def get_path_to_form_config(filename, app=None, loc=None):
     """Returns the path the the given form configuration. The file name
     should be realtive to the default location for the configurations.
 
+    The path is build from the path of the current application, and the
+    default location within this application.
+    The default location can be changed by providing a alternative path
+    in the loc attribute.
+
+    The app attribute defines the path to the application. If no
+    application is defined the application in which context the call of
+    this function happens will be used.
+
     :file: filename
+    :app: Name of the application. Defaults to the current application.
+    :loc: path within the application to the config file. Defaults to
+    /views/forms
     :returns: Absolute path to the configuration file
 
     """
-    location = "views/forms"
+    if loc is not None:
+        location = loc
+    else:
+        location = "views/forms"
     return get_path_to(os.path.join(location, filename), app)
 
 
-def get_path_to_overview_config(filename, app=None):
+def get_path_to_overview_config(filename, app=None, loc=None):
     """Returns the path the the given overview configuration. The file name
     should be realtive to the default location for the configurations.
 
+    The path is build from the path of the current application, and the
+    default location within this application.
+    The default location can be changed by providing a alternative path
+    in the loc attribute.
+
+    The app attribute defines the path to the application. If no
+    application is defined the application in which context the call of
+    this function happens will be used.
+
     :file: filename
+    :app: Name of the application. Defaults to the current application.
+    :loc: path within the application to the config file. Defaults to
+    /views/tables
     :returns: Absolute path to the configuration file
 
     """
-    location = "views/tables"
+    if loc is not None:
+        location = loc
+    else:
+        location = "views/tables"
     return get_path_to(os.path.join(location, filename), app)
 
 
