@@ -1,4 +1,5 @@
 import logging
+import transaction
 import sqlalchemy as sa
 from ringo.model import Base
 from ringo.model.user import BaseItem
@@ -154,7 +155,7 @@ def add_modul(config, dbsession):
     return modul
 
 
-def register_modul(config, dbsession):
+def setup_modul(config, dbsession):
     """Will add a new modul entry including actions to the moduls table
     if the modul is not already present.
 
@@ -167,10 +168,9 @@ def register_modul(config, dbsession):
         log.debug("Modul %s already registered" % modul)
     else:
         modul = add_modul(config, dbsession)
-
     # Configure actions
     modul = configure_actions(modul, config, dbsession)
-
+    transaction.commit()
     return modul
 
 
