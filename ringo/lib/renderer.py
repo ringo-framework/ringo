@@ -541,6 +541,7 @@ class DropdownFieldRenderer(FormbarDropdown):
     def __init__(self, field, translate):
         """@todo: to be defined"""
         FormbarDropdown.__init__(self, field, translate)
+        self.template = template_lookup.get_template("internal/dropdown.mako")
 
     def _get_template_values(self):
         values = FormbarDropdown._get_template_values(self)
@@ -564,13 +565,13 @@ class DropdownFieldRenderer(FormbarDropdown):
             values['options'] = filtered_items
         return values
 
-    def _render_link(self):
+    def render_link(self):
         html = []
         try:
             item = getattr(self._field._form._item, self._field.name)
             url = get_link_url(self._field)
             if url:
-                html.append('<a href="%s">&nbsp;[%s]</a>' % (url, item))
+                html.append('<a href="%s">%s</a>' % (url, item))
         except AttributeError:
             log.warning("Missing %s attribute in %s" % (self._field.name,
                                                         self._field._form))
@@ -579,7 +580,10 @@ class DropdownFieldRenderer(FormbarDropdown):
     def _render_label(self):
         html = []
         html.append(FormbarDropdown._render_label(self))
-        html.append(self._render_link())
+        if not self._field.is_readonly():
+            link = self.render_link()
+            if link:
+                html.append(" [%s]" % link)
         return "".join(html)
 
 

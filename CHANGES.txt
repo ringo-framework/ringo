@@ -17,6 +17,7 @@ to the tracker.
   the provided "_roles".
 - Removed category from form form and table configuration. It is currently
   unused.
+- Changed rendering of ringo specif dropdown.
 - Add option to configure group and owner inhertinace on creating new
   instances in the Owned-Mixin.
 
