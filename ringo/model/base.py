@@ -12,7 +12,7 @@ from ringo.lib.helpers import get_path_to_form_config, serialize
 from ringo.lib.sql import DBSession, regions
 from ringo.lib.imexport import JSONExporter
 from ringo.lib.sql.query import FromCache, set_relation_caching
-from ringo.model.mixins import Logged, StateMixin
+from ringo.model.mixins import Logged, StateMixin, Owned
 
 log = logging.getLogger(__name__)
 
@@ -285,6 +285,17 @@ class BaseItem(object):
             # flush the session to make the new id in the element
             # presistent.
             dbsession.flush()
+
+            # Check if uid or gid or uid inheritance is configured.
+            if isinstance(self, Owned):
+                gid_relation = getattr(self, '_inherit_gid')
+                if gid_relation:
+                    parent = getattr(self, gid_relation)
+                    self.group = parent.group
+                uid_relation = getattr(self, '_inherit_uid')
+                if uid_relation:
+                    parent = getattr(self, uid_relation)
+                    self.owner = parent.owner
         return self
 
 
