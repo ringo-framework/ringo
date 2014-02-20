@@ -149,7 +149,7 @@ def get_permissions(modul, item=None):
         # TODO: Note that actions, which are not inserted into the
         # database (e.g custom mixin actions.) will not have any roles
         # and are not considerd on building principals yet. (ti)
-        # <2014-02-07 11:08> 
+        # <2014-02-07 11:08>
         for role in action.roles:
             add_perm = True
             default_principal = 'role:%s' % role
@@ -191,7 +191,7 @@ def get_principals(userid, request):
     :returns: list with pricipals
 
     """
-    if userid == request.user.id:
+    if request.user:
         user = request.user
     else:
         user = _load_user(userid, request)
