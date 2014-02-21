@@ -185,6 +185,7 @@ def prettify(request, value):
 
     """
     locale_name = get_locale_name(request)
+
     if isinstance(value, datetime):
         return format_datetime(value, locale_name=locale_name, format="short")
     return value
