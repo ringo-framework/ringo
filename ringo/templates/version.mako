@@ -8,7 +8,7 @@
 <p>${_('This application.')}</p>
 <p>${_('Version')}: ${app_version}</p>
 % endif
-<h2>Ringo</h2>
+<h2><img src="${request.static_url('ringo:static/images/ringo-logo-64.png')}" alt="Rinfo logo"/>Ringo</h2>
 <p>${_('<a href="https://bitbucket.org/ti/ringo" target="_blank">Ringo</a> is a small Python based high level web application framework build with Pyramid . It provides basic functionality which is often used in modern web applications') | n}</p>
 <p>${_('Version')}: ${ringo_version}</p>
 <h2>Formbar</h2>

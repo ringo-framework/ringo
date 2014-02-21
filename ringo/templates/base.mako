@@ -23,11 +23,8 @@
     <![endif]-->
 
     <!-- Fav and touch icons -->
-    ##<link href="../assets/ico/apple-touch-icon-144-precomposed.png" sizes="144x144" rel="apple-touch-icon-precomposed">
-    ##<link href="../assets/ico/apple-touch-icon-114-precomposed.png" sizes="114x114" rel="apple-touch-icon-precomposed">
-    ##<link href="../assets/ico/apple-touch-icon-72-precomposed.png" sizes="72x72" rel="apple-touch-icon-precomposed">
-    ##<link href="../assets/ico/apple-touch-icon-57-precomposed.png" rel="apple-touch-icon-precomposed">
-    ##<link href="../assets/ico/favicon.png" rel="shortcut icon">
+    <link href="${request.static_url('ringo:static/images/icons/favicons/apple-touch-icon-128.png')}" sizes="128x128" rel="apple-touch-icon-precomposed">
+    <link href="${request.static_url('ringo:static/images/icons/favicons/favicon.png')}" rel="shortcut icon">
     <script src="${request.static_url('ringo:static/js/jquery.js')}"></script>
     <script src="${request.static_url('ringo:static/bootstrap/js/bootstrap.min.js')}"></script>
     <script src="${request.static_url('ringo:static/js/dataTables.js')}"></script>
