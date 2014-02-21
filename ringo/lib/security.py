@@ -191,7 +191,7 @@ def get_principals(userid, request):
     :returns: list with pricipals
 
     """
-    if userid == request.user.id:
+    if request.user:
         user = request.user
     else:
         user = _load_user(userid, request)
