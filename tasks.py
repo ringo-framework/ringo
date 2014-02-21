@@ -4,6 +4,9 @@ from invoke import run, task
 def docs(doctype="html"):
     """Will build the documentation"""
     run("cd docs; make %s" % doctype)
+    run("make %s" % doctype)
+    run("cd build")
+    run("cp -r html ../../ringo/static/doc")
 
 @task
 def test():
