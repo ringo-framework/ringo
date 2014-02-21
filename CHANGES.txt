@@ -22,6 +22,7 @@ to the tracker.
   instances in the Owned-Mixin.
 - Deletion of Items now cascades to Logs, Comments, Versions and nested
   Elements.
+- #18: Added some ringo artwork.
 
 0.10.0
 ------
