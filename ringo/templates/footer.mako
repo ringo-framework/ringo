@@ -27,6 +27,11 @@
         </li>
         <li>
           <a href="${request.route_path('version')}" title="${_('Show version information')}">${h.get_app_title()} ver. ${h.get_app_version()}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
 
 <!-- Modal Help Dialog-->
 <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="Help" aria-hidden="true">
@@ -41,11 +46,6 @@
         src="${request.static_url('ringo:static/doc/html/index.html')}"
         frameborder="0" width="100%" height="300"></iframe>
       </div>
-    </div>
-  </div>
-</div>
-        </li>
-      </ul>
     </div>
   </div>
 </div>
