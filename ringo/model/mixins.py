@@ -313,7 +313,7 @@ class Versioned(object):
         nm_table = Table(tbl_name, Base.metadata,
                          Column('iid', Integer, ForeignKey(cls.id)),
                          Column('vid', Integer, ForeignKey("versions.id")))
-        versions = relationship(Version, secondary=nm_table)
+        versions = relationship(Version, secondary=nm_table, cascade="all")
         return versions
 
     @classmethod
@@ -385,7 +385,7 @@ class Logged(object):
         nm_table = Table(tbl_name, Base.metadata,
                          Column('iid', Integer, ForeignKey(cls.id)),
                          Column('lid', Integer, ForeignKey("logs.id")))
-        logs = relationship(Log, secondary=nm_table)
+        logs = relationship(Log, secondary=nm_table, cascade="all")
         return logs
 
     def build_changes(self, old_values, new_values):
@@ -524,7 +524,8 @@ class Nested(object):
         join = "%s.id==%s.parent_id" % (name, name)
         return relationship(name,
                             primaryjoin=join,
-                            backref=backref('parent', remote_side=[cls.id]))
+                            backref=backref('parent', remote_side=[cls.id]),
+                            cascade="all")
 
     def get_parents(self):
         """Return a list of all parents of the current item
@@ -563,7 +564,7 @@ class Commented(object):
         nm_table = Table(tbl_name, Base.metadata,
                          Column('iid', Integer, ForeignKey(cls.id)),
                          Column('cid', Integer, ForeignKey("comments.id")))
-        comments = relationship(Comment, secondary=nm_table)
+        comments = relationship(Comment, secondary=nm_table, cascade="all")
         return comments
 
     @classmethod
@@ -619,5 +620,6 @@ class Todo(object):
         nm_table = Table(tbl_name, Base.metadata,
                          Column('iid', Integer, ForeignKey(cls.id)),
                          Column('tid', Integer, ForeignKey("todos.id")))
-        rel = relationship(Todo, secondary=nm_table, backref=clsname+"s")
+        rel = relationship(Todo, secondary=nm_table,
+                           backref=clsname+"s", cascade="all")
         return rel
