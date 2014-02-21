@@ -22,6 +22,7 @@ eggs
 parts
 bin
 var
+doc/html
 sdist
 develop-eggs
 .installed.cfg
