@@ -23,6 +23,7 @@ to the tracker.
 - Deletion of Items now cascades to Logs, Comments, Versions and nested
   Elements.
 - #18: Added some ringo artwork.
+- #8: Make documentation available in the application
 
 0.10.0
 ------
