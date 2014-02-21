@@ -8,7 +8,7 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
-0.10.1
+0.11.0
 ------
 - Add service under "rest/rule/evaluate" to evaluate rules. Service is used
   for client side evaluation of rules in the formulars.
