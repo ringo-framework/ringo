@@ -120,7 +120,7 @@ def add_rest_service(config, clazz):
         #route_url = "rest/%s/%s" % (name, action.url)
         log.debug("Adding route: %s, %s" % (route_name, route_url))
         config.add_route(route_name, route_url,
-                         factory=get_resource_factory(clazz, modul))
+                         factory=get_resource_factory(clazz))
     return config
 
 def add_route(config, clazz):
@@ -153,7 +153,7 @@ def add_route(config, clazz):
         route_url = "%s/%s" % (name, action.url)
         log.debug("Adding route: %s, %s" % (route_name, route_url))
         config.add_route(route_name, route_url,
-                         factory=get_resource_factory(clazz, clazz.get_item_modul()))
+                         factory=get_resource_factory(clazz))
     return add_rest_service(config, clazz)
 
 
