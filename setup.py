@@ -22,13 +22,16 @@ requires = [
     'babel',
     'Sphinx',
     'formbar',
-    'nose',
-    'behave',
     'invoke',
-    'coverage',
-    'webtest',
     'dogpile.cache',
     'py3o.template'
+]
+
+tests_requires = [
+    'nose',
+    'behave',
+    'coverage',
+    'webtest'
 ]
 
 setup(name='ringo',
@@ -49,8 +52,9 @@ setup(name='ringo',
       include_package_data=True,
       zip_safe=False,
       #test_suite='ringo',
-      test_suite = 'nose.collector',
+      test_suite='nose.collector',
       install_requires=requires,
+      tests_require=tests_requires,
       setup_requires=["hgtools"],
       entry_points="""\
       [paste.app_factory]
