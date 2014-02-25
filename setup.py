@@ -28,6 +28,7 @@ requires = [
 ]
 
 tests_requires = [
+    'mock',
     'behave',
     'coverage',
     'webtest'
