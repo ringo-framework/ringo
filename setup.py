@@ -24,14 +24,14 @@ requires = [
     'formbar',
     'invoke',
     'dogpile.cache',
+    'behave',
+    'coverage',
+    'webtest',
+    'mock',
     'py3o.template'
 ]
 
 tests_requires = [
-    'mock',
-    'behave',
-    'coverage',
-    'webtest'
 ]
 
 setup(name='ringo',
