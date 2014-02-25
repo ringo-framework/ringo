@@ -39,8 +39,8 @@ def setup_ringo_security(config):
                                                hashalg='sha512',
                                                callback=get_principals)
     authz_policy = ACLAuthorizationPolicy()
-    config.set_authentication_policy(authn_policy)
     config.set_authorization_policy(authz_policy)
+    config.set_authentication_policy(authn_policy)
     # Make the user object available as attribute "user" in the request.
     # See http://docs.pylonsproject.org/projects/ \
     #            pyramid_cookbook/en/latest/auth/ \
