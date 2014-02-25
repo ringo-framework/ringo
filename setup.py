@@ -13,6 +13,7 @@ requires = [
     'alembic',
     'transaction',
     'pyramid_tm',
+    'pyramid_mako',
     'pyramid_debugtoolbar',
     'pyramid_beaker',
     'pyramid_handlers',
