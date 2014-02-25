@@ -142,12 +142,12 @@ class HelpersTests(BaseUnitTest):
     def test_prettify_date(self):
         from ringo.lib.helpers import prettify
         result = prettify(self.get_request(), datetime(1977, 3, 12, 0, 0, 0))
-        self.assertEquals(result, "3/12/77, 12:00 AM")
+        self.assertEquals(result, u"3/12/77 12:00 AM")
 
     def test_format_datetime(self):
         from ringo.lib.helpers import format_datetime
         result = format_datetime(datetime(1977, 3, 12, 0, 0, 0))
-        self.assertEquals(result, "1977-03-12 00:00")
+        self.assertEquals(result, u"1977-03-12 00:00")
 
     def test_get_week(self):
         from ringo.lib.helpers import get_week
