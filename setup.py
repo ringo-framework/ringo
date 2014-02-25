@@ -28,7 +28,6 @@ requires = [
 ]
 
 tests_requires = [
-    'nose',
     'behave',
     'coverage',
     'webtest'
@@ -55,7 +54,7 @@ setup(name='ringo',
       test_suite='nose.collector',
       install_requires=requires,
       tests_require=tests_requires,
-      setup_requires=["hgtools"],
+      setup_requires=["hgtools", "nose"],
       entry_points="""\
       [paste.app_factory]
       main = ringo:main
