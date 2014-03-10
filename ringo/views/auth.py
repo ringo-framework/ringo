@@ -221,6 +221,8 @@ def reset_password(request):
                   '_': _}
         mail = Mail([recipient], subject, template="password_reminder", values=values)
         mailer.send(mail)
+        msg = _("Password was resetted and sent ti the users email address."
+                "Please check your email :)")
         success = True
     else:
         msg = _("Password was not resetted. Maybe the request"
