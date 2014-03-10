@@ -34,6 +34,7 @@ class Mailer:
         :returns: True or False
 
         """
+	log.debug("Sending from '%s' to '%s'. Subject: %s" % (mail.sender or self.default_sender, mail.recipients, mail.subject))
         message = Message(subject=mail.subject,
                           sender=mail.sender or self.default_sender,
                           recipients=mail.recipients,
