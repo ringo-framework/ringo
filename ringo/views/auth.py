@@ -130,7 +130,7 @@ def register_user(request):
             mailer = Mailer(request)
             recipient = profile.email
             subject = _('Confirm user registration for %s' % get_app_name())
-            values = {'url': request.route_path('confirm_user', token=atoken),
+            values = {'url': request.route_url('confirm_user', token=atoken),
                       'app_name': get_app_name(),
                       'email': settings['mail.default_sender'],
                       '_': _}
@@ -185,7 +185,7 @@ def forgot_password(request):
                 mailer = Mailer(request)
                 recipient = user.profile[0].email
                 subject = _('Password reset request for %s' % get_app_name())
-                values = {'url': request.route_path('reset_password', token=user.reset_tokens[-1]),
+                values = {'url': request.route_url('reset_password', token=user.reset_tokens[-1]),
                           'app_name': get_app_name(),
                           'email': settings['mail.default_sender'],
                           '_': _}
