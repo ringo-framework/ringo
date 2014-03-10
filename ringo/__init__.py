@@ -206,6 +206,7 @@ def setup_finished_callback(config):
 def setup_pyramid_modules(config):
     config.include('pyramid_handlers')
     config.include('pyramid_beaker')
+    config.include('pyramid_mako')
     return config
 
 def setup_security(config):

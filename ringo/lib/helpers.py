@@ -44,6 +44,7 @@ def import_model(clazzpath):
     if modul.clazzpath == clazzpath:
         return orig_clazz
     else:
+        # TODO: Is this code ever reached? (ti) <2014-02-25 23:07>
         return import_model(modul.clazzpath)
 
 def get_ringo_version():
@@ -85,6 +86,7 @@ def get_action_url(request, item, action):
     route_name = "%s-%s" % (base_name, action)
     if isinstance(item, object):
         return request.route_path(route_name, id=item.id)
+    # TODO: Is this code ever reached. See testcase (ti) <2014-02-25 23:17>
     return request.route_path(route_name)
 
 

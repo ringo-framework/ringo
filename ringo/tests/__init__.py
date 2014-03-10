@@ -1,10 +1,11 @@
 import os
 import unittest
-#from mock import Mock
+from mock import Mock
 from paste.deploy.loadwsgi import appconfig
 from webtest import TestApp
 
 from pyramid import testing
+from pyramid.registry import Registry
 
 from sqlalchemy import engine_from_config
 from sqlalchemy.orm import sessionmaker
@@ -27,6 +28,8 @@ class BaseTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        cls.registry = Registry(name="ringo")
+        cls.registry.settings = settings
         cls.engine = engine_from_config(settings, prefix='sqlalchemy.')
         cls.Session = sessionmaker()
 
@@ -37,7 +40,7 @@ class BaseTestCase(unittest.TestCase):
         self.trans = connection.begin()
 
         # bind an individual Session to the connection
-        #DBSession.configure(bind=connection)
+        DBSession.configure(bind=connection)
         self.session = self.Session(bind=connection)
 
     def tearDown(self):
@@ -49,28 +52,40 @@ class BaseTestCase(unittest.TestCase):
         self.session.close()
 
 
-#class BaseUnitTest(BaseTestCase):
-#    def setUp(self):
-#        self.config = testing.setUp(request=testing.DummyRequest())
-#        super(BaseUnitTest, self).setUp()
-#
-#    def get_csrf_request(self, post=None):
-#        csrf = 'abc'
-#
-#        if not u'csrf_token' in post.keys():
-#            post.update({
-#                'csrf_token': csrf
-#            })
-#
-#        request = testing.DummyRequest(post)
-#
-#        request.session = Mock()
-#        csrf_token = Mock()
-#        csrf_token.return_value = csrf
-#
-#        request.session.get_csrf_token = csrf_token
-#
-#        return request
+class BaseUnitTest(BaseTestCase):
+    def setUp(self):
+        self.config = testing.setUp(request=testing.DummyRequest())
+        super(BaseUnitTest, self).setUp()
+
+    def get_request(self, user=None):
+        request = testing.DummyRequest()
+        if user:
+            user = Mock()
+            user.news = []
+            user.settings = {'searches': {'foo': 'bar'}}
+
+        request.user = user
+        request.translate = lambda x: x
+        request.db = self.session
+        return request
+
+    def get_csrf_request(self, post=None):
+        csrf = 'abc'
+
+        if not u'csrf_token' in post.keys():
+            post.update({
+                'csrf_token': csrf
+            })
+
+        request = testing.DummyRequest(post)
+
+        request.session = Mock()
+        csrf_token = Mock()
+        csrf_token.return_value = csrf
+
+        request.session.get_csrf_token = csrf_token
+
+        return request
 
 
 class BaseFunctionalTest(BaseTestCase):
