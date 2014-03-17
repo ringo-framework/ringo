@@ -114,7 +114,7 @@ def register_user(request):
             atoken = str(uuid.uuid4())
             user.activation_token = atoken
             # Set profile data
-            user.profile.email = form.data['email']
+            user.profile[0].email = form.data['email']
             # Set user group
             group = gfac.load(USER_GROUP_ID)
             user.groups.append(group)
@@ -125,7 +125,7 @@ def register_user(request):
             # 3. Send confirmation email. The user will be activated
             #    after the user clicks on the confirmation link
             mailer = Mailer(request)
-            recipient = user.profile.email
+            recipient = user.profile[0].email
             subject = _('Confirm user registration for %s' % get_app_name())
             values = {'url': request.route_url('confirm_user', token=atoken),
                       'app_name': get_app_name(),
