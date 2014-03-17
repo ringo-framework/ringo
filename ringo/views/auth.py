@@ -99,8 +99,7 @@ def register_user(request):
     if request.POST:
         if form.validate(request.params.mixed()):
             # 1. Create user. Do not activate him. Default role is user.
-            ufac = BaseFactory(User)
-            pfac = BaseFactory(Profile)
+            ufac = User.get_item_factory()
             gfac = BaseFactory(Usergroup)
             user = ufac.create(None)
             # Set login from formdata
@@ -114,21 +113,19 @@ def register_user(request):
             user.activated = False
             atoken = str(uuid.uuid4())
             user.activation_token = atoken
+            # Set profile data
+            user.profile.email = form.data['email']
             # Set user group
             group = gfac.load(USER_GROUP_ID)
             user.groups.append(group)
             # Set default user group.
             user.gid = group.id
             DBSession.add(user)
-            profile = pfac.create(None)
-            profile.email = form.data['email']
-            profile.user = user
-            DBSession.add(profile)
 
             # 3. Send confirmation email. The user will be activated
             #    after the user clicks on the confirmation link
             mailer = Mailer(request)
-            recipient = profile.email
+            recipient = user.profile.email
             subject = _('Confirm user registration for %s' % get_app_name())
             values = {'url': request.route_url('confirm_user', token=atoken),
                       'app_name': get_app_name(),
