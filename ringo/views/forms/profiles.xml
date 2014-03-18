@@ -2,15 +2,22 @@
 <configuration>
   <source>
     <!-- Define different entity types -->
-    <entity id="e1" name="first_name" label="Firstname" type="string"/>
-    <entity id="e2" name="last_name" label="Lastname" type="string"/>
+    <entity id="e1" name="first_name" label="Firstname" type="string" desired="true"/>
+    <entity id="e2" name="last_name" label="Lastname" type="string" desired="true"/>
     <entity id="e3" name="birthday" label="Birthday" type="date"/>
     <entity id="e4" name="address" label="Address" type="string">
       <renderer type="textarea"/>
     </entity>
-    <entity id="e5" name="email" label="E-Mail" type="string"/>
+    <entity id="e5" name="email" label="E-Mail" type="string" required="true"/>
     <entity id="e6" name="url" label="Web" type="string"/>
     <entity id="e7" name="phone" label="Phone" type="string"/>
+    <entity id="e8" name="gender" label="Gender" type="integer" desired="true">
+      <renderer type="dropdown"/>
+      <options>
+        <option value="1">Male</option>
+        <option value="0">Female</option>
+      </options>
+    </entity>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>
@@ -32,6 +39,7 @@
     <row>
       <col><field ref="e1"/></col>
       <col><field ref="e2"/></col>
+      <col><field ref="e8"/></col>
     </row>
     <row>
       <col><field ref="e4"/></col>

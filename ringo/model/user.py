@@ -194,6 +194,7 @@ class Profile(BaseItem, Owned, Base):
     id = sa.Column(sa.Integer, primary_key=True)
     first_name = sa.Column(sa.Text, nullable=True)
     last_name = sa.Column(sa.Text, nullable=True)
+    gender = sa.Column(sa.Integer)
     birthday = sa.Column(sa.Date)
     address = sa.Column(sa.Text)
     phone = sa.Column(sa.Text)
