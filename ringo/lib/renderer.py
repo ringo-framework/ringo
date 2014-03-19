@@ -631,7 +631,11 @@ class ListingFieldRenderer(FormbarSelectionField):
     * showsearch: Flag "true" or "false" to configure rendering a search
       field.
     * onlylinked: "true" or "false". If true only linked items will be
-      rendered"""
+      rendered
+    * multiple: "true" or "false". If false only one option can be
+      selected. Defaults to true. Note that this restriction is only
+      implemented on client side.
+    """
 
     def __init__(self, field, translate):
         FormbarSelectionField.__init__(self, field, translate)

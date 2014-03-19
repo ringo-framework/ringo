@@ -16,7 +16,9 @@
     <tr>
     % if not field.is_readonly() and not field.renderer.onlylinked == "true":
       <th width="20px">
-        <input type="checkbox" name="check_all" onclick="checkAll('${field.name}');">
+        % if field.renderer.multiple == "true":
+          <input type="checkbox" name="check_all" onclick="checkAll('${field.name}');">
+        % endif
       </th>
     % endif
       % for num, col in enumerate(tableconfig.get_columns()):
@@ -36,7 +38,11 @@
       <tr>
       % if not field.is_readonly() and not field.renderer.onlylinked == "true":
         <td>
-          <input type="checkbox" value="${item.id}" name="${field.name}"/>
+          % if field.renderer.multiple == "true":
+            <input type="checkbox" value="${item.id}" name="${field.name}"/>
+          % else:
+            <input type="checkbox" value="${item.id}" name="${field.name}" onclick="checkOne('${field.name}', this);"/>
+          % endif
         </td>
       % else:
           ## Render a hidden checkbox field as we need to submit the values in
@@ -87,6 +93,14 @@ function checkAll(checkId) {
           } else if (inputs[i].checked == false ) {
               inputs[i].checked = true ;
           }
+      }
+  }
+}
+function checkOne(checkId, element) {
+  var inputs = document.getElementsByTagName("input");
+  for (var i = 0; i < inputs.length; i++) {
+      if (inputs[i].type == "checkbox" && inputs[i].name == checkId && inputs[i].value != element.value) {
+        inputs[i].checked = false;
       }
   }
 }
