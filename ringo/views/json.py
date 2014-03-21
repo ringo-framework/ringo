@@ -70,10 +70,11 @@ def rest_notfound(request):
              request_method="GET")
 def evaluate_(request):
     rule = Rule(expr=request.GET.get('rule').split(' '))
+    result = rule.evaluate({})
     if rule.evaluate({}):
-        return JSONResponse(True, rule.msg)
+        return JSONResponse(True, result, {"msg": rule.msg})
     else:
-        return JSONResponse(False, rule.msg)
+        return JSONResponse(False, result, {"msg": rule.msg})
 
 def list_(clazz, request):
     """Returns a JSON objcet with all item of a clazz. The list does not
