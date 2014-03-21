@@ -15,6 +15,10 @@ to the tracker.
 - Added unittests to test /lib/helpers
 - Added unittests to test /views/index
 - Enhanced Profile modul. Added gender field. Make some fields desired and required.
+- Added "multiple" attribute to Listfield Renderer. Allows the restrict the
+  selection of items to one item at once. Only implemented on client side.
+- Add support for list elements while accessing a "." separated
+  attributes in the __getattribute__ method of the BaseItem.
 
 0.11.1
 ------
