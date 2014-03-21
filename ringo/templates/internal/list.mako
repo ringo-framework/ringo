@@ -134,7 +134,10 @@ table-bordered">
         <td onclick="openItem('${request.route_path(clazz.get_action_routename(permission), id=item.id)}')" class="${render_responsive_class(field.get('screen'))} link">
       % endif
         <%
-            value = h.prettify(request, getattr(item, field.get('name')))
+            try:
+              value = h.prettify(request, getattr(item, field.get('name')))
+            except:
+              value = "NaF"
         %>
         % if isinstance(value, list):
           ## TODO: Expandation needed here? As this are very likely
