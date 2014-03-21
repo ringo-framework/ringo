@@ -62,11 +62,24 @@ class BaseItem(object):
         """This function tries to get the given attribute of the item if
         it can not be found using the usual way to get attributes. In
         this case we will split the attribute name by "." and try to get
-        the attribute along the "." separated attribute name."""
+        the attribute along the "." separated attribute name. The
+        function also offers basic support for accessing individual
+        elements in lists in case one attribute is a list while
+        iterating over all attributes. Currently only flat lists are
+        supported.
+        
+        Example: x.y[1].z"""
         element = self
         attributes = name.split('.')
         for attr in attributes:
-            element = object.__getattribute__(element, attr)
+            splitmark_s = attr.find("[")
+            splitmark_e = attr.find("]")
+            if splitmark_s > 0:
+                index = int(attr[splitmark_s+1:splitmark_e])
+                attr = attr[:splitmark_s]
+                element = object.__getattribute__(element, attr)[index]
+            else:
+                element = object.__getattribute__(element, attr)
         return element
 
     def __unicode__(self):
