@@ -10,7 +10,7 @@
       ## option will be visible or hidden
       % if option[2]:
         <option value="${option[1]}">${option[0]}</option>
-      % else:
+      % elif not field.renderer.remove_filtered == "true":
         <option value="${option[1]}" class="hidden">${option[0]}</option>
       % endif
     % endfor
