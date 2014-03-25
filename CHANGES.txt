@@ -19,6 +19,10 @@ to the tracker.
   selection of items to one item at once. Only implemented on client side.
 - Add support for list elements while accessing a "." separated
   attributes in the __getattribute__ method of the BaseItem.
+- Add relation from tags to modules to allow modul specifc keywords.
+- Add tags to forms.
+- Add comments to forms.
+- Ported "filter" attribute of selectionfield renderer to the listfield renderer.
 
 0.11.1
 ------
