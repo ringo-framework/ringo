@@ -244,7 +244,9 @@ Ringo comes with some predefined modules which provide some common
 functionality. However the modules might not match your need, so they can be
 extended or modified.
 
-First you need to create a new model file in your application. In this file
+Add new fields to the model
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+You need to create a new model file in your application. In this file
 create a model which inherits from the base modul and add attributes and
 extend or overwrite functions as needed. In the following example we add two
 additional columns to the base Profile modul::
@@ -267,6 +269,36 @@ additional columns to the base Profile modul::
             def __unicode__(self):
                 return "%s" % (self.col1)
 
+Overwrite existing Statemachine/Workflow
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+If you want to change the statemachine/workflow for the model you need
+overwrite some attributes of the modul in order to inject your new
+StateMachine.  In the follwing example we overwrite the StateMachine of the
+imaginary class "Foo" which has a statemachine available under the name
+"foo_state".::
+
+        import sqlalchemy as sa
+        from ringo.model.statemachine import Statemachine, State, \
+        null_handler as handler, null_condition as condition
+        import Bar
+
+        class FooStatemachine(Statemachine):
+
+            def setup(self):
+                # Do the setup here
+
+        class Foo(Bar):
+            # Overwrite attributes of the StateMixin from the inherited
+            # clazz to inject the custom statemachine.
+            _statemachines = {'foo_state_id': FooStatemachine}
+
+            @property
+            def foo_state(self):
+                state = self.get_statemachine('foo_state_id')
+                return state.get_state()
+
+Let your application know about the new model
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Next we need to import the new model in the __init__.py file of the application::
 
         from myapp.model.modul import Modul
