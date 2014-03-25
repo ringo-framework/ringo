@@ -16,7 +16,7 @@
     <tr>
     % if not field.is_readonly() and not field.renderer.onlylinked == "true":
       <th width="20px">
-        % if field.renderer.multiple == "true":
+        % if not field.renderer.multiple == "false":
           <input type="checkbox" name="check_all" onclick="checkAll('${field.name}');">
         % endif
       </th>
@@ -38,7 +38,7 @@
       <tr>
       % if not field.is_readonly() and not field.renderer.onlylinked == "true":
         <td>
-          % if field.renderer.multiple == "true":
+          % if not field.renderer.multiple == "false":
             <input type="checkbox" value="${item.id}" name="${field.name}"/>
           % else:
             <input type="checkbox" value="${item.id}" name="${field.name}" onclick="checkOne('${field.name}', this);"/>
