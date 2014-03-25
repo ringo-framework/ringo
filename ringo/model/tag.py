@@ -21,6 +21,11 @@ class Tag(BaseItem, Owned, Base):
     description = sa.Column('description', sa.Text, default=None)
     tagtype = sa.Column('type', sa.Integer, default=None)
 
+    # Relation to a modul. Tags can be assigned to a module for
+    # filtering.
+    mid = sa.Column(sa.Integer, sa.ForeignKey('modules.id'))
+    modul = sa.orm.relationship("ModulItem", backref="tags")
+
     def render(self):
         mapping = {
             0: "label label-default",
