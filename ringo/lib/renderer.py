@@ -643,8 +643,18 @@ class ListingFieldRenderer(FormbarSelectionField):
         self.template = template_lookup.get_template("internal/listfield.mako")
 
     def _get_all_items(self):
+        filtered_items = []
         clazz = self._field._get_sa_mapped_class()
-        return clazz.get_item_list(self._field._form._request)
+        itemlist = clazz.get_item_list(self._field._form._request)
+        item_ids = [i.id for i in itemlist.items]
+        # Get filtered options and only use the items which are
+        # * in the origin items list and has passed filtering.
+        for item in self._field.get_options():
+            # (item, option-value, visible)
+            if item[2] is True and item[0].id in item_ids:
+                filtered_items.append(item[0])
+        itemlist.items = filtered_items
+        return itemlist
 
     def _get_selected_items(self):
         try:
