@@ -19,6 +19,13 @@
     </entity>
     <entity id="s1" name="review_state_id" label="Review state" type="integer">
       <renderer type="state"></renderer>
+      <help>Only forms in the state "published" will be available for other users.</help>
+    </entity>
+    <entity id="e5" name="tags" label="Keywords">
+      <renderer type="listing" filter="'forms' eq %modul"/>
+    </entity>
+    <entity id="e6" name="comments" label="Comments">
+      <renderer type="comments"/>
     </entity>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
@@ -38,16 +45,28 @@
 
   <!-- Role -->
   <snippet id="s1">
-    <row>
-      <col><field ref="e1"/></col>
-      <col><field ref="s1"/></col>
-    </row>
-    <row>
-      <col><field ref="modul"/></col>
-      <col><field ref="e2"/></col>
-    </row>
-    <row>
-      <col><field ref="e4"/></col>
-    </row>
+    <page id="p1" label="Form">
+      <row>
+        <col><field ref="e1"/></col>
+      </row>
+      <row>
+        <col><field ref="e2"/></col>
+      </row>
+      <row>
+        <col><field ref="modul"/></col>
+        <col><field ref="e5"/></col>
+      </row>
+      <row>
+        <col><field ref="e4"/></col>
+      </row>
+    </page>
+    <page id="p2" label="State/Comments">
+      <row>
+        <col><field ref="s1"/></col>
+      </row>
+      <row>
+        <col><field ref="e6"/></col>
+      </row>
+    </page>
   </snippet>
 </configuration>
