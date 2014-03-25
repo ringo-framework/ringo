@@ -4,7 +4,8 @@ from ringo.model.base import BaseItem, BaseFactory
 from ringo.model.statemachine import Statemachine, State, \
 null_handler as handler, null_condition as condition
 from ringo.model.modul import ModulItem, _create_default_actions
-from ringo.model.mixins import Owned, Meta, Logged, StateMixin
+from ringo.model.mixins import Owned, Meta, Logged, StateMixin, Tagged, \
+Commented
 
 d1 = """The form is currently marked as draft. This means it is
 currently under work and may change."""
@@ -44,7 +45,8 @@ class FormFactory(BaseFactory):
         return new_item
 
 
-class Form(BaseItem, ReviewStateMixin, Owned, Meta, Logged, Base):
+class Form(BaseItem, ReviewStateMixin, Owned, Meta, Logged, Tagged,
+           Commented, Base):
     __tablename__ = 'forms'
     _modul_id = 14
     id = sa.Column(sa.Integer, primary_key=True)
