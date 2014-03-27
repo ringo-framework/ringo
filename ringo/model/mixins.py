@@ -231,6 +231,20 @@ class Blobform(object):
             element = object.__getattribute__(element, attr)
         return element
 
+    def set_values(self, values):
+        json_data = json.loads(self.get_values().get('data') or "{}")
+        columns = self.get_columns(self)
+        for key, value in values.iteritems():
+            if key in columns:
+                log.debug("Setting value '%s' for '%s' in DB" % (value, key))
+                setattr(self, key, value)
+            else:
+                if isinstance(value, datetime.date):
+                    value = str(value)
+                log.debug("Setting value '%s' for '%s' in JSON" % (value, key))
+                json_data[key] = value
+        setattr(self, 'data', json.dumps(json_data))
+
     def save(self, data, request=None):
         """Will save the given data into Blobform items. This function
         overwrites the default behavior of the BaseItem and takes care
@@ -253,8 +267,6 @@ class Blobform(object):
             dbsession = request.db
         else:
             dbsession = None
-        json_data = {}
-        columns = self.get_columns(self)
         log.debug("Saving %s" % self)
 
         old_values = self.get_values()
@@ -276,16 +288,8 @@ class Blobform(object):
                 text = json.dumps(self.build_changes(old_values, data))
             self.add_log_entry(subject, text, request)
 
-        for key, value in data.iteritems():
-            if key in columns:
-                log.debug("Setting value '%s' for '%s' in DB" % (value, key))
-                setattr(self, key, value)
-            else:
-                if isinstance(value, datetime.date):
-                    value = str(value)
-                log.debug("Setting value '%s' for '%s' in JSON" % (value, key))
-                json_data[key] = value
-        setattr(self, 'data', json.dumps(json_data))
+        # Set values
+        self.set_values(data)
 
         # If the item has no id, then we assume it is a new item. So
         # add it to the database session.

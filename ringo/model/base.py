@@ -240,6 +240,14 @@ class BaseItem(object):
             values[field] = value
         return values
 
+    def set_values(self, values):
+        for key, value in values.iteritems():
+            if hasattr(self, key):
+                log.debug("Setting value '%s' in %s" % (value, key))
+                setattr(self, key, value)
+            else:
+                log.warning('Not saving "%s". Attribute not found' % key)
+
     def save(self, data, request=None):
         """Will save the given data into the item. If the current item
         has no value for the id attribute it is assumed that this item
@@ -284,12 +292,8 @@ class BaseItem(object):
                 text = json.dumps(self.build_changes(old_values, data))
             self.add_log_entry(subject, text, request)
 
-        for key, value in data.iteritems():
-            if hasattr(self, key):
-                log.debug("Setting value '%s' in %s" % (value, key))
-                setattr(self, key, value)
-            else:
-                log.warning('Not saving "%s". Attribute not found' % key)
+        # Set values
+        self.set_values(data)
 
         # If the item has no id, then we assume it is a new item. So
         # add it to the database session.
