@@ -232,6 +232,10 @@ class Blobform(object):
         return element
 
     def set_values(self, values):
+        """Will set the given values into Blobform items. This function
+        overwrites the default behavior of the BaseItem and takes care
+        that the data will be saved in the data attribute as JSON
+        string."""
         json_data = json.loads(self.get_values().get('data') or "{}")
         columns = self.get_columns(self)
         for key, value in values.iteritems():
@@ -244,58 +248,6 @@ class Blobform(object):
                 log.debug("Setting value '%s' for '%s' in JSON" % (value, key))
                 json_data[key] = value
         setattr(self, 'data', json.dumps(json_data))
-
-    def save(self, data, request=None):
-        """Will save the given data into Blobform items. This function
-        overwrites the default behavior of the BaseItem and takes care
-        that the data will be saved in the data attribute as JSON
-        string. If the current item has no value for the id attribute it
-        is assumed that this item must be added to the database as a new
-        item. In this case you need to provide a dbsession as the new
-        item is not linked to any dbsession yet.
-
-        Please note, that you must ensure that the submitted values are
-        validated. This function does no validation on the submitted
-        data.
-
-        :data: Dictionary with key value pairs.
-        :request: Current request session. Used when saving new items.
-        :returns: item with new data.
-
-        """
-        if request:
-            dbsession = request.db
-        else:
-            dbsession = None
-        log.debug("Saving %s" % self)
-
-        old_values = self.get_values()
-        # Handle statechange
-        if isinstance(self, StateMixin):
-            for key in self.list_statemachines():
-                new_state_id = data.get(key)
-                old_state_id = old_values.get(key)
-                if new_state_id != old_state_id:
-                    self.change_state(request, key, old_state_id, new_state_id)
-
-        # Handle logentry
-        if isinstance(self, Logged):
-            if not self.id:
-                subject = "Create"
-                text = json.dumps(self.build_changes(old_values, data))
-            else:
-                subject = "Update"
-                text = json.dumps(self.build_changes(old_values, data))
-            self.add_log_entry(subject, text, request)
-
-        # Set values
-        self.set_values(data)
-
-        # If the item has no id, then we assume it is a new item. So
-        # add it to the database session.
-        if not self.id and dbsession:
-            dbsession.add(self)
-        return self
 
 class Version(Base):
     __tablename__ = 'versions'
