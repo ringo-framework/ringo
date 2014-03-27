@@ -2,6 +2,7 @@ import logging
 import sqlalchemy as sa
 from ringo.model import Base
 from ringo.model.user import BaseItem
+from ringo.lib.helpers import dynamic_import
 
 log = logging.getLogger(__name__)
 
@@ -49,6 +50,10 @@ class ModulItem(BaseItem, Base):
 
     def __unicode__(self):
         return self.name
+
+    def get_clazz(self):
+        """Returns the clazz defined in the clazzpath attribute"""
+        return dynamic_import(self.clazzpath)
 
     def get_label(self, plural=False):
         if plural:
