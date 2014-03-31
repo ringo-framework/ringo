@@ -4,7 +4,7 @@
       % if len(h.get_modules(request, 'admin-menu')) > 0:
         <ul class="list-unstyled">
           <li class="dropdown dropup">
-            <a href="#" data-toggle="dropdown"><img src="${request.static_url('ringo:static/images/icons/16x16/applications-system.png')}"/>${_('Administration')}<b class="caret"></b></a>
+            <a href="#" data-toggle="dropdown"><img src="${request.static_path('ringo:static/images/icons/16x16/applications-system.png')}"/>${_('Administration')}<b class="caret"></b></a>
             <ul class="dropdown-menu dropup-menu" role="menu">
               % for modul in h.get_modules(request, 'admin-menu'):
                 <li><a href="${request.route_path(modul.name+'-list')}">${_(modul.get_label(plural=True))}</a></li>
@@ -43,7 +43,7 @@
       </div>
       <div class="modal-body">
         <iframe
-        src="${request.static_url('ringo:static/doc/html/index.html')}"
+        src="${request.static_path('ringo:static/doc/html/index.html')}"
         frameborder="0" width="100%" height="300"></iframe>
       </div>
     </div>
