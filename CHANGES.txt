@@ -10,6 +10,13 @@ to the tracker.
 
 0.11.2
 ------
+- Changed order of calls to add relations, handle events and saving the values
+  in the item. Prevents errors when inheriting informations from linked items.
+- Fixed setting max_age in auth_tkt cookie. Fixes error in IE10 for if running
+  in pyramid > 1.4.5.
+
+0.11.2
+------
 - Splitted requirements. Required packages for testing are now installed
   locally.
 - Added unittests to test /lib/helpers
