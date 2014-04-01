@@ -422,40 +422,43 @@ def create_(clazz, request, callback=None, renderers={}):
         item_label = clazz.get_item_modul().get_label()
         mapping = {'item_type': item_label}
         if form.validate(request.params):
-            sitem = item.save(form.data, request)
-            msg = _('Created new ${item_type} successfull.',
-                    mapping=mapping)
-            log.info(msg)
-            request.session.flash(msg, 'success')
 
-            # Check if the user is allowed to call the url after saving
-            if has_permission("update", item, request):
-                route_name = item.get_action_routename('update')
-                url = request.route_path(route_name, id=item.id)
-            else:
-                route_name = item.get_action_routename('read')
-                url = request.route_path(route_name, id=item.id)
-
-            # handle create events
-            handle_event('create', request, item)
-            # Invalidate cache
-            invalidate_cache()
-            formname = request.session.get('%s.form' % clazz)
-            if formname:
-                del request.session['%s.form' % clazz]
-                request.session.save()
-            # Link the item_type
+            # Handle linking of the new item to antoher relation. The
+            # relation was provided as GET parameter in the current
+            # request and is now saved in the session.
             addrelation = request.session.get('%s.addrelation' % clazz)
             if addrelation:
                 rrel, rclazz, rid = addrelation.split(':')
                 parent = import_model(rclazz)
                 pfactory = parent.get_item_factory()
                 pitem = pfactory.load(rid)
-                log.debug('Linking %s to %s in %s' % (sitem, pitem, rrel))
+                log.debug('Linking %s to %s in %s' % (item, pitem, rrel))
                 tmpattr = getattr(pitem, rrel)
-                tmpattr.append(sitem)
+                tmpattr.append(item)
+
+            # Save the item. Save validated values submitted from the
+            # form into the new created item.
+            sitem = item.save(form.data, request)
+            msg = _('Created new ${item_type} successfull.',
+                    mapping=mapping)
+            log.info(msg)
+            request.session.flash(msg, 'success')
+
+            # handle create events
+            handle_event('create', request, item)
+
+            # Call callback. The callback is called as last action after
+            # the rest of the saving has been done.
             if callback:
                 sitem = callback(request, sitem)
+
+            # Invalidate cache
+            invalidate_cache()
+            formname = request.session.get('%s.form' % clazz)
+            if formname:
+                del request.session['%s.form' % clazz]
+                request.session.save()
+
             # Handle redirect after success.
             backurl = request.session.get('%s.backurl' % clazz)
             if backurl:
@@ -464,7 +467,15 @@ def create_(clazz, request, callback=None, renderers={}):
                 request.session.save()
                 return HTTPFound(location=backurl)
             else:
-                # Redirect to the update view.
+                # Set the URL the user will be redirected after the save
+                # operation. URL depends on whether the user is allowed to
+                # call the update page or not.
+                if has_permission("update", item, request):
+                    route_name = item.get_action_routename('update')
+                    url = request.route_path(route_name, id=item.id)
+                else:
+                    route_name = item.get_action_routename('read')
+                    url = request.route_path(route_name, id=item.id)
                 return HTTPFound(location=url)
         else:
             msg = _('Error on validation the data'
@@ -516,20 +527,16 @@ def update_(clazz, request, callback=None, renderers={}):
             log.info(msg)
             request.session.flash(msg, 'success')
 
-            if callback:
-                item = callback(request, item)
             # handle update events
             handle_event('update', request, item)
+
+            # Call callback. The callback is called as last action after
+            # the rest of the saving has been done.
+            if callback:
+                item = callback(request, item)
+
             # Invalidate cache
             invalidate_cache()
-            # Handle redirect after success.
-            # Check if the user is allowed to call the url after saving
-            if has_permission("update", item, request):
-                route_name = item.get_action_routename('update')
-                url = request.route_path(route_name, id=item.id)
-            else:
-                route_name = item.get_action_routename('read')
-                url = request.route_path(route_name, id=item.id)
 
             backurl = request.session.get('%s.backurl' % clazz)
             if backurl:
@@ -538,7 +545,14 @@ def update_(clazz, request, callback=None, renderers={}):
                 request.session.save()
                 return HTTPFound(location=backurl)
             else:
-                # Redirect to the update view.
+                # Handle redirect after success.
+                # Check if the user is allowed to call the url after saving
+                if has_permission("update", item, request):
+                    route_name = item.get_action_routename('update')
+                    url = request.route_path(route_name, id=item.id)
+                else:
+                    route_name = item.get_action_routename('read')
+                    url = request.route_path(route_name, id=item.id)
                 return HTTPFound(location=url)
         else:
             msg = _('Error on validation the data for '
