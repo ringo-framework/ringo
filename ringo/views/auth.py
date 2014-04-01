@@ -59,7 +59,7 @@ def login(request):
         else:
             msg = _("Login was successfull :)")
             request.session.flash(msg, 'success')
-            headers = remember(request, user.id, max_age='86400')
+            headers = remember(request, user.id, max_age=86400)
             target_url = request.route_path('home')
             return HTTPFound(location=target_url, headers=headers)
 
