@@ -308,11 +308,19 @@ class BaseItem(object):
                 gid_relation = getattr(self, '_inherit_gid')
                 if gid_relation:
                     parent = getattr(self, gid_relation)
-                    self.group = parent.group
+                    # FIXME: Check why this attribute can be None. (ti)
+                    # <2014-04-01 13:37> 
+                    if parent:
+                        self.group = parent.group
+                    else:
+                        log.warning("Inheritance of group '%s' failed. Was None" % gid_relation)
                 uid_relation = getattr(self, '_inherit_uid')
                 if uid_relation:
                     parent = getattr(self, uid_relation)
-                    self.owner = parent.owner
+                    if parent:
+                        self.owner = parent.owner
+                    else:
+                        log.warning("Inheritance of group '%s' failed. Was None" % gid_relation)
         return self
 
 
