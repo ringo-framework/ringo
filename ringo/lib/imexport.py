@@ -103,22 +103,30 @@ class Importer(object):
         return item
 
     def perform(self, request, data):
-        """Will return a list of imported items
+        """Will return a list of imported items. The list will contain a
+        tupel of the item and a string which gives information on the
+        operaten (update, create).
 
         :request: Current request
         :data: Importdata as string (JSON, XML...)
         :returns: List of imported items
 
         """
-        values = self.deserialize(data)
+        imported_items = []
+        import_data = self.deserialize(data)
         factory = self._clazz.get_item_factory()
-        uuid = values.get('uuid')
-        try:
-            item = factory.load(uuid, uuid=True)
-        except:
-            item = factory.create(user=request.user)
-        self._set_values(item, values)
-        return item
+        _ = request.translate
+        for values in import_data:
+            uuid = values.get('uuid')
+            try:
+                item = factory.load(uuid, uuid=True)
+                operation = _("UPDATE")
+            except:
+                item = factory.create(user=request.user)
+                operation = _("CREATE")
+            self._set_values(item, values)
+            imported_items.append((item, operation))
+        return imported_items
 
 class JSONImporter(Importer):
     """Docstring for JSONImporter."""
@@ -149,4 +157,6 @@ class JSONImporter(Importer):
         :returns: Python dictionary with python values
         """
         conv = json.loads(data, object_hook=self._deserialize_hook)
+        if isinstance(conv, dict):
+            return [conv]
         return conv

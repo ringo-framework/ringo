@@ -14,6 +14,8 @@ to the tracker.
   in the item. Prevents errors when inheriting informations from linked items.
 - Fixed setting max_age in auth_tkt cookie. Fixes error in IE10 for if running
   in pyramid > 1.4.5.
+- Changed import. Import now allows importing multiple items. After the import
+  has finished a result page is shown.
 
 0.11.2
 ------

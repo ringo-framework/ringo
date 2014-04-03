@@ -706,6 +706,7 @@ def export_(clazz, request):
 def import_(clazz, request, callback=None):
     handle_history(request)
     handle_params(clazz, request)
+    imported_items = []
     rvalue = {}
 
     # Load the item return 400 if the item can not be found.
@@ -716,14 +717,25 @@ def import_(clazz, request, callback=None):
        and form.validate(request.params)):
         request.POST.get('file').file.seek(0)
         importer = JSONImporter(clazz)
-        item = importer.perform(request, request.POST.get('file').file.read())
-        item.save({}, request.db)
-        route_name = item.get_action_routename('update')
-        url = request.route_path(route_name, id=item.id)
-        if callback:
-            item = callback(request, item)
-        # handle update events
-        handle_event('import', request, item)
+        items = importer.perform(request, request.POST.get('file').file.read())
+        for item in items:
+            item, operation = item[0], item[1]
+            try:
+                item.save({}, request)
+                route_name = item.get_action_routename('update')
+                url = request.route_path(route_name, id=item.id)
+                if callback:
+                    item = callback(request, item)
+                # handle update events
+                handle_event('import', request, item)
+                imported_items.append((item, operation, True))
+            except:
+                imported_items.append((item, operation, False))
+
+        # TODO: Set URL which is called after the import finished.
+        # This should be some kind of a result page showing the imported
+        # items (ti) <2014-04-03 10:11>
+
         # Invalidate cache
         invalidate_cache()
         # Handle redirect after success.
@@ -733,15 +745,12 @@ def import_(clazz, request, callback=None):
             del request.session['%s.backurl' % clazz]
             request.session.save()
             return HTTPFound(location=backurl)
-        else:
-            # Redirect to the update view.
-            return HTTPFound(location=url)
-    else:
-        # FIXME: Get the ActionItem here and provide this in the Dialog to get
-        # the translation working (torsten) <2013-07-10 09:32>
-        rvalue['dialog'] = renderer.render()
-        rvalue['clazz'] = clazz
-        return rvalue
+
+    # FIXME: Get the ActionItem here and provide this in the Dialog to get
+    # the translation working (torsten) <2013-07-10 09:32>
+    rvalue['dialog'] = renderer.render(imported_items)
+    rvalue['clazz'] = clazz
+    return rvalue
 
 def print_(request):
     item = request.context.item

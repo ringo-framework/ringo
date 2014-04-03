@@ -432,7 +432,7 @@ class ImportDialogRenderer(DialogRenderer):
         self.form = Form(form_config,
                          csrf_token=self._request.session.get_csrf_token())
 
-    def render(self):
+    def render(self, items):
         values = {}
         values['request'] = self._request
         values['body'] = self._render_body()
@@ -441,6 +441,8 @@ class ImportDialogRenderer(DialogRenderer):
         values['ok_url'] = self._request.current_route_url()
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
+        values['overview_url'] = self._request.route_path(self._item.get_action_routename('list'))
+        values['items'] = items
         return self.template.render(**values)
 
     def _render_body(self):
