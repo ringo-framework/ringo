@@ -81,7 +81,7 @@ autoresponsive = tableconfig.is_autoresponsive()
     % endif
   </form>
 </div>
-<form id="data-table">
+<form id="data-table" name="data-table" role="form" action="${request.current_route_url()}" method="POST">
 <table id="data" class="table table-striped table-hover table-condensed
 table-bordered">
   <tr>
@@ -168,14 +168,21 @@ table-bordered">
   </tr>
   % endif
 </table>
-<div class="well well-small form-inline">
-  <select class="input-large" name="bundle_action">
-    <option value="-1">${_('Select action for seletced items...')}</option>
-    <option value="1">Test 1</option>
-    <option value="2">Test 2</option>
-  </select>
-  <input class="btn btn-primary" type="button" class="input-small" value="${_('Perform')}"/>
-</div>
+% if enable_bundled_actions:
+  <div class="well well-small">
+    <input name="csrf_token" type="hidden" value="${request.session.get_csrf_token()}">
+    <select class="input-large" name="bundle_action">
+      <option value="-1">${_('Select action for seletced items...')}</option>
+      % for action in clazz.get_item_actions():
+        ${action.bundle}
+        % if action.bundle:
+          <option value="${action.id}">${action.name}</option>
+        % endif
+      % endfor
+    </select>
+    <input class="btn btn-primary input-small" type="submit" value="${_('Perform')}"/>
+  </div>
+% endif
 </form>
 
 <div class="modal fade" id="savequerydialog">

@@ -241,7 +241,7 @@ class ListRenderer(Renderer):
                   '_': request.translate,
                   'h': ringo.lib.helpers,
                   's': security,
-                  'enable_bundled_actions': False,
+                  'enable_bundled_actions': True,
                   'search': search,
                   'search_field': search_field,
                   'saved_searches': get_saved_searches(request,
