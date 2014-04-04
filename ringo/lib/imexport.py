@@ -3,6 +3,9 @@ import logging
 import datetime
 from time import mktime
 import json
+import csv
+import codecs
+import StringIO, cStringIO
 from sqlalchemy.orm import ColumnProperty, class_mapper
 
 log = logging.getLogger(__name__)
@@ -14,6 +17,45 @@ class RingoJSONEncoder(json.JSONEncoder):
            or isinstance(obj, datetime.date)):
             return obj.isoformat()
             #return int(mktime(obj.timetuple()))
+
+class UnicodeCSVWriter:
+    """
+    A CSV writer which will write rows to CSV file "f",
+    which is encoded in the given encoding.
+    """
+
+    def __init__(self, f, fields, dialect=csv.excel, encoding="utf-8", **kwds):
+        # Redirect output to a queue
+        self.queue = cStringIO.StringIO()
+        self.writer = csv.DictWriter(self.queue, fieldnames=fields, dialect=dialect, **kwds)
+        self.stream = f
+        self.encoder = codecs.getincrementalencoder(encoding)()
+
+    def writeheader(self):
+        self.writer.writeheader()
+
+    def writerow(self, row):
+        tmp_dict = {}
+        for k,v in row.iteritems():
+            try:
+                tmp_dict[k] = v.encode("utf-8")
+            except AttributeError:
+                tmp_dict[k] = None
+        self.writer.writerow(tmp_dict)
+        # Fetch UTF-8 output from the queue ...
+        data = self.queue.getvalue()
+        data = data.decode("utf-8")
+        # ... and reencode it into the target encoding
+        data = self.encoder.encode(data)
+        # write to the target stream
+        self.stream.write(data)
+        # empty queue
+        self.queue.truncate(0)
+
+    def writerows(self, rows):
+        for row in rows:
+            self.writerow(row)
+
 
 class Exporter(object):
 
@@ -55,11 +97,21 @@ class Exporter(object):
         return self.serialize(data)
 
 class JSONExporter(Exporter):
-
     """Docstring for JSONExporter. """
 
     def serialize(self, data):
         return json.dumps(data, cls = RingoJSONEncoder)
+
+class CSVExporter(Exporter):
+    """Docstring for CSVExporter. """
+
+    def serialize(self, data):
+        outfile = StringIO.StringIO()
+        writer = UnicodeCSVWriter(outfile, data.keys(), quotechar="'")
+        writer.writeheader()
+        writer.writerow(data)
+        outfile.seek(0)
+        return outfile.read()
 
 class Importer(object):
     """Docstring for Importer."""

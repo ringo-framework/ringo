@@ -16,6 +16,7 @@ to the tracker.
   in pyramid > 1.4.5.
 - Changed import. Import now allows importing multiple items. After the import
   has finished a result page is shown.
+- Implemented export as CSV.
 
 0.11.2
 ------

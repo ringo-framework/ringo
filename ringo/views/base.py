@@ -15,7 +15,7 @@ from ringo.model.form import Form as BlobformForm
 from ringo.model.mixins import Owned, Logged, Blobform, Versioned
 from ringo.lib.helpers import import_model, get_path_to_form_config
 from ringo.lib.security import has_role, has_permission
-from ringo.lib.imexport import JSONImporter, JSONExporter
+from ringo.lib.imexport import JSONImporter, JSONExporter, CSVExporter
 User = import_model('ringo.model.user.User')
 from ringo.lib.renderer import (
     ListRenderer, ConfirmDialogRenderer,
@@ -686,7 +686,10 @@ def export_(clazz, request):
        and form.validate(request.params)):
         # Setup exporter
         ef = form.data.get('format')
-        exporter = JSONExporter(clazz)
+        if ef == "json":
+            exporter = JSONExporter(clazz)
+        elif ef == "csv":
+            exporter = CSVExporter(clazz)
         export = exporter.perform(item)
         # Build response
         resp = request.response

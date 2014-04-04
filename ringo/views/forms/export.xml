@@ -6,6 +6,7 @@
       <renderer type="dropdown"/>
       <options>
         <option value="json">JSON</option>
+        <option value="csv">CSV</option>
       </options>
     </entity>
   </source>
