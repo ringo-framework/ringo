@@ -8,7 +8,7 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
-0.11.2
+0.11.3
 ------
 - Changed order of calls to add relations, handle events and saving the values
   in the item. Prevents errors when inheriting informations from linked items.
