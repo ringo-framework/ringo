@@ -215,3 +215,28 @@ class JSONImporter(Importer):
         if isinstance(conv, dict):
             return [conv]
         return conv
+
+class CSVImporter(Importer):
+    """Docstring for CSVImporter."""
+
+    def _deserialize_hook(self, obj):
+        conv = {}
+        for k,v in obj.iteritems():
+            if v:
+                conv[k] = unicode(v, "utf-8")
+        obj = self._deserialize_dates(obj)
+        return conv
+
+    def deserialize(self, data):
+        """Will convert the CSV data back into a dictionary with python values
+
+        :data: String CSV data
+        :returns: List of dictionary with python values
+        """
+        result = []
+        infile = StringIO.StringIO(data)
+        reader = csv.DictReader(infile)
+        for conv in reader:
+            conv = self._deserialize_hook(conv)
+            result.append(conv)
+        return result

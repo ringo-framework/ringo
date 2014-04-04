@@ -15,7 +15,8 @@ from ringo.model.form import Form as BlobformForm
 from ringo.model.mixins import Owned, Logged, Blobform, Versioned
 from ringo.lib.helpers import import_model, get_path_to_form_config
 from ringo.lib.security import has_role, has_permission
-from ringo.lib.imexport import JSONImporter, JSONExporter, CSVExporter
+from ringo.lib.imexport import JSONImporter, JSONExporter, \
+CSVExporter, CSVImporter
 User = import_model('ringo.model.user.User')
 from ringo.lib.renderer import (
     ListRenderer, ConfirmDialogRenderer,
@@ -719,7 +720,10 @@ def import_(clazz, request, callback=None):
        and confirmed(request)
        and form.validate(request.params)):
         request.POST.get('file').file.seek(0)
-        importer = JSONImporter(clazz)
+        if request.POST.get('format') == 'json':
+            importer = JSONImporter(clazz)
+        elif request.POST.get('format') == 'csv':
+            importer = CSVImporter(clazz)
         items = importer.perform(request, request.POST.get('file').file.read())
         for item in items:
             item, operation = item[0], item[1]
