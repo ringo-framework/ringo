@@ -168,6 +168,14 @@ table-bordered">
   </tr>
   % endif
 </table>
+<div class="well well-small form-inline">
+  <select class="input-large" name="bundle_action">
+    <option value="-1">${_('Select action for seletced items...')}</option>
+    <option value="1">Test 1</option>
+    <option value="2">Test 2</option>
+  </select>
+  <input class="btn btn-primary" type="button" class="input-small" value="${_('Perform')}"/>
+</div>
 </form>
 
 <div class="modal fade" id="savequerydialog">
