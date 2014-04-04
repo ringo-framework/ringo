@@ -12,7 +12,7 @@ def notfound_get(request):
     renderer = ErrorDialogRenderer(request, title=title, body=body)
     rvalue = {}
     rvalue['dialog'] = renderer.render()
-    request.response_status = '404 Not Found'
+    request.response.status = 404
     return rvalue
 
 
@@ -25,5 +25,5 @@ def forbidden(request):
     renderer = ErrorDialogRenderer(request, title=title, body=body)
     rvalue = {}
     rvalue['dialog'] = renderer.render()
-    request.response_status = '403 Forbidden'
+    request.response.status = 403
     return rvalue
