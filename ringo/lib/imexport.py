@@ -132,6 +132,25 @@ class Importer(object):
             type_mapping[col] = str(prop.type)
         return type_mapping
 
+    def _deserialize_dates(self, obj):
+        """This function can be called after the basic deserialisation has
+        finished. It is used to convert data and datetime objects which
+        is not supported by the defaults decoders
+
+        :obj: Deserialized dictionary from basic deserialisation
+        :returns: Deserialized dictionary with additional date and
+        datetime deserialisation
+        """
+        for field in obj:
+            if self._clazz_type[field] == "DATE" and obj[field] is not None:
+                obj[field] = datetime.datetime.strptime(obj[field],
+                                                        "%Y-%m-%d").date()
+            elif (self._clazz_type[field] == "DATETIME"
+                  and obj[field] is not None):
+                obj[field] = datetime.datetime.strptime(obj[field],
+                                                        "%Y-%m-%dT%H:%M:%S.%f")
+        return obj
+
     def deserialize(self, data):
         """Will convert the string data into a dictionary like data.
 
@@ -184,29 +203,13 @@ class JSONImporter(Importer):
     """Docstring for JSONImporter."""
 
     def _deserialize_hook(self, obj):
-        """This function is called after the basic deserialisation has
-        finished. It is used to convert data and datetime objects which
-        is not supported by the defauls JSON decoder
-
-        :obj: Deserialized dictionary from basic deserialisation
-        :returns: Deserialized dictionary with additional date and
-        datetime deserialisation
-        """
-        for field in obj:
-            if self._clazz_type[field] == "DATE" and obj[field] is not None:
-                obj[field] = datetime.datetime.strptime(obj[field],
-                                                        "%Y-%m-%d").date()
-            elif (self._clazz_type[field] == "DATETIME"
-                  and obj[field] is not None):
-                obj[field] = datetime.datetime.strptime(obj[field],
-                                                        "%Y-%m-%dT%H:%M:%S.%f")
-        return obj
+        return self._deserialize_dates(obj)
 
     def deserialize(self, data):
         """Will convert the JSON data back into a dictionary with python values
 
         :data: String JSON data
-        :returns: Python dictionary with python values
+        :returns: List of dictionary with python values
         """
         conv = json.loads(data, object_hook=self._deserialize_hook)
         if isinstance(conv, dict):
