@@ -391,18 +391,19 @@ class ErrorDialogRenderer(DialogRenderer):
 class ExportDialogRenderer(DialogRenderer):
     """Docstring for ExportDialogRenderer"""
 
-    def __init__(self, request, item):
+    def __init__(self, request, clazz):
         """@todo: to be defined """
-        DialogRenderer.__init__(self, request, item, "export")
+        DialogRenderer.__init__(self, request, clazz, "export")
         self.template = template_lookup.get_template("internal/export.mako")
         config = Config(load(get_path_to_form_config('export.xml', 'ringo')))
         form_config = config.get_form('default')
         self.form = Form(form_config,
                          csrf_token=self._request.session.get_csrf_token())
 
-    def render(self):
+    def render(self, items):
         values = {}
         values['request'] = self._request
+        values['items'] = items
         values['body'] = self._render_body()
         values['modul'] = self._item.get_item_modul().get_label(plural=True)
         values['action'] = self._action.capitalize()
