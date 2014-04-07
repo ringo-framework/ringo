@@ -86,14 +86,16 @@ class Exporter(object):
         """
         return ""
 
-    def perform(self, item):
-        """Returns the serialized item as string
+    def perform(self, items):
+        """Returns the serialized items as string
 
-        :item: @todo
+        :items: @todo
         :returns: @todo
 
         """
-        data = self._get_data(item)
+        data = []
+        for item in items:
+            data.append(self._get_data(item))
         return self.serialize(data)
 
 class JSONExporter(Exporter):
@@ -107,9 +109,9 @@ class CSVExporter(Exporter):
 
     def serialize(self, data):
         outfile = StringIO.StringIO()
-        writer = UnicodeCSVWriter(outfile, data.keys(), quotechar="'")
+        writer = UnicodeCSVWriter(outfile, data[0].keys(), quotechar="'")
         writer.writeheader()
-        writer.writerow(data)
+        writer.writerows(data)
         outfile.seek(0)
         return outfile.read()
 
