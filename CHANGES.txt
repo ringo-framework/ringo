@@ -8,6 +8,13 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
+0.12.0
+------
+- #12: Implemented basic version of bundled actions. Currently "Delete" and
+  "Export" is supported.
+- Modified export. Export now supports exporting more than one item (Bundled
+  actions)
+
 0.11.3
 ------
 - Changed order of calls to add relations, handle events and saving the values
