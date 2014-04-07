@@ -81,7 +81,7 @@ autoresponsive = tableconfig.is_autoresponsive()
     % endif
   </form>
 </div>
-<form id="data-table" name="data-table" role="form" action="${request.current_route_url()}" method="POST">
+<form id="data-table" name="data-table" role="form" action="${request.route_path(clazz.get_action_routename('bundle'))}" method="POST">
 <table id="data" class="table table-striped table-hover table-condensed
 table-bordered">
   <tr>
@@ -172,11 +172,10 @@ table-bordered">
   <div class="well well-small">
     <input name="csrf_token" type="hidden" value="${request.session.get_csrf_token()}">
     <select class="input-large" name="bundle_action">
-      <option value="-1">${_('Select action for seletced items...')}</option>
       % for action in clazz.get_item_actions():
         ${action.bundle}
         % if action.bundle:
-          <option value="${action.id}">${action.name}</option>
+          <option value="${action.name}">${action.name}</option>
         % endif
       % endfor
     </select>
