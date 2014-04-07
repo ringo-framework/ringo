@@ -58,12 +58,12 @@ class BaseUnitTest(BaseTestCase):
         self.request = self._build_request()
         self.config = testing.setUp(self.registry, request=self.request)
 
-    def get_request(self, user=None):
+    def _build_request(self):
         request = testing.DummyRequest()
-        if user:
-            user = Mock()
-            user.news = []
-            user.settings = {'searches': {'foo': 'bar'}}
+
+        user = Mock()
+        user.news = []
+        user.settings = {'searches': {'foo': 'bar'}}
 
         request.user = user
         request.translate = lambda x: x
