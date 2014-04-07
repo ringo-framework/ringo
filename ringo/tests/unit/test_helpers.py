@@ -3,24 +3,20 @@ from mock import Mock
 import pkg_resources
 from ringo.tests import BaseUnitTest
 
-from pyramid import testing
 
 class HelpersTests(BaseUnitTest):
-    def setUp(self):
-        """ This sets up the application registry with the
-        registrations your application declares in its ``includeme``
-        function.
-        """
-        super(BaseUnitTest, self).setUp()
-        self.config = testing.setUp(self.registry, request=self.get_request())
 
-    def tearDown(self):
-        """ Clear out the application registry """
-        testing.tearDown()
+    def test_get_saved_searches_unauthorized(self):
+        from ringo.lib.helpers import get_saved_searches
+        self.request.user = None
+        result = get_saved_searches(self.request, "test")
+        self.assertEquals(result, {})
+
+
+class HelpersAuthTests(BaseUnitTest):
 
     def test_serialize_datetime(self):
         from ringo.lib.helpers import serialize
-        from datetime import datetime
         dt = datetime(1977, 3, 12, 0, 0, 0)
         result = serialize(dt)
         self.assertEquals(result, "1977-03-12 00:00:00")
@@ -64,7 +60,7 @@ class HelpersTests(BaseUnitTest):
         item = Mock()
         item.id = 1
         item.__tablename__ = "supertable"
-        result = get_action_url(self.get_request(), item, 'read')
+        result = get_action_url(self.request, item, 'read')
         self.assertEquals(result, "/supertables/read/1")
 
     def test_get_action_url_list(self):
@@ -72,7 +68,7 @@ class HelpersTests(BaseUnitTest):
         from ringo.lib.helpers import import_model
         user = import_model('ringo.model.user.User')
         self.config.add_route('users-list', '/users/list')
-        result = get_action_url(self.get_request(), user, 'list')
+        result = get_action_url(self.request, user, 'list')
         self.assertEquals(result, "/users/list")
 
     def test_get_path_to(self):
@@ -109,19 +105,14 @@ class HelpersTests(BaseUnitTest):
         result = import_model('ringo.model.user.User')
         self.assertEquals(result.__tablename__, "users")
 
-    def test_get_saved_searches_unauthorized(self):
-        from ringo.lib.helpers import get_saved_searches
-        result = get_saved_searches(self.get_request(), "test")
-        self.assertEquals(result, {})
-
     def test_get_saved_searches_authorized(self):
         from ringo.lib.helpers import get_saved_searches
-        result = get_saved_searches(self.get_request("xxx"), "foo")
+        result = get_saved_searches(self.request, "foo")
         self.assertEquals(result, "bar")
 
     def test_get_modules(self):
         from ringo.lib.helpers import get_modules
-        result = get_modules(self.get_request(), 'admin-menu')
+        result = get_modules(self.request, 'admin-menu')
         self.assertEquals(len(result), 10)
 
     def test_get_formbar_css(self):
@@ -136,12 +127,12 @@ class HelpersTests(BaseUnitTest):
 
     def test_prettify_nondate(self):
         from ringo.lib.helpers import prettify
-        result = prettify(self.get_request(), "Test")
+        result = prettify(self.request, "Test")
         self.assertEquals(result, "Test")
 
     def test_prettify_date(self):
         from ringo.lib.helpers import prettify
-        result = prettify(self.get_request(), datetime(1977, 3, 12, 0, 0, 0))
+        result = prettify(self.request, datetime(1977, 3, 12, 0, 0, 0))
         self.assertEquals(result, u"3/12/77 12:00 AM")
 
     def test_format_datetime(self):
@@ -160,12 +151,12 @@ class HelpersTests(BaseUnitTest):
         from ringo.lib.helpers import format_timedelta
         start = datetime(1977, 3, 7, 0, 0)
         end = datetime(1977, 3, 7, 1, 0)
-        result = format_timedelta(end-start)
+        result = format_timedelta(end - start)
         self.assertEquals(result, "01:00:00")
 
     def test_format_negative_timedelta(self):
         from ringo.lib.helpers import format_timedelta
         start = datetime(1977, 3, 7, 0, 0)
         end = datetime(1977, 3, 7, 1, 0)
-        result = format_timedelta(start-end)
+        result = format_timedelta(start - end)
         self.assertEquals(result, "-01:00:00")
