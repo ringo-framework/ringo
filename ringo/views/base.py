@@ -8,7 +8,7 @@ from pyramid.view import view_config
 import sqlalchemy as sa
 
 from formbar.config import Config, load, parse
-from formbar.form import Form
+from formbar.form import Form, variabledecode
 
 from ringo.model.base import BaseFactory
 from ringo.model.form import Form as BlobformForm
@@ -306,6 +306,37 @@ def get_search(clazz, request):
                                                                 search_field))
             saved_search.append((search, search_field))
     return saved_search
+
+def bundle_(request):
+    clazz = request.context.__model__
+    handle_history(request)
+    handle_params(clazz, request)
+
+    # Handle bundle params. If the request has the bundle_action param
+    # the request is the intial request for a bundled action. In this
+    # case we can delete all previous selected and stored item ids in
+    # the session.
+    params = variabledecode.variable_decode(request.params)
+    if params.get('bundle_action'):
+        request.session['%s.bundle.action' % clazz] = params.get('bundle_action')
+        try:
+            del request.session['%s.bundle.items' % clazz]
+        except KeyError:
+            pass
+        request.session['%s.bundle.items' % clazz] = params.get('id', [])
+    bundle_action = request.session.get('%s.bundle.action' % clazz)
+    ids = request.session.get('%s.bundle.items' % clazz)
+
+    factory = clazz.get_item_factory()
+    items = []
+    for id in ids:
+        items.append(factory.load(id))
+
+    if bundle_action == 'Export':
+        rvalue = _handle_export_request(clazz, request, items)
+    elif bundle_action == 'Delete':
+        rvalue = _handle_delete_request(clazz, request, items)
+    return rvalue
 
 
 def list_(clazz, request):
