@@ -54,8 +54,9 @@ class BaseTestCase(unittest.TestCase):
 
 class BaseUnitTest(BaseTestCase):
     def setUp(self):
-        self.config = testing.setUp(request=testing.DummyRequest())
         super(BaseUnitTest, self).setUp()
+        self.request = self._build_request()
+        self.config = testing.setUp(self.registry, request=self.request)
 
     def get_request(self, user=None):
         request = testing.DummyRequest()
