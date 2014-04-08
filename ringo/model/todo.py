@@ -2,7 +2,6 @@ from datetime import datetime
 import sqlalchemy as sa
 from ringo.model import Base
 from ringo.model.base import BaseItem, BaseFactory, BaseList
-from ringo.model.modul import ModulItem, _create_default_actions
 from ringo.model.mixins import Owned, StateMixin
 from ringo.model.statemachine import Statemachine, State, null_handler, null_condition
 
@@ -117,9 +116,6 @@ class Todo(BaseItem, Owned, TodoStateMixin, Base):
     assigned_id = sa.Column(sa.Integer, sa.ForeignKey('users.id'))
     assigned = sa.orm.relationship("User", secondary=nm_todo_users)
 
-    def __unicode__(self):
-        return str(self.id)
-
     @classmethod
     def get_item_factory(cls):
         return TodoFactory(cls)
@@ -127,17 +123,3 @@ class Todo(BaseItem, Owned, TodoStateMixin, Base):
     @classmethod
     def get_item_list(cls, request, user=None, cache=None):
         return TodoList(cls, request, user, cache=None)
-
-def init_model(dbsession):
-    """Will setup the initial model for the todo.
-
-    :dbsession: Database session to which the items will be added.
-    :returns: None
-    """
-    modul = ModulItem(name='todos')
-    modul.clazzpath = "ringo.model.todo.Todo"
-    modul.label = "Todo"
-    modul.label_plural = "Todos"
-    modul.display = "hidden"
-    modul.actions.extend(_create_default_actions(dbsession))
-    dbsession.add(modul)

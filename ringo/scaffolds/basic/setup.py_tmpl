@@ -33,7 +33,6 @@ setup(name='{{package}}',
       [paste.app_factory]
       main = {{package}}:main
       [console_scripts]
-      initialize_{{package}}_db = {{package}}.scripts.initializedb:main
       add_{{package}}_modul = ringo.scripts.add_modul:main
       [babel.extractors]
       tableconfig = ringo.lib.i18n:extract_i18n_tableconfig

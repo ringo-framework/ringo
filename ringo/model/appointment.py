@@ -1,16 +1,8 @@
 from datetime import date
 import sqlalchemy as sa
 from ringo.model import Base
-from ringo.model.base import BaseItem, BaseFactory, BaseList
-from ringo.model.modul import ModulItem, _create_default_actions
+from ringo.model.base import BaseItem, BaseList
 from ringo.model.mixins import Owned
-
-
-class AppointmentFactory(BaseFactory):
-
-    def create(self, user=None):
-        new_item = BaseFactory.create(self, user)
-        return new_item
 
 
 class Reminders(BaseList):
@@ -43,20 +35,3 @@ class Appointment(BaseItem, Owned, Base):
     email = sa.Column('email', sa.Integer, nullable=True, default=None)
     title = sa.Column('title', sa.Text, nullable=False, default=None)
     description = sa.Column('description', sa.Text, nullable=True, default=None)
-
-    def __unicode__(self):
-        return str(self.id)
-
-def init_model(dbsession):
-    """Will setup the initial model for the appointment.
-
-    :dbsession: Database session to which the items will be added.
-    :returns: None
-    """
-    modul = ModulItem(name='appointments')
-    modul.clazzpath = "ringo.model.appointment.Appointment"
-    modul.label = "Appointment"
-    modul.label_plural = "Appointments"
-    modul.display = "hidden"
-    modul.actions.extend(_create_default_actions(dbsession))
-    dbsession.add(modul)

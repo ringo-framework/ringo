@@ -1,19 +1,23 @@
 from invoke import run, task
 
+
 @task
 def docs(doctype="html"):
     """Will build the documentation"""
     run("cd docs; make %s" % doctype)
     run("cp -r docs/build/html ringo/static/doc")
 
+
 @task
 def test(exclude="None"):
     """Will run all the tests"""
-    run("alembic -c alembic-test.ini upgrade head")
     if not exclude:
         exclude = []
     if exclude:
         exclude = exclude.split(",")
+    if "init" not in exclude:
+        run("rm test.sqlite")
+        run("alembic -c alembic-test.ini upgrade head")
     run("python setup.py nosetests")
     if "behave" not in exclude:
         #run("coverage erase")
@@ -30,4 +34,3 @@ def test(exclude="None"):
         run("rm -r test-data")
     else:
         print "Ignoring Functional-Tests (Behave)"
-    run("rm test.sqlite")

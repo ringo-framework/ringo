@@ -256,9 +256,6 @@ class State(object):
     def __str__(self):
         return self._label
 
-    def __unicode__(self):
-        return self.__str__()
-
     def __init__(self, statemachine, id, label,
                  description=None, disabled_actions={}):
         """Initialise the State

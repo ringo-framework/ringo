@@ -173,18 +173,6 @@ def add_routes(package, modul, clazz):
     except:
         print 'Failed.'
 
-def add_init(package, modul):
-    target_file = os.path.join(get_app_path(package), package, 'scripts', 'initializedb.py')
-    print 'Adding modul initialisation to "%s"... ' % target_file,
-    try:
-        importstr = "from %s.model.%s import init_model as init_%s_model\n# AUTOREPLACEIMPORT" % (package, modul, modul)
-        initstr = "init_%s_model(DBSession)\n        # AUTOREPLACEINIT" % (modul)
-        replace(target_file, '# AUTOREPLACEIMPORT', importstr)
-        replace(target_file, '# AUTOREPLACEINIT', initstr)
-        print 'Ok.'
-    except:
-        print 'Failed.'
-
 def replace(file_path, pattern, subst):
     #Create temp file
     fh, abs_path = mkstemp()
@@ -221,8 +209,6 @@ def add_modul(name, package, config):
     add_table_file(package, modul)
     # 5. Configure Routes for the new modul.
     add_routes(package, modul, clazz)
-    # 6. Configure Routes for the new modul.
-    add_init(package, modul)
 
     # 7. Dynamic import of new clazz to be able to create the table.
     mod = __import__('%s.model.%s' % (package, modul), fromlist=[clazz])

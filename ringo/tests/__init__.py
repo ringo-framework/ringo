@@ -47,44 +47,28 @@ class BaseTestCase(unittest.TestCase):
         # rollback - everything that happened with the
         # Session above (including calls to commit())
         # is rolled back.
-        testing.tearDown()
         self.trans.rollback()
         self.session.close()
+        testing.tearDown()
 
 
 class BaseUnitTest(BaseTestCase):
     def setUp(self):
-        self.config = testing.setUp(request=testing.DummyRequest())
         super(BaseUnitTest, self).setUp()
+        self.request = self._build_request()
+        self.config = testing.setUp(self.registry, request=self.request)
 
-    def get_request(self, user=None):
+    def _build_request(self):
         request = testing.DummyRequest()
-        if user:
-            user = Mock()
-            user.news = []
-            user.settings = {'searches': {'foo': 'bar'}}
+
+        user = Mock()
+        user.news = []
+        user.settings = {'searches': {'foo': 'bar'}}
 
         request.user = user
         request.translate = lambda x: x
         request.db = self.session
-        return request
-
-    def get_csrf_request(self, post=None):
-        csrf = 'abc'
-
-        if not u'csrf_token' in post.keys():
-            post.update({
-                'csrf_token': csrf
-            })
-
-        request = testing.DummyRequest(post)
-
-        request.session = Mock()
-        csrf_token = Mock()
-        csrf_token.return_value = csrf
-
-        request.session.get_csrf_token = csrf_token
-
+        request.context = Mock()
         return request
 
 

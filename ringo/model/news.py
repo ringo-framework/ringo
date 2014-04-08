@@ -1,7 +1,6 @@
 import sqlalchemy as sa
 from ringo.model import Base
 from ringo.model.base import BaseItem
-from ringo.model.modul import ModulItem, _create_default_actions
 from ringo.model.mixins import Owned, Meta
 
 
@@ -25,21 +24,3 @@ class News(BaseItem, Meta, Owned, Base):
     users = sa.orm.relationship("User",
                                 secondary=nm_news_user,
                                 backref='news')
-
-    def __unicode__(self):
-        return str(self.id)
-
-
-def init_model(dbsession):
-    """Will setup the initial model for the news.
-
-    :dbsession: Database session to which the items will be added.
-    :returns: None
-    """
-    modul = ModulItem(name='news')
-    modul.clazzpath = "ringo.model.news.News"
-    modul.label = "News"
-    modul.label_plural = "News"
-    modul.display = "admin-menu"
-    modul.actions.extend(_create_default_actions(dbsession))
-    dbsession.add(modul)
