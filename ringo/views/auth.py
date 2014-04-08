@@ -99,6 +99,9 @@ def register_user(request):
     if request.POST:
         if form.validate(request.params.mixed()):
             # 1. Create user. Do not activate him. Default role is user.
+            # TODO: Check why we not use the get_item_factory_method
+            # here. Do we use plain factories because the need full
+            # controll of depended relations? (ti) <2014-04-08 17:07> 
             ufac = BaseFactory(User)
             pfac = BaseFactory(Profile)
             gfac = BaseFactory(Usergroup)
