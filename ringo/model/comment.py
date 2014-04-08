@@ -22,12 +22,13 @@ class Comment(BaseItem, Meta, Nested, Owned, Base):
         return str(self.id)
 
 
-def init_model(dbsession):
+def init_model(dbsession): # pragma: no cover
     """Will setup the initial model for the comment.
 
     :dbsession: Database session to which the items will be added.
     :returns: None
     """
+    # TODO: Remove this code. See issue41 (None) <2014-04-08 16:21> 
     modul = ModulItem(name='comments')
     modul.clazzpath = "ringo.model.comment.Comment"
     modul.label = "Comment"
