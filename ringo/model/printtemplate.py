@@ -5,13 +5,6 @@ from ringo.model.modul import ModulItem, _create_default_actions, ActionItem
 from ringo.model.mixins import Owned
 
 
-class PrinttemplateFactory(BaseFactory):
-
-    def create(self, user=None):
-        new_item = BaseFactory.create(self, user)
-        return new_item
-
-
 class Printtemplate(BaseItem, Owned, Base):
     __tablename__ = 'printtemplates'
     _modul_id = 15

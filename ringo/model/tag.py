@@ -5,13 +5,6 @@ from ringo.model.modul import ModulItem, _create_default_actions
 from ringo.model.mixins import Owned
 
 
-class TagFactory(BaseFactory):
-
-    def create(self, user=None):
-        new_item = BaseFactory.create(self, user)
-        return new_item
-
-
 class Tag(BaseItem, Owned, Base):
     """Tags (keywords) can be used to mark items."""
     __tablename__ = 'tags'

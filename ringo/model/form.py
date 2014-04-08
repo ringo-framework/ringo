@@ -37,13 +37,6 @@ class ReviewStateMixin(StateMixin):
         return state.get_state()
 
 
-class FormFactory(BaseFactory):
-
-    def create(self, user=None):
-        new_item = BaseFactory.create(self, user)
-        return new_item
-
-
 class Form(BaseItem, ReviewStateMixin, Owned, Meta, Logged, Base):
     __tablename__ = 'forms'
     _modul_id = 14

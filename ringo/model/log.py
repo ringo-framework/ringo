@@ -5,13 +5,6 @@ from ringo.model.modul import ModulItem, _create_default_actions
 from ringo.model.mixins import Owned, Meta
 
 
-class LogFactory(BaseFactory):
-
-    def create(self, user=None):
-        new_item = BaseFactory.create(self, user)
-        return new_item
-
-
 class Log(BaseItem, Owned, Meta, Base):
     __tablename__ = 'logs'
     _modul_id = 10

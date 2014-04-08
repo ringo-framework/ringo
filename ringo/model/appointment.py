@@ -6,13 +6,6 @@ from ringo.model.modul import ModulItem, _create_default_actions
 from ringo.model.mixins import Owned
 
 
-class AppointmentFactory(BaseFactory):
-
-    def create(self, user=None):
-        new_item = BaseFactory.create(self, user)
-        return new_item
-
-
 class Reminders(BaseList):
     def __init__(self, db, cache=""):
         BaseList.__init__(self, Appointment, db, cache=cache)

@@ -5,13 +5,6 @@ from ringo.model.modul import ModulItem, _create_default_actions, ActionItem
 from ringo.model.mixins import Owned
 
 
-class FileFactory(BaseFactory):
-
-    def create(self, user=None):
-        new_item = BaseFactory.create(self, user)
-        return new_item
-
-
 class File(BaseItem, Owned, Base):
     __tablename__ = 'files'
     _modul_id = 8
