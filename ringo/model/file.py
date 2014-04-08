@@ -22,6 +22,3 @@ class File(BaseItem, Owned, Base):
     description = sa.Column('description', sa.Text, nullable=True, default=None)
     size = sa.Column('size', sa.Integer, nullable=True, default=None)
     mime = sa.Column('mime', sa.Text, nullable=True, default=None)
-
-    def __unicode__(self):
-        return str(self.id)

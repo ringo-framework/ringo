@@ -25,6 +25,3 @@ class News(BaseItem, Meta, Owned, Base):
     users = sa.orm.relationship("User",
                                 secondary=nm_news_user,
                                 backref='news')
-
-    def __unicode__(self):
-        return str(self.id)

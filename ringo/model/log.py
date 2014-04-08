@@ -22,6 +22,3 @@ class Log(BaseItem, Owned, Meta, Base):
     category = sa.Column('category', sa.Integer, nullable=True, default=None)
     subject = sa.Column('subject', sa.Text, nullable=False, default=None)
     text = sa.Column('text', sa.Text, nullable=True, default=None)
-
-    def __unicode__(self):
-        return str(self.id)

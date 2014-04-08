@@ -17,6 +17,3 @@ class Comment(BaseItem, Meta, Nested, Owned, Base):
     _modul_id = 11
     id = sa.Column(sa.Integer, primary_key=True)
     text = sa.Column(sa.Text)
-
-    def __unicode__(self):
-        return str(self.id)

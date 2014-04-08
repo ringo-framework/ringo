@@ -43,6 +43,3 @@ class Appointment(BaseItem, Owned, Base):
     email = sa.Column('email', sa.Integer, nullable=True, default=None)
     title = sa.Column('title', sa.Text, nullable=False, default=None)
     description = sa.Column('description', sa.Text, nullable=True, default=None)
-
-    def __unicode__(self):
-        return str(self.id)

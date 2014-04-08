@@ -117,9 +117,6 @@ class Todo(BaseItem, Owned, TodoStateMixin, Base):
     assigned_id = sa.Column(sa.Integer, sa.ForeignKey('users.id'))
     assigned = sa.orm.relationship("User", secondary=nm_todo_users)
 
-    def __unicode__(self):
-        return str(self.id)
-
     @classmethod
     def get_item_factory(cls):
         return TodoFactory(cls)
