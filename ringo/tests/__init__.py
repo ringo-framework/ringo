@@ -47,9 +47,9 @@ class BaseTestCase(unittest.TestCase):
         # rollback - everything that happened with the
         # Session above (including calls to commit())
         # is rolled back.
-        testing.tearDown()
         self.trans.rollback()
         self.session.close()
+        testing.tearDown()
 
 
 class BaseUnitTest(BaseTestCase):
