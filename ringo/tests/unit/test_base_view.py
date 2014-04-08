@@ -1,6 +1,7 @@
 import pyramid
 from ringo.tests import BaseUnitTest
 
+
 class ViewHelpersTests(BaseUnitTest):
 
     def setUp(self):
@@ -11,19 +12,17 @@ class ViewHelpersTests(BaseUnitTest):
         item = self.request.db.query(ModulItem).filter(ModulItem.id == 1).one()
         self.request.context.item = item
         self.request.matchdict = {'id': 1}
-        self.request.session['modules.1.form.page'] =  2
+        self.request.session['modules.1.form.page'] = 2
 
     def test_get_context(self):
-        from ringo.model.modul import ModulItem
         from ringo.views.base import _get_item_from_context
         result = _get_item_from_context(self.request)
         self.assertEqual(result.name, 'modules')
 
     def test_get_context_fail(self):
-        from ringo.model.modul import ModulItem
         from ringo.views.base import _get_item_from_context
         self.request.context.item = None
-        with self.assertRaises(pyramid.exceptions.HTTPBadRequest):
+        with self.assertRaises(pyramid.httpexceptions.HTTPBadRequest):
             _get_item_from_context(self.request)
 
     def test_get_current_formpage(self):
@@ -40,7 +39,6 @@ class ViewHelpersTests(BaseUnitTest):
         self.assertEqual(result, 1)
 
     def test_get_ownership_form(self):
-        from ringo.model.modul import ModulItem
         from ringo.views.base import get_ownership_form
         from ringo.views.base import _get_item_from_context
         item = _get_item_from_context(self.request)
@@ -49,7 +47,6 @@ class ViewHelpersTests(BaseUnitTest):
         self.assertEqual(result._item, item)
 
     def test_get_ownership_form_readonly(self):
-        from ringo.model.modul import ModulItem
         from ringo.views.base import get_ownership_form
         from ringo.views.base import _get_item_from_context
         item = _get_item_from_context(self.request)
@@ -60,14 +57,12 @@ class ViewHelpersTests(BaseUnitTest):
     def test_get_ownership_form_owned(self):
         from ringo.model.user import Profile
         from ringo.views.base import get_ownership_form
-        from ringo.views.base import _get_item_from_context
         item = self.request.db.query(Profile).filter(Profile.id == 1).one()
         result = get_ownership_form(item, self.request)
         self.assertEqual(len(result.fields.keys()), 2)
         self.assertEqual(result._item, item)
 
     def test_get_logbook_form(self):
-        from ringo.model.modul import ModulItem
         from ringo.views.base import get_logbook_form
         from ringo.views.base import _get_item_from_context
         item = _get_item_from_context(self.request)
@@ -76,7 +71,6 @@ class ViewHelpersTests(BaseUnitTest):
         self.assertEqual(result._item, item)
 
     def test_get_logbook_form_readonly(self):
-        from ringo.model.modul import ModulItem
         from ringo.views.base import get_logbook_form
         from ringo.views.base import _get_item_from_context
         item = _get_item_from_context(self.request)
@@ -87,7 +81,6 @@ class ViewHelpersTests(BaseUnitTest):
     def test_get_logbook_form_owned(self):
         from ringo.model.user import Profile
         from ringo.views.base import get_logbook_form
-        from ringo.views.base import _get_item_from_context
         item = self.request.db.query(Profile).filter(Profile.id == 1).one()
         result = get_logbook_form(item, self.request)
         self.assertEqual(len(result.fields.keys()), 1)
