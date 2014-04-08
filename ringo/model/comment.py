@@ -20,19 +20,3 @@ class Comment(BaseItem, Meta, Nested, Owned, Base):
 
     def __unicode__(self):
         return str(self.id)
-
-
-def init_model(dbsession): # pragma: no cover
-    """Will setup the initial model for the comment.
-
-    :dbsession: Database session to which the items will be added.
-    :returns: None
-    """
-    # TODO: Remove this code. See issue41 (None) <2014-04-08 16:21> 
-    modul = ModulItem(name='comments')
-    modul.clazzpath = "ringo.model.comment.Comment"
-    modul.label = "Comment"
-    modul.label_plural = "Comments"
-    modul.display = "hidden"
-    modul.actions.extend(_create_default_actions(dbsession))
-    dbsession.add(modul)

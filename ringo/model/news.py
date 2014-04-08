@@ -28,18 +28,3 @@ class News(BaseItem, Meta, Owned, Base):
 
     def __unicode__(self):
         return str(self.id)
-
-
-def init_model(dbsession):
-    """Will setup the initial model for the news.
-
-    :dbsession: Database session to which the items will be added.
-    :returns: None
-    """
-    modul = ModulItem(name='news')
-    modul.clazzpath = "ringo.model.news.News"
-    modul.label = "News"
-    modul.label_plural = "News"
-    modul.display = "admin-menu"
-    modul.actions.extend(_create_default_actions(dbsession))
-    dbsession.add(modul)

@@ -46,17 +46,3 @@ class Appointment(BaseItem, Owned, Base):
 
     def __unicode__(self):
         return str(self.id)
-
-def init_model(dbsession):
-    """Will setup the initial model for the appointment.
-
-    :dbsession: Database session to which the items will be added.
-    :returns: None
-    """
-    modul = ModulItem(name='appointments')
-    modul.clazzpath = "ringo.model.appointment.Appointment"
-    modul.label = "Appointment"
-    modul.label_plural = "Appointments"
-    modul.display = "hidden"
-    modul.actions.extend(_create_default_actions(dbsession))
-    dbsession.add(modul)

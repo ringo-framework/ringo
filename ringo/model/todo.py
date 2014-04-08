@@ -127,17 +127,3 @@ class Todo(BaseItem, Owned, TodoStateMixin, Base):
     @classmethod
     def get_item_list(cls, request, user=None, cache=None):
         return TodoList(cls, request, user, cache=None)
-
-def init_model(dbsession):
-    """Will setup the initial model for the todo.
-
-    :dbsession: Database session to which the items will be added.
-    :returns: None
-    """
-    modul = ModulItem(name='todos')
-    modul.clazzpath = "ringo.model.todo.Todo"
-    modul.label = "Todo"
-    modul.label_plural = "Todos"
-    modul.display = "hidden"
-    modul.actions.extend(_create_default_actions(dbsession))
-    dbsession.add(modul)

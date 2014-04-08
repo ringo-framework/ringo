@@ -56,17 +56,3 @@ class Form(BaseItem, ReviewStateMixin, Owned, Meta, Logged, Base):
 
     # relations
     modul = sa.orm.relationship("ModulItem", backref="blobforms")
-
-def init_model(dbsession):
-    """Will setup the initial model for the form.
-
-    :dbsession: Database session to which the items will be added.
-    :returns: None
-    """
-    modul = ModulItem(name='forms')
-    modul.clazzpath = "ringo.model.form.Form"
-    modul.label = "Form"
-    modul.label_plural = "Forms"
-    modul.display = "admin-menu"
-    modul.actions.extend(_create_default_actions(dbsession))
-    dbsession.add(modul)

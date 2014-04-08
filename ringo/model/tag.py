@@ -34,18 +34,3 @@ class Tag(BaseItem, Owned, Base):
 
     def __unicode__(self):
         return self.name
-
-
-def init_model(dbsession):
-    """Will setup the initial model for the tag.
-
-    :dbsession: Database session to which the items will be added.
-    :returns: None
-    """
-    modul = ModulItem(name='tags')
-    modul.clazzpath = "ringo.model.tag.Tag"
-    modul.label = "Tag"
-    modul.label_plural = "Tags"
-    modul.display = "admin-menu"
-    modul.actions.extend(_create_default_actions(dbsession))
-    dbsession.add(modul)

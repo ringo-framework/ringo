@@ -25,17 +25,3 @@ class Log(BaseItem, Owned, Meta, Base):
 
     def __unicode__(self):
         return str(self.id)
-
-def init_model(dbsession):
-    """Will setup the initial model for the log.
-
-    :dbsession: Database session to which the items will be added.
-    :returns: None
-    """
-    modul = ModulItem(name='logs')
-    modul.clazzpath = "ringo.model.log.Log"
-    modul.label = "Log"
-    modul.label_plural = "Logs"
-    modul.display = "admin-menu"
-    modul.actions.extend(_create_default_actions(dbsession))
-    dbsession.add(modul)
