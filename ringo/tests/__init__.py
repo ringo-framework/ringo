@@ -68,6 +68,7 @@ class BaseUnitTest(BaseTestCase):
         request.user = user
         request.translate = lambda x: x
         request.db = self.session
+        request.context = Mock()
         return request
 
 
