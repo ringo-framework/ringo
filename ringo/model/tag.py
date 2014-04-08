@@ -1,7 +1,6 @@
 import sqlalchemy as sa
 from ringo.model import Base
-from ringo.model.base import BaseItem, BaseFactory
-from ringo.model.modul import ModulItem, _create_default_actions
+from ringo.model.base import BaseItem
 from ringo.model.mixins import Owned
 
 
