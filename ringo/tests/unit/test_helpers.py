@@ -133,7 +133,7 @@ class HelpersAuthTests(BaseUnitTest):
     def test_prettify_date(self):
         from ringo.lib.helpers import prettify
         result = prettify(self.request, datetime(1977, 3, 12, 0, 0, 0))
-        self.assertEquals(result, u"3/12/77, 12:00 AM")
+        self.assertEquals(result, u"3/12/77 12:00 AM")
 
     def test_format_datetime(self):
         from ringo.lib.helpers import format_datetime
