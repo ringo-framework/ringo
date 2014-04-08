@@ -16,7 +16,7 @@ from shutil import move
 from ringo  import modul_template_dir
 from ringo.lib.sql import DBSession
 from ringo.model import Base
-from ringo.model.modul import ModulItem, _create_default_actions
+from ringo.model.modul import ModulItem, ActionItem
 
 from pyramid.paster import (
     get_appsettings,
@@ -34,6 +34,40 @@ MODEL = """
 
 VIEW = """
 """
+
+def _create_default_actions(dbsession, ignore=[]):
+    # TODO: Translate the name of the Action (torsten) <2013-07-10 09:32>
+    a0 = ActionItem(name="List", url="list", icon="icon-list-alt")
+    a1 = ActionItem(name="Create", url="create", icon=" icon-plus")
+    a2 = ActionItem(name="Read", url="read/{id}", icon="icon-eye-open")
+    a3 = ActionItem(name="Update", url="update/{id}", icon="icon-edit")
+    a4 = ActionItem(name="Delete", url="delete/{id}", icon="icon-trash")
+    a5 = ActionItem(name="Import", url="import", icon="icon-import")
+    a6 = ActionItem(name="Export", url="export/{id}", icon="icon-export")
+    actions = []
+    if not "list" in ignore:
+        dbsession.add(a0)
+        actions.append(a0)
+    if not "create" in ignore:
+        dbsession.add(a1)
+        actions.append(a1)
+    if not "read" in ignore:
+        dbsession.add(a2)
+        actions.append(a2)
+    if not "update" in ignore:
+        dbsession.add(a3)
+        actions.append(a3)
+    if not "delete" in ignore:
+        dbsession.add(a4)
+        actions.append(a4)
+    if not "import" in ignore:
+        dbsession.add(a5)
+        actions.append(a5)
+    if not "export" in ignore:
+        dbsession.add(a6)
+        actions.append(a6)
+    return actions
+
 
 def my_import(name):
     mod = __import__(name)
