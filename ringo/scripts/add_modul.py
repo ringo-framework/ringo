@@ -9,11 +9,10 @@ import logging
 import transaction
 import pkg_resources
 import argparse
-import ConfigParser, os
+import ConfigParser
 from tempfile import mkstemp
 from shutil import move
-
-from ringo  import modul_template_dir
+from ringo import modul_template_dir
 from ringo.lib.sql import DBSession
 from ringo.model import Base
 from ringo.model.modul import ModulItem, ActionItem
@@ -76,6 +75,7 @@ def my_import(name):
         mod = getattr(mod, comp)
     return mod
 
+
 def get_package_name(config_file):
     config = ConfigParser.ConfigParser()
     config.read(config_file)
@@ -83,15 +83,18 @@ def get_package_name(config_file):
     package = egg.split(':')[1]
     return package
 
+
 def get_app_path(package):
     path = pkg_resources.get_distribution(package).location
     return path
+
 
 def get_engine(config_file):
     setup_logging(config_file)
     settings = get_appsettings(config_file)
     engine = engine_from_config(settings, 'sqlalchemy.')
     return engine
+
 
 def add_db_entry(package, name, engine):
     print 'Adding new entry in modules table for "%s"... ' % name,
@@ -119,11 +122,12 @@ def add_db_entry(package, name, engine):
         print e
         print 'Failed.'
 
+
 def add_model_file(package, modul, id, clazz):
     target_file = os.path.join(get_app_path(package), package, 'model', '%s.py' % modul)
     print 'Adding new model file "%s"... ' % target_file,
     try:
-        tablename = modul+'s'
+        tablename = modul + 's'
         label = modul.capitalize()
         label_plural = label + "s"
         clazzpath = ".".join([package, 'model', modul, label])
@@ -143,11 +147,12 @@ def add_model_file(package, modul, id, clazz):
         outfile.write(generated)
         outfile.close()
         print 'Ok.'
-    except Exception, e:
+    except Exception:
         print 'Failed.'
 
+
 def add_view_file(package, modul, clazz):
-    filename = modul+"s"
+    filename = modul + "s"
     target_file= os.path.join(get_app_path(package), package, 'views', '%s.py' % filename)
     print 'Adding new view file "%s"... ' % target_file,
     try:
@@ -165,8 +170,9 @@ def add_view_file(package, modul, clazz):
     except:
         print 'Failed.'
 
+
 def add_form_file(package, modul):
-    filename = modul+"s"
+    filename = modul + "s"
     target_file= os.path.join(get_app_path(package), package, 'views', 'forms', '%s.xml' % filename)
     print 'Adding new form configuration file "%s"... ' % target_file,
     try:
@@ -180,8 +186,9 @@ def add_form_file(package, modul):
     except:
         print 'Failed.'
 
+
 def add_table_file(package, modul):
-    filename = modul+"s"
+    filename = modul + "s"
     target_file= os.path.join(get_app_path(package), package, 'views', 'tables', '%s.json' % filename)
     print 'Adding new table configuration file "%s"... ' % target_file,
     try:
@@ -195,6 +202,7 @@ def add_table_file(package, modul):
     except:
         print 'Failed.'
 
+
 def add_routes(package, modul, clazz):
     target_file = os.path.join(get_app_path(package), package, '__init__.py')
     print 'Adding routes to "%s"... ' % target_file,
@@ -207,10 +215,11 @@ def add_routes(package, modul, clazz):
     except:
         print 'Failed.'
 
+
 def replace(file_path, pattern, subst):
     #Create temp file
     fh, abs_path = mkstemp()
-    new_file = open(abs_path,'w')
+    new_file = open(abs_path, 'w')
     old_file = open(file_path)
     for line in old_file:
         new_file.write(line.replace(pattern, subst))
@@ -222,6 +231,7 @@ def replace(file_path, pattern, subst):
     os.remove(file_path)
     #Move new file
     move(abs_path, file_path)
+
 
 def add_modul(name, package, config):
     path = get_app_path(package)
@@ -248,6 +258,7 @@ def add_modul(name, package, config):
     mod = __import__('%s.model.%s' % (package, modul), fromlist=[clazz])
     klass = getattr(mod, clazz)
     Base.metadata.create_all(engine)
+
 
 def main():
     '''Main function'''
