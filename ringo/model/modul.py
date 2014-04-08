@@ -47,9 +47,6 @@ class ModulItem(BaseItem, Base):
 
     _sql_eager_loads = ['actions.roles']
 
-    def __unicode__(self):
-        return self.name
-
     def get_label(self, plural=False):
         if plural:
             return self.label_plural
