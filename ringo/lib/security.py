@@ -47,8 +47,12 @@ def setup_ringo_security(config):
     #            user_object.html
     config.add_request_method(get_user, 'user', reify=True)
 
-    # Add subscriber to check the CSRF token in POST requests.
-    config.add_subscriber(csrf_token_validation, ContextFound)
+    # Add subscriber to check the CSRF token in POST requests. You can
+    # disable this for testing by setting the
+    # "security.enable_csrf_check" config variable to "false".
+    settings = config.registry.settings
+    if settings.get('security.enable_csrf_check', 'true') != "false":
+        config.add_subscriber(csrf_token_validation, ContextFound)
 
 
 def get_user(request):

@@ -23,6 +23,12 @@ mako.directories =
     {{package}}:templates
     ringo:templates
 
+###
+# Settings for the security system.
+###
+# Disable the check of the csrf token for testing purpose. The setting
+# defaults to enabled checks
+security.enable_csrf_check = true
 [server:main]
 use = egg:waitress#main
 host = 0.0.0.0

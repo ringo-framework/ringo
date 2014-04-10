@@ -36,6 +36,11 @@ auth.register_user = false
 auth.password_reminder = false
 
 ###
+# Settings for the security system.
+###
+# Disable the check of the csrf token for testing purpose. The setting
+# defaults to enabled checks
+security.enable_csrf_check = true
 # Mailserver settings
 ###
 mail.host =
