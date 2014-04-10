@@ -33,7 +33,7 @@ DELETE FROM "modules" WHERE id = 11;
 
 
 def iter_statements(stmts):
-    for st in stmts.split('\n'):
+    for st in [x for x in stmts.split('\n') if x]:
         op.execute(st)
 
 

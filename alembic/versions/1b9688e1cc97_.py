@@ -37,7 +37,7 @@ DELETE from actions where id = 95;
 
 
 def iter_statements(stmts):
-    for st in stmts.split('\n'):
+    for st in [x for x in stmts.split('\n') if x]:
         op.execute(st)
 
 
