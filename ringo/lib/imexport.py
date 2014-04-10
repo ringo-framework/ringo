@@ -8,6 +8,7 @@ import cStringIO
 
 log = logging.getLogger(__name__)
 
+
 class RingoJSONEncoder(json.JSONEncoder):
 
     def default(self, obj):
@@ -15,6 +16,7 @@ class RingoJSONEncoder(json.JSONEncoder):
            or isinstance(obj, datetime.date)):
             return obj.isoformat()
             #return int(mktime(obj.timetuple()))
+
 
 class UnicodeCSVWriter:
     """
@@ -25,7 +27,8 @@ class UnicodeCSVWriter:
     def __init__(self, f, fields, dialect=csv.excel, encoding="utf-8", **kwds):
         # Redirect output to a queue
         self.queue = cStringIO.StringIO()
-        self.writer = csv.DictWriter(self.queue, fieldnames=fields, dialect=dialect, **kwds)
+        self.writer = csv.DictWriter(self.queue, fieldnames=fields,
+                                     dialect=dialect, **kwds)
         self.stream = f
         self.encoder = codecs.getincrementalencoder(encoding)()
 
@@ -34,7 +37,7 @@ class UnicodeCSVWriter:
 
     def writerow(self, row):
         tmp_dict = {}
-        for k,v in row.iteritems():
+        for k, v in row.iteritems():
             try:
                 tmp_dict[k] = v.encode("utf-8")
             except AttributeError:
@@ -73,7 +76,6 @@ class Exporter(object):
             data[col] = getattr(item, col)
         return data
 
-
     def serialize(self, data):
         """Will convert the given python data dictionary into a string
         containing JSON data
@@ -94,11 +96,13 @@ class Exporter(object):
         data = self._get_data(item)
         return self.serialize(data)
 
+
 class JSONExporter(Exporter):
     """Docstring for JSONExporter. """
 
     def serialize(self, data):
-        return json.dumps(data, cls = RingoJSONEncoder)
+        return json.dumps(data, cls=RingoJSONEncoder)
+
 
 class CSVExporter(Exporter):
     """Docstring for CSVExporter. """
@@ -110,6 +114,7 @@ class CSVExporter(Exporter):
         writer.writerow(data)
         outfile.seek(0)
         return outfile.read()
+
 
 class Importer(object):
     """Docstring for Importer."""
@@ -167,7 +172,8 @@ class Importer(object):
 
         """
         for key, value in values.iteritems():
-            if key == "id": continue
+            if key == "id":
+                continue
             setattr(item, key, value)
         return item
 
@@ -197,6 +203,7 @@ class Importer(object):
             imported_items.append((item, operation))
         return imported_items
 
+
 class JSONImporter(Importer):
     """Docstring for JSONImporter."""
 
@@ -214,12 +221,13 @@ class JSONImporter(Importer):
             return [conv]
         return conv
 
+
 class CSVImporter(Importer):
     """Docstring for CSVImporter."""
 
     def _deserialize_hook(self, obj):
         conv = {}
-        for k,v in obj.iteritems():
+        for k, v in obj.iteritems():
             if v:
                 conv[k] = unicode(v, "utf-8")
         obj = self._deserialize_dates(obj)
