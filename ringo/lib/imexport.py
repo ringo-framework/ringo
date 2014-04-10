@@ -107,7 +107,7 @@ class CSVExporter(Exporter):
 
     def serialize(self, data):
         outfile = StringIO.StringIO()
-        writer = UnicodeCSVWriter(outfile, data.keys(), quotechar="'")
+        writer = UnicodeCSVWriter(outfile, data.keys())
         writer.writeheader()
         writer.writerow(data)
         outfile.seek(0)
