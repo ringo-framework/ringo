@@ -28,8 +28,8 @@ def password_generator(size=8, chars=string.ascii_uppercase + string.digits):
 
 def csrf_token_validation(event):
     request = event.request
-    csrf = request.params.get('csrf_token')
     if (request.method == 'POST'):
+        csrf = request.params.get('csrf_token')
         if (csrf != unicode(request.session.get_csrf_token())):
             raise HTTPUnauthorized
 
