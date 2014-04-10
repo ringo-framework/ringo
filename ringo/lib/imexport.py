@@ -1,12 +1,10 @@
 """Modul for the messanging system in ringo"""
 import logging
 import datetime
-from time import mktime
 import json
 import csv
 import codecs
-import StringIO, cStringIO
-from sqlalchemy.orm import ColumnProperty, class_mapper
+import cStringIO
 
 log = logging.getLogger(__name__)
 
@@ -106,7 +104,7 @@ class CSVExporter(Exporter):
     """Docstring for CSVExporter. """
 
     def serialize(self, data):
-        outfile = StringIO.StringIO()
+        outfile = cStringIO.StringIO()
         writer = UnicodeCSVWriter(outfile, data.keys())
         writer.writeheader()
         writer.writerow(data)
@@ -234,7 +232,7 @@ class CSVImporter(Importer):
         :returns: List of dictionary with python values
         """
         result = []
-        infile = StringIO.StringIO(data)
+        infile = cStringIO.StringIO(data)
         reader = csv.DictReader(infile)
         for conv in reader:
             conv = self._deserialize_hook(conv)
