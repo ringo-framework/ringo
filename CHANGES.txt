@@ -11,6 +11,8 @@ to the tracker.
 0.x
 ------
 - Added more testcases
+- Added new configuration variable "security.enable_csrf_check" in
+  configuration files.
 
 0.11.4
 ------
