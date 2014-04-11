@@ -57,38 +57,3 @@ class RessourceFactory(object):
         if not self.__modul__:
             self.__modul__ = self.__model__.get_item_modul()
         return get_permissions(self.__modul__, self.item)
-
-
-class Resource(object):
-    """Ressource element"""
-
-    __name__ = ""
-    __parent__ = None
-
-    # Default ACL
-    #__acl__ = [(Allow, 'role:admin', ('create', 'read', 'update',
-    #                                  'delete', 'list'))]
-
-    def __init__(self, title=None, model=None):
-        self._childs = {}
-        self._title = title
-        self._model = title
-
-    def add_child(self, url, resource):
-        resource.__name__ = url
-        resource.__parent__ = self
-        self._childs[url] = resource
-
-    def __getitem__(self, name):
-        log.debug('Searching for resource "%s" in %s' % (name, self._childs))
-        try:
-            resource = self._childs[name]
-            return resource
-        except KeyError:
-            raise
-
-
-class Root(Resource):
-    def __init__(self, request):
-        super(Root, self).__init__("Root")
-        self.request = request
