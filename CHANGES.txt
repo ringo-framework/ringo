@@ -8,11 +8,12 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
-0.x
+0.11.5
 ------
 - Added more testcases
 - Added new configuration variable "security.enable_csrf_check" in
   configuration files.
+- Use default excel dialog on CSV export.
 
 0.11.4
 ------
