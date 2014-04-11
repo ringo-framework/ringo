@@ -234,7 +234,7 @@ class CSVImporter(Importer):
         for k, v in obj.iteritems():
             if v:
                 conv[k] = unicode(v, "utf-8")
-        obj = self._deserialize_dates(obj)
+        conv = self._deserialize_dates(conv)
         return conv
 
     def deserialize(self, data):
