@@ -111,7 +111,7 @@ class CSVExporter(Exporter):
 
     def serialize(self, data):
         outfile = cStringIO.StringIO()
-        writer = UnicodeCSVWriter(outfile, data.keys())
+        writer = UnicodeCSVWriter(outfile, sorted(data[0].keys()))
         writer.writeheader()
         writer.writerows(data)
         outfile.seek(0)
