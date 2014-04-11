@@ -171,7 +171,7 @@ table-bordered">
 % if enable_bundled_actions:
   <div class="well well-small">
     <input name="csrf_token" type="hidden" value="${request.session.get_csrf_token()}">
-    <select class="input-large" name="bundle_action">
+    <select class="form-control input-small" name="bundle_action" style="display:inline;width:auto;">
       % for action in clazz.get_item_actions():
         ${action.bundle}
         % if action.bundle:
@@ -179,7 +179,7 @@ table-bordered">
         % endif
       % endfor
     </select>
-    <input class="btn btn-primary input-small" type="submit" value="${_('Perform')}"/>
+    <input class="btn btn-default input-small" type="submit" value="${_('Perform')}"/>
   </div>
 % endif
 </form>
