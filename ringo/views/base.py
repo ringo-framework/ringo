@@ -330,7 +330,12 @@ def bundle_(request):
     factory = clazz.get_item_factory()
     items = []
     for id in ids:
-        items.append(factory.load(id))
+        # Check if the user is allowed to call the requested action on
+        # the loaded item. If so append it the the bundle, if not ignore
+        # it.
+        item = factory.load(id)
+        if has_permission(bundle_action.lower(), item, request):
+            items.append(item)
 
     if bundle_action == 'Export':
         rvalue = _handle_export_request(clazz, request, items)
