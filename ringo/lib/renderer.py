@@ -241,7 +241,7 @@ class ListRenderer(Renderer):
                   '_': request.translate,
                   'h': ringo.lib.helpers,
                   's': security,
-                  'enable_bundled_actions': False,
+                  'enable_bundled_actions': True,
                   'search': search,
                   'search_field': search_field,
                   'saved_searches': get_saved_searches(request,
@@ -318,12 +318,12 @@ class DialogRenderer(Renderer):
 class ConfirmDialogRenderer(DialogRenderer):
     """Docstring for ConfirmDialogRenderer """
 
-    def __init__(self, request, item, action, title=None, body=None):
+    def __init__(self, request, clazz, action, title=None, body=None):
         """@todo: to be defined """
-        DialogRenderer.__init__(self, request, item, action, title, body)
+        DialogRenderer.__init__(self, request, clazz, action, title, body)
         self.template = template_lookup.get_template("internal/confirm.mako")
 
-    def render(self):
+    def render(self, items):
         _ = self._request.translate
         mapping = {'Action': self._action.capitalize()}
         values = {}
@@ -331,14 +331,14 @@ class ConfirmDialogRenderer(DialogRenderer):
         values['icon'] = self._request.static_url(
             'ringo:static/images/icons/32x32/dialog-warning.png')
         values['header'] = _("Confirm ${Action}", mapping=mapping)
-        values['body'] = self._render_body()
+        values['body'] = self._render_body(items)
         values['action'] = self._action.capitalize()
         values['ok_url'] = self._request.current_route_url()
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
         return self.template.render(**values)
 
-    def _render_body(self):
+    def _render_body(self, items):
         out = []
         _ = self._request.translate
         item_label = self._item.get_item_modul().get_label()
@@ -349,10 +349,6 @@ class ConfirmDialogRenderer(DialogRenderer):
                      mapping=mapping))
         out.append("<br>")
         out.append("<ol>")
-        if isinstance(self._item, list):
-            items = self._item
-        else:
-            items = [self._item]
         for item in items:
             out.append("<li>")
             out.append(unicode(item))
@@ -395,18 +391,19 @@ class ErrorDialogRenderer(DialogRenderer):
 class ExportDialogRenderer(DialogRenderer):
     """Docstring for ExportDialogRenderer"""
 
-    def __init__(self, request, item):
+    def __init__(self, request, clazz):
         """@todo: to be defined """
-        DialogRenderer.__init__(self, request, item, "export")
+        DialogRenderer.__init__(self, request, clazz, "export")
         self.template = template_lookup.get_template("internal/export.mako")
         config = Config(load(get_path_to_form_config('export.xml', 'ringo')))
         form_config = config.get_form('default')
         self.form = Form(form_config,
                          csrf_token=self._request.session.get_csrf_token())
 
-    def render(self):
+    def render(self, items):
         values = {}
         values['request'] = self._request
+        values['items'] = items
         values['body'] = self._render_body()
         values['modul'] = self._item.get_item_modul().get_label(plural=True)
         values['action'] = self._action.capitalize()

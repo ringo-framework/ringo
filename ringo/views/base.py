@@ -8,7 +8,7 @@ from pyramid.view import view_config
 import sqlalchemy as sa
 
 from formbar.config import Config, load, parse
-from formbar.form import Form
+from formbar.form import Form, variabledecode
 
 from ringo.model.base import BaseFactory
 from ringo.model.form import Form as BlobformForm
@@ -306,6 +306,37 @@ def get_search(clazz, request):
                                                                 search_field))
             saved_search.append((search, search_field))
     return saved_search
+
+def bundle_(request):
+    clazz = request.context.__model__
+    handle_history(request)
+    handle_params(clazz, request)
+
+    # Handle bundle params. If the request has the bundle_action param
+    # the request is the intial request for a bundled action. In this
+    # case we can delete all previous selected and stored item ids in
+    # the session.
+    params = variabledecode.variable_decode(request.params)
+    if params.get('bundle_action'):
+        request.session['%s.bundle.action' % clazz] = params.get('bundle_action')
+        try:
+            del request.session['%s.bundle.items' % clazz]
+        except KeyError:
+            pass
+        request.session['%s.bundle.items' % clazz] = params.get('id', [])
+    bundle_action = request.session.get('%s.bundle.action' % clazz)
+    ids = request.session.get('%s.bundle.items' % clazz)
+
+    factory = clazz.get_item_factory()
+    items = []
+    for id in ids:
+        items.append(factory.load(id))
+
+    if bundle_action == 'Export':
+        rvalue = _handle_export_request(clazz, request, items)
+    elif bundle_action == 'Delete':
+        rvalue = _handle_delete_request(clazz, request, items)
+    return rvalue
 
 
 def list_(clazz, request):
@@ -635,21 +666,17 @@ def read_(clazz, request, callback=None, renderers={}):
                                       previous_values=previous_values)
     return rvalue
 
-
-def delete_(clazz, request):
-    item = _get_item_from_context(request)
-    handle_history(request)
-    handle_params(clazz, request)
+def _handle_delete_request(clazz, request, items):
     _ = request.translate
     rvalue = {}
-
     if request.method == 'POST' and confirmed(request):
-        request.db.delete(item)
+        for item in items:
+            request.db.delete(item)
         route_name = clazz.get_action_routename('list')
         url = request.route_path(route_name)
-        item_label = clazz.get_item_modul().get_label()
-        mapping = {'item_type': item_label, 'item': item}
-        msg = _('Deleted ${item_type} "${item}" successfull.', mapping=mapping)
+        item_label = clazz.get_item_modul().get_label(plural=True)
+        mapping = {'item_type': item_label, 'item': item, 'num': len(items)}
+        msg = _('Deleted ${num} ${item_type} successfull.', mapping=mapping)
         log.info(msg)
         request.session.flash(msg, 'success')
         # Invalidate cache
@@ -667,20 +694,32 @@ def delete_(clazz, request):
     else:
         # FIXME: Get the ActionItem here and provide this in the Dialog to get
         # the translation working (torsten) <2013-07-10 09:32>
-        renderer = ConfirmDialogRenderer(request, item, 'delete')
-        rvalue['dialog'] = renderer.render()
+        renderer = ConfirmDialogRenderer(request, clazz, 'delete')
+        rvalue['dialog'] = renderer.render(items)
         rvalue['clazz'] = clazz
-        rvalue['item'] = item
+        rvalue['item'] = items
         return rvalue
 
+
+def delete_(clazz, request):
+    item = _get_item_from_context(request)
+    handle_history(request)
+    handle_params(clazz, request)
+    return _handle_delete_request(clazz, request, [item])
 
 def export_(clazz, request):
     item = _get_item_from_context(request)
     handle_history(request)
     handle_params(clazz, request)
-    rvalue = {}
+    return _handle_export_request(clazz, request, [item])
 
-    renderer = ExportDialogRenderer(request, item)
+def _handle_export_request(clazz, request, items):
+    """Helper function to handle the export request. This function
+    provides the required logic to show the export configuration dialog
+    and returning the exported items. It is called when exporting a
+    single item or when exporting multiple items in a bundle."""
+    rvalue = {}
+    renderer = ExportDialogRenderer(request, clazz)
     form = renderer.form
     if (request.method == 'POST'
        and confirmed(request)
@@ -691,7 +730,7 @@ def export_(clazz, request):
             exporter = JSONExporter(clazz)
         elif ef == "csv":
             exporter = CSVExporter(clazz)
-        export = exporter.perform(item)
+        export = exporter.perform(items)
         # Build response
         resp = request.response
         resp.content_type = str('application/%s' % ef)
@@ -701,9 +740,7 @@ def export_(clazz, request):
     else:
         # FIXME: Get the ActionItem here and provide this in the Dialog to get
         # the translation working (torsten) <2013-07-10 09:32>
-        rvalue['dialog'] = renderer.render()
-        rvalue['clazz'] = clazz
-        rvalue['item'] = item
+        rvalue['dialog'] = renderer.render(items)
         return rvalue
 
 

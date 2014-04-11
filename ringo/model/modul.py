@@ -16,6 +16,10 @@ class ActionItem(BaseItem, Base):
     url = sa.Column(sa.Text, nullable=False)
     icon = sa.Column(sa.Text, nullable=False)
     description = sa.Column(sa.Text)
+    bundle = sa.Column(sa.Boolean, nullable=False,
+                       server_default=sa.sql.expression.false())
+    """Flag to indicate if the action should be available in the bundled
+    actions"""
     display = sa.Column(sa.Text, default="primary")
     """Optional. Configure where the action will be displayed. If display is
     'secondary' the action will be rendererd in the advanced dropdown

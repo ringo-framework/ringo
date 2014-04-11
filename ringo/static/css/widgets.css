@@ -27,8 +27,12 @@
  * *************************************************************************/
 /* Change the mouse cursor to a pointer when hovering the rows of the
  * overviewtable to indicate that they are clickable. */
+#data {
+    margin-bottom: 10px;
+}
+
 #data td.link:hover {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 #data td a.filter {

@@ -93,7 +93,9 @@ class Exporter(object):
         :returns: @todo
 
         """
-        data = self._get_data(item)
+        data = []
+        for item in items:
+            data.append(self._get_data(item))
         return self.serialize(data)
 
 
@@ -111,7 +113,7 @@ class CSVExporter(Exporter):
         outfile = cStringIO.StringIO()
         writer = UnicodeCSVWriter(outfile, data.keys())
         writer.writeheader()
-        writer.writerow(data)
+        writer.writerows(data)
         outfile.seek(0)
         return outfile.read()
 

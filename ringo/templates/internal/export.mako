@@ -5,6 +5,12 @@
         <div class="panel-heading"><strong>${_('Export configuration for')} ${modul}</strong></div>
           <div class="panel-body">
             <p>${body}</p>
+            <p>${_('You have selected %s %s for export:' % (len(items), modul))}</p>
+            <ol>
+            % for item in items:
+                <li>${item}</li>
+            % endfor
+            </ol>
           </div>
           <div class="panel-footer">
             <button type"submit" class="btn btn-primary">${action}</button>

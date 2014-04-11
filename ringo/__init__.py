@@ -154,6 +154,20 @@ def add_route(config, clazz):
         log.debug("Adding route: %s, %s" % (route_name, route_url))
         config.add_route(route_name, route_url,
                          factory=get_resource_factory(clazz))
+
+        # Add bundle action.
+        if action.name == "List":
+            from ringo.views.base import bundle_
+            action_name = "Bundle"
+            route_name = "%s-%s" % (name, action_name.lower())
+            route_url = "%s/%s" % (name, action_name.lower())
+            log.debug("Adding route: %s, %s" % (route_name, route_url))
+            config.add_route(route_name, route_url,
+                             factory=get_resource_factory(clazz))
+            config.add_view(bundle_, route_name=route_name,
+                            renderer='/default/bundle.mako',
+                            permission='list')
+
     return add_rest_service(config, clazz)
 
 
