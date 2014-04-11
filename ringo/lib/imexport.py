@@ -86,10 +86,10 @@ class Exporter(object):
         """
         return ""
 
-    def perform(self, item):
+    def perform(self, items):
         """Returns the serialized item as string
 
-        :item: @todo
+        :items: @todo
         :returns: @todo
 
         """

@@ -67,7 +67,7 @@ class BaseItem(object):
         elements in lists in case one attribute is a list while
         iterating over all attributes. Currently only flat lists are
         supported.
-        
+
         Example: x.y[1].z"""
         element = self
         attributes = name.split('.')
@@ -100,7 +100,7 @@ class BaseItem(object):
 
     def __json__(self, request):
         exporter = JSONExporter(self.__class__)
-        return exporter.perform(self)
+        return exporter.perform([self])
 
     @classmethod
     def get_columns(cls, include_relations=False):
@@ -309,7 +309,7 @@ class BaseItem(object):
                 if gid_relation:
                     parent = getattr(self, gid_relation)
                     # FIXME: Check why this attribute can be None. (ti)
-                    # <2014-04-01 13:37> 
+                    # <2014-04-01 13:37>
                     if parent:
                         self.group = parent.group
                     else:
