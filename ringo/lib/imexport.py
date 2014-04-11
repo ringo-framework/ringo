@@ -41,7 +41,7 @@ class UnicodeCSVWriter:
             try:
                 tmp_dict[k] = v.encode("utf-8")
             except AttributeError:
-                tmp_dict[k] = None
+                tmp_dict[k] = v
         self.writer.writerow(tmp_dict)
         # Fetch UTF-8 output from the queue ...
         data = self.queue.getvalue()
