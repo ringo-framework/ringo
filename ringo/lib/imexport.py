@@ -147,6 +147,8 @@ class Importer(object):
         datetime deserialisation
         """
         for field in obj:
+            if not obj[field]:
+                continue
             if self._clazz_type[field] == "DATE" and obj[field] is not None:
                 obj[field] = datetime.datetime.strptime(obj[field],
                                                         "%Y-%m-%d").date()
