@@ -770,7 +770,7 @@ def import_(clazz, request, callback=None):
         for item in items:
             item, operation = item[0], item[1]
             try:
-                item.save({}, request)
+                item.save(item.get_values(), request)
                 route_name = item.get_action_routename('update')
                 url = request.route_path(route_name, id=item.id)
                 if callback:
