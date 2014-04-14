@@ -152,7 +152,7 @@ class Importer(object):
             elif (self._clazz_type[field] == "DATETIME"
                   and obj[field] is not None):
                 obj[field] = datetime.datetime.strptime(obj[field],
-                                                        "%Y-%m-%dT%H:%M:%S.%f")
+                                                        "%Y-%m-%d %H:%M:%S")
         return obj
 
     def deserialize(self, data):
