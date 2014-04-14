@@ -164,19 +164,6 @@ class Importer(object):
         """
         return {}
 
-    def _set_values(self, item, values):
-        """@todo: Docstring for _set_values.
-
-        :item: @todo
-        :values: @todo
-        :returns: @todo
-
-        """
-        for key, value in values.iteritems():
-            if key == "id":
-                continue
-            setattr(item, key, value)
-        return item
 
     def perform(self, request, data):
         """Will return a list of imported items. The list will contain a
@@ -200,7 +187,10 @@ class Importer(object):
             except:
                 item = factory.create(user=request.user)
                 operation = _("CREATE")
-            self._set_values(item, values)
+            # Ignore id field in import.
+            if "id" in values:
+                del values["id"]
+            item.set_values(values)
             imported_items.append((item, operation))
         return imported_items
 
