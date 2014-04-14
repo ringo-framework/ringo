@@ -5,6 +5,7 @@ import json
 import csv
 import codecs
 import cStringIO
+import sets
 
 log = logging.getLogger(__name__)
 
