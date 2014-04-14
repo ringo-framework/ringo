@@ -442,7 +442,7 @@ class Owned(object):
     """Mixin to add references to a user and a usergroup. This
     references are used to build some kind of ownership of the item. The
     ownership is used from the permission system.
-   
+
     It is posible to configure inhertinace of the owner and group from
     a given parent element. This information is used only while creating
     new instances of the modul. If configured, the default group and
