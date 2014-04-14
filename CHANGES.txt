@@ -8,6 +8,12 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
+0.12.1
+------
+- Improved export of Blobform items. Instead of exporting the "data" attribute
+  all field in the data field will be flattend and added to the toplevel of
+  the export.
+
 0.12.0
 ------
 - #12: Implemented basic version of bundled actions. Currently "Delete" and
