@@ -9,15 +9,6 @@ import cStringIO
 log = logging.getLogger(__name__)
 
 
-class RingoJSONEncoder(json.JSONEncoder):
-
-    def default(self, obj):
-        if (isinstance(obj, datetime.datetime)
-           or isinstance(obj, datetime.date)):
-            return obj.isoformat()
-            #return int(mktime(obj.timetuple()))
-
-
 class UnicodeCSVWriter:
     """
     A CSV writer which will write rows to CSV file "f",
@@ -97,7 +88,7 @@ class JSONExporter(Exporter):
     """Docstring for JSONExporter. """
 
     def serialize(self, data):
-        return json.dumps(data, cls=RingoJSONEncoder)
+        return json.dumps(data)
 
 
 class CSVExporter(Exporter):
