@@ -109,9 +109,21 @@ class JSONExporter(Exporter):
 class CSVExporter(Exporter):
     """Docstring for CSVExporter. """
 
+    def _collect_keys(self, data):
+        """The function will collect all keys (fields) within the given
+        items. This is needed in case of blobform items as those items
+        has a generic data field which may contain variable number of
+        fields depending if the item has a value for the fields or
+        not."""
+        keys = sets.Set()
+        for item in data:
+            keys = keys.union(item.keys())
+        return keys
+
+
     def serialize(self, data):
         outfile = cStringIO.StringIO()
-        writer = UnicodeCSVWriter(outfile, sorted(data[0].keys()))
+        writer = UnicodeCSVWriter(outfile, sorted(self._collect_keys(data)))
         writer.writeheader()
         writer.writerows(data)
         outfile.seek(0)
