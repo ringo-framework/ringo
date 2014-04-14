@@ -70,12 +70,6 @@ class Exporter(object):
         """
         self._clazz = clazz
 
-    def _get_data(self, item):
-        data = {}
-        for col in item.get_columns():
-            data[col] = getattr(item, col)
-        return data
-
     def serialize(self, data):
         """Will convert the given python data dictionary into a string
         containing JSON data
@@ -95,7 +89,7 @@ class Exporter(object):
         """
         data = []
         for item in items:
-            data.append(self._get_data(item))
+            data.append(item.get_values(serialized=True))
         return self.serialize(data)
 
 
