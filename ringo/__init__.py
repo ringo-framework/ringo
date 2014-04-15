@@ -310,5 +310,7 @@ def setup_routes(config):
                      factory=get_resource_factory(News))
     # REST Url to evalute formed rules.
     config.add_route('rules-evaluate', 'rest/rule/evaluate')
+    # REST Url to render formed form.
+    config.add_route('form-render', 'rest/form/render')
 
     return config
