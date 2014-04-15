@@ -13,6 +13,7 @@ to the tracker.
 - Improved export of Blobform items. Instead of exporting the "data" attribute
   all field in the data field will be flattend and added to the toplevel of
   the export.
+- Added Import and Export to the profiles module
 
 0.12.0
 ------
