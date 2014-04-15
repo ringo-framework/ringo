@@ -231,28 +231,6 @@ class Blobform(object):
             element = object.__getattribute__(element, attr)
         return element
 
-    def get_values(self, include_relations=False, serialized=False):
-        """Blobform specific function to get the values of an item as
-        dictionary. The function first calls the get_values function
-        from the BaseItem. All values which are nested within the data
-        attribute will be flattened and added to the dictionary.
-
-        This behaviour was introduced first to implement exports. This
-        way the values in the export will be available in the export
-        like any other field.
-        """
-        values = {}
-        raw_values = super(Blobform, self).get_values(include_relations, serialized)
-        for key in raw_values:
-            if key == "data":
-                json_data = json.loads(raw_values[key])
-                for jkey in json_data:
-                    if jkey.startswith("_"):
-                        continue
-                    values[jkey] = json_data[jkey]
-            else:
-                values[key] = raw_values[key]
-        return values
 
     def set_values(self, values):
         """Will set the given values into Blobform items. This function
