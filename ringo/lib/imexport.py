@@ -72,6 +72,19 @@ class Exporter(object):
         """
         return ""
 
+    def flatten(self, data):
+        """Will flatten nested data structures as found in Blobforms"""
+        values = {}
+        for key in data:
+            # Handle data container of blobforms
+            if key == "data":
+                jdata = json.loads(data[key])
+                for jkey in jdata:
+                    values[jkey] = jdata[jkey]
+            else:
+                values[key] = data[key]
+        return values
+
     def perform(self, items):
         """Returns the serialized item as string
 
