@@ -8,6 +8,7 @@ from pyramid.view import view_config
 from pyramid.response import Response
 
 from formbar.form import Form
+from formbar.config import Config, parse
 from formbar.rules import Rule
 
 from ringo.views.base import _get_item_from_context
@@ -75,6 +76,21 @@ def evaluate_(request):
         return JSONResponse(True, result, {"msg": rule.msg})
     else:
         return JSONResponse(False, result, {"msg": rule.msg})
+
+@view_config(route_name='form-render',
+             renderer='json',
+             request_method="POST")
+def render_(request):
+    form_config = request.POST.get("definition")
+    config_name = request.POST.get("formid")
+    config = Config(parse(form_config))
+    out = []
+    form_config = config.get_form(config_name)
+    form = Form(form_config, None, request.db,
+                csrf_token=request.session.get_csrf_token())
+    out.append(form.render(buttons=False, outline=False))
+    data = {"form": "".join(out)}
+    return JSONResponse(True, data, {"msg": "Ole!"})
 
 def list_(clazz, request):
     """Returns a JSON objcet with all item of a clazz. The list does not
