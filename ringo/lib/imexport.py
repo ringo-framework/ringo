@@ -94,7 +94,7 @@ class Exporter(object):
         """
         data = []
         for item in items:
-            data.append(item.get_values(serialized=True))
+            data.append(self.flatten(item.get_values(serialized=True)))
         return self.serialize(data)
 
 
@@ -118,7 +118,6 @@ class CSVExporter(Exporter):
         for item in data:
             keys = keys.union(item.keys())
         return keys
-
 
     def serialize(self, data):
         outfile = cStringIO.StringIO()
@@ -177,7 +176,6 @@ class Importer(object):
 
         """
         return {}
-
 
     def perform(self, request, data):
         """Will return a list of imported items. The list will contain a
