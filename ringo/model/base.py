@@ -233,6 +233,9 @@ class BaseItem(object):
         included. Else only scalar values are included"""
         values = {}
         for field in self.get_columns(include_relations):
+            # Ignore private form fields
+            if field.startswith("_"):
+                continue
             if serialized:
                 value = serialize(getattr(self, field))
             else:
@@ -242,6 +245,9 @@ class BaseItem(object):
 
     def set_values(self, values):
         for key, value in values.iteritems():
+            # Ignore private form fields
+            if key.startswith('_'):
+                continue
             if hasattr(self, key):
                 log.debug("Setting value '%s' in %s" % (value, key))
                 setattr(self, key, value)

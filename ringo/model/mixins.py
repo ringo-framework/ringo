@@ -240,6 +240,9 @@ class Blobform(object):
         json_data = json.loads(self.get_values().get('data') or "{}")
         columns = self.get_columns(self)
         for key, value in values.iteritems():
+            # Ignore private form fields
+            if key.startswith('_'):
+                continue
             if key in columns:
                 log.debug("Setting value '%s' for '%s' in DB" % (value, key))
                 setattr(self, key, value)
