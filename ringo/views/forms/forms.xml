@@ -12,7 +12,7 @@
       </options>
     </entity>
     <entity id="e4" name="definition" label="Formdefiniton" type="string" required="true">
-      <renderer type="textarea" rows="20"/>
+      <renderer type="formbareditor" url="/rest/form/render" rows="20"/>
     </entity>
     <entity id="modul" name="modul" label="Modul">
       <help>Select the modul for which this form will be available</help>
