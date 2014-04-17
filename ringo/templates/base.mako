@@ -13,9 +13,7 @@
     <link href="${request.static_path('ringo:static/css/layout.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/css/widgets.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/css/style.css')}" rel="stylesheet" media="screen">
-    <style>
-      ${h.get_formbar_css() | n}
-    </style>
+    <link href="${request.static_path('ringo:static/css/formbar.css')}" rel="stylesheet" media="screen">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -49,8 +47,8 @@
           }
       }
     };
-    ${h.get_formbar_js() | n}
   </script>
+  <script src="${request.static_path('ringo:static/js/formbar.js')}"></script>
   <script src="${request.static_path('ringo:static/js/init.js')}"></script>
   </body>
 </html>
