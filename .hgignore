@@ -27,8 +27,7 @@ sdist
 develop-eggs
 .installed.cfg
 ringo/.ropeproject
-ringo/static/js/formbar.js
-ringo/static/css/formbar.css
+ringo/static/formbar
 
 # Installer logs
 pip-log.txt
