@@ -75,7 +75,8 @@ def get_ownership_form(item, request, readonly=None):
     else:
         form_config = config.get_form('ownership-form-update')
     return Form(form_config, item, request.db,
-                csrf_token=request.session.get_csrf_token())
+                csrf_token=request.session.get_csrf_token(),
+                eval_url='/rest/rule/evaluate')
 
 
 def get_logbook_form(item, request, readonly=None, renderers={}):
@@ -86,7 +87,8 @@ def get_logbook_form(item, request, readonly=None, renderers={}):
         form_config = config.get_form('logbook-form-update')
     return Form(form_config, item, request.db,
                 renderers=renderers,
-                csrf_token=request.session.get_csrf_token())
+                csrf_token=request.session.get_csrf_token(),
+                eval_url='/rest/rule/evaluate')
 
 
 @view_config(route_name='set_current_form_page')
@@ -453,7 +455,8 @@ def create_(clazz, request, callback=None, renderers={}):
                                       'item': clazz.__tablename__,
                                       'itemid': None},
                 request=request,
-                csrf_token=request.session.get_csrf_token())
+                csrf_token=request.session.get_csrf_token(),
+                eval_url='/rest/rule/evaluate')
 
     if request.POST and do_validate:
         item_label = clazz.get_item_modul().get_label()
@@ -545,7 +548,8 @@ def update_(clazz, request, callback=None, renderers={}):
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,
                                       'itemid': item.id},
-                request=request, csrf_token=request.session.get_csrf_token())
+                request=request, csrf_token=request.session.get_csrf_token(),
+                eval_url='/rest/rule/evaluate')
 
     if request.POST:
         # Check which form should handled. If the submitted data has the
@@ -639,7 +643,8 @@ def read_(clazz, request, callback=None, renderers={}):
                      change_page_callback={'url': 'set_current_form_page',
                                            'item': clazz.__tablename__,
                                            'itemid': item.id},
-                     request=request, csrf_token=request.session.get_csrf_token())
+                     request=request, csrf_token=request.session.get_csrf_token(),
+                     eval_url='/rest/rule/evaluate')
 
     # Validate the form to generate the warnings if the form has not
     # been alreaded validated.
