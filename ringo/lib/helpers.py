@@ -171,7 +171,7 @@ def get_formbar_css():
 
 
 def get_formbar_js():
-    return get_js('"/rest/rule/evaluate"')
+    return get_js()
 
 ########################################################################
 #                          Formating content                           #
