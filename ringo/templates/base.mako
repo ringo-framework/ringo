@@ -13,7 +13,9 @@
     <link href="${request.static_path('ringo:static/css/layout.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/css/widgets.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/css/style.css')}" rel="stylesheet" media="screen">
-    <link href="${request.static_path('ringo:static/css/formbar.css')}" rel="stylesheet" media="screen">
+    % for filename in h.formbar_css_filenames: 
+      <link href="${request.static_path('ringo:static/formbar/%s' % filename)}" rel="stylesheet" media="screen">
+    % endfor
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -27,6 +29,9 @@
     <script src="${request.static_path('ringo:static/bootstrap/js/bootstrap.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/dataTables.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.jcountdown.min.js')}"></script>
+    % for filename in h.formbar_js_filenames: 
+      <script src="${request.static_path('ringo:static/formbar/%s' % filename)}"></script>
+    % endfor
     <%include file="/custom-header.mako" />
   </head>
   <body>
@@ -48,7 +53,6 @@
       }
     };
   </script>
-  <script src="${request.static_path('ringo:static/js/formbar.js')}"></script>
   <script src="${request.static_path('ringo:static/js/init.js')}"></script>
   </body>
 </html>
