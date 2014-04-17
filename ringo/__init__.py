@@ -62,6 +62,7 @@ from ringo.model.printtemplate import Printtemplate
 
 base_dir = pkg_resources.get_distribution("ringo").location
 template_dir = os.path.join(base_dir, 'ringo', 'templates')
+static_dir = os.path.join(base_dir, 'ringo', 'static')
 
 # Directory with templates to generate views and models
 modul_template_dir = os.path.join(base_dir, 'ringo', 'scripts', 'templates')
@@ -75,6 +76,23 @@ def add_renderer_globals(event):
     event['N_'] = request.translate
     event['localizer'] = request.localizer
 
+def write_formbar_static_files():
+    formbar_css = os.path.join(static_dir, 'formbar')
+    for filename, content in helpers.get_formbar_css():
+        filename = os.path.join(formbar_css, filename)
+        head, tail = os.path.split(filename)
+        if not os.path.exists(head):
+            os.makedirs(head)
+        with open(filename, 'wb') as f:
+            f.write(content)
+    formbar_js = os.path.join(static_dir, 'formbar')
+    for filename, content in helpers.get_formbar_js():
+        filename = os.path.join(formbar_js, filename)
+        head, tail = os.path.split(filename)
+        if not os.path.exists(head):
+            os.makedirs(head)
+        with open(filename, 'wb') as f:
+            f.write(content)
 
 def connect_on_request(event):
     request = event.request
@@ -209,6 +227,8 @@ def includeme(config):
     config = setup_translation(config)
     log.info('-> Translation finished.')
     config.scan()
+    write_formbar_static_files()
+    log.info('-> Formbar static files written.')
     log.info('OK :) Setup of Ringo finished.')
 
 def setup_finished_callback(config):
