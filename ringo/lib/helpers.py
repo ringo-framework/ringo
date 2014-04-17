@@ -9,7 +9,7 @@ format_time as babel_format_time
 from datetime import datetime, timedelta, time, date
 from pyramid.threadlocal import get_current_registry
 from pyramid.i18n import get_locale_name
-from formbar.helpers import get_css, get_js
+from formbar.helpers import get_css_files, get_js_files
 
 def serialize(value):
     """Very simple helper function which returns a stringified version
@@ -166,12 +166,20 @@ def get_modules(request, display):
     return user_moduls
 
 
+formbar_css_filenames = []
 def get_formbar_css():
-    return get_css()
+    result = get_css_files()
+    for filename, content in result:
+        formbar_css_filenames.append(filename)
+    return result
 
 
+formbar_js_filenames = []
 def get_formbar_js():
-    return get_js()
+    result = get_js_files()
+    for filename, content in result:
+        formbar_js_filenames.append(filename)
+    return result
 
 ########################################################################
 #                          Formating content                           #
