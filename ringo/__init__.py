@@ -290,7 +290,6 @@ def setup_routes(config):
     config.add_route('version', 'version')
     config.add_route('contact', 'contact')
     config.add_route('about', 'about')
-    config.add_route('test', 'test')
     config.add_route('home', '/')
 
     # MODULES
