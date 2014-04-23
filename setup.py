@@ -22,7 +22,7 @@ requires = [
     'waitress',
     'babel',
     'Sphinx',
-    'formbar',
+    'formbar>=0.7',
     'invoke',
     'dogpile.cache',
     'behave',
@@ -36,7 +36,7 @@ tests_requires = [
 ]
 
 setup(name='ringo',
-      version='0.12.0',
+      version='0.13.0',
       description='A simple web framework with base functionality to build web applications.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
