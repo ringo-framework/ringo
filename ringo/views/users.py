@@ -120,7 +120,7 @@ def changepassword(request):
             form.save()
             # Actually save the password. This is not done in the form
             # as the password needs to be encrypted.
-            encrypt_password(request, item)
+            encrypt_password_callback(request, item)
             msg = _('Changed password for "${item}" successfull.',
                     mapping=mapping)
             log.info(msg)
