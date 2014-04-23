@@ -10,6 +10,11 @@ to the tracker.
 
 0.13.0
 ------
+- Improved Formbar form editing. Use new ACE (http://ace.c9.io/) JS based
+  editor to edit the form definition. Requires new formbar lib (>= 0.7)
+- Add preview tabs to the form editor, which allow to see a basic preview
+  of the form. The preview does not support any dynamic now application
+  specific renderers.
 - Write the formbar specific CSS and JS on application start into the ringo
   static folder.
 - Do not include the JS and CSS code of formbar into the document. Instead use
