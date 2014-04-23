@@ -20,6 +20,9 @@ to the tracker.
 - Do not include the JS and CSS code of formbar into the document. Instead use
   to dynamically written CSS and JS files to reduce the size of the generated
   document.
+- Improved password encryption. Replaced use of pythons built in hashlib.md5
+  algorithm with the use of the passlib library
+  (https://pythonhosted.org/passlib/index.html) for more secure password.
 
 0.12.1
 ------
