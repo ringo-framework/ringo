@@ -376,10 +376,7 @@ def password_reset(token, db):
         if td.days <= 1:
             user = token.user
             password = password_generator()
-            md5_pw = hashlib.md5()
-            md5_pw.update(password)
-            md5_pw = md5_pw.hexdigest()
-            user.password = md5_pw
+            user.password = encrypt_password(password)
             log.info('Password reset success for user %s' % user)
             # delete all old password request token
             for old_token in user.reset_tokens:
@@ -426,19 +423,23 @@ def login(username, password):
     :returns: `User` instance if login is OK else None.
 
     """
-    md5_pw = hashlib.md5()
-    md5_pw.update(password or "")
-    md5_pw = md5_pw.hexdigest()
     log.debug("Login user '%s' with pw '%s'" % (username, password))
-    try:
-        user = DBSession.query(User).filter_by(login=username,
-                                               password=md5_pw).one()
-        if user.activated:
-            log.info("Login successfull '%s'" % (username))
-            return user
+    user = load_user(username)
+    if user:
+        if verify_password(password, user.password):
+            if user.activated:
+                log.info("Login successfull '%s'" % (username))
+                if passwords_needs_update(user.password):
+                    log.info("Updating password for user '%s'" % (username))
+                    user.password = encrypt_password(password) 
+                return user
+            else:
+                log.info("Login failed for user '%s'. "
+                         "Reason: Not activated" % username)
+        else:
+            log.info("Login failed for user '%s'. "
+                     "Reason: Wrong password" % username)
+    else:
         log.info("Login failed for user '%s'. "
-                 "Reason: Not activated" % username)
-    except NoResultFound:
-        log.info("Login failed for user '%s'. "
-                 "Reason: Username or Password wrong" % username)
+                 "Reason: Username not known" % username)
     return None
