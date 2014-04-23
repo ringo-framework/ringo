@@ -1,4 +1,3 @@
-import hashlib
 import uuid
 
 import pyramid.httpexceptions as exc
@@ -20,7 +19,7 @@ Usergroup = import_model('ringo.model.user.Usergroup')
 from ringo.views import handle_history
 from ringo.lib.helpers import get_path_to_form_config, get_app_name
 from ringo.lib.security import login as user_login, request_password_reset, \
-    password_reset, activate_user
+    password_reset, activate_user, encrypt_password
 from ringo.lib.message import Mailer, Mail
 
 
@@ -109,9 +108,7 @@ def register_user(request):
             # Set login from formdata
             user.login = form.data['login']
             # Encrypt password and save
-            pw = hashlib.md5()
-            pw.update(form.data['pass'])
-            user.password = pw.hexdigest()
+            user.password = encrypt_password(form.data['pass'])
             # Deactivate the user. To activate the user needs to confirm
             # with the activation link
             user.activated = False

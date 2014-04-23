@@ -1,5 +1,4 @@
 import logging
-import hashlib
 import sqlalchemy as sa
 from pyramid.httpexceptions import HTTPBadRequest, HTTPForbidden, HTTPFound
 from pyramid.view import view_config
@@ -18,21 +17,19 @@ from ringo.views.json import (
     delete_ as json_delete
     )
 from ringo.lib.helpers import import_model
-from ringo.lib.security import login
+from ringo.lib.security import login, encrypt_password
 from ringo.lib.sql import invalidate_cache
 User = import_model('ringo.model.user.User')
 
 log = logging.getLogger(__name__)
 
 
-def encrypt_password(request, user):
+def encrypt_password_callback(request, user):
     """Callback helper function. This function is called within the base
     create view to encrypt the password after the user has been
     created."""
     unencryped_pw = user.password
-    pw = hashlib.md5()
-    pw.update(unencryped_pw)
-    user.password = pw.hexdigest()
+    user.password = encrypt_password(unencryped_pw)
     return user
 
 def check_password(field, data):
@@ -57,7 +54,7 @@ def list(request):
              renderer='/default/create.mako',
              permission='create')
 def create(request):
-    return create_(User, request, encrypt_password)
+    return create_(User, request, encrypt_password_callback)
 
 
 @view_config(route_name=User.get_action_routename('update'),
