@@ -29,7 +29,8 @@ requires = [
     'coverage',
     'webtest',
     'mock',
-    'py3o.template'
+    'py3o.template',
+    'passlib'
 ]
 
 tests_requires = [
