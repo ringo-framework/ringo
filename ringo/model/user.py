@@ -1,5 +1,4 @@
 import logging
-import hashlib
 import json
 import sqlalchemy as sa
 from datetime import datetime
