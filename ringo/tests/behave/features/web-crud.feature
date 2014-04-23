@@ -167,8 +167,8 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | usergroup | 1  | 200      |
   | anonymous | role  | 1  | 403      |
   | admin     | role  | 1  | 200      |
-  | anonymous | profil | 1  | 404      |
-  | admin     | profil | 1  | 404      |
+  | anonymous | profil | 1  | 403      |
+  | admin     | profil | 1  | 200      |
   | anonymous | modul  | 1  | 404      |
   | admin     | modul  | 1  | 404      |
 
@@ -185,8 +185,8 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | usergroup | 1  | 200      |
   | anonymous | role  | 1  | 403      |
   | admin     | role  | 1  | 200      |
-  | anonymous | profil | 1  | 404      |
-  | admin     | profil | 1  | 404      |
+  | anonymous | profil | 1  | 403      |
+  | admin     | profil | 1  | 200      |
   | anonymous | modul  | 1  | 404      |
   | admin     | modul  | 1  | 404      |
   | anonymous | appointment  | 1  | 403      |
