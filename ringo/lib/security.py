@@ -3,6 +3,7 @@ import hashlib
 import uuid
 import string
 import random
+from passlib.context import CryptContext
 from datetime import datetime
 
 from pyramid.events import ContextFound
@@ -24,6 +25,80 @@ log = logging.getLogger(__name__)
 
 def password_generator(size=8, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
+
+pwd_context = CryptContext(
+    # replace this list with the hash(es) you wish to support.
+    # this example sets pbkdf2_sha256 as the default,
+    # with support for legacy md5 hashes.
+    schemes=["pbkdf2_sha256"],
+    default="pbkdf2_sha256",
+
+    # vary rounds parameter randomly when creating new hashes...
+    all__vary_rounds = 0.1,
+
+    # set the number of rounds that should be used...
+    # (appropriate values may vary for different schemes,
+    # and the amount of time you wish it to take)
+    pbkdf2_sha256__default_rounds = 8000,
+)
+
+def encrypt_password(password, scheme=None):
+    """Will return a string with encrypted password using the passlib
+    library. The returned string will have the following format:
+    $algo$rounds$salt$hash
+
+    :password: unencrypted password
+    :scheme: string of an supported encryption algorithm. Defaults tthe
+    CryptContext default
+    :returns: encrypted password
+
+    """
+    return pwd_context.encrypt(password, scheme=scheme)
+
+
+def verify_password(password, pwhash):
+    """Will return True if the password is valid. Else False.
+
+    :password: unencrypted password
+    :pwhash: encrypted password
+    :returns: True or False
+    """
+    if pwhash.startswith("$"):
+        return pwd_context.verify(password, pwhash)
+    else:
+        # Old password hash scheme without salt etc.
+        md5_pw = hashlib.md5()
+        md5_pw.update(password)
+        return pwhash == md5_pw.hexdigest()
+
+
+def passwords_needs_update(pwhash):
+    """Will return True if the given pwhash uses a deprecated
+    encryption algorithm and needs to be updated.
+
+    :pwhash: encrypted password
+    :returns: True or False 
+    """
+    if pwhash.startswith("$"):
+        return pwd_context.needs_update(pwhash)
+    else:
+        # Old password hash scheme without salt etc.
+        return True
+
+
+def load_user(login):
+    """Will return the user with the given login
+    name. If no user can be found with the given login "None" will be
+    returned.
+
+    :login: Login of the user as string
+    :returns: User or None
+
+    """
+    try:
+        return DBSession.query(User).filter_by(login=login).one()
+    except NoResultFound:
+        return None
 
 
 def csrf_token_validation(event):
