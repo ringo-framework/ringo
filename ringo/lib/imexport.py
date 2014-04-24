@@ -199,9 +199,11 @@ class Importer(object):
             except:
                 item = factory.create(user=request.user)
                 operation = _("CREATE")
-            # Ignore id field in import.
+            # Ignore id, uuid field in import.
             if "id" in values:
                 del values["id"]
+            if "uuid" in values:
+                del values["uuid"]
             item.set_values(values)
             imported_items.append((item, operation))
         return imported_items
