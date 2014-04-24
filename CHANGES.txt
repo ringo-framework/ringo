@@ -8,6 +8,12 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
+0.13.1
+------
+- Added option "not specified" to gender field in profile.
+- Improved rendering of dropdownfield. Fixed emtpy field if there is no linked
+  item.
+
 0.13.0
 ------
 - Improved Formbar form editing. Use new ACE (http://ace.c9.io/) JS based
