@@ -157,6 +157,9 @@ class Importer(object):
         datetime deserialisation
         """
         for field in obj:
+            if not obj[field]:
+                # Ignore empty values as coversion will fail.
+                continue
             if not field in self._clazz_type or not obj[field]:
                 continue
             if self._clazz_type[field] == "DATE" and obj[field] is not None:
@@ -233,8 +236,7 @@ class CSVImporter(Importer):
     def _deserialize_hook(self, obj):
         conv = {}
         for k, v in obj.iteritems():
-            if v:
-                conv[k] = unicode(v, "utf-8")
+            conv[k] = unicode(v, "utf-8")
         conv = self._deserialize_dates(conv)
         return conv
 
