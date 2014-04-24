@@ -244,6 +244,27 @@ class BaseItem(object):
         return values
 
     def set_values(self, values):
+        """Will set the values of the items attributes to the given
+        values in the dictionary. Attributes beginning with "_" are
+        considred private and are ignored.
+
+        This function will not handle saving the changed data. This can
+        be by either calling the save method of the item, or
+        automatically at the transactions end if autocommit is enabled.
+
+        Please note that setting the values for foreign key attributes
+        might not work as expected. This is especially true for foreign
+        keys to already existing items. You are not able to change a
+        existing relation in the items by changing the foreign key value
+        (You must do this by setting the related item). In this case the
+        value for the foreign key seems to be ignored and replaced by
+        the one of the actual related item.
+        In contrast you can set a new relation by setting the foreign
+        key if this is a new relation.
+
+        :values: Dictionary with values to be set
+        """
+
         for key, value in values.iteritems():
             # Ignore private form fields
             if key.startswith('_'):
