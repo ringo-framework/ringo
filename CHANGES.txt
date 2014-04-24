@@ -13,6 +13,7 @@ to the tracker.
 - Added option "not specified" to gender field in profile.
 - Improved rendering of dropdownfield. Fixed emtpy field if there is no linked
   item.
+- Worked on importer. Handle uuid values correct on import.
 
 0.13.0
 ------
