@@ -14,6 +14,7 @@ to the tracker.
 - Improved rendering of dropdownfield. Fixed emtpy field if there is no linked
   item.
 - Worked on importer. Handle uuid values correct on import.
+- Fix deleting profiles if a user is gets deleted.
 
 0.13.0
 ------
