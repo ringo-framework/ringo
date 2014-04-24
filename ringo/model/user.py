@@ -202,7 +202,7 @@ class Profile(BaseItem, Owned, Base):
 
     # The foreign key to the user is injected from the Owned mixin.
     user = sa.orm.relation("User", cascade="all, delete",
-                           backref=sa.orm.backref("profile", cascade="all, delete"),
+                           backref=sa.orm.backref("profile", cascade="all, delete-orphan"),
                            single_parent=True,
                            uselist=False)
 
