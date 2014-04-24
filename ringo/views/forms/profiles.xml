@@ -14,6 +14,7 @@
     <entity id="e8" name="gender" label="Gender" type="integer" desired="true">
       <renderer type="dropdown"/>
       <options>
+        <option value="">Not specified</option>
         <option value="1">Male</option>
         <option value="0">Female</option>
       </options>
