@@ -201,8 +201,9 @@ class Profile(BaseItem, Owned, Base):
     web = sa.Column(sa.Text)
 
     # The foreign key to the user is injected from the Owned mixin.
-    user = sa.orm.relation("User", cascade="all, delete-orphan",
-                           backref="profile", single_parent=True,
+    user = sa.orm.relation("User", cascade="all, delete",
+                           backref=sa.orm.backref("profile", cascade="all, delete"),
+                           single_parent=True,
                            uselist=False)
 
     def __unicode__(self):
