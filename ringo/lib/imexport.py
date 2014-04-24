@@ -197,6 +197,8 @@ class Importer(object):
         for values in import_data:
             uuid = values.get('uuid')
             try:
+                # uuid might be empty for new items, which will raise an
+                # error on loading.
                 item = factory.load(uuid, uuid=True)
                 operation = _("UPDATE")
             except:
