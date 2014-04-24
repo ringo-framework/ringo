@@ -18,6 +18,10 @@ def serialize(value):
         return ""
     if isinstance(value, datetime):
         return value.strftime("%Y-%m-%d %H:%M:%S")
+    if isinstance(value, bool):
+        # use 1 and 0 here to be able to set this values on import,
+        # "True" and "False" will fail.
+        return value and "1" or "0"
     return unicode(value)
 
 
