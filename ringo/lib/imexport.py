@@ -199,7 +199,7 @@ class Importer(object):
             try:
                 # uuid might be empty for new items, which will raise an
                 # error on loading.
-                item = factory.load(uuid, uuid=True)
+                item = factory.load(uuid or "thisuuiddoesnotexist", uuid=True)
                 operation = _("UPDATE")
             except:
                 item = factory.create(user=request.user)
