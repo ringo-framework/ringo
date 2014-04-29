@@ -53,18 +53,23 @@
 
   <!-- Create-->
   <snippet id="create_snippet">
-    <snippet ref="s1"/>
+    <snippet ref="s1c"/>
     <snippet ref="s2"/>
     <snippet ref="s3"/>
   </snippet>
   <!-- Create-->
   <snippet id="update_snippet">
-    <snippet ref="s1"/>
+    <snippet ref="s1e"/>
     <snippet ref="s3"/>
   </snippet>
 
   <!-- Login -->
-  <snippet id="s1">
+  <snippet id="s1c">
+    <row>
+      <col><field ref="e1"/></col>
+    </row>
+  </snippet>
+  <snippet id="s1e">
     <row>
       <col><field ref="e1"/></col>
       <col><field ref="e9"/></col>
