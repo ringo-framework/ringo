@@ -119,34 +119,41 @@ class User(BaseItem, Base):
     def __unicode__(self):
         return self.login
 
-    def has_role(self, role):
+    def has_role(self, role, include_group_roles=True):
         """Return True if the user has the given role. Else False"
         :user: User instance
+        :include_group_roles: Boolean flag to configure if the roles of
+        the groups the user is member of should be checked too.
+        Defaults to True.
         :returns: True or False
         """
-        roles = [r.name for r in self.get_roles()]
+        roles = [r.name for r in self.get_roles(include_group_roles)]
         return role in roles
 
-    def get_roles(self):
+    def get_roles(self, include_group_roles=True):
         """Returns a list of roles the user has. The list contains
         `Role` object and are collected by loading roles directly
-        attached to the user plus roles attached to the groups the user
-        is member of
+        attached to the user plus optionally roles attached to the
+        groups the user is member of
 
+        :include_group_roles: Booloan flag to configure if the roles of
+        the groups the user is member of should be included in the list.
+        Defaults to True.
         :returns: List of `Role` instances
         """
         tmp_roles = {}
 
         # Add roles directly attached to the user.
-        for role in self.roles:
-            if role.name not in tmp_roles:
-                tmp_roles[role.name] = role
+        for urole in self.roles:
+            if urole.name not in tmp_roles:
+                tmp_roles[urole.name] = urole
 
-        # Add roles directly attached to the user.
-        for group in self.groups:
-            for role in group.roles:
-                if role.name not in tmp_roles:
-                    tmp_roles[role.name] = role
+        # Add roles attached to the users groups.
+        if include_group_roles:
+            for group in self.groups:
+                for grole in group.get_roles():
+                    if grole.name not in tmp_roles:
+                        tmp_roles[grole.name] = grole
 
         return list(tmp_roles.values())
 
@@ -167,6 +174,20 @@ class Usergroup(BaseItem, Base):
 
     def __unicode__(self):
         return self.name
+
+    def get_roles(self):
+        """Returns a list of roles the group has. The list contains
+        `Role` object and are collected by loading roles directly
+        attached to the group.
+
+        :returns: List of `Role` instances
+        """
+        tmp_roles = {}
+        # Add roles directly attached to the group.
+        for role in self.roles:
+            if role.name not in tmp_roles:
+                tmp_roles[role.name] = role
+        return list(tmp_roles.values())
 
 
 class Role(BaseItem, Base):

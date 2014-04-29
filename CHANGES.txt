@@ -8,6 +8,11 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
+0.14.0
+------
+- Changed permission system.
+- Add boolean flag to choose if the group roles should be included in the user.get_roles()
+
 0.13.1
 ------
 - Added option "not specified" to gender field in profile.
