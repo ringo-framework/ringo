@@ -12,6 +12,8 @@ to the tracker.
 ------
 - Changed permission system.
 - Add boolean flag to choose if the group roles should be included in the user.get_roles()
+- Changed building the principals of the user. Group roles will only be added
+  to the user if he is actually member of the items group on permission check
 
 0.13.1
 ------

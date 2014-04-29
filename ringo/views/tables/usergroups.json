@@ -2,8 +2,8 @@
     "overview": {
         "columns": [
             {"name": "name", "label": "Name"},
-            {"name": "roles", "label": "Roles"},
-            {"name": "members", "label": "Members"}
+            {"name": "members", "label": "Members"},
+            {"name": "roles", "label": "Roles"}
         ]
     }
 }

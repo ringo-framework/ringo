@@ -257,6 +257,10 @@ def get_permissions(modul, item=None):
                 perms.append((Allow, principal, permission))
     return perms
 
+def __add_principal(principals, new):
+    if new not in principals:
+        principals.append(new)
+    return principals
 
 def get_principals(userid, request):
     """Returns a list of pricipals for the user with userid for the
@@ -276,17 +280,25 @@ def get_principals(userid, request):
         user = _load_user(userid, request)
     principals = []
     if user:
-        # Add roles the user have
-        for role in get_roles(user):
-            principals.append('role:%s' % role.name)
-            principals.append('role:%s;uid:%s' % (role.name, user.id))
-        # Add groups the user member of
-        for group in user.groups:
-            principals.append('group:%s' % group.id)
-            for role in get_roles(user):
-                principals.append('role:%s;group:%s' % (role.name, group.id))
+        # Add the roles of the user. The roles will be added in
+        # connection with the uid and groups as the roles should only be
+        # applicable if the user is the owner or member of the group of
+        # the item.
+        for urole in user.get_roles(include_group_roles=False):
+            principal = 'role:%s' % urole.name
+            __add_principal(principals, principal)
+            principal = 'role:%s;uid:%s' % (urole.name, user.id)
+            __add_principal(principals, principal)
+            for group in user.groups:
+                for grole in group.get_roles():
+                    principal = 'role:%s' % grole.name
+                    __add_principal(principals, principal)
+                    principal = 'role:%s;group:%s' % (grole.name, group.id)
+                    __add_principal(principals, principal)
         # Finally add the user itself
-        principals.append('uid:%s' % user.id)
+        principal = 'uid:%s' % user.id
+        __add_principal(principals, principal)
+    principals.sort(key=len, reverse=True)
     log.debug('Principals for userid "%s": %s' % (userid, principals))
     return principals
 
