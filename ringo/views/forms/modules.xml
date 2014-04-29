@@ -28,6 +28,10 @@
         <option value="user-menu">User menu</option>
       </options>
     </entity>
+    <entity id="e8" name="default_group" label="Default group">
+      <help>New items of this modul will have the given group</help>
+      <renderer type="dropdown"/>
+    </entity>
     <entity id="forms" name="blobforms" label="Forms">
       <help>Select a forms which will be used to create the new item</help>
       <renderer type="dropdown" remove_filtered="true" filter="@name eq %modul and %review_state_id eq '3' or 'admin' in $user.get_roles or 'formularmanager' in $user.get_roles"/>
@@ -70,6 +74,7 @@
     </row>
     <row>
       <col><field ref="e6"/></col>
+      <col><field ref="e8"/></col>
     </row>
   </snippet>
 </configuration>

@@ -14,6 +14,8 @@ to the tracker.
 - Add boolean flag to choose if the group roles should be included in the user.get_roles()
 - Changed building the principals of the user. Group roles will only be added
   to the user if he is actually member of the items group on permission check
+- Add option to configure a default group on modul level which will be used on
+  creation time as group if no special user default group is defined.
 
 0.13.1
 ------

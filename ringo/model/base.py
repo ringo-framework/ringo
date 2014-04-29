@@ -503,10 +503,15 @@ class BaseFactory(object):
         # Try to set the ownership of the entry if the item provides the
         # fields.
         if (hasattr(item, 'uid')
-        and hasattr(item, 'gid')
         and user is not None):
             item.uid = user.id
-            item.gid = user.gid
+        if (hasattr(item, 'gid')):
+            if (user is not None and user.gid):
+                item.gid = user.gid
+            else :
+                modul = item.get_item_modul()
+                default_gid = modul.gid
+                item.gid = default_gid
         return item
 
     def load(self, id, db=None, cache="", uuid=False):

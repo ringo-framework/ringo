@@ -45,7 +45,9 @@ class ModulItem(BaseItem, Base):
     description = sa.Column(sa.Text)
     str_repr = sa.Column(sa.Text)
     display = sa.Column(sa.Text)
+    gid = sa.Column(sa.Integer, sa.ForeignKey('usergroups.id'))
 
+    default_group = sa.orm.relationship("Usergroup", uselist=False)
     actions = sa.orm.relationship("ActionItem",
                                   backref="modul",
                                   lazy="joined")
@@ -75,5 +77,5 @@ class ModulItem(BaseItem, Base):
         try:
             format_str, fields = self.str_repr.split("|")
             return (format_str, fields.split(","))
-        except AttributeError:
+        except:
             return ("%s", ["id"])
