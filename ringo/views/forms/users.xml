@@ -25,6 +25,9 @@
     <entity id="e8" name="activation_token" label="Activation Token">
       <help>The activation token can be used to (re)activate a deactivated or new registered user. Please call /auth/activate_user/$token to active the user.</help>
     </entity>
+    <entity id="e9" name="profile" label="Profile" readonly="true">
+      <renderer type="dropdown"/>
+    </entity>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>
@@ -64,6 +67,7 @@
   <snippet id="s1">
     <row>
       <col><field ref="e1"/></col>
+      <col><field ref="e9"/></col>
     </row>
   </snippet>
   <!-- Password -->
