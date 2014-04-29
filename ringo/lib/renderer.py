@@ -500,21 +500,13 @@ def add_renderers(renderers):
         renderers["link"] = LinkFieldRenderer
     return renderers
 
-def get_link_url(field):
-    form = field._form
-    try:
-        item = getattr(form._item, field.name)
-    except AttributeError:
-        # Can happen when designing forms an the model of the item
-        # is not yet configured.
-        log.warning("Missing %s attribute in %s" % (form._item, field.name))
-        item = None
+def get_link_url(item, request):
     if isinstance(item, BaseItem):
-        if security.has_permission("update", item, field._form._request):
+        if security.has_permission("update", item, request):
             route_name = item.get_action_routename('update')
         else:
             route_name = item.get_action_routename('read')
-        return field._form._request.route_path(route_name, id=item.id)
+        return request.route_path(route_name, id=item.id)
     return None
 
 class LinkFieldRenderer(FieldRenderer):
@@ -526,7 +518,12 @@ class LinkFieldRenderer(FieldRenderer):
     def _get_template_values(self):
         values = FieldRenderer._get_template_values(self)
         values['link_text'] = self._field.label
-        values['url'] = get_link_url(self._field) or "#"
+        try:
+            item = getattr(self._field._form._item, self._field.name)
+        except AttributeError:
+            log.warning("Missing %s attribute in %s" % (self._field.name,
+                                                        self._field._form))
+        values['url'] = get_link_url(item, self._field._form._request) or "#"
         return values
 
     def _render_label(self):
@@ -566,14 +563,22 @@ class DropdownFieldRenderer(FormbarDropdown):
 
     def render_link(self):
         html = []
+        items = []
         try:
             item = getattr(self._field._form._item, self._field.name)
-            url = get_link_url(self._field)
-            if url:
-                html.append('<a href="%s">%s</a>' % (url, item))
         except AttributeError:
             log.warning("Missing %s attribute in %s" % (self._field.name,
-                                                        self._field._form))
+                                                        self._field._form._item))
+            return "".join.html
+
+        if not isinstance(item, list):
+            items.append(item)
+        else:
+            items = item
+        for item in items:
+            url = get_link_url(item, self._field._form._request)
+            if url:
+                html.append('<a href="%s">%s</a>' % (url, item))
         return "".join(html)
 
     def _render_label(self):
