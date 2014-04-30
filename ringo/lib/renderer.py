@@ -16,7 +16,7 @@ from ringo.lib.helpers import (
     get_path_to_overview_config,
     get_path_to_form_config,
 )
-from ringo.model.base import BaseItem
+from ringo.model.base import BaseItem, BaseList
 import ringo.lib.security as security
 
 template_lookup = TemplateLookup(directories=[template_dir],
@@ -646,16 +646,30 @@ class ListingFieldRenderer(FormbarSelectionField):
         self.all_items = self._get_all_items()
         self.template = template_lookup.get_template("internal/listfield.mako")
 
+    def get_class(self):
+        try:
+            clazz = self._field._get_sa_mapped_class()
+            return clazz
+        except AttributeError:
+            # Special logic if the fields item is not an SQLAlchemy
+            # attribute but a python property (used to add futher
+            # informations to the fields item model). In this case getting
+            # the clazz from the SA attributes mapper -> clazz will
+            # fail.
+            clazz = getattr(self._field._form._item, self._field.name)
+            if isinstance(clazz, BaseList):
+                return clazz.clazz
+            return clazz
+
     def _get_all_items(self):
         filtered_items = []
-        clazz = self._field._get_sa_mapped_class()
+        clazz = self.get_class()
         itemlist = clazz.get_item_list(self._field._form._request)
-        item_ids = [i.id for i in itemlist.items]
         # Get filtered options and only use the items which are
         # * in the origin items list and has passed filtering.
-        for item in self._field.get_options():
+        for item in self._field.filter_options(itemlist.items):
             # (item, option-value, visible)
-            if item[2] is True and item[0].id in item_ids:
+            if item[2] is True:
                 filtered_items.append(item[0])
         itemlist.items = filtered_items
         return itemlist
@@ -663,6 +677,8 @@ class ListingFieldRenderer(FormbarSelectionField):
     def _get_selected_items(self):
         try:
             items = getattr(self._field._form._item, self._field.name)
+            if isinstance(items, BaseList):
+                items = items.items
         except AttributeError:
             # Can happen when designing forms an the model of the item
             # is not yet configured.
@@ -719,9 +735,10 @@ class ListingFieldRenderer(FormbarSelectionField):
             items = self._get_selected_items()
         else:
             items = self._filter_items(self.all_items.items)
+
         values = {'items': items,
                   'field': self._field,
-                  'clazz': self._field._get_sa_mapped_class(),
+                  'clazz': self.get_class(),
                   'pclazz': self._field._form._item.__class__,
                   'request': self._field._form._request,
                   '_': self._field._form._translate,
