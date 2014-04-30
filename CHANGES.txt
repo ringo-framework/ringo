@@ -17,6 +17,7 @@ to the tracker.
 - Add option to configure a default group on modul level which will be used on
   creation time as group if no special user default group is defined.
 - Added information about the users profile to the user form.
+- Allow refering to python properties in ListingFieldRenderer.
 
 0.13.1
 ------
