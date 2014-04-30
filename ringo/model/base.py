@@ -96,7 +96,7 @@ class BaseItem(object):
         if format_str:
             return format_str % tuple([self.get_value(f) for f in fields])
         else:
-            return "%s" % str(self.id)
+            return "%s" % str(self.id or self.__class__)
 
     def __json__(self, request):
         exporter = JSONExporter(self.__class__)
