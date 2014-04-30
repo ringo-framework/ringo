@@ -522,7 +522,12 @@ class LinkFieldRenderer(FieldRenderer):
             item = getattr(self._field._form._item, self._field.name)
         except AttributeError:
             log.warning("Missing %s attribute in %s" % (self._field.name,
-                                                        self._field._form))
+                                                        self._field._form._item))
+            # If the attribute is not part of the item there may be a
+            # value in the field based on a expression. So set the item
+            # to the value of the field. If this is not an instance of
+            # BaseItem the link can not be generated.
+            item = self._field.value
         values['url'] = get_link_url(item, self._field._form._request) or "#"
         return values
 
