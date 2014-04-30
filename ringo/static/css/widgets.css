@@ -162,3 +162,8 @@ ul.dropdown-menu li table td {
 .result-state {
   display: none
 }
+
+/* Custom formbar forms */
+.formbar-linkfield {
+  margin-top: 1.45em;
+}
