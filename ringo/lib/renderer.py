@@ -19,8 +19,7 @@ from ringo.lib.helpers import (
 from ringo.model.base import BaseItem, BaseList
 import ringo.lib.security as security
 
-template_lookup = TemplateLookup(directories=[template_dir],
-                                 module_directory='/tmp/ringo_modules')
+template_lookup = TemplateLookup(directories=[template_dir])
 
 log = logging.getLogger(__name__)
 
