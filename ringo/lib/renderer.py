@@ -504,8 +504,10 @@ def get_link_url(item, request):
     if isinstance(item, BaseItem):
         if security.has_permission("update", item, request):
             route_name = item.get_action_routename('update')
-        else:
+        elif security.has_permission("read", item, request):
             route_name = item.get_action_routename('read')
+        else:
+            return None
         return request.route_path(route_name, id=item.id)
     return None
 
@@ -584,6 +586,8 @@ class DropdownFieldRenderer(FormbarDropdown):
             url = get_link_url(item, self._field._form._request)
             if url:
                 html.append('<a href="%s">%s</a>' % (url, item))
+            else:
+                html.append('%s' % item)
         return "".join(html)
 
     def _render_label(self):

@@ -18,6 +18,8 @@ to the tracker.
   creation time as group if no special user default group is defined.
 - Added information about the users profile to the user form.
 - Allow refering to python properties in ListingFieldRenderer.
+- Only render link in Dropdownfields if the user is actually allowed to view
+  or update the linked item.
 
 0.13.1
 ------
