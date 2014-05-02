@@ -116,9 +116,6 @@ class User(BaseItem, Base):
     def get_item_factory(cls):
         return UserFactory(cls)
 
-    def __unicode__(self):
-        return self.login
-
     def has_role(self, role, include_group_roles=True):
         """Return True if the user has the given role. Else False"
         :user: User instance
@@ -204,9 +201,6 @@ class Role(BaseItem, Base):
                                   secondary=nm_action_roles,
                                   backref='roles')
 
-    def __unicode__(self):
-        return self.name
-
 
 class Profile(BaseItem, Owned, Base):
     __tablename__ = 'profiles'
@@ -226,6 +220,3 @@ class Profile(BaseItem, Owned, Base):
                            backref=sa.orm.backref("profile", cascade="all, delete-orphan"),
                            single_parent=True,
                            uselist=False)
-
-    def __unicode__(self):
-        return "%s %s" % (self.first_name, self.last_name)
