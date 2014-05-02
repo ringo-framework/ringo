@@ -585,7 +585,7 @@ class DropdownFieldRenderer(FormbarDropdown):
             url = get_link_url(item, self._field._form._request)
             if url:
                 html.append('<a href="%s">%s</a>' % (url, item))
-            else:
+            elif self._field.is_readonly():
                 html.append('%s' % item)
         return "".join(html)
 
