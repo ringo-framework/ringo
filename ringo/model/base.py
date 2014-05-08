@@ -77,7 +77,14 @@ class BaseItem(object):
             if splitmark_s > 0:
                 index = int(attr[splitmark_s+1:splitmark_e])
                 attr = attr[:splitmark_s]
-                element = object.__getattribute__(element, attr)[index]
+                element_list = object.__getattribute__(element, attr)
+                if len(element_list) > 0:
+                    element = element_list[index]
+                else:
+                    log.error("IndexError in %s on %s for %s"
+                              % (name, attr, self))
+                    element = None
+                    break
             else:
                 element = object.__getattribute__(element, attr)
         return element
