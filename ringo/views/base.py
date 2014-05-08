@@ -543,7 +543,9 @@ def update_(clazz, request, callback=None, renderers={}):
     owner_form = get_ownership_form(item, request)
     logbook_form = get_logbook_form(item, request, readonly=True,
                                     renderers=renderers)
-    item_form = Form(item.get_form_config('update'), item, request.db, translate=_,
+    item_form_name = request.session.get("%s.form" % clazz) or "update"
+    item_form = Form(item.get_form_config(item_form_name),
+                item, request.db, translate=_,
                 renderers=renderers,
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,
@@ -578,6 +580,9 @@ def update_(clazz, request, callback=None, renderers={}):
 
             # Invalidate cache
             invalidate_cache()
+            if request.session.get('%s.form' % clazz):
+                del request.session['%s.form' % clazz]
+                request.session.save()
 
             backurl = request.session.get('%s.backurl' % clazz)
             if backurl:
