@@ -20,6 +20,7 @@ to the tracker.
 - Allow refering to python properties in ListingFieldRenderer.
 - Only render link in Dropdownfields if the user is actually allowed to view
   or update the linked item.
+- Support alternative forms in the update view.
 
 0.13.1
 ------
