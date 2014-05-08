@@ -575,7 +575,7 @@ class DropdownFieldRenderer(FormbarDropdown):
         except AttributeError:
             log.warning("Missing %s attribute in %s" % (self._field.name,
                                                         self._field._form._item))
-            return "".join.html
+            return "".join(html)
 
         if not isinstance(item, list):
             items.append(item)
