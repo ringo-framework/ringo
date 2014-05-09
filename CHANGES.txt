@@ -21,6 +21,8 @@ to the tracker.
 - Only render link in Dropdownfields if the user is actually allowed to view
   or update the linked item.
 - Support alternative forms in the update view.
+- Fix configuration of default sorting order in tableconfig (Was ignored).
+  Changed default to asc.
 
 0.13.1
 ------

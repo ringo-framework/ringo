@@ -116,7 +116,7 @@ class TableConfig:
 
     * *default-sort-field*: Name of the column which should be used as
       default sorting on the table. Defaults to the first column in the table.
-    * *default-sort-order*: Sort order (desc, asc) Defaults to desc.
+    * *default-sort-order*: Sort order (desc, asc) Defaults to asc.
     * *auto-responsive*: If True than only the first column of a table
       will be displayed on small devices. Else you need to configure the
       "screen" attribute for the fields.
@@ -188,7 +188,7 @@ class TableConfig:
             def_order = settings.get('default-sort-order')
             if def_order:
                 return def_order
-        return "desc"
+        return "asc"
 
 
 class Renderer(object):

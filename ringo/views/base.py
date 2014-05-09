@@ -208,7 +208,7 @@ def handle_sorting(clazz, request):
 
     # Default sorting options
     default_field = clazz.get_table_config().get_default_sort_column()
-    default_order = 'asc'
+    default_order = clazz.get_table_config().get_default_sort_order()
 
     # Get sorting from the session. If there is no saved sorting use the
     # default value.
