@@ -23,6 +23,7 @@ to the tracker.
 - Support alternative forms in the update view.
 - Fix configuration of default sorting order in tableconfig (Was ignored).
   Changed default to asc.
+- Add sorting to the ListfieldRenderer based on the tableconfig.
 
 0.13.1
 ------

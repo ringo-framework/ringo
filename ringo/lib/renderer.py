@@ -680,20 +680,29 @@ class ListingFieldRenderer(FormbarSelectionField):
             if item[2] is True:
                 filtered_items.append(item[0])
         itemlist.items = filtered_items
+        # Sort fields
+        config = itemlist.clazz.get_table_config(self._field._config.renderer.table)
+        sort_field = config.get_default_sort_column()
+        sort_order = config.get_default_sort_order()
+        itemlist.sort(sort_field, sort_order)
         return itemlist
 
-    def _get_selected_items(self):
+    def _get_selected_items(self, items):
+        selected = []
         try:
-            items = getattr(self._field._form._item, self._field.name)
-            if isinstance(items, BaseList):
-                items = items.items
+            sitems = getattr(self._field._form._item, self._field.name)
+            if isinstance(items, list):
+                sitem_ids = [x.id for x in sitems]
+                for item in items:
+                    if item.id in sitem_ids:
+                        selected.append(item)
+            return selected
         except AttributeError:
             # Can happen when designing forms an the model of the item
             # is not yet configured.
             log.warning("Missing %s attribute in %s" % (self._field._form._item,
                                                         self._field.name))
-            items = []
-        return items
+        return selected
 
     def _filter_items(self, items):
         """Will filter the items to only show valid items in the list"""
@@ -740,7 +749,7 @@ class ListingFieldRenderer(FormbarSelectionField):
         config = self._field._config.renderer
         html.append(self._render_label())
         if self._field.is_readonly() or self.onlylinked == "true":
-            items = self._get_selected_items()
+            items = self._get_selected_items(self.all_items.items)
         else:
             items = self._filter_items(self.all_items.items)
 
