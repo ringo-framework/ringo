@@ -128,7 +128,7 @@ def add_rest_service(config, clazz):
     for action in [action for action in modul.actions
                    if action.name.lower() in
                    ['list', 'create', 'read', 'update', 'delete']]:
-        route_name = "rest-%s-%s" % (name, action.name.lower())
+        route_name = clazz.get_action_routename(action.name.lower(), prefix="rest")
 
         url = action.url.split("/")
         if len(url) > 1:
