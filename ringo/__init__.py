@@ -117,10 +117,10 @@ def add_rest_service(config, clazz):
         config.add_route(route_name, route_url,
                          factory=get_resource_factory(clazz))
 
-def add_route(config, clazz):
-    """Setup routes for the activates actions of the given model of the modul.
-    The new routes will be added for each action available in this modul
-    with the following name and url:
+def setup_modul(config, clazz):
+    """Setup routes and views for the activated actions of the given
+    model of the modul.  The new routes will be added with the following
+    name and url:
 
     * Name: $modulname-$actionname
     * Url:  $modulname/$actionurl
@@ -136,6 +136,7 @@ def add_route(config, clazz):
 
     """
     name = clazz.__tablename__
+    #  Setup web interface
     for action in clazz.get_item_actions():
         route_name = "%s-%s" % (name, action.name.lower())
         route_url = "%s/%s" % (name, action.url)
@@ -156,6 +157,7 @@ def add_route(config, clazz):
                             renderer='/default/bundle.mako',
                             permission='list')
 
+    #  Setup REST interface
     add_rest_service(config, clazz)
 
 
@@ -270,7 +272,7 @@ def setup_routes(config):
         clazz = helpers.dynamic_import(modul.clazzpath)
         module_classes[clazz._modul_id] = clazz
     for modul_id in module_classes:
-        add_route(config, module_classes[modul_id])
+        setup_modul(config, module_classes[modul_id])
 
     # Helpers
     #########
