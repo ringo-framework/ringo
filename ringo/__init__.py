@@ -139,7 +139,6 @@ def add_rest_service(config, clazz):
         log.debug("Adding route: %s, %s" % (route_name, route_url))
         config.add_route(route_name, route_url,
                          factory=get_resource_factory(clazz))
-    return config
 
 def add_route(config, clazz):
     """Setup routes for the activates actions of the given modul.
@@ -186,7 +185,7 @@ def add_route(config, clazz):
                             renderer='/default/bundle.mako',
                             permission='list')
 
-    return add_rest_service(config, clazz)
+    add_rest_service(config, clazz)
 
 
 def main(global_config, **settings):
