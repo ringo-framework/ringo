@@ -221,7 +221,7 @@ def includeme(config):
     log.info('-> Security finished.')
     config = setup_static_views(config)
     log.info('-> Static views finished.')
-    config = setup_routes(config)
+    config.include(setup_routes)
     log.info('-> Routes finished.')
     config = setup_translation(config)
     log.info('-> Translation finished.')
