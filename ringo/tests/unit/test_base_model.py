@@ -16,7 +16,7 @@ class BaseItemTests(BaseUnitTest):
     def test_load_item(self):
         item = self._load_item()
         result = item.render()
-        self.assertEqual(result, "1")
+        self.assertEqual(result, "modules")
 
     def test_get_item(self):
         item = self._load_item()
@@ -26,12 +26,12 @@ class BaseItemTests(BaseUnitTest):
     def test_unicode(self):
         item = self._load_item()
         result = unicode(item)
-        self.assertEqual(result, u"1")
+        self.assertEqual(result, u"modules")
 
     def test_json(self):
         item = self._load_item()
         result = item.__json__(self.request)
-        self.assertEqual(len(result), len('[{"str_repr": "", "uuid": "", "display": "admin-menu", "description": "", "label": "Modul", "label_plural": "Modules", "id": "1", "clazzpath": "ringo.model.modul.ModulItem", "name": "modules"}]'))
+        self.assertEqual(len(result), len('[{"str_repr": "%s|name", "description": "", "name": "modules", "label": "Modul", "gid": "", "id": "1", "label_plural": "Modules", "display": "admin-menu", "clazzpath": "ringo.model.modul.ModulItem", "uuid": ""}]'))
 
     def test_get_form_config(self):
         from ringo.model.modul import ModulItem
