@@ -15,7 +15,7 @@ import sqlalchemy as sa
 
 
 INSERTS = """
-INSERT INTO nm_user_roles (uid, rid) select uid, rid from nm_usergroup_roles r JOIN nm_user_usergroups g ON r.gid = g.uid;
+INSERT INTO nm_user_roles (uid, rid) select g.uid, r.rid from nm_usergroup_roles r join nm_user_usergroups g on g.gid = r.gid;
 DELETE FROM nm_usergroup_roles;
 """
 DELETES = """"""
