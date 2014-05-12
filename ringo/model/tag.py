@@ -28,6 +28,3 @@ class Tag(BaseItem, Owned, Base):
             5: "label label-danger"}
         return '<span class="%s">%s</span>' % (mapping.get(self.tagtype),
                                                self.name)
-
-    def __unicode__(self):
-        return self.name
