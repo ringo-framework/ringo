@@ -25,6 +25,7 @@ to the tracker.
   Changed default to asc.
 - Add sorting to the ListfieldRenderer based on the tableconfig.
 - Show number of items in the header of item overview pages.
+- BaseLists are now iterable.
 
 0.13.1
 ------

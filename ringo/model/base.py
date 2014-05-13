@@ -389,6 +389,9 @@ class BaseList(object):
             self.items = items
         self.search_filter = []
 
+    def __iter__(self):
+        return iter(self.items)
+
     def _filter_for_user(self, items, user):
         """Returns a filterd item list. The items are filterd based on
         the permission of the given user. Only items are included where
