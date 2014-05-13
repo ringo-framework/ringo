@@ -692,7 +692,7 @@ class ListingFieldRenderer(FormbarSelectionField):
         try:
             sitems = getattr(self._field._form._item, self._field.name) or []
             if isinstance(items, list):
-                sitem_ids = [x.id for x in sitems.items]
+                sitem_ids = [x.id for x in sitems]
                 for item in items:
                     if item.id in sitem_ids:
                         selected.append(item)
