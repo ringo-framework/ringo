@@ -24,6 +24,7 @@ to the tracker.
 - Fix configuration of default sorting order in tableconfig (Was ignored).
   Changed default to asc.
 - Add sorting to the ListfieldRenderer based on the tableconfig.
+- Show number of items in the header of item overview pages.
 
 0.13.1
 ------

@@ -2,7 +2,7 @@
 <div class="page-header">
   <div class="row">
     <div class="col-sm-8">
-      <h1>${N_(clazz.get_item_modul().get_label(plural=True))}</h1>
+      <h1>${len(itemlist.items)} ${N_(clazz.get_item_modul().get_label(plural=True))}</h1>
     </div>
     <div class="col-sm-4 visible-xs">
       <div class="context-menu">

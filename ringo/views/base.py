@@ -406,6 +406,7 @@ def list_(clazz, request):
     rendered_page = renderer.render(request)
     rvalue['clazz'] = clazz
     rvalue['listing'] = rendered_page
+    rvalue['itemlist'] = listing
     return rvalue
 
 
