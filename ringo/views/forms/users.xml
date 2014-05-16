@@ -21,7 +21,15 @@
     <entity id="e4" name="roles" label="Roles"/>
     <entity id="e5" name="groups" label="Usergroups"/>
     <entity id="e6" name="default_group" label="Default group"/>
-    <entity id="e7" name="activated" label="Activated"/>
+    <entity id="e7" name="activated" label="Activated">
+      <renderer type="radio">
+        <label align="left"/>
+      </renderer>
+      <options>
+        <option value="True">Yes</option>
+        <option value="False">No</option>
+      </options>
+    </entity>
     <entity id="e8" name="activation_token" label="Activation Token">
       <help>The activation token can be used to (re)activate a deactivated or new registered user. Please call /auth/activate_user/$token to active the user.</help>
     </entity>
