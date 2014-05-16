@@ -10,6 +10,7 @@ to the tracker.
 
 0.14.0
 ------
+- Update to Bootstrap 3.1.1
 - Changed permission system.
 - Add boolean flag to choose if the group roles should be included in the user.get_roles()
 - Changed building the principals of the user. Group roles will only be added
