@@ -72,7 +72,7 @@ def rest_notfound(request):
 def evaluate_(request):
     rule = Rule(expr=request.GET.get('rule').split(' '))
     result = rule.evaluate({})
-    if rule.evaluate({}):
+    if result:
         return JSONResponse(True, result, {"msg": rule.msg})
     else:
         return JSONResponse(False, result, {"msg": rule.msg})
