@@ -224,8 +224,8 @@ class BaseItem(object):
             # This error is only acceptable for blobforms as attributes
             # can be added and removed by the user on the fly. So there
             # is a good chance that older items do not have this attribute.
-            log.error("Attribute '%s' not found in '%s'"
-                      % (name, self))
+            log.error("Attribute '%s' not found in '%s'; id:%s"
+                      % (name, repr(self), self.id))
             raw_value = None
         expand = []
         table_config = self.get_table_config()
