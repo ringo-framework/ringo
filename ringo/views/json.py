@@ -72,10 +72,7 @@ def rest_notfound(request):
 def evaluate_(request):
     rule = Rule(expr=request.GET.get('rule').split(' '))
     result = rule.evaluate({})
-    if result:
-        return JSONResponse(True, result, {"msg": rule.msg})
-    else:
-        return JSONResponse(False, result, {"msg": rule.msg})
+    return JSONResponse(True, result, {"msg": rule.msg})
 
 @view_config(route_name='form-render',
              renderer='json',
