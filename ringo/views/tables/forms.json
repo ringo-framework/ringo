@@ -3,6 +3,7 @@
         "columns": [
             {"name": "title", "label": "Title"},
             {"name": "description", "label": "Description"},
+            {"name": "modul.label", "label": "Modul"},
             {"name": "review_state", "label": "State", "width": "150"}
         ]
     }

@@ -28,6 +28,7 @@ to the tracker.
 - Add sorting to the ListfieldRenderer based on the tableconfig.
 - Show number of items in the header of item overview pages.
 - BaseLists are now iterable.
+- Add label of the forms modul in the forms overview.
 
 0.13.1
 ------
