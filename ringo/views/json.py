@@ -9,7 +9,7 @@ from pyramid.response import Response
 
 from formbar.form import Form
 from formbar.config import Config, parse
-from formbar.rules import Rule
+from formbar.rules import Rule, Parser
 
 from ringo.views.base import _get_item_from_context
 
@@ -70,7 +70,8 @@ def rest_notfound(request):
              renderer='json',
              request_method="GET")
 def evaluate_(request):
-    rule = Rule(expr=request.GET.get('rule').split(' '))
+    expr = Parser().parse(request.GET.get('rule'))
+    rule = Rule(expr=expr)
     result = rule.evaluate({})
     return JSONResponse(True, result, {"msg": rule.msg})
 
