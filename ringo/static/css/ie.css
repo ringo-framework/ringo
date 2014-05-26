@@ -1,0 +1,5 @@
+#data td a.filter {
+  text-decoration: None;
+  color: black;
+  cursor: url('/images/icons/cursors/lupe.cur');
+}
