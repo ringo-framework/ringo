@@ -1,6 +1,7 @@
 import os
 import logging
 import pkg_resources
+from ringo.lib import helpers
 from ringo.resources import get_resource_factory
 
 base_dir = pkg_resources.get_distribution("ringo").location
@@ -91,3 +92,25 @@ def setup_modul(config, clazz):
             config.add_view(bundle_, route_name=route_name,
                             renderer='/default/bundle.mako',
                             permission='list')
+
+
+def write_formbar_static_files():
+    formbar_css = os.path.join(static_dir, 'formbar')
+    for filename, content in helpers.get_formbar_css():
+        filename = os.path.join(formbar_css, filename)
+        head, tail = os.path.split(filename)
+        if not os.path.exists(head):
+            os.makedirs(head)
+        with open(filename, 'wb') as f:
+            f.write(content)
+    formbar_js = os.path.join(static_dir, 'formbar')
+    for filename, content in helpers.get_formbar_js():
+        filename = os.path.join(formbar_js, filename)
+        head, tail = os.path.split(filename)
+        if not os.path.exists(head):
+            os.makedirs(head)
+        with open(filename, 'wb') as f:
+            f.write(content)
+    log.info('-> Formbar static files written.')
+
+
