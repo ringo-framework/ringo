@@ -217,6 +217,7 @@ def main(global_config, **settings):
 
     config.set_session_factory(session_factory_from_settings(settings))
     config.include('ringo')
+    config.scan()
     config = setup_finished_callback(config)
     return config.make_wsgi_app()
 
@@ -234,7 +235,6 @@ def includeme(config):
     log.info('-> Routes finished.')
     config = setup_translation(config)
     log.info('-> Translation finished.')
-    config.scan()
     write_formbar_static_files()
     log.info('-> Formbar static files written.')
     log.info('OK :) Setup of Ringo finished.')
