@@ -1,7 +1,9 @@
+import logging
 import json
 from pyramid.events import NewRequest
-from pyramid.events import subscriber
 from pyramid.i18n import get_localizer, TranslationStringFactory
+
+log = logging.getLogger(__name__)
 
 translators = []
 translators.append(TranslationStringFactory('ringo'))
@@ -12,7 +14,13 @@ strings will be iterated until one of them returns a translated string.
 On default there is only on factory for ringo available, but derived
 applications can append their own translation factory."""
 
-@subscriber(NewRequest)
+def setup_translation(config):
+    config.add_translation_dirs('ringo:locale/')
+    config.add_subscriber(set_request_locale, NewRequest)
+    config.add_subscriber(add_localizer, NewRequest)
+    log.info('-> Translation finished.')
+    return config
+
 def set_request_locale(event):
     """Will set the loacle of the request depending on the users
     accept_language setting in the browser. The locale will be used for
@@ -22,7 +30,6 @@ def set_request_locale(event):
     accepted = event.request.accept_language
     event.request._LOCALE_ = accepted.best_match(('en', 'fr', 'de'), 'en')
 
-@subscriber(NewRequest)
 def add_localizer(event):
     request = event.request
     localizer = get_localizer(request)

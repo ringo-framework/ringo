@@ -72,15 +72,6 @@ def connect_on_request(event):
     # Try to clear the cache on every request
     clear_cache()
 
-def set_request_locale(event):
-    """Will set the loacle of the request depending on the users
-    accept_language setting in the browser. The locale will be used for
-    localisation."""
-    if not event.request.accept_language:
-        return
-    accepted = event.request.accept_language
-    event.request._LOCALE_ = accepted.best_match(('en', 'fr', 'de'), 'en')
-
 def close_db_connection(request):
     request.db.close()
 
@@ -181,6 +172,7 @@ def main(global_config, **settings):
 
 def includeme(config):
     log.info('Setup of Ringo...')
+    config.include('ringo.lib.i18n.setup_translation')
     config = setup_pyramid_modules(config)
     log.info('-> Modules finished.')
     config = setup_subscribers(config)
@@ -191,8 +183,6 @@ def includeme(config):
     log.info('-> Static views finished.')
     config.include(setup_routes)
     log.info('-> Routes finished.')
-    config = setup_translation(config)
-    log.info('-> Translation finished.')
     write_formbar_static_files()
     log.info('-> Formbar static files written.')
     config.scan()
@@ -214,13 +204,8 @@ def setup_security(config):
     config.include('ringo.lib.security.setup_ringo_security')
     return config
 
-def setup_translation(config):
-    config.add_translation_dirs('ringo:locale/')
-    return config
-
 def setup_subscribers(config):
     config.add_subscriber(connect_on_request, NewRequest)
-    config.add_subscriber(set_request_locale, NewRequest)
     config.add_subscriber(add_renderer_globals, BeforeRender)
     return config
 
