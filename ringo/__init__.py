@@ -74,15 +74,6 @@ def setup_static_views(config):
     config.add_static_view('static',
                            path='ringo:static',
                            cache_max_age=3600)
-    config.add_static_view('images',
-                           path='ringo:static/images',
-                           cache_max_age=3600)
-    config.add_static_view('bootstrap',
-                           path='ringo:static/bootstrap',
-                           cache_max_age=3600)
-    config.add_static_view('css',
-                           path='ringo:static/css',
-                           cache_max_age=3600)
     return config
 
 def setup_routes(config):
