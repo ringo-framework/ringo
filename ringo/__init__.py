@@ -50,11 +50,18 @@ def main(global_config, **settings):
 
 def includeme(config):
     log.info('Setup of Ringo...')
+    # Configure pyramid modules
+    config.include('pyramid_handlers')
+    config.include('pyramid_beaker')
+    config.include('pyramid_mako')
+    log.info('-> Pyramid extensions finished.')
+
     config.include('ringo.lib.i18n.setup_translation')
     config.include('ringo.lib.sql.db.setup_connect_on_request')
     config.include('ringo.lib.renderer.setup_render_globals')
     config.include('ringo.setup_pyramid_modules')
     config.include('ringo.lib.security.setup_ringo_security')
+
     config = setup_static_views(config)
     config.include('ringo.config.setup_modules')
     config.include(setup_routes)
@@ -62,13 +69,6 @@ def includeme(config):
     write_formbar_static_files()
     config.scan()
     log.info('OK :) Setup of Ringo finished.')
-
-def setup_pyramid_modules(config):
-    config.include('pyramid_handlers')
-    config.include('pyramid_beaker')
-    config.include('pyramid_mako')
-    log.info('-> Modules finished.')
-    return config
 
 def setup_static_views(config):
     config.add_static_view('static',
