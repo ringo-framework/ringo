@@ -892,3 +892,13 @@ def print_(request):
 def confirmed(request):
     """Returns True id the request is confirmed"""
     return request.params.get('confirmed') == "1"
+
+action_view_mapping = {
+    "list": list__,
+    "create": create__,
+    "read": read__,
+    "update": update__,
+    "delete": delete__,
+    "import": import__,
+    "export": export__,
+}

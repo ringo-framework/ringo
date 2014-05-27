@@ -219,3 +219,11 @@ def delete_(clazz, request):
     item = _get_item_from_context(request)
     request.db.delete(item)
     return JSONResponse(True, item)
+
+action_view_mapping = {
+    "list": list__,
+    "create": create__,
+    "read": read__,
+    "update": update__,
+    "delete": delete__,
+}
