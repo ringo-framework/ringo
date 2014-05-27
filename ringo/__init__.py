@@ -156,8 +156,7 @@ def includeme(config):
     config.include('ringo.lib.i18n.setup_translation')
     config.include('ringo.lib.sql.db.setup_connect_on_request')
     config.include('ringo.lib.renderer.setup_render_globals')
-    config = setup_pyramid_modules(config)
-    log.info('-> Modules finished.')
+    config.include('ringo.setup_pyramid_modules')
     config = setup_security(config)
     log.info('-> Security finished.')
     config = setup_static_views(config)
@@ -179,6 +178,7 @@ def setup_pyramid_modules(config):
     config.include('pyramid_handlers')
     config.include('pyramid_beaker')
     config.include('pyramid_mako')
+    log.info('-> Modules finished.')
     return config
 
 def setup_security(config):
