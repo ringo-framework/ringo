@@ -17,6 +17,8 @@ log = logging.getLogger(__name__)
 
 
 def setup(config):
+    """Setup method which is called on application initialition and
+    takes care that many ringo specific things are setup correctly."""
     setup_modules(config)
     config.include('ringo.lib.i18n.setup_translation')
     config.include('ringo.lib.sql.db.setup_connect_on_request')
@@ -26,8 +28,9 @@ def setup(config):
 
 
 def setup_modules(config):
-    # MODULES
-    #########
+    """Will iterate over all configured modules in the application.
+    Configured modules are loaded from database. For each module it will
+    call the setup_modul method."""
     # FIXME: Check why it is not possible to submit the loaded clazz in
     # the first for loop into the add_route method. It only seems only
     # to work after loading and saving the saving the modules in a dict.
@@ -122,6 +125,8 @@ def setup_modul(config, clazz):
 
 
 def write_formbar_static_files():
+    """Will write the formbar specific css and js files into the formbar
+    directory in the static file location"""
     formbar_css = os.path.join(static_dir, 'formbar')
     for filename, content in helpers.get_formbar_css():
         filename = os.path.join(formbar_css, filename)
@@ -139,5 +144,3 @@ def write_formbar_static_files():
         with open(filename, 'wb') as f:
             f.write(content)
     log.info('-> Formbar static files written.')
-
-
