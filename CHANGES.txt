@@ -8,6 +8,13 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
+0.15.0
+------
+- Changed the way how the routing is setup on application initialisation. Now
+  iterate over all available modules from database and configure the routes
+  for each modul instead hardcoding the configuration including importing the
+  modules etc.
+
 0.14.0
 ------
 - Update to JQuery to 2.1.1
