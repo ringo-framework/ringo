@@ -12,6 +12,15 @@ strings will be iterated until one of them returns a translated string.
 On default there is only on factory for ringo available, but derived
 applications can append their own translation factory."""
 
+@subscriber(NewRequest)
+def set_request_locale(event):
+    """Will set the loacle of the request depending on the users
+    accept_language setting in the browser. The locale will be used for
+    localisation."""
+    if not event.request.accept_language:
+        return
+    accepted = event.request.accept_language
+    event.request._LOCALE_ = accepted.best_match(('en', 'fr', 'de'), 'en')
 
 @subscriber(NewRequest)
 def add_localizer(event):
