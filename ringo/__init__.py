@@ -1,7 +1,6 @@
 import os
 import logging
 from pyramid.config import Configurator
-from pyramid.events import BeforeRender
 from pyramid_beaker import session_factory_from_settings
 
 from sqlalchemy import engine_from_config
@@ -38,14 +37,6 @@ from ringo.lib.i18n import (
     locale_negotiator,
 )
 
-
-def add_renderer_globals(event):
-    request = event['request']
-    event['h'] = helpers
-    event['s'] = security
-    event['_'] = request.translate
-    event['N_'] = request.translate
-    event['localizer'] = request.localizer
 
 def write_formbar_static_files():
     formbar_css = os.path.join(static_dir, 'formbar')
@@ -164,10 +155,9 @@ def includeme(config):
     log.info('Setup of Ringo...')
     config.include('ringo.lib.i18n.setup_translation')
     config.include('ringo.lib.sql.db.setup_connect_on_request')
+    config.include('ringo.lib.renderer.setup_render_globals')
     config = setup_pyramid_modules(config)
     log.info('-> Modules finished.')
-    config = setup_subscribers(config)
-    log.info('-> Subscribers finished.')
     config = setup_security(config)
     log.info('-> Security finished.')
     config = setup_static_views(config)
@@ -193,10 +183,6 @@ def setup_pyramid_modules(config):
 
 def setup_security(config):
     config.include('ringo.lib.security.setup_ringo_security')
-    return config
-
-def setup_subscribers(config):
-    config.add_subscriber(add_renderer_globals, BeforeRender)
     return config
 
 def setup_static_views(config):

@@ -2,6 +2,7 @@ import logging
 import cgi
 import json
 from mako.lookup import TemplateLookup
+from pyramid.events import BeforeRender
 from formbar.renderer import (
     FieldRenderer,
     DropdownFieldRenderer as FormbarDropdown,
@@ -22,6 +23,20 @@ import ringo.lib.security as security
 template_lookup = TemplateLookup(directories=[template_dir])
 
 log = logging.getLogger(__name__)
+
+
+def setup_render_globals(config):
+    config.add_subscriber(add_renderer_globals, BeforeRender)
+
+
+def add_renderer_globals(event):
+    request = event['request']
+    event['h'] = ringo.lib.helpers
+    event['s'] = security
+    event['_'] = request.translate
+    event['N_'] = request.translate
+    event['localizer'] = request.localizer
+
 
 def _load_overview_config(clazz):
         """Return a datastructure representing the overview
