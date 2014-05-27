@@ -77,7 +77,7 @@ def passwords_needs_update(pwhash):
     encryption algorithm and needs to be updated.
 
     :pwhash: encrypted password
-    :returns: True or False 
+    :returns: True or False
     """
     if pwhash.startswith("$"):
         return pwd_context.needs_update(pwhash)
@@ -128,6 +128,7 @@ def setup_ringo_security(config):
     settings = config.registry.settings
     if settings.get('security.enable_csrf_check', 'true') != "false":
         config.add_subscriber(csrf_token_validation, ContextFound)
+    log.info('-> Security finished.')
 
 
 def get_user(request):
@@ -443,7 +444,7 @@ def login(username, password):
                 log.info("Login successfull '%s'" % (username))
                 if passwords_needs_update(user.password):
                     log.info("Updating password for user '%s'" % (username))
-                    user.password = encrypt_password(password) 
+                    user.password = encrypt_password(password)
                 return user
             else:
                 log.info("Login failed for user '%s'. "

@@ -901,4 +901,5 @@ action_view_mapping = {
     "delete": delete__,
     "import": import__,
     "export": export__,
+    "print":  print_,
 }

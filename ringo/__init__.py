@@ -23,15 +23,11 @@ from ringo.model.base import (
 from ringo.model.user import User
 from ringo.model.modul import ModulItem
 from ringo.model.news import News
-from ringo.views.mixins import (
-    setup_mixin_views
-)
 from ringo.config import (
     static_dir
 )
 from ringo.lib import (
-    helpers,
-    security
+    helpers
 )
 from ringo.lib.i18n import (
     locale_negotiator,
@@ -148,7 +144,6 @@ def main(global_config, **settings):
 
     config.set_session_factory(session_factory_from_settings(settings))
     config.include('ringo')
-    config = setup_finished_callback(config)
     return config.make_wsgi_app()
 
 def includeme(config):
@@ -157,8 +152,7 @@ def includeme(config):
     config.include('ringo.lib.sql.db.setup_connect_on_request')
     config.include('ringo.lib.renderer.setup_render_globals')
     config.include('ringo.setup_pyramid_modules')
-    config = setup_security(config)
-    log.info('-> Security finished.')
+    config.include('ringo.lib.security.setup_ringo_security')
     config = setup_static_views(config)
     log.info('-> Static views finished.')
     config.include(setup_routes)
@@ -168,21 +162,11 @@ def includeme(config):
     config.scan()
     log.info('OK :) Setup of Ringo finished.')
 
-def setup_finished_callback(config):
-    """Callback function which should be called if the setup of the application is finished."""
-    config = setup_mixin_views(config)
-    log.info('-> Mixin views finished.')
-    return config
-
 def setup_pyramid_modules(config):
     config.include('pyramid_handlers')
     config.include('pyramid_beaker')
     config.include('pyramid_mako')
     log.info('-> Modules finished.')
-    return config
-
-def setup_security(config):
-    config.include('ringo.lib.security.setup_ringo_security')
     return config
 
 def setup_static_views(config):
