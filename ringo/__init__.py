@@ -1,6 +1,5 @@
 import os
 import logging
-import pkg_resources
 from beaker.cache import cache_regions
 from pyramid.config import Configurator
 from pyramid.events import BeforeRender, NewRequest
@@ -29,6 +28,9 @@ from ringo.model.news import News
 from ringo.views.mixins import (
     setup_mixin_views
 )
+from ringo.config import (
+    static_dir
+)
 from ringo.lib import (
     helpers,
     security
@@ -36,13 +38,6 @@ from ringo.lib import (
 from ringo.lib.i18n import (
     locale_negotiator,
 )
-
-base_dir = pkg_resources.get_distribution("ringo").location
-template_dir = os.path.join(base_dir, 'ringo', 'templates')
-static_dir = os.path.join(base_dir, 'ringo', 'static')
-
-# Directory with templates to generate views and models
-modul_template_dir = os.path.join(base_dir, 'ringo', 'scripts', 'templates')
 
 
 def add_renderer_globals(event):

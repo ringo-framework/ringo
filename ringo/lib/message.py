@@ -6,7 +6,7 @@ from pyramid_mailer import get_mailer
 from pyramid_mailer.message import Message
 
 from mako.lookup import TemplateLookup
-from ringo import template_dir as ringo_template_dir
+from ringo.config import template_dir as ringo_template_dir
 from ringo.lib.helpers import get_app_name
 
 log = logging.getLogger(__name__)

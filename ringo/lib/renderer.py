@@ -9,7 +9,7 @@ from formbar.renderer import (
 )
 from formbar.config import Config, load
 from formbar.form import Form
-from ringo import template_dir
+from ringo.config import template_dir
 import ringo.lib.helpers
 from ringo.lib.helpers import (
     get_saved_searches,
