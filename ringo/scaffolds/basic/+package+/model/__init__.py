@@ -1,1 +1,1 @@
-from ringo.lib.sql import Base
+from ringo.model import Base
