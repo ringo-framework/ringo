@@ -1,9 +1,6 @@
-import os
 import logging
 from pyramid.config import Configurator
 from pyramid_beaker import session_factory_from_settings
-
-from sqlalchemy import engine_from_config
 
 log = logging.getLogger(__name__)
 
@@ -11,8 +8,8 @@ log = logging.getLogger(__name__)
 from ringo.resources import (
     get_resource_factory,
 )
-from ringo.lib.sql import (
-    DBSession,
+from ringo.lib.sql.db import (
+    setup_db_session,
 )
 from ringo.model import (
     Base,
@@ -22,9 +19,6 @@ from ringo.model.base import (
 )
 from ringo.model.user import User
 from ringo.model.news import News
-from ringo.config import (
-    setup
-)
 from ringo.lib.i18n import (
     locale_negotiator,
 )
@@ -34,12 +28,10 @@ def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
     clear_cache()
-    engine = engine_from_config(settings, 'sqlalchemy.')
-    DBSession.configure(bind=engine)
+    engine, dbsession = setup_db_session(settings)
     Base.metadata.bind = engine
     config = Configurator(settings=settings,
                           locale_negotiator=locale_negotiator)
-
     config.set_session_factory(session_factory_from_settings(settings))
     config.include('ringo')
     return config.make_wsgi_app()
