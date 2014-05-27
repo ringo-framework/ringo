@@ -84,33 +84,6 @@ def set_request_locale(event):
 def close_db_connection(request):
     request.db.close()
 
-def add_rest_service(config, clazz):
-    """Set routes for basic RESTfull service on CRUD operations on the item
-
-    :config: Pylons config instance
-    :clazz: The clazz of the module for which the new routes will be set up.
-    :returns: config
-
-    """
-    # load modul to get the enabled actions
-    factory = ModulItem.get_item_factory()
-    modul = factory.load(clazz._modul_id)
-    name = clazz.__tablename__
-    for action in [action for action in modul.actions
-                   if action.name.lower() in
-                   ['list', 'create', 'read', 'update', 'delete']]:
-        route_name = clazz.get_action_routename(action.name.lower(), prefix="rest")
-
-        url = action.url.split("/")
-        if len(url) > 1:
-            route_url = "rest/%s/%s" % (name, url[1])
-        else:
-            route_url = "rest/%s" % (name)
-        #route_url = "rest/%s/%s" % (name, action.url)
-        log.debug("Adding route: %s, %s" % (route_name, route_url))
-        config.add_route(route_name, route_url,
-                         factory=get_resource_factory(clazz))
-
 def setup_modul(config, clazz):
     """Setup routes and views for the activated actions of the given
     model of the modul.  The new routes will be added with the following
