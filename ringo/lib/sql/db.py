@@ -1,5 +1,6 @@
 import query
 from pyramid.events import NewRequest
+from sqlalchemy import engine_from_config
 from sqlalchemy.orm import scoped_session, sessionmaker
 from zope.sqlalchemy import ZopeTransactionExtension
 from ringo.lib.sql.cache import regions, init_cache
@@ -21,7 +22,7 @@ DBSession = scoped_session(
 def setup_db_session(settings):
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
-    return engine, session
+    return engine, DBSession
 
 # Session initialisation
 ########################

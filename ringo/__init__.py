@@ -2,26 +2,15 @@ import logging
 from pyramid.config import Configurator
 from pyramid_beaker import session_factory_from_settings
 
-log = logging.getLogger(__name__)
-
-
-from ringo.resources import (
-    get_resource_factory,
-)
-from ringo.lib.sql.db import (
-    setup_db_session,
-)
-from ringo.model import (
-    Base,
-)
-from ringo.model.base import (
-    clear_cache,
-)
+from ringo.resources import get_resource_factory
+from ringo.lib.i18n import locale_negotiator
+from ringo.lib.sql.db import setup_db_session
+from ringo.model import Base
+from ringo.model.base import clear_cache
 from ringo.model.user import User
 from ringo.model.news import News
-from ringo.lib.i18n import (
-    locale_negotiator,
-)
+
+log = logging.getLogger(__name__)
 
 
 def main(global_config, **settings):
