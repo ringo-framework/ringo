@@ -13,7 +13,7 @@ from ringo.views.json import (
     )
 from ringo.lib.helpers import import_model
 from ringo.lib.security import login, encrypt_password
-from ringo.lib.sql import invalidate_cache
+from ringo.lib.sql.cache import invalidate_cache
 User = import_model('ringo.model.user.User')
 
 log = logging.getLogger(__name__)

@@ -1,1 +1,3 @@
-from ringo.lib.sql import Base
+from sqlalchemy.ext.declarative import declarative_base
+# global declarative base class.
+Base = declarative_base()

@@ -9,7 +9,8 @@ from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload, ColumnProperty, class_mapper
 from sqlalchemy.orm.attributes import get_history
 from ringo.lib.helpers import get_path_to_form_config, serialize
-from ringo.lib.sql import DBSession, regions
+from ringo.lib.sql import DBSession
+from ringo.lib.sql.cache import regions
 from ringo.lib.imexport import JSONExporter
 from ringo.lib.sql.query import FromCache, set_relation_caching
 from ringo.model.mixins import Logged, StateMixin, Owned

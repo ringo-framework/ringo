@@ -23,7 +23,7 @@ from ringo.lib.renderer import (
     ExportDialogRenderer, ImportDialogRenderer,
     PrintDialogRenderer, add_renderers
 )
-from ringo.lib.sql import invalidate_cache
+from ringo.lib.sql.cache import invalidate_cache
 from ringo.views import handle_history
 
 log = logging.getLogger(__name__)
