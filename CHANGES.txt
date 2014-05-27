@@ -16,6 +16,7 @@ stay compatible with this release:
 1. rename add_route to setup_modul
 2. Move setup of modules into a "includeme" method.
 3. Use config.include("appname") to call the includeme method.
+4. setup_finished callback is removed.
 
 - Changed the way how the routing is setup on application initialisation. Now
   iterate over all available modules from database and configure the routes
