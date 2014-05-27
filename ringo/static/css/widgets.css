@@ -70,13 +70,13 @@ div.dataTables_length select {
 
 div.dataTables_info {
     position: relative;
-    top: -18px;
+    top: -10px;
     font-size: 0.9em;
     float: left;
 }
 div.dataTables_paginate {
     position: relative;
-    top: -18px;
+    top: -10px;
     font-size: 0.9em;
     float: right;
 }
