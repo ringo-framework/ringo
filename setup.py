@@ -62,7 +62,7 @@ setup(name='ringo',
       [paste.app_factory]
       main = ringo:main
       [console_scripts]
-      add_ringo_modul = ringo.scripts.add_modul:main
+      ringo-admin = ringo.scripts.admin:main
       [babel.extractors]
       tableconfig = ringo.lib.i18n:extract_i18n_tableconfig
       formconfig = formbar.i18n:extract_i18n_formconfig

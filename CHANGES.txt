@@ -22,6 +22,8 @@ stay compatible with this release:
   iterate over all available modules from database and configure the routes
   for each modul instead hardcoding the configuration including importing the
   modules etc.
+- Added new ringo-admin command.
+- Removed old add-ringo-modul command.
 
 0.14.0
 ------

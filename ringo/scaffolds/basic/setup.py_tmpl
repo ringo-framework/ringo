@@ -33,7 +33,7 @@ setup(name='{{package}}',
       [paste.app_factory]
       main = {{package}}:main
       [console_scripts]
-      add_{{package}}_modul = ringo.scripts.add_modul:main
+      {{package}}-admin = ringo.scripts.admin:main
       [babel.extractors]
       tableconfig = ringo.lib.i18n:extract_i18n_tableconfig
       formconfig = formbar.i18n:extract_i18n_formconfig
