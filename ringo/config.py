@@ -16,6 +16,15 @@ modul_template_dir = os.path.join(base_dir, 'ringo', 'scripts', 'templates')
 log = logging.getLogger(__name__)
 
 
+def setup(config):
+    setup_modules(config)
+    config.include('ringo.lib.i18n.setup_translation')
+    config.include('ringo.lib.sql.db.setup_connect_on_request')
+    config.include('ringo.lib.renderer.setup_render_globals')
+    config.include('ringo.lib.security.setup_ringo_security')
+    write_formbar_static_files()
+
+
 def setup_modules(config):
     # MODULES
     #########

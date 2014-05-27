@@ -21,17 +21,14 @@ from ringo.model.base import (
     clear_cache,
 )
 from ringo.model.user import User
-from ringo.model.modul import ModulItem
 from ringo.model.news import News
 from ringo.config import (
-    write_formbar_static_files, static_dir, setup_modul
-)
-from ringo.lib import (
-    helpers
+    setup
 )
 from ringo.lib.i18n import (
     locale_negotiator,
 )
+
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
@@ -55,20 +52,12 @@ def includeme(config):
     config.include('pyramid_beaker')
     config.include('pyramid_mako')
     log.info('-> Pyramid extensions finished.')
-
-    config.include('ringo.lib.i18n.setup_translation')
-    config.include('ringo.lib.sql.db.setup_connect_on_request')
-    config.include('ringo.lib.renderer.setup_render_globals')
-    config.include('ringo.setup_pyramid_modules')
-    config.include('ringo.lib.security.setup_ringo_security')
-
+    config.include('ringo.config.setup')
     config = setup_static_views(config)
-    config.include('ringo.config.setup_modules')
-    config.include(setup_routes)
-    log.info('-> Routes finished.')
-    write_formbar_static_files()
+    config = setup_routes(config)
     config.scan()
     log.info('OK :) Setup of Ringo finished.')
+
 
 def setup_static_views(config):
     config.add_static_view('static',
@@ -104,5 +93,5 @@ def setup_routes(config):
                      factory=get_resource_factory(News))
     config.add_route('rules-evaluate', 'rest/rule/evaluate')
     config.add_route('form-render', 'rest/form/render')
-
+    log.info('-> Routes finished.')
     return config
