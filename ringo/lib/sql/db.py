@@ -1,9 +1,11 @@
 import query
+from pyramid.events import NewRequest
 from sqlalchemy.orm import scoped_session, sessionmaker
 from zope.sqlalchemy import ZopeTransactionExtension
 from ringo.lib.sql.cache import regions, init_cache
 
 init_cache()
+
 # Session initialisation
 ########################
 # scoped_session.  Apply our custom CachingQuery class to it,
@@ -15,3 +17,21 @@ DBSession = scoped_session(
                     extension=ZopeTransactionExtension()
                 )
             )
+
+# Session initialisation
+########################
+def setup_connect_on_request(config):
+    config.add_subscriber(connect_on_request, NewRequest)
+
+
+def connect_on_request(event):
+    from ringo.model.base import clear_cache
+    request = event.request
+    request.db = DBSession
+    request.add_finished_callback(close_db_connection)
+    # Try to clear the cache on every request
+    clear_cache()
+
+
+def close_db_connection(request):
+    request.db.close()

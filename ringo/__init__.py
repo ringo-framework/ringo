@@ -1,7 +1,7 @@
 import os
 import logging
 from pyramid.config import Configurator
-from pyramid.events import BeforeRender, NewRequest
+from pyramid.events import BeforeRender
 from pyramid_beaker import session_factory_from_settings
 
 from sqlalchemy import engine_from_config
@@ -64,16 +64,6 @@ def write_formbar_static_files():
             os.makedirs(head)
         with open(filename, 'wb') as f:
             f.write(content)
-
-def connect_on_request(event):
-    request = event.request
-    request.db = DBSession
-    request.add_finished_callback(close_db_connection)
-    # Try to clear the cache on every request
-    clear_cache()
-
-def close_db_connection(request):
-    request.db.close()
 
 def setup_modul(config, clazz):
     """Setup routes and views for the activated actions of the given
@@ -173,6 +163,7 @@ def main(global_config, **settings):
 def includeme(config):
     log.info('Setup of Ringo...')
     config.include('ringo.lib.i18n.setup_translation')
+    config.include('ringo.lib.sql.db.setup_connect_on_request')
     config = setup_pyramid_modules(config)
     log.info('-> Modules finished.')
     config = setup_subscribers(config)
@@ -205,7 +196,6 @@ def setup_security(config):
     return config
 
 def setup_subscribers(config):
-    config.add_subscriber(connect_on_request, NewRequest)
     config.add_subscriber(add_renderer_globals, BeforeRender)
     return config
 
