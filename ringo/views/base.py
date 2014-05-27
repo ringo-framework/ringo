@@ -345,6 +345,12 @@ def bundle_(request):
         rvalue = _handle_delete_request(clazz, request, items)
     return rvalue
 
+def list__(request):
+    """Wrapper method to match default signature of a view method. Will
+    add the missing clazz attribut and call the wrapped method with the
+    correct parameters."""
+    clazz = request.context.__model__
+    return list_(clazz, request)
 
 def list_(clazz, request):
     # Important! Prevent any write access on the database for this
@@ -409,6 +415,12 @@ def list_(clazz, request):
     rvalue['itemlist'] = listing
     return rvalue
 
+def create__(request):
+    """Wrapper method to match default signature of a view method. Will
+    add the missing clazz attribut and call the wrapped method with the
+    correct parameters."""
+    clazz = request.context.__model__
+    return create_(clazz, request)
 
 def create_(clazz, request, callback=None, renderers={}):
     """Base view to create a new item of type clazz. This view will
@@ -530,6 +542,12 @@ def create_(clazz, request, callback=None, renderers={}):
                                  page=get_current_form_page(clazz, request))
     return rvalue
 
+def update__(request):
+    """Wrapper method to match default signature of a view method. Will
+    add the missing clazz attribut and call the wrapped method with the
+    correct parameters."""
+    clazz = request.context.__model__
+    return update_(clazz, request)
 
 def update_(clazz, request, callback=None, renderers={}):
     item = _get_item_from_context(request)
@@ -629,6 +647,12 @@ def update_(clazz, request, callback=None, renderers={}):
                                       page = get_current_form_page(clazz, request))
     return rvalue
 
+def read__(request):
+    """Wrapper method to match default signature of a view method. Will
+    add the missing clazz attribut and call the wrapped method with the
+    correct parameters."""
+    clazz = request.context.__model__
+    return read_(clazz, request)
 
 def read_(clazz, request, callback=None, renderers={}):
     item = _get_item_from_context(request)
@@ -716,12 +740,25 @@ def _handle_delete_request(clazz, request, items):
         rvalue['item'] = items
         return rvalue
 
+def delete__(request):
+    """Wrapper method to match default signature of a view method. Will
+    add the missing clazz attribut and call the wrapped method with the
+    correct parameters."""
+    clazz = request.context.__model__
+    return delete_(clazz, request)
 
 def delete_(clazz, request):
     item = _get_item_from_context(request)
     handle_history(request)
     handle_params(clazz, request)
     return _handle_delete_request(clazz, request, [item])
+
+def export__(request):
+    """Wrapper method to match default signature of a view method. Will
+    add the missing clazz attribut and call the wrapped method with the
+    correct parameters."""
+    clazz = request.context.__model__
+    return export_(clazz, request)
 
 def export_(clazz, request):
     item = _get_item_from_context(request)
@@ -759,6 +796,12 @@ def _handle_export_request(clazz, request, items):
         rvalue['dialog'] = renderer.render(items)
         return rvalue
 
+def import__(request):
+    """Wrapper method to match default signature of a view method. Will
+    add the missing clazz attribut and call the wrapped method with the
+    correct parameters."""
+    clazz = request.context.__model__
+    return import_(clazz, request)
 
 def import_(clazz, request, callback=None):
     handle_history(request)

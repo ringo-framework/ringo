@@ -90,6 +90,13 @@ def render_(request):
     data = {"form": "".join(out)}
     return JSONResponse(True, data, {"msg": "Ole!"})
 
+def list__(request):
+    """Wrapper method to match default signature of a view method. Will
+    add the missing clazz attribut and call the wrapped method with the
+    correct parameters."""
+    clazz = request.context.__model__
+    return list_(clazz, request)
+
 def list_(clazz, request):
     """Returns a JSON objcet with all item of a clazz. The list does not
     have any capabilities for sorting or filtering
@@ -101,6 +108,13 @@ def list_(clazz, request):
     """
     listing = clazz.get_item_list(request)
     return JSONResponse(True, listing)
+
+def create__(request):
+    """Wrapper method to match default signature of a view method. Will
+    add the missing clazz attribut and call the wrapped method with the
+    correct parameters."""
+    clazz = request.context.__model__
+    return create_(clazz, request)
 
 def create_(clazz, request):
     """Create a new item of type clazz. The item will be
@@ -131,6 +145,13 @@ def create_(clazz, request):
         # Validation fails! return item
         return JSONResponse(False, sitem)
 
+def read__(request):
+    """Wrapper method to match default signature of a view method. Will
+    add the missing clazz attribut and call the wrapped method with the
+    correct parameters."""
+    clazz = request.context.__model__
+    return read_(clazz, request)
+
 def read_(clazz, request, callback=None):
     """Returns a JSON object of a specific item of type clazz. The
     loaded item is determined by the id provided in the matchdict object
@@ -145,6 +166,13 @@ def read_(clazz, request, callback=None):
     if callback is not None:
         item = callback(request, item)
     return JSONResponse(True, item)
+
+def update__(request):
+    """Wrapper method to match default signature of a view method. Will
+    add the missing clazz attribut and call the wrapped method with the
+    correct parameters."""
+    clazz = request.context.__model__
+    return update_(clazz, request)
 
 def update_(clazz, request):
     """Updates an item of type clazz. The item is loaded based on the
@@ -171,6 +199,13 @@ def update_(clazz, request):
     else:
         # Validation fails! return item
         return JSONResponse(False, item)
+
+def delete__(request):
+    """Wrapper method to match default signature of a view method. Will
+    add the missdeleteing clazz attribut and call the wrapped method with the
+    correct parameters."""
+    clazz = request.context.__model__
+    return delete_(clazz, request)
 
 def delete_(clazz, request):
     """Deletes an item of type clazz. The item is deleted based on the
