@@ -20,22 +20,46 @@
 This is a short description of what this script does.
 """
 
-import logging
 import os
+import sys
 import argparse
-from alembic.config import Config
-from alembic import command
-from ringo.lib.helpers import get_app_location
 
-log = logging.getLogger(__name__)
+from ringo.scripts.db import (
+    handle_db_init_command,
+    handle_db_upgrade_command
+)
 
+from ringo.scripts.modul import (
+    handle_modul_add_command,
+    handle_modul_delete_command,
+)
 
-def handle_db_init_command(args):
-    cfg = Config("alembic.ini")
-    ringo_path = get_app_location("ringo")
-    cfg.set_main_option("script_location",
-                        os.path.join(ringo_path, "alembic"))
-    command.upgrade(cfg, "head")
+def modul_name(var):
+    return str(var).lower()
+
+def setup_modul_parser(subparsers, parent):
+    p = subparsers.add_parser('modul',
+                              help='Modul administration',
+                              parents=[parent])
+    sp = p.add_subparsers(help='Modul command help')
+
+    # Add command
+    add_parser = sp.add_parser('add',
+                                help='Adds a new modul',
+                                parents=[parent])
+    add_parser.add_argument('name',
+                            type=modul_name,
+                            help='Name of the new modul (singular form)')
+    add_parser.set_defaults(func=handle_modul_add_command)
+
+    # Add command
+    delete_parser = sp.add_parser('delete',
+                                  help='Deletes a modul',
+                                  parents=[parent])
+    delete_parser.add_argument('name',
+                               type=modul_name,
+                               help='Name of the modul to delete')
+    delete_parser.set_defaults(func=handle_modul_delete_command)
 
 
 def setup_db_parser(subparsers, parent):
@@ -50,9 +74,19 @@ def setup_db_parser(subparsers, parent):
                                 parents=[parent])
     init_parser.set_defaults(func=handle_db_init_command)
 
+    # Upgrade command
+    upgrade_parser = sp.add_parser('upgrade',
+                                help='Upgrades a database',
+                                parents=[parent])
+    upgrade_parser.set_defaults(func=handle_db_upgrade_command)
+
 
 def setup_global_argument_parser():
     parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument('--app',
+                        default=_get_app_name(),
+                        metavar="APP",
+                        help="Name of the application")
     parser.add_argument('--config',
                         default="development.ini",
                         metavar="INI",
@@ -64,9 +98,18 @@ def setup_parser():
     parser = argparse.ArgumentParser(description="Administrate various "
                                      "aspects in a ringo based application.")
     global_arguments = setup_global_argument_parser()
-    subparsers = parser.add_subparsers(help='sub-command help')
+    subparsers = parser.add_subparsers(help='Command help')
     setup_db_parser(subparsers, global_arguments)
+    setup_modul_parser(subparsers, global_arguments)
     return parser
+
+
+def _get_app_name():
+    """@todo: Docstring for _get_app_name.
+    :returns: @todo
+
+    """
+    return sys.argv[0].split("/")[-1].split("-")[0]
 
 
 def main():
