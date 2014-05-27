@@ -2,6 +2,8 @@ import os
 import logging
 import pkg_resources
 from ringo.lib import helpers
+from ringo.lib.sql.db import DBSession
+from ringo.model.modul import ModulItem
 from ringo.resources import get_resource_factory
 
 base_dir = pkg_resources.get_distribution("ringo").location
@@ -12,6 +14,22 @@ static_dir = os.path.join(base_dir, 'ringo', 'static')
 modul_template_dir = os.path.join(base_dir, 'ringo', 'scripts', 'templates')
 
 log = logging.getLogger(__name__)
+
+
+def setup_modules(config):
+    # MODULES
+    #########
+    # FIXME: Check why it is not possible to submit the loaded clazz in
+    # the first for loop into the add_route method. It only seems only
+    # to work after loading and saving the saving the modules in a dict.
+    # Otherwise the views seems not not be mapped correctly to the routes.
+    # (torsten) <2014-05-09 18:32>
+    module_classes = {}
+    for modul in DBSession.query(ModulItem).filter(ModulItem.id < 1000).all():
+        clazz = helpers.dynamic_import(modul.clazzpath)
+        module_classes[clazz._modul_id] = clazz
+    for modul_id in module_classes:
+        setup_modul(config, module_classes[modul_id])
 
 
 def setup_modul(config, clazz):

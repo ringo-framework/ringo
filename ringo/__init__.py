@@ -56,7 +56,7 @@ def includeme(config):
     config.include('ringo.setup_pyramid_modules')
     config.include('ringo.lib.security.setup_ringo_security')
     config = setup_static_views(config)
-    log.info('-> Static views finished.')
+    config.include('ringo.config.setup_modules')
     config.include(setup_routes)
     log.info('-> Routes finished.')
     write_formbar_static_files()
@@ -74,6 +74,7 @@ def setup_static_views(config):
     config.add_static_view('static',
                            path='ringo:static',
                            cache_max_age=3600)
+    log.info('-> Static views finished.')
     return config
 
 def setup_routes(config):
@@ -91,20 +92,6 @@ def setup_routes(config):
     config.add_route('contact', 'contact')
     config.add_route('about', 'about')
     config.add_route('home', '/')
-
-    # MODULES
-    #########
-    # FIXME: Check why it is not possible to submit the loaded clazz in
-    # the first for loop into the add_route method. It only seems only
-    # to work after loading and saving the saving the modules in a dict.
-    # Otherwise the views seems not not be mapped correctly to the routes.
-    # (torsten) <2014-05-09 18:32>
-    module_classes = {}
-    for modul in DBSession.query(ModulItem).filter(ModulItem.id < 1000).all():
-        clazz = helpers.dynamic_import(modul.clazzpath)
-        module_classes[clazz._modul_id] = clazz
-    for modul_id in module_classes:
-        setup_modul(config, module_classes[modul_id])
 
     # Helpers
     #########
