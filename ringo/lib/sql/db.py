@@ -18,6 +18,11 @@ DBSession = scoped_session(
                 )
             )
 
+def setup_db_session(settings):
+    engine = engine_from_config(settings, 'sqlalchemy.')
+    DBSession.configure(bind=engine)
+    return engine, session
+
 # Session initialisation
 ########################
 def setup_connect_on_request(config):
