@@ -4,17 +4,12 @@ from pyramid.httpexceptions import HTTPBadRequest, HTTPForbidden, HTTPFound
 from pyramid.view import view_config
 from formbar.form import Form, Validator
 
-from ringo.views.base import (list_, create_, update_, read_, delete_,
-                              handle_history, handle_params,
-                              get_current_form_page, export_, import_)
+from ringo.views.base import (create_, handle_history, handle_params,
+                              get_current_form_page)
 from ringo.model.mixins import Owned
 
 from ringo.views.json import (
-    list_   as json_list,
     create_ as json_create,
-    update_ as json_update,
-    read_   as json_read,
-    delete_ as json_delete
     )
 from ringo.lib.helpers import import_model
 from ringo.lib.security import login, encrypt_password
@@ -43,39 +38,11 @@ def check_password(field, data):
 ###########################################################################
 
 
-@view_config(route_name=User.get_action_routename('list'),
-             renderer='/default/list.mako',
-             permission='list')
-def list(request):
-    return list_(User, request)
-
-
 @view_config(route_name=User.get_action_routename('create'),
              renderer='/default/create.mako',
              permission='create')
 def create(request):
     return create_(User, request, encrypt_password_callback)
-
-
-@view_config(route_name=User.get_action_routename('update'),
-             renderer='/default/update.mako',
-             permission='update')
-def update(request):
-    return update_(User, request)
-
-
-@view_config(route_name=User.get_action_routename('read'),
-             renderer='/default/read.mako',
-             permission='read')
-def read(request):
-    return read_(User, request)
-
-
-@view_config(route_name=User.get_action_routename('delete'),
-             renderer='/default/confirm.mako',
-             permission='delete')
-def delete(request):
-    return delete_(User, request)
 
 
 @view_config(route_name=User.get_action_routename('changepassword'),
@@ -141,29 +108,9 @@ def changepassword(request):
     rvalue['form'] = form.render(page=get_current_form_page(clazz, request))
     return rvalue
 
-@view_config(route_name=User.get_action_routename('export'),
-             renderer='/default/export.mako',
-             permission='export')
-def export(request):
-    return export_(User, request)
-
-@view_config(route_name=User.get_action_routename('import'),
-             renderer='/default/import.mako',
-             permission='import')
-def myimport(request):
-    return import_(User, request)
-
 ###########################################################################
 #                               REST SERVICE                              #
 ###########################################################################
-
-@view_config(route_name=User.get_action_routename('list', prefix="rest"),
-             renderer='json',
-             request_method="GET",
-             permission='list'
-             )
-def rest_list(request):
-    return json_list(User, request)
 
 @view_config(route_name=User.get_action_routename('create', prefix="rest"),
              renderer='json',
@@ -171,24 +118,3 @@ def rest_list(request):
              permission='create')
 def rest_create(request):
     return json_create(User, request, encrypt_password)
-
-@view_config(route_name=User.get_action_routename('read', prefix="rest"),
-             renderer='json',
-             request_method="GET",
-             permission='read')
-def rest_read(request):
-    return json_read(User, request)
-
-@view_config(route_name=User.get_action_routename('update', prefix="rest"),
-             renderer='json',
-             request_method="PUT",
-             permission='update')
-def rest_update(request):
-    return json_update(User, request)
-
-@view_config(route_name=User.get_action_routename('delete', prefix="rest"),
-             renderer='json',
-             request_method="DELETE",
-             permission='delete')
-def rest_delete(request):
-    return json_delete(User, request)
