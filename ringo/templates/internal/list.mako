@@ -2,7 +2,8 @@
 mapping = {'num_filters': len(listing.search_filter)}
 def render_filter_link(request, field, value, clazz):
   out = []
-  url = request.current_route_url()
+  # Only take the path of the url and ignore any previous search filters.
+  url = request.current_route_path().split("?")[0]
   params = "form=search&search=%s&field=%s" % (value, field.get('name'))
   out.append('<a href="%s?%s" data-toggle="tooltip"' % (url, params))
   out.append('class="filter"')
@@ -98,10 +99,10 @@ table-bordered">
     % endif
       % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
         <a
-        href="${request.current_route_url()}?sort_field=${field.get('name')}&sort_order=desc">${_(field.get('label'))}</a>
+        href="${request.current_route_path().split('?')[0]}?sort_field=${field.get('name')}&sort_order=desc">${_(field.get('label'))}</a>
       % else:
         <a
-        href="${request.current_route_url()}?sort_field=${field.get('name')}&sort_order=asc">${_(field.get('label'))}</a>
+        href="${request.current_route_path().split('?')[0]}?sort_field=${field.get('name')}&sort_order=asc">${_(field.get('label'))}</a>
       % endif
       % if request.session['%s.list.sort_field' % clazz.__tablename__] == field.get('name'):
         % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
@@ -146,7 +147,7 @@ table-bordered">
           <%
             links = []
             for v in value:
-             links.append(render_filter_link(request, field, v, clazz))
+              links.append(render_filter_link(request, field, v, clazz))
           %>
           ${", ".join(links)}
         % else:
