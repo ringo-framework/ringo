@@ -37,7 +37,7 @@ autoresponsive = tableconfig.is_autoresponsive()
     <input name="form" type="hidden" value="search">
     <div class="form-group">
       <label class="sr-only" for="search">${_('Search')}</label>
-      <input name="search" class="form-control input-large" type="text" value="${search}" placeholder="${_('Search for (Regexpr) in ...')}"/>
+      <input name="search" class="form-control input-large" type="text" value="${search}" placeholder="${_('Search for in ...')}"/>
     </div>
     <div class="form-group">
       <label class="sr-only" for="field">${_('Fields')}</label>

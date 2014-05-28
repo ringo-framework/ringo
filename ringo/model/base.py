@@ -475,9 +475,10 @@ class BaseList(object):
         the value matches, then the item is kept in the list.
         """
         self.search_filter = filter_stack
+        log.debug('Length filterstack: %s' % len(filter_stack))
         for search, search_field in filter_stack:
             # Build a regular expression
-            re_expr = re.compile(search)
+            re_expr = re.compile(re.escape(search))
             filtered_items = []
             log.debug('Filtering "%s" in "%s" on %s items'
                       % (search, search_field, len(self.items)))
