@@ -21,11 +21,13 @@ A state machine can be attached to the items using a :ref:`mixin_state`
 which organises the state machines an provides a unique interface.
 """
 
-def walk(state, found=None):
+def walk(state, ignore_checks=False, found=None):
     """Helper function to collect all available states in the states
     graph beginning from the given start state
 
     :state: Start state
+    :ignore_checks: Do not check if a transition is avaible. Return all
+    states.
     :returns: List of all states
 
     """
@@ -33,11 +35,11 @@ def walk(state, found=None):
         found = []
     if state not in found:
         found.append(state)
-        for transition in state.get_transitions():
+        for transition in state.get_transitions(ignore_checks):
             if transition._end_state in found:
                 continue
             else:
-                walk(transition._end_state, found)
+                walk(transition._end_state, ignore_checks, found)
     return found
 
 
@@ -109,7 +111,7 @@ class Statemachine(object):
         current_id = getattr(self._item, self._item_state_attr)
         if init_state:
             current_id = init_state
-        for st in self.get_states():
+        for st in self.get_states(ignore_checks=True):
             if st._id == current_id:
                 self._current = st
                 break
@@ -128,13 +130,15 @@ class Statemachine(object):
         """
         return None
 
-    def get_states(self):
+    def get_states(self, ignore_checks=False):
         """Returns a list of all states in the statemachine
 
+        :ignore_checks: Do not check if a transition is avaible. Return
+        all states.
         :returns: List of :class:`State` objects.
 
         """
-        return walk(self._root)
+        return walk(self._root, ignore_checks=ignore_checks)
 
     def set_state(self, state):
         """Will set the current state of the state machine
@@ -306,14 +310,16 @@ class State(object):
         """
         return self._disabled_actions.get(role, [])
 
-    def get_transitions(self):
+    def get_transitions(self, ignore_checks=False):
         """Returns the available transitions to other states.
 
+        :ignore_checks: Do not check if a transition is avaible. Return
+        all available transitions.
         :returns:  List of :class:`Transition` objects.
 
         """
         transitions = []
         for trans in self._transitions:
-            if trans.is_available():
+            if ignore_checks or trans.is_available():
                 transitions.append(trans)
         return transitions
