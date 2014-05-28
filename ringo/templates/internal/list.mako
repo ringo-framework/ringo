@@ -66,7 +66,7 @@ autoresponsive = tableconfig.is_autoresponsive()
                   href="${request.current_route_url()}?form=search&saved=${key}">${_(value[2])}</a>
                 </td>
                 <td width="20">
-                  <a class="pull-right" tabindex="-1" href="${request.current_route_url()}?form=search&delete=${key}"><i class="icon-remove"></i></a>
+                  <a class="pull-right" tabindex="-1" href="${request.current_route_url()}?form=search&delete=${key}"><i class="glyphicon glyphicon-remove"></i></a>
                 </td>
               </tr>
               % endfor
