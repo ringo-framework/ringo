@@ -446,7 +446,8 @@ class BaseList(object):
         return self.items
 
     def sort(self, field, order, expand=True):
-        """Will return a sorted item list.
+        """Will return a sorted item list. Sorting is done based on the
+        string version of the value in the sort field.
 
         :field: Name of the field on which the sort will be done
         :order: If "desc" then the order will be reverted.
@@ -454,10 +455,9 @@ class BaseList(object):
         :returns: Sorted item list
 
         """
-        if expand:
-            sorted_items = sorted(self.items, key=itemgetter(field))
-        else:
-            sorted_items = sorted(self.items, key=attrgetter(field))
+        getter = attrgetter(field)
+        sorted_items = sorted(self.items,
+                              key=lambda item: unicode(getter(item)))
         if order == "desc":
             sorted_items.reverse()
         self.items = sorted_items
