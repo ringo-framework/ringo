@@ -1,5 +1,7 @@
 <%
 value = field.get_value() or []
+if not isinstance(value, list):
+  value = [value]
 selected = [str(id) for id in value if id]
 %>
 <input style="display:none" type="checkbox" value="" name="${field.name}" checked="checked"/>
