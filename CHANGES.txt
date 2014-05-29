@@ -16,6 +16,7 @@ to the tracker.
 	  search. Therefor regular expressions are currently not supported
 	  anymore. See #52.
 	* Search is now case insesnsitive.
+- Fix expandation of value in readonly dropdowns.
 
 0.14.0
 ------
