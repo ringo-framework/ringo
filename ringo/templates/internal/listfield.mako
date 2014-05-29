@@ -5,7 +5,7 @@ if not isinstance(value, list):
 selected = [str(id) for id in value if id]
 %>
 <input style="display:none" type="checkbox" value="" name="${field.name}" checked="checked"/>
-% if field.renderer.showsearch == "true":
+% if field.renderer.showsearch == "true" and not field.is_readonly():
 <table class="table table-condensed table-striped table-bordered datatable-simple">
 % else:
 <table class="table table-condensed table-striped table-bordered datatable-blank">
