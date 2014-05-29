@@ -1,3 +1,8 @@
+<%
+value = field.get_value() or []
+selected = [str(id) for id in value if id]
+%>
+<input style="display:none" type="checkbox" value="" name="${field.name}" checked="checked"/>
 % if field.renderer.showsearch == "true":
 <table class="table table-condensed table-striped table-bordered datatable-simple">
 % else:
@@ -39,14 +44,22 @@
       % if not field.is_readonly() and not field.renderer.onlylinked == "true":
         <td>
           % if not field.renderer.multiple == "false":
-            <input type="checkbox" value="${item.id}" name="${field.name}"/>
+            % if str(item.id) in selected:
+              <input type="checkbox" value="${item.id}" name="${field.name}" checked="checked"/>
+            % else:
+              <input type="checkbox" value="${item.id}" name="${field.name}"/>
+            % endif
           % else:
-            <input type="checkbox" value="${item.id}" name="${field.name}" onclick="checkOne('${field.name}', this);"/>
+            % if str(item.id) in selected:
+              <input type="checkbox" value="${item.id}" name="${field.name}" onclick="checkOne('${field.name}', this);" checked="checked"/>
+            % else:
+              <input type="checkbox" value="${item.id}" name="${field.name}" onclick="checkOne('${field.name}', this);"/>
+            % endif
           % endif
         </td>
       % else:
           ## Render a hidden checkbox field as we need to submit the values in
-          <input style="display:none" type="checkbox" value="${item.id}" name="${field.name}"/>
+          <input style="display:none" type="checkbox" value="${item.id}" name="${field.name}" checked="checked"/>
       % endif
       % for num, col in enumerate(tableconfig.get_columns()):
         % if permission and not field.renderer.nolinks == "true":
