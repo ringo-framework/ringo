@@ -488,7 +488,7 @@ class BaseList(object):
         log.debug('Length filterstack: %s' % len(filter_stack))
         for search, search_field in filter_stack:
             # Build a regular expression
-            re_expr = re.compile(re.escape(search))
+            re_expr = re.compile(re.escape(search), re.IGNORECASE)
             filtered_items = []
             log.debug('Filtering "%s" in "%s" on %s items'
                       % (search, search_field, len(self.items)))
