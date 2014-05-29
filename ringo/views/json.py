@@ -2,6 +2,7 @@
 Modul for a simple RESTfull Interface to basic CRUD operations on the
 items
 """
+import logging
 from pyramid.view import forbidden_view_config
 from pyramid.view import notfound_view_config
 from pyramid.view import view_config
@@ -12,6 +13,9 @@ from formbar.config import Config, parse
 from formbar.rules import Rule, Parser
 
 from ringo.views.base import _get_item_from_context
+
+log = logging.getLogger(__name__)
+
 
 class JSONResponse(object):
     """Generic response item for JSON responses on the RESTfull api"""
@@ -70,10 +74,16 @@ def rest_notfound(request):
              renderer='json',
              request_method="GET")
 def evaluate_(request):
-    expr = Parser().parse(request.GET.get('rule'))
-    rule = Rule(expr=expr)
-    result = rule.evaluate({})
-    return JSONResponse(True, result, {"msg": rule.msg})
+    try:
+        ruleexpr = request.GET.get('rule')
+        expr = Parser().parse(ruleexpr)
+        rule = Rule(expr=expr)
+        result = rule.evaluate({})
+        return JSONResponse(True, result, {"msg": rule.msg})
+    except:
+        msg = "Can not evaluate rule '%s'" % ruleexpr
+        log.error(msg)
+        return JSONResponse(False, False, {"msg": msg})
 
 @view_config(route_name='form-render',
              renderer='json',
