@@ -17,6 +17,7 @@ to the tracker.
 	  anymore. See #52.
 	* Search is now case insesnsitive.
 - Fix expandation of value in readonly dropdowns.
+- New formencode version 0.8.1
 
 0.14.0
 ------
