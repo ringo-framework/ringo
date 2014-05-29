@@ -8,6 +8,15 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
+0.14.1
+------
+- Fixes in the overview
+	* Sorting on BaseItems is done based on their string representation.
+	* Filter expressions are now escaped. This allows special chars in the
+	  search. Therefor regular expressions are currently not supported
+	  anymore. See #52.
+	* Search is now case insesnsitive.
+
 0.14.0
 ------
 - Update to JQuery to 2.1.1
