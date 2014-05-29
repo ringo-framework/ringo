@@ -3,7 +3,7 @@ import json
 import re
 import datetime
 import uuid
-from operator import itemgetter, attrgetter
+from operator import attrgetter
 from formbar.config import Config, load
 from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload, ColumnProperty, class_mapper
@@ -54,6 +54,18 @@ class BaseItem(object):
 
     def __str__(self):
         return self.__unicode__()
+
+    def __cmp__(self, other):
+        """Comparision of the elements are done on their string
+        representation"""
+        s = unicode(self)
+        o = unicode(other)
+        if s < o:
+            return -1
+        elif s == o:
+            return 0
+        else:
+            return 1
 
     def __getitem__(self, name):
         return self.get_value(name)
@@ -455,9 +467,7 @@ class BaseList(object):
         :returns: Sorted item list
 
         """
-        getter = attrgetter(field)
-        sorted_items = sorted(self.items,
-                              key=lambda item: unicode(getter(item)))
+        sorted_items = sorted(self.items, key=attrgetter(field))
         if order == "desc":
             sorted_items.reverse()
         self.items = sorted_items
