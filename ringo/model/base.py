@@ -3,7 +3,7 @@ import json
 import re
 import datetime
 import uuid
-from operator import itemgetter, attrgetter
+from operator import attrgetter
 from formbar.config import Config, load
 from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload, ColumnProperty, class_mapper
@@ -55,6 +55,18 @@ class BaseItem(object):
 
     def __str__(self):
         return self.__unicode__()
+
+    def __cmp__(self, other):
+        """Comparision of the elements are done on their string
+        representation"""
+        s = unicode(self)
+        o = unicode(other)
+        if s < o:
+            return -1
+        elif s == o:
+            return 0
+        else:
+            return 1
 
     def __getitem__(self, name):
         return self.get_value(name)
@@ -447,7 +459,8 @@ class BaseList(object):
         return self.items
 
     def sort(self, field, order, expand=True):
-        """Will return a sorted item list.
+        """Will return a sorted item list. Sorting is done based on the
+        string version of the value in the sort field.
 
         :field: Name of the field on which the sort will be done
         :order: If "desc" then the order will be reverted.
@@ -455,10 +468,7 @@ class BaseList(object):
         :returns: Sorted item list
 
         """
-        if expand:
-            sorted_items = sorted(self.items, key=itemgetter(field))
-        else:
-            sorted_items = sorted(self.items, key=attrgetter(field))
+        sorted_items = sorted(self.items, key=attrgetter(field))
         if order == "desc":
             sorted_items.reverse()
         self.items = sorted_items
@@ -476,9 +486,10 @@ class BaseList(object):
         the value matches, then the item is kept in the list.
         """
         self.search_filter = filter_stack
+        log.debug('Length filterstack: %s' % len(filter_stack))
         for search, search_field in filter_stack:
             # Build a regular expression
-            re_expr = re.compile(search)
+            re_expr = re.compile(re.escape(search), re.IGNORECASE)
             filtered_items = []
             log.debug('Filtering "%s" in "%s" on %s items'
                       % (search, search_field, len(self.items)))

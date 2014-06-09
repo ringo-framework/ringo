@@ -8,7 +8,7 @@ from pyramid.view import view_config
 import sqlalchemy as sa
 
 from formbar.config import Config, load, parse
-from formbar.form import Form, variabledecode
+from formbar.form import Form
 
 from ringo.model.base import BaseFactory
 from ringo.model.form import Form as BlobformForm
@@ -318,7 +318,7 @@ def bundle_(request):
     # the request is the intial request for a bundled action. In this
     # case we can delete all previous selected and stored item ids in
     # the session.
-    params = variabledecode.variable_decode(request.params)
+    params = request.params.mixed()
     if params.get('bundle_action'):
         request.session['%s.bundle.action' % clazz] = params.get('bundle_action')
         try:

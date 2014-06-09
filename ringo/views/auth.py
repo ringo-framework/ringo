@@ -48,7 +48,7 @@ def login(request):
     form_config = config.get_form('loginform')
     form = Form(form_config, csrf_token=request.session.get_csrf_token())
     if request.POST:
-        form.validate(request.params.mixed())
+        form.validate(request.params)
         username = form.data.get('login')
         password = form.data.get('pass')
         user = user_login(username, password)
@@ -96,12 +96,12 @@ def register_user(request):
                           is_login_unique)
     form.add_validator(validator)
     if request.POST:
-        if form.validate(request.params.mixed()):
+        if form.validate(request.params):
             # 1. Create user. Do not activate him. Default role is user.
             ufac = User.get_item_factory()
             # TODO: Check why we not use the get_item_factory_method
             # here. Do we use plain factories because the need full
-            # controll of depended relations? (ti) <2014-04-08 17:07> 
+            # controll of depended relations? (ti) <2014-04-08 17:07>
             pfac = BaseFactory(Profile)
             gfac = BaseFactory(Usergroup)
             user = ufac.create(None)
@@ -176,7 +176,7 @@ def forgot_password(request):
     form_config = config.get_form('forgot_password')
     form = Form(form_config, csrf_token=request.session.get_csrf_token())
     if request.POST:
-        if form.validate(request.params.mixed()):
+        if form.validate(request.params):
             username = form.data.get('login')
             user = request_password_reset(username, request.db)
             if user:

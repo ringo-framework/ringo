@@ -27,4 +27,4 @@ class Tag(BaseItem, Owned, Base):
             4: "label label-warning",
             5: "label label-danger"}
         return '<span class="%s">%s</span>' % (mapping.get(self.tagtype),
-                                               self.name)
+                                               self)

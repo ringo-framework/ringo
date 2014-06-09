@@ -9,7 +9,7 @@ to the tracker.
 - Send notification mail when a new user confirms the new account.
 
 0.15.0
-------
+=======
 IMPORTANT: Application will need some work on application initialisation to
 stay compatible with this release:
 
@@ -24,6 +24,17 @@ stay compatible with this release:
   modules etc.
 - Added new ringo-admin command.
 - Removed old add-ringo-modul command.
+
+0.14.1
+=======
+- Fixes in the overview
+	* Sorting on BaseItems is done based on their string representation.
+	* Filter expressions are now escaped. This allows special chars in the
+	  search. Therefor regular expressions are currently not supported
+	  anymore. See #52.
+	* Search is now case insesnsitive.
+- Fix expandation of value in readonly dropdowns.
+- New formencode version 0.8.1
 
 0.14.0
 ------

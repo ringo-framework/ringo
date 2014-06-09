@@ -105,10 +105,8 @@ Searching
 The search is based on the visible values in the overview. That means you can
 search for anything which is displayed in one of the columns. If the search
 string matches at least one value in the column the item will be found and
-displayed in the overview.
-
-The search can be a regular expression. Optionally you can select a specific
-column to restrict the search an this column. On default the search is done
+displayed in the overview. Optionally you can select a specific column
+to restrict the search an this column. On default the search is done
 over all visible columns.
 
 .. hint::

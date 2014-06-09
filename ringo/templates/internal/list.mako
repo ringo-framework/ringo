@@ -2,7 +2,8 @@
 mapping = {'num_filters': len(listing.search_filter)}
 def render_filter_link(request, field, value, clazz):
   out = []
-  url = request.current_route_url()
+  # Only take the path of the url and ignore any previous search filters.
+  url = request.current_route_path().split("?")[0]
   params = "form=search&search=%s&field=%s" % (value, field.get('name'))
   out.append('<a href="%s?%s" data-toggle="tooltip"' % (url, params))
   out.append('class="filter"')
@@ -37,7 +38,7 @@ autoresponsive = tableconfig.is_autoresponsive()
     <input name="form" type="hidden" value="search">
     <div class="form-group">
       <label class="sr-only" for="search">${_('Search')}</label>
-      <input name="search" class="form-control input-large" type="text" value="${search}" placeholder="${_('Search for (Regexpr) in ...')}"/>
+      <input name="search" class="form-control input-large" type="text" value="${search}" placeholder="${_('Search for in ...')}"/>
     </div>
     <div class="form-group">
       <label class="sr-only" for="field">${_('Fields')}</label>
@@ -65,7 +66,7 @@ autoresponsive = tableconfig.is_autoresponsive()
                   href="${request.current_route_url()}?form=search&saved=${key}">${_(value[2])}</a>
                 </td>
                 <td width="20">
-                  <a class="pull-right" tabindex="-1" href="${request.current_route_url()}?form=search&delete=${key}"><i class="icon-remove"></i></a>
+                  <a class="pull-right" tabindex="-1" href="${request.current_route_url()}?form=search&delete=${key}"><i class="glyphicon glyphicon-remove"></i></a>
                 </td>
               </tr>
               % endfor
@@ -98,10 +99,10 @@ table-bordered">
     % endif
       % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
         <a
-        href="${request.current_route_url()}?sort_field=${field.get('name')}&sort_order=desc">${_(field.get('label'))}</a>
+        href="${request.current_route_path().split('?')[0]}?sort_field=${field.get('name')}&sort_order=desc">${_(field.get('label'))}</a>
       % else:
         <a
-        href="${request.current_route_url()}?sort_field=${field.get('name')}&sort_order=asc">${_(field.get('label'))}</a>
+        href="${request.current_route_path().split('?')[0]}?sort_field=${field.get('name')}&sort_order=asc">${_(field.get('label'))}</a>
       % endif
       % if request.session['%s.list.sort_field' % clazz.__tablename__] == field.get('name'):
         % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
@@ -146,7 +147,7 @@ table-bordered">
           <%
             links = []
             for v in value:
-             links.append(render_filter_link(request, field, v, clazz))
+              links.append(render_filter_link(request, field, v, clazz))
           %>
           ${", ".join(links)}
         % else:
