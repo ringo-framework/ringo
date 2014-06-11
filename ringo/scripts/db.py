@@ -52,3 +52,8 @@ def handle_db_init_command(args):
 def handle_db_upgrade_command(args):
     cfg = get_alembic_config(args)
     command.upgrade(cfg, "head")
+
+
+def handle_db_revision_command(args, msg=None):
+    cfg = get_alembic_config(args)
+    command.revision(cfg, message=msg, autogenerate=True)
