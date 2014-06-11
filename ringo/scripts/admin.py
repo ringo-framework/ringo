@@ -52,7 +52,7 @@ def setup_modul_parser(subparsers, parent):
                             help='Name of the new modul (singular form)')
     add_parser.set_defaults(func=handle_modul_add_command)
 
-    # Add command
+    # Delete command
     delete_parser = sp.add_parser('delete',
                                   help='Deletes a modul',
                                   parents=[parent])
