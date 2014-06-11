@@ -3,7 +3,8 @@ import transaction
 from mako.lookup import TemplateLookup
 from ringo.config import modul_template_dir
 from ringo.lib.helpers import get_app_location
-from ringo.scripts.db import get_session
+from ringo.scripts.db import get_session, handle_db_revision_command, \
+handle_db_upgrade_command
 from ringo.model.modul import ModulItem, ActionItem
 template_lookup = TemplateLookup(directories=[modul_template_dir])
 
@@ -210,3 +211,6 @@ def handle_modul_add_command(args):
     add_model_file(package, name, modul_id, clazz)
     add_form_file(package, name)
     add_table_file(package, name)
+    msg = "Added %s modul" % name
+    handle_db_revision_command(args, msg)
+    handle_db_upgrade_command(args)
