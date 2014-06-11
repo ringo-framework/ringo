@@ -50,6 +50,13 @@ def setup_modul_parser(subparsers, parent):
     add_parser.add_argument('name',
                             type=modul_name,
                             help='Name of the new modul (singular form)')
+    add_parser.add_argument('--mixin',
+                            nargs="*",
+                            choices=['owned', 'meta', 'logged', 'state',
+                                     'blobform', 'versioned', 'printable',
+                                     'nested', 'commented', 'tagged', 'todo'],
+                            default=["owned"],
+                            help='Mixins for the generated model')
     add_parser.set_defaults(func=handle_modul_add_command)
 
     # Delete command

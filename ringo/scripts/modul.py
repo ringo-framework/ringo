@@ -8,6 +8,19 @@ handle_db_upgrade_command
 from ringo.model.modul import ModulItem, ActionItem
 template_lookup = TemplateLookup(directories=[modul_template_dir])
 
+mixinmap = {
+    'owned': 'Owned',
+    'meta': 'Meta',
+    'logged': 'Logged',
+    'state': 'StateMixin',
+    'blobform': 'Blobform',
+    'versioned': 'Versioned',
+    'printable': 'Printable',
+    'nested': 'Nested',
+    'commented': 'Commented',
+    'tagged': 'Tagged',
+    'todo': 'Todo'
+}
 
 def _create_default_actions(session, ignore=[]):
     # TODO: Translate the name of the Action (torsten) <2013-07-10 09:32>
@@ -68,7 +81,7 @@ def add_db_entry(package, name, session):
             modul.label = label
             modul.label_plural = label_plural
             modul.display = "header-menu"
-            modul.str_repr = "%%s|id"
+            modul.str_repr = "%s|id"
             modul.actions.extend(_create_default_actions(session))
             session.add(modul)
             session.flush()
@@ -91,9 +104,13 @@ def del_model_file(package, modul):
         print 'Failed.'
 
 
-def add_model_file(package, modul, id, clazz):
+def add_model_file(package, modul, id, clazz, mixins):
     target_file = os.path.join(get_app_location(package), package, 'model', '%s.py' % modul)
     print 'Adding new model file "%s"... ' % target_file,
+    # Build mixins
+    mixinclasses = []
+    for mixin in mixins:
+        mixinclasses.append(mixinmap[mixin])
     try:
         tablename = modul + 's'
         label = modul.capitalize()
@@ -107,7 +124,8 @@ def add_model_file(package, modul, id, clazz):
             'modul': modul,
             'table': tablename,
             'id': id,
-            'clazz': clazz
+            'clazz': clazz,
+            'mixins': mixinclasses
         }
         template = template_lookup.get_template("model.mako")
         generated = template.render(**values)
@@ -208,7 +226,7 @@ def handle_modul_add_command(args):
     name = args.name
     clazz = name.capitalize()
     modul_id = add_db_entry(package, name, session)
-    add_model_file(package, name, modul_id, clazz)
+    add_model_file(package, name, modul_id, clazz, args.mixin)
     add_form_file(package, name)
     add_table_file(package, name)
     msg = "Added %s modul" % name
