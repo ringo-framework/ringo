@@ -1,11 +1,15 @@
 import os
+import uuid
 import transaction
+from sqlalchemy import func
 from mako.lookup import TemplateLookup
 from ringo.config import modul_template_dir
 from ringo.lib.helpers import get_app_location
-from ringo.scripts.db import get_session, handle_db_revision_command, \
-handle_db_upgrade_command
-from ringo.model.modul import ModulItem, ActionItem
+from ringo.scripts.db import (
+    get_session, create_new_revision,
+    handle_db_upgrade_command
+)
+from ringo.model.modul import ModulItem
 template_lookup = TemplateLookup(directories=[modul_template_dir])
 
 mixinmap = {
@@ -22,45 +26,65 @@ mixinmap = {
     'todo': 'Todo'
 }
 
-def _create_default_actions(session, ignore=[]):
+
+def _get_default_actions_sql(session, mid, ignore=[]):
     # TODO: Translate the name of the Action (torsten) <2013-07-10 09:32>
-    a0 = ActionItem(name="List", url="list", icon="icon-list-alt")
-    a1 = ActionItem(name="Create", url="create", icon=" icon-plus")
-    a2 = ActionItem(name="Read", url="read/{id}", icon="icon-eye-open")
-    a3 = ActionItem(name="Update", url="update/{id}", icon="icon-edit")
-    a4 = ActionItem(name="Delete", url="delete/{id}", icon="icon-trash")
-    a5 = ActionItem(name="Import", url="import", icon="icon-import")
-    a6 = ActionItem(name="Export", url="export/{id}", icon="icon-export")
-    actions = []
-    if not "list" in ignore:
-        session.add(a0)
-        actions.append(a0)
-    if not "create" in ignore:
-        session.add(a1)
-        actions.append(a1)
-    if not "read" in ignore:
-        session.add(a2)
-        actions.append(a2)
-    if not "update" in ignore:
-        session.add(a3)
-        actions.append(a3)
-    if not "delete" in ignore:
-        session.add(a4)
-        actions.append(a4)
-    if not "import" in ignore:
-        session.add(a5)
-        actions.append(a5)
-    if not "export" in ignore:
-        session.add(a6)
-        actions.append(a6)
-    return actions
+    sql = []
+    for action in ['list', 'create', 'read', 'update',
+                   'delete', 'import', 'export']:
+        if action in ignore:
+            continue
+        myuuid = uuid.uuid4().hex
+        if action == "list":
+            name = "List"
+            url = "list"
+            icon = "icon-list-alt"
+            bundle = 0
+        if action == "create":
+            name = "Create"
+            url = "create"
+            icon = "icon-plus"
+            bundle = 0
+        if action == "read":
+            name = "Read"
+            url = "read/{id}"
+            icon = "icon-eye-open"
+            bundle = 0
+        if action == "update":
+            name = "Update"
+            url = "update/{id}"
+            icon = "icon-eye-open"
+            bundle = 0
+        if action == "delete":
+            name = "Delete"
+            url = "delete/{id}"
+            icon = "icon-eye-delete"
+            bundle = 1
+        if action == "import":
+            name = "Import"
+            url = "import"
+            icon = "icon-import"
+            bundle = 0
+        if action == "export":
+            name = "Export"
+            url = "export/{id}"
+            icon = "icon-export"
+            bundle = 1
+
+        sql.append("""INSERT INTO "actions" """
+                   """(mid, name, url, icon, uuid, bundle) """
+                   """VALUES (%s, '%s', '%s', '%s', '%s', '%s')""" %
+                   (mid, name, url, icon, myuuid, bundle))
+    return sql
+
 
 def remove_db_entry(name, session):
     print 'Remove entry in modules table for "%s"... ' % name,
     modul_name = name + "s"
     try:
         with transaction.manager:
-            modul = session.query(ModulItem).filter(ModulItem.name == modul_name).delete()
+            session.query(ModulItem).filter(
+                ModulItem.name == modul_name).delete()
             session.flush()
         # Get last inserted id.
         print 'Ok.'
@@ -68,34 +92,53 @@ def remove_db_entry(name, session):
         print e
         print 'Failed.'
 
-def add_db_entry(package, name, session):
-    print 'Adding new entry in modules table for "%s"... ' % name,
+
+def get_next_modulid(package, session):
+    if package == "ringo":
+        id = session.query(
+            func.max(ModulItem.id)).filter(ModulItem.id < 1000).one()[0]
+    else:
+        id = session.query(
+            func.max(ModulItem.id)).filter(ModulItem.id > 999).one()[0]
+    print id
+    if id:
+        return id + 1
+    else:
+        return 1000
+
+
+def get_insert_statements(package, name, session):
+    """Will retunr the INSERT statements for the new modul. They can be
+    used in the migration scripts.
+
+    :package: @todo
+    :name: @todo
+    :session: @todo
+    :returns: @todo
+
+    """
     modul_name = name + "s"
     label = name.capitalize()
     label_plural = label + "s"
     clazzpath = ".".join([package, 'model', name, label])
-    try:
-        with transaction.manager:
-            modul = ModulItem(name=modul_name)
-            modul.clazzpath = clazzpath
-            modul.label = label
-            modul.label_plural = label_plural
-            modul.display = "header-menu"
-            modul.str_repr = "%s|id"
-            modul.actions.extend(_create_default_actions(session))
-            session.add(modul)
-            session.flush()
-        # Get last inserted id.
-        last_modul = session.query(ModulItem).filter(ModulItem.name == modul_name).one()
-        print 'Ok.'
-        return last_modul.id
-    except Exception, e:
-        print e
-        print 'Failed.'
+    location = "header-menu"
+    str_repr = "%s|id"
+    myuuid = uuid.uuid4().hex
+    id = get_next_modulid(package, session)
+
+    sql = []
+    sql.append("""INSERT INTO "modules" """
+               """VALUES (%s,'%s','%s','%s','%s', """
+               """NULL, '%s','%s','%s', NULL); """
+               % (id, modul_name, clazzpath, label,
+                  label_plural, str_repr, location, myuuid))
+    sql.extend(_get_default_actions_sql(session, id))
+    return sql
 
 
 def del_model_file(package, modul):
-    target_file = os.path.join(get_app_location(package), package, 'model', '%s.py' % modul)
+    target_file = os.path.join(get_app_location(package),
+                               package, 'model', '%s.py' % modul)
     print 'Deleting model file "%s"... ' % target_file,
     try:
         os.remove(target_file)
@@ -105,7 +148,8 @@ def del_model_file(package, modul):
 
 
 def add_model_file(package, modul, id, clazz, mixins):
-    target_file = os.path.join(get_app_location(package), package, 'model', '%s.py' % modul)
+    target_file = os.path.join(get_app_location(package),
+                               package, 'model', '%s.py' % modul)
     print 'Adding new model file "%s"... ' % target_file,
     # Build mixins
     mixinclasses = []
@@ -139,7 +183,8 @@ def add_model_file(package, modul, id, clazz, mixins):
 
 def del_form_file(package, modul):
     filename = modul + "s"
-    target_file= os.path.join(get_app_location(package), package, 'views', 'forms', '%s.xml' % filename)
+    target_file = os.path.join(get_app_location(package),
+                               package, 'views', 'forms', '%s.xml' % filename)
     print 'Deleting form configuration file "%s"... ' % target_file,
     try:
         os.remove(target_file)
@@ -150,7 +195,8 @@ def del_form_file(package, modul):
 
 def add_form_file(package, modul):
     filename = modul + "s"
-    target_file= os.path.join(get_app_location(package), package, 'views', 'forms', '%s.xml' % filename)
+    target_file = os.path.join(get_app_location(package),
+                               package, 'views', 'forms', '%s.xml' % filename)
     print 'Adding new form configuration file "%s"... ' % target_file,
     try:
         values = {}
@@ -166,7 +212,9 @@ def add_form_file(package, modul):
 
 def del_table_file(package, modul):
     filename = modul + "s"
-    target_file= os.path.join(get_app_location(package), package, 'views', 'tables', '%s.json' % filename)
+    target_file = os.path.join(get_app_location(package),
+                               package,
+                               'views', 'tables', '%s.json' % filename)
     print 'Deleting table configuration file "%s"... ' % target_file,
     try:
         os.remove(target_file)
@@ -177,7 +225,9 @@ def del_table_file(package, modul):
 
 def add_table_file(package, modul):
     filename = modul + "s"
-    target_file= os.path.join(get_app_location(package), package, 'views', 'tables', '%s.json' % filename)
+    target_file = os.path.join(get_app_location(package),
+                               package,
+                               'views', 'tables', '%s.json' % filename)
     print 'Adding new table configuration file "%s"... ' % target_file,
     try:
         values = {}
@@ -189,7 +239,6 @@ def add_table_file(package, modul):
         print 'Ok.'
     except:
         print 'Failed.'
-
 
 
 def handle_modul_delete_command(args):
@@ -225,10 +274,12 @@ def handle_modul_add_command(args):
     package = args.app
     name = args.name
     clazz = name.capitalize()
-    modul_id = add_db_entry(package, name, session)
+    modul_id = get_next_modulid(package, session)
+    sql = get_insert_statements(package, name, session)
+    #modul_id = add_db_entry(package, name, session)
     add_model_file(package, name, modul_id, clazz, args.mixin)
     add_form_file(package, name)
     add_table_file(package, name)
     msg = "Added %s modul" % name
-    handle_db_revision_command(args, msg)
+    create_new_revision(args, sql, msg)
     handle_db_upgrade_command(args)
