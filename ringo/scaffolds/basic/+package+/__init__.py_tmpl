@@ -3,6 +3,7 @@ from pyramid.i18n import TranslationStringFactory
 
 from ringo.lib.sql.db import setup_db_session
 from ringo.model import Base
+from ringo.config import setup_modules
 from ringo.lib.i18n import translators
 
 def main(global_config, **settings):
@@ -13,12 +14,13 @@ def main(global_config, **settings):
     config = Configurator(settings=settings)
     # Include basic ringo configuration.
     config.include('ringo')
-    config.commit()
-
-    # Now configure the application and optionally overwrite previously
-    translators.append(TranslationStringFactory('{{package}}'))
-    config.add_translation_dirs('{{package}}:locale/')
-
-    # done configurations.
+    config.include('{{package}}')
     config.scan()
     return config.make_wsgi_app()
+
+def includeme(config):
+    # Now configure the application and optionally overwrite previously
+    translators.append(TranslationStringFactory('plorma'))
+    config.add_translation_dirs('plorma:locale/')
+    config.add_static_view('plorma-static', path='plorma:static',
+                           cache_max_age=3600)
