@@ -37,7 +37,7 @@ def setup_modules(config):
     # Otherwise the views seems not not be mapped correctly to the routes.
     # (torsten) <2014-05-09 18:32>
     module_classes = {}
-    for modul in DBSession.query(ModulItem).filter(ModulItem.id < 1000).all():
+    for modul in DBSession.query(ModulItem).all():
         clazz = helpers.dynamic_import(modul.clazzpath)
         module_classes[clazz._modul_id] = clazz
     for modul_id in module_classes:
