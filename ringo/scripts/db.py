@@ -54,6 +54,9 @@ def copy_initial_migration_scripts(args):
     src = os.path.join(*src_path)
     dst = os.path.join(*dst_path)
     src_files = os.listdir(src)
+    # Only copy the initial files if the directory is empty.
+    if len(src_files) >= 3:
+        return
     for file_name in src_files:
         full_file_name = os.path.join(src, file_name)
         if (os.path.isfile(full_file_name)):
