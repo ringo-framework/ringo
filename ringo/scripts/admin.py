@@ -32,6 +32,7 @@ from ringo.scripts.db import (
 from ringo.scripts.modul import (
     handle_modul_add_command,
     handle_modul_delete_command,
+    handle_modul_fields_command,
 )
 
 def modul_name(var):
@@ -42,6 +43,14 @@ def setup_modul_parser(subparsers, parent):
                               help='Modul administration',
                               parents=[parent])
     sp = p.add_subparsers(help='Modul command help')
+    # Model command
+    model_parser = sp.add_parser('fields',
+                                 help='Generates the model fields',
+                                 parents=[parent])
+    model_parser.add_argument('name',
+                              type=modul_name,
+                              help='Name of the new modul (singular form)')
+    model_parser.set_defaults(func=handle_modul_fields_command)
 
     # Add command
     add_parser = sp.add_parser('add',

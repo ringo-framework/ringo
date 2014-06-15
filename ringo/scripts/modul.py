@@ -1,4 +1,5 @@
 import os
+import subprocess
 import uuid
 import transaction
 from sqlalchemy import func
@@ -241,6 +242,33 @@ def add_table_file(package, modul):
         print 'Failed.'
 
 
+def handle_modul_fields_command(args):
+    """@todo: Docstring for add_modul_add_command.
+
+    :args: @todo
+    :returns: @todo
+    """
+    path = []
+    path.append(get_app_location(args.app))
+    path.append(args.app)
+    path.append("views")
+    path.append("forms")
+    path.append("%s.xml" % args.name)
+
+    formbar_path = []
+    formbar_path.append(get_app_location("formbar"))
+    formbar_path.append("contrib")
+    formbar_path.append("generate.py")
+    print os.path.join(*formbar_path)
+
+    print subprocess.check_output([
+        "python",
+        os.path.join(*formbar_path),
+        "model",
+        os.path.join(*path)
+    ])
+
+
 def handle_modul_delete_command(args):
     """@todo: Docstring for add_modul_add_command.
 
@@ -276,7 +304,6 @@ def handle_modul_add_command(args):
     clazz = name.capitalize()
     modul_id = get_next_modulid(package, session)
     sql = get_insert_statements(package, name, session)
-    #modul_id = add_db_entry(package, name, session)
     add_model_file(package, name, modul_id, clazz, args.mixin)
     add_form_file(package, name)
     add_table_file(package, name)
