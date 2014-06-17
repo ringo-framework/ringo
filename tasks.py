@@ -16,7 +16,7 @@ def test(exclude="None"):
     if exclude:
         exclude = exclude.split(",")
     if "init" not in exclude:
-        run("rm test.sqlite")
+        run("rm -f test.sqlite")
         run("alembic -c alembic-test.ini upgrade head")
     run("python setup.py nosetests")
     if "behave" not in exclude:
