@@ -35,7 +35,7 @@ def index_view(request):
         reminder_renderer = DTListRenderer(reminders)
         values['reminders'] = reminder_renderer.render(request)
         # Todos
-        todos = TodoReminders(request)
+        todos = TodoReminders(request, user=request.user)
         todo_renderer = TodoListRenderer(todos)
         values['todos'] = todo_renderer.render(request)
     return values
