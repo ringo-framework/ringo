@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-05-06 14:54+0200\n"
-"PO-Revision-Date: 2014-05-06 16:28+0200\n"
+"POT-Creation-Date: 2014-06-30 12:54+0200\n"
+"PO-Revision-Date: 2014-06-30 12:56+0200\n"
 "Last-Translator: Torsten Irlaender <torsten@irlaender.de>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 1.3\n"
+"Generated-By: Babel 0.9.6\n"
 
 #: ringo/lib/imexport.py:203
 msgid "UPDATE"
@@ -41,7 +41,7 @@ msgstr ""
 "Bitte klicken Sie auf \"${Action}\", um den Eintrag zu ${action}. Klicken"
 " sie auf \"Abbrechen\", um den Vorgang zuzubrechen."
 
-#: ringo/lib/renderer.py:856
+#: ringo/lib/renderer.py:865
 msgid "New entry"
 msgstr "Neuer Eintrag"
 
@@ -414,7 +414,7 @@ msgid "You have selected %s %s for export:"
 msgstr "Sie haben %s %s für den Export selektiert:"
 
 #: ringo/templates/internal/export.mako:17
-#: ringo/templates/internal/list.mako:201
+#: ringo/templates/internal/list.mako:202
 #: ringo/templates/internal/print.mako:11
 msgid "Close"
 msgstr "Schließen"
@@ -461,51 +461,51 @@ msgstr "Fehler"
 msgid "Overview"
 msgstr "Übersicht"
 
-#: ringo/templates/internal/list.mako:39 ringo/templates/internal/list.mako:55
+#: ringo/templates/internal/list.mako:40 ringo/templates/internal/list.mako:56
 msgid "Search"
 msgstr "Suche"
 
-#: ringo/templates/internal/list.mako:40
-msgid "Search for (Regexpr) in ..."
-msgstr "Suche nach (Regexp) in ..."
+#: ringo/templates/internal/list.mako:41
+msgid "Search for in ..."
+msgstr "Suche nach in ..."
 
-#: ringo/templates/internal/list.mako:43
+#: ringo/templates/internal/list.mako:44
 msgid "Fields"
 msgstr "Felder"
 
-#: ringo/templates/internal/list.mako:45
+#: ringo/templates/internal/list.mako:46
 msgid "All columns"
 msgstr "Alle Spalten"
 
-#: ringo/templates/internal/list.mako:57
+#: ringo/templates/internal/list.mako:58
 msgid "Options "
 msgstr "Optionen "
 
-#: ringo/templates/internal/list.mako:75 ringo/templates/internal/list.mako:192
+#: ringo/templates/internal/list.mako:76 ringo/templates/internal/list.mako:193
 msgid "Save current search filter"
 msgstr "Speichere aktuellen Suchfilter"
 
-#: ringo/templates/internal/list.mako:76
+#: ringo/templates/internal/list.mako:77
 msgid "Reset current search filter"
 msgstr "Aktuellen Suchfilter zurücksetzen"
 
-#: ringo/templates/internal/list.mako:80
+#: ringo/templates/internal/list.mako:81
 msgid "${num_filter} filter applied"
 msgstr "${num_filters} Filter angewendet"
 
-#: ringo/templates/internal/list.mako:166
+#: ringo/templates/internal/list.mako:167
 msgid "No items found"
 msgstr "Keine Einträge gefunden"
 
-#: ringo/templates/internal/list.mako:182
+#: ringo/templates/internal/list.mako:183
 msgid "Perform"
 msgstr "Ausführen"
 
-#: ringo/templates/internal/list.mako:194
+#: ringo/templates/internal/list.mako:195
 msgid "Queryname"
 msgstr "Abfragename"
 
-#: ringo/templates/internal/list.mako:197
+#: ringo/templates/internal/list.mako:198
 msgid ""
 "Please insert a name for your query. It it will be selectable under this "
 "name in the options menu of the search after saving."
@@ -513,11 +513,11 @@ msgstr ""
 "Bitte geben Sie einen Namen für ihre Abfrage an. Die Abfrag wird nach dem"
 " Speichern unter diesem Namen im Optionsmenü auswählbar sein."
 
-#: ringo/templates/internal/list.mako:200
+#: ringo/templates/internal/list.mako:201
 msgid "Save Query"
 msgstr "Abfrage speichern"
 
-#: ringo/templates/internal/listfield.mako:12
+#: ringo/templates/internal/listfield.mako:19
 msgid "Add"
 msgstr "Hinzufügen"
 
@@ -673,23 +673,23 @@ msgstr ""
 "Das Passwort wurde nicht zurückgesetzt. Vielleicht ist das Token nicht "
 "gültig?"
 
-#: ringo/views/base.py:482
+#: ringo/views/base.py:483
 msgid "Created new ${item_type} successfull."
 msgstr "${item_type} wurde erfolgreich angelegt."
 
-#: ringo/views/base.py:521
+#: ringo/views/base.py:522
 msgid "Error on validation the data for new ${item_type}"
 msgstr "Fehler bei der Überprüfung der Daten für ${item_type}"
 
-#: ringo/views/base.py:566
+#: ringo/views/base.py:569
 msgid "Edited ${item_type} \"${item}\" successfull."
 msgstr "${item_type} \"${item}\" wurde erfolgreich bearbeitet."
 
-#: ringo/views/base.py:599
+#: ringo/views/base.py:605
 msgid "Error on validation the data for ${item_type} \"${item}\"."
 msgstr "Fehler bei der Überprüfung der Daten für ${item_type} \"${item}\""
 
-#: ringo/views/base.py:689
+#: ringo/views/base.py:695
 msgid "Deleted ${num} ${item_type} successfull."
 msgstr "${item_type} wurde erfolgreich gelöscht."
 
@@ -873,11 +873,11 @@ msgstr "Exportformat"
 
 #: ringo/views/forms/export.xml:2 ringo/views/forms/import.xml:3
 msgid "JSON"
-msgstr ""
+msgstr "JSON"
 
 #: ringo/views/forms/export.xml:3 ringo/views/forms/import.xml:4
 msgid "CSV"
-msgstr ""
+msgstr "CSV"
 
 #. Label for file field in form config
 #: ringo/views/forms/files.xml:2 ringo/views/forms/printtemplates.xml:2
@@ -924,7 +924,7 @@ msgstr "Formulardefinition"
 #. Label for modul column in overview table config
 #: ringo/views/forms/forms.xml:5 ringo/views/forms/printtemplates.xml:6
 #: ringo/views/forms/tags.xml:4 ringo/views/tables/actions.json:2
-#: ringo/views/tables/printtemplates.json:4
+#: ringo/views/tables/forms.json:4 ringo/views/tables/printtemplates.json:4
 msgid "Modul"
 msgstr "Modul"
 
@@ -1252,7 +1252,7 @@ msgstr ""
 "\n"
 "Die Aufgabe wird in dessen Aufgabenübersicht gelistet werden."
 
-#: ringo/views/forms/todos.xml:12
+#: ringo/views/forms/todos.xml:12 ringo/views/forms/users.xml:16
 msgid "No"
 msgstr "Nein"
 
@@ -1357,6 +1357,10 @@ msgstr "Die Anmeldekennung muss größer oder gleich 2 Zeichen lang sein."
 msgid "Passwords must be equal"
 msgstr "Passwörter müssen gleich sein"
 
+#: ringo/views/forms/users.xml:15
+msgid "Yes"
+msgstr "Ja"
+
 #. Label for name column in overview table config
 #: ringo/views/tables/actions.json:3
 msgid "Action"
@@ -1374,7 +1378,7 @@ msgstr "ID"
 
 #. Label for review_state column in overview table config
 #. Label for todo_state column in overview table config
-#: ringo/views/tables/forms.json:4 ringo/views/tables/todos.json:5
+#: ringo/views/tables/forms.json:5 ringo/views/tables/todos.json:5
 msgid "State"
 msgstr "Status"
 
@@ -1388,27 +1392,6 @@ msgstr "Name"
 msgid "Groups"
 msgstr "Gruppen"
 
-#~ msgid "Read"
-#~ msgstr "Lesen"
-
-#~ msgid "Edit"
-#~ msgstr "Bearbeiten"
-
-#~ msgid ""
-#~ msgstr ""
-
-#~ msgid "Deleted ${item_type} \"${item}\" successfull."
-#~ msgstr "${item_type} \"${item}\" wurde erfolgreich gelöscht."
-
-#~ msgid "Login is required"
-#~ msgstr "Anmeldekennung ist ein Pflichtfeld"
-
-#~ msgid "Password must be at least 6 chars long"
-#~ msgstr "Passwort muss mindestens 6 Zeichen lang sein"
-
-#~ msgid "Loginname is required"
-#~ msgstr "Anmeldekennung ist ein Pflichtfeld"
-
-#~ msgid "Email is required"
-#~ msgstr "Email ist ein Pflichtfeld"
+#~ msgid "Search for (Regexpr) in ..."
+#~ msgstr "Suche nach (Regexp) in ..."
 
