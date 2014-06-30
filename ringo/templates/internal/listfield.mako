@@ -4,7 +4,6 @@ if not isinstance(value, list):
   value = [value]
 selected = [str(id) for id in value if id]
 %>
-<input style="display:none" type="checkbox" value="" name="${field.name}" checked="checked"/>
 % if field.renderer.showsearch == "true" and not field.is_readonly():
 <table class="table table-condensed table-striped table-bordered datatable-simple">
 % else:
@@ -47,9 +46,9 @@ selected = [str(id) for id in value if id]
         <td>
           % if not field.renderer.multiple == "false":
             % if str(item.id) in selected:
-              <input type="checkbox" value="${item.id}" name="${field.name}" checked="checked"/>
+              <input type="checkbox" value="${item.id}" name="${field.name}" checked="checked" onclick="check('${field.name}', this);"/>
             % else:
-              <input type="checkbox" value="${item.id}" name="${field.name}"/>
+              <input type="checkbox" value="${item.id}" name="${field.name}" onclick="check('${field.name}', this);"/>
             % endif
           % else:
             % if str(item.id) in selected:
@@ -114,13 +113,30 @@ function checkAll(checkId) {
           }
       }
   }
+  check(checkId);
 }
+
 function checkOne(checkId, element) {
   var inputs = document.getElementsByTagName("input");
   for (var i = 0; i < inputs.length; i++) {
       if (inputs[i].type == "checkbox" && inputs[i].name == checkId && inputs[i].value != element.value) {
         inputs[i].checked = false;
       }
+  }
+  check(checkId);
+}
+
+function check(checkId) {
+  /* Will add a hidden checkbox with no value in case no other checkbox is
+   * selected. This is needed to items with no selection, as in this case html
+   * does not submit the checkbox field at all. So this is a hack to simulate
+   * an empty selection */
+  var inputs = $("input[type='checkbox'][name="+checkId+"]");
+  var selected = inputs.filter(":checked");
+  if (selected.length == 0 && inputs.length > 0) {
+    $(inputs[0]).before('<input id="'+checkId+'-empty" style="display:none" type="checkbox" value="" name="'+checkId+'" checked="checked"/>');
+  } else {
+    $("#"+checkId+"-empty").remove();
   }
 }
 </script>
