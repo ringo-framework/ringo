@@ -24,6 +24,8 @@ stay compatible with this release:
   modules etc.
 - Added new ringo-admin command.
 - Removed old add-ringo-modul command.
+- Automatic logout after a configurable time. Defaults to 1800sec. Some time
+  before the loggout a warning dialog will be raised.
 
 0.14.1
 =======
