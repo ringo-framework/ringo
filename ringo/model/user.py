@@ -4,7 +4,7 @@ import sqlalchemy as sa
 from datetime import datetime
 from ringo.model import Base
 from ringo.model.base import BaseItem, BaseFactory
-from ringo.model.modul import ActionItem, ModulItem
+from ringo.model.modul import ActionItem
 from ringo.model.mixins import Owned
 
 
