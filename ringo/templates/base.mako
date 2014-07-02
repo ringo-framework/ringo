@@ -29,6 +29,7 @@
     <script src="${request.static_path('ringo:static/bootstrap/js/bootstrap.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/dataTables.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.jcountdown.min.js')}"></script>
+    <script src="${request.static_path('ringo:static/js/jquery.timer.js')}"></script>
     % for filename in h.formbar_js_filenames: 
       <script src="${request.static_path('ringo:static/formbar/%s' % filename)}"></script>
     % endfor
@@ -54,6 +55,26 @@
     };
   </script>
   <script src="${request.static_path('ringo:static/js/init.js')}"></script>
+  % if request.user:
+  <script>
+      logoutCountdown(${s.get_auth_timeout(request.registry.settings)},
+      '${request.route_path("autologout")}');
+  </script>
+  <div class="modal fade" id="logoutWarning">
+    <div class="modal-dialog">
+      <div class="panel panel-warning">
+        <div class="panel-heading"><strong>${_('Logout will happen soon')}</strong></div>
+          <div class="panel-body">
+            <p>${_('You will be logged out automatically in a short time because of inactivity. Please close this dialog and init a new request to renew your session timer.')}</p>
+          </div>
+          <div class="panel-footer">
+            <button type"submit" class="btn btn-default">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  % endif
   </body>
 </html>
 

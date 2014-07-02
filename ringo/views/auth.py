@@ -77,6 +77,11 @@ def logout(request):
     request.session.flash(msg, 'success')
     return HTTPFound(location=target_url, headers=headers)
 
+@view_config(route_name='autologout', renderer='/auth/autologout.mako')
+def autologout(request):
+    _ = request.translate
+    return {"_": _}
+
 
 @view_config(route_name='register_user',
              renderer='/auth/register_user.mako')

@@ -4,6 +4,9 @@ $( document ).ready(function() {
     $('#savequerydialog').modal({
         show: false
     });
+    $('#logoutWarning').modal({
+        show: false
+    });
     $('.datatable-pageinated').dataTable( {
            "bPaginate": true,
            "sPaginationType": "full_numbers",
@@ -62,4 +65,16 @@ $( document ).ready(function() {
         $('#'+pane).show();
     });
 
+
 });
+
+function logoutCountdown(time, url) {
+    var warning = $.timer(function() {
+      $("#logoutWarning").modal("show");
+    });
+    warning.set({ time : time/100*95*1000, autostart : true });
+    var logout = $.timer(function() {
+        location.href=url;
+    });
+    logout.set({ time : time*1000-500, autostart : true });
+}
