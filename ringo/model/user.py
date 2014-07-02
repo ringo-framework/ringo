@@ -4,7 +4,6 @@ import sqlalchemy as sa
 from datetime import datetime
 from ringo.model import Base
 from ringo.model.base import BaseItem, BaseFactory
-from ringo.model.modul import ActionItem
 from ringo.model.mixins import Owned
 
 
@@ -197,7 +196,7 @@ class Role(BaseItem, Base):
     the user will gain the assigned permissions irrespective from
     checking the ownership"""
 
-    permissions = sa.orm.relation(ActionItem,
+    permissions = sa.orm.relation("ActionItem",
                                   secondary=nm_action_roles,
                                   backref='roles')
 
