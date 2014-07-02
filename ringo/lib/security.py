@@ -26,6 +26,12 @@ log = logging.getLogger(__name__)
 def password_generator(size=8, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
+def get_auth_timeout(settings):
+    """Will return the amount of seconds until the auth session will
+    time out. This can be configured in the application ini file. If no
+    configuration is found. it defaults to 1800 seconds (30min)"""
+    return int(settings.get("auth.timeout") or 1800)
+
 pwd_context = CryptContext(
     # replace this list with the hash(es) you wish to support.
     # this example sets pbkdf2_sha256 as the default,
@@ -110,8 +116,12 @@ def csrf_token_validation(event):
 
 
 def setup_ringo_security(config):
+    settings = config.registry.settings
+    timeout = get_auth_timeout(settings)
     authn_policy = AuthTktAuthenticationPolicy('seekrit',
                                                hashalg='sha512',
+                                               timeout=timeout,
+                                               reissue_time=timeout/10,
                                                callback=get_principals)
     authz_policy = ACLAuthorizationPolicy()
     config.set_authorization_policy(authz_policy)
@@ -125,7 +135,6 @@ def setup_ringo_security(config):
     # Add subscriber to check the CSRF token in POST requests. You can
     # disable this for testing by setting the
     # "security.enable_csrf_check" config variable to "false".
-    settings = config.registry.settings
     if settings.get('security.enable_csrf_check', 'true') != "false":
         config.add_subscriber(csrf_token_validation, ContextFound)
     log.info('-> Security finished.')

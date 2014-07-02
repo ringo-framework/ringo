@@ -1,6 +1,7 @@
 import logging
 from pyramid.config import Configurator
 from pyramid_beaker import session_factory_from_settings
+from pyramid.security import remember
 
 from ringo.resources import get_resource_factory
 from ringo.lib.i18n import locale_negotiator

@@ -32,6 +32,7 @@ mako.directories =
 ###
 # Settings for the auth system
 ###
+auth.timeout = 1800
 auth.register_user = false
 auth.password_reminder = false
 
