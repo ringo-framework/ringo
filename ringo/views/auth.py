@@ -10,11 +10,11 @@ from formbar.form import Form, Validator
 
 from ringo.lib.sql import DBSession
 from ringo.model.base import BaseFactory
-from ringo.model.user import USER_GROUP_ID
+from ringo.model.user import USER_GROUP_ID, USER_ROLE_ID
 from ringo.lib.helpers import import_model
 User = import_model('ringo.model.user.User')
-Profile = import_model('ringo.model.user.Profile')
 Usergroup = import_model('ringo.model.user.Usergroup')
+Role = import_model('ringo.model.user.Role')
 
 from ringo.views import handle_history
 from ringo.lib.helpers import get_path_to_form_config, get_app_name
@@ -99,11 +99,6 @@ def register_user(request):
         if form.validate(request.params):
             # 1. Create user. Do not activate him. Default role is user.
             ufac = User.get_item_factory()
-            # TODO: Check why we not use the get_item_factory_method
-            # here. Do we use plain factories because the need full
-            # controll of depended relations? (ti) <2014-04-08 17:07>
-            pfac = BaseFactory(Profile)
-            gfac = BaseFactory(Usergroup)
             user = ufac.create(None)
             # Set login from formdata
             user.login = form.data['login']
@@ -116,14 +111,21 @@ def register_user(request):
             user.activation_token = atoken
             # Set profile data
             user.profile[0].email = form.data['email']
-            # Set user group
+
+            # 2. Set user group
+            gfac = BaseFactory(Usergroup)
             group = gfac.load(USER_GROUP_ID)
             user.groups.append(group)
+
+            # 3. Set user role
+            rfac = BaseFactory(Role)
+            role = rfac.load(USER_ROLE_ID)
+            user.roles.append(role)
             # Set default user group.
-            user.gid = group.id
+            user.default_group = group
             DBSession.add(user)
 
-            # 3. Send confirmation email. The user will be activated
+            # 4. Send confirmation email. The user will be activated
             #    after the user clicks on the confirmation link
             mailer = Mailer(request)
             recipient = user.profile[0].email
