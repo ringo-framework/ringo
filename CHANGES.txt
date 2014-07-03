@@ -18,6 +18,7 @@ to the tracker.
 	* Search is now case insesnsitive.
 - Fix expandation of value in readonly dropdowns.
 - New formencode version 0.8.1
+- New registed users will have the user role in addition to the user group now.
 
 0.14.0
 ------
