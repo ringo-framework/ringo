@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-06-30 12:54+0200\n"
+"POT-Creation-Date: 2014-07-04 16:03+0200\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 0.9.6\n"
+"Generated-By: Babel 1.3\n"
 
 #: ringo/lib/imexport.py:203
 msgid "UPDATE"
@@ -71,23 +71,27 @@ msgstr ""
 msgid "Authors"
 msgstr ""
 
-#: ringo/templates/base.mako:99
+#: ringo/templates/base.mako:100
 msgid "Advanced"
 msgstr ""
 
-#: ringo/templates/base.mako:101
+#: ringo/templates/base.mako:102
 msgid "Back to"
 msgstr ""
 
-#: ringo/templates/base.mako:104 ringo/templates/footer.mako:7
+#: ringo/templates/base.mako:105 ringo/templates/footer.mako:7
 msgid "Administration"
 msgstr ""
 
-#: ringo/templates/base.mako:108
+#: ringo/templates/base.mako:106
+msgid "Change ownership"
+msgstr ""
+
+#: ringo/templates/base.mako:109
 msgid "Show logbook"
 msgstr ""
 
-#: ringo/templates/base.mako:112
+#: ringo/templates/base.mako:113
 msgid "Advanced actions"
 msgstr ""
 
@@ -163,6 +167,7 @@ msgid "Logout"
 msgstr ""
 
 #. Label for login field in form config
+#. Label for user.login column in overview table config
 #. Label for login column in overview table config
 #: ringo/templates/header.mako:45 ringo/templates/index.mako:18
 #: ringo/templates/auth/confirm_user.mako:19
@@ -170,7 +175,7 @@ msgstr ""
 #: ringo/templates/auth/reset_password.mako:19
 #: ringo/templates/auth/reset_password.mako:24 ringo/views/forms/auth.xml:1
 #: ringo/views/forms/users.xml:1 ringo/views/forms/users.xml:2
-#: ringo/views/tables/users.json:2
+#: ringo/views/tables/profiles.json:6 ringo/views/tables/users.json:2
 msgid "Login"
 msgstr ""
 
@@ -467,7 +472,7 @@ msgstr ""
 msgid "Save Query"
 msgstr ""
 
-#: ringo/templates/internal/listfield.mako:19
+#: ringo/templates/internal/listfield.mako:18
 msgid "Add"
 msgstr ""
 
@@ -557,47 +562,47 @@ msgstr ""
 msgid "Logout was successfull :)"
 msgstr ""
 
-#: ringo/views/auth.py:130
+#: ringo/views/auth.py:132
 #, python-format
 msgid "Confirm user registration for %s"
 msgstr ""
 
-#: ringo/views/auth.py:140
+#: ringo/views/auth.py:142
 msgid ""
 "User has been created and a confirmation mail was sent to the users email"
 " adress. Please check your email :)"
 msgstr ""
 
-#: ringo/views/auth.py:160
+#: ringo/views/auth.py:162
 msgid "The user has beed successfull confirmed."
 msgstr ""
 
-#: ringo/views/auth.py:162
+#: ringo/views/auth.py:164
 msgid "The user was not confirmed. Maybe the confirmation token was not valid?"
 msgstr ""
 
-#: ringo/views/auth.py:185
+#: ringo/views/auth.py:187
 #, python-format
 msgid "Password reset request for %s"
 msgstr ""
 
-#: ringo/views/auth.py:194
+#: ringo/views/auth.py:196
 msgid ""
 "Password reset token has been sent to the users email address. Please "
 "check your email :)"
 msgstr ""
 
-#: ringo/views/auth.py:215
+#: ringo/views/auth.py:217
 msgid "Password has been reseted"
 msgstr ""
 
-#: ringo/views/auth.py:222
+#: ringo/views/auth.py:224
 msgid ""
 "Password was resetted and sent to the users email address. Please check "
 "your email :)"
 msgstr ""
 
-#: ringo/views/auth.py:226
+#: ringo/views/auth.py:228
 msgid "Password was not resetted. Maybe the request token was not valid?"
 msgstr ""
 

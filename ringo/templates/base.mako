@@ -103,7 +103,7 @@
       % if owner:
         <li class="divider"></li>
         <li role="presentation" class="dropdown-header">${_('Administration')}</li>
-        <li><a href="#ownership">Change ownership</a></li>
+        <li><a href="#ownership">${_('Change ownership')}</a></li>
       % endif
       % if logbook:
         <li><a href="#logbook">${_('Show logbook')}</a></li>
