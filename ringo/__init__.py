@@ -249,6 +249,7 @@ def setup_security(config):
 
 def setup_translation(config):
     config.add_translation_dirs('ringo:locale/')
+    config.add_translation_dirs('formbar:locale/')
     return config
 
 def setup_subscribers(config):

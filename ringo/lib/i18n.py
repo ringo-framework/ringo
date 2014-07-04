@@ -4,13 +4,15 @@ from pyramid.events import subscriber
 from pyramid.i18n import get_localizer, TranslationStringFactory
 
 translators = []
+translators.append(TranslationStringFactory('formbar'))
 translators.append(TranslationStringFactory('ringo'))
 """The translators variable holds a list of available
 TranslationStringFactory. Usually there is one factory per i18n domain
 which needs to be translated. On translation the availabe translation
 strings will be iterated until one of them returns a translated string.
-On default there is only on factory for ringo available, but derived
-applications can append their own translation factory."""
+On default there is only two translators available for ringo. The base
+ringo translator and the formbar translator. But derived applications
+can append their own translation factory."""
 
 
 @subscriber(NewRequest)
