@@ -56,6 +56,9 @@ from ringo.lib.helpers import format_datetime
 
 <script>
 var newslist = $('#newslisting').dataTable( {
+       "oLanguage": {
+            "sUrl": "/static/js/datatables/i18n/"+getLanguageFromBrowser()+".json"
+       },
        "bPaginate": true,
        "sPaginationType": "full_numbers",
        "bLengthChange": true,
