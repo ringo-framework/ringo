@@ -327,6 +327,9 @@ class BaseItem(object):
         log.debug("Saving %s" % repr(self))
 
         old_values = self.get_values()
+        # Set values
+        self.set_values(data)
+
         # Handle statechange
         if isinstance(self, StateMixin):
             for key in self.list_statemachines():
@@ -345,9 +348,6 @@ class BaseItem(object):
                 subject = "Update"
                 text = json.dumps(self.build_changes(old_values, data))
             self.add_log_entry(subject, text, request)
-
-        # Set values
-        self.set_values(data)
 
         # If the item has no id, then we assume it is a new item. So
         # add it to the database session.
