@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-07-04 16:03+0200\n"
-"PO-Revision-Date: 2014-07-04 16:07+0200\n"
+"POT-Creation-Date: 2014-07-07 14:24+0200\n"
+"PO-Revision-Date: 2014-07-07 14:29+0200\n"
 "Last-Translator: Torsten Irlaender <torsten@irlaender.de>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -529,6 +529,22 @@ msgstr "Hinzufügen"
 #: ringo/templates/internal/print.mako:5
 msgid "Print configuration for"
 msgstr "Druckkonfiguration für"
+
+#: ringo/templates/internal/statefield.mako:8
+msgid "State transition"
+msgstr "Zustandswechsel"
+
+#: ringo/templates/internal/statefield.mako:10
+msgid "No Transition"
+msgstr "Kein Wechsel"
+
+#: ringo/templates/internal/statefield.mako:20
+msgid "Current state"
+msgstr "Aktueller Zustand"
+
+#: ringo/templates/internal/statefield.mako:27
+msgid "Resulting State"
+msgstr "Resultierender Zustand"
 
 #: ringo/templates/mails/password_reminder.mako:1
 #: ringo/templates/mails/password_reset_request.mako:1
