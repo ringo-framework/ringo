@@ -180,20 +180,22 @@ class Importer(object):
         """
         return {}
 
-    def perform(self, request, data):
+    def perform(self, data, user=None, translate=lambda x: x):
         """Will return a list of imported items. The list will contain a
         tupel of the item and a string which gives information on the
-        operaten (update, create).
+        operaten (update, create). For create operations the new item
+        will be created with the given user.
 
-        :request: Current request
         :data: Importdata as string (JSON, XML...)
+        :user: User object. Used when creating objects.
+        :translate: Translation method.
         :returns: List of imported items
 
         """
         imported_items = []
         import_data = self.deserialize(data)
         factory = self._clazz.get_item_factory()
-        _ = request.translate
+        _ = translate
         for values in import_data:
             uuid = values.get('uuid')
             try:
@@ -202,7 +204,7 @@ class Importer(object):
                 item = factory.load(uuid or "thisuuiddoesnotexist", uuid=True)
                 operation = _("UPDATE")
             except:
-                item = factory.create(user=request.user)
+                item = factory.create(user=user)
                 operation = _("CREATE")
             # Ignore id, uuid field in import.
             if "id" in values:

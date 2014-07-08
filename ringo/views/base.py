@@ -820,7 +820,9 @@ def import_(clazz, request, callback=None):
             importer = JSONImporter(clazz)
         elif request.POST.get('format') == 'csv':
             importer = CSVImporter(clazz)
-        items = importer.perform(request, request.POST.get('file').file.read())
+        items = importer.perform(request.POST.get('file').file.read(),
+                                 request.user,
+                                 request.translate)
         for item in items:
             item, operation = item[0], item[1]
             try:
