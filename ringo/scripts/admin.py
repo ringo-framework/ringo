@@ -26,7 +26,9 @@ import argparse
 
 from ringo.scripts.db import (
     handle_db_init_command,
-    handle_db_upgrade_command
+    handle_db_upgrade_command,
+    handle_db_savedata_command,
+    handle_db_loaddata_command
 )
 
 from ringo.scripts.modul import (
@@ -95,6 +97,24 @@ def setup_db_parser(subparsers, parent):
                                 help='Upgrades a database',
                                 parents=[parent])
     upgrade_parser.set_defaults(func=handle_db_upgrade_command)
+
+    # Savedata command
+    savedata_parser = sp.add_parser('savedata',
+                                help='Saves the data of a given modul',
+                                parents=[parent])
+    savedata_parser.set_defaults(func=handle_db_savedata_command)
+    savedata_parser.add_argument('--modul',
+                        metavar="Modul",
+                        help="Name of the Modul")
+
+    # Loaddata command
+    loaddata_parser = sp.add_parser('loaddata',
+                                help='Loads the data of a given modul',
+                                parents=[parent])
+    loaddata_parser.set_defaults(func=handle_db_loaddata_command)
+    loaddata_parser.add_argument('--modul',
+                        metavar="Modul",
+                        help="Name of the Modul")
 
 
 def setup_global_argument_parser():
