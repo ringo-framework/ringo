@@ -10,7 +10,7 @@ from pyramid.paster import (
 )
 from ringo.lib.sql import DBSession
 from ringo.lib.helpers import get_app_location, dynamic_import
-from ringo.lib.imexport import JSONExporter
+from ringo.lib.imexport import JSONExporter, JSONImporter
 from ringo.model.modul import ModulItem
 
 log = logging.getLogger(__name__)
@@ -114,4 +114,14 @@ def handle_db_savedata_command(args):
     print exporter.perform(session.query(modul).all())
 
 def handle_db_loaddata_command(args):
-    pass
+    path = []
+    path.append(get_app_location(args.app))
+    path.append(args.config)
+    session = get_session(os.path.join(*path))
+    modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == args.modul).all()[0].clazzpath
+    modul = dynamic_import(modul_clazzpath)
+    importer = JSONImporter(modul)
+    items = []
+    with open(args.fixture) as f:
+        items = importer.perform(f.read())
+    print items

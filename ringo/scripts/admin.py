@@ -103,8 +103,8 @@ def setup_db_parser(subparsers, parent):
                                 help='Saves the data of a given modul',
                                 parents=[parent])
     savedata_parser.set_defaults(func=handle_db_savedata_command)
-    savedata_parser.add_argument('--modul',
-                        metavar="Modul",
+    savedata_parser.add_argument('modul',
+                        metavar="modul",
                         help="Name of the Modul")
 
     # Loaddata command
@@ -112,9 +112,12 @@ def setup_db_parser(subparsers, parent):
                                 help='Loads the data of a given modul',
                                 parents=[parent])
     loaddata_parser.set_defaults(func=handle_db_loaddata_command)
-    loaddata_parser.add_argument('--modul',
-                        metavar="Modul",
+    loaddata_parser.add_argument('modul',
+                        metavar="modul",
                         help="Name of the Modul")
+    loaddata_parser.add_argument('fixture',
+                        metavar="fixture",
+                        help="Path to the importfile")
 
 
 def setup_global_argument_parser():
