@@ -21,8 +21,8 @@ INSERT INTO "modules" VALUES(3,'users','ringo.model.user.User','User','Users',NU
 INSERT INTO "modules" VALUES(4,'usergroups','ringo.model.user.Usergroup','Usergroup','Usergroups',NULL,NULL,'admin-menu');
 INSERT INTO "modules" VALUES(5,'roles','ringo.model.user.Role','Role','Roles',NULL,NULL,'admin-menu');
 INSERT INTO "modules" VALUES(6,'profiles','ringo.model.user.Profile','Profile','Profiles',NULL,NULL,'admin-menu');
-INSERT INTO "modules" VALUES(7,'appointments','ringo.model.appointment.Appointment','Appointment','Appointments',NULL,NULL,'header-menu');
-INSERT INTO "modules" VALUES(8,'files','ringo.model.file.File','File','Files',NULL,NULL,'header-menu');
+INSERT INTO "modules" VALUES(7,'appointments','ringo.model.appointment.Appointment','Appointment','Appointments',NULL,NULL,'admin-menu');
+INSERT INTO "modules" VALUES(8,'files','ringo.model.file.File','File','Files',NULL,NULL,'admin-menu');
 INSERT INTO "roles" VALUES(1,'admin',1);
 INSERT INTO "roles" VALUES(2,'user',0);
 INSERT INTO "usergroups" VALUES(1,'admins');
