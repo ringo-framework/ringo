@@ -20,8 +20,4 @@ mapping={'app_title': h.get_app_title()}
 <h2>${_('What to do next?')}</h2>
 <p>${_('The Ringo application framework provides already some basic functionality which is ready for use in your fresh created application. It time to make a tour in your application to get a better impression of what is already included and how things work.') | n}</p>
 <p>${_('You probably want to change this page and other things. No problem. A good starting point is the documentation. Please consult the part on development and learn how to change and add things to this application. Happy coding! :)')}</p>
-<h2>${_('News')}</h2>
-${news | n}
-<h2>${_('Reminders')}</h2>
-${reminders | n}
 % endif
