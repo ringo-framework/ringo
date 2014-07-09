@@ -2,6 +2,8 @@ import logging
 import shutil
 import os
 from sqlalchemy import engine_from_config
+import transaction
+
 from alembic.config import Config
 from alembic import command
 from pyramid.paster import (
@@ -122,6 +124,19 @@ def handle_db_loaddata_command(args):
     modul = dynamic_import(modul_clazzpath)
     importer = JSONImporter(modul)
     items = []
+    updated = 0
+    created = 0
     with open(args.fixture) as f:
         items = importer.perform(f.read())
-    print items
+        for item in [item[0] for item in items]:
+            # Add all new items to the session
+            if not item.id:
+                session.add(item)
+                created += 1
+            else:
+                updated += 1
+        try:
+            transaction.commit()
+            print "Updated %s items, Created %s items" % (updated, created)
+        except:
+            print "Loading data failed!"
