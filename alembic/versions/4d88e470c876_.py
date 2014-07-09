@@ -14,7 +14,9 @@ from alembic import op
 import sqlalchemy as sa
 
 
-INSERTS = """"""
+INSERTS = """
+UPDATE modules set gid=2 where name = 'news';
+"""
 DELETES = """"""
 
 
