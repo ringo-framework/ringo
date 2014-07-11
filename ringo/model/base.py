@@ -195,6 +195,9 @@ class BaseItem(object):
             return "%s-%s" % (prefix, routename)
         return routename
 
+    def reset_uuid(self):
+        self.uuid = '%.32x' % uuid.uuid4()
+
     def get_changes(self):
         """Will return dictionary which attributes which have been
         changes. The value for each attribute is a tuple with the old
