@@ -40,7 +40,6 @@ def includeme(config):
     config.scan()
     log.info('OK :) Setup of Ringo finished.')
 
-
 def setup_static_views(config):
     config.add_static_view('static',
                            path='ringo:static',

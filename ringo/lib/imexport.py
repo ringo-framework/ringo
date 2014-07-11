@@ -161,18 +161,17 @@ class Importer(object):
         datetime deserialisation
         """
         for field in obj:
-            if not obj[field]:
-                # Ignore empty values as coversion will fail.
+            if (not field in self._clazz_type or
+                not self._clazz_type[field] in ['DATE', 'DATETIME']):
                 continue
-            if not field in self._clazz_type or not obj[field]:
-                continue
-            if self._clazz_type[field] == "DATE" and obj[field] is not None:
-                obj[field] = datetime.datetime.strptime(obj[field],
-                                                        "%Y-%m-%d").date()
-            elif (self._clazz_type[field] == "DATETIME"
-                  and obj[field] is not None):
-                obj[field] = datetime.datetime.strptime(obj[field],
-                                                        "%Y-%m-%d %H:%M:%S")
+            elif not obj[field]:
+                obj[field] = None
+            elif self._clazz_type[field] == "DATE":
+                obj[field] = datetime.datetime.strptime(
+                    obj[field], "%Y-%m-%d").date()
+            elif self._clazz_type[field] == "DATETIME":
+                obj[field] = datetime.datetime.strptime(
+                    obj[field], "%Y-%m-%d %H:%M:%S")
         return obj
 
     def deserialize(self, data):

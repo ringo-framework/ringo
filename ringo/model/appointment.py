@@ -6,8 +6,8 @@ from ringo.model.mixins import Owned
 
 
 class Reminders(BaseList):
-    def __init__(self, db, cache=""):
-        BaseList.__init__(self, Appointment, db, cache=cache)
+    def __init__(self, db, user=None, cache=""):
+        BaseList.__init__(self, Appointment, db, user=user, cache=cache)
         self._filter_appointments()
 
     def _filter_appointments(self):

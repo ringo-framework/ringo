@@ -45,17 +45,14 @@ class TodoFactory(BaseFactory):
 
 class TodoList(BaseList):
     """The TodoList will list all the todo elements which are 1. accessable
-    by the user and 2. are assigned to the current user. Users in the role
-    "admin" will of course get all todo items"""
+    by the user and 2. are assigned to the current user."""
 
     def _filter_for_user(self, items, user):
         """Filter out todo elements which are not assinged to the user"""
         items = BaseList._filter_for_user(self, items, user)
         # Now filter out all the todo items which are not assinged to
         # the current user.
-        if user is not None and user.has_role('admin'):
-            return items
-        elif user is not None:
+        if user is not None:
             filtered_items = []
             for item in items:
                 if user.id in [u.id for u in item.assigned]:
@@ -64,8 +61,8 @@ class TodoList(BaseList):
         return items
 
 class Reminders(TodoList):
-    def __init__(self, db, cache=""):
-        TodoList.__init__(self, Todo, db, cache=cache)
+    def __init__(self, db, user=None, cache=""):
+        TodoList.__init__(self, Todo, db, user=user, cache=cache)
         self._filter_todo()
 
     def _filter_todo(self):

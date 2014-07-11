@@ -27,12 +27,13 @@
     <link href="${request.static_path('ringo:static/images/icons/favicons/favicon.png')}" rel="shortcut icon">
     <script src="${request.static_path('ringo:static/js/jquery.js')}"></script>
     <script src="${request.static_path('ringo:static/bootstrap/js/bootstrap.min.js')}"></script>
-    <script src="${request.static_path('ringo:static/js/dataTables.js')}"></script>
+    <script src="${request.static_path('ringo:static/js/datatables/dataTables.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.jcountdown.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.timer.js')}"></script>
     % for filename in h.formbar_js_filenames: 
       <script src="${request.static_path('ringo:static/formbar/%s' % filename)}"></script>
     % endfor
+    <script src="${request.static_path('ringo:static/js/helpers.js')}"></script>
     <%include file="/custom-header.mako" />
   </head>
   <body>
@@ -123,7 +124,7 @@
       % if owner:
         <li class="divider"></li>
         <li role="presentation" class="dropdown-header">${_('Administration')}</li>
-        <li><a href="#ownership">Change ownership</a></li>
+        <li><a href="#ownership">${_('Change ownership')}</a></li>
       % endif
       % if logbook:
         <li><a href="#logbook">${_('Show logbook')}</a></li>
