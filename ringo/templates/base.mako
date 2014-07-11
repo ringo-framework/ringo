@@ -90,7 +90,7 @@
     icon = "glyphicon glyphicon-eye-open"
   elif icon == "icon-edit":
     icon = "glyphicon glyphicon-edit"
-  elif icon == "icon-eye-delete":
+  elif icon in ["icon-eye-delete", "icon-trash"]:
     icon = "glyphicon glyphicon-trash"
   elif icon == "icon-download":
     icon = "glyphicon glyphicon-download"
