@@ -158,11 +158,10 @@ class Importer(object):
         """
         for field in obj:
             if not obj[field]:
-                # Ignore empty values as coversion will fail.
+                obj[field] = None
+            elif not field in self._clazz_type:
                 continue
-            if not field in self._clazz_type or not obj[field]:
-                continue
-            if self._clazz_type[field] == "DATE" and obj[field] is not None:
+            elif self._clazz_type[field] == "DATE" and obj[field] is not None:
                 obj[field] = datetime.datetime.strptime(obj[field],
                                                         "%Y-%m-%d").date()
             elif (self._clazz_type[field] == "DATETIME"
