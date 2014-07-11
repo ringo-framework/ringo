@@ -94,6 +94,10 @@ class Exporter(object):
         """
         data = []
         for item in items:
+            # Ensure that every item has a UUID. Set missing UUID here
+            # if the item has no uuid set yet.
+            if not item.uuid:
+                item.reset_uuid()
             data.append(self.flatten(item.get_values(serialized=True)))
         return self.serialize(data)
 
