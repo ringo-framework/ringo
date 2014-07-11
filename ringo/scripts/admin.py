@@ -28,7 +28,8 @@ from ringo.scripts.db import (
     handle_db_init_command,
     handle_db_upgrade_command,
     handle_db_savedata_command,
-    handle_db_loaddata_command
+    handle_db_loaddata_command,
+    handle_db_uuid_command
 )
 
 from ringo.scripts.modul import (
@@ -118,6 +119,18 @@ def setup_db_parser(subparsers, parent):
     loaddata_parser.add_argument('fixture',
                         metavar="fixture",
                         help="Path to the importfile")
+
+    # UUID command
+    uuid_parser = sp.add_parser('resetuuid',
+                                help='Generates UUID for data of a given modul',
+                                parents=[parent])
+    uuid_parser.set_defaults(func=handle_db_uuid_command)
+    uuid_parser.add_argument('modul',
+                        metavar="modul",
+                        help="Name of the Modul")
+    uuid_parser.add_argument('--missing-only',
+                        action="store_true",
+                        help="Reset the UUID only where it is not already set.")
 
 
 def setup_global_argument_parser():
