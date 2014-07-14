@@ -93,6 +93,10 @@ def get_alembic_config(args, app=None):
     config_path.append(get_app_location(args.app))
     config_path.append("alembic.ini")
     cfg = Config(os.path.join(*config_path))
+    if args.config:
+        app_config = get_appsettings(args.config)
+        cfg.set_main_option("sqlalchemy.url",
+                            app_config.get('sqlalchemy.url'))
     return cfg
 
 
