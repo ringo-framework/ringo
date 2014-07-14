@@ -69,7 +69,7 @@ port = 6543
 keys = root, {{package}}, sqlalchemy
 
 [handlers]
-keys = console
+keys = console, filelog
 
 [formatters]
 keys = generic
@@ -94,6 +94,12 @@ qualname = sqlalchemy.engine
 [handler_console]
 class = StreamHandler
 args = (sys.stderr,)
+level = NOTSET
+formatter = generic
+
+[handler_filelog]
+class = FileHandler
+args = ('%(here)s/{{package}}.log','a')
 level = NOTSET
 formatter = generic
 
