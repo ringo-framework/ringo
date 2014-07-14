@@ -70,4 +70,6 @@ start the standalone application of ringo with the following steps:
 
 - $ ringo-admin db init
 
+- $ invoke docs
+
 - $ pserve development.ini
