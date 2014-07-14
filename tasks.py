@@ -17,7 +17,7 @@ def test(exclude="None"):
         exclude = exclude.split(",")
     if "init" not in exclude:
         run("rm -f test.sqlite")
-        run("alembic -c alembic-test.ini upgrade head")
+        run("ringo-admin db init --config=test.ini")
     run("python setup.py nosetests")
     if "behave" not in exclude:
         #run("coverage erase")
