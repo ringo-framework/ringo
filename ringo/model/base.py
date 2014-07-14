@@ -195,6 +195,9 @@ class BaseItem(object):
             return "%s-%s" % (prefix, routename)
         return routename
 
+    def reset_uuid(self):
+        self.uuid = '%.32x' % uuid.uuid4()
+
     def get_changes(self):
         """Will return dictionary which attributes which have been
         changes. The value for each attribute is a tuple with the old
@@ -328,6 +331,9 @@ class BaseItem(object):
         log.debug("Saving %s" % repr(self))
 
         old_values = self.get_values()
+        # Set values
+        self.set_values(data)
+
         # Handle statechange
         if isinstance(self, StateMixin):
             for key in self.list_statemachines():
@@ -346,9 +352,6 @@ class BaseItem(object):
                 subject = "Update"
                 text = json.dumps(self.build_changes(old_values, data))
             self.add_log_entry(subject, text, request)
-
-        # Set values
-        self.set_values(data)
 
         # If the item has no id, then we assume it is a new item. So
         # add it to the database session.

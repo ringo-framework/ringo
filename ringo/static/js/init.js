@@ -1,6 +1,6 @@
 $( document ).ready(function() {
     $('.dialog').modal();
-    $('.alert').delay(3 * 1000).fadeOut();
+    $('.fade.out').delay(3 * 1000).fadeOut();
     $('#savequerydialog').modal({
         show: false
     });
@@ -8,6 +8,9 @@ $( document ).ready(function() {
         show: false
     });
     $('.datatable-pageinated').dataTable( {
+           "oLanguage": {
+                "sUrl": "/static/js/datatables/i18n/"+getLanguageFromBrowser()+".json"
+           },
            "bPaginate": true,
            "sPaginationType": "full_numbers",
            "bLengthChange": true,
@@ -19,6 +22,9 @@ $( document ).ready(function() {
            "bAutoWidth": true
      });
     $('.datatable-simple').dataTable( {
+           "oLanguage": {
+                "sUrl": "/static/js/datatables/i18n/"+getLanguageFromBrowser()+".json"
+           },
            "bPaginate": false,
            "bLengthChange": false,
            "bFilter": true,
@@ -29,6 +35,9 @@ $( document ).ready(function() {
            "bAutoWidth": false
      });
      $('.datatable-blank').dataTable({
+           "oLanguage": {
+                "sUrl": "/static/js/datatables/i18n/"+getLanguageFromBrowser()+".json"
+           },
            "bPaginate": false,
            "bLengthChange": false,
            "bFilter": false,

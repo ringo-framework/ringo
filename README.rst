@@ -1,17 +1,18 @@
 Ringo
 =====
-`Ringo` is a small Python based high level web application framework build with
-Pyramid . It provides basic functionality which is often used in modern web
-applications. See the list of features for more details.
+.. image:: https://drone.io/bitbucket.org/ti/ringo/status.png
+
+Ringo is a small Python based high level web application framework build with
+Pyramid. Ringo tries to make it very easy to build form based web application
+to manage your data. Because ringo provides many basic features which are
+often used in modern webapplications it greatly speeds up development. But it
+is also flexible and offers many ways to configure the layout, behaviour and
+workflow of your application. See the list of :ref:`features` for more
+details.
 
 Ringo comes with an application scaffold which can be used as a boilerplate for
 your application development. See the development part in the documentation
 for more details on how to build a Ringo based application.
-
-In Ringo based applications Ringo plays the role of a base library which
-provides basic functionality. In most cases this basic functionality should
-fit the needs in easy usecases. If it fits not, then it can be extended and
-configured to your need in an easy way.
 
 License
 =======
@@ -23,20 +24,27 @@ Features
 Ringo provides some basic features which are useful if you build your
 web application based on Ringo:
 
+ * Easy extendible and configurable modular architekture,
+ * Basic actions for every modul including:
+        - Search and sortable listing (storeable and configurable)
+        - Basic CRUD actions
+        - CSV, JSON import and export
+ * Role based authorisation.
  * Authentication with email registration and password reminders
- * Authorisation with a role based permission System
- * Basic CRUD actions
- * RESTfull interface for CRUD operations.
+ * Powerfull statemachine to model workflows in moduls.
  * Layout and validation of forms using the `Formbar <https://pypi.python.org/pypi/formbar>`_ library
- * Support for caching expensive SQL queries
- * Regular expression based searching (storeable)
- * Sorting
- * User Profiles
- * Logging of Changes in items
- * Todos, Comment, Tags
- * Statemachines. Items can have states
- * Basic CSRF protection on POST requests
- * Extendible, Configurable
+ * Internal messenging system
+ * Logging of useractions
+ * Versioning of forms (see what changed to the last version)
+ * Ready to use modules:
+        - User Profiles
+        - Comments
+        - Tags
+        - Files
+        - Basic Appointments
+ * Widely configurable from the web UI.
+ * Nice console client for various administration tasks.
+ * ...
 
 Documentation
 =============
@@ -56,10 +64,12 @@ Getting Started
 The fastest way to get an impression of Ringo`s core functionallity is to
 start the standalone application of ringo with the following steps:
 
-- cd <directory containing this file>
+- $ hg clone https://bitbucket.org/ti/ringo
 
-- $venv/bin/python setup.py develop
+- $ python setup.py develop
 
-- $venv/bin/alembic upgrade head
+- $ ringo-admin db init
 
-- $venv/bin/pserve development.ini
+- $ invoke docs
+
+- $ pserve development.ini

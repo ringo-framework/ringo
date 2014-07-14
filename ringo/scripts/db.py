@@ -144,3 +144,29 @@ def handle_db_loaddata_command(args):
             print "Updated %s items, Created %s items" % (updated, created)
         except:
             print "Loading data failed!"
+
+def handle_db_uuid_command(args):
+    path = []
+    path.append(get_app_location(args.app))
+    path.append(args.config)
+    session = get_session(os.path.join(*path))
+    modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == args.modul).all()[0].clazzpath
+    modul = dynamic_import(modul_clazzpath)
+    updated = 0
+    created = 0
+    for item in session.query(modul).all():
+        if item.uuid:
+            if args.missing_only:
+                continue
+            else:
+                item.reset_uuid()
+                updated += 1
+        else:
+            item.uuid.reset_uuid()
+            created += 1
+    try:
+        transaction.commit()
+        print "Updated %s items, Created %s items" % (updated, created)
+    except:
+        print "Loading data failed!"
+
