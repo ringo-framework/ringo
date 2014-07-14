@@ -71,6 +71,8 @@ Ringo provides some basic CRUD [#]_ actions which are available on default for e
 * Update: Edit items of the module.
 * Delete: Deleting items.
 * List: Listing all items of the module. This is slightly different to the action to read a single item.
+* Import (CSV, JSON)
+* Export (CSV, JSON)
 
 Every time you want to do something different to your items you will likely
 want to implement another action for the module. See :ref:`add_action` for

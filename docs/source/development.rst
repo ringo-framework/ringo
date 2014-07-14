@@ -104,56 +104,11 @@ Your application is ready for development :)
 Add a new modul to your application
 ===================================
 If you want to add a new modul to your ringo based application or the the
-ringo base then you should follow the steps described below.
+ringo base then you should use the ringo-admin command::
 
- 1. Call the :ref:commands_add_modul_ add_modul command to add the new modul.
+        ringo-admin modul add name
 
-.. important::
-
-        Make sure your application codebase is up to date. This includes the
-        application code, ringo and the database. Are all changes commited?
-
-This was easy, ey?
-But this is only the quick shot. For more advanced usage proceed to the next
-section.
-
-.. _alembic_migration:
-
-Using alembic for database migration
-------------------------------------
-In order to be able to migrate your database also, the precedure of creating a
-new modul gets a little bit more complex::
-
-        # 1. Backup your database to be able to generate the new added INSERTS
-        # statements.
-        cp myproject.sqlite myproject.sqlite.orig
-        sqlite3 myproject.sqlite.orig .dump | grep INSERT > inserts.orig
-
-        # 2. Call the :ref:commands_add_modul_ add_modul command to add the
-        # new modul.
-        add_myproject_modul mymodul --config=development.ini
-
-        # 3. Generate new new added INSERTS statements.
-        sqlite3 myproject.sqlite .dump | grep INSERT > inserts.modified
-        diff -n inserts.orig inserts.modified | grep INSERT > inserts.new
-
-        # 4. Now revert the database and generate a migration file.
-        cp myproject.sqlite.orig myproject.sqlite
-        alembic revision --autogenerate
-
-        # 5. Add the statements from inserts.new into the genrated migration
-        # file. If you need any modifications, make sure you also modificate the
-        # init_modul method in the model file of the new added modul.
-
-        # 6. Finally remove temporary files
-        rm myproject.sqlite.orig
-        rm inserts.orig
-        rm inserts.modified
-        rm inserts.new
-
-After these steps you should be able to migrate your application by using
-your SCM to versionize the application code base and by using alembic your
-the database versioning.
+The the help page of the command for more informations.
 
 Customisation
 =============
@@ -406,30 +361,9 @@ Ringo come two types of tests:
  1. Functional and Unit tests and
  2. Behaviour driven tests using the `Behave <http://www.behave.org>`_ framework. All tests are located are under "ringo/tests" directory.
 
-Functional and Unit tests
--------------------------
-.. warning::
-   These tests are outdated and must be fixed. Most of the functionality is
-   now implemented in the behave tests.
-
 Start the tests by invoking the following command::
 
-        initialize_ringo_db test.ini
-        python setup.py test
-
-        # or if you want some codemetrics using coverage
-        nosetests
-
-        # Finally delete the test database
-        rm test.sqlite
-
-Behave
-------
-Behave is nice! You will like it too :) Go and read the documentation.
-
-Tests can be triggered by invoking the following command::
-
-        sh test.sh
+        invoke tests
 
 This will create new test database calls the tests and make some statistics on
 the code coverage.

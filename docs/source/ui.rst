@@ -4,6 +4,9 @@ Elements of the UI
 This chapter will give an overview of user elements in the basic ringo user
 interface (UI) and how to use them.
 
+.. warning::
+        The screenshots are outdated!
+
 Below you can see an example of a view in the Ringo application.
 
 
