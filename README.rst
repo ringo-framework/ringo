@@ -64,10 +64,10 @@ Getting Started
 The fastest way to get an impression of Ringo`s core functionallity is to
 start the standalone application of ringo with the following steps:
 
-- cd <directory containing this file>
+- $ hg clone https://bitbucket.org/ti/ringo
 
-- $venv/bin/python setup.py develop
+- $ python setup.py develop
 
-- $venv/bin/ringo-admin db init
+- $ ringo-admin db init
 
-- $venv/bin/pserve development.ini
+- $ pserve development.ini
