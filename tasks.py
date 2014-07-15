@@ -2,10 +2,13 @@ from invoke import run, task
 
 
 @task
-def docs(doctype="html"):
+def docs(doctype="html", zip=False):
     """Will build the documentation"""
     run("cd docs; make %s" % doctype)
     run("cp -r docs/build/html ringo/static/doc")
+    run("cp -r docs/build/html ringo/static/doc")
+    if doctype == "html" and zip:
+        run("cd docs/build/html/; zip -r ../doc.zip *")
 
 
 @task
