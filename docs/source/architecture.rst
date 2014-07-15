@@ -273,8 +273,8 @@ to the item in general.
 
 After the permission to access the item in general is allowed, the role bases
 system answers the second question: What is allowed. The permission system
-will now check which roles the users have and which actions are allowed for
-this role.
+will now check which :ref:`roles` the users have and which actions are allowed for
+these roles.
 
 There are currently two ways a user can be equiped with permissions:
 
@@ -333,6 +333,15 @@ for more information how things work in general under the hood.
 See :ref:`api-security` for documentation on helper functions used to build
 the ACL.
 
+
+.. _roles:
+
+Roles
+-----
+A Role s used to configure which actions are
+permitted to users.  Therefor each role will have an internal list of modul
+actions. A user will be allowed to call all actions assigned to the role he is
+equiped with.
 
 Event Handlers
 ==============
