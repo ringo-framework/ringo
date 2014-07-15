@@ -26,11 +26,17 @@ Ringo itself uses some external libraries to provide some of its
 functionality. E.g the formbar library is used to build all forms and do
 validation. The access to the database is done with the ORM SQLAlchemy.
 
-A ringo based application is another pyramid based application which basically extends ringo. See `Exending An Existing Pyramid Application <http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/extending.html>`_ for more details on how this is done.
+A ringo based application is another pyramid based application which basically
+extends ringo. See `Exending An Existing Pyramid Application
+<http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/extending.html>`_
+for more details on how this is done.
 
-All this magic is already done in a pyramid scaffold which comes with ringo. Using this scaffold will create an application which uses ringo functionality by simply importing it at the right places and take care the basic configuration is done in the
-proper way. See :ref:`create_ringo_based_application` for information on how
-to create an application using this scaffold.
+All this magic is already done in a pyramid scaffold which comes with ringo.
+Using this scaffold will create an application which uses ringo functionality
+by simply importing it at the right places and take care the basic
+configuration is done in the proper way. See
+:ref:`create_ringo_based_application` for information on how to create an
+application using this scaffold.
 
 .. _modules:
 
@@ -53,7 +59,13 @@ users. Further it has templates which define how the pages in the application
 will look like. Finally there are configuration files to define how the forms
 and overview tables will look like.
 
-Ringo already come with many modules. One module per item. There is a module for the user management, a module for appointment and so on. There is also a module to handle the modules itself. So we can say in general: ringos functionality is the sum of all modules functionality. Ringo or a ringo based application can be extended by adding new modules.  Fortunately you will not need to create this infrastructure for you own. See :ref:`add_modules` for more information.
+Ringo already come with many modules. One module per item. There is a module
+for the user management, a module for appointment and so on. There is also a
+module to handle the modules itself. So we can say in general: ringos
+functionality is the sum of all modules functionality. Ringo or a ringo based
+application can be extended by adding new modules.  Fortunately you will not
+need to create this infrastructure for you own. See :ref:`add_modules` for
+more information.
 
 Each module has a common set of configuration options which can be done
 directly in the web interface. See the modules entry in the administion menu
@@ -259,12 +271,26 @@ information to which owner and which group it belongs to. Only the owner,
 members of the group or users with an administrational role are granted access
 to the item in general.
 
-The role bases system answers the second question: What is allowed. Assuming
-the user has general access to the item. The permission system will now check
-which roles the users have and which actions are allowed for this role.
+After the permission to access the item in general is allowed, the role bases
+system answers the second question: What is allowed. The permission system
+will now check which roles the users have and which actions are allowed for
+this role.
 
-The permission system in Ringo uses the Pyramid `Pyramid Authorisation and
-Authenfication API <http://docs.pylonsproject.org/projects/pyramid/en/latest/api/security.html>`_
+There are currently two ways a user can be equiped with permissions:
+
+1. If the user is the owner of the item, then all permissions of the
+users roles will be applied.
+
+2. If the user is member of the items group, then the permissins of the groups
+will be applied.
+
+.. note::
+        Currently there is no anonymous access to the item. See Issue61 in the
+        ringo bugtracker. A workaround might be to setup a user group with
+        all users of the system and assing the needed roles to it. Then set
+        this group as the item group.
+
+See :ref:`authorisation` for more details on this.
 
 .. _authentification:
 
@@ -276,16 +302,23 @@ from the database on every request with the roles and groups attached to the
 user.  This user object is used later for the Authorisation. If the user is
 not logged in the user object is empty.
 
+The authentification has a default timeout of 30min. The timeout will be reset
+after every new request of the user. The timeout can be configured in the
+application configuration bei setting the 'auth.timeout' config variable.
+
 .. _authorisation:
 
 Authorisation
 -------------
-Authorisation is done on every request. Authorisation is done against
-resources.
+The permission system in Ringo uses the Pyramid `Pyramid Authorisation and
+Authenfication API <http://docs.pylonsproject.org/projects/pyramid/en/latest/api/security.html>`_
+
+Authorisation is done on every request. The authorisation will check if the
+user is allowed to access the requested resource.
 
 A resource is an url or an item which is accessed by calling the url in your
 application.  In all cases this resource is build from a resource factory for
-every request.  The resource will have an ACL which determines if the user of
+every request.  Every resource will have an ACL which determines if the user of
 the current request (See :ref:`authentification`) is allowed to access the
 resource.
 
@@ -316,4 +349,3 @@ the event (update, create, delete) is excecuted.
 
 Some of the Mixin classes do already have some predefined event_handlers
 configured.
-
