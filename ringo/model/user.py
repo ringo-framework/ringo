@@ -189,6 +189,10 @@ class Usergroup(BaseItem, Base):
 
 
 class Role(BaseItem, Base):
+    """A Role is used to configure which actions are permitted to users.
+    Therefor each role will have an internal list of modul actions. A
+    user will be allowed to call all actions assigned to the role he is
+    equiped with."""
     __tablename__ = 'roles'
     _modul_id = 5
     id = sa.Column(sa.Integer, primary_key=True)
