@@ -262,8 +262,8 @@ The permission system addresses two basic questions:
    to access the item.
 
 To answer these two questions the permission system of Ringo is a combination
-of concepts of the permission system known from the Unix file system and a
-roles based permission system.
+of concepts of the permission system known from the `Unix file system  <http://http://en.wikipedia.org/wiki/File_system_permissions>`_ and a
+`roles based permission system <http://http://en.wikipedia.org/wiki/Role-based_access_control>`_.
 
 The Unix file system part answers the first question: Who is allowed? Therefor
 every item in the system inherited from the :ref:`mixin_owned` stores
