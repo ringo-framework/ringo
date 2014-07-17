@@ -649,7 +649,6 @@ class StateFieldRenderer(FormbarDropdown):
 class ListingFieldRenderer(FormbarSelectionField):
     """Renderer to render a listing of linked items. Used attributes:
 
-    * foreignkey: name of the foreignkey in the database
     * form: Name of the form which is used to add new items
     * table: Name of the table configuration which is used to list items
     * hideadd: Flag "true" or "false" to configure hiding the add button.
