@@ -223,12 +223,7 @@ class BaseItem(object):
                 changes[col] = (history.deleted, history.added)
         return changes
 
-    # TODO: Expandation should not be done based on the table
-    # configuration. As this function is also usefull for values which
-    # are not visible in the default table. It should be an optional
-    # parameter of the function!
-    # (ti) <2013-10-10 21:29>
-    def get_value(self, name, form_id="create"):
+    def get_value(self, name, form_id="create", expand=False):
         """Return the value of the given attribe of the item. Unlike
         accessing the raw value through the attribite directly this
         function will apply all configured transformations to the value
@@ -242,19 +237,15 @@ class BaseItem(object):
             log.error("Attribute '%s' not found in '%s'; id:%s"
                       % (name, repr(self), self.id))
             raw_value = None
-        expand = []
-        table_config = self.get_table_config()
-        # TODO: Iterating again and again over the columns might be
-        # expensive. Do some caching here? (None) <2013-09-22 20:33>
-        for col in table_config.get_columns():
-            if col.get('expand'):
-                expand.append(col.get('name'))
-        if name in expand:
+        if expand:
             form_config = self.get_form_config(form_id)
-            field_config = form_config.get_field(name)
-            for option in field_config.options:
-                if str(raw_value) == str(option[1]):
-                    return option[0]
+            try:
+                field_config = form_config.get_field(name)
+                for option in field_config.options:
+                    if str(raw_value) == str(option[1]):
+                        return option[0]
+            except KeyError:
+                log.error("Field %s not found in form config" % name)
         return raw_value
 
     def get_values(self, include_relations=False, serialized=False):
