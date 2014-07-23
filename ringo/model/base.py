@@ -1,7 +1,6 @@
 import logging
 import json
 import re
-import datetime
 import uuid
 from operator import attrgetter
 from formbar.config import Config, load
@@ -25,6 +24,7 @@ def clear_cache():
     BaseItem._cache_form_config = {}
     BaseItem._cache_item_modul = {}
     BaseItem._cache_item_list = {}
+
 
 class BaseItem(object):
 
@@ -88,7 +88,7 @@ class BaseItem(object):
             splitmark_s = attr.find("[")
             splitmark_e = attr.find("]")
             if splitmark_s > 0:
-                index = int(attr[splitmark_s+1:splitmark_e])
+                index = int(attr[splitmark_s + 1:splitmark_e])
                 attr = attr[:splitmark_s]
                 element_list = object.__getattribute__(element, attr)
                 if len(element_list) > 0:
@@ -125,7 +125,7 @@ class BaseItem(object):
     @classmethod
     def get_columns(cls, include_relations=False):
         return [prop.key for prop in class_mapper(cls).iterate_properties
-            if isinstance(prop, ColumnProperty) or include_relations]
+                if isinstance(prop, ColumnProperty) or include_relations]
 
     @classmethod
     def get_item_factory(cls):
@@ -185,14 +185,15 @@ class BaseItem(object):
         tries to load it from the ringo application."""
         cfile = "%s.xml" % self.__class__.__tablename__
         cachename = "%s.%s" % (self.__class__.__name__, formname)
-        if not self.__class__._cache_form_config.get(cachename):
+        cache = self.__class__._cache_form_config
+        if not cache.get(cachename):
             try:
                 loaded_config = load(get_path_to_form_config(cfile))
             except IOError:
                 loaded_config = load(get_path_to_form_config(cfile, 'ringo'))
             config = Config(loaded_config)
-            self.__class__._cache_form_config[cachename] = config.get_form(formname)
-        return self.__class__._cache_form_config[cachename]
+            cache[cachename] = config.get_form(formname)
+        return cache[cachename]
 
     def reset_uuid(self):
         self.uuid = '%.32x' % uuid.uuid4()
@@ -221,7 +222,6 @@ class BaseItem(object):
             if history.has_changes():
                 changes[col] = (history.deleted, history.added)
         return changes
-
 
     # TODO: Expandation should not be done based on the table
     # configuration. As this function is also usefull for values which
@@ -370,14 +370,16 @@ class BaseItem(object):
                     if parent:
                         self.group = parent.group
                     else:
-                        log.warning("Inheritance of group '%s' failed. Was None" % gid_relation)
+                        log.warning("Inheritance of group '%s' failed. "
+                                    "Was None" % gid_relation)
                 uid_relation = getattr(self, '_inherit_uid')
                 if uid_relation:
                     parent = getattr(self, uid_relation)
                     if parent:
                         self.owner = parent.owner
                     else:
-                        log.warning("Inheritance of group '%s' failed. Was None" % gid_relation)
+                        log.warning("Inheritance of group '%s' failed. "
+                                    "Was None" % gid_relation)
         return self
 
 
@@ -430,29 +432,12 @@ class BaseList(object):
         from ringo.lib.security import has_permission
         filtered_items = []
         if user and not user.has_role("admin"):
-            # TODO: Check if the user has the role to read items of the
-            # clazz. If not then we do not need to check any further as
-            # the user isn't allowed to see the item anyway. (torsten)
-            # <2013-08-22 08:06>
-            groups = [g.id for g in user.groups]
-
-
             # Iterate over all items and check if the user has generally
             # access to the item.
             for item in items:
                 # Only check ownership if the item provides a uid.
-                # Is owner?
                 if has_permission('read', item, self.request):
                     filtered_items.append(item)
-                #if hasattr(item, 'uid'):
-                #    # Is owner?
-                #    if item.uid == user.id:
-                #        filtered_items.append(item)
-                #    # Is in group?
-                #    elif item.gid in groups:
-                #        filtered_items.append(item)
-                #else:
-                #    filtered_items.append(item)
             return filtered_items
         else:
             return items
@@ -499,7 +484,8 @@ class BaseList(object):
                 fields = [search_field]
             else:
                 table_config = self.clazz.get_table_config()
-                fields = [field.get('name') for field in table_config.get_columns()]
+                fields = [field.get('name') for field
+                          in table_config.get_columns()]
             for item in self.items:
                 for field in fields:
                     value = item.get_value(field)
@@ -511,6 +497,7 @@ class BaseList(object):
                         filtered_items.append(item)
                         break
             self.items = filtered_items
+
 
 class BaseFactory(object):
 
@@ -535,12 +522,12 @@ class BaseFactory(object):
         # Try to set the ownership of the entry if the item provides the
         # fields.
         if (hasattr(item, 'uid')
-        and user is not None):
+           and user is not None):
             item.uid = user.id
         if (hasattr(item, 'gid')):
             if (user is not None and user.gid):
                 item.gid = user.gid
-            else :
+            else:
                 modul = item.get_item_modul()
                 default_gid = modul.gid
                 item.gid = default_gid
@@ -569,4 +556,3 @@ class BaseFactory(object):
             return q.filter(self._clazz.uuid == id).one()
         else:
             return q.filter(self._clazz.id == id).one()
-
