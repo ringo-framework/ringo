@@ -159,6 +159,13 @@ class BaseItem(object):
         return cls._cache_item_modul[cls._modul_id]
 
     @classmethod
+    def get_action_routename(cls, action, prefix=None):
+        routename = "%s-%s" % (cls.__tablename__, action)
+        if prefix:
+            return "%s-%s" % (prefix, routename)
+        return routename
+
+    @classmethod
     def get_table_config(cls, tablename=None):
         """Returns the table (overview, listing) configuration with the
         name 'tablename' of this Item from the configuration file. If
@@ -186,13 +193,6 @@ class BaseItem(object):
             config = Config(loaded_config)
             self.__class__._cache_form_config[cachename] = config.get_form(formname)
         return self.__class__._cache_form_config[cachename]
-
-    @classmethod
-    def get_action_routename(cls, action, prefix=None):
-        routename = "%s-%s" % (cls.__tablename__, action)
-        if prefix:
-            return "%s-%s" % (prefix, routename)
-        return routename
 
     def reset_uuid(self):
         self.uuid = '%.32x' % uuid.uuid4()
