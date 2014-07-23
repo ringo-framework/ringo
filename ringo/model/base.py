@@ -172,21 +172,20 @@ class BaseItem(object):
             cls._cache_table_config[cachename] = TableConfig(cls, tablename)
         return cls._cache_table_config[cachename]
 
-    @classmethod
-    def get_form_config(cls, formname):
+    def get_form_config(self, formname):
         """Return the Configuration for a given form. The configuration
         tried to be loaded from the application first. If this fails it
         tries to load it from the ringo application."""
-        cfile = "%s.xml" % cls.__tablename__
-        cachename = "%s.%s" % (cls.__name__, formname)
-        if not cls._cache_form_config.get(cachename):
+        cfile = "%s.xml" % self.__class__.__tablename__
+        cachename = "%s.%s" % (self.__class__.__name__, formname)
+        if not self.__class__._cache_form_config.get(cachename):
             try:
                 loaded_config = load(get_path_to_form_config(cfile))
             except IOError:
                 loaded_config = load(get_path_to_form_config(cfile, 'ringo'))
             config = Config(loaded_config)
-            cls._cache_form_config[cachename] = config.get_form(formname)
-        return cls._cache_form_config[cachename]
+            self.__class__._cache_form_config[cachename] = config.get_form(formname)
+        return self.__class__._cache_form_config[cachename]
 
     @classmethod
     def get_action_routename(cls, action, prefix=None):
