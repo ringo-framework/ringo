@@ -70,7 +70,7 @@ selected = [str(id) for id in value if id]
         % endif
         <%
           try:
-            value = item.get_value(col.get('name'))
+            value = item.get_value(col.get('name'), expand=col.get('expand'))
           except AttributeError:
             value = "NaF"
         %>

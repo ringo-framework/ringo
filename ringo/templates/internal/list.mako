@@ -136,7 +136,7 @@ table-bordered">
       % endif
         <%
             try:
-              value = h.prettify(request, getattr(item, field.get('name')))
+              value = h.prettify(request, item.get_value(field.get('name'), expand=field.get('expand')))
             except:
               value = "NaF"
         %>
@@ -151,11 +151,7 @@ table-bordered">
           %>
           ${", ".join(links)}
         % else:
-          % if field.get('expand'):
-            ${render_filter_link(request, field, item.get_value(field.get('name')), clazz)}
-          % else:
-            ${render_filter_link(request, field, value, clazz)}
-          % endif
+          ${render_filter_link(request, field, value, clazz)}
         % endif
     </td>
     % endfor
