@@ -465,6 +465,13 @@ class BaseList(object):
         """
         self.search_filter = filter_stack
         log.debug('Length filterstack: %s' % len(filter_stack))
+        table_config = self.clazz.get_table_config()
+        table_columns = {}
+
+        # Save cols in the tableconfig for later access while getting values.
+        for col in table_config.get_columns():
+            table_columns[col.get('name')] = col
+
         for search, search_field in filter_stack:
             # Build a regular expression
             re_expr = re.compile(re.escape(search), re.IGNORECASE)
@@ -474,12 +481,11 @@ class BaseList(object):
             if search_field != "":
                 fields = [search_field]
             else:
-                table_config = self.clazz.get_table_config()
-                fields = [field.get('name') for field
-                          in table_config.get_columns()]
+                fields = [field.get('name') for field in table_columns]
             for item in self.items:
                 for field in fields:
-                    value = item.get_value(field)
+                    expand = table_columns[field].get('expand')
+                    value = item.get_value(field, expand=expand)
                     if isinstance(value, list):
                         value = ", ".join([unicode(x) for x in value])
                     else:
