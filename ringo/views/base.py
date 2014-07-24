@@ -328,6 +328,10 @@ def bundle_(request):
         request.session['%s.bundle.items' % clazz] = params.get('id', [])
     bundle_action = request.session.get('%s.bundle.action' % clazz)
     ids = request.session.get('%s.bundle.items' % clazz)
+    # If the user only selects one single item it is not a list. So
+    # convert it to a list with one item.
+    if not isinstance(ids, list):
+        ids = [ids]
 
     factory = clazz.get_item_factory()
     items = []
