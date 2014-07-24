@@ -25,7 +25,7 @@
           <%
             form_config = tableconfig.get_form_config()
             try:
-              value = getattr(item, field.get('name'))
+              value = item.get_value(field.get('name'), expand=field.get('expand'))
             except AttributeError:
               value = "NaF"
           %>

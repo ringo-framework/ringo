@@ -1,7 +1,6 @@
 import logging
 import json
 import re
-import datetime
 import uuid
 from operator import attrgetter
 from formbar.config import Config, load
@@ -25,6 +24,7 @@ def clear_cache():
     BaseItem._cache_form_config = {}
     BaseItem._cache_item_modul = {}
     BaseItem._cache_item_list = {}
+
 
 class BaseItem(object):
 
@@ -88,7 +88,7 @@ class BaseItem(object):
             splitmark_s = attr.find("[")
             splitmark_e = attr.find("]")
             if splitmark_s > 0:
-                index = int(attr[splitmark_s+1:splitmark_e])
+                index = int(attr[splitmark_s + 1:splitmark_e])
                 attr = attr[:splitmark_s]
                 element_list = object.__getattribute__(element, attr)
                 if len(element_list) > 0:
@@ -125,7 +125,7 @@ class BaseItem(object):
     @classmethod
     def get_columns(cls, include_relations=False):
         return [prop.key for prop in class_mapper(cls).iterate_properties
-            if isinstance(prop, ColumnProperty) or include_relations]
+                if isinstance(prop, ColumnProperty) or include_relations]
 
     @classmethod
     def get_item_factory(cls):
@@ -159,6 +159,13 @@ class BaseItem(object):
         return cls._cache_item_modul[cls._modul_id]
 
     @classmethod
+    def get_action_routename(cls, action, prefix=None):
+        routename = "%s-%s" % (cls.__tablename__, action)
+        if prefix:
+            return "%s-%s" % (prefix, routename)
+        return routename
+
+    @classmethod
     def get_table_config(cls, tablename=None):
         """Returns the table (overview, listing) configuration with the
         name 'tablename' of this Item from the configuration file. If
@@ -172,28 +179,21 @@ class BaseItem(object):
             cls._cache_table_config[cachename] = TableConfig(cls, tablename)
         return cls._cache_table_config[cachename]
 
-    @classmethod
-    def get_form_config(cls, formname):
+    def get_form_config(self, formname):
         """Return the Configuration for a given form. The configuration
         tried to be loaded from the application first. If this fails it
         tries to load it from the ringo application."""
-        cfile = "%s.xml" % cls.__tablename__
-        cachename = "%s.%s" % (cls.__name__, formname)
-        if not cls._cache_form_config.get(cachename):
+        cfile = "%s.xml" % self.__class__.__tablename__
+        cachename = "%s.%s" % (self.__class__.__name__, formname)
+        cache = self.__class__._cache_form_config
+        if not cache.get(cachename):
             try:
                 loaded_config = load(get_path_to_form_config(cfile))
             except IOError:
                 loaded_config = load(get_path_to_form_config(cfile, 'ringo'))
             config = Config(loaded_config)
-            cls._cache_form_config[cachename] = config.get_form(formname)
-        return cls._cache_form_config[cachename]
-
-    @classmethod
-    def get_action_routename(cls, action, prefix=None):
-        routename = "%s-%s" % (cls.__tablename__, action)
-        if prefix:
-            return "%s-%s" % (prefix, routename)
-        return routename
+            cache[cachename] = config.get_form(formname)
+        return cache[cachename]
 
     def reset_uuid(self):
         self.uuid = '%.32x' % uuid.uuid4()
@@ -223,13 +223,7 @@ class BaseItem(object):
                 changes[col] = (history.deleted, history.added)
         return changes
 
-
-    # TODO: Expandation should not be done based on the table
-    # configuration. As this function is also usefull for values which
-    # are not visible in the default table. It should be an optional
-    # parameter of the function!
-    # (ti) <2013-10-10 21:29>
-    def get_value(self, name, form_id="create"):
+    def get_value(self, name, form_id="create", expand=False):
         """Return the value of the given attribe of the item. Unlike
         accessing the raw value through the attribite directly this
         function will apply all configured transformations to the value
@@ -243,19 +237,15 @@ class BaseItem(object):
             log.error("Attribute '%s' not found in '%s'; id:%s"
                       % (name, repr(self), self.id))
             raw_value = None
-        expand = []
-        table_config = self.get_table_config()
-        # TODO: Iterating again and again over the columns might be
-        # expensive. Do some caching here? (None) <2013-09-22 20:33>
-        for col in table_config.get_columns():
-            if col.get('expand'):
-                expand.append(col.get('name'))
-        if name in expand:
+        if expand:
             form_config = self.get_form_config(form_id)
-            field_config = form_config.get_field(name)
-            for option in field_config.options:
-                if str(raw_value) == str(option[1]):
-                    return option[0]
+            try:
+                field_config = form_config.get_field(name)
+                for option in field_config.options:
+                    if str(raw_value) == str(option[1]):
+                        return option[0]
+            except KeyError:
+                log.error("Field %s not found in form config" % name)
         return raw_value
 
     def get_values(self, include_relations=False, serialized=False):
@@ -371,14 +361,16 @@ class BaseItem(object):
                     if parent:
                         self.group = parent.group
                     else:
-                        log.warning("Inheritance of group '%s' failed. Was None" % gid_relation)
+                        log.warning("Inheritance of group '%s' failed. "
+                                    "Was None" % gid_relation)
                 uid_relation = getattr(self, '_inherit_uid')
                 if uid_relation:
                     parent = getattr(self, uid_relation)
                     if parent:
                         self.owner = parent.owner
                     else:
-                        log.warning("Inheritance of group '%s' failed. Was None" % gid_relation)
+                        log.warning("Inheritance of group '%s' failed. "
+                                    "Was None" % gid_relation)
         return self
 
 
@@ -431,29 +423,12 @@ class BaseList(object):
         from ringo.lib.security import has_permission
         filtered_items = []
         if user and not user.has_role("admin"):
-            # TODO: Check if the user has the role to read items of the
-            # clazz. If not then we do not need to check any further as
-            # the user isn't allowed to see the item anyway. (torsten)
-            # <2013-08-22 08:06>
-            groups = [g.id for g in user.groups]
-
-
             # Iterate over all items and check if the user has generally
             # access to the item.
             for item in items:
                 # Only check ownership if the item provides a uid.
-                # Is owner?
                 if has_permission('read', item, self.request):
                     filtered_items.append(item)
-                #if hasattr(item, 'uid'):
-                #    # Is owner?
-                #    if item.uid == user.id:
-                #        filtered_items.append(item)
-                #    # Is in group?
-                #    elif item.gid in groups:
-                #        filtered_items.append(item)
-                #else:
-                #    filtered_items.append(item)
             return filtered_items
         else:
             return items
@@ -490,6 +465,13 @@ class BaseList(object):
         """
         self.search_filter = filter_stack
         log.debug('Length filterstack: %s' % len(filter_stack))
+        table_config = self.clazz.get_table_config()
+        table_columns = {}
+
+        # Save cols in the tableconfig for later access while getting values.
+        for col in table_config.get_columns():
+            table_columns[col.get('name')] = col
+
         for search, search_field in filter_stack:
             # Build a regular expression
             re_expr = re.compile(re.escape(search), re.IGNORECASE)
@@ -499,11 +481,11 @@ class BaseList(object):
             if search_field != "":
                 fields = [search_field]
             else:
-                table_config = self.clazz.get_table_config()
-                fields = [field.get('name') for field in table_config.get_columns()]
+                fields = [field.get('name') for field in table_columns]
             for item in self.items:
                 for field in fields:
-                    value = item.get_value(field)
+                    expand = table_columns[field].get('expand')
+                    value = item.get_value(field, expand=expand)
                     if isinstance(value, list):
                         value = ", ".join([unicode(x) for x in value])
                     else:
@@ -512,6 +494,7 @@ class BaseList(object):
                         filtered_items.append(item)
                         break
             self.items = filtered_items
+
 
 class BaseFactory(object):
 
@@ -536,12 +519,12 @@ class BaseFactory(object):
         # Try to set the ownership of the entry if the item provides the
         # fields.
         if (hasattr(item, 'uid')
-        and user is not None):
+           and user is not None):
             item.uid = user.id
         if (hasattr(item, 'gid')):
             if (user is not None and user.gid):
                 item.gid = user.gid
-            else :
+            else:
                 modul = item.get_item_modul()
                 default_gid = modul.gid
                 item.gid = default_gid
@@ -570,4 +553,3 @@ class BaseFactory(object):
             return q.filter(self._clazz.uuid == id).one()
         else:
             return q.filter(self._clazz.id == id).one()
-
