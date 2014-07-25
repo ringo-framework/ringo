@@ -128,7 +128,7 @@ def register_user(request):
             user.roles.append(role)
             # Set default user group.
             user.default_group = group
-            DBSession.add(user)
+            request.db.add(user)
 
             # 4. Send confirmation email. The user will be activated
             #    after the user clicks on the confirmation link
