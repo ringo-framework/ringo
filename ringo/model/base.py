@@ -223,7 +223,7 @@ class BaseItem(object):
                 changes[col] = (history.deleted, history.added)
         return changes
 
-    def get_value(self, name, form_id="create", expand=False):
+    def get_value(self, name, form_id="read", expand=False):
         """Return the value of the given attribe of the item. Unlike
         accessing the raw value through the attribite directly this
         function will apply all configured transformations to the value
