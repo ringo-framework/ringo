@@ -1,3 +1,12 @@
+% if field.renderer.layout == "simple":
+<label for="${field.id}">${_('State')}: ${state._label}</label>
+<select id="${field.id}" name="${field.name}" class="form-control">
+  <option value="${state._id}">${_('No Transition')}</option>
+  % for trans in state.get_transitions():
+      <option value="${trans._end_state._id}">${trans._label}</option>
+  % endfor
+</select>
+% else:
 <div class="panel panel-info">
   <div class="panel-heading">
     <label for="${field.id}">${field.label}</label>
@@ -35,6 +44,7 @@
     </div>
   </div>
 </div>
+% endif
 
 <script>
   $("#${field.id}").change(function() {

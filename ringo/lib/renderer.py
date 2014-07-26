@@ -618,7 +618,18 @@ class StateFieldRenderer(FormbarDropdown):
     """Ringo specific DropdownFieldRenderer to change the current state
     of an item.  This renderer will render a combined widget containing
     a textfield showing the current state of the item and a dropdown
-    with available actions which can be done from this state."""
+    with available actions which can be done from this state.
+
+    You can configure the layout of the statefield by setting the layout
+    option. On default the renderer shows the current state with
+    description and the resulting state and description when choosing a
+    transtion. Setting the option to simple will render a simple
+    dropdown with the current state as part of the fields label and the
+    available transitions as options of the dropdown
+
+    * layout: Option to change the layout of the statefield.
+
+    """
 
     def __init__(self, field, translate):
         """@todo: to be defined"""
