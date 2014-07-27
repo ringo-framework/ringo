@@ -300,6 +300,11 @@ def get_principals(userid, request):
             principal = 'role:%s;uid:%s' % (urole.name, user.id)
             __add_principal(principals, principal)
             for group in user.groups:
+                # Add the user role for every group the user is member
+                # of
+                principal = 'role:%s;group:%s' % (urole.name, group.id)
+                __add_principal(principals, principal)
+                # Additionally add group specifiy roles
                 for grole in group.get_roles():
                     principal = 'role:%s' % grole.name
                     __add_principal(principals, principal)

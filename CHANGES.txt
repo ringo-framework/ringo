@@ -28,6 +28,8 @@ stay compatible with this release:
   before the loggout a warning dialog will be raised.
 - Removed deprecated "ignore" filter for selections. Use must use filter now.
 - Filter option and items Dropdowns and Listings (Listfield, Comments) on user permissions.
+- Changed permission system. Add user roles to the user if the user is member
+  of the items group. Added group roles additionally.
 
 0.14.1
 =======
