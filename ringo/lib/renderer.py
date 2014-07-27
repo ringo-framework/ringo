@@ -562,28 +562,6 @@ class DropdownFieldRenderer(FormbarDropdown):
         FormbarDropdown.__init__(self, field, translate)
         self.template = template_lookup.get_template("internal/dropdown.mako")
 
-    def _get_template_values(self):
-        values = FormbarDropdown._get_template_values(self)
-        options = values['options']
-
-        # Filter options
-        filtered_items = []
-        hirachy = None
-        # Check if this listing is used to list items to build a
-        # hirachically parent child structure.
-        if hirachy is None and len(options) > 0:
-            if (type(options[-1][0]) == type(self._field._form._item)):
-                hirachy = True
-                children = self._field._form._item.get_children()
-        if hirachy:
-            for option in options:
-                if option[1] == self._field._form._item.id:
-                    continue
-                if option[1] not in [x.id for x in children]:
-                    filtered_items.append(option)
-            values['options'] = filtered_items
-        return values
-
     def render_link(self):
         html = []
         items = []
@@ -739,33 +717,13 @@ class ListingFieldRenderer(FormbarSelectionField):
             for fexpr in self._field.renderer.ignore.split(","):
                 key, value = fexpr.split(":")
                 ignore_filter[key] = value
-        # Check if this listing is used to list items to build a
-        # hirachically parent child structure.
-        hirachy = None
-        if hirachy is None and len(items) > 0:
-            if (type(items[0]) == type(self._field._form._item)):
-                hirachy = True
-                children = self._field._form._item.children
         # Now start filtering the items
         for item in items:
             # Filter for items based on the form configuration
-            ignore = False
             for key in ignore_filter.keys():
                 if str(ignore_filter[key]) == str(getattr(item, key)):
-                    ignore = True
-                    break
-            if ignore:
-                continue
-            # If this list lists item in a hirachy then only list items
-            # which are direct childs of the current item or are
-            # do not have prevent
-            if hirachy:
-                if ((item.parent_id is None
-                    or item.id in [x.id for x in children])
-                    and item.id != self._field._form._item.id):
-                        filtered_items.append(item)
-            else:
-                filtered_items.append(item)
+                    continue
+            filtered_items.append(item)
         return filtered_items
 
     def render(self):
