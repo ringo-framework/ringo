@@ -29,7 +29,6 @@ from ringo.lib.helpers import format_datetime
       <td>
       % endif
           <%
-            form_config = tableconfig.get_form_config()
             try:
               value = getattr(item, field.get('name'))
               if isinstance(value, datetime.datetime):

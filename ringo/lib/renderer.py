@@ -192,9 +192,6 @@ class TableConfig:
             cols.append(col)
         return cols
 
-    def get_form_config(self, name="create"):
-        return self.clazz.get_form_config(name)
-
     def get_default_sort_column(self):
         """Returns the name of the attribute of the clazz which is
         marked as field for default sorting in the *settings* section of
