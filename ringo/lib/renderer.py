@@ -707,25 +707,6 @@ class ListingFieldRenderer(FormbarSelectionField):
                                                         self._field.name))
         return selected
 
-    def _filter_items(self, items):
-        """Will filter the items to only show valid items in the list"""
-        filtered_items = []
-        # Collect filters defined in the form to ignore certian items in
-        # the list.
-        ignore_filter = {}
-        if self._field.renderer.ignore:
-            for fexpr in self._field.renderer.ignore.split(","):
-                key, value = fexpr.split(":")
-                ignore_filter[key] = value
-        # Now start filtering the items
-        for item in items:
-            # Filter for items based on the form configuration
-            for key in ignore_filter.keys():
-                if str(ignore_filter[key]) == str(getattr(item, key)):
-                    continue
-            filtered_items.append(item)
-        return filtered_items
-
     def render(self):
         """Initialize renderer"""
         html = []
@@ -734,7 +715,7 @@ class ListingFieldRenderer(FormbarSelectionField):
         if self._field.is_readonly() or self.onlylinked == "true":
             items = self._get_selected_items(self.all_items.items)
         else:
-            items = self._filter_items(self.all_items.items)
+            items = self.all_items.items
 
         values = {'items': items,
                   'field': self._field,

@@ -26,6 +26,7 @@ stay compatible with this release:
 - Removed old add-ringo-modul command.
 - Automatic logout after a configurable time. Defaults to 1800sec. Some time
   before the loggout a warning dialog will be raised.
+- Removed deprecated "ignore" filter for selections. Use must use filter now.
 
 0.14.1
 =======
