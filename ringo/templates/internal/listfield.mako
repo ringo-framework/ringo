@@ -3,6 +3,13 @@ value = field.get_value() or []
 if not isinstance(value, list):
   value = [value]
 selected = [str(id) for id in value if id]
+visible_items = []
+hidden_items = []
+for item in items:
+  if item[2]:
+    visible_items.append(item)
+  else:
+    hidden_items.append(item)
 %>
 % if field.renderer.showsearch == "true" and not field.is_readonly():
 <table class="table table-condensed table-striped table-bordered datatable-simple">
@@ -33,11 +40,7 @@ selected = [str(id) for id in value if id]
     </tr>
   </thead>
   <tbody>
-    % for item in items:
-      ## Ignore hidden elements
-      % if not item[2]:
-        continue
-      % endif
+    % for item in visible_items:
       <%
       permission = None
       if s.has_permission("update", item[0], request):
@@ -90,7 +93,7 @@ selected = [str(id) for id in value if id]
     % endfor
   </tbody>
 </table>
-% for item in items:
+% for item in hidden_items:
   % if not item[2]:
     <input style="display:none" type="checkbox" value="${item[0].id}" name="${field.name}" checked="checked"/>
   % endif
