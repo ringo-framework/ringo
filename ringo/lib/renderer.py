@@ -155,9 +155,6 @@ class TableConfig:
     * *auto-responsive*: If True than only the first column of a table
       will be displayed on small devices. Else you need to configure the
       "screen" attribute for the fields.
-
-    If no configuration file can be found, then add all fields
-    configured in the form configuration to the overview.
     """
 
     def __init__(self, clazz, name):
@@ -171,12 +168,7 @@ class TableConfig:
         """
         self.clazz = clazz
         self.name = name or "overview"
-        config = _load_overview_config(clazz)
-        if config:
-            self.config = config
-        else:
-            form_config = self.get_form_config()
-            self.config = _form2overview(form_config)
+        self.config = _load_overview_config(clazz)
 
     def get_settings(self):
         """Returns the settings for the table as dictionary
