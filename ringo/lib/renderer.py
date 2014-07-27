@@ -848,7 +848,12 @@ class CommentRenderer(FieldRenderer):
     def render(self):
         _ = self.translate
         html = []
-        comments = self._field._form._item.comments
+        comments = []
+        for comment in self._field._form._item.comments:
+            if security.has_permission('read',
+                                       comment,
+                                       self._field._form._request):
+                comments.append(comment)
         if not self._field.is_readonly():
             html.append('<label for="new-comment" class="control-label">')
             html.append(_('New entry'))
