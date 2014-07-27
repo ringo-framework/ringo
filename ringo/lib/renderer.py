@@ -38,6 +38,25 @@ def add_renderer_globals(event):
     event['localizer'] = request.localizer
 
 
+def filter_options_on_permissions(request, options):
+    """Will filter the given options based on the permissions on the
+    current user of the request. After filtering the options will only
+    have items where the user is allowed to at least read it.
+
+    :request: current request
+    :options: list of tuple of options (item, value, filtered)
+    :returns: filtered list of option tuples.
+
+    """
+    filtered_options = []
+    for option in options:
+        visible = False
+        if security.has_permission('read', option[0], request):
+            visible = True
+        filtered_options.append((option[0], option[1], visible))
+    return filtered_options
+
+
 def _load_overview_config(clazz):
         """Return a datastructure representing the overview
         configuration. The configuration is loaded from a JSON
@@ -713,7 +732,7 @@ class ListingFieldRenderer(FormbarSelectionField):
         # in the origin items list and has passed filtering.
         items = self._field.filter_options(items)
         # Now filter the items based on the user permissions
-        items = filter_option_on_permission(self._field._form._request, items)
+        items = filter_options_on_permissions(self._field._form._request, items)
 
         values = {'items': items,
                   'field': self._field,
