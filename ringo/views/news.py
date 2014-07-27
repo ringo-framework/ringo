@@ -1,6 +1,7 @@
 import logging
 from pyramid.view import view_config
 from ringo.model.news import News
+from ringo.views.json import read_ as json_read
 
 log = logging.getLogger(__name__)
 
@@ -12,8 +13,8 @@ def _mark_news_as_read(request, item):
     :returns: news item
 
     """
-    users = item.users
-    users.remove(request.user)
+    user = request.user
+    user.news.remove(item)
     return item
 
 def read_callback(request, item):
