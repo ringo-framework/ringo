@@ -18,6 +18,7 @@ from ringo.lib.helpers import (
     get_path_to_form_config,
 )
 from ringo.model.base import BaseItem, BaseList
+from ringo.model.form import Form as FormItem
 import ringo.lib.security as security
 
 template_lookup = TemplateLookup(directories=[template_dir])
@@ -580,6 +581,13 @@ class DropdownFieldRenderer(FormbarDropdown):
         """@todo: to be defined"""
         FormbarDropdown.__init__(self, field, translate)
         self.template = template_lookup.get_template("internal/dropdown.mako")
+
+    def _get_template_values(self):
+        values = FormbarDropdown._get_template_values(self)
+        values['options'] = filter_options_on_permissions(
+            self._field._form._request,
+            values['options'])
+        return values
 
     def render_link(self):
         html = []

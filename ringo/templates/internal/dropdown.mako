@@ -14,12 +14,14 @@
       ## option will be visible or hidden
       % if option[2]:
         % if str(option[1]) == str(field.get_value()):
-          <option value="${option[1]}" selected="selected">${option[0]}</option>
+          <option value="${option[1]}" selected="selected">${option[0]} </option>
         % else:
           <option value="${option[1]}">${option[0]}</option>
         % endif
-      % elif not field.renderer.remove_filtered == "true":
-        <option value="${option[1]}" class="hidden">${option[0]}</option>
+      % else:
+        % if str(option[1]) == str(field.get_value()):
+          <option value="${option[1]}" selected="selected">${option[0]}</option>
+        % endif
       % endif
     % endfor
   </select>
