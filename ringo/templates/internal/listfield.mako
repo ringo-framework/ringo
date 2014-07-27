@@ -34,43 +34,47 @@ selected = [str(id) for id in value if id]
   </thead>
   <tbody>
     % for item in items:
+      ## Ignore hidden elements
+      % if not item[2]:
+        continue
+      % endif
       <%
       permission = None
-      if s.has_permission("update", item, request):
+      if s.has_permission("update", item[0], request):
         permission = "update"
-      elif s.has_permission("read", item, request):
+      elif s.has_permission("read", item[0], request):
         permission = "read"
       %>
       <tr>
       % if not field.is_readonly():
         <td>
           % if not field.renderer.multiple == "false":
-            % if str(item.id) in selected:
-              <input type="checkbox" value="${item.id}" name="${field.name}" checked="checked" onclick="check('${field.name}', this);"/>
+            % if str(item[0].id) in selected:
+              <input type="checkbox" value="${item[0].id}" name="${field.name}" checked="checked" onclick="check('${field.name}', this);"/>
             % else:
-              <input type="checkbox" value="${item.id}" name="${field.name}" onclick="check('${field.name}', this);"/>
+              <input type="checkbox" value="${item[0].id}" name="${field.name}" onclick="check('${field.name}', this);"/>
             % endif
           % else:
-            % if str(item.id) in selected:
-              <input type="checkbox" value="${item.id}" name="${field.name}" onclick="checkOne('${field.name}', this);" checked="checked"/>
+            % if str(item[0].id) in selected:
+              <input type="checkbox" value="${item[0].id}" name="${field.name}" onclick="checkOne('${field.name}', this);" checked="checked"/>
             % else:
-              <input type="checkbox" value="${item.id}" name="${field.name}" onclick="checkOne('${field.name}', this);"/>
+              <input type="checkbox" value="${item[0].id}" name="${field.name}" onclick="checkOne('${field.name}', this);"/>
             % endif
           % endif
         </td>
       % else:
           ## Render a hidden checkbox field as we need to submit the values in
-          <input style="display:none" type="checkbox" value="${item.id}" name="${field.name}" checked="checked"/>
+          <input style="display:none" type="checkbox" value="${item[0].id}" name="${field.name}" checked="checked"/>
       % endif
       % for num, col in enumerate(tableconfig.get_columns()):
         % if permission and not field.renderer.nolinks == "true":
-          <td onclick="openItem('${request.route_path(clazz.get_action_routename(permission), id=item.id)}')" class="${num > 0 and 'hidden-xs'} link">
+          <td onclick="openItem('${request.route_path(clazz.get_action_routename(permission), id=item[0].id)}')" class="${num > 0 and 'hidden-xs'} link">
         % else:
           <td class="${num > 0 and 'hidden-xs'}">
         % endif
         <%
           try:
-            value = item.get_value(col.get('name'), expand=col.get('expand'))
+            value = item[0].get_value(col.get('name'), expand=col.get('expand'))
           except AttributeError:
             value = "NaF"
         %>
@@ -86,6 +90,11 @@ selected = [str(id) for id in value if id]
     % endfor
   </tbody>
 </table>
+% for item in items:
+  % if not item[2]:
+    <input style="display:none" type="checkbox" value="${item[0].id}" name="${field.name}" checked="checked"/>
+  % endif
+% endfor
 
 <script type="text/javascript">
 function openItem(url) {

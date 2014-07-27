@@ -654,7 +654,7 @@ class ListingFieldRenderer(FormbarSelectionField):
 
     def __init__(self, field, translate):
         FormbarSelectionField.__init__(self, field, translate)
-        self.all_items = self._get_all_items()
+        self.itemlist = self._get_all_items()
         self.template = template_lookup.get_template("internal/listfield.mako")
 
     def get_class(self):
@@ -673,18 +673,10 @@ class ListingFieldRenderer(FormbarSelectionField):
             return clazz
 
     def _get_all_items(self):
-        filtered_items = []
         clazz = self.get_class()
         itemlist = clazz.get_item_list(self._field._form._request)
-        # Get filtered options and only use the items which are
-        # * in the origin items list and has passed filtering.
-        for item in self._field.filter_options(itemlist.items):
-            # (item, option-value, visible)
-            if item[2] is True:
-                filtered_items.append(item[0])
-        itemlist.items = filtered_items
-        # Sort fields
-        config = itemlist.clazz.get_table_config(self._field._config.renderer.table)
+        config = itemlist.clazz.get_table_config(
+            self._field._config.renderer.table)
         sort_field = config.get_default_sort_column()
         sort_order = config.get_default_sort_order()
         itemlist.sort(sort_field, sort_order)
@@ -713,9 +705,15 @@ class ListingFieldRenderer(FormbarSelectionField):
         config = self._field._config.renderer
         html.append(self._render_label())
         if self._field.is_readonly() or self.onlylinked == "true":
-            items = self._get_selected_items(self.all_items.items)
+            items = self._get_selected_items(self.itemlist.items)
         else:
-            items = self.all_items.items
+            items = self.itemlist.items
+
+        # Get filtered options and only use the items which are
+        # in the origin items list and has passed filtering.
+        items = self._field.filter_options(items)
+        # Now filter the items based on the user permissions
+        items = filter_option_on_permission(self._field._form._request, items)
 
         values = {'items': items,
                   'field': self._field,
@@ -724,7 +722,7 @@ class ListingFieldRenderer(FormbarSelectionField):
                   'request': self._field._form._request,
                   '_': self._field._form._translate,
                   's': security,
-                  'tableconfig': self.all_items.clazz.get_table_config(config.table)}
+                  'tableconfig': self.itemlist.clazz.get_table_config(config.table)}
         html.append(self.template.render(**values))
         return "".join(html)
 
