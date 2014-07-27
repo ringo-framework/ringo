@@ -20,7 +20,7 @@ selected = [str(id) for id in value if id]
     </tr>
     % endif
     <tr>
-    % if not field.is_readonly() and not field.renderer.onlylinked == "true":
+    % if not field.is_readonly():
       <th width="20px">
         % if not field.renderer.multiple == "false":
           <input type="checkbox" name="check_all" onclick="checkAll('${field.name}');">
@@ -42,7 +42,7 @@ selected = [str(id) for id in value if id]
         permission = "read"
       %>
       <tr>
-      % if not field.is_readonly() and not field.renderer.onlylinked == "true":
+      % if not field.is_readonly():
         <td>
           % if not field.renderer.multiple == "false":
             % if str(item.id) in selected:
