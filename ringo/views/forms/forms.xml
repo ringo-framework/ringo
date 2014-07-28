@@ -54,6 +54,7 @@
       </row>
       <row>
         <col><field ref="modul"/></col>
+        <col><field ref="e3"/></col>
         <col><field ref="e5"/></col>
       </row>
       <row>
