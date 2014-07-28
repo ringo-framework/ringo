@@ -7,6 +7,9 @@
       <renderer type="listing" hideadd="true" nolinks="true" showsearch="true"/>
     </entity>
     <entity id="e3" name="admin" label="Administrational role"/>
+    <entity id="e4" name="description" label="Description" type="string">
+      <renderer type="textarea"/>
+    </entity>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>
@@ -27,6 +30,9 @@
   <snippet id="s1">
     <row>
       <col><field ref="e1"/></col>
+    </row>
+    <row>
+      <col><field ref="e4"/></col>
     </row>
     <row>
       <col><field ref="e2"/></col>

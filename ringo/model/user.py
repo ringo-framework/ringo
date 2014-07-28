@@ -166,6 +166,7 @@ class Usergroup(BaseItem, Base):
     _modul_id = 4
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.Text, unique=True, nullable=False)
+    description = sa.Column(sa.Text)
 
     # Relations
     roles = sa.orm.relationship("Role", secondary=nm_usergroup_roles)
@@ -197,6 +198,7 @@ class Role(BaseItem, Base):
     _modul_id = 5
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.Text, unique=True, nullable=False)
+    description = sa.Column(sa.Text)
     admin = sa.Column(sa.Boolean, default=False)
     """Flag to set the role as administrational role which means that
     the user will gain the assigned permissions irrespective from
