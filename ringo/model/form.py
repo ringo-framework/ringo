@@ -8,22 +8,17 @@ Commented
 
 d1 = """The form is currently marked as draft. This means it is
 currently under work and may change."""
-d2 = """The form  is marked for a review. This means is work is finished
-and the form can not be changed anymore."""
-d3 = """The form  is published and can be used in the application. The
+d2 = """The form  is published and can be used in the application. The
 form can not be changed."""
 
 class ReviewStatemachine(Statemachine):
 
     def setup(self):
         s1 = State(self, 1, "Draft", description=d1)
-        s2 = State(self, 2, "Review", description=d2)
-        s3 = State(self, 3, "Published", description=d3)
+        s2 = State(self, 2, "Published", description=d2)
 
-        s1.add_transition(s2, "Review", handler, condition)
+        s1.add_transition(s2, "Publish", handler, condition)
         s2.add_transition(s1, "Revise", handler, condition)
-        s2.add_transition(s3, "Finish", handler, condition)
-        s3.add_transition(s1, "Revise", handler, condition)
         return s1
 
 class ReviewStateMixin(StateMixin):
