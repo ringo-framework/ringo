@@ -41,6 +41,19 @@
   cursor:zoom-in;
 }
 
+table.content-shorten {
+  table-layout:fixed;
+}
+
+table.content-shorten td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+</style>
+
+
+
  /* Datatables
  **********************************************************************/
 div.dataTables_length {
