@@ -105,7 +105,6 @@ class User(BaseItem, Base):
     roles = sa.orm.relationship("Role",
                                 secondary=nm_user_roles,
                                 backref='user')
-                                )
     groups = sa.orm.relationship("Usergroup",
                                  secondary=nm_user_usergroups,
                                  backref='members')
