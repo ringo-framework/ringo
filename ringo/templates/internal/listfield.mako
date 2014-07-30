@@ -65,9 +65,6 @@ for item in items:
             % endif
           % endif
         </td>
-      % else:
-          ## Render a hidden checkbox field as we need to submit the values in
-          <input style="display:none" type="checkbox" value="${item[0].id}" name="${field.name}" checked="checked"/>
       % endif
       % for num, col in enumerate(tableconfig.get_columns()):
         % if permission and not field.renderer.nolinks == "true":
