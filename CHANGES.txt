@@ -34,6 +34,7 @@ stay compatible with this release:
 - Statemodel of forms only have two states now: Draft, Published
 - Added support for Regular expressions in search (again). Now you can
   configure if the searchterm is a regular expression or not.
+- Show userlisting in roles.
 
 0.14.1
 =======
