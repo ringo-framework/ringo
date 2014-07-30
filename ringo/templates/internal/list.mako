@@ -1,9 +1,10 @@
 <%
+url = request.current_route_url().split("?")[0]
 mapping = {'num_filters': len(listing.search_filter)}
 def render_filter_link(request, field, value, clazz):
   out = []
   # Only take the path of the url and ignore any previous search filters.
-  url = request.current_route_path().split("?")[0]
+  url = request.current_route_url().split("?")[0]
   params = "form=search&search=%s&field=%s" % (value, field.get('name'))
   out.append('<a href="%s?%s" data-toggle="tooltip"' % (url, params))
   out.append('class="filter"')
@@ -33,7 +34,7 @@ def render_responsive_class(visibleonsize):
 autoresponsive = tableconfig.is_autoresponsive()
 %>
 <div class="well well-small search-widget">
-  <form name="search" class="form-inline" role="form" action="${request.current_route_url()}" method="POST">
+  <form name="search" class="form-inline" role="form" action="${url}" method="POST">
     <input name="csrf_token" type="hidden" value="${request.session.get_csrf_token()}">
     <input name="form" type="hidden" value="search">
     <div class="form-group">
@@ -53,7 +54,13 @@ autoresponsive = tableconfig.is_autoresponsive()
         % endfor
       </select>
     </div>
-    <button class="btn btn-default">${_('Search')}</button>
+    <button class="btn btn-default">
+    % if regexpr or request.session.get('%s.list.search.regexpr' % clazz.__tablename__, False):
+        ${_('Search+')}
+    % else:
+        ${_('Search')}
+    % endif
+    </button>
     <div class="btn-group">
       <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">${_('Options ')}<span class="caret"></span></button>
       <ul class="dropdown-menu">
@@ -63,10 +70,10 @@ autoresponsive = tableconfig.is_autoresponsive()
               <tr>
                 <td>
                   <a tabindex="-1"
-                  href="${request.current_route_url()}?form=search&saved=${key}">${_(value[2])}</a>
+                  href="${url}?form=search&saved=${key}">${_(value[2])}</a>
                 </td>
                 <td width="20">
-                  <a class="pull-right" tabindex="-1" href="${request.current_route_url()}?form=search&delete=${key}"><i class="glyphicon glyphicon-remove"></i></a>
+                  <a class="pull-right" tabindex="-1" href="${url}?form=search&delete=${key}"><i class="glyphicon glyphicon-remove"></i></a>
                 </td>
               </tr>
               % endfor
@@ -74,7 +81,12 @@ autoresponsive = tableconfig.is_autoresponsive()
           </li>
         <li class="divider"></li>
         <li><a tabindex="-1" href="#" data-toggle="modal" data-target="#savequerydialog">${_('Save current search filter')}</a></li>
-        <li><a tabindex="-1" href="${request.current_route_url()}?form=search&reset">${_('Reset current search filter')}</a></li>
+        <li><a tabindex="-1" href="${url}?form=search&reset">${_('Reset current search filter')}</a></li>
+        % if request.session.get('%s.list.search.regexpr' % clazz.__tablename__, False):
+          <li><a tabindex="-1" href="${url}?form=search&disableregexpr">${_('Disable regexpr in search')}</a></li>
+        % else:
+          <li><a tabindex="-1" href="${url}?form=search&enableregexpr">${_('Enable regexpr in search')}</a></li>
+        % endif
       </ul>
     </div>
     % if len(listing.search_filter) > 0:
@@ -186,7 +198,7 @@ table-bordered">
 </form>
 
 <div class="modal fade" id="savequerydialog">
-  <form id="savequery" action="${request.current_route_url()}">
+  <form id="savequery" action="${url}">
   <input name="csrf_token" type="hidden" value="${request.session.get_csrf_token()}">
   <div class="modal-dialog">
     <div class="panel panel-default">

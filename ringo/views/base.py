@@ -265,6 +265,14 @@ def get_search(clazz, request):
     # Check if there is already a saved search in the session
     saved_search = request.session.get('%s.list.search' % name, [])
 
+    regexpr = request.session.get('%s.list.search.regexpr' % name, False)
+    if "enableregexpr" in request.params:
+        request.session['%s.list.search.regexpr' % name] = True
+        return saved_search
+    elif  "disableregexpr" in request.params:
+        request.session['%s.list.search.regexpr' % name] = False
+        return saved_search
+
     if 'reset' in request.params:
         return []
 
@@ -306,7 +314,7 @@ def get_search(clazz, request):
         if not found:
             log.debug('Adding search for "%s" in field "%s"' % (search,
                                                                 search_field))
-            saved_search.append((search, search_field))
+            saved_search.append((search, search_field, regexpr))
     return saved_search
 
 def bundle_(request):

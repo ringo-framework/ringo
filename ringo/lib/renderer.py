@@ -255,9 +255,11 @@ class ListRenderer(Renderer):
         if len(self.listing.search_filter) > 0:
             search = self.listing.search_filter[-1][0]
             search_field = self.listing.search_filter[-1][1]
+            regexpr = self.listing.search_filter[-1][2]
         else:
             search = ""
             search_field = ""
+            regexpr = False
         values = {'items': self.listing.items,
                   'clazz': self.listing.clazz,
                   'listing': self.listing,
@@ -267,6 +269,7 @@ class ListRenderer(Renderer):
                   's': security,
                   'enable_bundled_actions': True,
                   'search': search,
+                  'regexpr': regexpr,
                   'search_field': search_field,
                   'saved_searches': get_saved_searches(request,
                                                        self.listing.clazz.__tablename__),

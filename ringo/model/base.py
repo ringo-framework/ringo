@@ -472,9 +472,12 @@ class BaseList(object):
         for col in table_config.get_columns():
             table_columns[col.get('name')] = col
 
-        for search, search_field in filter_stack:
+        for search, search_field, regexpr in filter_stack:
             # Build a regular expression
-            re_expr = re.compile(re.escape(search), re.IGNORECASE)
+            if regexpr:
+                re_expr = re.compile(search, re.IGNORECASE)
+            else:
+                re_expr = re.compile(re.escape(search), re.IGNORECASE)
             filtered_items = []
             log.debug('Filtering "%s" in "%s" on %s items'
                       % (search, search_field, len(self.items)))
