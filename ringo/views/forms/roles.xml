@@ -10,7 +10,9 @@
     <entity id="e4" name="description" label="Description" type="string">
       <renderer type="textarea"/>
     </entity>
-    <entity id="e5" name="users" label="Users"/>
+    <entity id="e5" name="users" label="Users">
+      <renderer type="selection"/>
+    </entity>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>
