@@ -19,6 +19,9 @@
         <option value="0">Female</option>
       </options>
     </entity>
+    <entity id="e9" name="user" label="Login" readonly="true">
+      <renderer type="dropdown"/>
+    </entitity>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>
@@ -40,11 +43,12 @@
     <row>
       <col><field ref="e1"/></col>
       <col><field ref="e2"/></col>
-      <col><field ref="e8"/></col>
+      <col><field ref="e9"/></col>
     </row>
     <row>
       <col><field ref="e4"/></col>
       <col><field ref="e3"/></col>
+      <col><field ref="e8"/></col>
     </row>
     <row>
       <col>
