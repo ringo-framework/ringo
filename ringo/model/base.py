@@ -481,7 +481,7 @@ class BaseList(object):
             if search_field != "":
                 fields = [search_field]
             else:
-                fields = [field.get('name') for field in table_columns]
+                fields = table_columns.keys()
             for item in self.items:
                 for field in fields:
                     expand = table_columns[field].get('expand')
