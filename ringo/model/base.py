@@ -2,7 +2,6 @@ import logging
 import json
 import re
 import uuid
-from operator import attrgetter
 from formbar.config import Config, load
 from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload, ColumnProperty, class_mapper
@@ -15,6 +14,16 @@ from ringo.lib.sql.query import FromCache, set_relation_caching
 from ringo.model.mixins import Logged, StateMixin, Owned
 
 log = logging.getLogger(__name__)
+
+
+def attrgetter(field, expand):
+    def g(obj):
+        return resolve_attr(obj, field, expand)
+    return g
+
+
+def resolve_attr(obj, attr, expand):
+    return obj.get_value(attr, expand=expand)
 
 
 def clear_cache():
@@ -436,7 +445,7 @@ class BaseList(object):
     def __json__(self, request):
         return self.items
 
-    def sort(self, field, order, expand=True):
+    def sort(self, field, order, expand=False):
         """Will return a sorted item list. Sorting is done based on the
         string version of the value in the sort field.
 
@@ -446,7 +455,7 @@ class BaseList(object):
         :returns: Sorted item list
 
         """
-        sorted_items = sorted(self.items, key=attrgetter(field))
+        sorted_items = sorted(self.items, key=attrgetter(field, expand))
         if order == "desc":
             sorted_items.reverse()
         self.items = sorted_items
