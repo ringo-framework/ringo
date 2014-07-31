@@ -137,6 +137,7 @@ html[xmlns] .dataTables_wrapper { display: block; }
 
 .table .actions {
     text-align: right;
+    width: 100px;
 }
 
 /* Search
