@@ -21,7 +21,7 @@
     </entity>
     <entity id="e9" name="user" label="Login" readonly="true">
       <renderer type="dropdown"/>
-    </entitity>
+    </entity>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>
