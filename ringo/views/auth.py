@@ -9,7 +9,6 @@ from formbar.config import Config, load
 from formbar.form import Form, Validator
 
 from ringo.lib.sql import DBSession
-from ringo.model.base import BaseFactory
 from ringo.model.user import USER_GROUP_ID, USER_ROLE_ID
 from ringo.lib.helpers import import_model
 User = import_model('ringo.model.user.User')
@@ -118,12 +117,12 @@ def register_user(request):
             user.profile[0].email = form.data['email']
 
             # 2. Set user group
-            gfac = BaseFactory(Usergroup)
+            gfac = Usergroup.get_item_factory()
             group = gfac.load(USER_GROUP_ID)
             user.groups.append(group)
 
             # 3. Set user role
-            rfac = BaseFactory(Role)
+            rfac = Role.get_item_factory()
             role = rfac.load(USER_ROLE_ID)
             user.roles.append(role)
             # Set default user group.
