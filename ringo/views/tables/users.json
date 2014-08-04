@@ -6,7 +6,8 @@
             {"name": "login", "label": "Login", "width": "100"},
             {"name": "roles", "label": "Roles"},
             {"name": "groups", "label": "Groups"},
-            {"name": "activated", "label": "Activated", "width": "100"}
+            {"name": "activated", "label": "Activated", "width": "100"},
+            {"name": "last_login", "label": "Last login", "width": "150"}
         ]
     }
 }

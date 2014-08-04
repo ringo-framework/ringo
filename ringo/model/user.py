@@ -100,6 +100,7 @@ class User(BaseItem, Base):
     activation_token = sa.Column(sa.Text)
     gid = sa.Column(sa.Integer, sa.ForeignKey('usergroups.id'))
     sid = sa.Column(sa.Integer, sa.ForeignKey('user_settings.id'))
+    last_login = sa.Column(sa.DateTime)
 
     # Relations
     roles = sa.orm.relationship("Role",

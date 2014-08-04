@@ -35,6 +35,7 @@ stay compatible with this release:
 - Added support for Regular expressions in search (again). Now you can
   configure if the searchterm is a regular expression or not.
 - Show userlisting in roles.
+- #47: Added last_login column
 
 0.14.1
 =======

@@ -455,6 +455,7 @@ def login(username, password):
     if user:
         if verify_password(password, user.password):
             if user.activated:
+                user.last_login = datetime.now()
                 log.info("Login successfull '%s'" % (username))
                 if passwords_needs_update(user.password):
                     log.info("Updating password for user '%s'" % (username))
