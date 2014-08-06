@@ -24,6 +24,7 @@ def setup(config):
     config.include('ringo.lib.sql.db.setup_connect_on_request')
     config.include('ringo.lib.renderer.setup_render_globals')
     config.include('ringo.lib.security.setup_ringo_security')
+    config.include('ringo.lib.cache.setup_cache')
     write_formbar_static_files()
 
 

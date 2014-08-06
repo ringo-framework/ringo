@@ -1,6 +1,7 @@
 """Caching of items."""
 import logging
 import datetime
+from pyramid.events import NewRequest
 
 log = logging.getLogger(__name__)
 
@@ -52,13 +53,25 @@ class Cache(object):
 
     def get(self, key):
         """Will return the cached value for the key. If there is no
-        value stored for the given key an KeyError will be raised.
+        value stored for the given key None will be returned.
 
         :key: String idenditifier for the cached value
         :returns: The cached value
 
         """
-        return self._data[key]
+        return self._data.get(key)
+
+
+def setup_cache(config):
+    config.add_subscriber(init_cache, NewRequest)
+
+
+def init_cache(event):
+    request = event.request
+    request.cache_item_list = Cache()
+    request.cache_item_modul = Cache()
+    CACHE_TABLE_CONFIG.clear()
+    CACHE_FORM_CONFIG.clear()
 
 # GLOBAL CACHE INSTANCES
 CACHE_TABLE_CONFIG = Cache()
