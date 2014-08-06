@@ -36,6 +36,9 @@ stay compatible with this release:
   configure if the searchterm is a regular expression or not.
 - Show userlisting in roles.
 - #47: Added last_login column
+- Changed caching. Replaced class based caching partially with request based
+  caching if possible. Use new Cache object (lib/cache.py) for caching in
+  general.
 
 0.14.1
 =======
