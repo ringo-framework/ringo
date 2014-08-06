@@ -11,7 +11,7 @@
       <renderer type="password"/>
       <rule expr="$pass==$pass2" msg="Password are not equal" method="pre"/>
     </entity>
-    <entity id="e5" name="email" label="Email" required="true"/>
+    <entity id="e5" name="email" label="Email" type="email" required="true"/>
   </source>
   <form id="loginform" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="s1"/>
