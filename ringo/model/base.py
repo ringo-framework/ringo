@@ -7,6 +7,7 @@ from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload, ColumnProperty, class_mapper
 from sqlalchemy.orm.attributes import get_history
 from ringo.lib.helpers import get_path_to_form_config, serialize
+from ringo.lib.cache import CACHE_TABLE_CONFIG, CACHE_FORM_CONFIG
 from ringo.lib.sql import DBSession
 from ringo.lib.sql.cache import regions
 from ringo.lib.imexport import JSONExporter
@@ -31,8 +32,6 @@ def clear_cache():
     called per request."""
     BaseItem._cache_table_config = {}
     BaseItem._cache_form_config = {}
-    BaseItem._cache_item_modul = {}
-    BaseItem._cache_item_list = {}
 
 
 class BaseItem(object):
@@ -41,10 +40,6 @@ class BaseItem(object):
     """Configure a list of relations which are configured to be
     eager loaded."""
     _sql_eager_loads = []
-    """Cached table config for the class"""
-    _cache_table_config = {}
-    """Cached form config for the class"""
-    _cache_form_config = {}
     """Cached modul for the class"""
     _cache_item_modul = {}
     """Cached item list for the class"""
@@ -184,9 +179,9 @@ class BaseItem(object):
         # unique cachename for tableconfigs among all inherited classes.
         cachename = "%s.%s" % (cls.__name__, tablename)
         from ringo.lib.renderer import TableConfig
-        if not cls._cache_table_config.get(cachename):
-            cls._cache_table_config[cachename] = TableConfig(cls, tablename)
-        return cls._cache_table_config[cachename]
+        if not CACHE_TABLE_CONFIG.get(cachename):
+            CACHE_TABLE_CONFIG.set(cachename, TableConfig(cls, tablename))
+        return CACHE_TABLE_CONFIG.get(cachename)
 
     def get_form_config(self, formname):
         """Return the Configuration for a given form. The configuration
@@ -194,15 +189,14 @@ class BaseItem(object):
         tries to load it from the ringo application."""
         cfile = "%s.xml" % self.__class__.__tablename__
         cachename = "%s.%s" % (self.__class__.__name__, formname)
-        cache = self.__class__._cache_form_config
-        if not cache.get(cachename):
+        if not CACHE_FORM_CONFIG.get(cachename):
             try:
                 loaded_config = load(get_path_to_form_config(cfile))
             except IOError:
                 loaded_config = load(get_path_to_form_config(cfile, 'ringo'))
             config = Config(loaded_config)
-            cache[cachename] = config.get_form(formname)
-        return cache[cachename]
+            CACHE_FORM_CONFIG.set(cachename, config.get_form(formname))
+        return CACHE_FORM_CONFIG.get(cachename)
 
     def reset_uuid(self):
         self.uuid = '%.32x' % uuid.uuid4()
