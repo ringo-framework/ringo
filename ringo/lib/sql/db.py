@@ -31,12 +31,9 @@ def setup_connect_on_request(config):
 
 
 def connect_on_request(event):
-    from ringo.model.base import clear_cache
     request = event.request
     request.db = DBSession
     request.add_finished_callback(close_db_connection)
-    # Try to clear the cache on every request
-    clear_cache()
 
 
 def close_db_connection(request):
