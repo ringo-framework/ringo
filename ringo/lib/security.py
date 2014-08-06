@@ -241,7 +241,7 @@ def get_permissions(modul, item=None):
         # <2014-02-07 11:08>
         for role in action.roles:
             add_perm = True
-            default_principal = 'role:%s' % role
+            default_principal = 'role:%s' % role.name
 
             # Check if the actions is available in the current state of
             # the item if the item has states.
