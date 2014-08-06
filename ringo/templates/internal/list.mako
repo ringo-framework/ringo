@@ -8,7 +8,7 @@ def render_filter_link(request, field, value, clazz):
   params = "form=search&search=%s&field=%s" % (value, field.get('name'))
   out.append('<a href="%s?%s" data-toggle="tooltip"' % (url, params))
   out.append('class="filter"')
-  out.append('title="Filter %s on %s in %s">' % (clazz.get_item_modul().get_label(plural=True), value, field.get('label')))
+  out.append('title="Filter %s on %s in %s">' % (clazz.get_item_modul(request).get_label(plural=True), value, field.get('label')))
   if hasattr(value, "render"):
     out.append('%s</a>' % value.render())
   else:
@@ -185,7 +185,7 @@ table-bordered">
   <div class="well well-small">
     <input name="csrf_token" type="hidden" value="${request.session.get_csrf_token()}">
     <select class="form-control input-small" name="bundle_action" style="display:inline;width:auto;">
-      % for action in clazz.get_item_actions():
+      % for action in clazz.get_item_actions(request):
         ${action.bundle}
         % if action.bundle:
           <option value="${action.name}">${action.name}</option>

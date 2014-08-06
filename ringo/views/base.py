@@ -143,7 +143,7 @@ def get_blobform_config(request, item, formname):
         return item, formconfig.get_form(formname)
     else:
         log.debug("Stage 1: User is selecting a blobform")
-        modul = item.get_item_modul()
+        modul = item.get_item_modul(request)
         formconfig = modul.get_form_config("blobform")
         return modul, formconfig
 
@@ -484,7 +484,7 @@ def create_(clazz, request, callback=None, renderers={}):
                 eval_url='/rest/rule/evaluate')
 
     if request.POST and do_validate:
-        item_label = clazz.get_item_modul().get_label()
+        item_label = clazz.get_item_modul(request).get_label()
         mapping = {'item_type': item_label}
         if form.validate(request.params):
 
@@ -592,7 +592,7 @@ def update_(clazz, request, callback=None, renderers={}):
         else:
             form = item_form
 
-        item_label = clazz.get_item_modul().get_label()
+        item_label = clazz.get_item_modul(request).get_label()
         mapping = {'item_type': item_label, 'item': item}
         if form.validate(request.params):
             item.save(form.data, request)
@@ -726,7 +726,7 @@ def _handle_delete_request(clazz, request, items):
             request.db.delete(item)
         route_name = clazz.get_action_routename('list')
         url = request.route_path(route_name)
-        item_label = clazz.get_item_modul().get_label(plural=True)
+        item_label = clazz.get_item_modul(request).get_label(plural=True)
         mapping = {'item_type': item_label, 'item': item, 'num': len(items)}
         msg = _('Deleted ${num} ${item_type} successfull.', mapping=mapping)
         log.info(msg)

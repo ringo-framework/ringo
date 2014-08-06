@@ -2,6 +2,7 @@ import logging
 import json
 import re
 import uuid
+from pyramid.threadlocal import get_current_request
 from formbar.config import Config, load
 from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload, ColumnProperty, class_mapper
@@ -40,10 +41,6 @@ class BaseItem(object):
     """Configure a list of relations which are configured to be
     eager loaded."""
     _sql_eager_loads = []
-    """Cached modul for the class"""
-    _cache_item_modul = {}
-    """Cached item list for the class"""
-    _cache_item_list = {}
 
     # Added UUID column for every BaseItem. This is needed to identify
     # item on imports and exports.
@@ -137,30 +134,40 @@ class BaseItem(object):
 
     @classmethod
     def get_item_list(cls, request, user=None, cache=None):
-        if not cls._cache_item_list.get(cls._modul_id):
+        if not request.cache_item_list.get(cls._modul_id):
             listing = BaseList(cls, request, user, cache)
-            cls._cache_item_list[cls._modul_id] = listing
-        return cls._cache_item_list[cls._modul_id]
+            request.cache_item_list.set(cls._modul_id, listing)
+        return request.cache_item_list.get(cls._modul_id)
 
     @classmethod
-    def get_item_actions(cls):
+    def get_item_actions(cls, request=None):
         """Returns a list of ActionItems which are available for items
         modul. If you want to add custom actions to the modul please
         overwrite this method.
 
         :returns: List of ActionItems.
         """
-        modul = cls.get_item_modul()
+        modul = cls.get_item_modul(request)
         return modul.actions
 
     @classmethod
-    def get_item_modul(cls):
-        from ringo.model.modul import ModulItem
-        if not cls._cache_item_modul.get(cls._modul_id):
+    def get_item_modul(cls, request=None):
+        if not request:
+            request = get_current_request()
+            if request:
+                log.warning("Calling get_item_modul with no request although "
+                            "there is a request available. "
+                            "Using 'get_current_request'...")
+        if not request or not request.cache_item_modul.get(cls._modul_id):
+            from ringo.model.modul import ModulItem
             factory = BaseFactory(ModulItem)
             modul = factory.load(cls._modul_id)
-            cls._cache_item_modul[cls._modul_id] = modul
-        return cls._cache_item_modul[cls._modul_id]
+            if request:
+                if not request.cache_item_modul.get(cls._modul_id):
+                    request.cache_item_modul.set(cls._modul_id, modul)
+            else:
+                return modul
+        return request.cache_item_modul.get(cls._modul_id)
 
     @classmethod
     def get_action_routename(cls, action, prefix=None):

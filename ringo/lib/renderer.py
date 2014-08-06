@@ -363,7 +363,7 @@ class ConfirmDialogRenderer(DialogRenderer):
     def _render_body(self, items):
         out = []
         _ = self._request.translate
-        item_label = self._item.get_item_modul().get_label()
+        item_label = self._item.get_item_modul(self._request).get_label()
         mapping = {'action': self._action, 'item': item_label,
                    'Action': self._action.capitalize()}
         out.append(_("Do you really want to ${action}"
@@ -427,7 +427,7 @@ class ExportDialogRenderer(DialogRenderer):
         values['request'] = self._request
         values['items'] = items
         values['body'] = self._render_body()
-        values['modul'] = self._item.get_item_modul().get_label(plural=True)
+        values['modul'] = self._item.get_item_modul(self._request).get_label(plural=True)
         values['action'] = self._action.capitalize()
         values['ok_url'] = self._request.current_route_url()
         values['_'] = self._request.translate
@@ -455,7 +455,7 @@ class ImportDialogRenderer(DialogRenderer):
         values = {}
         values['request'] = self._request
         values['body'] = self._render_body()
-        values['modul'] = self._item.get_item_modul().get_label(plural=True)
+        values['modul'] = self._item.get_item_modul(self._request).get_label(plural=True)
         values['action'] = self._action.capitalize()
         values['ok_url'] = self._request.current_route_url()
         values['_'] = self._request.translate
@@ -488,7 +488,7 @@ class PrintDialogRenderer(DialogRenderer):
         values = {}
         values['request'] = self._request
         values['body'] = self._render_body()
-        values['modul'] = self._item.get_item_modul().get_label(plural=True)
+        values['modul'] = self._item.get_item_modul(self._request).get_label(plural=True)
         values['action'] = self._action.capitalize()
         values['ok_url'] = self._request.current_route_url()
         values['_'] = self._request.translate
