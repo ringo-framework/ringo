@@ -2,11 +2,13 @@ import logging
 import json
 import re
 import uuid
+from pyramid.threadlocal import get_current_request
 from formbar.config import Config, load
 from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload, ColumnProperty, class_mapper
 from sqlalchemy.orm.attributes import get_history
 from ringo.lib.helpers import get_path_to_form_config, serialize
+from ringo.lib.cache import CACHE_TABLE_CONFIG, CACHE_FORM_CONFIG
 from ringo.lib.sql import DBSession
 from ringo.lib.sql.cache import regions
 from ringo.lib.imexport import JSONExporter
@@ -31,8 +33,6 @@ def clear_cache():
     called per request."""
     BaseItem._cache_table_config = {}
     BaseItem._cache_form_config = {}
-    BaseItem._cache_item_modul = {}
-    BaseItem._cache_item_list = {}
 
 
 class BaseItem(object):
@@ -41,14 +41,6 @@ class BaseItem(object):
     """Configure a list of relations which are configured to be
     eager loaded."""
     _sql_eager_loads = []
-    """Cached table config for the class"""
-    _cache_table_config = {}
-    """Cached form config for the class"""
-    _cache_form_config = {}
-    """Cached modul for the class"""
-    _cache_item_modul = {}
-    """Cached item list for the class"""
-    _cache_item_list = {}
 
     # Added UUID column for every BaseItem. This is needed to identify
     # item on imports and exports.
@@ -142,30 +134,40 @@ class BaseItem(object):
 
     @classmethod
     def get_item_list(cls, request, user=None, cache=None):
-        if not cls._cache_item_list.get(cls._modul_id):
+        if not request.cache_item_list.get(cls._modul_id):
             listing = BaseList(cls, request, user, cache)
-            cls._cache_item_list[cls._modul_id] = listing
-        return cls._cache_item_list[cls._modul_id]
+            request.cache_item_list.set(cls._modul_id, listing)
+        return request.cache_item_list.get(cls._modul_id)
 
     @classmethod
-    def get_item_actions(cls):
+    def get_item_actions(cls, request=None):
         """Returns a list of ActionItems which are available for items
         modul. If you want to add custom actions to the modul please
         overwrite this method.
 
         :returns: List of ActionItems.
         """
-        modul = cls.get_item_modul()
+        modul = cls.get_item_modul(request)
         return modul.actions
 
     @classmethod
-    def get_item_modul(cls):
-        from ringo.model.modul import ModulItem
-        if not cls._cache_item_modul.get(cls._modul_id):
+    def get_item_modul(cls, request=None):
+        if not request:
+            request = get_current_request()
+            if request:
+                log.warning("Calling get_item_modul with no request although "
+                            "there is a request available. "
+                            "Using 'get_current_request'...")
+        if not request or not request.cache_item_modul.get(cls._modul_id):
+            from ringo.model.modul import ModulItem
             factory = BaseFactory(ModulItem)
             modul = factory.load(cls._modul_id)
-            cls._cache_item_modul[cls._modul_id] = modul
-        return cls._cache_item_modul[cls._modul_id]
+            if request:
+                if not request.cache_item_modul.get(cls._modul_id):
+                    request.cache_item_modul.set(cls._modul_id, modul)
+            else:
+                return modul
+        return request.cache_item_modul.get(cls._modul_id)
 
     @classmethod
     def get_action_routename(cls, action, prefix=None):
@@ -184,9 +186,9 @@ class BaseItem(object):
         # unique cachename for tableconfigs among all inherited classes.
         cachename = "%s.%s" % (cls.__name__, tablename)
         from ringo.lib.renderer import TableConfig
-        if not cls._cache_table_config.get(cachename):
-            cls._cache_table_config[cachename] = TableConfig(cls, tablename)
-        return cls._cache_table_config[cachename]
+        if not CACHE_TABLE_CONFIG.get(cachename):
+            CACHE_TABLE_CONFIG.set(cachename, TableConfig(cls, tablename))
+        return CACHE_TABLE_CONFIG.get(cachename)
 
     def get_form_config(self, formname):
         """Return the Configuration for a given form. The configuration
@@ -194,15 +196,14 @@ class BaseItem(object):
         tries to load it from the ringo application."""
         cfile = "%s.xml" % self.__class__.__tablename__
         cachename = "%s.%s" % (self.__class__.__name__, formname)
-        cache = self.__class__._cache_form_config
-        if not cache.get(cachename):
+        if not CACHE_FORM_CONFIG.get(cachename):
             try:
                 loaded_config = load(get_path_to_form_config(cfile))
             except IOError:
                 loaded_config = load(get_path_to_form_config(cfile, 'ringo'))
             config = Config(loaded_config)
-            cache[cachename] = config.get_form(formname)
-        return cache[cachename]
+            CACHE_FORM_CONFIG.set(cachename, config.get_form(formname))
+        return CACHE_FORM_CONFIG.get(cachename)
 
     def reset_uuid(self):
         self.uuid = '%.32x' % uuid.uuid4()

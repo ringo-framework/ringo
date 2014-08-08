@@ -10,6 +10,7 @@ from pyramid.registry import Registry
 from sqlalchemy import engine_from_config
 from sqlalchemy.orm import sessionmaker
 
+from ringo.lib.cache import Cache
 from ringo.lib.sql import DBSession
 from ringo import main
 from ringo.lib.i18n import locale_negotiator
@@ -60,6 +61,8 @@ class BaseUnitTest(BaseTestCase):
 
     def _build_request(self):
         request = testing.DummyRequest()
+        request.cache_item_modul = Cache()
+        request.cache_item_list = Cache()
 
         user = Mock()
         user.news = []

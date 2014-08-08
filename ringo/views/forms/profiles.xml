@@ -8,7 +8,7 @@
     <entity id="e4" name="address" label="Address" type="string">
       <renderer type="textarea"/>
     </entity>
-    <entity id="e5" name="email" label="E-Mail" type="string" required="true"/>
+    <entity id="e5" name="email" label="E-Mail" type="email" required="true"/>
     <entity id="e6" name="url" label="Web" type="string"/>
     <entity id="e7" name="phone" label="Phone" type="string"/>
     <entity id="e8" name="gender" label="Gender" type="integer" desired="true">

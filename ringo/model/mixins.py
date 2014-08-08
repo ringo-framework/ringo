@@ -49,6 +49,7 @@ from sqlalchemy.orm import (
 )
 
 from ringo.model import Base
+from ringo.lib.cache import CACHE_FORM_CONFIG
 from ringo.lib.helpers import serialize
 
 log = logging.getLogger(__name__)
@@ -206,12 +207,12 @@ class Blobform(object):
             # A reference to a form has been set. Load the references value
             cachename = "%s.%s.%s" % (self.__class__.__name__,
                                       self.fid, formname)
-            if not self.__class__._cache_form_config.get(cachename):
+            if not CACHE_FORM_CONFIG.get(cachename):
                 factory = Form.get_item_factory()
                 form = factory.load(self.fid)
                 config = Config(parse(form.definition.encode('utf-8')))
-                self.__class__._cache_form_config[cachename] = config.get_form(formname)
-            return self.__class__._cache_form_config[cachename]
+                CACHE_FORM_CONFIG.set(cachename, config.get_form(formname))
+            return CACHE_FORM_CONFIG.get(cachename)
         else:
             # Fallback! Should not happen. Load default form.
             return super(Blobform, self).get_form_config(formname)

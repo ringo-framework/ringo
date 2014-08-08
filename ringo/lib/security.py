@@ -175,13 +175,13 @@ def has_permission(permission, context, request):
 
     """
     if isinstance(context, BaseItem):
-        modul = context.get_item_modul()
+        modul = context.get_item_modul(request)
         context.__acl__ = get_permissions(modul, context)
     #elif issubclass(context.__class__, BaseItem):
     # Checking for subclass of BaseItem does not work always to check
     # for a get_item_modul function.
     elif hasattr(context, "get_item_modul"):
-        modul = context.get_item_modul()
+        modul = context.get_item_modul(request)
         context.__acl__ = get_permissions(modul)
     # TODO: Call of has_permission will trigger 4 additional SQL-Queries
     # per call. So we might think about caching the result.
@@ -241,7 +241,7 @@ def get_permissions(modul, item=None):
         # <2014-02-07 11:08>
         for role in action.roles:
             add_perm = True
-            default_principal = 'role:%s' % role
+            default_principal = 'role:%s' % role.name
 
             # Check if the actions is available in the current state of
             # the item if the item has states.

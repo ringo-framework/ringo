@@ -104,7 +104,7 @@
 
 <%def name="render_item_base_actions(item)">
   <% context_actions = [] %>
-  % for action in item.get_item_actions():
+  % for action in item.get_item_actions(request):
     % if (request.url.find(action.name.lower()) < 0) and s.has_permission((action.permission or action.name.lower()), request.context.item, request):
       <%
       icon = get_icon(action)
@@ -120,7 +120,7 @@
     <button type="button" class="btn btn-default dropdown-toggle"
     data-toggle="dropdown"> ${_('Advanced')} <span class="caret"></span></button>
     <ul id="context-menu-options" class="dropdown-menu  pull-right" role="menu">
-      <li><a href="#form">${_('Back to')} ${item.get_item_modul().get_label()}: ${item}</a></li>
+      <li><a href="#form">${_('Back to')} ${item.get_item_modul(request).get_label()}: ${item}</a></li>
       % if owner:
         <li class="divider"></li>
         <li role="presentation" class="dropdown-header">${_('Administration')}</li>
