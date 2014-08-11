@@ -52,8 +52,8 @@ def filter_options_on_permissions(request, options):
     filtered_options = []
     for option in options:
         visible = False
-        if (security.has_permission('read', option[0], request)
-            or not hasattr(option[0], 'owner')):
+        if (option[2] and (security.has_permission('read', option[0], request)
+            or not hasattr(option[0], 'owner'))):
             visible = True
         filtered_options.append((option[0], option[1], visible))
     return filtered_options
