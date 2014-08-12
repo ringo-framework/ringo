@@ -3,8 +3,9 @@ from ringo.tests import BaseUnitTest
 class GlobalTests(BaseUnitTest):
 
     def test_clear_cache(self):
-        from ringo.model.base import clear_cache
-        clear_cache()
+        from ringo.lib.cache import CACHE_TABLE_CONFIG, CACHE_FORM_CONFIG
+        CACHE_TABLE_CONFIG.clear()
+        CACHE_FORM_CONFIG.clear()
 
 class BaseItemTests(BaseUnitTest):
 

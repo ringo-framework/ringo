@@ -28,13 +28,6 @@ def resolve_attr(obj, attr, expand):
     return obj.get_value(attr, expand=expand)
 
 
-def clear_cache():
-    """Helper function to clear some caching. This function should be
-    called per request."""
-    BaseItem._cache_table_config = {}
-    BaseItem._cache_form_config = {}
-
-
 class BaseItem(object):
 
     _modul_id = None

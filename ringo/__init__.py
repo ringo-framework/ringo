@@ -7,7 +7,6 @@ from ringo.resources import get_resource_factory
 from ringo.lib.i18n import locale_negotiator
 from ringo.lib.sql.db import setup_db_session
 from ringo.model import Base
-from ringo.model.base import clear_cache
 from ringo.model.user import User
 from ringo.model.news import News
 
@@ -17,7 +16,6 @@ log = logging.getLogger(__name__)
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
-    clear_cache()
     engine, dbsession = setup_db_session(settings)
     Base.metadata.bind = engine
     config = Configurator(settings=settings,
