@@ -638,7 +638,8 @@ class StateFieldRenderer(FormbarDropdown):
         # Get all available transitions from the current state for this
         # item and request.
         item = self._field._form._item
-        sm = item.get_statemachine(self._field.name)
+        sm = item.get_statemachine(self._field.name,
+                                   request=self._field._form._request)
         state = sm.get_state()
 
         html.append(self._render_label())
