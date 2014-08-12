@@ -31,9 +31,9 @@ def resolve_attr(obj, attr, expand):
 class BaseItem(object):
 
     _modul_id = None
+    _sql_eager_loads = []
     """Configure a list of relations which are configured to be
     eager loaded."""
-    _sql_eager_loads = []
 
     # Added UUID column for every BaseItem. This is needed to identify
     # item on imports and exports.
