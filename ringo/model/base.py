@@ -112,10 +112,6 @@ class BaseItem(object):
         else:
             return "%s" % str(self.id or self.__class__)
 
-    def __json__(self, request):
-        exporter = JSONExporter(self.__class__)
-        return exporter.perform([self])
-
     @classmethod
     def get_columns(cls, include_relations=False):
         return [prop.key for prop in class_mapper(cls).iterate_properties
@@ -435,9 +431,6 @@ class BaseList(object):
             return filtered_items
         else:
             return items
-
-    def __json__(self, request):
-        return self.items
 
     def sort(self, field, order, expand=False):
         """Will return a sorted item list. Sorting is done based on the

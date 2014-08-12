@@ -12,6 +12,8 @@ from formbar.form import Form
 from formbar.config import Config, parse
 from formbar.rules import Rule, Parser
 
+from ringo.lib.imexport import JSONExporter
+from ringo.model.base import BaseItem, BaseList
 from ringo.views.base import _get_item_from_context
 
 log = logging.getLogger(__name__)
@@ -52,6 +54,12 @@ class JSONResponse(object):
     def __json__(self, request):
         rvalue = {}
         rvalue['success'] = self._success
+        if isinstance(self._data, BaseItem):
+            exporter = JSONExporter(self._data.__class__)
+            self._data = exporter.perform([self._data])
+        elif isinstance(self._data, BaseList):
+            exporter = JSONExporter(self._data.__class__)
+            self._data = exporter.perform(self._data.items)
         rvalue['data'] = self._data
         rvalue['params'] = self._params
         return rvalue
