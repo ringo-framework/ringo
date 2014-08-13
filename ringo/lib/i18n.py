@@ -18,6 +18,7 @@ can append their own translation factory."""
 
 def setup_translation(config):
     config.add_translation_dirs('ringo:locale/')
+    config.add_translation_dirs('formbar:locale/')
     config.add_subscriber(set_request_locale, NewRequest)
     config.add_subscriber(add_localizer, NewRequest)
     log.info('-> Translation finished.')
