@@ -563,7 +563,12 @@ class LinkFieldRenderer(FieldRenderer):
 class DropdownFieldRenderer(FormbarDropdown):
     """Ringo specific DropdownFieldRenderer. This renderer add a small
     link next to the label to make it possible to jump to the selected
-    item in the dropdown list."""
+    item in the dropdown list.
+
+    * nolink: Flag "true" or "false" to configure completly disable
+      linking Default to "false".
+
+    """
 
     def __init__(self, field, translate):
         """@todo: to be defined"""
@@ -600,7 +605,7 @@ class DropdownFieldRenderer(FormbarDropdown):
     def _render_label(self):
         html = []
         html.append(FormbarDropdown._render_label(self))
-        if not self._field.is_readonly():
+        if not self._field.is_readonly() and not self.nolink == "true":
             link = self.render_link()
             if link:
                 html.append(" [%s]" % link)

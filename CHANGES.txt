@@ -18,6 +18,7 @@ like the request.
 
 New:
 * All Mails will have the application name in the subject.
+* Add "nolink" Attribute to the DropdownRenderer.
 
 Bugfixes:
 
