@@ -16,6 +16,11 @@ like the request.
 * Removed __json__ method. JSON export is now completely handled in the
   Exporter (JSONResponse)
 
+Bugfixes:
+
+* Handle case if an attribute returns a BaseList as selected items in
+  ListRenderer.
+
 0.15.0
 =======
 IMPORTANT: Application will need some work on application initialisation to
