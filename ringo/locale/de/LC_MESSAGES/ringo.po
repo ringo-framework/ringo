@@ -622,7 +622,7 @@ msgid ""
 "password for \"${app_name}\"."
 msgstr ""
 "Sie haben diese E-Mail erhalten, da Sie ein Zurücksetzen ihres Passworts "
-"für \"${app_name\" beantragt haben."
+"für \"${app_name}\" beantragt haben."
 
 #: ringo/templates/mails/password_reset_request.mako:6
 msgid ""
