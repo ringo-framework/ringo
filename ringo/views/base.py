@@ -727,7 +727,7 @@ def _handle_delete_request(clazz, request, items):
         route_name = clazz.get_action_routename('list')
         url = request.route_path(route_name)
         item_label = clazz.get_item_modul(request).get_label(plural=True)
-        mapping = {'item_type': item_label, 'item': item, 'num': len(items)}
+        mapping = {'item_type': item_label, 'num': len(items)}
         msg = _('Deleted ${num} ${item_type} successfull.', mapping=mapping)
         log.info(msg)
         request.session.flash(msg, 'success')
