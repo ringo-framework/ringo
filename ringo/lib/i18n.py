@@ -53,7 +53,7 @@ def add_localizer(event):
                                        default=default))
             if ts != string:
                 break
-        return Template(ts).substitute(mapping)
+        return Template(ts).safe_substitute(mapping)
 
     request.localizer = localizer
     request.translate = auto_translate
