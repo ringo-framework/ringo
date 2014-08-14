@@ -699,21 +699,24 @@ class ListingFieldRenderer(FormbarSelectionField):
         return itemlist
 
     def _get_selected_items(self, items):
-        selected = []
         try:
-            sitems = getattr(self._field._form._item, self._field.name) or []
-            if isinstance(items, list):
-                sitem_ids = [x.id for x in sitems]
-                for item in items:
-                    if item.id in sitem_ids:
-                        selected.append(item)
+            selected = getattr(self._field._form._item, self._field.name) or []
+            # Usually the getattr function should return a single item
+            # or a list of items. But in some cases the attribute can be
+            # a BaseList. This can happen if the attribute is a python
+            # property of the item to dynamically add some attributes.
+            # This property might return a BaseList.
+            if isinstance(selected, BaseList):
+                selected = selected.items
+            elif not isinstance(selected, list):
+                selected = [selected]
             return selected
         except AttributeError:
             # Can happen when designing forms an the model of the item
             # is not yet configured.
-            log.warning("Missing %s attribute in %s" % (self._field._form._item,
-                                                        self._field.name))
-        return selected
+            log.warning("Missing %s attribute in %s" % (self._field.name,
+                                                        repr(self._field._form._item)))
+        return []
 
     def render(self):
         """Initialize renderer"""
