@@ -18,6 +18,7 @@ like the request.
 
 Bugfixes:
 
+* Translate options in dropdown lists.
 * Handle case if an attribute returns a BaseList as selected items in
   ListRenderer.
 
