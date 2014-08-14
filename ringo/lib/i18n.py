@@ -1,7 +1,9 @@
 import logging
+from string import Template
 import json
 from pyramid.events import NewRequest
 from pyramid.i18n import get_localizer, TranslationStringFactory
+
 
 log = logging.getLogger(__name__)
 
@@ -35,22 +37,23 @@ def set_request_locale(event):
 
 def add_localizer(event):
     request = event.request
-    localizer = get_localizer(request)
+    localizer = request.localizer
 
-    def auto_translate(string, default=None, mapping={}):
+    def auto_translate(string, default=None, mapping=None):
         """The translation function will iterate over the available
         TranslationStringFactorys in the translators varibale and try to
         translate the given string. TranslationsStrings will be iterated
         in reversed order and iteration stops as soon as the
         TranslationsString returns a string different from the given
         string (msgid)"""
+        if mapping is None:
+            mapping = {}
         for _ in translators[::-1]:
             ts = localizer.translate(_(string,
-                                       default=default,
-                                       mapping=mapping))
+                                       default=default))
             if ts != string:
                 break
-        return ts
+        return Template(ts).substitute(mapping)
 
     request.localizer = localizer
     request.translate = auto_translate
