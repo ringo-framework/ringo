@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2014-07-30 12:55+0200\n"
-"PO-Revision-Date: 2014-07-30 13:00+0200\n"
+"PO-Revision-Date: 2014-08-14 11:50+0200\n"
 "Last-Translator: Torsten Irlaender <torsten@irlaender.de>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -366,9 +366,9 @@ msgstr "Passwort zurücksetzen"
 #: ringo/templates/auth/forgot_password.mako:11
 msgid "Enter your Loginname and a password reset email will be sent out"
 msgstr ""
-"Geben Sie ihre Anmeldekennung und Passwort ein. Eine Email mit \"\n"
-"\"weiteren Informationen zum zurücksetzen des Passworts wird Ihnen "
-"zugesendet"
+"Geben Sie ihre Anmeldekennung und Passwort ein. Eine Email mit weiteren "
+"Informationen zum Zurücksetzen des Passworts wird Ihnen "
+"zugesendet."
 
 #: ringo/templates/auth/login.mako:10
 msgid "New here? Register a new account!"
@@ -388,10 +388,7 @@ msgid ""
 "email with a confirmation link to complete the registration."
 msgstr ""
 "Bitte füllen Sie das Formular aus, um einen neuen Zugang zur "
-"registrieren. \"\n"
-"\"Sie erhalten im Anschluss eine Email mit einem Bestätigungslink um die "
-"\"\n"
-"\"Registrierung abzuschließen."
+"registrieren. Sie erhalten im Anschluss eine Email mit einem Bestätigungslink um die Registrierung abzuschließen."
 
 #: ringo/templates/auth/reset_password.mako:7
 msgid "Password resetted"
@@ -651,8 +648,7 @@ msgid ""
 "To complete the registration you need to confirm the registration by "
 "clicking the following link:"
 msgstr ""
-"Bitte bestätigen Sie die Registration indem Sie den folgenden Link \"\n"
-"\"folgen: %s"
+"Bitte bestätigen Sie die Registration indem Sie den folgenden Link folgen: %s"
 
 #: ringo/templates/users/changepassword.mako:6
 msgid "Change Password for"
@@ -680,8 +676,7 @@ msgid ""
 "User has been created and a confirmation mail was sent to the users email"
 " adress. Please check your email :)"
 msgstr ""
-"Der Zugang wurde eingerichtet und eine Bestätigungsmail wurde an die\"\n"
-"\" angegebene Email-Adresse versendet. Bitte prüfen Sie Ihre Email"
+"Der Zugang wurde eingerichtet und eine Bestätigungsmail wurde an die angegebene Email-Adresse versendet. Bitte prüfen Sie Ihre Email"
 
 #: ringo/views/auth.py:167
 msgid "The user has beed successfull confirmed."
@@ -690,8 +685,7 @@ msgstr "Der Zugang wurde erfolgreich bestätigt."
 #: ringo/views/auth.py:169
 msgid "The user was not confirmed. Maybe the confirmation token was not valid?"
 msgstr ""
-"Der Zugang konnte nicht bestätigt werden. Vielleicht ist das\"\n"
-"\" Bestätigungs-Token nicht gülitg?"
+"Der Zugang konnte nicht bestätigt werden. Vielleicht ist das Bestätigungs-Token nicht gülitg?"
 
 #: ringo/views/auth.py:192
 #, python-format
@@ -751,8 +745,7 @@ msgstr "Fehler 404"
 #: ringo/views/errors.py:11
 msgid "Sorry, the requested ressource could not be found!"
 msgstr ""
-"Es tut mir leid, aber die angeforderte Ressource konnte nicht\"\n"
-"\" gefunden werden."
+"Es tut mir leid, aber die angeforderte Ressource konnte nicht gefunden werden."
 
 #: ringo/views/errors.py:22
 msgid "Error 403"
@@ -763,8 +756,7 @@ msgid ""
 "Authorisation error! Sorry, you are not allowed to access to requested "
 "ressource!"
 msgstr ""
-"Authorisierung fehlgeschlagen. Es tut mir leid, aber Sie haben nicht\"\n"
-"\" die erforderlichen Rechte, um auf die Ressource zuzugreifen."
+"Authorisierung fehlgeschlagen. Es tut mir leid, aber Sie haben nicht die erforderlichen Rechte, um auf die Ressource zuzugreifen."
 
 #: ringo/views/users.py:83
 msgid "The given password is not correct"
