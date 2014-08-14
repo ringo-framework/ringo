@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-07-30 12:55+0200\n"
-"PO-Revision-Date: 2014-08-14 11:50+0200\n"
+"POT-Creation-Date: 2014-08-14 11:54+0200\n"
+"PO-Revision-Date: 2014-08-14 11:57+0200\n"
 "Last-Translator: Torsten Irlaender <torsten@irlaender.de>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -25,15 +25,15 @@ msgstr "AKTUALISIERUNG"
 msgid "CREATE"
 msgstr "ANLEGEN"
 
-#: ringo/lib/renderer.py:360
+#: ringo/lib/renderer.py:355
 msgid "Confirm ${Action}"
 msgstr "Bestätigen ${Action}"
 
-#: ringo/lib/renderer.py:374
+#: ringo/lib/renderer.py:369
 msgid "Do you really want to ${action} the following ${item} items?"
 msgstr "Wollen Sie wirklich die folgenden ${item} Einträge ${action}?"
 
-#: ringo/lib/renderer.py:384
+#: ringo/lib/renderer.py:379
 msgid ""
 "Please press \"${Action}\" to ${action} the item. Press \"Cancel\" to "
 "cancel the action."
@@ -41,7 +41,7 @@ msgstr ""
 "Bitte klicken Sie auf \"${Action}\", um den Eintrag zu ${action}. Klicken"
 " sie auf \"Abbrechen\", um den Vorgang zuzubrechen."
 
-#: ringo/lib/renderer.py:852
+#: ringo/lib/renderer.py:851
 msgid "New entry"
 msgstr "Neuer Eintrag"
 
@@ -189,6 +189,7 @@ msgid "Logout"
 msgstr "Abmelden"
 
 #. Label for login field in form config
+#. Label for user field in form config
 #. Label for user.login column in overview table config
 #. Label for login column in overview table config
 #: ringo/templates/header.mako:45 ringo/templates/index.mako:18
@@ -197,8 +198,9 @@ msgstr "Abmelden"
 #: ringo/templates/auth/confirm_user.mako:24 ringo/templates/auth/login.mako:5
 #: ringo/templates/auth/reset_password.mako:19
 #: ringo/templates/auth/reset_password.mako:24 ringo/views/forms/auth.xml:1
-#: ringo/views/forms/users.xml:1 ringo/views/forms/users.xml:2
-#: ringo/views/tables/profiles.json:6 ringo/views/tables/users.json:2
+#: ringo/views/forms/profiles.xml:9 ringo/views/forms/users.xml:1
+#: ringo/views/forms/users.xml:2 ringo/views/tables/profiles.json:6
+#: ringo/views/tables/users.json:4
 msgid "Login"
 msgstr "Anmelden"
 
@@ -495,8 +497,8 @@ msgid "All columns"
 msgstr "Alle Spalten"
 
 #: ringo/templates/internal/list.mako:59
-msgid "Search+)"
-msgstr ""
+msgid "Search+"
+msgstr "Suche+"
 
 #: ringo/templates/internal/list.mako:65
 msgid "Options "
@@ -660,24 +662,23 @@ msgstr ""
 msgid "Change Password for"
 msgstr "Ändere Passwort für"
 
-#: ringo/views/auth.py:56
+#: ringo/views/auth.py:55
 msgid "Login failed!"
 msgstr "Anmeldung fehlgeschlagen"
 
-#: ringo/views/auth.py:59
+#: ringo/views/auth.py:58
 msgid "Login was successfull :)"
 msgstr "Anmeldung war erfolgreich :)"
 
-#: ringo/views/auth.py:76
+#: ringo/views/auth.py:75
 msgid "Logout was successfull :)"
 msgstr "Abmeldung war erfolgreich :)"
 
-#: ringo/views/auth.py:137
-#, python-format
-msgid "Confirm user registration for %s"
-msgstr "Bestätigen Sie die Registration für %s"
+#: ringo/views/auth.py:136
+msgid "[${app_name}]: Confirm user registration"
+msgstr "[${app_name}]: Bestätigung Nutzerregistrierung"
 
-#: ringo/views/auth.py:147
+#: ringo/views/auth.py:146
 msgid ""
 "User has been created and a confirmation mail was sent to the users email"
 " adress. Please check your email :)"
@@ -685,22 +686,21 @@ msgstr ""
 "Der Zugang wurde eingerichtet und eine Bestätigungsmail wurde an die "
 "angegebene Email-Adresse versendet. Bitte prüfen Sie Ihre Email"
 
-#: ringo/views/auth.py:167
+#: ringo/views/auth.py:166
 msgid "The user has beed successfull confirmed."
 msgstr "Der Zugang wurde erfolgreich bestätigt."
 
-#: ringo/views/auth.py:169
+#: ringo/views/auth.py:168
 msgid "The user was not confirmed. Maybe the confirmation token was not valid?"
 msgstr ""
 "Der Zugang konnte nicht bestätigt werden. Vielleicht ist das Best"
 "ätigungs-Token nicht gülitg?"
 
-#: ringo/views/auth.py:192
-#, python-format
-msgid "Password reset request for %s"
-msgstr "Anfrage zur Zurücksetzen des Passwort für %s"
+#: ringo/views/auth.py:191
+msgid "[${app_name}]: Password reset request"
+msgstr "[${app_name}]: Anfrage Passwort zurücksetzen"
 
-#: ringo/views/auth.py:201
+#: ringo/views/auth.py:200
 msgid ""
 "Password reset token has been sent to the users email address. Please "
 "check your email :)"
@@ -708,11 +708,11 @@ msgstr ""
 "Eine Token zum Zurücksetzen des Passworts wurde an die Email des Nutzers "
 "geschickt. Bitte prüfen Sie Ihre Email :)"
 
-#: ringo/views/auth.py:222
+#: ringo/views/auth.py:221
 msgid "Password has been reseted"
 msgstr "Passwort wurde zurückgesetzt"
 
-#: ringo/views/auth.py:229
+#: ringo/views/auth.py:228
 msgid ""
 "Password was resetted and sent to the users email address. Please check "
 "your email :)"
@@ -720,7 +720,7 @@ msgstr ""
 "Eine Token zum Zurücksetzen des Passworts wurde an die Email des Nutzers "
 "geschickt. Bitte prüfen Sie Ihre Email :)"
 
-#: ringo/views/auth.py:233
+#: ringo/views/auth.py:232
 msgid "Password was not resetted. Maybe the request token was not valid?"
 msgstr ""
 "Das Passwort wurde nicht zurückgesetzt. Vielleicht ist das Token nicht "
@@ -1135,7 +1135,7 @@ msgid "User menu"
 msgstr "Benuter-Menü"
 
 #. Label for users field in form config
-#: ringo/views/forms/news.xml:3
+#: ringo/views/forms/news.xml:3 ringo/views/forms/roles.xml:5
 msgid "Users"
 msgstr "Benutzer"
 
@@ -1156,13 +1156,17 @@ msgstr "Druckvorlagen"
 
 #. Label for first_name field in form config
 #. Label for first_name column in overview table config
+#. Label for profile[0].first_name column in overview table config
 #: ringo/views/forms/profiles.xml:1 ringo/views/tables/profiles.json:2
+#: ringo/views/tables/users.json:2
 msgid "Firstname"
 msgstr "Vorname"
 
 #. Label for last_name field in form config
 #. Label for last_name column in overview table config
+#. Label for profile[0].last_name column in overview table config
 #: ringo/views/forms/profiles.xml:2 ringo/views/tables/profiles.json:3
+#: ringo/views/tables/users.json:3
 msgid "Lastname"
 msgstr "Nachname"
 
@@ -1192,15 +1196,15 @@ msgstr "Telefon"
 msgid "Gender"
 msgstr "Geschlecht"
 
-#: ringo/views/forms/profiles.xml:9
+#: ringo/views/forms/profiles.xml:10
 msgid "Not specified"
 msgstr "keine Angabe"
 
-#: ringo/views/forms/profiles.xml:10
+#: ringo/views/forms/profiles.xml:11
 msgid "Male"
 msgstr "männlich"
 
-#: ringo/views/forms/profiles.xml:11
+#: ringo/views/forms/profiles.xml:12
 msgid "Female"
 msgstr "weiblich"
 
@@ -1355,7 +1359,7 @@ msgstr "Mitglieder"
 #. Label for roles column in overview table config
 #: ringo/views/forms/usergroups.xml:3 ringo/views/forms/users.xml:6
 #: ringo/views/tables/roles.json:3 ringo/views/tables/usergroups.json:4
-#: ringo/views/tables/users.json:3
+#: ringo/views/tables/users.json:5
 msgid "Roles"
 msgstr "Rollen"
 
@@ -1384,7 +1388,7 @@ msgstr "Benutzergruppen"
 
 #. Label for activated field in form config
 #. Label for activated column in overview table config
-#: ringo/views/forms/users.xml:9 ringo/views/tables/users.json:5
+#: ringo/views/forms/users.xml:9 ringo/views/tables/users.json:7
 msgid "Activated"
 msgstr "Aktiviert"
 
@@ -1436,22 +1440,11 @@ msgid "name"
 msgstr "Name"
 
 #. Label for groups column in overview table config
-#: ringo/views/tables/users.json:4
+#: ringo/views/tables/users.json:6
 msgid "Groups"
 msgstr "Gruppen"
 
-#~ msgid "Search for (Regexpr) in ..."
-#~ msgstr "Suche nach (Regexp) in ..."
-
-#~ msgid "News"
-#~ msgstr "Nachrichten"
-
-#~ msgid "Reminders"
-#~ msgstr "Erinnerungen"
-
-#~ msgid "Search (regexpr)"
-#~ msgstr ""
-
-#~ msgid "Search+"
-#~ msgstr "Suchen+"
-
+#. Label for last_login column in overview table config
+#: ringo/views/tables/users.json:8
+msgid "Last login"
+msgstr "Letze Anmeldung"
