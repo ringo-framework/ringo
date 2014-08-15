@@ -8,6 +8,18 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
+0.16.0
+======
+Refactoring
+
+New:
+
+views.api: Modul with method used by the client.
+views.respose: Modul with special Response objects.
+
+Moved methods and code from views.json into the new views.api and
+views.response modules
+
 0.15.1
 =======
 Refactoring. Cleanup Model and try to get rid of pyramid specific elements
