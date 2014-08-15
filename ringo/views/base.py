@@ -2,7 +2,7 @@ import uuid
 import StringIO
 import logging
 from py3o.template import Template
-from pyramid.httpexceptions import HTTPFound, HTTPBadRequest
+from pyramid.httpexceptions import HTTPFound
 from pyramid.response import Response
 from pyramid.view import view_config
 import sqlalchemy as sa
@@ -25,26 +25,9 @@ from ringo.lib.renderer import (
 )
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.views import handle_history
+from ringo.views.request import get_item_from_request
 
 log = logging.getLogger(__name__)
-
-
-def _get_item_from_context(request):
-    """On every request pyramid will use a resource factory to load the
-    requested resource for the current request. This resource is the
-    context for the current request. This function will extract the
-    loaded resource from the context. If the context is None, the item
-    could not be loaded. In this case raise a 400 HTTP Status code
-    exception.
-
-    :request: Current request having the item loaded in the current context
-    :returns: Loaded item
-
-    """
-    item = request.context.item
-    if not item:
-        raise HTTPBadRequest()
-    return item
 
 
 def get_current_form_page(clazz, request):
@@ -562,7 +545,7 @@ def update__(request):
     return update_(clazz, request)
 
 def update_(clazz, request, callback=None, renderers={}):
-    item = _get_item_from_context(request)
+    item = get_item_from_request(request)
     handle_history(request)
     handle_params(clazz, request)
     _ = request.translate
@@ -667,7 +650,7 @@ def read__(request):
     return read_(clazz, request)
 
 def read_(clazz, request, callback=None, renderers={}):
-    item = _get_item_from_context(request)
+    item = get_item_from_request(request)
     handle_history(request)
     handle_params(clazz, request)
     _ = request.translate
@@ -760,7 +743,7 @@ def delete__(request):
     return delete_(clazz, request)
 
 def delete_(clazz, request):
-    item = _get_item_from_context(request)
+    item = get_item_from_request(request)
     handle_history(request)
     handle_params(clazz, request)
     return _handle_delete_request(clazz, request, [item])
@@ -773,7 +756,7 @@ def export__(request):
     return export_(clazz, request)
 
 def export_(clazz, request):
-    item = _get_item_from_context(request)
+    item = get_item_from_request(request)
     handle_history(request)
     handle_params(clazz, request)
     return _handle_export_request(clazz, request, [item])

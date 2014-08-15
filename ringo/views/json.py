@@ -4,7 +4,7 @@ items
 """
 from formbar.form import Form
 
-from ringo.views.base import _get_item_from_context
+from ringo.views.request import get_item_from_request
 from ringo.views.response import JSONResponse
 
 
@@ -80,7 +80,7 @@ def read_(clazz, request, callback=None):
     :callback: Current function which is called after the item has been read.
     :returns: JSON object.
     """
-    item = _get_item_from_context(request)
+    item = get_item_from_request(request)
     if callback is not None:
         item = callback(request, item)
     return JSONResponse(True, item)
@@ -107,7 +107,7 @@ def update_(clazz, request):
     :request: Current request
     :returns: JSON object.
     """
-    item = _get_item_from_context(request)
+    item = get_item_from_request(request)
     form = Form(item.get_form_config('update'),
                 item, request.db, translate=request.translate,
                 csrf_token=request.session.get_csrf_token())
@@ -134,7 +134,7 @@ def delete_(clazz, request):
     :request: Current request
     :returns: JSON object.
     """
-    item = _get_item_from_context(request)
+    item = get_item_from_request(request)
     request.db.delete(item)
     return JSONResponse(True, item)
 

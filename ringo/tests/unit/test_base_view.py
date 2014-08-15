@@ -15,15 +15,15 @@ class ViewHelpersTests(BaseUnitTest):
         self.request.session['modules.1.form.page'] = 2
 
     def test_get_context(self):
-        from ringo.views.base import _get_item_from_context
-        result = _get_item_from_context(self.request)
+        from ringo.views.request import get_item_from_request
+        result = get_item_from_request(self.request)
         self.assertEqual(result.name, 'modules')
 
     def test_get_context_fail(self):
-        from ringo.views.base import _get_item_from_context
+        from ringo.views.request import get_item_from_request
         self.request.context.item = None
         with self.assertRaises(pyramid.httpexceptions.HTTPBadRequest):
-            _get_item_from_context(self.request)
+            get_item_from_request(self.request)
 
     def test_get_current_formpage(self):
         from ringo.model.modul import ModulItem
@@ -40,16 +40,16 @@ class ViewHelpersTests(BaseUnitTest):
 
     def test_get_ownership_form(self):
         from ringo.views.base import get_ownership_form
-        from ringo.views.base import _get_item_from_context
-        item = _get_item_from_context(self.request)
+        from ringo.views.request import get_item_from_request
+        item = get_item_from_request(self.request)
         result = get_ownership_form(item, self.request)
         self.assertEqual(len(result.fields.keys()), 2)
         self.assertEqual(result._item, item)
 
     def test_get_ownership_form_readonly(self):
         from ringo.views.base import get_ownership_form
-        from ringo.views.base import _get_item_from_context
-        item = _get_item_from_context(self.request)
+        from ringo.views.request import get_item_from_request
+        item = get_item_from_request(self.request)
         result = get_ownership_form(item, self.request, True)
         self.assertEqual(len(result.fields.keys()), 2)
         self.assertEqual(result._item, item)
@@ -64,16 +64,16 @@ class ViewHelpersTests(BaseUnitTest):
 
     def test_get_logbook_form(self):
         from ringo.views.base import get_logbook_form
-        from ringo.views.base import _get_item_from_context
-        item = _get_item_from_context(self.request)
+        from ringo.views.request import get_item_from_request
+        item = get_item_from_request(self.request)
         result = get_logbook_form(item, self.request)
         self.assertEqual(len(result.fields.keys()), 1)
         self.assertEqual(result._item, item)
 
     def test_get_logbook_form_readonly(self):
         from ringo.views.base import get_logbook_form
-        from ringo.views.base import _get_item_from_context
-        item = _get_item_from_context(self.request)
+        from ringo.views.request import get_item_from_request
+        item = get_item_from_request(self.request)
         result = get_logbook_form(item, self.request, True)
         self.assertEqual(len(result.fields.keys()), 1)
         self.assertEqual(result._item, item)
