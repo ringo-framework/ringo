@@ -197,31 +197,6 @@ class BaseItem(object):
     def reset_uuid(self):
         self.uuid = '%.32x' % uuid.uuid4()
 
-    def get_changes(self):
-        """Will return dictionary which attributes which have been
-        changes. The value for each attribute is a tuple with the old
-        and new value.
-
-        The function uses sqlalchemy history object which has
-        information on changed attributes of the item to check which
-        attributes have changed.  See
-        http://docs.sqlalchemy.org/en/rel_0_8/orm/session.html \
-        ?highlight=get_history#sqlalchemy.orm.attributes.get_history
-        for more details.
-
-        :returns: Dictionary whith changes.
-        """
-
-        # FIXME: History is empty if the item as relations set.
-        # Reproduce: Task item in plorma. Set more than one member in
-        # the team. (None) <2013-10-31 23:14>
-        changes = {}
-        for col in self.get_columns():
-            history = get_history(self, col)
-            if history.has_changes():
-                changes[col] = (history.deleted, history.added)
-        return changes
-
     def get_value(self, name, form_id="read", expand=False):
         """Return the value of the given attribe of the item. Unlike
         accessing the raw value through the attribite directly this

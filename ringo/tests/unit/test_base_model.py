@@ -53,17 +53,6 @@ class BaseItemTests(BaseUnitTest):
         result = ModulItem.get_action_routename('create', 'rest')
         self.assertEqual(result, 'rest-modules-create')
 
-    def test_get_changes(self):
-        item = self._load_item()
-        # FIXME: Can not change the value temporarily. Will break other
-        # testcases.(ti) <2014-04-08 15:54>
-        #old = item.label
-        #item.label= "xxx"
-        result = item.get_changes()
-        #self.assertEqual(result, {'label': ([u'Modul'], ['xxx'])})
-        self.assertEqual(result, {})
-        #item.label= old
-
     def test_get_values(self):
         item = self._load_item()
         result = item.get_values()
