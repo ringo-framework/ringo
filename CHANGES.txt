@@ -28,6 +28,17 @@ like the request.
 * Removed __json__ method. JSON export is now completely handled in the
   Exporter (JSONResponse)
 
+New:
+* All Mails will have the application name in the subject.
+* Add "nolink" Attribute to the DropdownRenderer.
+
+Bugfixes:
+
+* Translate options in dropdown lists.
+* Fixed automatic translation in connection with mappings.
+* Handle case if an attribute returns a BaseList as selected items in
+  ListRenderer.
+
 0.15.0
 =======
 IMPORTANT: Application will need some work on application initialisation to

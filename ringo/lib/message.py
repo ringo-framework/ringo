@@ -50,7 +50,7 @@ class Mail:
     def __init__(self, recipients, subject,
                  template=None, values={}, msg="", sender=None):
         self.recipients = recipients
-        self.subject = subject
+        self.subject = u"[%s] %s" % (get_app_name(), subject)
         self.sender = sender
         self.body = ""
 

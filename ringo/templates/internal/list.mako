@@ -95,8 +95,7 @@ autoresponsive = tableconfig.is_autoresponsive()
   </form>
 </div>
 <form id="data-table" name="data-table" role="form" action="${request.route_path(clazz.get_action_routename('bundle'))}" method="POST">
-<table id="data" class="table table-striped table-hover table-condensed
-table-bordered">
+<table id="data" class="table table-striped table-hover table-condensed table-bordered">
   <tr>
   % if enable_bundled_actions:
     <th width="2em">
@@ -105,9 +104,9 @@ table-bordered">
   % endif
   % for num, field in enumerate(tableconfig.get_columns()):
     % if autoresponsive:
-      <th width="${field.get('width')}" class="${num > 0 and 'hidden-xs'}"</th>
+      <th width="${field.get('width')}" class="${num > 0 and 'hidden-xs'}">
     % else:
-      <th width="${field.get('width')}" class="${render_responsive_class(field.get('screen'))}"</th>
+      <th width="${field.get('width')}" class="${render_responsive_class(field.get('screen'))}">
     % endif
       % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
         <a
@@ -203,19 +202,19 @@ table-bordered">
   <div class="modal-dialog">
     <div class="panel panel-default">
       <div class="panel-heading"><strong>${_('Save current search filter')}</strong></div>
-        <div class="panel-body">
-          <label for="save">${_('Queryname')}</label>
-          <input type="textfield" id="save" name="save"/>
-          <input type="hidden" name="form" value="search"/>
-          <p><small>${_('Please insert a name for your query. It it will be selectable under this name in the options menu of the search after saving.')}</small></p>
-        </div>
-        <div class="panel-footer">
-          <input class="btn btn-primary" type="button" onclick="formSubmit()" value="${_('Save Query')}">
-          <a href="#" class="btn btn-default" data-dismiss="modal">${_('Close')}</a>
-        </div>
+      <div class="panel-body">
+        <label for="save">${_('Queryname')}</label>
+        <input type="textfield" id="save" name="save"/>
+        <input type="hidden" name="form" value="search"/>
+        <p><small>${_('Please insert a name for your query. It it will be selectable under this name in the options menu of the search after saving.')}</small></p>
+      </div>
+      <div class="panel-footer">
+        <input class="btn btn-primary" type="button" onclick="formSubmit()" value="${_('Save Query')}">
+        <a href="#" class="btn btn-default" data-dismiss="modal">${_('Close')}</a>
       </div>
     </div>
   </div>
+  </form>
 </div>
 
 <script type="text/javascript">
