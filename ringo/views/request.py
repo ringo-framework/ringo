@@ -4,6 +4,15 @@ from pyramid.httpexceptions import HTTPBadRequest
 from ringo.lib.history import History
 
 
+def handle_event(request, item, event):
+    """Will call the event listeners for the given event on every base
+    class of the given item."""
+    for class_ in item.__class__.__bases__:
+        if hasattr(class_, event + '_handler'):
+            handler = getattr(class_, event + '_handler')
+            handler(request, item)
+
+
 def handle_history(request):
     history = request.session.get('history')
     if history is None:

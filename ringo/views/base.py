@@ -25,6 +25,7 @@ from ringo.lib.sql.cache import invalidate_cache
 from ringo.views.request import (
     handle_params,
     handle_history,
+    handle_event,
     get_item_from_request,
     get_current_form_page
 )
@@ -93,15 +94,6 @@ def get_blobform_config(request, item, formname):
         modul = item.get_item_modul(request)
         formconfig = modul.get_form_config("blobform")
         return modul, formconfig
-
-
-def handle_event(event, request, item):
-    """Will call the event listeners for the given event on every base
-    class of the given item."""
-    for class_ in item.__class__.__bases__:
-        if hasattr(class_, event + '_handler'):
-            handler = getattr(class_, event + '_handler')
-            handler(request, item)
 
 
 def handle_sorting(clazz, request):
@@ -418,7 +410,7 @@ def create_(clazz, request, callback=None, renderers={}):
             request.session.flash(msg, 'success')
 
             # handle create events
-            handle_event('create', request, item)
+            handle_event(request, item, 'create')
 
             # Call callback. The callback is called as last action after
             # the rest of the saving has been done.
@@ -510,7 +502,7 @@ def update_(clazz, request, callback=None, renderers={}):
             request.session.flash(msg, 'success')
 
             # handle update events
-            handle_event('update', request, item)
+            handle_event(request, item, 'update')
 
             # Call callback. The callback is called as last action after
             # the rest of the saving has been done.
@@ -752,7 +744,7 @@ def import_(clazz, request, callback=None):
                 if callback:
                     item = callback(request, item)
                 # handle update events
-                handle_event('import', request, item)
+                handle_event(request, item, 'import')
                 imported_items.append((item, operation, True))
             except:
                 imported_items.append((item, operation, False))
