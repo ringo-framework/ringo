@@ -1,7 +1,24 @@
 from pyramid.view import forbidden_view_config
 from pyramid.view import notfound_view_config
+from pyramid.response import Response
 
 from ringo.lib.renderer import ErrorDialogRenderer
+
+
+@forbidden_view_config(path_info='/rest')
+def rest_forbidden(request):
+    body = '{"success": false, "params": {"error": 403}}'
+    response = Response(body=body, content_type='application/json')
+    response.status = '403 Forbidden'
+    return response
+
+
+@notfound_view_config(path_info='/rest')
+def rest_notfound(request):
+    body = '{"success": false, "params": {"error": 404}}'
+    response = Response(body=body, content_type='application/json')
+    response.status = '404 Not Found'
+    return response
 
 
 @notfound_view_config(renderer='/default/error.mako')
