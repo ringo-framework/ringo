@@ -30,6 +30,7 @@ from ringo.views.request import (
     handle_params,
     handle_history,
     handle_event,
+    is_confirmed,
     get_item_from_request,
     get_current_form_page
 )
@@ -599,7 +600,7 @@ def read_(clazz, request, callback=None, renderers={}):
 def _handle_delete_request(clazz, request, items):
     _ = request.translate
     rvalue = {}
-    if request.method == 'POST' and confirmed(request):
+    if request.method == 'POST' and is_confirmed(request):
         for item in items:
             request.db.delete(item)
         route_name = clazz.get_action_routename('list')
@@ -665,7 +666,7 @@ def _handle_export_request(clazz, request, items):
     renderer = ExportDialogRenderer(request, clazz)
     form = renderer.form
     if (request.method == 'POST'
-       and confirmed(request)
+       and is_confirmed(request)
        and form.validate(request.params)):
         # Setup exporter
         ef = form.data.get('format')
@@ -703,7 +704,7 @@ def import_(clazz, request, callback=None):
     renderer = ImportDialogRenderer(request, clazz)
     form = renderer.form
     if (request.method == 'POST'
-       and confirmed(request)
+       and is_confirmed(request)
        and form.validate(request.params)):
         request.POST.get('file').file.seek(0)
         if request.POST.get('format') == 'json':
@@ -757,7 +758,7 @@ def print_(request):
     renderer = PrintDialogRenderer(request, item)
     form = renderer.form
     if (request.method == 'POST'
-       and confirmed(request)
+       and is_confirmed(request)
        and form.validate(request.params)):
 
         # Render the template
@@ -780,10 +781,6 @@ def print_(request):
         rvalue['item'] = item
         return rvalue
 
-
-def confirmed(request):
-    """Returns True id the request is confirmed"""
-    return request.params.get('confirmed') == "1"
 
 action_view_mapping = {
     "list": list__,

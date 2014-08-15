@@ -4,6 +4,11 @@ from pyramid.httpexceptions import HTTPBadRequest
 from ringo.lib.history import History
 
 
+def is_confirmed(request):
+    """Returns True id the request is confirmed"""
+    return request.params.get('confirmed') == "1"
+
+
 def handle_event(request, item, event):
     """Will call the event listeners for the given event on every base
     class of the given item."""
