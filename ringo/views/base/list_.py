@@ -10,8 +10,8 @@ from ringo.views.request import (
     handle_params,
     handle_history
 )
-from ringo.views.crud.export import _handle_export_request
-from ringo.views.crud.delete import _handle_delete_request
+from ringo.views.base.export import _handle_export_request
+from ringo.views.base.delete import _handle_delete_request
 
 log = logging.getLogger(__name__)
 

@@ -1,36 +1,35 @@
-import logging
-from ringo.views.crud.create import (
+from ringo.views.base.create import (
     create_,
     create__
 )
-from ringo.views.crud.list_ import (
+from ringo.views.base.list_ import (
     bundle_,
     list_,
     list__
 )
-from ringo.views.crud.read import (
+from ringo.views.base.read import (
     read_,
     read__
 )
-from ringo.views.crud.update import (
+from ringo.views.base.update import (
     update_,
     update__
 )
-from ringo.views.crud.delete import (
+from ringo.views.base.delete import (
     delete_,
     delete__,
     _handle_delete_request
 )
-from ringo.views.crud.export import (
+from ringo.views.base.export import (
     export_,
     export__,
     _handle_export_request
 )
-from ringo.views.crud.import_ import (
+from ringo.views.base.import_ import (
     import_,
     import__
 )
-from ringo.views.crud.print_ import (
+from ringo.views.base.print_ import (
     print_,
 )
 from ringo.views.forms import (
@@ -45,9 +44,6 @@ from ringo.views.request import (
     get_item_from_request,
     get_current_form_page
 )
-
-log = logging.getLogger(__name__)
-
 
 action_view_mapping = {
     "list": list__,
