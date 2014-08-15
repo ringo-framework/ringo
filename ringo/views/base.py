@@ -22,9 +22,9 @@ from ringo.lib.renderer import (
     PrintDialogRenderer, add_renderers
 )
 from ringo.lib.sql.cache import invalidate_cache
-from ringo.views import handle_history
 from ringo.views.request import (
     handle_params,
+    handle_history,
     get_item_from_request,
     get_current_form_page
 )

@@ -15,7 +15,7 @@ User = import_model('ringo.model.user.User')
 Usergroup = import_model('ringo.model.user.Usergroup')
 Role = import_model('ringo.model.user.Role')
 
-from ringo.views import handle_history
+from ringo.views.request import handle_history
 from ringo.lib.helpers import get_path_to_form_config, get_app_name
 from ringo.lib.security import login as user_login, request_password_reset, \
     password_reset, activate_user, encrypt_password
