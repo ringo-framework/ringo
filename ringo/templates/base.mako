@@ -65,12 +65,11 @@
     <div class="modal-dialog">
       <div class="panel panel-warning">
         <div class="panel-heading"><strong>${_('Logout will happen soon')}</strong></div>
-          <div class="panel-body">
-            <p>${_('You will be logged out automatically in a short time because of inactivity. Please close this dialog and init a new request to renew your session timer.')}</p>
-          </div>
-          <div class="panel-footer">
-            <button type"submit" class="btn btn-default">Ok</button>
-          </div>
+        <div class="panel-body">
+          <p>${_('You will be logged out automatically in a short time because of inactivity. Please close this dialog and init a new request to renew your session timer.')}</p>
+        </div>
+        <div class="panel-footer">
+          <button type="submit" class="btn btn-default">Ok</button>
         </div>
       </div>
     </div>
