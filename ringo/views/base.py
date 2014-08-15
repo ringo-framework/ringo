@@ -5,7 +5,7 @@ from py3o.template import Template
 from pyramid.httpexceptions import HTTPFound
 import sqlalchemy as sa
 
-from formbar.config import Config, load, parse
+from formbar.config import Config, parse
 from formbar.form import Form
 
 from ringo.model.base import BaseFactory
@@ -22,6 +22,10 @@ from ringo.lib.renderer import (
     PrintDialogRenderer, add_renderers
 )
 from ringo.lib.sql.cache import invalidate_cache
+from ringo.views.forms import (
+    get_ownership_form,
+    get_logbook_form
+)
 from ringo.views.request import (
     handle_params,
     handle_history,
@@ -31,32 +35,6 @@ from ringo.views.request import (
 )
 
 log = logging.getLogger(__name__)
-
-
-def get_ownership_form(item, request, readonly=None):
-    if (readonly is None and isinstance(item, Owned)):
-        readonly = not (item.is_owner(request.user)
-                        or has_role(request.user, "admin"))
-    config = Config(load(get_path_to_form_config('ownership.xml', 'ringo')))
-    if readonly:
-        form_config = config.get_form('ownership-form-read')
-    else:
-        form_config = config.get_form('ownership-form-update')
-    return Form(form_config, item, request.db,
-                csrf_token=request.session.get_csrf_token(),
-                eval_url='/rest/rule/evaluate')
-
-
-def get_logbook_form(item, request, readonly=None, renderers={}):
-    config = Config(load(get_path_to_form_config('logbook.xml', 'ringo')))
-    if readonly:
-        form_config = config.get_form('logbook-form-read')
-    else:
-        form_config = config.get_form('logbook-form-update')
-    return Form(form_config, item, request.db,
-                renderers=renderers,
-                csrf_token=request.session.get_csrf_token(),
-                eval_url='/rest/rule/evaluate')
 
 
 def get_blobform_config(request, item, formname):
