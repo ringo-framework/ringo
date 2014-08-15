@@ -1,6 +1,7 @@
 """The api modul include view functions which are some sort of helper
 functions usually called by the client"""
 import logging
+from pyramid.response import Response
 from pyramid.view import view_config
 
 from formbar.form import Form
@@ -47,3 +48,23 @@ def render(request):
     out.append(form.render(buttons=False, outline=False))
     data = {"form": "".join(out)}
     return JSONResponse(True, data, {"msg": "Ole!"})
+
+
+@view_config(route_name='set_current_form_page')
+def set_current_form_page(request):
+    """Will save the currently selected page of a form in the session.
+    The request will have some attributes in the GET request which will
+    config which page, of which item is currently shown. This function
+    is used as a callback function within formbar.
+
+    :request: Current request
+    :returns: Response
+    """
+    page = request.GET.get('page')
+    item = request.GET.get('item')
+    itemid = request.GET.get('itemid')
+    if page and item and itemid:
+        #request.session['%s.form.page' % key] = page_id
+        request.session['%s.%s.form.page' % (item, itemid)] = page
+        request.session.save()
+    return Response(body='OK', content_type='text/plain')

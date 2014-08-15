@@ -3,8 +3,6 @@ import StringIO
 import logging
 from py3o.template import Template
 from pyramid.httpexceptions import HTTPFound
-from pyramid.response import Response
-from pyramid.view import view_config
 import sqlalchemy as sa
 
 from formbar.config import Config, load, parse
@@ -72,26 +70,6 @@ def get_logbook_form(item, request, readonly=None, renderers={}):
                 renderers=renderers,
                 csrf_token=request.session.get_csrf_token(),
                 eval_url='/rest/rule/evaluate')
-
-
-@view_config(route_name='set_current_form_page')
-def set_current_form_page(request):
-    """Will save the currently selected page of a form in the session.
-    The request will have some attributes in the GET request which will
-    config which page, of which item is currently shown. This function
-    is used as a callback function within formbar.
-
-    :request: Current request
-    :returns: Response
-    """
-    page = request.GET.get('page')
-    item = request.GET.get('item')
-    itemid = request.GET.get('itemid')
-    if page and item and itemid:
-        #request.session['%s.form.page' % key] = page_id
-        request.session['%s.%s.form.page' % (item, itemid)] = page
-        request.session.save()
-    return Response(body='OK', content_type='text/plain')
 
 
 def get_blobform_config(request, item, formname):
