@@ -1,5 +1,6 @@
 import logging
 from pyramid.httpexceptions import HTTPFound
+from formbar.form import Form
 from formbar.config import Config, parse
 from ringo.lib.renderer import (
     add_renderers
@@ -7,7 +8,6 @@ from ringo.lib.renderer import (
 from ringo.lib.helpers import import_model
 from ringo.lib.security import has_permission
 from ringo.lib.sql.cache import invalidate_cache
-from ringo.model.form import Form
 from ringo.model.mixins import Blobform
 from ringo.views.request import (
     handle_params,
