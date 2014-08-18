@@ -4,7 +4,7 @@ items
 """
 from formbar.form import Form
 
-from ringo.views.base import rest_create
+from ringo.views.base import rest_create, rest_update
 from ringo.views.request import get_item_from_request
 from ringo.views.response import JSONResponse
 
@@ -50,39 +50,6 @@ def read_(clazz, request, callback=None):
         item = callback(request, item)
     return JSONResponse(True, item)
 
-def update__(request):
-    """Wrapper method to match default signature of a view method. Will
-    add the missing clazz attribut and call the wrapped method with the
-    correct parameters."""
-    clazz = request.context.__model__
-    return update_(clazz, request)
-
-def update_(clazz, request):
-    """Updates an item of type clazz. The item is loaded based on the
-    unique id value provided in the matchtict object in the current
-    request. The item will be updated with the data submitted in the
-    current PUT request. Before updating the item the data will be
-    validated against the "update" form of the item. If the validation
-    fails the item will not be updated. In all cases the item is return as
-    JSON object with the item and updated values back to the client. The
-    JSON Response will include further details on the reason why the
-    validation failed.
-
-    :clazz: Class of item to load
-    :request: Current request
-    :returns: JSON object.
-    """
-    item = get_item_from_request(request)
-    form = Form(item.get_form_config('update'),
-                item, request.db, translate=request.translate,
-                csrf_token=request.session.get_csrf_token())
-    if form.validate(request.params):
-            sitem = form.save()
-            return JSONResponse(True, sitem)
-    else:
-        # Validation fails! return item
-        return JSONResponse(False, item)
-
 def delete__(request):
     """Wrapper method to match default signature of a view method. Will
     add the missdeleteing clazz attribut and call the wrapped method with the
@@ -107,6 +74,6 @@ action_view_mapping = {
     "list": list__,
     "create": rest_create,
     "read": read__,
-    "update": update__,
+    "update": rest_update,
     "delete": delete__,
 }
