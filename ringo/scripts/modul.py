@@ -2,15 +2,19 @@ import os
 import subprocess
 import uuid
 import transaction
+import pkg_resources
 from sqlalchemy import func
 from mako.lookup import TemplateLookup
-from ringo.config import modul_template_dir
 from ringo.lib.helpers import get_app_location
 from ringo.scripts.db import (
     get_session, create_new_revision,
     handle_db_upgrade_command
 )
 from ringo.model.modul import ModulItem
+
+# Directory with templates to generate views and models
+base_dir = pkg_resources.get_distribution("ringo").location
+modul_template_dir = os.path.join(base_dir, 'ringo', 'scripts', 'templates')
 template_lookup = TemplateLookup(directories=[modul_template_dir])
 
 mixinmap = {

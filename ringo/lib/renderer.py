@@ -1,6 +1,8 @@
 import logging
 import cgi
 import json
+import os
+import pkg_resources
 from mako.lookup import TemplateLookup
 from pyramid.events import BeforeRender
 from formbar.renderer import (
@@ -10,7 +12,6 @@ from formbar.renderer import (
 )
 from formbar.config import Config, load
 from formbar.form import Form
-from ringo.config import template_dir
 import ringo.lib.helpers
 from ringo.lib.helpers import (
     get_saved_searches,
@@ -21,6 +22,8 @@ from ringo.model.base import BaseItem, BaseList
 from ringo.model.form import Form as FormItem
 import ringo.lib.security as security
 
+base_dir = pkg_resources.get_distribution("ringo").location
+template_dir = os.path.join(base_dir, 'ringo', 'templates')
 template_lookup = TemplateLookup(directories=[template_dir])
 
 log = logging.getLogger(__name__)

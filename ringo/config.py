@@ -5,13 +5,8 @@ from ringo.lib import helpers
 from ringo.lib.sql.db import DBSession
 from ringo.model.modul import ModulItem
 from ringo.resources import get_resource_factory
-
-base_dir = pkg_resources.get_distribution("ringo").location
-template_dir = os.path.join(base_dir, 'ringo', 'templates')
-static_dir = os.path.join(base_dir, 'ringo', 'static')
-
-# Directory with templates to generate views and models
-modul_template_dir = os.path.join(base_dir, 'ringo', 'scripts', 'templates')
+from ringo.views.base import action_view_mapping as wavm
+from ringo.views.json import action_view_mapping as ravm
 
 log = logging.getLogger(__name__)
 
@@ -63,8 +58,6 @@ def setup_modul(config, clazz):
     :returns: config
 
     """
-    from ringo.views.base import action_view_mapping as wavm
-    from ringo.views.json import action_view_mapping as ravm
     name = clazz.__tablename__
     for action in clazz.get_item_actions():
         action_name = action.name.lower()
@@ -128,6 +121,8 @@ def setup_modul(config, clazz):
 def write_formbar_static_files():
     """Will write the formbar specific css and js files into the formbar
     directory in the static file location"""
+    base_dir = pkg_resources.get_distribution("ringo").location
+    static_dir = os.path.join(base_dir, 'ringo', 'static')
     formbar_css = os.path.join(static_dir, 'formbar')
     for filename, content in helpers.get_formbar_css():
         filename = os.path.join(formbar_css, filename)

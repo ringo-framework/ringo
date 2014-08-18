@@ -6,7 +6,6 @@ from pyramid_mailer import get_mailer
 from pyramid_mailer.message import Message
 
 from mako.lookup import TemplateLookup
-from ringo.config import template_dir as ringo_template_dir
 from ringo.lib.helpers import get_app_name
 
 log = logging.getLogger(__name__)
@@ -55,11 +54,15 @@ class Mail:
         self.body = ""
 
         app_base_dir = pkg_resources.get_distribution(get_app_name()).location
+        ringo_base_dir = pkg_resources.get_distribution("ringo").location
         template_dir = os.path.join(app_base_dir,
                                     get_app_name(),
                                     'templates/mails')
+        ringo_template_dir = os.path.join(ringo_base_dir,
+                                          "ringo",
+                                          'templates/mails')
         self.tl = TemplateLookup(directories=[template_dir,
-                                 ringo_template_dir + "/mails"])
+                                              ringo_template_dir])
 
         if template:
             self.template = self.tl.get_template("%s.mako" % template)
