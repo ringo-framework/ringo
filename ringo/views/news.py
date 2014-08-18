@@ -1,7 +1,7 @@
 import logging
 from pyramid.view import view_config
 from ringo.model.news import News
-from ringo.views.json import rest_read
+from ringo.views.base.read import rest_read
 
 log = logging.getLogger(__name__)
 
