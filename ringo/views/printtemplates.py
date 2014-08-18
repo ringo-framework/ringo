@@ -4,7 +4,7 @@ from pyramid.view import view_config
 from ringo.views.base import (
     create, rest_create,
     update, rest_update,
-    read_
+    read
 )
 from ringo.views.files import save_file
 from ringo.model.printtemplate import Printtemplate
@@ -30,7 +30,7 @@ def update_(request):
 @view_config(route_name=Printtemplate.get_action_routename('download'),
              permission='download')
 def download(request):
-    result = read_(Printtemplate, request)
+    result = read(request)
     item = result['item']
     response = request.response
     response.content_type = str(item.mime)

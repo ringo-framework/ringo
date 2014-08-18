@@ -18,15 +18,8 @@ from ringo.views.request import (
 log = logging.getLogger(__name__)
 
 
-def read__(request):
-    """Wrapper method to match default signature of a view method. Will
-    add the missing clazz attribut and call the wrapped method with the
-    correct parameters."""
+def read(request, callback=None, renderers={}):
     clazz = request.context.__model__
-    return read_(clazz, request)
-
-
-def read_(clazz, request, callback=None, renderers={}):
     item = get_item_from_request(request)
     handle_history(request)
     handle_params(clazz, request)

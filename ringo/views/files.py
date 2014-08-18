@@ -3,7 +3,7 @@ import mimetypes
 from pyramid.response import FileIter
 from pyramid.view import view_config
 
-from ringo.views.base import create, update, read_
+from ringo.views.base import create, update, read
 from ringo.lib.helpers import import_model
 File = import_model('ringo.model.file.File')
 
@@ -47,7 +47,7 @@ def update_(request):
 @view_config(route_name=File.get_action_routename('download'),
              permission='download')
 def download(request):
-    result = read_(File, request)
+    result = read(request)
     item = result['item']
     response = request.response
     response.content_type = str(item.mime)
