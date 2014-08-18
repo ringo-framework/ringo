@@ -6,7 +6,7 @@ from ringo.views.base.create import (
 from ringo.views.base.list_ import (
     bundle_,
     list_,
-    list__
+    rest_list,
 )
 from ringo.views.base.read import (
     read,
@@ -47,7 +47,7 @@ from ringo.views.request import (
 )
 
 web_action_view_mapping = {
-    "list": list__,
+    "list": list_,
     "create": create,
     "read": read,
     "update": update,

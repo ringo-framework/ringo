@@ -6,6 +6,7 @@ from ringo.lib.security import has_permission
 from ringo.lib.renderer import (
     ListRenderer
 )
+from ringo.views.response import JSONResponse
 from ringo.views.request import (
     handle_params,
     handle_history
@@ -179,15 +180,8 @@ def bundle_(request):
     return rvalue
 
 
-def list__(request):
-    """Wrapper method to match default signature of a view method. Will
-    add the missing clazz attribut and call the wrapped method with the
-    correct parameters."""
+def list_(request):
     clazz = request.context.__model__
-    return list_(clazz, request)
-
-
-def list_(clazz, request):
     # Important! Prevent any write access on the database for this
     # request. This is needed as transform would modify the items values
     # else.
@@ -249,3 +243,16 @@ def list_(clazz, request):
     rvalue['listing'] = rendered_page
     rvalue['itemlist'] = listing
     return rvalue
+
+
+def rest_list(request):
+    """Returns a JSON objcet with all item of a clazz. The list does not
+    have any capabilities for sorting or filtering
+
+    :request: Current request.
+    :returns: JSON object.
+
+    """
+    clazz = request.context.__model__
+    listing = clazz.get_item_list(request)
+    return JSONResponse(True, listing)
