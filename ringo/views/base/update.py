@@ -7,7 +7,7 @@ from ringo.lib.sql.cache import invalidate_cache
 from ringo.lib.renderer import (
     add_renderers
 )
-from ringo.views.forms import (
+from ringo.views.helpers import (
     get_ownership_form,
     get_logbook_form
 )
