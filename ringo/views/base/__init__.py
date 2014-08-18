@@ -2,9 +2,7 @@ from ringo.views.base.create import (
     create,
     rest_create,
 )
-
 from ringo.views.base.list_ import (
-    bundle_,
     list_,
     rest_list,
 )
@@ -19,12 +17,10 @@ from ringo.views.base.update import (
 from ringo.views.base.delete import (
     delete,
     rest_delete,
-    _handle_delete_request
 )
 from ringo.views.base.export import (
     export_,
     export__,
-    _handle_export_request
 )
 from ringo.views.base.import_ import (
     import_,

@@ -5,7 +5,11 @@ from ringo.lib import helpers
 from ringo.lib.sql.db import DBSession
 from ringo.model.modul import ModulItem
 from ringo.resources import get_resource_factory
-from ringo.views.base import web_action_view_mapping, rest_action_view_mapping
+from ringo.views.base.list_ import bundle_
+from ringo.views.base import (
+    web_action_view_mapping,
+    rest_action_view_mapping
+)
 
 log = logging.getLogger(__name__)
 
@@ -105,7 +109,6 @@ def setup_modul(config, clazz):
 
         # Add bundle action.
         if action.name == "List":
-            from ringo.views.base import bundle_
             action_name = "Bundle"
             route_name = "%s-%s" % (name, action_name.lower())
             route_url = "%s/%s" % (name, action_name.lower())
