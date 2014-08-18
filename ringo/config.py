@@ -5,8 +5,8 @@ from ringo.lib import helpers
 from ringo.lib.sql.db import DBSession
 from ringo.model.modul import ModulItem
 from ringo.resources import get_resource_factory
-from ringo.views.base import web_action_view_mapping as wavm
-from ringo.views.json import action_view_mapping as ravm
+from ringo.views.base import web_action_view_mapping
+from ringo.views.base import rest_action_view_mapping
 
 log = logging.getLogger(__name__)
 
@@ -67,7 +67,7 @@ def setup_modul(config, clazz):
         log.debug("Adding WEB route: %s, %s" % (route_name, route_url))
         config.add_route(route_name, route_url,
                          factory=get_resource_factory(clazz))
-        view_func = wavm.get(action_name)
+        view_func = web_action_view_mapping.get(action_name)
         if view_func:
             if action_name == "delete":
                 template = "confirm"
@@ -96,7 +96,7 @@ def setup_modul(config, clazz):
         log.debug("Adding REST route: %s, %s" % (route_name, route_url))
         config.add_route(route_name, route_url,
                          factory=get_resource_factory(clazz))
-        view_func = ravm.get(action_name)
+        view_func = rest_action_view_mapping.get(action_name)
         if view_func:
             config.add_view(view_func,
                             route_name=route_name,

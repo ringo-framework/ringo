@@ -57,10 +57,10 @@ web_action_view_mapping = {
     "print":  print_,
 }
 
-#json_action_view_mapping = {
-#    "list": list__,
-#    "create": json_create,
-#    "read": read__,
-#    "update": update__,
-#    "delete": delete__,
-#}
+rest_action_view_mapping = {
+    "list": rest_list,
+    "create": rest_create,
+    "read": rest_read,
+    "update": rest_update,
+    "delete": rest_delete,
+}
