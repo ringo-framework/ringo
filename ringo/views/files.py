@@ -3,7 +3,7 @@ import mimetypes
 from pyramid.response import FileIter
 from pyramid.view import view_config
 
-from ringo.views.base import create_, update_, read_
+from ringo.views.base import create, update_, read_
 from ringo.lib.helpers import import_model
 File = import_model('ringo.model.file.File')
 
@@ -33,8 +33,8 @@ def save_file(request, item):
 @view_config(route_name=File.get_action_routename('create'),
              renderer='/default/create.mako',
              permission='create')
-def create(request):
-    return create_(File, request, callback=save_file)
+def create_(request):
+    return create(request, callback=save_file)
 
 
 @view_config(route_name=File.get_action_routename('update'),

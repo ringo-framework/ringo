@@ -9,6 +9,7 @@ from ringo.lib.helpers import import_model
 from ringo.lib.security import has_permission
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.model.mixins import Blobform
+from ringo.views.response import JSONResponse
 from ringo.views.request import (
     handle_params,
     handle_history,
@@ -56,22 +57,13 @@ def get_blobform_config(request, item, formname):
         return modul, formconfig
 
 
-def create__(request):
-    """Wrapper method to match default signature of a view method. Will
-    add the missing clazz attribut and call the wrapped method with the
-    correct parameters."""
-    clazz = request.context.__model__
-    return create_(clazz, request)
-
-
-def create_(clazz, request, callback=None, renderers={}):
+def create(request, callback=None, renderers={}):
     """Base view to create a new item of type clazz. This view will
     render a create form to create new items. It the user submits the
     data (POST) that the data will be validated and the new item will be
     saved to the database. Finally after saving on the POST-request the
     optional callback will be called.
 
-    :clazz: Class of items which will be created.
     :request: The current request
     :callback: A callback function [function(request, item)] which
     returns the item again.
@@ -79,6 +71,7 @@ def create_(clazz, request, callback=None, renderers={}):
     provided to the form to render specific formelements.
     :returns: Dictionary with the following keys 'clazz', 'item', 'form'
     """
+    clazz = request.context.__model__
     handle_history(request)
     params = handle_params(clazz, request)
     _ = request.translate
@@ -183,3 +176,34 @@ def create_(clazz, request, callback=None, renderers={}):
     rvalue['form'] = form.render(values=values,
                                  page=get_current_form_page(clazz, request))
     return rvalue
+
+
+def rest_create(request, callback=None):
+    """Create a new item of type clazz. The item will be
+    initialised with the data provided in the submitted POST request.
+    The submitted data will be validated before the item is actually
+    saved. If the submission fails the item is not saved in the
+    database. In all cases the item is return as JSON object with the
+    item and updated values back to the client. The JSON Response will
+    include further details on the reason why the validation failed.
+
+    :clazz: Class of item to create
+    :request: Current request
+    :returns: JSON object.
+
+    """
+    clazz = request.context.__model__
+    # Create a new item.
+    factory = clazz.get_item_factory()
+    item = factory.create(request.user)
+    # Initialise the create form for the item to be able to validate the
+    # submitted data.
+    form = Form(item.get_form_config('create'),
+                item, request.db, translate=request.translate,
+                csrf_token=request.session.get_csrf_token())
+    if form.validate(request.params):
+            sitem = form.save()
+            return JSONResponse(True, sitem)
+    else:
+        # Validation fails! return item
+        return JSONResponse(False, sitem)

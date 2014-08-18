@@ -1,9 +1,8 @@
 import logging
 from pyramid.view import view_config
 
-from ringo.views.base import create_, update_, read_
+from ringo.views.base import create, rest_create,  update_, read_
 from ringo.views.json import (
-    create_ as json_create,
     update_ as json_update,
     )
 from ringo.views.files import save_file
@@ -16,8 +15,8 @@ log = logging.getLogger(__name__)
 @view_config(route_name=Printtemplate.get_action_routename('create'),
              renderer='/default/create.mako',
              permission='create')
-def create(request):
-    return create_(Printtemplate, request, callback=save_file)
+def create_(request):
+    return create_(request, callback=save_file)
 
 
 @view_config(route_name=Printtemplate.get_action_routename('update'),
@@ -44,8 +43,8 @@ def download(request):
              renderer='json',
              request_method="POST",
              permission='create')
-def rest_create(request):
-    return json_create(Printtemplate, request, callback=save_file)
+def rest_create_(request):
+    return rest_create(request, callback=save_file)
 
 @view_config(route_name=Printtemplate.get_action_routename('update', prefix="rest"),
              renderer='json',

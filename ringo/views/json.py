@@ -4,6 +4,7 @@ items
 """
 from formbar.form import Form
 
+from ringo.views.base import rest_create
 from ringo.views.request import get_item_from_request
 from ringo.views.response import JSONResponse
 
@@ -26,42 +27,6 @@ def list_(clazz, request):
     """
     listing = clazz.get_item_list(request)
     return JSONResponse(True, listing)
-
-def create__(request):
-    """Wrapper method to match default signature of a view method. Will
-    add the missing clazz attribut and call the wrapped method with the
-    correct parameters."""
-    clazz = request.context.__model__
-    return create_(clazz, request)
-
-def create_(clazz, request):
-    """Create a new item of type clazz. The item will be
-    initialised with the data provided in the submitted POST request.
-    The submitted data will be validated before the item is actually
-    saved. If the submission fails the item is not saved in the
-    database. In all cases the item is return as JSON object with the
-    item and updated values back to the client. The JSON Response will
-    include further details on the reason why the validation failed.
-
-    :clazz: Class of item to create
-    :request: Current request
-    :returns: JSON object.
-
-    """
-    # Create a new item.
-    factory = clazz.get_item_factory()
-    item = factory.create(request.user)
-    # Initialise the create form for the item to be able to validate the
-    # submitted data.
-    form = Form(item.get_form_config('create'),
-                item, request.db, translate=request.translate,
-                csrf_token=request.session.get_csrf_token())
-    if form.validate(request.params):
-            sitem = form.save()
-            return JSONResponse(True, sitem)
-    else:
-        # Validation fails! return item
-        return JSONResponse(False, sitem)
 
 def read__(request):
     """Wrapper method to match default signature of a view method. Will
@@ -140,7 +105,7 @@ def delete_(clazz, request):
 
 action_view_mapping = {
     "list": list__,
-    "create": create__,
+    "create": rest_create,
     "read": read__,
     "update": update__,
     "delete": delete__,

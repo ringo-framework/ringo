@@ -1,7 +1,8 @@
 from ringo.views.base.create import (
-    create_,
-    create__
+    create,
+    rest_create,
 )
+
 from ringo.views.base.list_ import (
     bundle_,
     list_,
@@ -45,9 +46,9 @@ from ringo.views.request import (
     get_current_form_page
 )
 
-action_view_mapping = {
+web_action_view_mapping = {
     "list": list__,
-    "create": create__,
+    "create": create,
     "read": read__,
     "update": update__,
     "delete": delete__,
@@ -55,3 +56,11 @@ action_view_mapping = {
     "export": export__,
     "print":  print_,
 }
+
+#json_action_view_mapping = {
+#    "list": list__,
+#    "create": json_create,
+#    "read": read__,
+#    "update": update__,
+#    "delete": delete__,
+#}

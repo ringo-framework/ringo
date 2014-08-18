@@ -5,7 +5,7 @@ from ringo.lib import helpers
 from ringo.lib.sql.db import DBSession
 from ringo.model.modul import ModulItem
 from ringo.resources import get_resource_factory
-from ringo.views.base import action_view_mapping as wavm
+from ringo.views.base import web_action_view_mapping as wavm
 from ringo.views.json import action_view_mapping as ravm
 
 log = logging.getLogger(__name__)

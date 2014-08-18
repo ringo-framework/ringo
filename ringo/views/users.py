@@ -4,16 +4,13 @@ from pyramid.httpexceptions import HTTPBadRequest, HTTPForbidden, HTTPFound
 from pyramid.view import view_config
 from formbar.form import Form, Validator
 
-from ringo.views.base import create_
+from ringo.views.base import create, rest_create
 from ringo.views.request import (
     handle_history, handle_params,
     get_current_form_page
 )
 from ringo.model.mixins import Owned
 
-from ringo.views.json import (
-    create_ as json_create,
-    )
 from ringo.lib.helpers import import_model
 from ringo.lib.security import login, encrypt_password
 from ringo.lib.sql.cache import invalidate_cache
@@ -44,8 +41,8 @@ def check_password(field, data):
 @view_config(route_name=User.get_action_routename('create'),
              renderer='/default/create.mako',
              permission='create')
-def create(request):
-    return create_(User, request, encrypt_password_callback)
+def create_(request):
+    return create(request, encrypt_password_callback)
 
 
 @view_config(route_name=User.get_action_routename('changepassword'),
@@ -119,5 +116,5 @@ def changepassword(request):
              renderer='json',
              request_method="POST",
              permission='create')
-def rest_create(request):
-    return json_create(User, request, encrypt_password)
+def rest_create_(request):
+    return rest_create(User, request, encrypt_password)
