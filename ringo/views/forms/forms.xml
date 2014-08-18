@@ -55,10 +55,12 @@
       <row>
         <col><field ref="modul"/></col>
         <col><field ref="e3"/></col>
-        <col><field ref="e5"/></col>
       </row>
       <row>
         <col><field ref="e4"/></col>
+      </row>
+      <row>
+        <col><field ref="e5"/></col>
       </row>
     </page>
     <page id="p2" label="State/Comments">
