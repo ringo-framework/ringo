@@ -4,7 +4,7 @@ items
 """
 from formbar.form import Form
 
-from ringo.views.base import rest_create, rest_update
+from ringo.views.base import rest_create, rest_update, rest_read
 from ringo.views.request import get_item_from_request
 from ringo.views.response import JSONResponse
 
@@ -27,28 +27,6 @@ def list_(clazz, request):
     """
     listing = clazz.get_item_list(request)
     return JSONResponse(True, listing)
-
-def read__(request):
-    """Wrapper method to match default signature of a view method. Will
-    add the missing clazz attribut and call the wrapped method with the
-    correct parameters."""
-    clazz = request.context.__model__
-    return read_(clazz, request)
-
-def read_(clazz, request, callback=None):
-    """Returns a JSON object of a specific item of type clazz. The
-    loaded item is determined by the id provided in the matchdict object
-    of the current request.
-
-    :clazz: Class of item to load
-    :request: Current request
-    :callback: Current function which is called after the item has been read.
-    :returns: JSON object.
-    """
-    item = get_item_from_request(request)
-    if callback is not None:
-        item = callback(request, item)
-    return JSONResponse(True, item)
 
 def delete__(request):
     """Wrapper method to match default signature of a view method. Will
@@ -73,7 +51,7 @@ def delete_(clazz, request):
 action_view_mapping = {
     "list": list__,
     "create": rest_create,
-    "read": read__,
+    "read": rest_read,
     "update": rest_update,
     "delete": delete__,
 }

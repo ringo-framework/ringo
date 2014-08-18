@@ -10,6 +10,7 @@ from ringo.views.base.list_ import (
 )
 from ringo.views.base.read import (
     read,
+    rest_read
 )
 from ringo.views.base.update import (
     update,

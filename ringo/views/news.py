@@ -1,7 +1,7 @@
 import logging
 from pyramid.view import view_config
 from ringo.model.news import News
-from ringo.views.json import read_ as json_read
+from ringo.views.json import rest_read
 
 log = logging.getLogger(__name__)
 
@@ -33,4 +33,4 @@ def read_callback(request, item):
              request_method="PUT",
              permission='read')
 def rest_markasread(request):
-    return json_read(News, request, callback=read_callback)
+    return rest_read(request, callback=read_callback)

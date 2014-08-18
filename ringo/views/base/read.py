@@ -8,6 +8,7 @@ from ringo.views.forms import (
     get_ownership_form,
     get_logbook_form
 )
+from ringo.views.response import JSONResponse
 from ringo.views.request import (
     handle_params,
     handle_history,
@@ -72,3 +73,19 @@ def read(request, callback=None, renderers={}):
                                       values=values,
                                       previous_values=previous_values)
     return rvalue
+
+
+def rest_read(request, callback=None):
+    """Returns a JSON object of a specific item of type clazz. The
+    loaded item is determined by the id provided in the matchdict object
+    of the current request.
+
+    :request: Current request
+    :callback: Current function which is called after the item has been read.
+    :returns: JSON object.
+    """
+    clazz = request.context.__model__
+    item = get_item_from_request(request)
+    if callback is not None:
+        item = callback(request, item)
+    return JSONResponse(True, item)
