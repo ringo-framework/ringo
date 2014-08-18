@@ -29,18 +29,6 @@ from ringo.views.base.import_ import (
 from ringo.views.base.print_ import (
     print_,
 )
-from ringo.views.forms import (
-    get_ownership_form,
-    get_logbook_form
-)
-from ringo.views.request import (
-    handle_params,
-    handle_history,
-    handle_event,
-    is_confirmed,
-    get_item_from_request,
-    get_current_form_page
-)
 
 web_action_view_mapping = {
     "list": list_,
