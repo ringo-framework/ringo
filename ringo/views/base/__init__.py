@@ -18,6 +18,7 @@ from ringo.views.base.update import (
 )
 from ringo.views.base.delete import (
     delete,
+    rest_delete,
     _handle_delete_request
 )
 from ringo.views.base.export import (

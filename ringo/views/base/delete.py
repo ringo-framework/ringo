@@ -2,6 +2,7 @@ import logging
 from pyramid.httpexceptions import HTTPFound
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.lib.renderer import ConfirmDialogRenderer
+from ringo.views.response import JSONResponse
 from ringo.views.request import (
     handle_params,
     handle_history,
@@ -53,3 +54,17 @@ def delete(request):
     handle_history(request)
     handle_params(clazz, request)
     return _handle_delete_request(clazz, request, [item])
+
+
+def rest_delete(request):
+    """Deletes an item of type clazz. The item is deleted based on the
+    unique id value provided in the matchtict object in the current
+    DELETE request. The data will be deleted without any futher confirmation!
+
+    :clazz: Class of item to delete
+    :request: Current request
+    :returns: JSON object.
+    """
+    item = get_item_from_request(request)
+    request.db.delete(item)
+    return JSONResponse(True, item)
