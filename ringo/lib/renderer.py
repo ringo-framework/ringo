@@ -520,6 +520,8 @@ def add_renderers(renderers):
         renderers["comments"] = CommentRenderer
     if not "link" in renderers:
         renderers["link"] = LinkFieldRenderer
+    if not "tags" in renderers:
+        renderers["tags"] = TagFieldRenderer
     return renderers
 
 def get_link_url(item, request):
@@ -749,6 +751,24 @@ class ListingFieldRenderer(FormbarSelectionField):
                   'tableconfig': self.itemlist.clazz.get_table_config(config.table)}
         html.append(self.template.render(**values))
         return "".join(html)
+
+class TagFieldRenderer(ListingFieldRenderer):
+    """Renderer to render tags  listings. The renderer will only show
+    tags which are either associated to no module or the the items
+    module."""
+
+    def __init__(self, field, translate):
+        ListingFieldRenderer.__init__(self, field, translate)
+
+    def _get_all_items(self):
+        tags = []
+        alltags = ListingFieldRenderer._get_all_items(self)
+        item_modul = self._field._form._item.get_item_modul(self._field._form._request).id
+        for tag in alltags:
+            if not tag.modul or (tag.modul.id == item_modul):
+                tags.append(tag)
+        alltags.items = tags
+        return alltags
 
 
 class LogRenderer(FieldRenderer):
