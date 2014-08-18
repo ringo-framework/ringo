@@ -47,15 +47,8 @@ def _handle_delete_request(clazz, request, items):
         return rvalue
 
 
-def delete__(request):
-    """Wrapper method to match default signature of a view method. Will
-    add the missing clazz attribut and call the wrapped method with the
-    correct parameters."""
+def delete(request):
     clazz = request.context.__model__
-    return delete_(clazz, request)
-
-
-def delete_(clazz, request):
     item = get_item_from_request(request)
     handle_history(request)
     handle_params(clazz, request)
