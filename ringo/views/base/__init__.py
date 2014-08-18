@@ -13,8 +13,7 @@ from ringo.views.base.read import (
     read__
 )
 from ringo.views.base.update import (
-    update_,
-    update__
+    update,
 )
 from ringo.views.base.delete import (
     delete_,
@@ -50,7 +49,7 @@ web_action_view_mapping = {
     "list": list__,
     "create": create,
     "read": read__,
-    "update": update__,
+    "update": update,
     "delete": delete__,
     "import": import__,
     "export": export__,

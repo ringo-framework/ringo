@@ -3,7 +3,7 @@ import mimetypes
 from pyramid.response import FileIter
 from pyramid.view import view_config
 
-from ringo.views.base import create, update_, read_
+from ringo.views.base import create, update, read_
 from ringo.lib.helpers import import_model
 File = import_model('ringo.model.file.File')
 
@@ -40,8 +40,8 @@ def create_(request):
 @view_config(route_name=File.get_action_routename('update'),
              renderer='/default/update.mako',
              permission='update')
-def update(request):
-    return update_(File, request, callback=save_file)
+def update_(request):
+    return update(request, callback=save_file)
 
 
 @view_config(route_name=File.get_action_routename('download'),

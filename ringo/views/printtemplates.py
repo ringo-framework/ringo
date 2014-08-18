@@ -1,7 +1,7 @@
 import logging
 from pyramid.view import view_config
 
-from ringo.views.base import create, rest_create,  update_, read_
+from ringo.views.base import create, rest_create,  update, read_
 from ringo.views.json import (
     update_ as json_update,
     )
@@ -23,7 +23,7 @@ def create_(request):
              renderer='/default/update.mako',
              permission='update')
 def update(request):
-    return update_(Printtemplate, request, callback=save_file)
+    return update(request, callback=save_file)
 
 
 @view_config(route_name=Printtemplate.get_action_routename('download'),
