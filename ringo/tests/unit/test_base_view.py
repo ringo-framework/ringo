@@ -39,7 +39,7 @@ class ViewHelpersTests(BaseUnitTest):
         self.assertEqual(result, 1)
 
     def test_get_ownership_form(self):
-        from ringo.views.forms import get_ownership_form
+        from ringo.views.helpers import get_ownership_form
         from ringo.views.request import get_item_from_request
         item = get_item_from_request(self.request)
         result = get_ownership_form(item, self.request)
@@ -47,7 +47,7 @@ class ViewHelpersTests(BaseUnitTest):
         self.assertEqual(result._item, item)
 
     def test_get_ownership_form_readonly(self):
-        from ringo.views.forms import get_ownership_form
+        from ringo.views.helpers import get_ownership_form
         from ringo.views.request import get_item_from_request
         item = get_item_from_request(self.request)
         result = get_ownership_form(item, self.request, True)
@@ -56,14 +56,14 @@ class ViewHelpersTests(BaseUnitTest):
 
     def test_get_ownership_form_owned(self):
         from ringo.model.user import Profile
-        from ringo.views.forms import get_ownership_form
+        from ringo.views.helpers import get_ownership_form
         item = self.request.db.query(Profile).filter(Profile.id == 1).one()
         result = get_ownership_form(item, self.request)
         self.assertEqual(len(result.fields.keys()), 2)
         self.assertEqual(result._item, item)
 
     def test_get_logbook_form(self):
-        from ringo.views.forms import get_logbook_form
+        from ringo.views.helpers import get_logbook_form
         from ringo.views.request import get_item_from_request
         item = get_item_from_request(self.request)
         result = get_logbook_form(item, self.request)
@@ -71,7 +71,7 @@ class ViewHelpersTests(BaseUnitTest):
         self.assertEqual(result._item, item)
 
     def test_get_logbook_form_readonly(self):
-        from ringo.views.forms import get_logbook_form
+        from ringo.views.helpers import get_logbook_form
         from ringo.views.request import get_item_from_request
         item = get_item_from_request(self.request)
         result = get_logbook_form(item, self.request, True)
@@ -80,7 +80,7 @@ class ViewHelpersTests(BaseUnitTest):
 
     def test_get_logbook_form_owned(self):
         from ringo.model.user import Profile
-        from ringo.views.forms import get_logbook_form
+        from ringo.views.helpers import get_logbook_form
         item = self.request.db.query(Profile).filter(Profile.id == 1).one()
         result = get_logbook_form(item, self.request)
         self.assertEqual(len(result.fields.keys()), 1)
