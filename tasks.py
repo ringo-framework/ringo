@@ -1,5 +1,13 @@
 from invoke import run, task
 
+@task
+def clean():
+    """Will remove swp, rej, pyc, orig files"""
+    run("find . -name \*.swp -delete")
+    run("find . -name \*.swo -delete")
+    run("find . -name \*.rej -delete")
+    run("find . -name \*.orig -delete")
+    run("find . -name \*.pyc -delete")
 
 @task
 def docs(doctype="html", zip=False, show=False):

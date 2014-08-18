@@ -2,95 +2,11 @@
 Modul for a simple RESTfull Interface to basic CRUD operations on the
 items
 """
-import logging
-from pyramid.view import view_config
-from pyramid.response import Response
-
 from formbar.form import Form
-from formbar.config import Config, parse
-from formbar.rules import Rule, Parser
 
-from ringo.lib.imexport import JSONExporter
-from ringo.model.base import BaseItem, BaseList
-from ringo.views.base import _get_item_from_context
+from ringo.views.request import get_item_from_request
+from ringo.views.response import JSONResponse
 
-log = logging.getLogger(__name__)
-
-
-class JSONResponse(object):
-    """Generic response item for JSON responses on the RESTfull api"""
-
-    def __init__(self, success, data, params=None):
-        """Create a new JSONResponse. The Response object has the
-        following format::
-
-        {
-            "success":[true|false],
-            "data": object
-            "params": {
-                "parm1": "value1",
-                "parm2": "value1",
-                ...
-                "parmN": "value1"
-            }
-        }
-
-        The format of the data or params attribute is not specified. It
-        can basically contain any valid JSON. Usually the data attribute
-        will contain a dictionary with the attributes of an item or a
-        list of  dictionarys with values of items.
-
-        :data: Payload included in the Response.
-        :success: Generic status of the query
-        :params: Optional parameters. Can include further information.
-        E.g why the last request failed.
-        """
-        self._data = data
-        self._success = success
-        self._params = params
-
-    def __json__(self, request):
-        rvalue = {}
-        rvalue['success'] = self._success
-        if isinstance(self._data, BaseItem):
-            exporter = JSONExporter(self._data.__class__)
-            self._data = exporter.perform([self._data])
-        elif isinstance(self._data, BaseList):
-            exporter = JSONExporter(self._data.__class__)
-            self._data = exporter.perform(self._data.items)
-        rvalue['data'] = self._data
-        rvalue['params'] = self._params
-        return rvalue
-
-@view_config(route_name='rules-evaluate',
-             renderer='json',
-             request_method="GET")
-def evaluate_(request):
-    try:
-        ruleexpr = request.GET.get('rule')
-        expr = Parser().parse(ruleexpr)
-        rule = Rule(expr=expr)
-        result = rule.evaluate({})
-        return JSONResponse(True, result, {"msg": rule.msg})
-    except:
-        msg = "Can not evaluate rule '%s'" % ruleexpr
-        log.error(msg)
-        return JSONResponse(False, False, {"msg": msg})
-
-@view_config(route_name='form-render',
-             renderer='json',
-             request_method="POST")
-def render_(request):
-    form_config = request.POST.get("definition")
-    config_name = request.POST.get("formid")
-    config = Config(parse(form_config))
-    out = []
-    form_config = config.get_form(config_name)
-    form = Form(form_config, None, request.db,
-                csrf_token=request.session.get_csrf_token())
-    out.append(form.render(buttons=False, outline=False))
-    data = {"form": "".join(out)}
-    return JSONResponse(True, data, {"msg": "Ole!"})
 
 def list__(request):
     """Wrapper method to match default signature of a view method. Will
@@ -164,7 +80,7 @@ def read_(clazz, request, callback=None):
     :callback: Current function which is called after the item has been read.
     :returns: JSON object.
     """
-    item = _get_item_from_context(request)
+    item = get_item_from_request(request)
     if callback is not None:
         item = callback(request, item)
     return JSONResponse(True, item)
@@ -191,7 +107,7 @@ def update_(clazz, request):
     :request: Current request
     :returns: JSON object.
     """
-    item = _get_item_from_context(request)
+    item = get_item_from_request(request)
     form = Form(item.get_form_config('update'),
                 item, request.db, translate=request.translate,
                 csrf_token=request.session.get_csrf_token())
@@ -218,7 +134,7 @@ def delete_(clazz, request):
     :request: Current request
     :returns: JSON object.
     """
-    item = _get_item_from_context(request)
+    item = get_item_from_request(request)
     request.db.delete(item)
     return JSONResponse(True, item)
 

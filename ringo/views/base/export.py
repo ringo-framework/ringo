@@ -1,0 +1,62 @@
+import logging
+from ringo.lib.imexport import (
+    JSONExporter,
+    CSVExporter
+)
+from ringo.lib.renderer import (
+    ExportDialogRenderer
+)
+from ringo.views.request import (
+    handle_params,
+    handle_history,
+    is_confirmed,
+    get_item_from_request,
+)
+
+log = logging.getLogger(__name__)
+
+
+def export__(request):
+    """Wrapper method to match default signature of a view method. Will
+    add the missing clazz attribut and call the wrapped method with the
+    correct parameters."""
+    clazz = request.context.__model__
+    return export_(clazz, request)
+
+
+def export_(clazz, request):
+    item = get_item_from_request(request)
+    handle_history(request)
+    handle_params(clazz, request)
+    return _handle_export_request(clazz, request, [item])
+
+
+def _handle_export_request(clazz, request, items):
+    """Helper function to handle the export request. This function
+    provides the required logic to show the export configuration dialog
+    and returning the exported items. It is called when exporting a
+    single item or when exporting multiple items in a bundle."""
+    rvalue = {}
+    renderer = ExportDialogRenderer(request, clazz)
+    form = renderer.form
+    if (request.method == 'POST'
+       and is_confirmed(request)
+       and form.validate(request.params)):
+        # Setup exporter
+        ef = form.data.get('format')
+        if ef == "json":
+            exporter = JSONExporter(clazz)
+        elif ef == "csv":
+            exporter = CSVExporter(clazz)
+        export = exporter.perform(items)
+        # Build response
+        resp = request.response
+        resp.content_type = str('application/%s' % ef)
+        resp.content_disposition = 'attachment; filename=export.%s' % ef
+        resp.body = export
+        return resp
+    else:
+        # FIXME: Get the ActionItem here and provide this in the Dialog to get
+        # the translation working (torsten) <2013-07-10 09:32>
+        rvalue['dialog'] = renderer.render(items)
+        return rvalue

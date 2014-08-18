@@ -18,7 +18,7 @@ from ringo.model.base import BaseList
 from ringo.model.appointment import Reminders
 from ringo.model.news import News
 from ringo.model.todo import Reminders as TodoReminders
-from ringo.views import handle_history
+from ringo.views.request import handle_history
 
 
 @view_config(route_name='home', renderer='/index.mako')

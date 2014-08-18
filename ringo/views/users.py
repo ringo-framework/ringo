@@ -4,8 +4,11 @@ from pyramid.httpexceptions import HTTPBadRequest, HTTPForbidden, HTTPFound
 from pyramid.view import view_config
 from formbar.form import Form, Validator
 
-from ringo.views.base import (create_, handle_history, handle_params,
-                              get_current_form_page)
+from ringo.views.base import create_
+from ringo.views.request import (
+    handle_history, handle_params,
+    get_current_form_page
+)
 from ringo.model.mixins import Owned
 
 from ringo.views.json import (
