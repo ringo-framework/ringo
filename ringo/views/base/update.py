@@ -60,13 +60,19 @@ def handle_POST_request(name, request, callback, renderers=None):
         request.session.flash(msg, 'error')
 
 def update(request, callback=None, renderers={}):
-    """Base method to handle update requests. Returns a dictionary of
-    values used available in the rendererd template The template to
-    render is defined in the view configuration.
+    """Base method to handle update requests. This view will render a
+    update form to update items on (GET) requests. 
+    
+    It the user submits the data (POST) that the data will be validated.
+    If validation is successfull the item will be saved in the datebase
+    and the callback method will be called. Finally a redirect to either
+    the backurl or the edit or read mode of the item will be triggered.
 
+    If the validation fails, the form will be rendered again.
+    
     :request: Current request
     :callback: Current function which is called after the item has been read.
-    :returns: Dictionary.
+    :returns: Dictionary or Redirect.
     """
     handle_history(request)
     handle_params(request)
