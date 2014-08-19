@@ -70,6 +70,7 @@ def get_rendered_item_form(name, request, values=None, renderers=None):
         renderers = {}
     clazz = request.context.__model__
     item = get_item_from_request(request)
+    name = request.session.get("%s.form" % clazz) or name
     form = get_item_form(name, request, renderers)
     if isinstance(item, Versioned):
         previous_values = item.get_previous_values(author=request.user.login)
@@ -97,6 +98,7 @@ def get_item_form(name, request, renderers=None):
         renderers = {}
     renderers = add_renderers(renderers)
     clazz = request.context.__model__
+    name = request.session.get("%s.form" % clazz) or name
     form = Form(item.get_form_config(name), item, request.db,
                 translate=request.translate,
                 renderers=renderers,

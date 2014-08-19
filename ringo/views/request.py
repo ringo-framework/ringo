@@ -1,6 +1,9 @@
 """Modul to handle requests."""
-from pyramid.httpexceptions import HTTPBadRequest
-
+from pyramid.httpexceptions import (
+    HTTPBadRequest,
+    HTTPFound
+)
+from ringo.lib.security import has_permission
 from ringo.lib.history import History
 
 
@@ -33,6 +36,37 @@ def handle_callback(request, callback, item=None):
         item = callback(request, item)
         request.context.item = item
     return item
+
+def handle_redirect_on_success(request):
+    """Will return a redirect. If there has been a saved "backurl" the
+    redirect will on on this url. In all other cases the function will
+    try to determine if the item in the request can be opened in edit
+    mode or not. If the current user is allowed to open the item in
+    edit mode then the update view is called. Else the read view is
+    called.
+
+    :request: Current request
+    :returns: Redirect
+    """
+
+    item = get_item_from_request(request)
+    clazz = request.context.__model__
+    backurl = request.session.get('%s.backurl' % clazz)
+    if backurl:
+        # Redirect to the configured backurl.
+        del request.session['%s.backurl' % clazz]
+        request.session.save()
+        return HTTPFound(location=backurl)
+    else:
+        # Handle redirect after success.
+        # Check if the user is allowed to call the url after saving
+        if has_permission("update", item, request):
+            route_name = item.get_action_routename('update')
+            url = request.route_path(route_name, id=item.id)
+        else:
+            route_name = item.get_action_routename('read')
+            url = request.route_path(route_name, id=item.id)
+        return HTTPFound(location=url)
 
 
 def handle_history(request):
