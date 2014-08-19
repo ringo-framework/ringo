@@ -1,8 +1,6 @@
 import logging
-from ringo.lib.sql.cache import invalidate_cache
+from ringo.views.response import JSONResponse
 from ringo.views.helpers import (
-    get_ownership_form,
-    get_logbook_form,
     get_item_form,
     get_rendered_ownership_form,
     get_rendered_logbook_form,
@@ -11,53 +9,13 @@ from ringo.views.helpers import (
 from ringo.views.request import (
     handle_params,
     handle_history,
-    handle_callback,
-    handle_event,
-    handle_redirect_on_success,
+    handle_POST_request,
     get_item_from_request,
     get_return_value
 )
 
 log = logging.getLogger(__name__)
 
-def handle_POST_request(name, request, callback, renderers=None):
-    """@todo: Docstring for handle_POST_request.
-
-    :name: @todo
-    :request: @todo
-    :callback: @todo
-    :renderers: @todo
-    :returns: @todo
-
-    """
-    if 'owner' in request.params:
-        form = get_ownership_form(request)
-    else:
-        form = get_item_form(name, request, renderers)
-    _ = request.translate
-    clazz = request.context.__model__
-    item_label = clazz.get_item_modul(request).get_label()
-    item = get_item_from_request(request)
-    mapping = {'item_type': item_label, 'item': item}
-    if form.validate(request.params):
-        item.save(form.data, request)
-        msg = _('Edited ${item_type} "${item}" successfull.',
-                mapping=mapping)
-        log.info(msg)
-        request.session.flash(msg, 'success')
-        handle_event(request, item, 'update')
-        handle_callback(request, callback)
-        # Invalidate cache
-        invalidate_cache()
-        if request.session.get('%s.form' % clazz):
-            del request.session['%s.form' % clazz]
-        request.session.save()
-        return handle_redirect_on_success(request)
-    else:
-        msg = _('Error on validation the data for '
-                '${item_type} "${item}".', mapping=mapping)
-        log.info(msg)
-        request.session.flash(msg, 'error')
 
 def update(request, callback=None, renderers={}):
     """Base method to handle update requests. This view will render a
@@ -85,7 +43,8 @@ def update(request, callback=None, renderers={}):
     rvalues['owner'] = get_rendered_ownership_form(request)
     rvalues['logbook'] = get_rendered_logbook_form(request, readonly=True)
     values = {'_roles': [str(r.name) for r in request.user.get_roles()]}
-    rvalues['form'] = get_rendered_item_form('update', request, values, renderers)
+    rvalues['form'] = get_rendered_item_form('update', request,
+                                             values, renderers)
     return rvalues
 
 
@@ -103,7 +62,6 @@ def rest_update(request, callback=None):
     :request: Current request
     :returns: JSON object.
     """
-    clazz = request.context.__model__
     item = get_item_from_request(request)
     form = get_item_form('update', request)
     if form.validate(request.params):
@@ -112,4 +70,3 @@ def rest_update(request, callback=None):
     else:
         # Validation fails! return item
         return JSONResponse(False, item)
-
