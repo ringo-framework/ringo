@@ -142,7 +142,7 @@ def get_search(clazz, request):
 def bundle_(request):
     clazz = request.context.__model__
     handle_history(request)
-    handle_params(clazz, request)
+    handle_params(request)
 
     # Handle bundle params. If the request has the bundle_action param
     # the request is the intial request for a bundled action. In this
