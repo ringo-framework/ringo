@@ -1,13 +1,15 @@
 from ringo.lib.security import has_role
 from ringo.lib.helpers import get_path_to_form_config
 from ringo.lib.renderer import add_renderers
+from ringo.views.request import get_item_from_request
 from ringo.model.mixins import Owned
 
 from formbar.config import Config, load
 from formbar.form import Form
 
 
-def get_ownership_form(item, request, readonly=None):
+def get_ownership_form(request, readonly=None):
+    item = get_item_from_request(request)
     if (readonly is None and isinstance(item, Owned)):
         readonly = not (item.is_owner(request.user)
                         or has_role(request.user, "admin"))
@@ -21,7 +23,8 @@ def get_ownership_form(item, request, readonly=None):
                 eval_url='/rest/rule/evaluate')
 
 
-def get_logbook_form(item, request, readonly=None, renderers=None):
+def get_logbook_form(request, readonly=None, renderers=None):
+    item = get_item_from_request(request)
     if not renderers:
         renderers = {}
     renderers = add_renderers(renderers)
@@ -36,15 +39,15 @@ def get_logbook_form(item, request, readonly=None, renderers=None):
                 eval_url='/rest/rule/evaluate')
 
 
-def get_item_form(name, item, request, renderers=None):
+def get_item_form(name, request, renderers=None):
     """Will return a form for the given item
 
     :name: Name of the form
-    :item: The item for which the form will be used
     :request: Current request
     :renderers: Dictionary with custom renderers
     :returns: Form
     """
+    item = get_item_from_request(request)
     if not renderers:
         renderers = {}
     renderers = add_renderers(renderers)
@@ -59,5 +62,3 @@ def get_item_form(name, item, request, renderers=None):
                 csrf_token=request.session.get_csrf_token(),
                 eval_url='/rest/rule/evaluate')
     return form
-
-

@@ -33,9 +33,8 @@ def update(request, callback=None, renderers={}):
     # Add ringo specific renderers
     renderers = add_renderers(renderers)
 
-    owner_form = get_ownership_form(item, request)
-    logbook_form = get_logbook_form(item, request, readonly=True,
-                                    renderers=renderers)
+    owner_form = get_ownership_form(request)
+    logbook_form = get_logbook_form(request, readonly=True, renderers=renderers)
     item_form_name = request.session.get("%s.form" % clazz) or "update"
     item_form = Form(item.get_form_config(item_form_name),
                      item, request.db, translate=_,

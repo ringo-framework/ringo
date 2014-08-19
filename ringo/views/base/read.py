@@ -22,10 +22,9 @@ def read(request, callback=None, renderers={}):
     handle_history(request)
     handle_params(request)
 
-    owner_form = get_ownership_form(item, request, readonly=True)
-    logbook_form = get_logbook_form(item, request, readonly=True,
-                                    renderers=renderers)
-    item_form = get_item_form('read', item, request, renderers=renderers)
+    owner_form = get_ownership_form(request, readonly=True)
+    logbook_form = get_logbook_form(request, readonly=True, renderers=renderers)
+    item_form = get_item_form('read', request, renderers=renderers)
 
     # Validate the form to generate the warnings if the form has not
     # been alreaded validated.
