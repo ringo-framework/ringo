@@ -1,19 +1,14 @@
 import logging
+from pyramid.httpexceptions import HTTPBadRequest
 from formbar.config import (
     Config,
     load,
     parse
 )
 from formbar.form import Form
-
-
 from ringo.lib.security import has_role
 from ringo.lib.helpers import get_path_to_form_config
 from ringo.lib.renderer import add_renderers
-from ringo.views.request import (
-    get_item_from_request,
-    get_current_form_page
-)
 from ringo.model.form import Form as BlobformForm
 from ringo.model.mixins import (
     Owned,
@@ -172,3 +167,39 @@ def get_item_form(name, request, renderers=None):
                 csrf_token=request.session.get_csrf_token(),
                 eval_url='/rest/rule/evaluate')
     return form
+
+
+def get_current_form_page(clazz, request):
+    """Returns the id of the currently selected page. The currently
+    selected page is saved in the session. If there is no saved value
+    then the the first page is returned
+
+    :clazz: The clazz for which the form is displayed
+    :request: Current request
+    :returns: id of the currently selected page. Default: 1
+    """
+    itemid = request.matchdict.get('id')
+    item = clazz.__tablename__
+    page = request.session.get('%s.%s.form.page' % (item, itemid))
+    if page:
+        return int(page)
+    else:
+        return 1
+
+
+def get_item_from_request(request):
+    """On every request pyramid will use a resource factory to load the
+    requested resource for the current request. This resource is the
+    context for the current request. This function will extract the
+    loaded resource from the context. If the context is None, the item
+    could not be loaded. In this case raise a 400 HTTP Status code
+    exception.
+
+    :request: Current request having the item loaded in the current context
+    :returns: Loaded item
+
+    """
+    item = request.context.item
+    if not item:
+        raise HTTPBadRequest()
+    return item
