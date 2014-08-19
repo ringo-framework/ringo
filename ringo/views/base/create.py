@@ -9,6 +9,7 @@ from ringo.lib.helpers import import_model
 from ringo.lib.security import has_permission
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.model.mixins import Blobform
+from ringo.model.form import Form as BlobformForm
 from ringo.views.response import JSONResponse
 from ringo.views.request import (
     handle_params,
@@ -41,13 +42,13 @@ def get_blobform_config(request, item, formname):
     if fid:
         log.debug("Stage 3: User has submitted data to create a new item")
         setattr(item, 'fid', fid)
-        formfactory = Form.get_item_factory()
+        formfactory = BlobformForm.get_item_factory()
         formconfig = Config(parse(formfactory.load(fid).definition))
         return item, formconfig.get_form(formname)
     elif blobform:
         log.debug("Stage 2: User has selected a blobform %s " % blobform)
         setattr(item, 'fid', blobform)
-        formfactory = Form.get_item_factory()
+        formfactory = BlobformForm.get_item_factory()
         formconfig = Config(parse(formfactory.load(blobform).definition))
         return item, formconfig.get_form(formname)
     else:
