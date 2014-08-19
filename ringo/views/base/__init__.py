@@ -1,10 +1,10 @@
 from ringo.views.base.create import (
     create,
-    rest_create,
+    rest_create
 )
 from ringo.views.base.list_ import (
     list_,
-    rest_list,
+    rest_list
 )
 from ringo.views.base.read import (
     read,
@@ -20,14 +20,14 @@ from ringo.views.base.delete import (
 )
 from ringo.views.base.export import (
     export_,
-    export__,
+    export__
 )
 from ringo.views.base.import_ import (
     import_,
     import__
 )
 from ringo.views.base.print_ import (
-    print_,
+    print_
 )
 
 web_action_view_mapping = {

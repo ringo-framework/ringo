@@ -18,6 +18,23 @@ def handle_event(request, item, event):
             handler(request, item)
 
 
+def handle_callback(request, callback, item=None):
+    """Will call the given callback
+
+    :request: Current request
+    :callback: Callable function
+    :item: item for which the callback will be called.
+    :returns: item
+
+    """
+    if not item:
+        item = get_item_from_request(request)
+    if callback:
+        item = callback(request, item)
+        request.context.item = item
+    return item
+
+
 def handle_history(request):
     history = request.session.get('history')
     if history is None:
@@ -64,6 +81,24 @@ def handle_params(request):
         params['addrelation'] = relation
     request.session.save()
     return params
+
+
+def get_return_value(request):
+    """Will return a dictionary of values used as context in the
+    templates. The dictionary will include:
+
+    * clazz: clazz of the current request
+    * item: item of the current request
+
+    :request: Current request
+    :returns: Dictionary with values as context
+    """
+    rvalues = {}
+    clazz = request.context.__model__
+    item = get_item_from_request(request)
+    rvalues['clazz'] = clazz
+    rvalues['item'] = item
+    return rvalues
 
 
 def get_current_form_page(clazz, request):

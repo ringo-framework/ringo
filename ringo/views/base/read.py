@@ -1,75 +1,47 @@
 import logging
-from formbar.form import Form
-from ringo.model.mixins import Owned, Logged, Versioned
 from ringo.views.helpers import (
-    get_ownership_form,
-    get_logbook_form,
-    get_item_form
+    get_rendered_ownership_form,
+    get_rendered_logbook_form,
+    get_rendered_item_form
 )
 from ringo.views.response import JSONResponse
 from ringo.views.request import (
     handle_params,
     handle_history,
+    handle_callback,
     get_item_from_request,
-    get_current_form_page
+    get_return_value
 )
 
 log = logging.getLogger(__name__)
 
-def read(request, callback=None, renderers={}):
-    clazz = request.context.__model__
-    item = get_item_from_request(request)
+
+def read(request, callback=None, renderers=None):
+    """Base method to handle read requests. Returns a dictionary of
+    values used available in the rendererd template The template to
+    render is defined in the view configuration.
+
+    :request: Current request
+    :callback: Current function which is called after the item has been read.
+    :returns: Dictionary.
+    """
     handle_history(request)
     handle_params(request)
-
-    owner_form = get_ownership_form(request, readonly=True)
-    logbook_form = get_logbook_form(request, readonly=True, renderers=renderers)
-    item_form = get_item_form('read', request, renderers=renderers)
-
-    # Validate the form to generate the warnings if the form has not
-    # been alreaded validated.
-    if not item_form.validated:
-        item_form.validate(None)
-
-    if callback:
-        item = callback(request, item)
-
-    rvalue = {}
-    rvalue['clazz'] = clazz
-    rvalue['item'] = item
-    if isinstance(item, Owned):
-        rvalue['owner'] = owner_form.render()
-    else:
-        rvalue['owner'] = ""
-    if isinstance(item, Logged):
-        rvalue['logbook'] = logbook_form.render()
-    else:
-        rvalue['logbook'] = ""
-
-    if isinstance(item, Versioned):
-        previous_values = item.get_previous_values(author=request.user.login)
-    else:
-        previous_values = {}
-    # Add ringo specific values into the renderered form
+    handle_callback(request, callback)
+    rvalues = get_return_value(request)
+    rvalues['owner'] = get_rendered_ownership_form(request, readonly=True)
+    rvalues['logbook'] = get_rendered_logbook_form(request, readonly=True)
     values = {'_roles': [str(r.name) for r in request.user.get_roles()]}
-    rvalue['form'] = item_form.render(page=get_current_form_page(clazz,
-                                                                 request),
-                                      values=values,
-                                      previous_values=previous_values)
-    return rvalue
-
+    rvalues['form'] = get_rendered_item_form('read', request, values, renderers)
+    return rvalues
 
 def rest_read(request, callback=None):
-    """Returns a JSON object of a specific item of type clazz. The
-    loaded item is determined by the id provided in the matchdict object
-    of the current request.
+    """Base method to handle read requests on the REST interface.
+    Returns a JSON object of a specific item.
 
     :request: Current request
     :callback: Current function which is called after the item has been read.
     :returns: JSON object.
     """
-    clazz = request.context.__model__
-    item = get_item_from_request(request)
-    if callback is not None:
-        item = callback(request, item)
-    return JSONResponse(True, item)
+    handle_callback(request, callback)
+    return JSONResponse(True, get_item_from_request(request))
