@@ -23,6 +23,14 @@ log = logging.getLogger(__name__)
 
 
 def update(request, callback=None, renderers={}):
+    """Base method to handle update requests. Returns a dictionary of
+    values used available in the rendererd template The template to
+    render is defined in the view configuration.
+
+    :request: Current request
+    :callback: Current function which is called after the item has been read.
+    :returns: Dictionary.
+    """
     clazz = request.context.__model__
     item = get_item_from_request(request)
     handle_history(request)
