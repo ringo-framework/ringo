@@ -18,7 +18,7 @@ def print_(request):
     item = get_item_from_request(request)
     clazz = item.__class__
     handle_history(request)
-    handle_params(clazz, request)
+    handle_params(request)
     rvalue = {}
 
     renderer = PrintDialogRenderer(request, item)

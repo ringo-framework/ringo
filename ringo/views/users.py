@@ -53,7 +53,7 @@ def changepassword(request):
     change their own password."""
     clazz = User
     handle_history(request)
-    handle_params(clazz, request)
+    handle_params(request)
     _ = request.translate
     rvalue = {}
 

@@ -26,7 +26,7 @@ def handle_history(request):
     request.session['history'] = history
 
 
-def handle_params(clazz, request):
+def handle_params(request):
     """Handles varios sytem GET params comming with the request
     Known params are:
 
@@ -42,6 +42,7 @@ def handle_params(clazz, request):
      * addrelation: A ":" separated string 'relation:class:id' to identify that
        a item with id should be linked to the relation of this item.
     """
+    clazz = request.context.__model__
     params = {}
     backurl = request.GET.get('backurl')
     if backurl:

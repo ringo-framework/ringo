@@ -26,7 +26,7 @@ def update(request, callback=None, renderers={}):
     clazz = request.context.__model__
     item = get_item_from_request(request)
     handle_history(request)
-    handle_params(clazz, request)
+    handle_params(request)
     _ = request.translate
     rvalue = {}
 

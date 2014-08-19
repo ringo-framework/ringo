@@ -52,7 +52,7 @@ def delete(request):
     clazz = request.context.__model__
     item = get_item_from_request(request)
     handle_history(request)
-    handle_params(clazz, request)
+    handle_params(request)
     return _handle_delete_request(clazz, request, [item])
 
 

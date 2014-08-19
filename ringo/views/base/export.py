@@ -27,7 +27,7 @@ def export__(request):
 def export_(clazz, request):
     item = get_item_from_request(request)
     handle_history(request)
-    handle_params(clazz, request)
+    handle_params(request)
     return _handle_export_request(clazz, request, [item])
 
 

@@ -74,7 +74,7 @@ def create(request, callback=None, renderers={}):
     """
     clazz = request.context.__model__
     handle_history(request)
-    params = handle_params(clazz, request)
+    params = handle_params(request)
     _ = request.translate
     rvalue = {}
 

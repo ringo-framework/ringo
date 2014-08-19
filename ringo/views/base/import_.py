@@ -29,7 +29,7 @@ def import__(request):
 
 def import_(clazz, request, callback=None):
     handle_history(request)
-    handle_params(clazz, request)
+    handle_params(request)
     imported_items = []
     rvalue = {}
 

@@ -23,12 +23,12 @@ def read(request, callback=None, renderers={}):
     clazz = request.context.__model__
     item = get_item_from_request(request)
     handle_history(request)
-    handle_params(clazz, request)
     _ = request.translate
     rvalue = {}
 
     # Add ringo specific renderers
     renderers = add_renderers(renderers)
+    handle_params(request)
 
     owner_form = get_ownership_form(item, request, readonly=True)
     logbook_form = get_logbook_form(item, request, readonly=True,
