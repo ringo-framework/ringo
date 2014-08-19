@@ -1,12 +1,10 @@
 import logging
 from formbar.form import Form
 from ringo.model.mixins import Owned, Logged, Versioned
-from ringo.lib.renderer import (
-    add_renderers
-)
 from ringo.views.helpers import (
     get_ownership_form,
-    get_logbook_form
+    get_logbook_form,
+    get_item_form
 )
 from ringo.views.response import JSONResponse
 from ringo.views.request import (
@@ -18,30 +16,16 @@ from ringo.views.request import (
 
 log = logging.getLogger(__name__)
 
-
 def read(request, callback=None, renderers={}):
     clazz = request.context.__model__
     item = get_item_from_request(request)
     handle_history(request)
-    _ = request.translate
-    rvalue = {}
-
-    # Add ringo specific renderers
-    renderers = add_renderers(renderers)
     handle_params(request)
 
     owner_form = get_ownership_form(item, request, readonly=True)
     logbook_form = get_logbook_form(item, request, readonly=True,
                                     renderers=renderers)
-    item_form = Form(item.get_form_config('read'), item, request.db,
-                     translate=_,
-                     renderers=renderers,
-                     change_page_callback={'url': 'set_current_form_page',
-                                           'item': clazz.__tablename__,
-                                           'itemid': item.id},
-                     request=request,
-                     csrf_token=request.session.get_csrf_token(),
-                     eval_url='/rest/rule/evaluate')
+    item_form = get_item_form('read', item, request, renderers=renderers)
 
     # Validate the form to generate the warnings if the form has not
     # been alreaded validated.
@@ -51,6 +35,7 @@ def read(request, callback=None, renderers={}):
     if callback:
         item = callback(request, item)
 
+    rvalue = {}
     rvalue['clazz'] = clazz
     rvalue['item'] = item
     if isinstance(item, Owned):
