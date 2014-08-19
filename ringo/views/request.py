@@ -1,10 +1,15 @@
 """Modul to handle requests."""
+import logging
 from pyramid.httpexceptions import (
     HTTPBadRequest,
     HTTPFound
 )
 from ringo.lib.security import has_permission
+from ringo.lib.helpers import import_model
 from ringo.lib.history import History
+from ringo.lib.sql.cache import invalidate_cache
+
+log = logging.getLogger(__name__)
 
 
 def is_confirmed(request):
@@ -36,6 +41,64 @@ def handle_callback(request, callback, item=None):
         item = callback(request, item)
         request.context.item = item
     return item
+
+
+def handle_POST_request(name, request, callback, renderers=None):
+    """@todo: Docstring for handle_POST_request.
+
+    :name: @todo
+    :request: @todo
+    :callback: @todo
+    :renderers: @todo
+    :returns: @todo
+
+    """
+    from ringo.views.helpers import (
+        get_ownership_form,
+        get_item_form
+    )
+    if 'owner' in request.params:
+        form = get_ownership_form(request)
+    else:
+        form = get_item_form(name, request, renderers)
+    _ = request.translate
+    clazz = request.context.__model__
+    item_label = clazz.get_item_modul(request).get_label()
+    item = get_item_from_request(request)
+    mapping = {'item_type': item_label, 'item': item}
+
+    if form.validate(request.params) and "blobforms" not in request.params:
+        # Handle linking of the new item to antoher relation. The
+        # relation was provided as GET parameter in the current
+        # request and is now saved in the session.
+        addrelation = request.session.get('%s.addrelation' % clazz)
+        if addrelation:
+            rrel, rclazz, rid = addrelation.split(':')
+            parent = import_model(rclazz)
+            pfactory = parent.get_item_factory()
+            pitem = pfactory.load(rid)
+            log.debug('Linking %s to %s in %s' % (item, pitem, rrel))
+            tmpattr = getattr(pitem, rrel)
+            tmpattr.append(item)
+        item.save(form.data, request)
+        msg = _('Edited ${item_type} "${item}" successfull.',
+                mapping=mapping)
+        log.info(msg)
+        request.session.flash(msg, 'success')
+        handle_event(request, item, name)
+        handle_callback(request, callback)
+        # Invalidate cache
+        invalidate_cache()
+        if request.session.get('%s.form' % clazz):
+            del request.session['%s.form' % clazz]
+        request.session.save()
+        return handle_redirect_on_success(request)
+    else:
+        msg = _('Error on validation the data for '
+                '${item_type} "${item}".', mapping=mapping)
+        log.info(msg)
+        request.session.flash(msg, 'error')
+
 
 def handle_redirect_on_success(request):
     """Will return a redirect. If there has been a saved "backurl" the
