@@ -37,7 +37,6 @@ def handle_callback(request, callback, item=None):
         item = get_item_from_request(request)
     if callback:
         item = callback(request, item)
-        request.context.item = item
     return item
 
 
