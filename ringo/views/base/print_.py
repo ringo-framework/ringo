@@ -14,34 +14,51 @@ from ringo.views.request import (
 log = logging.getLogger(__name__)
 
 
+def _render_template(template, item):
+    """Will render the given template with the items data.
+
+    :template: @todo
+    :item: @todo
+    :returns: @todo
+
+    """
+    out = StringIO.StringIO()
+    temp = Template(StringIO.StringIO(template.data), out)
+    temp.render({"item": item.get_values()})
+    return out
+
+def _build_response(request, template, data):
+    """Will return a response object with the rendererd template
+
+    :request: Current request
+    :template: The template.
+    :data: Payload of the response
+    :returns: Response object.
+
+    """
+    resp = request.response
+    resp.content_type = str(template.mime)
+    resp.content_disposition = 'attachment; filename=%s' % template.name
+    resp.body = out.getvalue()
+    return resp
+
 def print_(request):
-    item = get_item_from_request(request)
-    clazz = item.__class__
     handle_history(request)
     handle_params(request)
-    rvalue = {}
-
+    item = get_item_from_request(request)
     renderer = PrintDialogRenderer(request, item)
     form = renderer.form
     if (request.method == 'POST'
        and is_confirmed(request)
        and form.validate(request.params)):
-
-        # Render the template
         template = form.data.get('printtemplates')[0]
-        out = StringIO.StringIO()
-        temp = Template(StringIO.StringIO(template.data), out)
-        temp.render({"item": item.get_values()})
-
+        # Render the template
+        out = _render_template(template, item)
         # Build response
-        resp = request.response
-        resp.content_type = str(template.mime)
-        resp.content_disposition = 'attachment; filename=%s' % template.name
-        resp.body = out.getvalue()
-        return resp
+        return _build_response(request, template, out)
     else:
-        # FIXME: Get the ActionItem here and provide this in the Dialog to get
-        # the translation working (torsten) <2013-07-10 09:32>
+        clazz = item.__class__
+        rvalue = {}
         rvalue['dialog'] = renderer.render()
         rvalue['clazz'] = clazz
         rvalue['item'] = item
