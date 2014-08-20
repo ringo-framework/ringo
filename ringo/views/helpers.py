@@ -109,7 +109,7 @@ def get_logbook_form(request, readonly=None):
                 csrf_token=request.session.get_csrf_token(),
                 eval_url='/rest/rule/evaluate')
 
-def render_item_form(request, form, values=None):
+def render_item_form(request, form, values=None, validate=True):
     """Returns the rendered item form for the item in the current
     request."""
     if not values:
@@ -121,7 +121,7 @@ def render_item_form(request, form, values=None):
         previous_values = {}
     # Validate the form to generate the warnings if the form has not
     # been alreaded validated.
-    if not form.validated:
+    if validate and not form.validated:
         form.validate(None)
     clazz = request.context.__model__
     page = get_current_form_page(clazz, request)

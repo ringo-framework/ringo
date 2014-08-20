@@ -45,7 +45,7 @@ def create(request, callback=None, renderers={}):
     rvalues = get_return_value(request)
     values = {'_roles': [str(r.name) for r in request.user.get_roles()]}
     values.update(params.get('values', {}))
-    rvalues['form'] = render_item_form(request, form, values)
+    rvalues['form'] = render_item_form(request, form, values, False)
     return rvalues
 
 
