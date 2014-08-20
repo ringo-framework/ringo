@@ -2,12 +2,14 @@ import logging
 from formbar.form import Form
 from ringo.views.response import JSONResponse
 from ringo.views.helpers import (
-    get_rendered_item_form
+    get_item_form,
+    render_item_form,
 )
 from ringo.views.request import (
     handle_params,
     handle_history,
     handle_POST_request,
+    handle_redirect_on_success,
     get_return_value
 )
 
@@ -36,17 +38,14 @@ def create(request, callback=None, renderers={}):
     clazz = request.context.__model__
     factory = clazz.get_item_factory()
     request.context.item = factory.create(request.user)
-
-    if request.POST:
-        # Will trigger a redirec in case of a successfull validation
-        redirect = handle_POST_request('create', request, callback, renderers)
-        if redirect:
-            return redirect
+    form = get_item_form('create', request, renderers)
+    if request.POST and 'blobforms' not in request.params:
+        if handle_POST_request(form, request, callback, 'create', renderers):
+            return handle_redirect_on_success(request)
     rvalues = get_return_value(request)
     values = {'_roles': [str(r.name) for r in request.user.get_roles()]}
     values.update(params.get('values', {}))
-    rvalues['form'] = get_rendered_item_form('create', request,
-                                             values, renderers)
+    rvalues['form'] = render_item_form(request, form, values)
     return rvalues
 
 

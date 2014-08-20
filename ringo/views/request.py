@@ -5,7 +5,11 @@ from ringo.lib.security import has_permission
 from ringo.lib.helpers import import_model
 from ringo.lib.history import History
 from ringo.lib.sql.cache import invalidate_cache
-from ringo.views.helpers import get_item_from_request
+from ringo.views.helpers import (
+    get_item_from_request,
+    get_ownership_form,
+    get_item_form
+)
 
 log = logging.getLogger(__name__)
 
@@ -40,24 +44,17 @@ def handle_callback(request, callback, item=None):
     return item
 
 
-def handle_POST_request(name, request, callback, renderers=None):
+def handle_POST_request(form, request, callback, event, renderers=None):
     """@todo: Docstring for handle_POST_request.
 
     :name: @todo
     :request: @todo
     :callback: @todo
     :renderers: @todo
-    :returns: @todo
+    :event: Name of the event (update, create...) Used for the event handler
+    :returns: True or False
 
     """
-    from ringo.views.helpers import (
-        get_ownership_form,
-        get_item_form
-    )
-    if 'owner' in request.params:
-        form = get_ownership_form(request)
-    else:
-        form = get_item_form(name, request, renderers)
     _ = request.translate
     clazz = request.context.__model__
     item_label = clazz.get_item_modul(request).get_label()
@@ -82,19 +79,22 @@ def handle_POST_request(name, request, callback, renderers=None):
                 mapping=mapping)
         log.info(msg)
         request.session.flash(msg, 'success')
-        handle_event(request, item, name)
+        handle_event(request, item, form._config.id)
         handle_callback(request, callback)
         # Invalidate cache
         invalidate_cache()
         if request.session.get('%s.form' % clazz):
             del request.session['%s.form' % clazz]
         request.session.save()
-        return handle_redirect_on_success(request)
+        return True
+    elif "blobforms" in request.params:
+        pass
     else:
         msg = _('Error on validation the data for '
                 '${item_type} "${item}".', mapping=mapping)
         log.info(msg)
         request.session.flash(msg, 'error')
+    return False
 
 
 def handle_redirect_on_success(request):

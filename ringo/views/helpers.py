@@ -36,7 +36,7 @@ def get_blobform_config(request, item, formname):
 
     """
     # First check if the fid parameter is provided
-    fid = request.params.get('fid')
+    fid = request.params.get('fid') or item.fid
     blobform = request.params.get('blobforms')
     if fid:
         log.debug("Stage 3: User has submitted data to create a new item")
@@ -109,19 +109,12 @@ def get_logbook_form(request, readonly=None):
                 csrf_token=request.session.get_csrf_token(),
                 eval_url='/rest/rule/evaluate')
 
-
-def get_rendered_item_form(name, request, values=None, renderers=None):
-    """Returns the rendered logbook form for the item in the current
-    request. If the item is not an instance of Owned, than an empty
-    string is returned."""
+def render_item_form(request, form, values=None):
+    """Returns the rendered item form for the item in the current
+    request."""
     if not values:
         values = {}
-    if not renderers:
-        renderers = {}
-    clazz = request.context.__model__
-    item = get_item_from_request(request)
-    name = request.session.get("%s.form" % clazz) or name
-    form = get_item_form(name, request, renderers)
+    item = form._item
     if isinstance(item, Versioned):
         previous_values = item.get_previous_values(author=request.user.login)
     else:
@@ -130,10 +123,18 @@ def get_rendered_item_form(name, request, values=None, renderers=None):
     # been alreaded validated.
     if not form.validated:
         form.validate(None)
+    clazz = request.context.__model__
     page = get_current_form_page(clazz, request)
     # Add ringo specific values into the renderered form
     return form.render(page=page, values=values,
                        previous_values=previous_values)
+
+def get_rendered_item_form(name, request, values=None, renderers=None):
+    """Returns the rendered logbook form for the item in the current
+    request. If the item is not an instance of Owned, than an empty
+    string is returned."""
+    form = get_item_form(name, request, renderers)
+    return render_item_form(request, form, values)
 
 
 def get_item_form(name, request, renderers=None):
@@ -144,9 +145,9 @@ def get_item_form(name, request, renderers=None):
     :renderers: Dictionary with custom renderers
     :returns: Form
     """
-    item = get_item_from_request(request)
     if not renderers:
         renderers = {}
+    item = get_item_from_request(request)
     renderers = add_renderers(renderers)
     clazz = request.context.__model__
     name = request.session.get("%s.form" % clazz) or name

@@ -2,6 +2,8 @@ import logging
 from ringo.views.response import JSONResponse
 from ringo.views.helpers import (
     get_item_form,
+    render_item_form,
+    get_ownership_form,
     get_rendered_ownership_form,
     get_rendered_logbook_form,
     get_rendered_item_form
@@ -10,6 +12,7 @@ from ringo.views.request import (
     handle_params,
     handle_history,
     handle_POST_request,
+    handle_redirect_on_success,
     get_item_from_request,
     get_return_value
 )
@@ -27,24 +30,26 @@ def update(request, callback=None, renderers={}):
     the backurl or the edit or read mode of the item will be triggered.
 
     If the validation fails, the form will be rendered again.
-    
     :request: Current request
     :callback: Current function which is called after the item has been read.
     :returns: Dictionary or Redirect.
     """
     handle_history(request)
     handle_params(request)
+    if 'owner' in request.params:
+        form = get_ownership_form(request)
+    else:
+        form = get_item_form('update', request, renderers)
+
     if request.POST:
-        # Will trigger a redirec in case of a successfull validation
-        redirect = handle_POST_request('update', request, callback, renderers)
-        if redirect:
-            return redirect
+        if handle_POST_request(form, request, callback, 'update', renderers):
+            return handle_redirect_on_success(request)
+
     rvalues = get_return_value(request)
     rvalues['owner'] = get_rendered_ownership_form(request)
     rvalues['logbook'] = get_rendered_logbook_form(request, readonly=True)
     values = {'_roles': [str(r.name) for r in request.user.get_roles()]}
-    rvalues['form'] = get_rendered_item_form('update', request,
-                                             values, renderers)
+    rvalues['form'] = render_item_form(request, form, values)
     return rvalues
 
 
