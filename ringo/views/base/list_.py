@@ -174,9 +174,9 @@ def bundle_(request):
             items.append(item)
 
     if bundle_action == 'Export':
-        rvalue = _handle_export_request(clazz, request, items)
+        rvalue = _handle_export_request(request, items)
     elif bundle_action == 'Delete':
-        rvalue = _handle_delete_request(clazz, request, items)
+        rvalue = _handle_delete_request(request, items)
     return rvalue
 
 

@@ -9,34 +9,26 @@ from ringo.lib.renderer import (
 from ringo.views.request import (
     handle_params,
     handle_history,
-    is_confirmed,
-    get_item_from_request,
+    is_confirmed
 )
+from ringo.views.helpers import get_item_from_request
 
 log = logging.getLogger(__name__)
 
 
-def export__(request):
-    """Wrapper method to match default signature of a view method. Will
-    add the missing clazz attribut and call the wrapped method with the
-    correct parameters."""
-    clazz = request.context.__model__
-    return export_(clazz, request)
-
-
-def export_(clazz, request):
-    item = get_item_from_request(request)
+def export(request):
     handle_history(request)
     handle_params(request)
-    return _handle_export_request(clazz, request, [item])
+    item = get_item_from_request(request)
+    return _handle_export_request(request, [item])
 
 
-def _handle_export_request(clazz, request, items):
+def _handle_export_request(request, items):
     """Helper function to handle the export request. This function
     provides the required logic to show the export configuration dialog
     and returning the exported items. It is called when exporting a
     single item or when exporting multiple items in a bundle."""
-    rvalue = {}
+    clazz = request.context.__model__
     renderer = ExportDialogRenderer(request, clazz)
     form = renderer.form
     if (request.method == 'POST'
@@ -58,5 +50,6 @@ def _handle_export_request(clazz, request, items):
     else:
         # FIXME: Get the ActionItem here and provide this in the Dialog to get
         # the translation working (torsten) <2013-07-10 09:32>
+        rvalue = {}
         rvalue['dialog'] = renderer.render(items)
         return rvalue
