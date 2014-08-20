@@ -5,8 +5,7 @@ from ringo.views.helpers import (
     render_item_form,
     get_ownership_form,
     get_rendered_ownership_form,
-    get_rendered_logbook_form,
-    get_rendered_item_form
+    get_rendered_logbook_form
 )
 from ringo.views.request import (
     handle_params,

@@ -129,13 +129,6 @@ def render_item_form(request, form, values=None, validate=True):
     return form.render(page=page, values=values,
                        previous_values=previous_values)
 
-def get_rendered_item_form(name, request, values=None, renderers=None):
-    """Returns the rendered logbook form for the item in the current
-    request. If the item is not an instance of Owned, than an empty
-    string is returned."""
-    form = get_item_form(name, request, renderers)
-    return render_item_form(request, form, values)
-
 
 def get_item_form(name, request, renderers=None):
     """Will return a form for the given item

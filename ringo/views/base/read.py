@@ -2,7 +2,8 @@ import logging
 from ringo.views.helpers import (
     get_rendered_ownership_form,
     get_rendered_logbook_form,
-    get_rendered_item_form
+    get_item_form,
+    render_item_form
 )
 from ringo.views.response import JSONResponse
 from ringo.views.request import (
@@ -32,7 +33,8 @@ def read(request, callback=None, renderers=None):
     rvalues['owner'] = get_rendered_ownership_form(request, readonly=True)
     rvalues['logbook'] = get_rendered_logbook_form(request, readonly=True)
     values = {'_roles': [str(r.name) for r in request.user.get_roles()]}
-    rvalues['form'] = get_rendered_item_form('read', request, values, renderers)
+    form = get_item_form('read', request, renderers)
+    rvalues['form'] = render_item_form(request, form, values)
     return rvalues
 
 def rest_read(request, callback=None):
