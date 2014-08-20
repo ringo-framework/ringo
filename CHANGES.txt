@@ -10,15 +10,18 @@ to the tracker.
 
 0.16.0
 ======
-Refactoring
+Refactoring of views.
 
-New:
-
-views.api: Modul with method used by the client.
-views.respose: Modul with special Response objects.
-
-Moved methods and code from views.json into the new views.api and
-views.response modules
+* Seperation of views: Basic views (LCRUDIE) are now located under
+  views.base.list ... views.base.export. Removed views/base.py.
+* Moved REST logic into the corresponding new view modules.
+* Moved methods and code from views.json into the new views.api and
+  views.response modules
+* views.api: Modul with method used by the client.
+* views.respose: Modul with special Response objects.
+* views.request: Modul with methods (handlers) with common logic for various views.
+* views.helpers : Modul with helpers methods (getters) to get things like to forms or
+  information from the request.
 
 0.15.1
 =======
