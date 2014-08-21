@@ -30,7 +30,8 @@ requires = [
     'webtest',
     'mock',
     'py3o.template',
-    'passlib'
+    'passlib',
+    'dateutil'
 ]
 
 tests_requires = [

@@ -3,6 +3,7 @@ import pkg_resources
 from babel.core import Locale
 from babel.dates import format_datetime as babel_format_datetime
 from datetime import datetime, timedelta
+from dateutil import tz
 from pyramid.threadlocal import get_current_registry
 from pyramid.i18n import get_locale_name
 from formbar.helpers import get_css_files, get_js_files
@@ -203,14 +204,32 @@ def prettify(request, value):
     locale_name = get_locale_name(request)
 
     if isinstance(value, datetime):
-        print value.tzinfo
-        return format_datetime(value, locale_name=locale_name, format="short")
+        return format_datetime(get_local_datetime(value),
+                               locale_name=locale_name, format="short")
     return value
 
 
 ###########################################################################
 #                               Times & Dates                             #
 ###########################################################################
+
+def get_local_datetime(dt, timezone=None):
+    """Will return a datetime converted into to given timezone. If the
+    given datetime is naiv and does not support timezone information
+    then UTC timezone is assumed. If timezone is None, then the local
+    timezone of the server will be used.
+
+    :dt: datetime
+    :timezone: String timezone (eg. Europe/Berin)
+    :returns: datetime
+
+    """
+    if not dt.tzinfo:
+        dt = dt.replace(tzinfo=tz.gettz('UTC'))
+    if not timezone:
+        timezone = tz.tzlocal()
+    return dt.astimezone(timezone)
+
 
 def get_week(current_datetime):
     """Returns a tuple definig the start and end datetime for the week of
