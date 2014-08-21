@@ -159,7 +159,7 @@ class StateMixin(object):
 class Meta(object):
     """Mixin to add a created and a updated datefield to items. The
     updated datefield will be updated on every update of the item with
-    the datetime of the update."""
+    the datetime of the update. Date will be saved in UTC"""
     created = Column(DateTime, default=datetime.datetime.utcnow)
     updated = Column(DateTime, default=datetime.datetime.utcnow)
 
@@ -173,7 +173,7 @@ class Meta(object):
         :item: Item handled in the update.
 
         """
-        item.updated = datetime.datetime.now()
+        item.updated = datetime.datetime.utcnow()
 
 
 class Blobform(object):
