@@ -31,7 +31,7 @@ requires = [
     'mock',
     'py3o.template',
     'passlib',
-    'dateutil'
+    'dateutils'
 ]
 
 tests_requires = [
