@@ -1,11 +1,11 @@
 {
     "overview": {
         "columns": [
-            {"name": "created", "label": "Created", "width": "150"},
+            {"name": "updated", "label": "Updated", "width": "150"},
             {"name": "subject", "label": "Subject"}
         ],
         "settings": {
-            "default-sort-field": "created",
+            "default-sort-field": "updated",
             "default-sort-order": "desc",
             "auto-responsive": false
         }
