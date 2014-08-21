@@ -38,14 +38,12 @@ from sqlalchemy import (
     Integer,
     DateTime,
     ForeignKey,
-    Table,
-    inspect
+    Table
 )
 
 from sqlalchemy.orm import (
     relationship,
-    backref,
-    attributes
+    backref
 )
 
 from ringo.model import Base
@@ -76,6 +74,7 @@ class Mixin(object):
         if not include_super:
             return cls._setup_item_actions()
         return actions + cls._setup_item_actions()
+
 
 class StateMixin(object):
     """Mixin to add one or more Statemachines to an item.  The
@@ -134,8 +133,6 @@ class StateMixin(object):
             logentry.subject = "State Changed: %s" % self
             self.logs.append(logentry)
 
-
-
     def get_statemachine(self, key, state_id=None, request=None):
         """Returns a statemachine instance for the given key
 
@@ -177,6 +174,7 @@ class Meta(object):
 
         """
         item.updated = datetime.datetime.now()
+
 
 class Blobform(object):
     """Mixin to add a data fields to store form data as JSON in a single
@@ -225,7 +223,7 @@ class Blobform(object):
         data = getattr(self, 'data')
         if data:
             json_data = json.loads(getattr(self, 'data'))
-            if json_data.has_key(name):
+            if name in json_data:
                 return json_data[name]
 
         element = self
@@ -233,7 +231,6 @@ class Blobform(object):
         for attr in attributes:
             element = object.__getattribute__(element, attr)
         return element
-
 
     def set_values(self, values):
         """Will set the given values into Blobform items. This function
@@ -256,12 +253,14 @@ class Blobform(object):
                 json_data[key] = value
         setattr(self, 'data', json.dumps(json_data))
 
+
 class Version(Base):
     __tablename__ = 'versions'
     id = Column(Integer, primary_key=True)
     values = Column(Text, default=None)
     author = Column(Text, default=None)
     date = Column(DateTime, default=None)
+
 
 class Versioned(object):
     """Mixin to add version functionallity to a modul. This mixin is
@@ -293,7 +292,6 @@ class Versioned(object):
 
         """
         version = Version()
-        values = {}
         item_values = item.get_values(serialized=True)
         version.values = json.dumps(item_values)
         version.author = request.user.login
@@ -411,16 +409,17 @@ class Printable(Mixin):
         action.display = 'secondary'
         return actions
 
-
     @declared_attr
     def printtemplates(cls):
         from ringo.model.printtemplate import Printtemplate
         tbl_name = "nm_%s_printtemplates" % cls.__name__.lower()
         nm_table = Table(tbl_name, Base.metadata,
                          Column('iid', Integer, ForeignKey(cls.id)),
-                         Column('tid', Integer, ForeignKey("printtemplates.id")))
+                         Column('tid', Integer,
+                                ForeignKey("printtemplates.id")))
         logs = relationship(Printtemplate, secondary=nm_table)
         return logs
+
 
 class Owned(object):
     """Mixin to add references to a user and a usergroup. This
@@ -584,5 +583,5 @@ class Todo(object):
                          Column('iid', Integer, ForeignKey(cls.id)),
                          Column('tid', Integer, ForeignKey("todos.id")))
         rel = relationship(Todo, secondary=nm_table,
-                           backref=clsname+"s", cascade="all")
+                           backref=clsname + "s", cascade="all")
         return rel
