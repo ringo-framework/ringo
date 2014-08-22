@@ -29,6 +29,9 @@ Bugfixes:
 * Handle case if an attribute returns a BaseList as selected items in
   ListRenderer.
 
+Changes:
+* Text in News is now a Textarea.
+
 0.15.0
 =======
 IMPORTANT: Application will need some work on application initialisation to
