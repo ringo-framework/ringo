@@ -13,6 +13,7 @@ will explain the user interface and some basic concepts in Ringo.
 
    overview
    ui
+   usage
    architecture
    development
    api
