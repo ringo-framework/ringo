@@ -25,6 +25,7 @@ New:
 Bugfixes:
 
 * Translate options in dropdown lists.
+* Translate headers in newslist.
 * Fixed automatic translation in connection with mappings.
 * Handle case if an attribute returns a BaseList as selected items in
   ListRenderer.
