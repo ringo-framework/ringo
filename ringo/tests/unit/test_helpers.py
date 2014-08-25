@@ -132,10 +132,14 @@ class HelpersAuthTests(BaseUnitTest):
 
     def test_prettify_date(self):
         from ringo.lib.helpers import prettify
-        result = prettify(self.request, datetime(1977, 3, 12, 0, 0, 0))
+        from dateutil import tz
+        dt = datetime(1977, 3, 12, 0, 0, 0, )
+        dt = dt.replace(tzinfo=tz.tzlocal())
+        result = prettify(self.request, dt)
         # The result of the prettify function for datetimes is not
         # constant and seems to depend on some system settings.
         # So test all known variants
+        print result
         check1 = (result == u"3/12/77 12:00 AM")
         check2 = (result == u"3/12/77, 12:00 AM")
         ok = check1 or check2
