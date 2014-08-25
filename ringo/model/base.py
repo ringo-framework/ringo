@@ -6,12 +6,10 @@ from pyramid.threadlocal import get_current_request
 from formbar.config import Config, load
 from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload, ColumnProperty, class_mapper
-from sqlalchemy.orm.attributes import get_history
 from ringo.lib.helpers import get_path_to_form_config, serialize
 from ringo.lib.cache import CACHE_TABLE_CONFIG, CACHE_FORM_CONFIG
 from ringo.lib.sql import DBSession
 from ringo.lib.sql.cache import regions
-from ringo.lib.imexport import JSONExporter
 from ringo.lib.sql.query import FromCache, set_relation_caching
 from ringo.model.mixins import Logged, StateMixin, Owned
 
@@ -305,11 +303,8 @@ class BaseItem(object):
                 old_state_id = old_values.get(key)
                 if ((new_state_id and old_state_id)
                    and (new_state_id != old_state_id)):
-                    try:
-                        self.change_state(request, key, old_state_id, new_state_id)
-                    except Exception as error:
-                        log.error(error)
-                        self.change_state(request, key, old_state_id, old_state_id)
+                    self.change_state(request, key,
+                                      old_state_id, new_state_id)
 
         # Handle logentry
         if isinstance(self, Logged):
