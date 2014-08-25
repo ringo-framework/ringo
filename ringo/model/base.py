@@ -334,6 +334,7 @@ class BaseItem(object):
                         self.change_state(request, key, old_state_id, new_state_id)
                     except Exception as error:
                         log.error(error)
+                        self.change_state(request, key, old_state_id, old_state_id)
 
         # Handle logentry
         if isinstance(self, Logged):
