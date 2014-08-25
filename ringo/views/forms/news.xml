@@ -4,7 +4,9 @@
     <!-- Define different entity types -->
     <!-- This field is only a Dummy field as example which is not really in the database -->
     <entity id="e1" name="subject" label="Subject" required="true"/>
-    <entity id="e2" name="text" label="Text"/>
+    <entity id="e2" name="text" label="Text">
+      <renderer type="textarea" rows="5"/>
+    </entity>
     <entity id="e3" name="users" label="Users"/>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">

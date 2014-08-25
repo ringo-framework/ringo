@@ -1,15 +1,13 @@
 import os
 import pkg_resources
 from babel.core import Locale
-from babel.dates import (
-format_date as babel_format_date,
-format_datetime as babel_format_datetime,
-format_time as babel_format_time
-)
-from datetime import datetime, timedelta, time, date
+from babel.dates import format_datetime as babel_format_datetime
+from datetime import datetime, timedelta
+from dateutil import tz
 from pyramid.threadlocal import get_current_registry
 from pyramid.i18n import get_locale_name
 from formbar.helpers import get_css_files, get_js_files
+
 
 def serialize(value):
     """Very simple helper function which returns a stringified version
@@ -27,9 +25,10 @@ def serialize(value):
 
 def dynamic_import(cl):
     d = cl.rfind(".")
-    classname = cl[d+1:len(cl)]
+    classname = cl[d + 1:len(cl)]
     m = __import__(cl[0:d], globals(), locals(), [classname])
     return getattr(m, classname)
+
 
 def import_model(clazzpath):
     """Will return the clazz defined by modul entry in the database of
@@ -52,6 +51,7 @@ def import_model(clazzpath):
     else:
         # TODO: Is this code ever reached? (ti) <2014-02-25 23:07>
         return import_model(modul.clazzpath)
+
 
 def get_ringo_version():
     return pkg_resources.get_distribution('ringo').version
@@ -189,6 +189,7 @@ def get_formbar_js():
 #                          Formating content                           #
 ########################################################################
 
+
 def prettify(request, value):
     """Generic function used in template rendering to prettify a given
     pythonic value into to a more human readable form. Depending on the
@@ -203,13 +204,32 @@ def prettify(request, value):
     locale_name = get_locale_name(request)
 
     if isinstance(value, datetime):
-        return format_datetime(value, locale_name=locale_name, format="short")
+        return format_datetime(get_local_datetime(value),
+                               locale_name=locale_name, format="short")
     return value
 
 
 ###########################################################################
 #                               Times & Dates                             #
 ###########################################################################
+
+def get_local_datetime(dt, timezone=None):
+    """Will return a datetime converted into to given timezone. If the
+    given datetime is naiv and does not support timezone information
+    then UTC timezone is assumed. If timezone is None, then the local
+    timezone of the server will be used.
+
+    :dt: datetime
+    :timezone: String timezone (eg. Europe/Berin)
+    :returns: datetime
+
+    """
+    if not dt.tzinfo:
+        dt = dt.replace(tzinfo=tz.gettz('UTC'))
+    if not timezone:
+        timezone = tz.tzlocal()
+    return dt.astimezone(timezone)
+
 
 def get_week(current_datetime):
     """Returns a tuple definig the start and end datetime for the week of
@@ -236,11 +256,13 @@ def format_timedelta(td):
         seconds = td.seconds % 60
     return '%02d:%02d:%02d' % (hours, minutes, seconds)
 
+
 def format_datetime(dt, locale_name=None, format="medium"):
     """Returns a prettyfied version of a datetime. If a locale_name is
     provided the datetime will be localized. Without a locale the
     datetime will be formatted into the form YYYY-MM-DD hh:ss"""
     if locale_name:
         locale = Locale(locale_name)
+
         return babel_format_datetime(dt, locale=locale, format=format)
     return dt.strftime("%Y-%m-%d %H:%M")

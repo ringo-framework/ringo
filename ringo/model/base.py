@@ -305,7 +305,11 @@ class BaseItem(object):
                 old_state_id = old_values.get(key)
                 if ((new_state_id and old_state_id)
                    and (new_state_id != old_state_id)):
-                    self.change_state(request, key, old_state_id, new_state_id)
+                    try:
+                        self.change_state(request, key, old_state_id, new_state_id)
+                    except Exception as error:
+                        log.error(error)
+                        self.change_state(request, key, old_state_id, old_state_id)
 
         # Handle logentry
         if isinstance(self, Logged):

@@ -91,7 +91,7 @@ for item in items:
   </tbody>
 </table>
 % for item in hidden_items:
-  % if not item[2]:
+  % if str(item[0].id) in selected:
     <input style="display:none" type="checkbox" value="${item[0].id}" name="${field.name}" checked="checked"/>
   % endif
 % endfor

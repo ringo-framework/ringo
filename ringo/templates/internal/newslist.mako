@@ -6,7 +6,7 @@ from ringo.lib.helpers import format_datetime
   <thead>
     <tr>
       % for field in tableconfig.get_columns():
-      <th width="${field.get('width')}">${field.get('label')}</th>
+      <th width="${field.get('width')}">${_(field.get('label'))}</th>
       % endfor
       ##<th width="10"><a href="#" class="linkmarkallasread"><span class="glyphicon glyphicon-check"></span></a></th>
       <th width="10"><span class="glyphicon glyphicon-check"></span></th>

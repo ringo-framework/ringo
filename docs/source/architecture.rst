@@ -245,6 +245,12 @@ Todo
 ----
 .. autoclass:: ringo.model.mixins.Todo
 
+.. __mixin_printable:
+
+Printable
+---------
+.. autoclass:: ringo.model.mixins.Printable
+
 States and Workflows
 ====================
 .. automodule:: ringo.model.statemachine

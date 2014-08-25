@@ -34,13 +34,19 @@ like the request.
 New:
 * All Mails will have the application name in the subject.
 * Add "nolink" Attribute to the DropdownRenderer.
+* Added new TagFieldRenderer. Will only show tags which are associated to no
+  or the items module.
 
 Bugfixes:
 
 * Translate options in dropdown lists.
+* Translate headers in newslist.
 * Fixed automatic translation in connection with mappings.
 * Handle case if an attribute returns a BaseList as selected items in
   ListRenderer.
+
+Changes:
+* Text in News is now a Textarea.
 
 0.15.0
 =======
