@@ -5,12 +5,13 @@ import uuid
 from pyramid.threadlocal import get_current_request
 from formbar.config import Config, load
 from sqlalchemy import Column, CHAR
-from sqlalchemy.orm import joinedload, ColumnProperty, class_mapper
+from sqlalchemy.orm import joinedload
 from ringo.lib.helpers import get_path_to_form_config, serialize
 from ringo.lib.cache import CACHE_TABLE_CONFIG, CACHE_FORM_CONFIG
 from ringo.lib.sql import DBSession
 from ringo.lib.sql.cache import regions
 from ringo.lib.sql.query import FromCache, set_relation_caching
+from ringo.lib.alchemy import get_columns_from_instance
 from ringo.model.mixins import Logged, StateMixin, Owned
 
 log = logging.getLogger(__name__)
@@ -109,11 +110,6 @@ class BaseItem(object):
             return format_str % tuple([self.get_value(f) for f in fields])
         else:
             return "%s" % str(self.id or self.__class__)
-
-    @classmethod
-    def get_columns(cls, include_relations=False):
-        return [prop.key for prop in class_mapper(cls).iterate_properties
-                if isinstance(prop, ColumnProperty) or include_relations]
 
     @classmethod
     def get_item_factory(cls):
@@ -225,7 +221,7 @@ class BaseItem(object):
         include_relations is true, than the realtion values are
         included. Else only scalar values are included"""
         values = {}
-        for field in self.get_columns(include_relations):
+        for field in get_columns_from_instance(self, include_relations):
             # Ignore private form fields
             if field.startswith("_"):
                 continue

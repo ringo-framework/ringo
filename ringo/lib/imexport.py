@@ -7,6 +7,8 @@ import codecs
 import cStringIO
 import sets
 
+from ringo.lib.alchemy import get_columns_from_clazz
+
 log = logging.getLogger(__name__)
 
 
@@ -146,7 +148,7 @@ class Importer(object):
 
     def _get_types(self, clazz):
         type_mapping = {}
-        for col in clazz.get_columns():
+        for col in get_columns_from_clazz(clazz):
             prop = getattr(clazz, col)
             type_mapping[col] = str(prop.type)
         return type_mapping

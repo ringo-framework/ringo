@@ -49,6 +49,7 @@ from sqlalchemy.orm import (
 from ringo.model import Base
 from ringo.lib.cache import CACHE_FORM_CONFIG
 from ringo.lib.helpers import serialize
+from ringo.lib.alchemy import get_columns_from_instance
 
 log = logging.getLogger(__name__)
 
@@ -242,7 +243,7 @@ class Blobform(object):
         that the data will be saved in the data attribute as JSON
         string."""
         json_data = json.loads(self.get_values().get('data') or "{}")
-        columns = self.get_columns(self)
+        columns = get_columns_from_instance(self)
         for key, value in values.iteritems():
             # Ignore private form fields
             if key.startswith('_'):
