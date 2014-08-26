@@ -74,19 +74,26 @@ def handle_POST_request(form, request, callback, event, renderers=None):
             log.debug('Linking %s to %s in %s' % (item, pitem, rrel))
             tmpattr = getattr(pitem, rrel)
             tmpattr.append(item)
-        item.save(form.data, request)
-        msg = _('Edited ${item_type} "${item}" successfull.',
-                mapping=mapping)
-        log.info(msg)
-        request.session.flash(msg, 'success')
-        handle_event(request, item, form._config.id)
-        handle_callback(request, callback)
-        # Invalidate cache
-        invalidate_cache()
-        if request.session.get('%s.form' % clazz):
-            del request.session['%s.form' % clazz]
-        request.session.save()
-        return True
+        try:
+            item.save(form.data, request)
+            msg = _('Edited ${item_type} "${item}" successfull.',
+                    mapping=mapping)
+            log.info(msg)
+            request.session.flash(msg, 'success')
+            handle_event(request, item, form._config.id)
+            handle_callback(request, callback)
+            # Invalidate cache
+            invalidate_cache()
+            if request.session.get('%s.form' % clazz):
+                del request.session['%s.form' % clazz]
+            request.session.save()
+            return True
+        except Exception as error:
+            mapping['error'] = unicode(error.message)
+            msg = _('Error while saving '
+                    '${item_type} "${item}": ${error}.', mapping=mapping)
+            log.error(msg)
+            request.session.flash(msg, 'error')
     elif "blobforms" in request.params:
         pass
     else:
