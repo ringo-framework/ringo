@@ -595,42 +595,49 @@ def update_(clazz, request, callback=None, renderers={}):
         item_label = clazz.get_item_modul(request).get_label()
         mapping = {'item_type': item_label, 'item': item}
         if form.validate(request.params):
-            item.save(form.data, request)
-            msg = _('Edited ${item_type} "${item}" successfull.',
-                    mapping=mapping)
-            log.info(msg)
-            request.session.flash(msg, 'success')
+            try:
+                item.save(form.data, request)
+                msg = _('Edited ${item_type} "${item}" successfull.',
+                        mapping=mapping)
+                log.info(msg)
+                request.session.flash(msg, 'success')
+                # handle update events
+                handle_event('update', request, item)
 
-            # handle update events
-            handle_event('update', request, item)
+                # Call callback. The callback is called as last action after
+                # the rest of the saving has been done.
+                if callback:
+                    item = callback(request, item)
 
-            # Call callback. The callback is called as last action after
-            # the rest of the saving has been done.
-            if callback:
-                item = callback(request, item)
+                # Invalidate cache
+                invalidate_cache()
+                if request.session.get('%s.form' % clazz):
+                    del request.session['%s.form' % clazz]
+                    request.session.save()
 
-            # Invalidate cache
-            invalidate_cache()
-            if request.session.get('%s.form' % clazz):
-                del request.session['%s.form' % clazz]
-                request.session.save()
-
-            backurl = request.session.get('%s.backurl' % clazz)
-            if backurl:
-                # Redirect to the configured backurl.
-                del request.session['%s.backurl' % clazz]
-                request.session.save()
-                return HTTPFound(location=backurl)
-            else:
-                # Handle redirect after success.
-                # Check if the user is allowed to call the url after saving
-                if has_permission("update", item, request):
-                    route_name = item.get_action_routename('update')
-                    url = request.route_path(route_name, id=item.id)
+                backurl = request.session.get('%s.backurl' % clazz)
+                if backurl:
+                    # Redirect to the configured backurl.
+                    del request.session['%s.backurl' % clazz]
+                    request.session.save()
+                    return HTTPFound(location=backurl)
                 else:
-                    route_name = item.get_action_routename('read')
-                    url = request.route_path(route_name, id=item.id)
-                return HTTPFound(location=url)
+                    # Handle redirect after success.
+                    # Check if the user is allowed to call the url after saving
+                    if has_permission("update", item, request):
+                        route_name = item.get_action_routename('update')
+                        url = request.route_path(route_name, id=item.id)
+                    else:
+                        route_name = item.get_action_routename('read')
+                        url = request.route_path(route_name, id=item.id)
+                    return HTTPFound(location=url)
+            except Exception as error:
+                mapping['error'] = unicode(error.message)
+                msg = _('Error while saving '
+                        '${item_type} "${item}": ${error}.', mapping=mapping)
+                log.info(msg)
+                request.session.flash(msg, 'error')
+
         else:
             msg = _('Error on validation the data for '
                     '${item_type} "${item}".', mapping=mapping)
