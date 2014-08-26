@@ -8,6 +8,7 @@ from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload
 from ringo.lib.helpers import get_path_to_form_config, serialize
 from ringo.lib.cache import CACHE_TABLE_CONFIG, CACHE_FORM_CONFIG
+from ringo.lib.table import get_table_config
 from ringo.lib.sql import DBSession
 from ringo.lib.sql.cache import regions
 from ringo.lib.sql.query import FromCache, set_relation_caching
@@ -158,20 +159,6 @@ class BaseItem(object):
         if prefix:
             return "%s-%s" % (prefix, routename)
         return routename
-
-    @classmethod
-    def get_table_config(cls, tablename=None):
-        """Returns the table (overview, listing) configuration with the
-        name 'tablename' of this Item from the configuration file. If
-        the default table configuration will be returned. The table
-        configuration is cached for later requests."""
-        # As this is a class method of the BaseItem we need to build a
-        # unique cachename for tableconfigs among all inherited classes.
-        cachename = "%s.%s" % (cls.__name__, tablename)
-        from ringo.lib.renderer import TableConfig
-        if not CACHE_TABLE_CONFIG.get(cachename):
-            CACHE_TABLE_CONFIG.set(cachename, TableConfig(cls, tablename))
-        return CACHE_TABLE_CONFIG.get(cachename)
 
     def get_form_config(self, formname):
         """Return the Configuration for a given form. The configuration
@@ -431,7 +418,7 @@ class BaseList(object):
         """
         self.search_filter = filter_stack
         log.debug('Length filterstack: %s' % len(filter_stack))
-        table_config = self.clazz.get_table_config()
+        table_config = get_table_config(self.clazz)
         table_columns = {}
 
         # Save cols in the tableconfig for later access while getting values.

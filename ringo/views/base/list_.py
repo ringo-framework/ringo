@@ -2,6 +2,7 @@ import uuid
 import logging
 from ringo.model.base import BaseFactory
 from ringo.model.user import User
+from ringo.lib.table import get_table_config
 from ringo.lib.security import has_permission
 from ringo.lib.renderer import (
     ListRenderer
@@ -28,8 +29,8 @@ def handle_sorting(clazz, request):
     name = clazz.__tablename__
 
     # Default sorting options
-    default_field = clazz.get_table_config().get_default_sort_column()
-    default_order = clazz.get_table_config().get_default_sort_order()
+    default_field = get_table_config(clazz).get_default_sort_column()
+    default_order = get_table_config(clazz).get_default_sort_order()
 
     # Get sorting from the session. If there is no saved sorting use the
     # default value.

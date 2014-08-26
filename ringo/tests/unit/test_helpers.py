@@ -90,7 +90,7 @@ class HelpersAuthTests(BaseUnitTest):
         self.assertEquals(result, location + "/ringo/views/forms/foo.xml")
 
     def test_get_path_to_table_config(self):
-        from ringo.lib.helpers import get_path_to_overview_config
+        from ringo.lib.table import get_path_to_overview_config
         location = pkg_resources.get_distribution("ringo").location
         result = get_path_to_overview_config("foo.json")
         self.assertEquals(result, location + "/ringo/views/tables/foo.json")
