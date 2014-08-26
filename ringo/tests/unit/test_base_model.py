@@ -38,9 +38,10 @@ class BaseItemTests(BaseUnitTest):
 
     def test_get_form_config(self):
         from ringo.model.modul import ModulItem
+        from ringo.lib.form import get_form_config
         factory = ModulItem.get_item_factory()
         item = factory.load(1)
-        result = item.get_form_config('create')
+        result = get_form_config(item, 'create')
         self.assertEqual(result.id, 'create')
 
     def test_get_action_routename(self):

@@ -1,5 +1,6 @@
 import logging
 from formbar.form import Form
+from ringo.lib.form import get_form_config
 from ringo.views.response import JSONResponse
 from ringo.views.helpers import (
     get_item_form,
@@ -69,7 +70,7 @@ def rest_create(request, callback=None):
     item = factory.create(request.user)
     # Initialise the create form for the item to be able to validate the
     # submitted data.
-    form = Form(item.get_form_config('create'),
+    form = Form(get_form_config(item, 'create'),
                 item, request.db, translate=request.translate,
                 csrf_token=request.session.get_csrf_token())
     if form.validate(request.params):

@@ -8,6 +8,7 @@ from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload
 from ringo.lib.helpers import get_path_to_form_config, serialize
 from ringo.lib.cache import CACHE_FORM_CONFIG
+from ringo.lib.form import get_form_config
 from ringo.lib.table import get_table_config
 from ringo.lib.sql import DBSession
 from ringo.lib.sql.cache import regions
@@ -154,21 +155,6 @@ class BaseItem(object):
             return "%s-%s" % (prefix, routename)
         return routename
 
-    def get_form_config(self, formname):
-        """Return the Configuration for a given form. The configuration
-        tried to be loaded from the application first. If this fails it
-        tries to load it from the ringo application."""
-        cfile = "%s.xml" % self.__class__.__tablename__
-        cachename = "%s.%s" % (self.__class__.__name__, formname)
-        if not CACHE_FORM_CONFIG.get(cachename):
-            try:
-                loaded_config = load(get_path_to_form_config(cfile))
-            except IOError:
-                loaded_config = load(get_path_to_form_config(cfile, 'ringo'))
-            config = Config(loaded_config)
-            CACHE_FORM_CONFIG.set(cachename, config.get_form(formname))
-        return CACHE_FORM_CONFIG.get(cachename)
-
     def reset_uuid(self):
         self.uuid = '%.32x' % uuid.uuid4()
 
@@ -187,7 +173,7 @@ class BaseItem(object):
                       % (name, repr(self), self.id))
             raw_value = None
         if expand:
-            form_config = self.get_form_config(form_id)
+            form_config = get_form_config(self, form_id)
             try:
                 field_config = form_config.get_field(name)
                 for option in field_config.options:

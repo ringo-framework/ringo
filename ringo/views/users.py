@@ -13,6 +13,7 @@ from ringo.views.request import (
 )
 from ringo.model.mixins import Owned
 
+from ringo.lib.form import get_form_config
 from ringo.lib.helpers import import_model
 from ringo.lib.security import login, encrypt_password
 from ringo.lib.sql.cache import invalidate_cache
@@ -70,7 +71,8 @@ def changepassword(request):
     except sa.orm.exc.NoResultFound:
         raise HTTPBadRequest()
 
-    form = Form(item.get_form_config('changepassword'), item, request.db, translate=_,
+    form = Form(get_form_config(item, 'changepassword'),
+                item, request.db, translate=_,
                 renderers={},
                 change_page_callback={'url': 'set_current_form_page',
                                       'item': clazz.__tablename__,

@@ -194,28 +194,6 @@ class Blobform(object):
         form = relationship(Form, uselist=False)
         return form
 
-    def get_form_config(self, formname):
-        """Return the Configuration for a given form. This function
-        overwrites the default get_form_config method from the BaseItem
-        to load the configuration from the database.
-        In contrast to the get_form_config method of the BaseItem forms for
-        Blobforms or not clazzwide but bound to instances of a blobform.
-        So this becomes an instance method."""
-        from ringo.model.form import Form
-        if self.fid:
-            # A reference to a form has been set. Load the references value
-            cachename = "%s.%s.%s" % (self.__class__.__name__,
-                                      self.fid, formname)
-            if not CACHE_FORM_CONFIG.get(cachename):
-                factory = Form.get_item_factory()
-                form = factory.load(self.fid)
-                config = Config(parse(form.definition.encode('utf-8')))
-                CACHE_FORM_CONFIG.set(cachename, config.get_form(formname))
-            return CACHE_FORM_CONFIG.get(cachename)
-        else:
-            # Fallback! Should not happen. Load default form.
-            return super(Blobform, self).get_form_config(formname)
-
     def __getattr__(self, name):
         """This function tries to get the given attribute of the item if
         it can not be found using the usual way to get attributes. In

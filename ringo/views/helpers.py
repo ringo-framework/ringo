@@ -6,6 +6,7 @@ from formbar.config import (
     parse
 )
 from formbar.form import Form
+from ringo.lib.form import get_form_config
 from ringo.lib.security import has_role
 from ringo.lib.helpers import get_path_to_form_config
 from ringo.lib.renderer import add_renderers
@@ -53,7 +54,7 @@ def get_blobform_config(request, item, formname):
     else:
         log.debug("Stage 1: User is selecting a blobform")
         modul = item.get_item_modul(request)
-        formconfig = modul.get_form_config("blobform")
+        formconfig = get_form_config(modul, "blobform")
         return modul, formconfig
 
 
@@ -147,9 +148,12 @@ def get_item_form(name, request, renderers=None):
 
     ## handle blobforms
     if isinstance(item, Blobform):
+        # TODO: Why not use the get_form_config method here. This can
+        # handle Blobforms and usual form configs. () <2014-08-26 22:21>
+
         item, formconfig = get_blobform_config(request, item, name)
     else:
-        formconfig = item.get_form_config(name)
+        formconfig = get_form_config(item, name)
 
     form = Form(formconfig, item, request.db,
                 translate=request.translate,
