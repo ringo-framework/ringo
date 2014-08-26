@@ -2,11 +2,14 @@ import logging
 from pyramid.httpexceptions import HTTPBadRequest
 from formbar.config import (
     Config,
-    load,
     parse
 )
 from formbar.form import Form
-from ringo.lib.form import get_form_config, get_path_to_form_config
+from ringo.lib.form import (
+    get_form_config,
+    get_ownership_form as _get_ownership_form,
+    get_logbook_form as _get_logbook_form
+)
 from ringo.lib.security import has_role
 from ringo.lib.renderer import add_renderers
 from ringo.model.form import Form as BlobformForm
@@ -71,17 +74,12 @@ def get_rendered_ownership_form(request, readonly=None):
 
 def get_ownership_form(request, readonly=None):
     item = get_item_from_request(request)
+    db = request.db
+    csrf_token = request.session.get_csrf_token()
     if (readonly is None and isinstance(item, Owned)):
         readonly = not (item.is_owner(request.user)
                         or has_role(request.user, "admin"))
-    config = Config(load(get_path_to_form_config('ownership.xml', 'ringo')))
-    if readonly:
-        form_config = config.get_form('ownership-form-read')
-    else:
-        form_config = config.get_form('ownership-form-update')
-    return Form(form_config, item, request.db,
-                csrf_token=request.session.get_csrf_token(),
-                eval_url='/rest/rule/evaluate')
+    return _get_ownership_form(item, db, csrf_token, readonly)
 
 
 def get_rendered_logbook_form(request, readonly=None):
@@ -98,16 +96,10 @@ def get_rendered_logbook_form(request, readonly=None):
 
 def get_logbook_form(request, readonly=None):
     item = get_item_from_request(request)
-    config = Config(load(get_path_to_form_config('logbook.xml', 'ringo')))
-    if readonly:
-        form_config = config.get_form('logbook-form-read')
-    else:
-        form_config = config.get_form('logbook-form-update')
-    renderers = add_renderers({})
-    return Form(form_config, item, request.db,
-                renderers=renderers,
-                csrf_token=request.session.get_csrf_token(),
-                eval_url='/rest/rule/evaluate')
+    db = request.db
+    csrf_token = request.session.get_csrf_token()
+    return _get_logbook_form(item, db, csrf_token, readonly)
+
 
 def render_item_form(request, form, values=None, validate=True):
     """Returns the rendered item form for the item in the current

@@ -73,6 +73,7 @@ class BaseUnitTest(BaseTestCase):
         request.translate = lambda x: x
         request.db = self.session
         request.context = Mock()
+        request.session.get_csrf_token = lambda: "xxx"
         return request
 
 
