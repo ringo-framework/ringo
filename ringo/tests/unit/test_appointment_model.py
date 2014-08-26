@@ -7,7 +7,7 @@ class ReminderTests(BaseUnitTest):
     def test_reminders(self):
         """Will create some appointments to check the reminder
         functionallity"""
-        from ringo.model.appointment import Appointment, Reminders
+        from ringo.model.appointment import Appointment, get_reminder_list
         factory = Appointment.get_item_factory()
         current_date = date.today()
         yesterday = current_date - timedelta(days=1)
@@ -19,10 +19,5 @@ class ReminderTests(BaseUnitTest):
         a2.save({"start": start, "end": end, "reminder": 1})
         a3 = factory.create(user=None)
         a3.save({"start": start, "end": end, "reminder": 1})
-        reminders = Reminders(self.request)
-        reminders.items.append(a1)
-        reminders.items.append(a2)
-        reminders.items.append(a3)
-        reminders._filter_appointments()
+        reminders = get_reminder_list(self.request, items=[a1, a2, a3])
         self.assertEqual(len(reminders.items), 2)
-

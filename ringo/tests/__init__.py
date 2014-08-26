@@ -12,6 +12,7 @@ from sqlalchemy.orm import sessionmaker
 
 from ringo.lib.cache import Cache
 from ringo.lib.sql import DBSession
+from ringo.model.base import get_item_list
 from ringo import main
 from ringo.lib.i18n import locale_negotiator
 
@@ -107,6 +108,6 @@ class BaseFunctionalTest(BaseTestCase):
 
     def get_max_id(self, clazz):
         'Returns the max id of item (last inserted) of clazz'
-        items = clazz.get_item_list(self.session)
+        items = get_item_list(self.session, clazz)
         last_item = items.items[-1]
         return last_item.id

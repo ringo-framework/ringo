@@ -1,27 +1,23 @@
 from datetime import date
 import sqlalchemy as sa
 from ringo.model import Base
-from ringo.model.base import BaseItem, BaseList
+from ringo.model.base import BaseItem, get_item_list
 from ringo.model.mixins import Owned
 
 
-class Reminders(BaseList):
-    def __init__(self, db, user=None, cache=""):
-        BaseList.__init__(self, Appointment, db, user=user, cache=cache)
-        self._filter_appointments()
+def get_reminder_list(request, user=None, cache="", items=None):
+    baselist = get_item_list(request, Appointment, user, cache, items)
+    filtered_items = []
+    current_date = date.today()
+    for item in baselist.items:
+        if item.end < current_date:
+            continue
+        if (item.reminder
+           and abs((current_date - item.start).total_seconds() % 60) <= item.reminder):
+            filtered_items.append(item)
+    baselist.items = filtered_items
+    return baselist
 
-    def _filter_appointments(self):
-        """Will filter out appointments in the past or events which have
-        either no or a not mathing reminder"""
-        filtered_items = []
-        current_date = date.today()
-        for item in self.items:
-            if item.end < current_date:
-                continue
-            if (item.reminder
-               and abs((current_date - item.start).total_seconds()%60) <= item.reminder):
-                filtered_items.append(item)
-        self.items = filtered_items
 
 class Appointment(BaseItem, Owned, Base):
     __tablename__ = 'appointments'

@@ -1,9 +1,15 @@
 from datetime import datetime
 import sqlalchemy as sa
 from ringo.model import Base
-from ringo.model.base import BaseItem, BaseFactory, BaseList
+from ringo.model.base import (
+    BaseItem, BaseFactory,
+    get_item_list
+)
 from ringo.model.mixins import Owned, StateMixin
-from ringo.model.statemachine import Statemachine, State, null_handler, null_condition
+from ringo.model.statemachine import (
+    Statemachine, State,
+    null_handler, null_condition
+)
 
 
 class TodoStatemachine(Statemachine):
@@ -16,6 +22,7 @@ class TodoStatemachine(Statemachine):
         s2.add_transition(s3, "Resolve", null_handler, null_condition)
         s3.add_transition(s2, "Reopen", null_handler, null_condition)
         return s1
+
 
 class TodoStateMixin(StateMixin):
         _statemachines = {'todo_state_id': TodoStatemachine}
@@ -43,54 +50,48 @@ class TodoFactory(BaseFactory):
         new_item.assigned.append(user)
         return new_item
 
-class TodoList(BaseList):
+
+def get_todo_list(request, user=None, cache="", items=None):
     """The TodoList will list all the todo elements which are 1. accessable
     by the user and 2. are assigned to the current user."""
-
-    def _filter_for_user(self, items, user):
-        """Filter out todo elements which are not assinged to the user"""
-        items = BaseList._filter_for_user(self, items, user)
-        # Now filter out all the todo items which are not assinged to
-        # the current user.
-        if user is not None:
-            filtered_items = []
-            for item in items:
-                if user.id in [u.id for u in item.assigned]:
-                    filtered_items.append(item)
-            return filtered_items
-        return items
-
-class Reminders(TodoList):
-    def __init__(self, db, user=None, cache=""):
-        TodoList.__init__(self, Todo, db, user=user, cache=cache)
-        self._filter_todo()
-
-    def _filter_todo(self):
-        """Will filter out todo elements which are "done", have no
-        reminders or reminders are not relevant"""
+    baselist = get_item_list(request, Todo, user, cache, items)
+    if user is not None:
         filtered_items = []
-        current_date = datetime.now()
-        for item in self.items:
-            # Item is done
-            if item.todo_state_id == 3:
-                continue
-            # Item has no reminder
-            elif item.reminder == 0:
-                continue
-            # Item has immediate reminder
-            elif item.reminder == 1:
+        for item in baselist.items:
+            if user.id in [u.id for u in item.assigned]:
                 filtered_items.append(item)
-            # Item has custom reminddate
-            elif item.reminder == 2:
-                if (current_date - item.reminddate).total_seconds() >= 0:
-                    filtered_items.append(item)
-            # Item deadline reminder or immediate
-            elif item.reminder == 3:
-                if not item.deadline:
-                    filtered_items.append(item)
-                elif (current_date - item.deadline).total_seconds() >= 0:
-                    filtered_items.append(item)
-        self.items = filtered_items
+        baselist.items = filtered_items
+    return baselist
+
+
+def get_todo_reminder_list(request, user=None, cache="", items=None):
+    """Will filter out todo elements which are "done", have no
+    reminders or reminders are not relevant"""
+    baselist = get_todo_list(request, user, cache, items)
+    filtered_items = []
+    current_date = datetime.now()
+    for item in baselist.items:
+        # Item is done
+        if item.todo_state_id == 3:
+            continue
+        # Item has no reminder
+        elif item.reminder == 0:
+            continue
+        # Item has immediate reminder
+        elif item.reminder == 1:
+            filtered_items.append(item)
+        # Item has custom reminddate
+        elif item.reminder == 2:
+            if (current_date - item.reminddate).total_seconds() >= 0:
+                filtered_items.append(item)
+        # Item deadline reminder or immediate
+        elif item.reminder == 3:
+            if not item.deadline:
+                filtered_items.append(item)
+            elif (current_date - item.deadline).total_seconds() >= 0:
+                filtered_items.append(item)
+    baselist.items = filtered_items
+    return baselist
 
 
 nm_todo_users = sa.Table(
@@ -98,6 +99,7 @@ nm_todo_users = sa.Table(
     sa.Column('uid', sa.Integer, sa.ForeignKey('users.id')),
     sa.Column('tid', sa.Integer, sa.ForeignKey('todos.id'))
 )
+
 
 class Todo(BaseItem, Owned, TodoStateMixin, Base):
     __tablename__ = 'todos'

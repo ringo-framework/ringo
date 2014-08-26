@@ -328,41 +328,71 @@ class BaseItem(object):
 ########################################################################
 
 
-def get_item_list(request, clazz, user=None, cache=None):
+def get_item_list(request, clazz, user=None, cache="", items=None):
     """Returns a BaseLists instance with items of the given clazz. You
     can optionally provide a user object. If provided the list will only
-    contain items which are readable by the given user. Further you can
-    define a caching region to cache the results of the sqlquery. If not
-    provided no caching is done.
+    contain items which are readable by user in the current request.
+    Further you can define a caching region to cache the results of the
+    sqlquery. If not provided no caching is done.
 
     :request: Current request
     :clazz: Clazz for with the items in the baselist will be loaded.
     :user: If provided only items readable for the
-           given user are included in the list
+           user in the current request are included in the list
     :cache: Name of the cache region. If empty then no caching is
             done.
+    :items: Set items of the Baselist. If provided no items will be
+    loaded.
     :returns: BaseList instance
 
     """
     if not request.cache_item_list.get(clazz._modul_id):
-        listing = BaseList(clazz, request, user, cache)
+        listing = BaseList(clazz, request.db, cache, items)
+        if user:
+            listing = filter_itemlist_for_user(request, listing)
         request.cache_item_list.set(clazz._modul_id, listing)
     return request.cache_item_list.get(clazz._modul_id)
 
 
+def filter_itemlist_for_user(request, baselist):
+    """Returns a filterd baselist. The items are filterd based on
+    the permission of the current user in the request. Only items are
+    included where the given user has read access. This means:
+
+     1. The user has aproriate role (read access)
+     2. Is owner or member of the items group
+
+    :request: Current request
+    :baselist: BaseList instance
+    :returns: Filtered BaseList instance
+
+    """
+    from ringo.lib.security import has_permission
+    filtered_items = []
+    if request.user and not request.user.has_role("admin"):
+        # Iterate over all items and check if the user has generally
+        # access to the item.
+        for item in baselist.items:
+            # Only check ownership if the item provides a uid.
+            if has_permission('read', item, request):
+                filtered_items.append(item)
+        baselist.items = filtered_items
+    return baselist
+
+
 class BaseList(object):
-    def __init__(self, clazz, request, user=None, cache="", items=None):
+    def __init__(self, clazz, db, cache="", items=None):
         """A List object of. A list can be filterd, and sorted.
 
         :clazz: Class of items which will be loaded.
-        :request: Current request
-        :user: If provided only items readable for the
-               given user are included in the list
+        :db: DB connection used to load the items.
         :cache: Name of the cache region. If empty then no caching is
                 done.
+        :items: Set items of the Baselist. If provided no items will be
+        loaded.
         """
         self.clazz = clazz
-        self.request = request
+        self.db = db
         # TODO: Check which is the best loading strategy here for large
         # collections. Tests with 100k datasets rendering only 100 shows
         # that the usual lazyload method seems to be the fastest which is
@@ -370,44 +400,19 @@ class BaseList(object):
         #self.items = db.query(clazz).options(joinedload('*')).all()
 
         if items is None:
-            q = request.db.query(self.clazz)
+            q = self.db.query(self.clazz)
             if cache in regions.keys():
                 q = set_relation_caching(q, self.clazz, cache)
                 q = q.options(FromCache(cache))
             for relation in self.clazz._sql_eager_loads:
                 q = q.options(joinedload(relation))
-            self.items = self._filter_for_user(q.all(), user)
+            self.items = q.all()
         else:
             self.items = items
         self.search_filter = []
 
     def __iter__(self):
         return iter(self.items)
-
-    def _filter_for_user(self, items, user):
-        """Returns a filterd item list. The items are filterd based on
-        the permission of the given user. Only items are included where
-        the given user has read access. This means:
-
-         1. The user has aproriate role (read access)
-         2. Is owner or member of the items group
-
-        If no user is provided the list is not filtered and all origin
-        items are included in the returned list.
-        """
-        # Filter items based on the uid
-        from ringo.lib.security import has_permission
-        filtered_items = []
-        if user and not user.has_role("admin"):
-            # Iterate over all items and check if the user has generally
-            # access to the item.
-            for item in items:
-                # Only check ownership if the item provides a uid.
-                if has_permission('read', item, self.request):
-                    filtered_items.append(item)
-            return filtered_items
-        else:
-            return items
 
     def sort(self, field, order, expand=False):
         """Will return a sorted item list. Sorting is done based on the
