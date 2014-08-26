@@ -367,3 +367,7 @@ Start the tests by invoking the following command::
 
 This will create new test database calls the tests and make some statistics on
 the code coverage.
+
+Translation
+===========
+Translation of ringo is managed using `the Transifex webservice <https://www.transifex.com/projects/p/plorma/>`_
