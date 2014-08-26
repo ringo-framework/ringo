@@ -6,9 +6,8 @@ from formbar.config import (
     parse
 )
 from formbar.form import Form
-from ringo.lib.form import get_form_config
+from ringo.lib.form import get_form_config, get_path_to_form_config
 from ringo.lib.security import has_role
-from ringo.lib.helpers import get_path_to_form_config
 from ringo.lib.renderer import add_renderers
 from ringo.model.form import Form as BlobformForm
 from ringo.model.mixins import (

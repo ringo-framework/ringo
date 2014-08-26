@@ -84,7 +84,7 @@ class HelpersAuthTests(BaseUnitTest):
         self.assertEquals(result, location)
 
     def test_get_path_to_form_config(self):
-        from ringo.lib.helpers import get_path_to_form_config
+        from ringo.lib.form import get_path_to_form_config
         location = pkg_resources.get_distribution("ringo").location
         result = get_path_to_form_config("foo.xml")
         self.assertEquals(result, location + "/ringo/views/forms/foo.xml")

@@ -13,11 +13,11 @@ from formbar.config import Config, load
 from formbar.form import Form
 import ringo.lib.helpers
 from ringo.lib.helpers import (
-    get_saved_searches,
-    get_path_to_form_config,
+    get_saved_searches
 )
 from ringo.model.base import BaseItem, BaseList, get_item_list
 from ringo.lib.table import get_table_config
+from ringo.lib.form import get_path_to_form_config
 import ringo.lib.security as security
 
 base_dir = pkg_resources.get_distribution("ringo").location
