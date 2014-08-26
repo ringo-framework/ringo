@@ -7,7 +7,7 @@ from formbar.config import Config, load
 from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload
 from ringo.lib.helpers import get_path_to_form_config, serialize
-from ringo.lib.cache import CACHE_TABLE_CONFIG, CACHE_FORM_CONFIG
+from ringo.lib.cache import CACHE_FORM_CONFIG
 from ringo.lib.table import get_table_config
 from ringo.lib.sql import DBSession
 from ringo.lib.sql.cache import regions
