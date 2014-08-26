@@ -155,7 +155,9 @@ class Statemachine(object):
                 self._current = transition._end_state
                 setattr(self._item, self._item_state_attr, self._current._id)
                 return self._current
-        raise Exception('No fitting transition to transition found')
+        _ = self._request.translate
+        raise Exception(_('Can not find any available state transition '
+                          'based on the current or submitted item values'))
 
     def get_state(self):
         """Returns the current state of the Statemachine

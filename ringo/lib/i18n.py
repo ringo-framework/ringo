@@ -46,6 +46,10 @@ def add_localizer(event):
         in reversed order and iteration stops as soon as the
         TranslationsString returns a string different from the given
         string (msgid)"""
+        # An empty string leads to returning the header of the PO file.
+        # So if no string to translate is provided return an empty string.
+        if not string:
+            return string
         if mapping is None:
             mapping = {}
         for _ in translators[::-1]:
