@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-14 12:02+0200\n"
+"POT-Creation-Date: 2014-08-26 11:43+0200\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -39,8 +39,14 @@ msgid ""
 "cancel the action."
 msgstr ""
 
-#: ringo/lib/renderer.py:851
+#: ringo/lib/renderer.py:876
 msgid "New entry"
+msgstr ""
+
+#: ringo/model/statemachine.py:159
+msgid ""
+"Can not find any available state transition based on the current or "
+"submitted item values."
 msgstr ""
 
 #: ringo/templates/about.mako:4 ringo/templates/about.mako:6
@@ -82,27 +88,27 @@ msgid ""
 " session timer."
 msgstr ""
 
-#: ringo/templates/base.mako:121
+#: ringo/templates/base.mako:120
 msgid "Advanced"
 msgstr ""
 
-#: ringo/templates/base.mako:123
+#: ringo/templates/base.mako:122
 msgid "Back to"
 msgstr ""
 
-#: ringo/templates/base.mako:126 ringo/templates/footer.mako:7
+#: ringo/templates/base.mako:125 ringo/templates/footer.mako:7
 msgid "Administration"
 msgstr ""
 
-#: ringo/templates/base.mako:127
+#: ringo/templates/base.mako:126
 msgid "Change ownership"
 msgstr ""
 
-#: ringo/templates/base.mako:130
+#: ringo/templates/base.mako:129
 msgid "Show logbook"
 msgstr ""
 
-#: ringo/templates/base.mako:134
+#: ringo/templates/base.mako:133
 msgid "Advanced actions"
 msgstr ""
 
@@ -383,7 +389,7 @@ msgid "You have selected %s %s for export:"
 msgstr ""
 
 #: ringo/templates/internal/export.mako:17
-#: ringo/templates/internal/list.mako:214
+#: ringo/templates/internal/list.mako:213
 #: ringo/templates/internal/print.mako:11
 msgid "Close"
 msgstr ""
@@ -454,7 +460,7 @@ msgstr ""
 msgid "Options "
 msgstr ""
 
-#: ringo/templates/internal/list.mako:83 ringo/templates/internal/list.mako:205
+#: ringo/templates/internal/list.mako:83 ringo/templates/internal/list.mako:204
 msgid "Save current search filter"
 msgstr ""
 
@@ -474,25 +480,25 @@ msgstr ""
 msgid "${num_filter} filter applied"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:179
+#: ringo/templates/internal/list.mako:178
 msgid "No items found"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:195
+#: ringo/templates/internal/list.mako:194
 msgid "Perform"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:207
+#: ringo/templates/internal/list.mako:206
 msgid "Queryname"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:210
+#: ringo/templates/internal/list.mako:209
 msgid ""
 "Please insert a name for your query. It it will be selectable under this "
 "name in the options menu of the search after saving."
 msgstr ""
 
-#: ringo/templates/internal/list.mako:213
+#: ringo/templates/internal/list.mako:212
 msgid "Save Query"
 msgstr ""
 
@@ -660,15 +666,19 @@ msgstr ""
 msgid "Error on validation the data for new ${item_type}"
 msgstr ""
 
-#: ringo/views/base.py:599
+#: ringo/views/base.py:600
 msgid "Edited ${item_type} \"${item}\" successfull."
 msgstr ""
 
-#: ringo/views/base.py:635
+#: ringo/views/base.py:636
+msgid "Error while saving ${item_type} \"${item}\": ${error}."
+msgstr ""
+
+#: ringo/views/base.py:642
 msgid "Error on validation the data for ${item_type} \"${item}\"."
 msgstr ""
 
-#: ringo/views/base.py:731
+#: ringo/views/base.py:738
 msgid "Deleted ${num} ${item_type} successfull."
 msgstr ""
 
@@ -831,14 +841,15 @@ msgid "Comment"
 msgstr ""
 
 #. Label for updated field in form config
-#: ringo/views/forms/comments.xml:2
+#. Label for updated column in overview table config
+#: ringo/views/forms/comments.xml:2 ringo/views/tables/news.json:2
 msgid "Updated"
 msgstr ""
 
 #. Label for created field in form config
 #. Label for created column in overview table config
 #: ringo/views/forms/comments.xml:3 ringo/views/forms/logs.xml:2
-#: ringo/views/tables/logs.json:2 ringo/views/tables/news.json:2
+#: ringo/views/tables/logs.json:2
 msgid "Created"
 msgstr ""
 
