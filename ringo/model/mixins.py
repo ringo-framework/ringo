@@ -122,11 +122,7 @@ class StateMixin(object):
         dictionary"""
         log.debug("%s -> %s" % (old_state_id, new_state_id))
         sm = self.get_statemachine(key, old_state_id, request)
-        try:
-            sm.set_state(new_state_id)
-        except Exception as error:
-            log.error(error)
-            sm.set_state(old_state_id)
+        sm.set_state(new_state_id)
         # clear cached statemachines
         setattr(self, '_cache_statemachines', {})
         # Add logentry on statechange if the item is loggend
