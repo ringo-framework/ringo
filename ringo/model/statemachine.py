@@ -157,7 +157,7 @@ class Statemachine(object):
                 return self._current
         _ = self._request.translate
         raise Exception(_('Can not find any available state transition '
-                          'based on the current or submitted item values.'))
+                          'based on the current or submitted item values'))
 
     def get_state(self):
         """Returns the current state of the Statemachine

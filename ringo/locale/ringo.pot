@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.15.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-26 11:43+0200\n"
+"POT-Creation-Date: 2014-08-26 12:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,7 +46,7 @@ msgstr ""
 #: ringo/model/statemachine.py:159
 msgid ""
 "Can not find any available state transition based on the current or submitted"
-" item values."
+" item values"
 msgstr ""
 
 #: ringo/templates/about.mako:4 ringo/templates/about.mako:6

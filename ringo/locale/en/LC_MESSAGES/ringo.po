@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-26 11:43+0200\n"
+"POT-Creation-Date: 2014-08-26 12:07+0200\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -46,7 +46,7 @@ msgstr ""
 #: ringo/model/statemachine.py:159
 msgid ""
 "Can not find any available state transition based on the current or "
-"submitted item values."
+"submitted item values"
 msgstr ""
 
 #: ringo/templates/about.mako:4 ringo/templates/about.mako:6
@@ -1383,5 +1383,11 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "[${app_name}]: Password reset request"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Can not find any available state "
+#~ "transition based on the current or "
+#~ "submitted item values."
 #~ msgstr ""
 
