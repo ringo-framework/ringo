@@ -116,7 +116,3 @@ class Todo(BaseItem, Owned, TodoStateMixin, Base):
     @classmethod
     def get_item_factory(cls):
         return TodoFactory(cls)
-
-    @classmethod
-    def get_item_list(cls, request, user=None, cache=None):
-        return TodoList(cls, request, user, cache=None)

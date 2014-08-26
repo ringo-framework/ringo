@@ -116,12 +116,6 @@ class BaseItem(object):
     def get_item_factory(cls):
         return BaseFactory(cls)
 
-    @classmethod
-    def get_item_list(cls, request, user=None, cache=None):
-        if not request.cache_item_list.get(cls._modul_id):
-            listing = BaseList(cls, request, user, cache)
-            request.cache_item_list.set(cls._modul_id, listing)
-        return request.cache_item_list.get(cls._modul_id)
 
     @classmethod
     def get_item_actions(cls, request=None):
@@ -328,6 +322,32 @@ class BaseItem(object):
                         log.warning("Inheritance of group '%s' failed. "
                                     "Was None" % gid_relation)
         return self
+
+########################################################################
+#                               BaseList                               #
+########################################################################
+
+
+def get_item_list(request, clazz, user=None, cache=None):
+    """Returns a BaseLists instance with items of the given clazz. You
+    can optionally provide a user object. If provided the list will only
+    contain items which are readable by the given user. Further you can
+    define a caching region to cache the results of the sqlquery. If not
+    provided no caching is done.
+
+    :request: Current request
+    :clazz: Clazz for with the items in the baselist will be loaded.
+    :user: If provided only items readable for the
+           given user are included in the list
+    :cache: Name of the cache region. If empty then no caching is
+            done.
+    :returns: BaseList instance
+
+    """
+    if not request.cache_item_list.get(clazz._modul_id):
+        listing = BaseList(clazz, request, user, cache)
+        request.cache_item_list.set(clazz._modul_id, listing)
+    return request.cache_item_list.get(clazz._modul_id)
 
 
 class BaseList(object):

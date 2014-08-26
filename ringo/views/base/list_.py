@@ -1,6 +1,6 @@
 import uuid
 import logging
-from ringo.model.base import BaseFactory
+from ringo.model.base import BaseFactory, get_item_list
 from ringo.model.user import User
 from ringo.lib.table import get_table_config
 from ringo.lib.security import has_permission
@@ -200,7 +200,7 @@ def list_(request):
     rvalue = {}
     search = get_search(clazz, request)
     sorting = handle_sorting(clazz, request)
-    listing = clazz.get_item_list(request, user=request.user)
+    listing = get_item_list(request, clazz, user=request.user)
     listing.sort(sorting[0], sorting[1])
     listing.filter(search)
     # Only save the search if there are items
@@ -255,5 +255,5 @@ def rest_list(request):
 
     """
     clazz = request.context.__model__
-    listing = clazz.get_item_list(request)
+    listing = get_item_list(request, clazz)
     return JSONResponse(True, listing)

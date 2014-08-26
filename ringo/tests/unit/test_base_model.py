@@ -78,8 +78,8 @@ class BaseItemTests(BaseUnitTest):
 
     def test_get_item_list(self):
         from ringo.model.modul import ModulItem
-        from ringo.model.base import BaseList
-        result = ModulItem.get_item_list(self.request, user=None)
+        from ringo.model.base import BaseList, get_item_list
+        result = get_item_list(self.request, ModulItem, user=None)
         self.assertTrue(isinstance(result, BaseList))
 
     def test_get_item_actions(self):

@@ -16,7 +16,7 @@ from ringo.lib.helpers import (
     get_saved_searches,
     get_path_to_form_config,
 )
-from ringo.model.base import BaseItem, BaseList
+from ringo.model.base import BaseItem, BaseList, get_item_list
 from ringo.lib.table import get_table_config
 import ringo.lib.security as security
 
@@ -554,7 +554,7 @@ class ListingFieldRenderer(FormbarSelectionField):
 
     def _get_all_items(self):
         clazz = self.get_class()
-        itemlist = clazz.get_item_list(self._field._form._request)
+        itemlist = get_item_list(self._field._form._request, clazz)
         config = get_table_config(itemlist.clazz,
                                   self._field._config.renderer.table)
         sort_field = config.get_default_sort_column()
