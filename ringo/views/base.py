@@ -893,7 +893,7 @@ def print_(request):
         template = form.data.get('printtemplates')[0]
         out = StringIO.StringIO()
         temp = Template(StringIO.StringIO(template.data), out)
-        temp.render({"item":item.get_values()})
+        temp.render({"item":item})
 
         # Build response
         resp = request.response
