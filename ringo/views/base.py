@@ -898,7 +898,7 @@ def print_(request):
         # Build response
         resp = request.response
         resp.content_type = str(template.mime)
-        resp.content_disposition = 'attachment; filename=%s.odt' % template.name
+        resp.content_disposition = 'attachment; filename="%s.odt"' % template.name
         resp.body = out.getvalue()
         return resp
     else:

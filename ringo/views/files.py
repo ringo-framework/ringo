@@ -51,6 +51,6 @@ def download(request):
     item = result['item']
     response = request.response
     response.content_type = str(item.mime)
-    response.content_disposition = 'attachment; filename=%s' % item.name
+    response.content_disposition = 'attachment; filename="%s"' % item.name
     response.body = item.data
     return response
