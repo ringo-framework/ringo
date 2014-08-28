@@ -23,7 +23,8 @@ def test(exclude="None"):
     if "init" not in exclude:
         run("rm -f test.sqlite")
         run("ringo-admin db init --config=test.ini")
-    run("python setup.py nosetests")
+    if "unit" not in exclude:
+        run("python setup.py nosetests")
     if "behave" not in exclude:
         #run("coverage erase")
         #cmd_coverage = []
