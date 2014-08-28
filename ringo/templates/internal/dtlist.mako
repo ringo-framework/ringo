@@ -1,3 +1,6 @@
+<%
+from ringo.lib.helpers import prettify
+%>
 <table class="table table-condensed table-striped table-bordered datatable-simple">
   <thead>
     <tr>
@@ -25,7 +28,7 @@
           <%
             form_config = tableconfig.get_form_config()
             try:
-              value = item.get_value(field.get('name'), expand=field.get('expand'))
+              value = prettify(request, item.get_value(field.get('name'), expand=field.get('expand')))
             except AttributeError:
               value = "NaF"
           %>
