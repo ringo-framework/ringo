@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-26 12:07+0200\n"
-"PO-Revision-Date: 2014-08-26 12:04+0200\n"
+"POT-Creation-Date: 2014-08-28 16:06+0200\n"
+"PO-Revision-Date: 2014-08-28 16:09+0200\n"
 "Last-Translator: Torsten Irlaender <torsten@irlaender.de>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -53,37 +53,17 @@ msgstr ""
 "Es kann kein Zustandswechsel auf Basis der aktuelle oder übersendeten "
 "Daten gefunden werden"
 
-#: ringo/templates/about.mako:4 ringo/templates/about.mako:6
-#: ringo/templates/footer.mako:20
+#: ringo/templates/about.mako:4 ringo/templates/footer.mako:20
 msgid "About"
 msgstr "Info"
 
-#: ringo/templates/about.mako:7
+#: ringo/templates/about.mako:6
 msgid "Please provide some usefull information about your application here"
 msgstr "Bitte geben Sie hier sinnvolle Informationen über Anwendung an."
 
-#: ringo/templates/about.mako:8
+#: ringo/templates/about.mako:7
 msgid "This application is based on the Ringo web application framework."
 msgstr "Diese Anwendung basiert auf dem Ringo Webanwendungs-Rahmen."
-
-#: ringo/templates/about.mako:9
-msgid "License"
-msgstr "Lizenz"
-
-#: ringo/templates/about.mako:11
-msgid ""
-"This application is free software: you can redistribute it and/or modify "
-"it under the terms of the GNU General Public License as published by the "
-"Free Software Foundation, either version 2 of the License."
-msgstr ""
-"Dieses Programm ist freie Software. Sie können es unter den Bedingungen "
-"der GNU General Public License, wie von der Free Software Foundation "
-"veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß Version"
-" 2 der Lizenz oder (nach Ihrer Option) jeder späteren Version. "
-
-#: ringo/templates/about.mako:13
-msgid "Authors"
-msgstr "Autoren"
 
 #: ringo/templates/base.mako:67
 msgid "Logout will happen soon"
@@ -296,24 +276,25 @@ msgstr ""
 "Anwendung anpasst. Happy Coding! :)"
 
 #: ringo/templates/version.mako:5
+msgid "License"
+msgstr "Lizenz"
+
+#: ringo/templates/version.mako:7
 msgid ""
-"This page lists the version of some of the most important libraries used "
-"by the application."
+"This application is free software: you can redistribute it and/or modify "
+"it under the terms of the GNU General Public License as published by the "
+"Free Software Foundation, either version 2 of the License."
 msgstr ""
-"Diese Seite listet die Versionen von den wichtigsten Bibliotheken, die "
-"von der Anwendung genutzt werden."
+"Dieses Programm ist freie Software. Sie können es unter den Bedingungen "
+"der GNU General Public License, wie von der Free Software Foundation "
+"veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß Version"
+" 2 der Lizenz oder (nach Ihrer Option) jeder späteren Version. "
 
-#: ringo/templates/version.mako:8
-msgid "This application."
-msgstr "Diese Anwendung."
+#: ringo/templates/version.mako:9
+msgid "Core Components"
+msgstr "Kernkomponenten"
 
-#: ringo/templates/version.mako:9 ringo/templates/version.mako:13
-#: ringo/templates/version.mako:16 ringo/templates/version.mako:19
-#: ringo/templates/version.mako:22
-msgid "Version"
-msgstr "Version"
-
-#: ringo/templates/version.mako:12
+#: ringo/templates/version.mako:11
 msgid ""
 "<a href=\"https://bitbucket.org/ti/ringo\" target=\"_blank\">Ringo</a> is"
 " a small Python based high level web application framework build with "
@@ -325,7 +306,7 @@ msgstr ""
 "einige Basis-Funktionalität bereit, die oft in modernen Webanwendungen "
 "genutzt wird."
 
-#: ringo/templates/version.mako:15
+#: ringo/templates/version.mako:13
 msgid ""
 "<a href=\"https://bitbucket.org/ti/formbar\" "
 "target=\"_blank\">Formbar</a> is a Python library to layout, render and "
@@ -335,7 +316,7 @@ msgstr ""
 "target=\"_blank\">Formbar</a> ist eine Python Bibliothek zum Layout, "
 "Rendern und Validieren von HTML-Formularen in Webanwendungen."
 
-#: ringo/templates/version.mako:18
+#: ringo/templates/version.mako:15
 msgid ""
 "<a href=\"www.sqlalchemy.org\" target=\"_blank\">SQLAlchemy</a> is Python"
 " based ORM mapper."
@@ -343,7 +324,7 @@ msgstr ""
 "<a href=\"http://www.sqlalchemy.org\" target=\"_blank\">SQLAlchemy</a> "
 "ist ein Python basierter ORM."
 
-#: ringo/templates/version.mako:21
+#: ringo/templates/version.mako:17
 msgid ""
 "<a href=\"http://www.pylonsproject.org/\" "
 "target=\"_blank\">Pyramid</a></a> is a Python based web application "
@@ -556,7 +537,7 @@ msgstr ""
 msgid "Save Query"
 msgstr "Abfrage speichern"
 
-#: ringo/templates/internal/listfield.mako:25
+#: ringo/templates/internal/listfield.mako:26
 msgid "Add"
 msgstr "Hinzufügen"
 
@@ -1461,4 +1442,3 @@ msgstr "Gruppen"
 #: ringo/views/tables/users.json:8
 msgid "Last login"
 msgstr "Letze Anmeldung"
-
