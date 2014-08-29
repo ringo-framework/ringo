@@ -4,6 +4,7 @@ from ringo.views.base.create import (
 )
 from ringo.views.base.list_ import (
     list_,
+    bundle_,
     rest_list
 )
 from ringo.views.base.read import (
@@ -37,6 +38,7 @@ web_action_view_mapping = {
     "import": import_,
     "export": export,
     "print":  print_,
+    "bundle": bundle_,
 }
 
 rest_action_view_mapping = {

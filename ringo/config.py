@@ -5,7 +5,6 @@ from ringo.lib import helpers
 from ringo.lib.sql.db import DBSession
 from ringo.model.modul import ModulItem
 from ringo.resources import get_resource_factory
-from ringo.views.base.list_ import bundle_
 from ringo.views.base import (
     web_action_view_mapping,
     rest_action_view_mapping
@@ -30,23 +29,13 @@ def setup_modules(config):
     """Will iterate over all configured modules in the application.
     Configured modules are loaded from database. For each module it will
     call the setup_modul method."""
-    # FIXME: Check why it is not possible to submit the loaded clazz in
-    # the first for loop into the add_route method. It only seems only
-    # to work after loading and saving the saving the modules in a dict.
-    # Otherwise the views seems not not be mapped correctly to the routes.
-    # (torsten) <2014-05-09 18:32>
-    module_classes = {}
     for modul in DBSession.query(ModulItem).all():
-        clazz = helpers.dynamic_import(modul.clazzpath)
-        module_classes[clazz._modul_id] = clazz
-    for modul_id in module_classes:
-        setup_modul(config, module_classes[modul_id])
+        setup_modul(config, modul)
 
 
-def setup_modul(config, clazz):
-    """Setup routes and views for the activated actions of the given
-    model of the modul.  The new routes will be added with the following
-    name and url:
+def _setup_web_action(config, action, clazz, view_mapping):
+    """Setup a route and a view for given action and clazz.
+    The routes will have the follwoing following name and url:
 
     * Name: $modulname-$actionname
     * Url:  $modulname/$actionurl
@@ -56,68 +45,103 @@ def setup_modul(config, clazz):
     Further a clazz specific factory will be added to the route which is
     later used to setup the ACL of items of the modul.
 
-    :config: Pylons config instance
-    :clazz: The clazz of the module for which the new routes will be set up.
-    :returns: config
-
+    :config: Configuration
+    :action: Action item
+    :clazz: clazz item
+    :view_mapping: Dictionary with action items
+    :returns: @todo
     """
     name = clazz.__tablename__
-    for action in clazz.get_item_actions():
-        action_name = action.name.lower()
-        #  Setup web route and views
-        route_name = clazz.get_action_routename(action.name.lower())
-        route_url = "%s/%s" % (name, action.url)
-        log.debug("Adding WEB route: %s, %s" % (route_name, route_url))
-        config.add_route(route_name, route_url,
-                         factory=get_resource_factory(clazz))
-        view_func = web_action_view_mapping.get(action_name)
-        if view_func:
-            if action_name == "delete":
-                template = "confirm"
-            else:
-                template = action_name
-            config.add_view(view_func,
-                            route_name=route_name,
-                            renderer='/default/%s.mako' % template,
-                            permission=action.permission or action_name)
-
-        #  Setup REST route and views
-        action_method_mapping = {
-            "list": "GET",
-            "create": "POST",
-            "read": "GET",
-            "update": "PUT",
-            "delete": "DELETE"
-        }
-        route_name = clazz.get_action_routename(action.name.lower(),
-                                                prefix="rest")
-        tmpurl = action.url.split("/")
-        if len(tmpurl) > 1:
-            route_url = "rest/%s/%s" % (name, tmpurl[1])
+    action_name = action.name.lower()
+    route_name = clazz.get_action_routename(action_name)
+    route_url = "%s/%s" % (name, action.url)
+    log.debug("Adding WEB route: %s, %s" % (route_name, route_url))
+    config.add_route(route_name, route_url,
+                     factory=get_resource_factory(clazz))
+    view_func = view_mapping.get(action_name)
+    if view_func:
+        if action_name == "delete":
+            template = "confirm"
         else:
-            route_url = "rest/%s" % (name)
-        log.debug("Adding REST route: %s, %s" % (route_name, route_url))
-        config.add_route(route_name, route_url,
-                         factory=get_resource_factory(clazz))
-        view_func = rest_action_view_mapping.get(action_name)
-        if view_func:
-            config.add_view(view_func,
-                            route_name=route_name,
-                            renderer='json',
-                            request_method=action_method_mapping[action_name],
-                            permission=action.permission or action_name)
+            template = action_name
+        config.add_view(view_func,
+                        route_name=route_name,
+                        renderer='/default/%s.mako' % template,
+                        permission=action.permission or action_name)
+    ## Add bundle action.
+    if action_name == "list":
+       action_name = "bundle"
+       route_name = "%s-%s" % (name, action_name)
+       route_url = "%s/%s" % (name, action_name)
+       log.debug("Adding route: %s, %s" % (route_name, route_url))
+       config.add_route(route_name, route_url,
+                        factory=get_resource_factory(clazz))
+       config.add_view(view_mapping.get(action_name), route_name=route_name,
+                       renderer='/default/bundle.mako',
+                       permission='list')
 
-        # Add bundle action.
-        if action.name == "List":
-            action_name = "Bundle"
-            route_name = "%s-%s" % (name, action_name.lower())
-            route_url = "%s/%s" % (name, action_name.lower())
-            log.debug("Adding route: %s, %s" % (route_name, route_url))
-            config.add_route(route_name, route_url,
-                             factory=get_resource_factory(clazz))
-            config.add_view(bundle_, route_name=route_name,
-                            renderer='/default/bundle.mako',
-                            permission='list')
+
+def _setup_rest_action(config, action, clazz, view_mapping):
+    """Setup a route and a view for given action and clazz.
+    The routes will have the follwoing following name and url:
+
+    * Name: $modulname-$actionname
+    * Url:  $modulname/$actionurl
+
+    Note, that the actionname can be configured only as admin.
+
+    Further a clazz specific factory will be added to the route which is
+    later used to setup the ACL of items of the modul.
+
+    :config: Configuration
+    :action: Action item
+    :clazz: clazz item
+    :view_mapping: Dictionary with action items
+    :returns: @todo
+    """
+    action_method_mapping = {
+        "list": "GET",
+        "create": "POST",
+        "read": "GET",
+        "update": "PUT",
+        "delete": "DELETE"
+    }
+    name = clazz.__tablename__
+    action_name = action.name.lower()
+    view_func = view_mapping.get(action_name)
+    if not view_func:
+        return
+    route_name = clazz.get_action_routename(action_name,
+                                            prefix="rest")
+    tmpurl = action.url.split("/")
+    if len(tmpurl) > 1:
+        route_url = "rest/%s/%s" % (name, tmpurl[1])
+    else:
+        route_url = "rest/%s" % (name)
+    log.debug("Adding REST route: %s, %s" % (route_name, route_url))
+    method = action_method_mapping[action_name]
+    config.add_route(route_name, route_url,
+                     request_method=method,
+                     factory=get_resource_factory(clazz))
+    log.debug("Adding REST view: %s, %s, %s" % (view_func, route_name, method))
+    config.add_view(view_func,
+                    route_name=route_name,
+                    request_method=method,
+                    renderer='json',
+                    permission=action.permission or action_name)
+
+
+def setup_modul(config, modul):
+    """Setup routes and views for the activated actions of the given
+    model of the modul.
+    
+    :config: Pylons config instance
+    :modul: The module for which the new routes will be set up.
+    """
+    clazz = helpers.dynamic_import(modul.clazzpath)
+    for action in modul.actions:
+        _setup_web_action(config, action, clazz, web_action_view_mapping)
+        _setup_rest_action(config, action, clazz, rest_action_view_mapping)
 
 
 def write_formbar_static_files():
