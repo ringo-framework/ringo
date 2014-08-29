@@ -23,6 +23,10 @@ Refactoring of views.
 * views.helpers : Modul with helpers methods (getters) to get things like to forms or
   information from the request.
 
+Refactoring of model:
+* Removal of the request dependecy in the base model.
+Refactoring of the setup of the modules.
+
 0.15.1
 =======
 Refactoring. Cleanup Model and try to get rid of pyramid specific elements
