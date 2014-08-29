@@ -16,7 +16,7 @@ Usergroup = import_model('ringo.model.user.Usergroup')
 Role = import_model('ringo.model.user.Role')
 
 from ringo.views import handle_history
-from ringo.lib.helpers import get_path_to_form_config, get_app_name
+from ringo.lib.helpers import get_path_to_form_config, get_app_title
 from ringo.lib.security import login as user_login, request_password_reset, \
     password_reset, activate_user, encrypt_password
 from ringo.lib.message import Mailer, Mail
@@ -135,7 +135,7 @@ def register_user(request):
             recipient = user.profile[0].email
             subject = _('Confirm user registration')
             values = {'url': request.route_url('confirm_user', token=atoken),
-                      'app_name': get_app_name(),
+                      'app_name': get_app_title(),
                       'email': settings['mail.default_sender'],
                       '_': _}
             mail = Mail([recipient], subject, template="register_user", values=values)
@@ -190,7 +190,7 @@ def forgot_password(request):
                 recipient = user.profile[0].email
                 subject = _('Password reset request')
                 values = {'url': request.route_url('reset_password', token=user.reset_tokens[-1]),
-                          'app_name': get_app_name(),
+                          'app_name': get_app_title(),
                           'email': settings['mail.default_sender'],
                           '_': _}
                 mail = Mail([recipient], subject, template="password_reset_request", values=values)
@@ -220,7 +220,7 @@ def reset_password(request):
         recipient = user.profile[0].email
         subject = _('Password has been reseted')
         values = {'password': password,
-                  'app_name': get_app_name(),
+                  'app_name': get_app_title(),
                   'email': settings['mail.default_sender'],
                   '_': _}
         mail = Mail([recipient], subject, template="password_reminder", values=values)
