@@ -7,7 +7,7 @@ from pyramid_mailer.message import Message
 
 from mako.lookup import TemplateLookup
 from ringo.config import template_dir as ringo_template_dir
-from ringo.lib.helpers import get_app_name
+from ringo.lib.helpers import get_app_title, get_app_name
 
 log = logging.getLogger(__name__)
 
@@ -50,7 +50,7 @@ class Mail:
     def __init__(self, recipients, subject,
                  template=None, values={}, msg="", sender=None):
         self.recipients = recipients
-        self.subject = u"[%s] %s" % (get_app_name(), subject)
+        self.subject = u"[%s] %s" % (get_app_title(), subject)
         self.sender = sender
         self.body = ""
 
