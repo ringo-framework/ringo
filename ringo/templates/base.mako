@@ -103,7 +103,7 @@
 
 <%def name="render_item_base_actions(item)">
   <% context_actions = [] %>
-  % for action in item.get_item_actions(request):
+  % for action in h.get_item_actions(request, item):
     % if (request.url.find(action.name.lower()) < 0) and s.has_permission((action.permission or action.name.lower()), request.context.item, request):
       <%
       icon = get_icon(action)

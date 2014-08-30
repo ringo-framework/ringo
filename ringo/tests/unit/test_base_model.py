@@ -86,7 +86,8 @@ class BaseItemTests(BaseUnitTest):
     def test_get_item_actions(self):
         from ringo.model.modul import ModulItem
         from ringo.model.modul import ActionItem
-        result = ModulItem.get_item_actions()
+        from ringo.lib.helpers import get_item_actions
+        result = get_item_actions(self.request, ModulItem)
         self.assertTrue(isinstance(result, list))
         if len(result) > 0:
             self.assertTrue(isinstance(result[0], ActionItem))

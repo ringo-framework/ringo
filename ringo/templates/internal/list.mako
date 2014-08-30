@@ -184,7 +184,7 @@ autoresponsive = tableconfig.is_autoresponsive()
   <div class="well well-small">
     <input name="csrf_token" type="hidden" value="${request.session.get_csrf_token()}">
     <select class="form-control input-small" name="bundle_action" style="display:inline;width:auto;">
-      % for action in clazz.get_item_actions(request):
+      % for action in h.get_item_actions(request, clazz):
         ${action.bundle}
         % if action.bundle:
           <option value="${action.name}">${action.name}</option>

@@ -116,17 +116,6 @@ class BaseItem(object):
         return BaseFactory(cls)
 
     @classmethod
-    def get_item_actions(cls, request=None):
-        """Returns a list of ActionItems which are available for items
-        modul. If you want to add custom actions to the modul please
-        overwrite this method.
-
-        :returns: List of ActionItems.
-        """
-        modul = cls.get_item_modul(request)
-        return modul.actions
-
-    @classmethod
     def get_item_modul(cls, request=None):
         if not request:
             request = get_current_request()

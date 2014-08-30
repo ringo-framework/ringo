@@ -78,6 +78,18 @@ def get_app_title():
     return settings['app.title']
 
 
+def get_item_actions(request, item):
+    """Returns a list of ActionItems which are available for given item
+    or class.  If you want to add custom actions to the modul please
+    overwrite this method.
+
+    :item: Instance or class in the model.
+    :returns: List of ActionItems.
+    """
+    modul = item.get_item_modul(request)
+    return modul.actions
+
+
 def get_action_url(request, item, action):
     """Return an URL object for the given item and action. If the item
     is an instance of object then we assume that we want to get the URL
