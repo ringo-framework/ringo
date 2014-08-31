@@ -14,7 +14,7 @@ from ringo.views.request import (
 from ringo.model.mixins import Owned
 
 from ringo.lib.form import get_form_config
-from ringo.lib.helpers import import_model
+from ringo.lib.helpers import import_model, get_action_routename
 from ringo.lib.security import login, encrypt_password
 from ringo.lib.sql.cache import invalidate_cache
 User = import_model('ringo.model.user.User')
@@ -41,14 +41,14 @@ def check_password(field, data):
 ###########################################################################
 
 
-@view_config(route_name=User.get_action_routename('create'),
+@view_config(route_name=get_action_routename(User, 'create'),
              renderer='/default/create.mako',
              permission='create')
 def create_(request):
     return create(request, encrypt_password_callback)
 
 
-@view_config(route_name=User.get_action_routename('changepassword'),
+@view_config(route_name=get_action_routename(User, 'changepassword'),
              renderer='/users/changepassword.mako')
 def changepassword(request):
     """Method to change the users password by the user. The user user
@@ -96,7 +96,7 @@ def changepassword(request):
                     mapping=mapping)
             log.info(msg)
             request.session.flash(msg, 'success')
-            route_name = item.get_action_routename('changepassword')
+            route_name = get_action_routename(item, 'changepassword')
             url = request.route_path(route_name, id=item.id)
             # Invalidate cache
             invalidate_cache()
@@ -116,7 +116,7 @@ def changepassword(request):
 #                               REST SERVICE                              #
 ###########################################################################
 
-@view_config(route_name=User.get_action_routename('create', prefix="rest"),
+@view_config(route_name=get_action_routename(User, 'create', prefix="rest"),
              renderer='json',
              request_method="POST",
              permission='create')

@@ -94,7 +94,7 @@ autoresponsive = tableconfig.is_autoresponsive()
     % endif
   </form>
 </div>
-<form id="data-table" name="data-table" role="form" action="${request.route_path(clazz.get_action_routename('bundle'))}" method="POST">
+<form id="data-table" name="data-table" role="form" action="${request.route_path(h.get_action_routename(clazz, 'bundle'))}" method="POST">
 <table id="data" class="table table-striped table-hover table-condensed table-bordered">
   <tr>
   % if enable_bundled_actions:
@@ -141,9 +141,9 @@ autoresponsive = tableconfig.is_autoresponsive()
     % endif
     % for num, field in enumerate(tableconfig.get_columns()):
       % if autoresponsive:
-        <td onclick="openItem('${request.route_path(clazz.get_action_routename(permission), id=item.id)}')" class="${num > 0 and 'hidden-xs'} link">
+        <td onclick="openItem('${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}')" class="${num > 0 and 'hidden-xs'} link">
       % else:
-        <td onclick="openItem('${request.route_path(clazz.get_action_routename(permission), id=item.id)}')" class="${render_responsive_class(field.get('screen'))} link">
+        <td onclick="openItem('${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}')" class="${render_responsive_class(field.get('screen'))} link">
       % endif
         <%
             try:

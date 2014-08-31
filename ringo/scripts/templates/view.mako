@@ -1,6 +1,7 @@
 import logging
 from pyramid.view import view_config
 
+from ringo.lib.helpers import get_action_routename
 from ringo.views.base import list_, create_, update_, read_, delete_
 from ringo.views.base import list_, create_, update_, read_, delete_,\
 export_, import_
@@ -19,49 +20,49 @@ log = logging.getLogger(__name__)
 #                                HTML VIEW                                #
 ###########################################################################
 
-@view_config(route_name=${clazz}.get_action_routename('list'),
+@view_config(route_name=get_action_routename(${clazz}, 'list'),
              renderer='/default/list.mako',
              permission='list')
 def list(request):
     return list_(${clazz}, request)
 
 
-@view_config(route_name=${clazz}.get_action_routename('create'),
+@view_config(route_name=get_action_routename(${clazz}, 'create'),
              renderer='/default/create.mako',
              permission='create')
 def create(request):
     return create_(${clazz}, request)
 
 
-@view_config(route_name=${clazz}.get_action_routename('update'),
+@view_config(route_name=get_action_routename(${clazz}, 'update'),
              renderer='/default/update.mako',
              permission='update')
 def update(request):
     return update_(${clazz}, request)
 
 
-@view_config(route_name=${clazz}.get_action_routename('read'),
+@view_config(route_name=get_action_routename(${clazz}, 'read'),
              renderer='/default/read.mako',
              permission='read')
 def read(request):
     return read_(${clazz}, request)
 
 
-@view_config(route_name=${clazz}.get_action_routename('delete'),
+@view_config(route_name=get_action_routename(${clazz}, 'delete'),
              renderer='/default/confirm.mako',
              permission='delete')
 def delete(request):
     return delete_(${clazz}, request)
 
 
-@view_config(route_name=${clazz}.get_action_routename('export'),
+@view_config(route_name=get_action_routename(${clazz}, 'export'),
              renderer='/default/export.mako',
              permission='export')
 def export(request):
     return export_(${clazz}, request)
 
 
-@view_config(route_name=${clazz}.get_action_routename('import'),
+@view_config(route_name=get_action_routename(${clazz}, 'import'),
              renderer='/default/import.mako',
              permission='import')
 def myimport(request):
@@ -71,7 +72,7 @@ def myimport(request):
 #                               REST SERVICE                              #
 ###########################################################################
 
-@view_config(route_name=${clazz}.get_action_routename('list', prefix="rest"),
+@view_config(route_name=get_action_routename(${clazz}, 'list', prefix="rest"),
              renderer='json',
              request_method="GET",
              permission='list'
@@ -79,28 +80,28 @@ def myimport(request):
 def rest_list(request):
     return json_list(${clazz}, request)
 
-@view_config(route_name=${clazz}.get_action_routename('create', prefix="rest"),
+@view_config(route_name=get_action_routename(${clazz}, 'create', prefix="rest"),
              renderer='json',
              request_method="POST",
              permission='create')
 def rest_create(request):
-    return json_create(${clazz}, request, encrypt_password)
+    return json_create(${clazz}, request)
 
-@view_config(route_name=${clazz}.get_action_routename('read', prefix="rest"),
+@view_config(route_name=get_action_routename(${clazz}, 'read', prefix="rest"),
              renderer='json',
              request_method="GET",
              permission='read')
 def rest_read(request):
     return json_read(${clazz}, request)
 
-@view_config(route_name=${clazz}.get_action_routename('update', prefix="rest"),
+@view_config(route_name=get_action_routename(${clazz}, 'update', prefix="rest"),
              renderer='json',
              request_method="PUT",
              permission='update')
 def rest_update(request):
     return json_update(${clazz}, request)
 
-@view_config(route_name=${clazz}.get_action_routename('delete', prefix="rest"),
+@view_config(route_name=get_action_routename(${clazz}, 'delete', prefix="rest"),
              renderer='json',
              request_method="DELETE",
              permission='delete')

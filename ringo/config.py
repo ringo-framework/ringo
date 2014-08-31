@@ -3,6 +3,7 @@ import logging
 import pkg_resources
 from ringo.lib import helpers
 from ringo.lib.sql.db import DBSession
+from ringo.lib.helpers import get_action_routename
 from ringo.model.modul import ModulItem
 from ringo.resources import get_resource_factory
 from ringo.views.base import (
@@ -53,7 +54,7 @@ def _setup_web_action(config, action, clazz, view_mapping):
     """
     name = clazz.__tablename__
     action_name = action.name.lower()
-    route_name = clazz.get_action_routename(action_name)
+    route_name = get_action_routename(clazz, action_name)
     route_url = "%s/%s" % (name, action.url)
     log.debug("Adding WEB route: %s, %s" % (route_name, route_url))
     config.add_route(route_name, route_url,
@@ -111,8 +112,8 @@ def _setup_rest_action(config, action, clazz, view_mapping):
     view_func = view_mapping.get(action_name)
     if not view_func:
         return
-    route_name = clazz.get_action_routename(action_name,
-                                            prefix="rest")
+    route_name = get_action_routename(clazz, action_name,
+                                      prefix="rest")
     tmpurl = action.url.split("/")
     if len(tmpurl) > 1:
         route_url = "rest/%s/%s" % (name, tmpurl[1])
@@ -134,7 +135,7 @@ def _setup_rest_action(config, action, clazz, view_mapping):
 def setup_modul(config, modul):
     """Setup routes and views for the activated actions of the given
     model of the modul.
-    
+
     :config: Pylons config instance
     :modul: The module for which the new routes will be set up.
     """

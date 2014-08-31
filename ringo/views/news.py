@@ -1,5 +1,6 @@
 import logging
 from pyramid.view import view_config
+from ringo.lib.helpers import get_action_routename
 from ringo.model.news import News
 from ringo.views.base.read import rest_read
 
@@ -28,7 +29,7 @@ def read_callback(request, item):
     item = _mark_news_as_read(request, item)
     return item
 
-@view_config(route_name=News.get_action_routename('markasread', prefix="rest"),
+@view_config(route_name=get_action_routename(News, 'markasread', prefix="rest"),
              renderer='json',
              request_method="PUT",
              permission='read')

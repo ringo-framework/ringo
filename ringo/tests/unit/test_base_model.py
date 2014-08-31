@@ -46,12 +46,14 @@ class BaseItemTests(BaseUnitTest):
 
     def test_get_action_routename(self):
         from ringo.model.modul import ModulItem
-        result = ModulItem.get_action_routename('create')
+        from ringo.lib.helpers import get_action_routename
+        result = get_action_routename(ModulItem, 'create')
         self.assertEqual(result, 'modules-create')
 
     def test_get_action_routename_prefixed(self):
         from ringo.model.modul import ModulItem
-        result = ModulItem.get_action_routename('create', 'rest')
+        from ringo.lib.helpers import get_action_routename
+        result = get_action_routename(ModulItem, 'create', 'rest')
         self.assertEqual(result, 'rest-modules-create')
 
     def test_get_values(self):

@@ -26,6 +26,8 @@ Refactoring of views.
 Refactoring of model:
 * Removal of the request dependecy in the base model.
 Refactoring of the setup of the modules.
+* Removal of several class methods like get_action_routename and get_item
+  actions into lib.helpers and others.
 
 0.15.1
 =======

@@ -16,9 +16,9 @@ from ringo.lib.helpers import format_datetime
     <%
       url = None
       if s.has_permission("update", item, request):
-        url = request.route_path(item.get_action_routename("update"), id=item.id)
+        url = request.route_path(h.get_action_routename(item, "update"), id=item.id)
       elif s.has_permission("read", item, request):
-        url = request.route_path(item.get_action_routename("read"), id=item.id)
+        url = request.route_path(h.get_action_routename(item, "read"), id=item.id)
     %>
     <tr id="todoentry_${item.id}">
       % for field in tableconfig.get_columns():

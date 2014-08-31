@@ -90,6 +90,22 @@ def get_item_actions(request, item):
     return modul.actions
 
 
+def get_action_routename(item, action, prefix=None):
+    """Returns a string for the given action which can be used to get or
+    build a route. If prefix is provided the the prefix will be
+    prepended to the route name.
+
+    :item: Instance or class in the model.
+    :action: Name of the action.
+    :prefix: Optional prefix of the route name.
+    :returns: List of ActionItems.
+    """
+    routename = "%s-%s" % (item.__tablename__, action)
+    if prefix:
+        return "%s-%s" % (prefix, routename)
+    return routename
+
+
 def get_action_url(request, item, action):
     """Return an URL object for the given item and action. If the item
     is an instance of object then we assume that we want to get the URL
@@ -100,8 +116,7 @@ def get_action_url(request, item, action):
     :action: string of the action
     :returns: URL instance
     """
-    base_name = item.__tablename__
-    route_name = "%s-%s" % (base_name, action)
+    route_name = get_action_routename(item, action)
     if isinstance(item, object):
         return request.route_path(route_name, id=item.id)
     # TODO: Is this code ever reached. See testcase (ti) <2014-02-25 23:17>

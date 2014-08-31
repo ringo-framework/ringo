@@ -34,7 +34,7 @@
             </tr>
           % for item in items:
             <tr>
-              <td><a href="${request.route_path(item[0].get_action_routename('read'), id=item[0].id)}">${item[0]}</a></td>
+              <td><a href="${request.route_path(h.get_action_routename(item[0], 'read'), id=item[0].id)}">${item[0]}</a></td>
               <td>${item[1]}</td>
               <td>
                 % if item[2]:

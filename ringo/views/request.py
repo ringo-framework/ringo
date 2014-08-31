@@ -2,7 +2,7 @@
 import logging
 from pyramid.httpexceptions import HTTPFound
 from ringo.lib.security import has_permission
-from ringo.lib.helpers import import_model
+from ringo.lib.helpers import import_model, get_action_routename
 from ringo.lib.history import History
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.views.helpers import (
@@ -128,10 +128,10 @@ def handle_redirect_on_success(request):
         # Handle redirect after success.
         # Check if the user is allowed to call the url after saving
         if has_permission("update", item, request):
-            route_name = item.get_action_routename('update')
+            route_name = get_action_routename(item, 'update')
             url = request.route_path(route_name, id=item.id)
         else:
-            route_name = item.get_action_routename('read')
+            route_name = get_action_routename(item, 'read')
             url = request.route_path(route_name, id=item.id)
         return HTTPFound(location=url)
 

@@ -13,7 +13,8 @@ from formbar.config import Config, load
 from formbar.form import Form
 import ringo.lib.helpers
 from ringo.lib.helpers import (
-    get_saved_searches
+    get_saved_searches,
+    get_action_routename
 )
 from ringo.model.base import BaseItem, BaseList, get_item_list
 from ringo.lib.table import get_table_config
@@ -145,6 +146,7 @@ class DTListRenderer(Renderer):
                   'request': request,
                   '_': request.translate,
                   's': security,
+                  'h': ringo.lib.helpers,
                   'tableconfig': self.config}
         return self.template.render(**values)
 
@@ -314,7 +316,7 @@ class ImportDialogRenderer(DialogRenderer):
         values['ok_url'] = self._request.current_route_url()
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
-        values['overview_url'] = self._request.route_path(self._item.get_action_routename('list'))
+        values['overview_url'] = self._request.route_path(get_action_routename(self._item, 'list'))
         values['items'] = items
         return self.template.render(**values)
 
@@ -382,9 +384,9 @@ def add_renderers(renderers):
 def get_link_url(item, request):
     if isinstance(item, BaseItem):
         if security.has_permission("update", item, request):
-            route_name = item.get_action_routename('update')
+            route_name = get_action_routename(item, 'update')
         elif security.has_permission("read", item, request):
-            route_name = item.get_action_routename('read')
+            route_name = get_action_routename(item, 'read')
         else:
             return None
         return request.route_path(route_name, id=item.id)
@@ -605,6 +607,7 @@ class ListingFieldRenderer(FormbarSelectionField):
                   'request': self._field._form._request,
                   '_': self._field._form._translate,
                   's': security,
+                  'h': ringo.lib.helpers,
                   'tableconfig': get_table_config(self.itemlist.clazz,
                                                   config.table)}
         html.append(self.template.render(**values))

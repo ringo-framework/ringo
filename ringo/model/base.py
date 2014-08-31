@@ -134,13 +134,6 @@ class BaseItem(object):
                 return modul
         return request.cache_item_modul.get(cls._modul_id)
 
-    @classmethod
-    def get_action_routename(cls, action, prefix=None):
-        routename = "%s-%s" % (cls.__tablename__, action)
-        if prefix:
-            return "%s-%s" % (prefix, routename)
-        return routename
-
     def reset_uuid(self):
         self.uuid = '%.32x' % uuid.uuid4()
 

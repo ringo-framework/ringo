@@ -18,7 +18,7 @@
     <tr>
       % for field in tableconfig.get_columns():
       % if permission:
-      <td onclick="openItem('${request.route_path(clazz.get_action_routename(permission), id=item.id)}')" class="link">
+      <td onclick="openItem('${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}')" class="link">
       % else:
       <td>
       % endif

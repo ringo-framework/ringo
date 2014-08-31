@@ -21,7 +21,7 @@ for item in items:
     <tr class="table-toolbar">
       <th colspan="${len(tableconfig.get_columns())+1}">
       <a href="#"
-      onclick="addItem('${request.route_path(clazz.get_action_routename("create"))}', '${field.name}', '${field.renderer.form}', '${field._form._item.id}', '${pclazz.get_item_modul(request).clazzpath}')"
+      onclick="addItem('${request.route_path(h.get_action_routename(clazz, "create"))}', '${field.name}', '${field.renderer.form}', '${field._form._item.id}', '${pclazz.get_item_modul(request).clazzpath}')"
       class="btn btn-default btn-small">${_('Add')}</a>
       </th>
     </tr>
@@ -68,7 +68,7 @@ for item in items:
       % endif
       % for num, col in enumerate(tableconfig.get_columns()):
         % if permission and not field.renderer.nolinks == "true":
-          <td onclick="openItem('${request.route_path(clazz.get_action_routename(permission), id=item[0].id)}')" class="${num > 0 and 'hidden-xs'} link">
+          <td onclick="openItem('${request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)}')" class="${num > 0 and 'hidden-xs'} link">
         % else:
           <td class="${num > 0 and 'hidden-xs'}">
         % endif

@@ -2,6 +2,7 @@ import logging
 from pyramid.httpexceptions import HTTPFound
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.lib.renderer import ConfirmDialogRenderer
+from ringo.lib.helpers import get_action_routename
 from ringo.views.response import JSONResponse
 from ringo.views.request import (
     handle_params,
@@ -29,7 +30,7 @@ def _handle_redirect(request):
         return HTTPFound(location=backurl)
     else:
         # Redirect to the list view.
-        route_name = clazz.get_action_routename('list')
+        route_name = get_action_routename(clazz, 'list')
         url = request.route_path(route_name)
         return HTTPFound(location=url)
 
