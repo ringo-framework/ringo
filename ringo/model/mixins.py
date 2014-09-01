@@ -29,7 +29,6 @@ comments).
 import datetime
 import json
 import logging
-from formbar.config import Config, parse
 from sqlalchemy.ext.declarative import declared_attr
 
 from sqlalchemy import (
@@ -47,7 +46,6 @@ from sqlalchemy.orm import (
 )
 
 from ringo.model import Base
-from ringo.lib.cache import CACHE_FORM_CONFIG
 from ringo.lib.helpers import serialize
 from ringo.lib.alchemy import get_columns_from_instance
 
@@ -190,8 +188,7 @@ class Blobform(object):
 
     @declared_attr
     def form(cls):
-        from ringo.model.form import Form
-        form = relationship(Form, uselist=False)
+        form = relationship("Form", uselist=False)
         return form
 
     def __getattr__(self, name):
