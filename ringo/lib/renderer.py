@@ -1,5 +1,4 @@
 import logging
-import cgi
 import json
 from mako.lookup import TemplateLookup
 from pyramid.events import BeforeRender
@@ -18,7 +17,6 @@ from ringo.lib.helpers import (
     get_path_to_form_config,
 )
 from ringo.model.base import BaseItem, BaseList
-from ringo.model.form import Form as FormItem
 import ringo.lib.security as security
 
 template_lookup = TemplateLookup(directories=[template_dir])
@@ -439,6 +437,7 @@ class ExportDialogRenderer(DialogRenderer):
         out.append(self.form.render(buttons=False))
         return "".join(out)
 
+
 class ImportDialogRenderer(DialogRenderer):
     """Docstring for ImportDialogRenderer"""
 
@@ -480,9 +479,9 @@ class PrintDialogRenderer(DialogRenderer):
         config = Config(load(get_path_to_form_config('print.xml', 'ringo')))
         form_config = config.get_form('default')
         self.form = Form(form_config,
-                         item = clazz,
+                         item=clazz,
                          csrf_token=self._request.session.get_csrf_token(),
-                         dbsession = request.db)
+                         dbsession=request.db)
 
     def render(self):
         values = {}
@@ -524,6 +523,7 @@ def add_renderers(renderers):
         renderers["tags"] = TagFieldRenderer
     return renderers
 
+
 def get_link_url(item, request):
     if isinstance(item, BaseItem):
         if security.has_permission("update", item, request):
@@ -534,6 +534,7 @@ def get_link_url(item, request):
             return None
         return request.route_path(route_name, id=item.id)
     return None
+
 
 class LinkFieldRenderer(FieldRenderer):
     def __init__(self, field, translate):
@@ -561,6 +562,7 @@ class LinkFieldRenderer(FieldRenderer):
 
     def _render_label(self):
         return ""
+
 
 class DropdownFieldRenderer(FormbarDropdown):
     """Ringo specific DropdownFieldRenderer. This renderer add a small
@@ -751,6 +753,7 @@ class ListingFieldRenderer(FormbarSelectionField):
                   'tableconfig': self.itemlist.clazz.get_table_config(config.table)}
         html.append(self.template.render(**values))
         return "".join(html)
+
 
 class TagFieldRenderer(ListingFieldRenderer):
     """Renderer to render tags  listings. The renderer will only show
