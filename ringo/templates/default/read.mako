@@ -3,7 +3,7 @@
 <div class="page-header">
   <div class="row">
     <div class="col-sm-7">
-      <h1>${_(clazz.get_item_modul(request).get_label())}: ${item}</h1>
+      <h1>${_(h.get_item_modul(request, clazz).get_label())}: ${item}</h1>
     </div>
     <div class="col-sm-5 visible-xs">
       <div class="context-menu">

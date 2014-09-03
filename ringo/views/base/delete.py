@@ -2,7 +2,10 @@ import logging
 from pyramid.httpexceptions import HTTPFound
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.lib.renderer import ConfirmDialogRenderer
-from ringo.lib.helpers import get_action_routename
+from ringo.lib.helpers import (
+    get_action_routename,
+    get_item_modul
+)
 from ringo.views.response import JSONResponse
 from ringo.views.request import (
     handle_params,
@@ -41,7 +44,7 @@ def _handle_delete_request(request, items):
     if request.method == 'POST' and is_confirmed(request):
         for item in items:
             request.db.delete(item)
-        item_label = clazz.get_item_modul(request).get_label(plural=True)
+        item_label = get_item_modul(request, clazz).get_label(plural=True)
         mapping = {'item_type': item_label, 'num': len(items)}
         msg = _('Deleted ${num} ${item_type} successfull.', mapping=mapping)
         log.info(msg)

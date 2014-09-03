@@ -2,13 +2,13 @@
 <div class="page-header">
   <div class="row">
     <div class="col-sm-8">
-      <h1>${len(itemlist.items)} ${N_(clazz.get_item_modul(request).get_label(plural=True))}</h1>
+      <h1>${len(itemlist.items)} ${N_(h.get_item_modul(request, clazz).get_label(plural=True))}</h1>
     </div>
     <div class="col-sm-4 visible-xs">
       <div class="context-menu">
         <div class="btn-toolbar">
           <div class="btn-group btn-group-justified">
-            % if clazz.get_item_modul(request).has_action('create'):
+            % if h.get_item_modul(request, clazz).has_action('create'):
             <a href="${request.route_path(h.get_action_routename(clazz, 'create'))}" class="btn btn-primary btn-block">${_('New')}</a>
             % endif
           </div>
@@ -20,8 +20,8 @@
         <div class="btn-toolbar">
           <div class="btn-group">
             <%
-              show_create =  clazz.get_item_modul(request).has_action('create') and s.has_permission('create', request.context, request)
-              show_import =  clazz.get_item_modul(request).has_action('import') and s.has_permission('import', request.context, request)
+              show_create =  h.get_item_modul(request, clazz).has_action('create') and s.has_permission('create', request.context, request)
+              show_import =  h.get_item_modul(request, clazz).has_action('import') and s.has_permission('import', request.context, request)
             %>
             % if show_create:
               <a href="${request.route_path(h.get_action_routename(clazz, 'create'))}" class="btn btn-primary"><i class="glyphicon glyphicon-plus">&nbsp;</i>${_('New')}</a>

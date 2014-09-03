@@ -25,9 +25,20 @@ Refactoring of views.
 
 Refactoring of model:
 * Removal of the request dependecy in the base model.
-Refactoring of the setup of the modules.
+  Refactoring of the setup of the modules.
 * Removal of several class methods like get_action_routename and get_item
   actions into lib.helpers and others.
+
+HOWTO Upgrade:
+
+* The following methods has been moved:
+  - get_table_config -> lib/table.py
+  - get_form_config -> lib/form.py
+  - get_action_routename -> lib/helpers.py
+  - get_item_list -> model/base.py
+  - get_item_modul -> lib/helpers.py
+
+  Search for these methods in all *.py and *.mako files and adapt the call.
 
 0.15.1
 =======

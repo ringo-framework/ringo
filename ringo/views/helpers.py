@@ -5,6 +5,7 @@ from formbar.config import (
     parse
 )
 from formbar.form import Form
+from ringo.lib.helpers import get_item_modul
 from ringo.lib.form import (
     get_form_config,
     get_ownership_form as _get_ownership_form,
@@ -55,7 +56,7 @@ def get_blobform_config(request, item, formname):
         return item, formconfig.get_form(formname)
     else:
         log.debug("Stage 1: User is selecting a blobform")
-        modul = item.get_item_modul(request)
+        modul = get_item_modul(request, item)
         formconfig = get_form_config(modul, "blobform")
         return modul, formconfig
 

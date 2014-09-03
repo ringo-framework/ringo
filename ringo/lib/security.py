@@ -16,7 +16,9 @@ from pyramid.httpexceptions import HTTPUnauthorized
 
 from sqlalchemy.orm.exc import NoResultFound
 
+from ringo.lib.helpers import get_item_modul
 from ringo.lib.sql import DBSession
+from ringo.model.base import BaseItem
 from ringo.model.user import User, PasswordResetRequest
 
 log = logging.getLogger(__name__)
@@ -173,8 +175,8 @@ def has_permission(permission, context, request):
     :returns: True or False (Boolean like object)
 
     """
-    if hasattr(context, "get_item_modul"):
-        modul = context.get_item_modul(request)
+    if isinstance(context, BaseItem) or hasattr(context, "_modul_id"):
+        modul = get_item_modul(request, context)
         context.__acl__ = get_permissions(modul, context)
     # TODO: Call of has_permission will trigger 4 additional SQL-Queries
     # per call. So we might think about caching the result.
@@ -215,7 +217,7 @@ def get_permissions(modul, item=None):
     # Load current states for the item as we need to check which
     # permissions the user has depending on the current states of the item.
     current_states = []
-    if item and hasattr(item, '_statemachines'):
+    if isinstance(item, BaseItem) and hasattr(item, '_statemachines'):
         for smname in item._statemachines:
             sm = item.get_statemachine(smname)
             state = sm.get_state()

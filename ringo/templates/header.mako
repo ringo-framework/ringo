@@ -12,7 +12,7 @@
       <ul class="nav navbar-nav">
         <%
           if clazz:
-            modul_name = clazz.get_item_modul(request).name
+            modul_name = h.get_item_modul(request, clazz).name
           else:
             modul_name = None
         %>

@@ -1,12 +1,15 @@
 import os
+import logging
 import pkg_resources
 from babel.core import Locale
 from babel.dates import format_datetime as babel_format_datetime
 from datetime import datetime, timedelta
 from dateutil import tz
-from pyramid.threadlocal import get_current_registry
+from pyramid.threadlocal import get_current_registry, get_current_request
 from pyramid.i18n import get_locale_name
 from formbar.helpers import get_css_files, get_js_files
+
+log = logging.getLogger(__name__)
 
 
 def serialize(value):
@@ -78,6 +81,32 @@ def get_app_title():
     return settings['app.title']
 
 
+def get_item_modul(request, item):
+    if hasattr(item, "_modul_id"):
+        return _get_item_modul(request, item)
+    else:
+        return _get_item_modul(request, item.__class__)
+
+
+def _get_item_modul(request, item):
+    if not request:
+        request = get_current_request()
+        if request:
+            log.warning("Calling get_item_modul with no request although "
+                        "there is a request available. "
+                        "Using 'get_current_request'...")
+    if not request or not request.cache_item_modul.get(item._modul_id):
+        from ringo.model.modul import ModulItem
+        factory = ModulItem.get_item_factory()
+        modul = factory.load(item._modul_id)
+        if request:
+            if not request.cache_item_modul.get(item._modul_id):
+                request.cache_item_modul.set(item._modul_id, modul)
+        else:
+            return modul
+    return request.cache_item_modul.get(item._modul_id)
+
+
 def get_item_actions(request, item):
     """Returns a list of ActionItems which are available for given item
     or class.  If you want to add custom actions to the modul please
@@ -86,7 +115,7 @@ def get_item_actions(request, item):
     :item: Instance or class in the model.
     :returns: List of ActionItems.
     """
-    modul = item.get_item_modul(request)
+    modul = get_item_modul(request, item)
     return modul.actions
 
 

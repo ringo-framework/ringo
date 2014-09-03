@@ -8,7 +8,8 @@ from ringo.lib.sql.cache import invalidate_cache
 from ringo.views.helpers import (
     get_item_from_request,
     get_ownership_form,
-    get_item_form
+    get_item_form,
+    get_item_modul
 )
 
 log = logging.getLogger(__name__)
@@ -57,7 +58,7 @@ def handle_POST_request(form, request, callback, event, renderers=None):
     """
     _ = request.translate
     clazz = request.context.__model__
-    item_label = clazz.get_item_modul(request).get_label()
+    item_label = get_item_modul(request, clazz).get_label()
     item = get_item_from_request(request)
     mapping = {'item_type': item_label, 'item': item}
 

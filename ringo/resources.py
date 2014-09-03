@@ -1,5 +1,6 @@
 import logging
 from sqlalchemy.orm.exc import NoResultFound
+from ringo.lib.helpers import get_item_modul
 from ringo.lib.security import get_permissions
 
 log = logging.getLogger(__name__)
@@ -55,5 +56,5 @@ class RessourceFactory(object):
 
     def _get_item_permissions(self, request):
         if not self.__modul__:
-            self.__modul__ = self.__model__.get_item_modul(request)
+            self.__modul__ = get_item_modul(request, self.__model__)
         return get_permissions(self.__modul__, self.item)

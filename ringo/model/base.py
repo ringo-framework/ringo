@@ -2,10 +2,9 @@ import logging
 import json
 import re
 import uuid
-from pyramid.threadlocal import get_current_request
 from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload
-from ringo.lib.helpers import serialize
+from ringo.lib.helpers import serialize, get_item_modul
 from ringo.lib.form import get_form_config
 from ringo.lib.table import get_table_config
 from ringo.lib.sql import DBSession
@@ -104,7 +103,7 @@ class BaseItem(object):
         format_str|field1,field2,....fieldN. where format_str in a
         string with %s placeholders and fields is a comma separated list
         of fields of the item"""
-        modul = self.get_item_modul()
+        modul = get_item_modul(None, self.__class__)
         format_str, fields = modul.get_str_repr()
         if format_str:
             return format_str % tuple([self.get_value(f) for f in fields])
@@ -114,25 +113,6 @@ class BaseItem(object):
     @classmethod
     def get_item_factory(cls):
         return BaseFactory(cls)
-
-    @classmethod
-    def get_item_modul(cls, request=None):
-        if not request:
-            request = get_current_request()
-            if request:
-                log.warning("Calling get_item_modul with no request although "
-                            "there is a request available. "
-                            "Using 'get_current_request'...")
-        if not request or not request.cache_item_modul.get(cls._modul_id):
-            from ringo.model.modul import ModulItem
-            factory = BaseFactory(ModulItem)
-            modul = factory.load(cls._modul_id)
-            if request:
-                if not request.cache_item_modul.get(cls._modul_id):
-                    request.cache_item_modul.set(cls._modul_id, modul)
-            else:
-                return modul
-        return request.cache_item_modul.get(cls._modul_id)
 
     def reset_uuid(self):
         self.uuid = '%.32x' % uuid.uuid4()
@@ -471,7 +451,7 @@ class BaseFactory(object):
             if (user is not None and user.gid):
                 item.gid = user.gid
             else:
-                modul = item.get_item_modul()
+                modul = get_item_modul(None, item)
                 default_gid = modul.gid
                 item.gid = default_gid
         return item

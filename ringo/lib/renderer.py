@@ -14,7 +14,8 @@ from formbar.form import Form
 import ringo.lib.helpers
 from ringo.lib.helpers import (
     get_saved_searches,
-    get_action_routename
+    get_action_routename,
+    get_item_modul
 )
 from ringo.model.base import BaseItem, BaseList, get_item_list
 from ringo.lib.table import get_table_config
@@ -218,7 +219,7 @@ class ConfirmDialogRenderer(DialogRenderer):
     def _render_body(self, items):
         out = []
         _ = self._request.translate
-        item_label = self._item.get_item_modul(self._request).get_label()
+        item_label = get_item_modul(self._request, self._item).get_label()
         mapping = {'action': self._action, 'item': item_label,
                    'Action': self._action.capitalize()}
         out.append(_("Do you really want to ${action}"
@@ -282,7 +283,7 @@ class ExportDialogRenderer(DialogRenderer):
         values['request'] = self._request
         values['items'] = items
         values['body'] = self._render_body()
-        values['modul'] = self._item.get_item_modul(self._request).get_label(plural=True)
+        values['modul'] = get_item_modul(self._request, self._item).get_label(plural=True)
         values['action'] = self._action.capitalize()
         values['ok_url'] = self._request.current_route_url()
         values['_'] = self._request.translate
@@ -311,7 +312,7 @@ class ImportDialogRenderer(DialogRenderer):
         values = {}
         values['request'] = self._request
         values['body'] = self._render_body()
-        values['modul'] = self._item.get_item_modul(self._request).get_label(plural=True)
+        values['modul'] = get_item_modul(self._request, self._item).get_label(plural=True)
         values['action'] = self._action.capitalize()
         values['ok_url'] = self._request.current_route_url()
         values['_'] = self._request.translate
@@ -344,7 +345,7 @@ class PrintDialogRenderer(DialogRenderer):
         values = {}
         values['request'] = self._request
         values['body'] = self._render_body()
-        values['modul'] = self._item.get_item_modul(self._request).get_label(plural=True)
+        values['modul'] = get_item_modul(self._request, self._item).get_label(plural=True)
         values['action'] = self._action.capitalize()
         values['ok_url'] = self._request.current_route_url()
         values['_'] = self._request.translate
@@ -625,7 +626,8 @@ class TagFieldRenderer(ListingFieldRenderer):
     def _get_all_items(self):
         tags = []
         alltags = ListingFieldRenderer._get_all_items(self)
-        item_modul = self._field._form._item.get_item_modul(self._field._form._request).id
+        item_modul = get_item_modul(self._field._form._request,
+                                    self._field._form._item).id
         for tag in alltags:
             if not tag.modul or (tag.modul.id == item_modul):
                 tags.append(tag)
