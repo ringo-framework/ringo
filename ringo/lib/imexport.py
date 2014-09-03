@@ -153,19 +153,23 @@ class Importer(object):
 
     def _deserialize_dates(self, obj):
         """This function can be called after the basic deserialisation has
-        finished. It is used to convert data and datetime objects which
-        is not supported by the defaults decoders
+        finished. It is used to convert integer, date and datetime objects which
+        are either not supported by the defaults decoders or not decoded
+        correct (NULL values)
 
         :obj: Deserialized dictionary from basic deserialisation
-        :returns: Deserialized dictionary with additional date and
-        datetime deserialisation
+        :returns: Deserialized dictionary with additional integer, date
+        and datetime deserialisation
         """
         for field in obj:
             if (not field in self._clazz_type or
-                not self._clazz_type[field] in ['DATE', 'DATETIME']):
+                not self._clazz_type[field] in ['DATE', 'DATETIME', 'INTEGER']):
                 continue
             elif not obj[field]:
+                # Set NULL value
                 obj[field] = None
+            elif self._clazz_type[field] == "INTEGER":
+                obj[field] = int(obj(field))
             elif self._clazz_type[field] == "DATE":
                 obj[field] = datetime.datetime.strptime(
                     obj[field], "%Y-%m-%d").date()
