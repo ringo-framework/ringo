@@ -169,7 +169,7 @@ class Importer(object):
                 # Set NULL value
                 obj[field] = None
             elif self._clazz_type[field] == "INTEGER":
-                obj[field] = int(obj(field))
+                obj[field] = int(obj[field])
             elif self._clazz_type[field] == "DATE":
                 obj[field] = datetime.datetime.strptime(
                     obj[field], "%Y-%m-%d").date()
