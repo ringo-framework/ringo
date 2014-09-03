@@ -11,6 +11,9 @@ to the tracker.
 0.15.2
 =======
 * Use app title instead of app name as prefix in subject of notification mails.
+* Fix urls in import, export dialogs. Use get_current_route_patch instead of
+  URL (causes errors with SSL behind an reverse proxy)
+* Fix import. Handle NULL values correct for integers.
 
 0.15.1
 =======
