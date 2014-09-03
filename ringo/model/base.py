@@ -3,7 +3,7 @@ import json
 import re
 import uuid
 from sqlalchemy import Column, CHAR
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, Session
 from ringo.lib.helpers import serialize, get_item_modul
 from ringo.lib.form import get_form_config
 from ringo.lib.table import get_table_config
@@ -24,6 +24,25 @@ def attrgetter(field, expand):
 
 def resolve_attr(obj, attr, expand):
     return obj.get_value(attr, expand=expand)
+
+
+def load_modul(item):
+    """Will load the related modul for the given item. First we try to
+    get the bound session from the object and reuse this session to load
+    the modul item. If the item has no bound session then call the
+    get_item_modul method with no request.
+
+    :item: item
+    :returns: modul instance
+
+    """
+    from ringo.model.modul import ModulItem
+    session = Session.object_session(item)
+    mid = item.__class__._modul_id
+    if session:
+        return session.query(ModulItem).filter_by(id=mid).one()
+    else:
+        return get_item_modul(None, item)
 
 
 class BaseItem(object):
@@ -103,7 +122,7 @@ class BaseItem(object):
         format_str|field1,field2,....fieldN. where format_str in a
         string with %s placeholders and fields is a comma separated list
         of fields of the item"""
-        modul = get_item_modul(None, self.__class__)
+        modul = load_modul(self)
         format_str, fields = modul.get_str_repr()
         if format_str:
             return format_str % tuple([self.get_value(f) for f in fields])
