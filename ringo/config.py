@@ -4,6 +4,7 @@ import pkg_resources
 from ringo.lib import helpers
 from ringo.lib.sql.db import DBSession
 from ringo.lib.helpers import get_action_routename
+from ringo.lib.form import get_formbar_css, get_formbar_js
 from ringo.model.modul import ModulItem
 from ringo.resources import get_resource_factory
 from ringo.views.base import (
@@ -151,7 +152,7 @@ def write_formbar_static_files():
     base_dir = pkg_resources.get_distribution("ringo").location
     static_dir = os.path.join(base_dir, 'ringo', 'static')
     formbar_css = os.path.join(static_dir, 'formbar')
-    for filename, content in helpers.get_formbar_css():
+    for filename, content in get_formbar_css():
         filename = os.path.join(formbar_css, filename)
         head, tail = os.path.split(filename)
         if not os.path.exists(head):
@@ -159,7 +160,7 @@ def write_formbar_static_files():
         with open(filename, 'wb') as f:
             f.write(content)
     formbar_js = os.path.join(static_dir, 'formbar')
-    for filename, content in helpers.get_formbar_js():
+    for filename, content in get_formbar_js():
         filename = os.path.join(formbar_js, filename)
         head, tail = os.path.split(filename)
         if not os.path.exists(head):

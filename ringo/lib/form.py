@@ -2,6 +2,7 @@
 import os
 from formbar.form import Form
 from formbar.config import Config, load, parse
+from formbar.helpers import get_css_files, get_js_files
 from ringo.lib.cache import CACHE_FORM_CONFIG
 from ringo.lib.helpers import get_path_to
 
@@ -90,3 +91,19 @@ def _get_blobform_config(fid, formname):
     factory = Form.get_item_factory()
     form = factory.load(fid)
     return Config(parse(form.definition.encode('utf-8')))
+
+
+formbar_css_filenames = []
+def get_formbar_css():
+    result = get_css_files()
+    for filename, content in result:
+        formbar_css_filenames.append(filename)
+    return result
+
+
+formbar_js_filenames = []
+def get_formbar_js():
+    result = get_js_files()
+    for filename, content in result:
+        formbar_js_filenames.append(filename)
+    return result

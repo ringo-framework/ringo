@@ -19,7 +19,11 @@ from ringo.lib.helpers import (
 )
 from ringo.model.base import BaseItem, BaseList, get_item_list
 from ringo.lib.table import get_table_config
-from ringo.lib.form import get_path_to_form_config
+from ringo.lib.form import (
+    get_path_to_form_config,
+    formbar_css_filenames,
+    formbar_js_filenames
+)
 import ringo.lib.security as security
 
 base_dir = pkg_resources.get_distribution("ringo").location
@@ -39,6 +43,8 @@ def add_renderer_globals(event):
     event['s'] = security
     event['_'] = request.translate
     event['N_'] = request.translate
+    event['formbar_css_filenames'] = formbar_css_filenames
+    event['formbar_js_filenames'] = formbar_js_filenames
     event['localizer'] = request.localizer
 
 

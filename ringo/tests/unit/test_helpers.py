@@ -116,12 +116,12 @@ class HelpersAuthTests(BaseUnitTest):
         self.assertEquals(len(result), 12)
 
     def test_get_formbar_css(self):
-        from ringo.lib.helpers import get_formbar_css
+        from ringo.lib.form import get_formbar_css
         result = get_formbar_css()
         self.assertTrue(isinstance(result, list))
 
     def test_get_formbar_js(self):
-        from ringo.lib.helpers import get_formbar_js
+        from ringo.lib.form import get_formbar_js
         result = get_formbar_js()
         self.assertTrue(isinstance(result, list))
 

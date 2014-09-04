@@ -13,7 +13,7 @@
     <link href="${request.static_path('ringo:static/css/layout.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/css/widgets.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/css/style.css')}" rel="stylesheet" media="screen">
-    % for filename in h.formbar_css_filenames: 
+    % for filename in formbar_css_filenames: 
       <link href="${request.static_path('ringo:static/formbar/%s' % filename)}" rel="stylesheet" media="screen">
     % endfor
 
@@ -30,7 +30,7 @@
     <script src="${request.static_path('ringo:static/js/datatables/dataTables.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.jcountdown.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.timer.js')}"></script>
-    % for filename in h.formbar_js_filenames: 
+    % for filename in formbar_js_filenames: 
       <script src="${request.static_path('ringo:static/formbar/%s' % filename)}"></script>
     % endfor
     <script src="${request.static_path('ringo:static/js/helpers.js')}"></script>

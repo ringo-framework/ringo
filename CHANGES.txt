@@ -29,6 +29,9 @@ Refactoring of model:
 * Removal of several class methods like get_action_routename and get_item
   actions into lib.helpers and others.
 
+Refactoring of lib:
+* Splitted large lib/helpers.py into various files.
+
 HOWTO Upgrade:
 
 * The following methods has been moved:
