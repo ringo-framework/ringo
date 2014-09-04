@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime
 from pyramid.threadlocal import get_current_request
+from ringo.lib.sql import DBSession
 
 log = logging.getLogger(__name__)
 
@@ -36,7 +37,6 @@ def import_model(clazzpath):
     clazzpath the return the imported model.
     If the clazzpath differs then import the model defined by the moduls
     clazzpath."""
-    from ringo.lib.sql import DBSession
     from ringo.model.modul import ModulItem
     orig_clazz = dynamic_import(clazzpath)
     # Load entry from the database for the given modul
