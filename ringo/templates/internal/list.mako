@@ -1,5 +1,5 @@
 <%
-url = request.current_route_url().split("?")[0]
+url = request.current_route_path().split("?")[0]
 mapping = {'num_filters': len(listing.search_filter)}
 def render_filter_link(request, field, value, clazz):
   out = []

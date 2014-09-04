@@ -827,6 +827,7 @@ def import_(clazz, request, callback=None):
     handle_params(clazz, request)
     imported_items = []
     rvalue = {}
+    print "Import"
 
     # Load the item return 400 if the item can not be found.
     renderer = ImportDialogRenderer(request, clazz)
@@ -834,6 +835,7 @@ def import_(clazz, request, callback=None):
     if (request.method == 'POST'
        and confirmed(request)
        and form.validate(request.params)):
+        print "Import OK"
         request.POST.get('file').file.seek(0)
         if request.POST.get('format') == 'json':
             importer = JSONImporter(clazz)
@@ -872,6 +874,9 @@ def import_(clazz, request, callback=None):
 
     # FIXME: Get the ActionItem here and provide this in the Dialog to get
     # the translation working (torsten) <2013-07-10 09:32>
+    print form.get_errors() 
+    print confirmed(request)
+    print request.method
     rvalue['dialog'] = renderer.render(imported_items)
     rvalue['clazz'] = clazz
     return rvalue
