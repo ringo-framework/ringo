@@ -4,7 +4,7 @@ mapping = {'num_filters': len(listing.search_filter)}
 def render_filter_link(request, field, value, clazz):
   out = []
   # Only take the path of the url and ignore any previous search filters.
-  url = request.current_route_url().split("?")[0]
+  url = request.current_route_path().split("?")[0]
   params = "form=search&search=%s&field=%s" % (value, field.get('name'))
   out.append('<a href="%s?%s" data-toggle="tooltip"' % (url, params))
   out.append('class="filter"')
