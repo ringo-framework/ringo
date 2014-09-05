@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-08-26 12:07+0200\n"
+"POT-Creation-Date: 2014-08-28 16:06+0200\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -49,32 +49,16 @@ msgid ""
 "submitted item values"
 msgstr ""
 
-#: ringo/templates/about.mako:4 ringo/templates/about.mako:6
-#: ringo/templates/footer.mako:20
+#: ringo/templates/about.mako:4 ringo/templates/footer.mako:20
 msgid "About"
 msgstr ""
 
-#: ringo/templates/about.mako:7
+#: ringo/templates/about.mako:6
 msgid "Please provide some usefull information about your application here"
 msgstr ""
 
-#: ringo/templates/about.mako:8
+#: ringo/templates/about.mako:7
 msgid "This application is based on the Ringo web application framework."
-msgstr ""
-
-#: ringo/templates/about.mako:9
-msgid "License"
-msgstr ""
-
-#: ringo/templates/about.mako:11
-msgid ""
-"This application is free software: you can redistribute it and/or modify "
-"it under the terms of the GNU General Public License as published by the "
-"Free Software Foundation, either version 2 of the License."
-msgstr ""
-
-#: ringo/templates/about.mako:13
-msgid "Authors"
 msgstr ""
 
 #: ringo/templates/base.mako:67
@@ -264,22 +248,21 @@ msgid ""
 msgstr ""
 
 #: ringo/templates/version.mako:5
+msgid "License"
+msgstr ""
+
+#: ringo/templates/version.mako:7
 msgid ""
-"This page lists the version of some of the most important libraries used "
-"by the application."
+"This application is free software: you can redistribute it and/or modify "
+"it under the terms of the GNU General Public License as published by the "
+"Free Software Foundation, either version 2 of the License."
 msgstr ""
 
-#: ringo/templates/version.mako:8
-msgid "This application."
+#: ringo/templates/version.mako:9
+msgid "Core Libraries"
 msgstr ""
 
-#: ringo/templates/version.mako:9 ringo/templates/version.mako:13
-#: ringo/templates/version.mako:16 ringo/templates/version.mako:19
-#: ringo/templates/version.mako:22
-msgid "Version"
-msgstr ""
-
-#: ringo/templates/version.mako:12
+#: ringo/templates/version.mako:11
 msgid ""
 "<a href=\"https://bitbucket.org/ti/ringo\" target=\"_blank\">Ringo</a> is"
 " a small Python based high level web application framework build with "
@@ -287,20 +270,20 @@ msgid ""
 "web applications"
 msgstr ""
 
-#: ringo/templates/version.mako:15
+#: ringo/templates/version.mako:13
 msgid ""
 "<a href=\"https://bitbucket.org/ti/formbar\" "
 "target=\"_blank\">Formbar</a> is a Python library to layout, render and "
 "validate HTML forms in web applications."
 msgstr ""
 
-#: ringo/templates/version.mako:18
+#: ringo/templates/version.mako:15
 msgid ""
 "<a href=\"www.sqlalchemy.org\" target=\"_blank\">SQLAlchemy</a> is Python"
 " based ORM mapper."
 msgstr ""
 
-#: ringo/templates/version.mako:21
+#: ringo/templates/version.mako:17
 msgid ""
 "<a href=\"http://www.pylonsproject.org/\" "
 "target=\"_blank\">Pyramid</a></a> is a Python based web application "
@@ -502,7 +485,7 @@ msgstr ""
 msgid "Save Query"
 msgstr ""
 
-#: ringo/templates/internal/listfield.mako:25
+#: ringo/templates/internal/listfield.mako:26
 msgid "Add"
 msgstr ""
 
@@ -1386,8 +1369,20 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid ""
-#~ "Can not find any available state "
-#~ "transition based on the current or "
-#~ "submitted item values."
 #~ msgstr ""
+#~ msgid "Authors"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "This page lists the version of "
+#~ "some of the most important libraries "
+#~ "used by the application."
+#~ msgstr ""
+
+#~ msgid "This application."
+#~ msgstr ""
+
+#~ msgid "Version"
+#~ msgstr ""
+
 

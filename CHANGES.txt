@@ -10,8 +10,7 @@ to the tracker.
 
 0.16.0
 ======
-Refactoring of views.
-
+Refactoring of views:
 * Seperation of views: Basic views (LCRUDIE) are now located under
   views.base.list ... views.base.export. Removed views/base.py.
 * Moved REST logic into the corresponding new view modules.
@@ -30,7 +29,8 @@ Refactoring of model:
   actions into lib.helpers and others.
 
 Refactoring of lib:
-* Splitted large lib/helpers.py into various files.
+* Splitted large lib/helpers.py into various files under lib/helpers.
+* Splitted large lib/renderer.py into various files under lib/renderer.
 
 HOWTO Upgrade:
 
@@ -42,6 +42,13 @@ HOWTO Upgrade:
   - get_item_modul -> lib/helpers.py
 
   Search for these methods in all *.py and *.mako files and adapt the call.
+
+0.15.2
+======
+* Use app title instead of app name as prefix in subject of notification mails.
+* Fix urls in import, export dialogs. Use get_current_route_patch instead of
+  URL (causes errors with SSL behind an reverse proxy)
+* Fix import. Handle NULL values correct for integers.
 
 0.15.1
 =======

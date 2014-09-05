@@ -1,6 +1,6 @@
 <%
 import datetime
-from ringo.lib.helpers import format_datetime
+from ringo.lib.helpers import prettify
 %>
 <table id="newslisting" class="table table-condensed table-striped table-bordered">
   <thead>
@@ -30,9 +30,7 @@ from ringo.lib.helpers import format_datetime
       % endif
           <%
             try:
-              value = getattr(item, field.get('name'))
-              if isinstance(value, datetime.datetime):
-                value = format_datetime(value)
+              value = prettify(request, getattr(item, field.get('name')))
             except AttributeError:
               value = "NaF"
           %>

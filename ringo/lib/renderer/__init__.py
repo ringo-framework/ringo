@@ -1,7 +1,3 @@
-import logging
-import os
-import pkg_resources
-from mako.lookup import TemplateLookup
 from pyramid.events import BeforeRender
 
 import ringo.lib.security as security
@@ -10,7 +6,6 @@ from ringo.lib.form import (
     formbar_js_filenames,
     formbar_css_filenames
 )
-
 from ringo.lib.renderer.form import add_renderers
 from ringo.lib.renderer.dialogs import (
     DialogRenderer,
@@ -26,13 +21,6 @@ from ringo.lib.renderer.lists import (
     NewsListRenderer,
     TodoListRenderer
 )
-
-base_dir = pkg_resources.get_distribution("ringo").location
-template_dir = os.path.join(base_dir, 'ringo', 'templates')
-template_lookup = TemplateLookup(directories=[template_dir])
-
-log = logging.getLogger(__name__)
-
 
 def setup_render_globals(config):
     config.add_subscriber(add_renderer_globals, BeforeRender)

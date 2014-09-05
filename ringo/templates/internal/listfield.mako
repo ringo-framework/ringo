@@ -1,4 +1,5 @@
 <%
+from ringo.lib.helpers import prettify
 value = field.get_value() or []
 if not isinstance(value, list):
   value = [value]
@@ -74,7 +75,7 @@ for item in items:
         % endif
         <%
           try:
-            value = item[0].get_value(col.get('name'), expand=col.get('expand'))
+            value = prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand')))
           except AttributeError:
             value = "NaF"
         %>
