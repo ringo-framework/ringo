@@ -70,7 +70,7 @@ class ConfirmDialogRenderer(DialogRenderer):
         values['header'] = _("Confirm ${Action}", mapping=mapping)
         values['body'] = self._render_body(items)
         values['action'] = self._action.capitalize()
-        values['ok_url'] = self._request.current_route_url()
+        values['ok_url'] = self._request.current_route_path()
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
         return self.template.render(**values)
@@ -144,7 +144,7 @@ class ExportDialogRenderer(DialogRenderer):
         values['body'] = self._render_body()
         values['modul'] = get_item_modul(self._request, self._item).get_label(plural=True)
         values['action'] = self._action.capitalize()
-        values['ok_url'] = self._request.current_route_url()
+        values['ok_url'] = self._request.current_route_path()
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
         return self.template.render(**values)
@@ -173,7 +173,7 @@ class ImportDialogRenderer(DialogRenderer):
         values['body'] = self._render_body()
         values['modul'] = get_item_modul(self._request, self._item).get_label(plural=True)
         values['action'] = self._action.capitalize()
-        values['ok_url'] = self._request.current_route_url()
+        values['ok_url'] = self._request.current_route_path()
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
         values['overview_url'] = self._request.route_path(get_action_routename(self._item, 'list'))
@@ -206,7 +206,7 @@ class PrintDialogRenderer(DialogRenderer):
         values['body'] = self._render_body()
         values['modul'] = get_item_modul(self._request, self._item).get_label(plural=True)
         values['action'] = self._action.capitalize()
-        values['ok_url'] = self._request.current_route_url()
+        values['ok_url'] = self._request.current_route_path()
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
         return self.template.render(**values)

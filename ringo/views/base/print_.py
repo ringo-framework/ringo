@@ -24,8 +24,9 @@ def _render_template(template, item):
     """
     out = StringIO.StringIO()
     temp = Template(StringIO.StringIO(template.data), out)
-    temp.render({"item": item.get_values()})
+    temp.render({"item": item})
     return out
+
 
 def _build_response(request, template, data):
     """Will return a response object with the rendererd template
@@ -39,8 +40,9 @@ def _build_response(request, template, data):
     resp = request.response
     resp.content_type = str(template.mime)
     resp.content_disposition = 'attachment; filename="%s.odt"' % template.name
-    resp.body = out.getvalue()
+    resp.body = data.getvalue()
     return resp
+
 
 def print_(request):
     handle_history(request)
