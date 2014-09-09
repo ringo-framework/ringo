@@ -78,7 +78,7 @@ def _get_default_actions_sql(session, mid, ignore=[]):
 
         sql.append("""INSERT INTO "actions" """
                    """(mid, name, url, icon, uuid, bundle) """
-                   """VALUES (%s, '%s', '%s', '%s', '%s', '%s')""" %
+                   """VALUES (%s, '%s', '%s', '%s', '%s', '%s');""" %
                    (mid, name, url, icon, myuuid, bundle))
     return sql
 
