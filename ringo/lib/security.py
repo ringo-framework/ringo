@@ -251,7 +251,7 @@ def get_permissions(modul, item=None):
                 perms.append((Allow, default_principal, permission))
 
             # class level permissions
-            elif permission in ['create', 'list']:
+            elif permission in ['create', 'list'] and add_perm:
                 perms.append((Allow, default_principal, permission))
             # item level permissions. Only allow the owner or members of
             # the items group.
