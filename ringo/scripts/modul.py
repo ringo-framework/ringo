@@ -313,4 +313,3 @@ def handle_modul_add_command(args):
     add_table_file(package, name)
     msg = "Added %s modul" % name
     create_new_revision(args, sql, msg)
-    handle_db_upgrade_command(args)
