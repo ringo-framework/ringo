@@ -107,6 +107,7 @@ If you want to add a new modul to your ringo based application or the the
 ringo base then you should use the ringo-admin command::
 
         ringo-admin modul add name
+        ringo-admin db upgrade
 
 The the help page of the command for more informations.
 
