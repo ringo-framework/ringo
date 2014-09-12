@@ -111,6 +111,10 @@ ringo base then you should use the ringo-admin command::
 
 The the help page of the command for more informations.
 
+The generated modul only has some default fields like the `uuid` or `id`
+field. In the next step you can extend the new modul with fields. See
+:ref:`_add_fields` for more information.
+
 Customisation
 =============
 The behaviour of the application can be modified in different ways. You can
@@ -138,6 +142,36 @@ mapped functions on URLs.
 
 In the next sections I will give some examples on how to customise things in a
 ringo application.
+
+.. _add_fields:
+
+Adding new fields to the model
+------------------------------
+Adding new fields to the model of a modul can be achieved by the following
+steps.
+
+ 1. First open the form definiton which is located under `views/forms/<modulname>.xml`. 
+ 2. Add new fields (entities) to the form. See `formbar documentation <http://pythonhosted.org//formbar/>`_ for more information on how to add new entities.
+ 3. Generate the python code to be placed in the model file by calling::
+
+        ringo-admin model fields <modulname>
+
+   Note that the modulname will have a "s" appended. So a modul called
+   "client" becomes "clients" here. The generated code will include all
+   entities defined in the form, so you will need to filter out the new fields
+   on your own.
+
+ 4. Place the generated code snippet in the modul file of the modul under `model/<modulname>.py`.
+ 5. Generate a new revision file::
+
+        almebic revision --autogenerate -m "Your message here"
+
+ 6. Migrate database::
+
+        ringo-admin db upgrade
+
+ 7. Commit the changes.
+
 
 .. _add_action:
 
