@@ -12,6 +12,8 @@ to the tracker.
 ======
 - Allow configuration of caching of pages and static content.
 - Add various option to enhance cookie and session security.
+- Set headers to enhance security according to
+  http://ghaandeeonit.tumblr.com/post/65698553805/securing-your-pyramid-application
 
 0.16.0
 ======

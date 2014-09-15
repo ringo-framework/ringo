@@ -160,8 +160,12 @@ def setup_ringo_security(config):
 
     # Add tweens to add custom security headers.
     # http://ghaandeeonit.tumblr.com/post/65698553805/securing-your-pyramid-application
-    config.add_tween('ringo.tweens.clickjacking.clickjacking_factory')
-    config.add_tween('ringo.tweens.secure_headers.secure_headers_factory')
+    if settings.get("security.header_secure", "true") == "true":
+        config.add_tween('ringo.tweens.secure_headers.secure_headers_factory')
+    if settings.get("security.header_clickjacking", "true") == "true":
+        config.add_tween('ringo.tweens.clickjacking.clickjacking_factory')
+    if settings.get("security.header_csp", "false") == "true":
+        config.add_tween('ringo.tweens.csp.csp_factory')
     log.info('-> Security finished.')
 
 
