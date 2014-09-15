@@ -16,6 +16,7 @@ will explain the user interface and some basic concepts in Ringo.
    usage
    architecture
    development
+   config
    api
 
 Indices and tables

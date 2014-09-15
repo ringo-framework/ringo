@@ -40,9 +40,11 @@ def includeme(config):
     log.info('OK :) Setup of Ringo finished.')
 
 def setup_static_views(config):
+    settings = config.registry.settings
+    http_cache = settings.get('security.static_http_cache', '3600')
     config.add_static_view('static',
                            path='ringo:static',
-                           cache_max_age=3600)
+                           cache_max_age=int(http_cache))
     log.info('-> Static views finished.')
     return config
 

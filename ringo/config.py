@@ -61,6 +61,8 @@ def _setup_web_action(config, action, clazz, view_mapping):
     config.add_route(route_name, route_url,
                      factory=get_resource_factory(clazz))
     view_func = view_mapping.get(action_name)
+    settings = config.registry.settings
+    http_cache = settings.get('security.page_http_cache', '3600')
     if view_func:
         if action_name == "delete":
             template = "confirm"
@@ -69,7 +71,8 @@ def _setup_web_action(config, action, clazz, view_mapping):
         config.add_view(view_func,
                         route_name=route_name,
                         renderer='/default/%s.mako' % template,
-                        permission=action.permission or action_name)
+                        permission=action.permission or action_name,
+                        http_cache=int(http_cache))
     ## Add bundle action.
     if action_name == "list":
        action_name = "bundle"
@@ -126,11 +129,14 @@ def _setup_rest_action(config, action, clazz, view_mapping):
                      request_method=method,
                      factory=get_resource_factory(clazz))
     log.debug("Adding REST view: %s, %s, %s" % (view_func, route_name, method))
+    settings = config.registry.settings
+    http_cache = settings.get('security.page_http_cache', '3600')
     config.add_view(view_func,
                     route_name=route_name,
                     request_method=method,
                     renderer='json',
-                    permission=action.permission or action_name)
+                    permission=action.permission or action_name,
+                    http_cache=int(http_cache))
 
 
 def setup_modul(config, modul):

@@ -1,0 +1,55 @@
+#############
+Configuration
+#############
+
+Authentification
+================
+Autologout
+-----------
+The authentification only stay valud for the given time. After that time a
+automatic logout from the application will happen.
+
+ * auth.timeout = 1800
+
+Passwort reminder and user registration
+---------------------------------------
+Ringo provides methods to allow users to register a new account or send
+requests to reset their passwords. Botch subsystems can be enabled by changing
+the following values.
+
+ * auth.register_user = false
+ * auth.password_reminder = false
+
+Security
+========
+CSRF Protection
+---------------
+To enable CSRF protection you can configure ringo to include a CSRF
+synchronizer token to each form to protect POST request against CSRF attacks.
+
+ * security.enable_csrf_check = true
+
+However, for testing issues it might be usefull to disable this feature.
+
+Caching
+-------
+Number of seconds the cached content will stay valid. A value of non means no
+caching at all and all elements are loaded on every request.
+
+The enhance the security follwing the recommodation of measurement M 4.401 of
+`BSI Grundschutz <https://www.bsi.bund.de/DE/Themen/ITGrundschutz/ITGrundschutzKataloge/Inhalt/_content/m/m04/m04401.html;jsessionid=116E42B16FBC9D779FD768E7CDE905A1.2_cid368>`_ you should disable the caching.
+
+ * security.page_http_cache = 3600
+ * security.static_http_cache = 3600
+
+.. note::
+   The caching setting of the page currently only applies to the CRUD
+   operations of the modules and not to the static pages like contact, home
+   etc.
+
+Mail
+====
+ * mail.host =
+ * mail.default_sender =
+ * mail.username =
+ * mail.password =
