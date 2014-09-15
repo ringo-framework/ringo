@@ -157,6 +157,11 @@ def setup_ringo_security(config):
     # "security.enable_csrf_check" config variable to "false".
     if settings.get('security.enable_csrf_check', 'true') != "false":
         config.add_subscriber(csrf_token_validation, ContextFound)
+
+    # Add tweens to add custom security headers.
+    # http://ghaandeeonit.tumblr.com/post/65698553805/securing-your-pyramid-application
+    config.add_tween('ringo.tweens.clickjacking.clickjacking_factory')
+    config.add_tween('ringo.tweens.secure_headers.secure_headers_factory')
     log.info('-> Security finished.')
 
 
