@@ -93,7 +93,7 @@ def handle_POST_request(form, request, callback, event, renderers=None):
             mapping['error'] = unicode(error.message)
             msg = _('Error while saving '
                     '${item_type} "${item}": ${error}.', mapping=mapping)
-            log.error(msg)
+            log.exception(msg)
             request.session.flash(msg, 'error')
     elif "blobforms" in request.params:
         pass

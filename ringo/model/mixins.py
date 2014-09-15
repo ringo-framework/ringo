@@ -214,7 +214,7 @@ class Blobform(object):
         that the data will be saved in the data attribute as JSON
         string."""
         json_data = json.loads(self.get_values().get('data') or "{}")
-        columns = get_columns_from_instance(self)
+        columns = get_columns_from_instance(self, True)
         for key, value in values.iteritems():
             # Ignore private form fields
             if key.startswith('_'):
