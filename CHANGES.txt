@@ -11,6 +11,7 @@ to the tracker.
 0.16.1
 ======
 - Allow configuration of caching of pages and static content.
+- Add various option to enhance cookie and session security.
 
 0.16.0
 ======

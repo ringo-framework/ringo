@@ -29,6 +29,16 @@ mako.directories =
     {{package}}:templates
     ringo:templates
 
+# beaker session settings
+session.type = file
+session.data_dir = %(here)s/data/sessions/data
+session.lock_dir = %(here)s/data/sessions/lock
+session.key = customerskey
+session.secret = %(security.cookie_secret)s
+session.secure = %(security.cookie_secure)s
+session.cookie_path = %(security.cookie_path)s
+session.httponly = %(security.cookie_httponly)s
+
 ###
 # Settings for the auth system
 ###
@@ -46,6 +56,12 @@ security.enable_csrf_check = true
 # caching at all. Defaults to 3600 seconds.
 security.page_http_cache = 3600
 security.static_http_cache = 3600
+# Set cookie options.
+security.cookie_secret = 'secret'
+security.cookie_secure = false
+security.cookie_ip = true
+security.cookie_path = '/'
+security.cookie_httponly = true
 
 ###
 # Mailserver settings

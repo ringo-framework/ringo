@@ -31,6 +31,19 @@ synchronizer token to each form to protect POST request against CSRF attacks.
 
 However, for testing issues it might be usefull to disable this feature.
 
+Cookies
+-------
+See `Cookie options on <http://docs.pylonsproject.org/projects/pyramid/en/latest/api/authentication.html>`_ for more details.
+
+ * security.cookie_secret = 'secret'
+ * security.cookie_secure = false
+ * security.cookie_ip = false
+ * security.cookie_path = '/'
+ * security.cookie_httponly = false
+
+The `cookie_ip` setting will only apply to the `auth_tkt` cookie for the
+authorisation. Other option apply for all cookies set.
+
 Caching
 -------
 Number of seconds the cached content will stay valid. A value of non means no

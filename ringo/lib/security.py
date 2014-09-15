@@ -27,11 +27,22 @@ log = logging.getLogger(__name__)
 def password_generator(size=8, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
+
 def get_auth_timeout(settings):
     """Will return the amount of seconds until the auth session will
     time out. This can be configured in the application ini file. If no
     configuration is found. it defaults to 1800 seconds (30min)"""
     return int(settings.get("auth.timeout") or 1800)
+
+
+def get_cookie_secret(settings):
+    """Will return the configured string in the config to sign the
+    cookies. If no string is configured. Generate a random string for
+    this."""
+    secret = settings.get("auth.cookie_secret")
+    if not secret:
+        secret = password_generator(50)
+    return secret
 
 pwd_context = CryptContext(
     # replace this list with the hash(es) you wish to support.
@@ -119,11 +130,19 @@ def csrf_token_validation(event):
 def setup_ringo_security(config):
     settings = config.registry.settings
     timeout = get_auth_timeout(settings)
-    authn_policy = AuthTktAuthenticationPolicy('seekrit',
+    secret = get_cookie_secret(settings)
+    secure = settings.get("security.cookie_secure", "false") == "true"
+    include_ip = settings.get("security.cookie_ip", "false") == "true"
+    path = settings.get("security.cookie_path", "/")
+    httponly = settings.get("security.cookie_httponly", "false") == "true"
+    authn_policy = AuthTktAuthenticationPolicy(secret,
                                                hashalg='sha512',
                                                timeout=timeout,
                                                reissue_time=timeout/10,
-                                               callback=get_principals)
+                                               callback=get_principals,
+                                               include_ip = include_ip,
+                                               path=path,
+                                               http_only=httponly)
     authz_policy = ACLAuthorizationPolicy()
     config.set_authorization_policy(authz_policy)
     config.set_authentication_policy(authn_policy)
