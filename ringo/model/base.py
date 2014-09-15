@@ -310,12 +310,18 @@ def get_item_list(request, clazz, user=None, cache="", items=None):
     :returns: BaseList instance
 
     """
-    if not request.cache_item_list.get(clazz._modul_id):
+    key = "%s-%s" % (clazz._modul_id, user)
+    if not request.cache_item_list.get(key):
         listing = BaseList(clazz, request.db, cache, items)
         if user:
             listing = filter_itemlist_for_user(request, listing)
-        request.cache_item_list.set(clazz._modul_id, listing)
-    return request.cache_item_list.get(clazz._modul_id)
+        # Only cache the result if not items has been prefined for the
+        # list.
+        if items is None:
+            request.cache_item_list.set(key, listing)
+        else:
+            return listing
+    return request.cache_item_list.get(key)
 
 
 def filter_itemlist_for_user(request, baselist):
