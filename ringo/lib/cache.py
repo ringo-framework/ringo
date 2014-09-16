@@ -72,7 +72,9 @@ def init_cache(event):
     request.cache_item_modul = Cache()
     CACHE_TABLE_CONFIG.clear()
     CACHE_FORM_CONFIG.clear()
+    CACHE_MODULES.clear()
 
+CACHE_MODULES = Cache()
 # GLOBAL CACHE INSTANCES
 CACHE_TABLE_CONFIG = Cache()
 CACHE_FORM_CONFIG = Cache()

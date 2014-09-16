@@ -5,6 +5,7 @@ import uuid
 from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload, Session
 from ringo.lib.helpers import serialize, get_item_modul
+from ringo.lib.cache import CACHE_MODULES
 from ringo.lib.form import get_form_config
 from ringo.lib.table import get_table_config
 from ringo.lib.sql import DBSession
@@ -39,10 +40,14 @@ def load_modul(item):
     from ringo.model.modul import ModulItem
     session = Session.object_session(item)
     mid = item.__class__._modul_id
-    if session:
-        return session.query(ModulItem).filter_by(id=mid).one()
-    else:
-        return get_item_modul(None, item)
+    # Loading the modul is expensive! So try to cache it.
+    if not CACHE_MODULES.get(mid):
+        if session:
+            modul = session.query(ModulItem).filter_by(id=mid).one()
+        else:
+            modul = get_item_modul(None, item)
+        CACHE_MODULES.set(modul.id, modul)
+    return CACHE_MODULES.get(mid)
 
 
 class BaseItem(object):
