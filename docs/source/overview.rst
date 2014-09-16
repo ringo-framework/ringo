@@ -1,8 +1,6 @@
-********
+########
 Overview
-********
-What is Ringo?
-==============
+########
 Ringo is a small Python based high level web application framework build with
 Pyramid. Ringo tries to make it very easy to build form based web application
 to manage your data. Because ringo provides many basic features which are
@@ -55,28 +53,16 @@ Installation
 ============
 Ringo is available in its latest stable version on `PyPi <https://pypi.org/toirl/ringo>`_::
 
-        pip install ringo
-
 The source code is also available on `Bitbucket <https://bitbucket.org/ti/ringo>`_ if you want to keep track of
 the latest development version::
 
-        hg clone https://bitbucket.org/ti/ringo
-        cd ringo
-        python setup.py install
+Please read the :ref:`development` section to learn how to setup Ringo based
+application.
 
-You probably want to continue to read the :ref:`development` section to learn
-how to setup Ringo based application.
-
-Requirements
-------------
-Ringo was developed within a Python 2.7.3 environment. Older versions will not
-work as Ringo uses some XML features only available in Python >= 2.7.3. Newer
-versions might work, but it is not tested.
-
-Development state
-=================
-Ringo is under active development and already used for some small productional
-sites. I would say ringo is mostly in beta state.
+.. note::
+   Ringo was developed within a Python 2.7.3 environment. Older versions will
+   not work as Ringo uses some XML features only available in Python >= 2.7.3.
+   Newer versions might work, but it is not tested.
 
 Contact
 =======
