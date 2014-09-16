@@ -44,6 +44,28 @@ See `Cookie options on <http://docs.pylonsproject.org/projects/pyramid/en/latest
 The `cookie_ip` setting will only apply to the `auth_tkt` cookie for the
 authorisation. Other option apply for all cookies set.
 
+Headers
+-------
+See `this page <http://ghaandeeonit.tumblr.com/post/65698553805/securing-your-pyramid-application>`_ for more informations.
+
+ * security.header_secure = true
+ * security.header_clickjacking = true
+ * security.header_csp = false
+
+You can define `CSP Options <http://en.wikipedia.org/wiki/Content_Security_Policy>`_ by configuring one of the following
+options:
+
+ * security.csp.default_src
+ * security.csp.script_src
+ * security.csp.object_src
+ * security.csp.style_src
+ * security.csp.img_src
+ * security.csp.media_src
+ * security.csp.frame_src
+ * security.csp.font_src
+ * security.csp.connect_src
+ * security.csp.sandbox
+
 Caching
 -------
 Number of seconds the cached content will stay valid. A value of non means no

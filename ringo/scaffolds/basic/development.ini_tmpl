@@ -62,6 +62,10 @@ security.cookie_secure = false
 security.cookie_ip = true
 security.cookie_path = /
 security.cookie_httponly = true
+# Set header options.
+security.header_secure = true
+security.header_clickjacking = true
+security.header_csp = false
 
 ###
 # Mailserver settings
