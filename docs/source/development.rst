@@ -1,103 +1,135 @@
 
 .. _development:
 
-***********
+###########
 Development
-***********
+###########
 
 .. _installation_development:
 
-Setup a developmet environment
-==============================
+Environment
+***********
 If you plan to do any development with Ringo I recommend to setup a dedicated
 development environment based on a `Virtual Python Environment
-<https://pypi.python.org/pypi/virtualenv>`_.
+<https://pypi.python.org/pypi/virtualenv>`_ for each application (including
+ringo itself) you want to develop.
 
 This section will give you an example how create a development environment if
 you want to work on Ringo itself or if you want to create a Ringo based application.
 
-First create a new folder where all the development will happen. Then create a
-new Virtual Python Environment::
-
-        cd /path/to/your/development/folder
-        # create a folder where all the ringo development happens.
-        mkdir ringo
-        # create a subfolder where all the application development happens.
-        mkdir applications
-
-        # setup ringo.
-        cd ringo
-        virtualenv --no-site-packages python
-        # Activate your virtual environment and do all following steps with
-        # the activaed virtual env.
-        source python/bin/activate
-
-Now setup Ringo by getting the source from Bitbucket and installing it in the
-Virtual Python Environment::
-
-        hg clone https://bitbucket.org/ti/ringo
-        cd ringo
-        # Do only set a link to the Ringo application if you plan to develop
-        # on Ringo itself. Else you can also use "install" instead of "develop"
-        python setup.py development
-
-If you only want to work on Ringo itself you are ready here and can continue
-to read the :ref:`develop_ringo_application` section.
-
-If you want to create a new Ringo based application you should head
-over to the :ref:`create_ringo_based_application` section and continue the
-setup.
-
-.. _develop_ringo_application:
+It is assumed that all ringo related development happens under a folder named
+`/path/to/your/development/root/folder`.
 
 Develop on Ringo
-----------------
+================
 Ringo is not just a library which can be used in other applications.
-Ringo is for itself a standalone application! This means you can start Ringo
+Ringo is also standalone application! This means you can start Ringo
 and click around in the web application and use all the features provided by
 Ringo.
 
-This is very helpful as can see immediately the result of your changes.
+This is very helpful when developing features in ringo, as you can see
+immediately the result of your changes without effects from applications based
+on ringo.
 
-To develop on Ringo you obviously must have installed Ringo.
-This is explained in the :ref:`installation_development` section.
-After you installed Ringo for development the last final steps is to
-initialize the application. Please follow the instruction documented in the
-README file coming with Ringo::
+The next steps explain how to setup a development environment for ringo
+development::
 
-        # Change to your development folder
-        cd /path/to/your/development/folder/ringo/
+        cd /path/to/your/development/root/folder
+        # create a folder for the application you like to create.
+        mkdir ringo
         cd ringo
-        cat README.rst
 
-That is it. You are ready to go!
+        # Create and activate a new virtual environment and do all following
+        steps with # the activaed virtual env.
+        virtualenv --no-site-packages env
+        source env/bin/activate
+
+        # create a subfolder for all libs external libs.
+        mkdir lib
+        cd lib
+        # Install a development version of formbar.
+        hg clone http://bitbucket.org/ti/formbar
+        cd formbar
+        python setup.py develop
+        cd ..
+
+        # Install the source of ringo.
+        hg clone http://bitbucket.org/ti/ringo src
+        cd src
+        python setup.py develop
+
+Now you can initialize and start the ringo application by following
+the instructions provided in the README file within the src folder.
 
 .. _create_ringo_based_application:
 
 Develop/Create on a Ringo based application
--------------------------------------------
-To create a Ringo based application you obviously must have installed Ringo.
-The can be done either explained in the :ref:`installation_production` or :ref:`installation_development` section.
+===========================================
+Again you need to create a development environment. The steps to do it differs
+a little bit from the steps to create a developement environment before::
 
+        cd /path/to/your/development/root/folder
+        # create a folder for the application you like to create.
+        mkdir <yourappname> 
+        cd <yourappname>
+
+        # Create and activate a new virtual environment and do all following
+        steps with # the activaed virtual env.
+        virtualenv --no-site-packages env
+        source env/bin/activate
+
+        # create a subfolder for all libs external libs.
+        mkdir lib
+        cd lib
+        # Install a development version of formbar.
+        hg clone http://bitbucket.org/ti/formbar
+        cd formbar
+        python setup.py develop
+        # Install a development version of ringo.
+        hg clone http://bitbucket.org/ti/ringo
+        cd ringo
+        python setup.py develop
+        cd ..
+
+The following steps depend on what you want to do.
+
+Create and develop a new ringo based application
+""""""""""""""""""""""""""""""""""""""""""""""""
 You can now create a new Ringo based application. In the following example we
-will create an new application named ''MyFirstRingoApp''::
+will create an new application named ''yourappname''::
 
         # Change to your development folder
-        cd /path/to/your/development/folder/ringo/applications
-        # Create a subfolder Change to your development folder
-        cd applications
-        pcreate -s ringo MyFirstRingoApp
+        cd /path/to/your/development/root/folder
+        # create a folder for the application you like to create.
+        cd <yourappname>
+        pcreate -s ringo <yourappname>
+        mv <yourappname> src
+        cd src
+        python setup.py develop
 
 This will trigger the creation of an application skeleton based on the
 :ref:`scaffold_basic`.
 
 Now you can initialize and start your fresh created application by following
-the instructions provided in the README file with the application folder::
-
-        cd MyFirstRingoApp
-        cat README.rst
-
+the instructions provided in the README file with the application folder.
 Your application is ready for development :)
+
+Develop on an existing ringo based application
+""""""""""""""""""""""""""""""""""""""""""""""
+In the following example we will checkout an existing ringo based application
+named ''plorma''::
+
+        # Change to your development folder
+        cd /path/to/your/development/root/folder
+        # create a folder for the application you like to create.
+        cd <yourappname>
+        hg clone http://bitbucket.org/ti/plorma src
+        cd src
+        python setup.py develop
+
+Now you can initialize and start the application by following the instructions
+provided in the README file with the application folder.  Your application is
+ready for development :)
 
 .. _add_modules:
 
@@ -116,7 +148,7 @@ field. In the next step you can extend the new modul with fields. See
 :ref:`_add_fields` for more information.
 
 Customisation
-=============
+*************
 The behaviour of the application can be modified in different ways. You can
 customize the
 
@@ -146,7 +178,7 @@ ringo application.
 .. _add_fields:
 
 Adding new fields to the model
-------------------------------
+==============================
 Adding new fields to the model of a modul can be achieved by the following
 steps.
 
@@ -176,7 +208,7 @@ steps.
 .. _add_action:
 
 Adding a single custom actions to a module
-------------------------------------------
+==========================================
 If you are need specific single action to your modul you need to do the following steps. 
 
 .. note::
@@ -214,28 +246,28 @@ following code::
 .. _newmodulactions:
 
 Adding new actions to a module
-------------------------------
+==============================
 Write me
 
 Overwriting static files
-------------------------
+========================
 
 Configuring forms
------------------
+=================
 Simply overwrite the form configuration in your application
 
 Configuring overviews
----------------------
+=====================
 Simply overwrite the table configuration in your application
 
 Extending existing ringo models
--------------------------------
+===============================
 Ringo comes with some predefined modules which provide some common
 functionality. However the modules might not match your need, so they can be
 extended or modified.
 
 Add new fields to the model
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------
 You need to create a new model file in your application. In this file
 create a model which inherits from the base modul and add attributes and
 extend or overwrite functions as needed. In the following example we add two
@@ -260,7 +292,7 @@ additional columns to the base Profile modul::
                 return "%s" % (self.col1)
 
 Overwrite existing Statemachine/Workflow
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------------------
 If you want to change the statemachine/workflow for the model you need
 overwrite some attributes of the modul in order to inject your new
 StateMachine.  In the follwing example we overwrite the StateMachine of the
@@ -288,7 +320,7 @@ imaginary class "Foo" which has a statemachine available under the name
                 return state.get_state()
 
 Let your application know about the new model
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------------------------
 Next we need to import the new model in the __init__.py file of the application::
 
         from myapp.model.modul import Modul
@@ -319,7 +351,7 @@ will now use the new model. Please note, that you my need to overwrite
 existing relations to be able to refer to the overwritten model.
 
 Calling alternative views
--------------------------
+=========================
 Application logic is defined in the view function. The view for the model was
 setup on initialisation of the application and uses the default view logic in
 ringo by default.
@@ -355,7 +387,7 @@ too. No need to rewrite the default logic again in your custom view::
             return values
 
 Using callbacks in the views
-----------------------------
+============================
 Callback kann be used to implement custom application logic after the logic of
 the default view has been processed. This is usefull e.g if you want to send
 notification mails, modifiy values after a new item has been created or clean
@@ -385,12 +417,12 @@ this::
                 return create_(Foo, request, callback=foo_callback)
 
 Change the name of the application
-----------------------------------
+==================================
 The name of the application is defined in the "ini" file. Check the
 ``app.title`` configuration variable.
 
 Tests
-=====
+*****
 Ringo come two types of tests:
 
  1. Functional and Unit tests and
@@ -404,5 +436,5 @@ This will create new test database calls the tests and make some statistics on
 the code coverage.
 
 Translation
-===========
+***********
 Translation of ringo is managed using `the Transifex webservice <https://www.transifex.com/projects/p/plorma/>`_
