@@ -44,6 +44,8 @@ See `Cookie options on <http://docs.pylonsproject.org/projects/pyramid/en/latest
 The `cookie_ip` setting will only apply to the `auth_tkt` cookie for the
 authorisation. Other option apply for all cookies set.
 
+.. _conf_headers:
+
 Headers
 -------
 See `this page <http://ghaandeeonit.tumblr.com/post/65698553805/securing-your-pyramid-application>`_ for more informations.

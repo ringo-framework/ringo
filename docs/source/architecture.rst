@@ -365,12 +365,33 @@ Ringo has protection against common threads of webapplication included.
 
 CSRF-Protection
 ---------------
+To protect against CSRF attacks ringo follows the recommodation of `OWASP
+<http://url>`_ and adds a synchroniser token to each form, which will be sent
+and checked on each POST request. The token will be unique on every request.
+GET requests in ringo are not protected as GET functions in ringo should be
+idempotent and does not trigger expensive opertaions. Following this simple
+philosophie on GET requests will make any further CSRF protection obsolete.
+
 XSS-Protection
 --------------
+Ringo will add the following headers to protect the application against XSS attacks.
+
+ * 'X-XSS-Protection': '1; mode=block',
+ * 'X-Content-Type-Options': 'nosniff'
+
+Further ringo provides an option to enable a contect CSP for further
+protection. The CSP is disabled on default but can be enabled in the
+application :ref:`conf_headers` configuration.
+
 Clickjacking-Protection
 -----------------------
 Cookie and Session security
 ---------------------------
+
+DOS-Protection
+--------------
+DOS protection is not handled by ringo. Protection against DOS-attacks should
+be handled by the Reverse Proxy or Firewall.
 
 
 States and Workflows
