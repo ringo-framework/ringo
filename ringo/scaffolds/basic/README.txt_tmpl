@@ -8,7 +8,7 @@ Getting Started
 
 - $venv/bin/python setup.py develop
 
-- $venv/bin/initialize_{{package}}_db development.ini
+- $venv/bin/{{package}}-admin db init
 
 - $venv/bin/pserve development.ini
 
