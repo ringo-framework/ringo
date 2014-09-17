@@ -39,7 +39,7 @@ def get_cookie_secret(settings):
     """Will return the configured string in the config to sign the
     cookies. If no string is configured. Generate a random string for
     this."""
-    secret = settings.get("auth.cookie_secret")
+    secret = settings.get("security.cookie_secret")
     if not secret:
         secret = password_generator(50)
     return secret
