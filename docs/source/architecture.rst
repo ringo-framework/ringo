@@ -1,6 +1,6 @@
-************
+############
 Architecture
-************
+############
 The architecture of ringo is shown below.
 
 .. image:: images/applayers.png
@@ -38,64 +38,8 @@ configuration is done in the proper way. See
 :ref:`create_ringo_based_application` for information on how to create an
 application using this scaffold.
 
-.. _modules:
-
-Modules
-=======
-The term "Module" is central and often used in ringo. Therefore it is important
-to understand what a module is. This section tries to explain that.
-
-.. image:: images/modules.png
-   :alt: Schema of a module.
-
-You can think of a module in the way that it provides the infrastructure to
-work with a certain type of data in a web application. Where certain type of
-data means users, files, movies etc. rather than integers or datevalues. Lets
-call them items from now on.
-
-A module will have a model for the items you want to work with. It will include
-views to handle incoming request and generating the proper responses for
-users. Further it has templates which define how the pages in the application
-will look like. Finally there are configuration files to define how the forms
-and overview tables will look like.
-
-Ringo already come with many modules. One module per item. There is a module
-for the user management, a module for appointment and so on. There is also a
-module to handle the modules itself. So we can say in general: ringos
-functionality is the sum of all modules functionality. Ringo or a ringo based
-application can be extended by adding new modules.  Fortunately you will not
-need to create this infrastructure for you own. See :ref:`add_modules` for
-more information.
-
-Each module has a common set of configuration options which can be done
-directly in the web interface. See the modules entry in the administion menu
-for more information.
-
-.. _module_actions:
-
-Modul actions
--------------
-Modules provide actions which can be used to manipulate the item of a module.
-Ringo provides some basic CRUD [#]_ actions which are available on default for every module.
-
-* Create: Create new items.
-* Read: Show the item in detail in readonly mode.
-* Update: Edit items of the module.
-* Delete: Deleting items.
-* List: Listing all items of the module. This is slightly different to the action to read a single item.
-* Import (CSV, JSON)
-* Export (CSV, JSON)
-
-Every time you want to do something different to your items you will likely
-want to implement another action for the module. See :ref:`add_action` for
-more details how to add actions to a module.
-
-.. [#] CRUD means: Create, Read, Update, Delete
-
-
 Filesystem
-==========
-
+**********
 Ringo is organised in the following file layout::
 
         .
@@ -119,6 +63,7 @@ Ringo is organised in the following file layout::
            │   ├── mails
            │   └── users
            ├── tests
+           ├── teens
            └── views
                ├── forms
                └── tables
@@ -147,6 +92,8 @@ ringo/templates
    default folder has the templates for default CRUD actions and confirmation dialogs.
 ringo/tests
    Unit tests and behaviour driven tests. See :ref:`tests` for more details.
+ringo/tweens
+   Middleware like code. Used to modify headers in response objects.
 ringo/views
    Views with the business logic for the application. 
 ringo/views/forms
@@ -155,8 +102,10 @@ ringo/views/tables
    Configuration of overview tables for each modul.
 
 
+
+
 Database
-========
+********
 Below you see the basic schema of the ringo database. The schema only lists
 some central tables which help to understand how the things are wired together
 in ringo. The table colored orange `example` table in the top left is an
@@ -192,6 +141,59 @@ the password reset.
 
 .. [#] The ownership feature can be added by using the :ref:`mixin_owned`
    mixin.
+
+
+.. _modules:
+
+Modules
+*******
+The term "Module" is central and often used in ringo. Therefore it is important
+to understand what a module is. This section tries to explain that.
+
+.. image:: images/modules.png
+   :alt: Schema of a module.
+
+You can think of a module in the way that it provides the infrastructure to
+work with a certain type of data in a web application. Where certain type of
+data means users, files, movies etc. rather than integers or datevalues. Lets
+call them items from now on.
+
+A module will have a model for the items you want to work with. It will include
+views to handle incoming request and generating the proper responses for
+users. Further it has templates which define how the pages in the application
+will look like. Finally there are configuration files to define how the forms
+and overview tables will look like.
+
+Ringo already come with many modules. One module per item. There is a module
+for the user management, a module for appointment and so on. There is also a
+module to handle the modules itself. So we can say in general: ringos
+functionality is the sum of all modules functionality. Ringo or a ringo based
+application can be extended by adding new modules.  Fortunately you will not
+need to create this infrastructure for you own. See :ref:`add_modules` for
+more information.
+
+Each module has a common set of configuration options which can be done
+directly in the web interface. See the modules entry in the administion menu
+for more information.
+
+Modules provide actions which can be used to manipulate the item of a module.
+Ringo provides some basic CRUD [#]_ actions which are available on default for every module.
+
+* Create: Create new items.
+* Read: Show the item in detail in readonly mode.
+* Update: Edit items of the module.
+* Delete: Deleting items.
+* List: Listing all items of the module. This is slightly different to the action to read a single item.
+* Import (CSV, JSON)
+* Export (CSV, JSON)
+
+Every time you want to do something different to your items you will likely
+want to implement another action for the module. See :ref:`add_action` for
+more details how to add actions to a module.
+
+.. [#] CRUD means: Create, Read, Update, Delete
+
+
 
 Mixins
 ======
@@ -251,14 +253,28 @@ Printable
 ---------
 .. autoclass:: ringo.model.mixins.Printable
 
-States and Workflows
-====================
-.. automodule:: ringo.model.statemachine
+Event Handlers
+==============
+Each modul can implement one of the following event handlers to realize
+automatic modifications of the items:
 
-For detailed descriptione of the involved classes see API documentation of :ref:`api-statemachine`
+ * create_event_handler(request, item, \**kwargs)
+ * update_event_handler(request, item, \**kwargs)
+ * delete_event_handler(request, item, \**kwargs)
+
+The functions will be called for all base classes of the item
+automatically in the base controller if the specific view function for
+the event (update, create, delete) is excecuted.
+
+Some of the Mixin classes do already have some predefined event_handlers
+configured.
+
+Security
+********
+Security is an important aspect of ringo. This chapter will describe the
+permission system and explains how ringo handle common security threats.
 
 .. _permissionsystem:
-
 Permission System
 =================
 The permission system addresses two basic questions:
@@ -343,28 +359,23 @@ for more information how things work in general under the hood.
 See :ref:`api-security` for documentation on helper functions used to build
 the ACL.
 
+Security measurements
+=====================
+Ringo has protection against common threads of webapplication included.
 
-.. _roles:
+CSRF-Protection
+---------------
+XSS-Protection
+--------------
+Clickjacking-Protection
+-----------------------
+Cookie and Session security
+---------------------------
 
-Roles
------
-A Role s used to configure which actions are
-permitted to users.  Therefor each role will have an internal list of modul
-actions. A user will be allowed to call all actions assigned to the role he is
-equiped with.
 
-Event Handlers
-==============
-Each class can implement one of the following event handlers to realize
-automatic modifications of the items:
+States and Workflows
+********************
+.. automodule:: ringo.model.statemachine
 
- * create_event_handler(request, item, \**kwargs)
- * update_event_handler(request, item, \**kwargs)
- * delete_event_handler(request, item, \**kwargs)
+For detailed descriptione of the involved classes see API documentation of :ref:`api-statemachine`
 
-The functions will be called for all base classes of the item
-automatically in the base controller if the specific view function for
-the event (update, create, delete) is excecuted.
-
-Some of the Mixin classes do already have some predefined event_handlers
-configured.
