@@ -152,8 +152,12 @@ class BaseItem(object):
             # This error is only acceptable for blobforms as attributes
             # can be added and removed by the user on the fly. So there
             # is a good chance that older items do not have this attribute.
-            log.error("Attribute '%s' not found in '%s'; id:%s"
-                      % (name, repr(self), self.id))
+            if hasattr(self, 'id'):
+                log.error("Attribute '%s' not found in '%s'; id:%s"
+                          % (name, repr(self), self.id))
+            else:
+                log.error("Attribute '%s' not found in '%s'"
+                          % (name, repr(self)))
             raw_value = None
         if expand:
             form_config = get_form_config(self, form_id)
