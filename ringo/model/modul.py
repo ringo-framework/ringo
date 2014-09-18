@@ -50,7 +50,8 @@ class ModulItem(BaseItem, Base):
     default_group = sa.orm.relationship("Usergroup", uselist=False)
     actions = sa.orm.relationship("ActionItem",
                                   backref="modul",
-                                  lazy="joined")
+                                  lazy="joined",
+                                  cascade="all")
 
     _sql_eager_loads = ['actions.roles']
 
