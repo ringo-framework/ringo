@@ -6,7 +6,6 @@ from ringo.lib.helpers import dynamic_import
 
 log = logging.getLogger(__name__)
 
-
 class ActionItem(BaseItem, Base):
     __tablename__ = 'actions'
     _modul_id = 2
@@ -80,3 +79,28 @@ class ModulItem(BaseItem, Base):
             return (format_str, fields.split(","))
         except:
             return ("%s", ["id"])
+
+ACTIONS = {
+    "list":   ActionItem(name="List",
+                         url="list",
+                         icon="icon-list-alt"),
+    "create": ActionItem(name="Create",
+                         url="create",
+                         icon=" icon-plus"),
+    "read":   ActionItem(name="Read",
+                         url="read/{id}",
+                         icon="icon-eye-open"),
+    "update": ActionItem(name="Update",
+                         url="update/{id}",
+                         icon="icon-edit"),
+    "delete": ActionItem(name="Delete",
+                         url="delete/{id}",
+                         icon="icon-trash"),
+    "import": ActionItem(name="Import",
+                         url="import",
+                         icon="icon-import"),
+    "export": ActionItem(name="Export",
+                         url="export/{id}",
+                         icon="icon-export")
+}
+
