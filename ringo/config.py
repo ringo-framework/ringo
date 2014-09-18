@@ -2,10 +2,12 @@ import os
 import logging
 import pkg_resources
 from ringo.lib import helpers
+from ringo.lib.extension import unregister_modul
 from ringo.lib.sql.db import DBSession
 from ringo.lib.helpers import get_action_routename
 from ringo.lib.form import get_formbar_css, get_formbar_js
 from ringo.model.modul import ModulItem
+from ringo.model import extensions
 from ringo.resources import get_resource_factory
 from ringo.views.base import (
     web_action_view_mapping,
@@ -18,6 +20,7 @@ log = logging.getLogger(__name__)
 def setup(config):
     """Setup method which is called on application initialition and
     takes care that many ringo specific things are setup correctly."""
+    setup_extensions(config)
     setup_modules(config)
     config.include('ringo.lib.i18n.setup_translation')
     config.include('ringo.lib.sql.db.setup_connect_on_request')
@@ -25,6 +28,21 @@ def setup(config):
     config.include('ringo.lib.security.setup_ringo_security')
     config.include('ringo.lib.cache.setup_cache')
     write_formbar_static_files()
+
+
+def setup_extensions(config):
+    """Will setup the configured extensions. This included initialising
+    new extension and removing extension which aren't configured any
+    longer in the application."""
+    # First initialise extenstion
+    for extension in extensions:
+        config.include(extension)
+    # Now delete all extensions which are not configured.
+    for modul in DBSession.query(ModulItem).all():
+        app_name = modul.clazzpath.split(".")[0]
+        if app_name.find("extension") > 0:
+            if app_name not in extensions:
+                unregister_modul(modul)
 
 
 def setup_modules(config):
@@ -147,6 +165,7 @@ def setup_modul(config, modul):
     :modul: The module for which the new routes will be set up.
     """
     clazz = helpers.dynamic_import(modul.clazzpath)
+    log.info("Setup modul '%s'" % modul.name)
     for action in modul.actions:
         _setup_web_action(config, action, clazz, web_action_view_mapping)
         _setup_rest_action(config, action, clazz, rest_action_view_mapping)
