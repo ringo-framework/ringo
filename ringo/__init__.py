@@ -1,7 +1,6 @@
 import logging
 from pyramid.config import Configurator
 from pyramid_beaker import session_factory_from_settings
-from pyramid.security import remember
 
 from ringo.resources import get_resource_factory
 from ringo.lib.helpers import get_action_routename
@@ -39,6 +38,7 @@ def includeme(config):
     config.scan()
     log.info('OK :) Setup of Ringo finished.')
 
+
 def setup_static_views(config):
     settings = config.registry.settings
     http_cache = settings.get('security.static_http_cache', '3600')
@@ -47,6 +47,7 @@ def setup_static_views(config):
                            cache_max_age=int(http_cache))
     log.info('-> Static views finished.')
     return config
+
 
 def setup_routes(config):
     """Function which will setup the routes of the ringo application"""
