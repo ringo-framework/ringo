@@ -31,7 +31,6 @@ def includeme(config):
     config.include('pyramid_handlers')
     config.include('pyramid_beaker')
     config.include('pyramid_mako')
-    log.info('-> Pyramid extensions finished.')
     config.include('ringo.config.setup')
     config = setup_static_views(config)
     config = setup_routes(config)
@@ -45,7 +44,6 @@ def setup_static_views(config):
     config.add_static_view('static',
                            path='ringo:static',
                            cache_max_age=int(http_cache))
-    log.info('-> Static views finished.')
     return config
 
 
@@ -77,5 +75,4 @@ def setup_routes(config):
                      factory=get_resource_factory(News))
     config.add_route('rules-evaluate', 'rest/rule/evaluate')
     config.add_route('form-render', 'rest/form/render')
-    log.info('-> Routes finished.')
     return config

@@ -166,7 +166,6 @@ def setup_ringo_security(config):
         config.add_tween('ringo.tweens.clickjacking.clickjacking_factory')
     if settings.get("security.header_csp", "false") == "true":
         config.add_tween('ringo.tweens.csp.csp_factory')
-    log.info('-> Security finished.')
 
 
 def get_user(request):

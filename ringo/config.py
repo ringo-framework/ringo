@@ -173,4 +173,3 @@ def write_formbar_static_files():
             os.makedirs(head)
         with open(filename, 'wb') as f:
             f.write(content)
-    log.info('-> Formbar static files written.')
