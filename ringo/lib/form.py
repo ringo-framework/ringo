@@ -40,7 +40,7 @@ def get_item_form(item, name, db, translate, renderers,
                 eval_url='/rest/rule/evaluate')
 
 
-def get_path_to_form_config(filename, app=None):
+def get_path_to_form_config(filename, app=None, location=None):
     """Returns the path the the given form configuration. The file name
     should be realtive to the default location for the configurations.
 
@@ -48,7 +48,8 @@ def get_path_to_form_config(filename, app=None):
     :returns: Absolute path to the configuration file
 
     """
-    location = "views/forms"
+    if location is None:
+        location = "views/forms"
     return get_path_to(os.path.join(location, filename), app)
 
 
@@ -64,24 +65,25 @@ def get_form_config(item, formname):
     :returns: Formconfig
     """
     cachename = "%s.%s" % (item.__class__.__name__, formname)
+    name = item.__module__.split(".")[0]
     if not CACHE_FORM_CONFIG.get(cachename):
         if hasattr(item, 'fid'):
             config = _get_blobform_config(item.fid, formname)
         else:
             filename = "%s.xml" % item.__class__.__tablename__
-            config = _get_form_config(filename, formname)
+            config = _get_form_config(name, filename, formname)
         CACHE_FORM_CONFIG.set(cachename, config)
     return CACHE_FORM_CONFIG.get(cachename)
 
 
-def _get_form_config(filename, formname):
+def _get_form_config(name, filename, formname):
     """Return the file based configuration for a given form. The
     configuration tried to be loaded from the application first. If this
     fails it tries to load it from the ringo application."""
     try:
-        loaded_config = load(get_path_to_form_config(filename))
+        loaded_config = load(get_path_to_form_config(filename, name))
     except IOError:
-        loaded_config = load(get_path_to_form_config(filename, 'ringo'))
+        loaded_config = load(get_path_to_form_config(filename, name, location="."))
     return Config(loaded_config).get_form(formname)
 
 

@@ -1,8 +1,11 @@
 """Modul to with function to work with the table configuration"""
+import logging
 import os
 import json
 from ringo.lib.helpers import get_path_to
 from ringo.lib.cache import CACHE_TABLE_CONFIG
+
+log = logging.getLogger(__name__)
 
 
 def get_table_config(clazz, tablename=None):
@@ -24,7 +27,7 @@ def get_table_config(clazz, tablename=None):
     return CACHE_TABLE_CONFIG.get(cachename)
 
 
-def get_path_to_overview_config(filename, app=None):
+def get_path_to_overview_config(filename, app=None, location=None):
     """Returns the path the the given overview configuration. The file name
     should be realtive to the default location for the configurations.
 
@@ -32,7 +35,8 @@ def get_path_to_overview_config(filename, app=None):
     :returns: Absolute path to the configuration file
 
     """
-    location = "views/tables"
+    if location is None:
+        location = "views/tables"
     return get_path_to(os.path.join(location, filename), app)
 
 
@@ -169,11 +173,12 @@ def _load_overview_config(clazz):
         cfile = "%s.json" % clazz.__tablename__
         # Try to load the configuration for the overview first.
         config = None
+        name = clazz.__module__.split(".")[0]
         try:
-            config = open(get_path_to_overview_config(cfile), "r")
+            config = open(get_path_to_overview_config(cfile, name), "r")
         except IOError:
             try:
-                config = open(get_path_to_overview_config(cfile, 'ringo'), "r")
+                config = open(get_path_to_overview_config(cfile, name, location="."), "r")
             except IOError:
                 log.warning('Can not load overview configuration for "%s" '
                             'Configuring the overview now based on the form '
