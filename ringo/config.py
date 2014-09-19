@@ -40,7 +40,7 @@ def setup_extensions(config):
     # Now delete all extensions which are not configured.
     for modul in DBSession.query(ModulItem).all():
         app_name = modul.clazzpath.split(".")[0]
-        if app_name.find("extension") > 0:
+        if app_name.find("ringo_") > -1:
             if app_name not in extensions:
                 unregister_modul(modul)
 
