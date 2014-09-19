@@ -1,5 +1,29 @@
-"""Modul with helper functions to register, and unregister ringo extensions Extensions are external modules which are not hard wired with the
-application but can be added dynamically to a ringo application.
+"""
+Extensions are external pluggable modules and a option to add generic
+functionallity to the application in a dynamic way.
+
+In contrast to modules, extensions are generic and should not implement
+application specific stuff. Extensions should be used to create
+pluggable modules with generic functionallity which can be usefull for
+all kind of applications. An example might be an appointment extensions
+which allows the user to extend the application with an appointment
+feature.
+
+Extension can be Registered to an application by adding the extentions
+in the `extensions` list located in the `modul/__init__.py` file. As
+soon as the application is started the extension will be registered.
+To unregister a extension simply remove the extension from the
+`extentions` list.
+
+.. note::
+    For extensions which modifies the datamodel of the application a
+    seperate model migration is needed on registration and
+    unregistration of the extension. (See alembic and ringo-admin
+    documentation).
+
+For more information on how to create and register extensions please
+refer to the :ref:`development` part of the documentation.
+
 """
 import logging
 import sqlalchemy as sa

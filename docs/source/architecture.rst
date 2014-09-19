@@ -193,6 +193,9 @@ more details how to add actions to a module.
 
 .. [#] CRUD means: Create, Read, Update, Delete
 
+Extensions
+==========
+.. automodule:: ringo.lib.extension
 
 
 Mixins
