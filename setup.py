@@ -69,6 +69,7 @@ setup(name='ringo',
       formconfig = formbar.i18n:extract_i18n_formconfig
       [pyramid.scaffold]
       ringo=ringo.scaffolds:BasicRingoTemplate
+      ringo_extension=ringo.scaffolds:RingoExtensionTemplate
       """,
       message_extractors = {'ringo': [
             ('**.py', 'python', None),
