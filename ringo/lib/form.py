@@ -9,9 +9,9 @@ from ringo.lib.helpers import get_path_to
 
 def get_ownership_form(item, db, csrf_token, readonly=None):
     if readonly:
-        config = _get_form_config('ownership.xml', 'ownership-form-read')
+        config = _get_form_config('ringo', 'ownership.xml', 'ownership-form-read')
     else:
-        config = _get_form_config('ownership.xml', 'ownership-form-update')
+        config = _get_form_config('ringo', 'ownership.xml', 'ownership-form-update')
     return Form(config, item, db,
                 csrf_token=csrf_token,
                 eval_url='/rest/rule/evaluate')
@@ -19,9 +19,9 @@ def get_ownership_form(item, db, csrf_token, readonly=None):
 
 def get_logbook_form(item, db, csrf_token, readonly=None):
     if readonly:
-        config = _get_form_config('logbook.xml', 'logbook-form-read')
+        config = _get_form_config('ringo', 'logbook.xml', 'logbook-form-read')
     else:
-        config = _get_form_config('logbook.xml', 'logbook-form-update')
+        config = _get_form_config('ringo', 'logbook.xml', 'logbook-form-update')
     return Form(config, item, db,
                 csrf_token=csrf_token,
                 eval_url='/rest/rule/evaluate')
