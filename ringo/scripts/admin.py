@@ -29,7 +29,9 @@ from ringo.scripts.db import (
     handle_db_upgrade_command,
     handle_db_savedata_command,
     handle_db_loaddata_command,
-    handle_db_uuid_command
+    handle_db_uuid_command,
+    handle_db_restrict_command,
+    handle_db_unrestrict_command
 )
 
 from ringo.scripts.modul import (
@@ -104,6 +106,24 @@ def setup_db_parser(subparsers, parent):
                                 help='Saves the data of a given modul',
                                 parents=[parent])
     savedata_parser.set_defaults(func=handle_db_savedata_command)
+    savedata_parser.add_argument('modul',
+                        metavar="modul",
+                        help="Name of the Modul")
+
+    # restrict command
+    savedata_parser = sp.add_parser('restrict',
+                                help=('Restrict access to the given modul'
+                                     ' on database level'),
+                                parents=[parent])
+    savedata_parser.set_defaults(func=handle_db_restrict_command)
+    savedata_parser.add_argument('modul',
+                        metavar="modul",
+                        help="Name of the Modul")
+    savedata_parser = sp.add_parser('unrestrict',
+                                help=('Unrestrict access to the given modul'
+                                     ' on database level'),
+                                parents=[parent])
+    savedata_parser.set_defaults(func=handle_db_unrestrict_command)
     savedata_parser.add_argument('modul',
                         metavar="modul",
                         help="Name of the Modul")

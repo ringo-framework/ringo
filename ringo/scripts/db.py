@@ -171,3 +171,48 @@ def handle_db_uuid_command(args):
     except:
         print "Loading data failed!"
 
+def _get_user_id_function():
+    out = []
+    out.append("CREATE OR REPLACE FUNCTION uid() RETURNS integer")
+    out.append("LANGUAGE 'plpgsql' STABLE")
+    out.append("AS $$")
+    out.append("  DECLARE")
+    out.append("  uid integer;")
+    out.append("  BEGIN")
+    out.append("    SELECT INTO uid id FROM users WHERE login = session_user;")
+    out.append("    RETURN uid;")
+    out.append("  END;")
+    out.append("$$;")
+    return "\n".join(out)
+
+
+def handle_db_restrict_command(args):
+    """Will return a SQL statement to restrict the access to the given
+    tables by revoking all priviledges to the table in the public
+    scheme. Instead of this a view with the same name as the table in
+    the restricted view will be defined which only returns datasets
+    which the current user owns or is member of the items group."""
+    out = []
+    out.append("-- Execute this as user postgres")
+    out.append("CREATE SCHEMA IF NOT EXISTS restriced;")
+    out.append(_get_user_id_function())
+    out.append("REVOKE ALL ON TABLE public.%ss FROM PUBLIC;" % args.modul)
+    out.append("CREATE OR REPLACE VIEW %ss AS " % args.modul)
+    out.append("SELECT * FROM public.%ss WHERE " % args.modul)
+    out.append("uid = uid()")
+    out.append("OR gid IN ( SELECT gid from nm_user_usergroups where uid = uid() ) ")
+    out.append("OR uid() IN ( select uid from nm_user_roles where rid = 1 );")
+    out.append("GRANT ALL ON TABLE restricted.%ss TO PUBLIC;" % args.modul)
+    out.append("-- Do not to forget to change the default searchpath to '$user', restricted, public")
+    print "\n".join(out)
+
+
+def handle_db_unrestrict_command(args):
+    """Will return a SQL statement to unrestrict the access to the given
+    tables by granting all priviledges to the table in the public
+    scheme. The restricted view will be dropped."""
+    out = []
+    out.append("-- Execute this as user postgres")
+    out.append("GRANT ALL ON TABLE public.%ss TO PUBLIC;" % args.modul)
+    out.append("DROP VIEW IF EXISTS %ss;" % (args.modul))
+    print "\n".join(out)
