@@ -29,12 +29,15 @@ def iter_statements(stmts):
 def upgrade():
     conn = op.get_bind()
     res = conn.execute("select * from modules")
+    max_action_id = conn.execute("select max(id) from actions").fetchone()[0]
     results = res.fetchall()
     for r in results:
         if r.name in ['modules', 'profiles']: continue
-        stmnt = "INSERT into actions (mid, name, url, icon) VALUES (%s, 'Export', 'export/{id}', 'icon-export')" % r[0]
+        max_action_id += 1
+        stmnt = "INSERT into actions (id, mid, name, url, icon) VALUES (%s, %s, 'Export', 'export/{id}', 'icon-export')" % (max_action_id, r[0])
         op.execute(stmnt)
-        stmnt = "INSERT into actions (mid, name, url, icon) VALUES (%s, 'Import', 'import', 'icon-import')" % r[0]
+        max_action_id += 1
+        stmnt = "INSERT into actions (id, mid, name, url, icon) VALUES (%s, %s, 'Import', 'import', 'icon-import')" % (max_action_id, r[0])
         op.execute(stmnt)
     iter_statements(INSERTS)
 
