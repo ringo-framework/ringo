@@ -23,13 +23,13 @@ INSERT INTO "modules" VALUES(5,'roles','ringo.model.user.Role','Role','Roles',NU
 INSERT INTO "modules" VALUES(6,'profiles','ringo.model.user.Profile','Profile','Profiles',NULL,NULL,'admin-menu');
 INSERT INTO "modules" VALUES(7,'appointments','ringo.model.appointment.Appointment','Appointment','Appointments',NULL,NULL,'admin-menu');
 INSERT INTO "modules" VALUES(8,'files','ringo.model.file.File','File','Files',NULL,NULL,'admin-menu');
-INSERT INTO "roles" VALUES(1,'admin',1);
-INSERT INTO "roles" VALUES(2,'user',0);
+INSERT INTO "roles" VALUES(1,'admin','1');
+INSERT INTO "roles" VALUES(2,'user','0');
 INSERT INTO "usergroups" VALUES(1,'admins');
 INSERT INTO "usergroups" VALUES(2,'users');
 INSERT INTO "nm_usergroup_roles" VALUES(1,1);
 INSERT INTO "nm_usergroup_roles" VALUES(2,2);
-INSERT INTO "users" VALUES(1,'admin','5ebe2294ecd0e0f08eab7690d2a6ee69',1,'0e3cc848-22f6-4ff7-a562-12baf3037439',1,1);
+INSERT INTO "users" VALUES(1,'admin','5ebe2294ecd0e0f08eab7690d2a6ee69','1','0e3cc848-22f6-4ff7-a562-12baf3037439',1,1);
 INSERT INTO "actions" VALUES(1,1,'List','list','icon-list-alt',NULL);
 INSERT INTO "actions" VALUES(2,1,'Read','read/{id}','icon-eye-open',NULL);
 INSERT INTO "actions" VALUES(3,1,'Update','update/{id}','icon-edit',NULL);
