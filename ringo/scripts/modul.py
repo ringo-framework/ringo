@@ -10,7 +10,7 @@ from ringo.scripts.db import (
     get_session, create_new_revision,
     handle_db_upgrade_command
 )
-from ringo.model.modul import ModulItem
+from ringo.model.modul import ModulItem, ActionItem
 
 # Directory with templates to generate views and models
 base_dir = pkg_resources.get_distribution("ringo").location
@@ -32,7 +32,7 @@ mixinmap = {
 }
 
 
-def _get_default_actions_sql(session, mid, ignore=[]):
+def _get_default_actions_sql(session, mid, action_id, ignore=[]):
     # TODO: Translate the name of the Action (torsten) <2013-07-10 09:32>
     sql = []
     for action in ['list', 'create', 'read', 'update',
@@ -77,9 +77,10 @@ def _get_default_actions_sql(session, mid, ignore=[]):
             bundle = 1
 
         sql.append("""INSERT INTO "actions" """
-                   """(mid, name, url, icon, uuid, bundle) """
-                   """VALUES (%s, '%s', '%s', '%s', '%s', '%s');""" %
-                   (mid, name, url, icon, myuuid, bundle))
+                   """(id, mid, name, url, icon, uuid, bundle) """
+                   """VALUES (%s, %s, '%s', '%s', '%s', '%s', '%s');""" %
+                   (action_id, mid, name, url, icon, myuuid, bundle))
+        action_id += 1
     return sql
 
 
@@ -111,6 +112,10 @@ def get_next_modulid(package, session):
     else:
         return 1000
 
+def get_next_actionid(session):
+    id = session.query(func.max(ActionItem.id)).one()[0]
+    return id + 1
+
 
 def get_insert_statements(package, name, session):
     """Will retunr the INSERT statements for the new modul. They can be
@@ -130,6 +135,7 @@ def get_insert_statements(package, name, session):
     str_repr = "%s|id"
     myuuid = uuid.uuid4().hex
     id = get_next_modulid(package, session)
+    action_id = get_next_actionid(session)
 
     sql = []
     sql.append("""INSERT INTO "modules" """
@@ -137,7 +143,7 @@ def get_insert_statements(package, name, session):
                """NULL, '%s','%s','%s', NULL); """
                % (id, modul_name, clazzpath, label,
                   label_plural, str_repr, location, myuuid))
-    sql.extend(_get_default_actions_sql(session, id))
+    sql.extend(_get_default_actions_sql(session, id, action_id))
     return sql
 
 
