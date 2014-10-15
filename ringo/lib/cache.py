@@ -68,8 +68,16 @@ def setup_cache(config):
 
 def init_cache(event):
     request = event.request
-    request.cache_item_list = Cache()
-    request.cache_item_modul = Cache()
+
+    if hasattr(request, "cache_item_list"):
+        request.cache_item_list.clear()
+    else:
+        request.cache_item_list = Cache()
+
+    if hasattr(request, "cache_item_modul"):
+        request.cache_item_modul.clear()
+    else:
+        request.cache_item_modul = Cache()
     CACHE_TABLE_CONFIG.clear()
     CACHE_FORM_CONFIG.clear()
     CACHE_MODULES.clear()
