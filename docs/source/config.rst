@@ -76,13 +76,18 @@ caching at all and all elements are loaded on every request.
 The enhance the security follwing the recommodation of measurement M 4.401 of
 `BSI Grundschutz <https://www.bsi.bund.de/DE/Themen/ITGrundschutz/ITGrundschutzKataloge/Inhalt/_content/m/m04/m04401.html;jsessionid=116E42B16FBC9D779FD768E7CDE905A1.2_cid368>`_ you should disable the caching.
 
- * security.page_http_cache = 3600
+ * security.page_http_cache = 0
  * security.static_http_cache = 3600
 
 .. note::
    The caching setting of the page currently only applies to the CRUD
    operations of the modules and not to the static pages like contact, home
    etc.
+
+.. warning::
+   Caching of dynmic generated pages might result in some unexpected behaviour
+   such as outdated items in overview lists. Therefor ther default disables
+   caching here.
 
 Mail
 ====

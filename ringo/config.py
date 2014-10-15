@@ -80,7 +80,7 @@ def _setup_web_action(config, action, clazz, view_mapping):
                      factory=get_resource_factory(clazz))
     view_func = view_mapping.get(action_name)
     settings = config.registry.settings
-    http_cache = settings.get('security.page_http_cache', '3600')
+    http_cache = settings.get('security.page_http_cache', '0')
     if view_func:
         if action_name == "delete":
             template = "confirm"
@@ -148,7 +148,7 @@ def _setup_rest_action(config, action, clazz, view_mapping):
                      factory=get_resource_factory(clazz))
     log.debug("Adding REST view: %s, %s, %s" % (view_func, route_name, method))
     settings = config.registry.settings
-    http_cache = settings.get('security.page_http_cache', '3600')
+    http_cache = settings.get('security.page_http_cache', '0')
     config.add_view(view_func,
                     route_name=route_name,
                     request_method=method,
