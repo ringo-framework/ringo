@@ -1,5 +1,6 @@
 import logging
 import os
+import cgi
 import pkg_resources
 from mako.lookup import TemplateLookup
 
@@ -78,9 +79,9 @@ class ConfirmDialogRenderer(DialogRenderer):
     def _render_body(self, items):
         out = []
         _ = self._request.translate
-        item_label = get_item_modul(self._request, self._item).get_label()
-        mapping = {'action': self._action, 'item': item_label,
-                   'Action': self._action.capitalize()}
+        item_label = cgi.escape(get_item_modul(self._request, self._item).get_label())
+        mapping = {'action': cgi.escape(self._action), 'item': item_label,
+                   'Action': cgi.escape(self._action.capitalize())}
         out.append(_("Do you really want to ${action}"
                      " the following ${item} items?",
                      mapping=mapping))
@@ -88,7 +89,7 @@ class ConfirmDialogRenderer(DialogRenderer):
         out.append("<ol>")
         for item in items:
             out.append("<li>")
-            out.append(unicode(item))
+            out.append(cgi.escape(unicode(item)))
             out.append("</li>")
         out.append("</ol>")
         out.append(_('Please press "${Action}" to ${action} the item.'
