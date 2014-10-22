@@ -143,10 +143,10 @@ class BaseItem(object):
     def get_item_modul(cls, request=None):
         if not request:
             request = get_current_request()
-            if request:
-                log.warning("Calling get_item_modul with no request although "
-                            "there is a request available. "
-                            "Using 'get_current_request'...")
+            #if request:
+            #    log.warning("Calling get_item_modul with no request although "
+            #                "there is a request available. "
+            #                "Using 'get_current_request'...")
         if not request or not request.cache_item_modul.get(cls._modul_id):
             from ringo.model.modul import ModulItem
             factory = BaseFactory(ModulItem)
