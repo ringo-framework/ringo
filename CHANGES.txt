@@ -65,6 +65,8 @@ HOWTO Upgrade:
 * Fix urls in import, export dialogs. Use get_current_route_patch instead of
   URL (causes errors with SSL behind an reverse proxy)
 * Fix import. Handle NULL values correct for integers.
+* Fix handling NULL values in sorting.
+* Use new formbar version 0.9.0. Fix some rules.
 
 0.15.1
 =======

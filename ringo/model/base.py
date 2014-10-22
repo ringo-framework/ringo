@@ -16,6 +16,14 @@ from ringo.model.mixins import Logged, StateMixin, Owned
 
 log = logging.getLogger(__name__)
 
+def nonecmp(a, b):
+  if a is None and b is None:
+    return 0
+  if a is None:
+    return -1
+  if b is None:
+    return 1
+  return cmp(a, b)
 
 def attrgetter(field, expand):
     def g(obj):
@@ -403,7 +411,7 @@ class BaseList(object):
         :returns: Sorted item list
 
         """
-        sorted_items = sorted(self.items, key=attrgetter(field, expand))
+        sorted_items = sorted(self.items, cmp=nonecmp, key=attrgetter(field, expand))
         if order == "desc":
             sorted_items.reverse()
         self.items = sorted_items

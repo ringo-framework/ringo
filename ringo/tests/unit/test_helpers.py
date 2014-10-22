@@ -142,7 +142,8 @@ class HelpersAuthTests(BaseUnitTest):
         print result
         check1 = (result == u"3/12/77 12:00 AM")
         check2 = (result == u"3/12/77, 12:00 AM")
-        ok = check1 or check2
+        check3 = (result == u"3/12/77, 1:00 AM")
+        ok = check1 or check2 or check3
         self.assertTrue(ok)
 
     def test_format_datetime(self):
