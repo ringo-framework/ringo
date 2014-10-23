@@ -68,7 +68,6 @@ def get_form_config(item, formname):
     name = item.__module__.split(".")[0]
     if not CACHE_FORM_CONFIG.get(cachename):
         if hasattr(item, 'fid'):
-            print "XXX"
             config = _get_blobform_config(item.fid, formname)
         else:
             filename = "%s.xml" % item.__class__.__tablename__
