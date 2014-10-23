@@ -21,8 +21,8 @@ def evaluate(request):
     request. It will return a JSONResponse with the result of the
     evaluation."""
     try:
-        ruleexpr = request.GET.get('rule')
-        rule = Rule(expr=ruleexpr)
+        ruleexpr = request.GET.get('rule').strip()
+        rule = Rule(ruleexpr)
         result = rule.evaluate({})
         return JSONResponse(True, result, {"msg": rule.msg})
     except:
