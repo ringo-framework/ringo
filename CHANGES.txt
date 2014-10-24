@@ -12,10 +12,13 @@ to the tracker.
 ======
 - Added commands to generate SQL to restrict and unrestrict access to table of
   a modul on database level (only postgres)
+- Fixes of loading Form and Overview configuration.
+- Add escaping into the renderer
 
 0.16.2
 ======
-TODO
+- Add function to load ringo extenstions.
+- Changed logging in application (Removed and modified)
 
 0.16.1
 ======
