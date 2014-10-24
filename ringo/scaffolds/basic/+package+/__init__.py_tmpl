@@ -5,6 +5,7 @@ from ringo.lib.sql.db import setup_db_session
 from ringo.model import Base
 from ringo.config import setup_modules
 from ringo.lib.i18n import translators
+from {{package}}.model import extensions
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
@@ -15,12 +16,14 @@ def main(global_config, **settings):
     # Include basic ringo configuration.
     config.include('ringo')
     config.include('{{package}}')
+    for extension in extensions:
+        config.include(extension)
     config.scan()
     return config.make_wsgi_app()
 
 def includeme(config):
     # Now configure the application and optionally overwrite previously
-    translators.append(TranslationStringFactory('plorma'))
-    config.add_translation_dirs('plorma:locale/')
-    config.add_static_view('plorma-static', path='plorma:static',
+    translators.append(TranslationStringFactory('{{package}}'))
+    config.add_translation_dirs('{{package}}:locale/')
+    config.add_static_view('{{package}}-static', path='{{package}}:static',
                            cache_max_age=3600)

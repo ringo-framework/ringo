@@ -1,4 +1,5 @@
 import logging
+import cgi
 import json
 import os
 import pkg_resources
@@ -147,7 +148,7 @@ class DropdownFieldRenderer(FormbarDropdown):
         for item in items:
             url = get_link_url(item, self._field._form._request)
             if url:
-                html.append('<a href="%s">%s</a>' % (url, item))
+                html.append('<a href="%s">%s</a>' % (url, cgi.escape(unicode(item))))
         return "".join(html)
 
     def _render_label(self):
@@ -334,11 +335,11 @@ class LogRenderer(FieldRenderer):
         html.append(log.created.strftime("%y.%m.%d %H:%M"))
         html.append("</td>")
         html.append("<td>")
-        html.append(unicode(log.author))
+        html.append(cgi.escape(unicode(log.author)))
         html.append("</td>")
         html.append("<td>")
         if log.subject:
-            html.append('<strong>%s</strong>' % log.subject)
+            html.append('<strong>%s</strong>' % cgi.escape(log.subject))
             html.append('<br>')
         logentry = []
         try:
@@ -349,7 +350,9 @@ class LogRenderer(FieldRenderer):
                     xxx = ("""%s:
                            <i><span class="formbar-del-value">%s</span>
                            <span class="formbar-new-value">%s</span></i>"""
-                           % (field, logdata[field]["old"], logdata[field]["new"]))
+                           % (cgi.escape(field),
+                              cgi.escape(logdata[field]["old"]),
+                              cgi.escape(logdata[field]["new"])))
                 except:
                     xxx = ("""%s: <i><span class="formbar-new-value">%s</span></i>"""
                            % (field, logdata[field]))
@@ -358,7 +361,7 @@ class LogRenderer(FieldRenderer):
                 logentry.append("</li>")
             logentry.append("</ol>")
         except:
-            logentry.append(log.text or "")
+            logentry.append(cgi.escape(log.text or ""))
         html.append("".join(logentry))
         html.append("</td>")
         html.append("</tr>")
@@ -368,7 +371,7 @@ class LogRenderer(FieldRenderer):
         html = []
         logs = self._field._form._item.logs
         html.append('<label for="">%s (%s)</label>'
-                    % (self._field.label, len(logs)))
+                    % (cgi.escape(self._field.label), len(logs)))
         html.append('<table class="table table-densed">')
         html.append('<tr>')
         html.append('<th width="150px">%s</th>' % 'Date')
@@ -378,7 +381,7 @@ class LogRenderer(FieldRenderer):
         for log in logs[::-1]:
             html.append('<input type="checkbox" name="%s" value="%s"'
                         ' style="display:none"/>'
-                        % (self._field.name, log.id))
+                        % (cgi.escape(self._field.name), log.id))
             html.extend(self._render_body(log))
         html.append('</table>')
         return "".join(html)
@@ -396,7 +399,7 @@ class CommentRenderer(FieldRenderer):
         html.append('<a href="/comments/read/%s">#%s</a>'
                     % (comment.id, comment.id))
         html.append(" | ")
-        html.append("<bold>" + unicode(comment.owner.profile[0]) + "</bold>")
+        html.append("<bold>" + cgi.escape(unicode(comment.owner.profile[0])) + "</bold>")
         html.append(" | ")
         str_updated = comment.updated.strftime("%y.%m.%d %H:%M")
         str_created = comment.created.strftime("%y.%m.%d %H:%M")
@@ -409,7 +412,7 @@ class CommentRenderer(FieldRenderer):
 
     def _render_body(self, comment):
         html = []
-        html.append(comment.text.replace('\n', '<br>') or "")
+        html.append(cgi.escape(comment.text.replace('\n', '<br>') or ""))
         return html
 
     def render(self):
@@ -428,11 +431,11 @@ class CommentRenderer(FieldRenderer):
             html.append('<textarea class="form-control" id="new-comment" name="comment"></textarea>')
             html.append('</br>')
         html.append('<label for="">%s (%s)</label>'
-                    % (self._field.label, len(comments)))
+                    % (cgi.escape(self._field.label), len(comments)))
         for comment in comments[::-1]:
             html.append('<input type="checkbox" name="%s" value="%s"'
                         ' style="display:none"/>'
-                        % (self._field.name, comment.id))
+                        % (cgi.escape(self._field.name), comment.id))
             html.append('<div class="readonlyfield">')
             html.append("<table>")
             html.append("<tr >")

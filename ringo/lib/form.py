@@ -79,11 +79,15 @@ def get_form_config(item, formname):
 def _get_form_config(name, filename, formname):
     """Return the file based configuration for a given form. The
     configuration tried to be loaded from the application first. If this
-    fails it tries to load it from the ringo application."""
+    fails it tries to load it from the extension and finally from the
+    ringo application."""
     try:
         loaded_config = load(get_path_to_form_config(filename, name))
     except IOError:
-        loaded_config = load(get_path_to_form_config(filename, name, location="."))
+        try:
+            loaded_config = load(get_path_to_form_config(filename, name, location="."))
+        except IOError:
+            loaded_config = load(get_path_to_form_config(filename, "ringo"))
     return Config(loaded_config).get_form(formname)
 
 
@@ -92,7 +96,7 @@ def _get_blobform_config(fid, formname):
     from ringo.model.form import Form
     factory = Form.get_item_factory()
     form = factory.load(fid)
-    return Config(parse(form.definition.encode('utf-8')))
+    return Config(parse(form.definition.encode('utf-8'))).get_form(formname)
 
 
 formbar_css_filenames = []

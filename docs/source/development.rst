@@ -166,6 +166,31 @@ mapped functions on URLs.
 In the next sections I will give some examples on how to customise things in a
 ringo application.
 
+Add a new extension
+===================
+The following commands will create a new extension namend "evaluation" and
+install it in your system to make it available for other applications::
+
+    pcreate -t ringo_extension evaluation
+    cd evaluation 
+    python setup.py develop
+
+Now can can register the new extension for the first time with your
+application. Registering is done in the model/__init__.py file of your application::
+    import os
+    from ringo.model import Base, extensions
+    from ringo.lib import helpers
+    
+    extensions.append("ringo_evaluation")
+    
+    # Dynamically import all model files here to have the model available in
+    # the sqlalchemy metadata. This is needed for the schema migration with
+    # alembic. Otherwise the migration will produce many table drops as the
+    # tables of the models are not present in the metadata
+
+On the next start of your application the extension will be registerd with
+your application and a new modul entry will be created.
+
 .. _add_modules:
 
 Add a new modul to your application

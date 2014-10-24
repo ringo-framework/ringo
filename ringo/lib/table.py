@@ -165,27 +165,22 @@ class TableConfig:
 
 
 def _load_overview_config(clazz):
-        """Return a datastructure representing the overview
-        configuration. The configuration is loaded from a JSON
-        configuration file under /view/overviews relative to the
-        application root. If no configuration can be found return
-        None."""
-        cfile = "%s.json" % clazz.__tablename__
-        # Try to load the configuration for the overview first.
-        config = None
-        name = clazz.__module__.split(".")[0]
+    """Return a datastructure representing the overview
+    configuration. The configuration is loaded from a JSON
+    configuration file. The function will first try to load the
+    application specific configuration. If this fails it will try to
+    load it form the extension specific loaction and finally from ringo.
+    If no configuration can be found an exception is raised."""
+    cfile = "%s.json" % clazz.__tablename__
+    config = None
+    name = clazz.__module__.split(".")[0]
+    try:
+        config = open(get_path_to_overview_config(cfile, name), "r")
+    except IOError:
         try:
-            config = open(get_path_to_overview_config(cfile, name), "r")
+            config = open(get_path_to_overview_config(cfile,
+                                                      name,
+                                                      location="."), "r")
         except IOError:
-            try:
-                config = open(get_path_to_overview_config(cfile, name, location="."), "r")
-            except IOError:
-                log.warning('Can not load overview configuration for "%s" '
-                            'Configuring the overview now based on the form '
-                            'configuration' % clazz)
-
-        if config:
-            return json.load(config)
-        return None
-
-
+            config = open(get_path_to_overview_config(cfile, "ringo"), "r")
+    return json.load(config)

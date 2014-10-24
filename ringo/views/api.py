@@ -6,7 +6,7 @@ from pyramid.view import view_config
 
 from formbar.form import Form
 from formbar.config import Config, parse
-from formbar.rules import Rule, Parser
+from formbar.rules import Rule
 
 from ringo.views.response import JSONResponse
 
@@ -21,9 +21,8 @@ def evaluate(request):
     request. It will return a JSONResponse with the result of the
     evaluation."""
     try:
-        ruleexpr = request.GET.get('rule')
-        expr = Parser().parse(ruleexpr)
-        rule = Rule(expr=expr)
+        ruleexpr = request.GET.get('rule').strip()
+        rule = Rule(ruleexpr)
         result = rule.evaluate({})
         return JSONResponse(True, result, {"msg": rule.msg})
     except:

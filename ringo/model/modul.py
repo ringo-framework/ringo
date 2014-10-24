@@ -95,12 +95,14 @@ ACTIONS = {
                          icon="icon-edit"),
     "delete": ActionItem(name="Delete",
                          url="delete/{id}",
-                         icon="icon-trash"),
+                         icon="icon-trash",
+                         bundle=True),
     "import": ActionItem(name="Import",
                          url="import",
                          icon="icon-import"),
     "export": ActionItem(name="Export",
                          url="export/{id}",
-                         icon="icon-export")
+                         icon="icon-export",
+                         bundle=True)
 }
 
