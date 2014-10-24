@@ -20,7 +20,7 @@ def main(global_config, **settings):
 
 def includeme(config):
     # Now configure the application and optionally overwrite previously
-    translators.append(TranslationStringFactory('plorma'))
-    config.add_translation_dirs('plorma:locale/')
-    config.add_static_view('plorma-static', path='plorma:static',
+    translators.append(TranslationStringFactory('{{package}}'))
+    config.add_translation_dirs('{{package}}:locale/')
+    config.add_static_view('{{package}}-static', path='{{package}}:static',
                            cache_max_age=3600)
