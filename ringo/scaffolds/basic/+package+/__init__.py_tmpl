@@ -5,6 +5,7 @@ from ringo.lib.sql.db import setup_db_session
 from ringo.model import Base
 from ringo.config import setup_modules
 from ringo.lib.i18n import translators
+from {{package}}.model import extensions
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
@@ -15,6 +16,8 @@ def main(global_config, **settings):
     # Include basic ringo configuration.
     config.include('ringo')
     config.include('{{package}}')
+    for extension in extensions:
+        config.include(extension)
     config.scan()
     return config.make_wsgi_app()
 
