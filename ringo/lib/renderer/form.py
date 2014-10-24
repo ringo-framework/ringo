@@ -153,7 +153,7 @@ class DropdownFieldRenderer(FormbarDropdown):
 
     def _render_label(self):
         html = []
-        html.append(cgi.escape(FormbarDropdown._render_label(self)))
+        html.append(FormbarDropdown._render_label(self))
         if not self._field.is_readonly() and not self.nolink == "true":
             link = self.render_link()
             if link:
