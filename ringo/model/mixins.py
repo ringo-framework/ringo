@@ -373,6 +373,9 @@ class Printable(Mixin):
         actions.append(action)
         return actions
 
+    # FIXME: Remove this declared attribute/relation. No item will ever
+    # be inserted in this table. Only used to get a list of items in the
+    # printdialog (ti) <2014-10-27 12:28>
     @declared_attr
     def printtemplates(cls):
         from ringo.model.printtemplate import Printtemplate
