@@ -16,6 +16,7 @@
       <help>Whenever an item of the modul is displayed as simple string it will be displayed in the following form.</help>
     </entity>
     <entity id="e6" name="actions" label="Actions">
+      <renderer type="selection" filter="@id == %mid"/>
       <help>Select the actions which should be enabled for this modul</help>
     </entity>
     <entity id="e7" name="display" label="Display location">
