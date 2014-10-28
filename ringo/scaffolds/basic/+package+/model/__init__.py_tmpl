@@ -1,5 +1,5 @@
 import os
-from ringo.model import Base, extenstions
+from ringo.model import Base, extensions
 from ringo.lib import helpers
 
 # Define enabled ringo extenstion here. Extensions will be initialised
