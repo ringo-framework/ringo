@@ -5,7 +5,7 @@ from pyramid_beaker import session_factory_from_settings
 from ringo.resources import get_resource_factory
 from ringo.lib.helpers import get_action_routename
 from ringo.lib.i18n import locale_negotiator
-from ringo.lib.sql.db import setup_db_session
+from ringo.lib.sql.db import setup_db_session, setup_db_engine
 from ringo.model import Base
 from ringo.model.user import User
 from ringo.model.news import News
@@ -16,7 +16,10 @@ log = logging.getLogger(__name__)
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
-    engine, dbsession = setup_db_session(settings)
+    # Setup two db sessions. One using transactions (default) and one
+    # without transactions.
+    engine = setup_db_engine(settings)
+    setup_db_session(engine)
     Base.metadata.bind = engine
     config = Configurator(settings=settings,
                           locale_negotiator=locale_negotiator)

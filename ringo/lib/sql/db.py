@@ -19,10 +19,18 @@ DBSession = scoped_session(
                 )
             )
 
-def setup_db_session(settings):
-    engine = engine_from_config(settings, 'sqlalchemy.')
+NTDBSession = scoped_session(
+                sessionmaker(
+                    query_cls=query.query_callable(regions)
+                )
+            )
+
+def setup_db_engine(settings):
+    return engine_from_config(settings, 'sqlalchemy.')
+
+def setup_db_session(engine):
     DBSession.configure(bind=engine)
-    return engine, DBSession
+    NTDBSession.configure(bind=engine)
 
 # Session initialisation
 ########################
