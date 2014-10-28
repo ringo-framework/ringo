@@ -72,7 +72,7 @@ class Exporter(object):
         :returns: String representing the data
 
         """
-        return ""
+        return data
 
     def flatten(self, data):
         """Will flatten nested data structures as found in Blobforms"""
