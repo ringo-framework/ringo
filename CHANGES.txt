@@ -10,10 +10,12 @@ to the tracker.
 
 0.16.3
 ======
+- Important: Changed teh way how the DBSession is setup.
 - Added commands to generate SQL to restrict and unrestrict access to table of
   a modul on database level (only postgres)
 - Fixes of loading Form and Overview configuration.
 - Add escaping into the renderer
+
 
 0.16.2
 ======
