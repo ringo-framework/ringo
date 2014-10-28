@@ -12,10 +12,15 @@ from ringo.views.request import (
     handle_params,
     handle_history
 )
-from ringo.views.base.export import _handle_export_request
-from ringo.views.base.delete import _handle_delete_request
+
+# The dictionary will hold the request handlers for bundled actions. The
+# dictionary will be filled from the view definitions
+_bundle_request_handlers = {}
 
 log = logging.getLogger(__name__)
+
+def set_bundle_action_handler(key, handler):
+    _bundle_request_handlers[key] = handler
 
 
 def handle_sorting(clazz, request):
@@ -173,12 +178,7 @@ def bundle_(request):
         item = factory.load(id)
         if has_permission(bundle_action.lower(), item, request):
             items.append(item)
-
-    if bundle_action == 'Export':
-        rvalue = _handle_export_request(request, items)
-    elif bundle_action == 'Delete':
-        rvalue = _handle_delete_request(request, items)
-    return rvalue
+    return _bundle_request_handlers[bundle_action.lower()](request, items)
 
 
 def list_(request):
