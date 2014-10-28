@@ -4,7 +4,7 @@ import pkg_resources
 import transaction
 from ringo.lib import helpers
 from ringo.lib.extension import unregister_modul
-from ringo.lib.sql.db import DBSession
+from ringo.lib.sql.db import DBSession, NTDBSession
 from ringo.lib.helpers import get_action_routename
 from ringo.lib.form import get_formbar_css, get_formbar_js
 from ringo.model.modul import ModulItem
@@ -51,7 +51,7 @@ def setup_modules(config):
     """Will iterate over all configured modules in the application.
     Configured modules are loaded from database. For each module it will
     call the setup_modul method."""
-    for modul in DBSession.query(ModulItem).all():
+    for modul in NTDBSession.query(ModulItem).all():
         setup_modul(config, modul)
 
 
@@ -169,15 +169,17 @@ def setup_modul(config, modul):
     clazz = helpers.dynamic_import(modul.clazzpath)
     log.info("Setup modul '%s'" % modul.name)
 
+    # Reload modul
+    old_actions = list(a.url for a in modul.actions)
+
     for bclazz in clazz.__bases__:
         if issubclass(bclazz, Mixin):
             for action in bclazz.get_mixin_actions():
-                if not modul.has_action(action.url):
+                if not action.url in old_actions:
                     action.mid = clazz._modul_id
                     modul.actions.append(action)
-                    DBSession.add(action)
-                    DBSession.flush()
-                    transaction.commit()
+                    NTDBSession.add(action)
+    NTDBSession.commit()
 
     for action in modul.actions:
         _setup_web_action(config, action, clazz, web_action_view_mapping)
