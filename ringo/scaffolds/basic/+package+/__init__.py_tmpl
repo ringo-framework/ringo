@@ -1,7 +1,7 @@
 from pyramid.config import Configurator
 from pyramid.i18n import TranslationStringFactory
 
-from ringo.lib.sql.db import setup_db_session
+from ringo.lib.sql.db import setup_db_session, setup_db_engine
 from ringo.model import Base
 from ringo.config import setup_modules
 from ringo.lib.i18n import translators
@@ -10,7 +10,8 @@ from {{package}}.model import extensions
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
-    engine, session = setup_db_session(settings)
+    engine = setup_db_engine(settings)
+    setup_db_session(engine)
     Base.metadata.bind = engine
     config = Configurator(settings=settings)
     # Include basic ringo configuration.
