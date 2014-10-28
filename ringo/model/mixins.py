@@ -56,23 +56,13 @@ class Mixin(object):
     """Base mixin class"""
 
     @classmethod
-    def _setup_item_actions(cls):
-        return []
+    def get_mixin_actions(cls):
+        """Returns a list of actions specific for the mixin. Overwrite
+        this method if you want to add custom actions for your mixin.
 
-    @classmethod
-    def get_item_actions(cls, include_super=True):
-        """Returns a combined list of actions specific to the mixin and
-        base actions. If include_super is false only the actions
-        specific to this mixin are returned.
-
-        :include_super: Boolean flag. If true only mixin actions are returned
         :returns: List of ActionItems
-
         """
-        actions = super(Mixin, cls).get_item_actions()
-        if not include_super:
-            return cls._setup_item_actions()
-        return actions + cls._setup_item_actions()
+        return []
 
 
 class StateMixin(object):
@@ -371,18 +361,16 @@ class Logged(object):
 class Printable(Mixin):
 
     @classmethod
-    def _setup_item_actions(cls):
+    def get_mixin_actions(cls):
         from ringo.model.modul import ActionItem
         actions = []
         # Add Print action
         action = ActionItem()
-        action.mid = cls.get_item_modul().id
         action.name = 'Print'
         action.url = 'print/{id}'
         action.icon = 'glyphicon glyphicon-print'
-        actions.append(action)
-        action.permission = 'read'
         action.display = 'secondary'
+        actions.append(action)
         return actions
 
     @declared_attr

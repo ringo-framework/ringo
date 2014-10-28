@@ -1,6 +1,7 @@
 import os
 import logging
 import pkg_resources
+import transaction
 from ringo.lib import helpers
 from ringo.lib.extension import unregister_modul
 from ringo.lib.sql.db import DBSession
@@ -8,6 +9,7 @@ from ringo.lib.helpers import get_action_routename
 from ringo.lib.form import get_formbar_css, get_formbar_js
 from ringo.model.modul import ModulItem
 from ringo.model import extensions
+from ringo.model.mixins import Mixin
 from ringo.resources import get_resource_factory
 from ringo.views.base import (
     web_action_view_mapping,
@@ -166,6 +168,17 @@ def setup_modul(config, modul):
     """
     clazz = helpers.dynamic_import(modul.clazzpath)
     log.info("Setup modul '%s'" % modul.name)
+
+    for bclazz in clazz.__bases__:
+        if issubclass(bclazz, Mixin):
+            for action in bclazz.get_mixin_actions():
+                if not modul.has_action(action.url):
+                    action.mid = clazz._modul_id
+                    modul.actions.append(action)
+                    DBSession.add(action)
+                    DBSession.flush()
+                    transaction.commit()
+
     for action in modul.actions:
         _setup_web_action(config, action, clazz, web_action_view_mapping)
         _setup_rest_action(config, action, clazz, rest_action_view_mapping)
