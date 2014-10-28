@@ -176,7 +176,10 @@ install it in your system to make it available for other applications::
     python setup.py develop
 
 Now can can register the new extension for the first time with your
-application. Registering is done in the model/__init__.py file of your application::
+application. Registering is done in three steps.
+
+In the model/__init__.py file of your application::
+
     import os
     from ringo.model import Base, extensions
     from ringo.lib import helpers
@@ -187,6 +190,37 @@ application. Registering is done in the model/__init__.py file of your applicati
     # the sqlalchemy metadata. This is needed for the schema migration with
     # alembic. Otherwise the migration will produce many table drops as the
     # tables of the models are not present in the metadata
+
+If your extension provides some extension specific actions they should be
+implemented in a Extension Mixin class. Overwrite the 'get_mixin_actions'
+method to define the actions the extension should provide to other modules::
+
+        class Evaluable(Mixin):
+
+            @classmethod
+            def get_mixin_actions(cls):
+                actions = []
+                # Add Evaluation action
+                action = ActionItem()
+                action.name = 'Evaluate'
+                action.url = 'evaluate/{id}'
+                action.icon = 'glyphicon glyphicon-stats'
+                action.permission = 'read'
+                action.bundle = True
+                actions.append(action)
+                return actions
+
+To make the actions available in other modules you need to Inherit form this
+mixin::
+
+        class MyClass(Evaluable, Blobform, ..., BaseItem, Base):
+
+In case your extention provides custom templates you need to configure an
+additional search path for your templates in the ini file::
+
+       # mako template settings
+       mako.directories = ringo:templates
+       mako.directories = ringo_evaluation:templates
 
 On the next start of your application the extension will be registerd with
 your application and a new modul entry will be created.
