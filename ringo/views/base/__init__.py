@@ -48,3 +48,11 @@ rest_action_view_mapping = {
     "update": rest_update,
     "delete": rest_delete,
 }
+
+
+def set_web_action_view(key, view):
+    web_action_view_mapping[key] = view
+
+
+def set_rest_action_view(key, view):
+    rest_action_view_mapping[key] = view
