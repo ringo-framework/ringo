@@ -54,7 +54,6 @@ def _configure_actions(modul, config, actions, dbsession):
     old_actions = [action.name.lower() for action in modul.actions]
     delete_actions = (set(old_actions) - set(new_actions))
     add_actions = (set(new_actions) - set(old_actions))
-    print new_actions, add_actions
     for name in delete_actions:
         log.debug("Deleting action %s from modul %s" % (name, modul))
         action = modul.get_action(name)
