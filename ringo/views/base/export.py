@@ -12,6 +12,7 @@ from ringo.views.request import (
     is_confirmed
 )
 from ringo.views.helpers import get_item_from_request
+from ringo.views.base.list_ import set_bundle_action_handler
 
 log = logging.getLogger(__name__)
 
@@ -53,3 +54,5 @@ def _handle_export_request(request, items):
         rvalue = {}
         rvalue['dialog'] = renderer.render(items)
         return rvalue
+
+set_bundle_action_handler("export", _handle_export_request)

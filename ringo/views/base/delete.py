@@ -13,6 +13,7 @@ from ringo.views.request import (
     is_confirmed,
     get_item_from_request
 )
+from ringo.views.base.list_ import set_bundle_action_handler
 
 log = logging.getLogger(__name__)
 
@@ -81,3 +82,5 @@ def rest_delete(request):
     item = get_item_from_request(request)
     request.db.delete(item)
     return JSONResponse(True, item)
+
+set_bundle_action_handler("delete", _handle_delete_request)
