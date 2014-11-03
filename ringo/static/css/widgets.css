@@ -50,9 +50,11 @@ table.content-shorten td {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-</style>
 
-
+#pageination-size-selector {
+  width: auto;
+  display: inline;
+}
 
  /* Datatables
  **********************************************************************/

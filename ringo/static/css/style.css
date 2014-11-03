@@ -49,3 +49,8 @@ img.icon {
 .modal-lg {
   width: 80%;
 }
+
+/* pageination margin must be 0 to match ringo layout */
+nav ul.pageination {
+  margin: 0;
+}
