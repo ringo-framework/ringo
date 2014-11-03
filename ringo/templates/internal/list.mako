@@ -100,12 +100,12 @@ autoresponsive = tableconfig.is_autoresponsive()
     <div class="col-xs-6">
       <div class="pull-right">
         ${_('Show')}
-        <select id="pageination-size-selector" class="form-control input-small">
-          <option>50</option>
-          <option>100</option>
-          <option>250</option>
-          <option>500</option>
-          <option>All</option>
+        <select id="pageination-size-selector" class="form-control input-small" url="${request.current_route_path().split('?')[0]}">
+          <option value="50" ${listing.pageination_size == 50 and 'selected'}>50</option>
+          <option value="100" ${listing.pageination_size == 100 and 'selected'}>100</option>
+          <option value="250" ${listing.pageination_size == 250 and 'selected'}>250</option>
+          <option value="500" ${listing.pageination_size == 500 and 'selected'}>500</option>
+          <option value="" ${listing.pageination_size == None and 'selected'}>All</option>
         </select>
         ${_('items')}
       </div>
@@ -144,7 +144,7 @@ autoresponsive = tableconfig.is_autoresponsive()
     </th>
   % endfor
   </tr>
-  % for item in items:
+  % for item in items[listing.pageination_start:listing.pageination_end]:
     <%
     permission = None
     if s.has_permission("update", item, request):
@@ -222,8 +222,19 @@ autoresponsive = tableconfig.is_autoresponsive()
         <div>
           <nav>
             <ul class="pagination">
-              <li class="disabled"><a href="#">&laquo;</a></li>
-              <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+              % if listing.pageination_current == 0:
+                <li class="disabled"><a href="#">&laquo;</a></li>
+              % else:
+                <li><a href="${request.current_route_path().split('?')[0]}?pageination_page=${listing.pageination_current-1}">&laquo;</a></li>
+              % endif
+              % for page in range(listing.pageination_pages):
+                <li class="${(page == listing.pageination_current) and 'active'}"><a href="${request.current_route_path().split('?')[0]}?pageination_page=${page}">${page+1}<span class="sr-only">(current)</span></a></li>
+              % endfor
+              % if listing.pageination_pages == listing.pageination_current+1:
+                <li class="disabled"><a href="#">&raquo;</a></li>
+              % else:
+                <li><a href="${request.current_route_path().split('?')[0]}?pageination_page=${listing.pageination_current+1}">&raquo;</a></li>
+              % endif
             </ul>
           </nav>
         </div>
