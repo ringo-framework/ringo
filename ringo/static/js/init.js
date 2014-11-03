@@ -71,6 +71,10 @@ $( document ).ready(function() {
        $('.main-pane').hide();
        $('#'+pane).show();
     });
+    $('#pageination-size-selector').change(function() {
+        var value = $(this).val();
+        var url = $(this).attr('url') + "?pageination_size=" + value;
+        window.open(url,"_self");
     });
 
 
