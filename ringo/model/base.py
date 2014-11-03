@@ -1,4 +1,5 @@
 import logging
+import math
 import json
 import re
 import uuid
@@ -415,6 +416,30 @@ class BaseList(object):
         if order == "desc":
             sorted_items.reverse()
         self.items = sorted_items
+
+    def pageinate(self, page=0, size=None):
+        """This function will set the range for pagination (page) of the
+        items in the list. The subset is defined by the size of the page
+        and the current page. So if the list contains 1000 entries and
+        the paginated should be done on 100 entries per page and the
+        current page is 4 the list will return item 400 to 499.
+
+        :page: Integer of the current page
+        :size: Items per page
+        :returns:
+
+        """
+        self.pageination_current = page
+        self.pageination_size = size
+        if size is None:
+            pages = 1
+            self.pageination_start = 0
+            self.pageination_end = len(self.items)
+        else:
+            pages = int(math.ceil(float(len(self.items))/size))
+            self.pageination_start = page * size
+            self.pageination_end = (page+1) * size
+        self.pageination_pages = pages
 
     def filter(self, filter_stack):
         """This function will filter the list of items by only leaving
