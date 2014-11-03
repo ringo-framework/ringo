@@ -221,7 +221,7 @@ autoresponsive = tableconfig.is_autoresponsive()
       <div class="pull-right text-right">
         <div>
           <nav>
-            <ul class="pageination">
+            <ul class="pagination">
               <li class="disabled"><a href="#">&laquo;</a></li>
               <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
             </ul>

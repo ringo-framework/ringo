@@ -51,6 +51,6 @@ img.icon {
 }
 
 /* pageination margin must be 0 to match ringo layout */
-nav ul.pageination {
+nav ul.pagination {
   margin: 0;
 }
