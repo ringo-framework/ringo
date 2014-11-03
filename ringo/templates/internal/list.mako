@@ -34,65 +34,84 @@ def render_responsive_class(visibleonsize):
 autoresponsive = tableconfig.is_autoresponsive()
 %>
 <div class="well well-small search-widget">
-  <form name="search" class="form-inline" role="form" action="${url}" method="POST">
-    <input name="csrf_token" type="hidden" value="${request.session.get_csrf_token()}">
-    <input name="form" type="hidden" value="search">
-    <div class="form-group">
-      <label class="sr-only" for="search">${_('Search')}</label>
-      <input name="search" class="form-control input-large" type="text" value="${search}" placeholder="${_('Search for in ...')}"/>
-    </div>
-    <div class="form-group">
-      <label class="sr-only" for="field">${_('Fields')}</label>
-      <select name="field"  class="form-control input-small">
-        <option value="">${_('All columns')}</option>
-        % for field in tableconfig.get_columns():
-          % if field.get('name') == search_field:
-            <option value="${field.get('name')}" selected>${_(field.get('label'))}</option>
-          % else:
-            <option value="${field.get('name')}">${_(field.get('label'))}</option>
-          % endif
-        % endfor
-      </select>
-    </div>
-    <button class="btn btn-default">
-    % if regexpr or request.session.get('%s.list.search.regexpr' % clazz.__tablename__, False):
-        ${_('Search+')}
-    % else:
-        ${_('Search')}
-    % endif
-    </button>
-    <div class="btn-group">
-      <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">${_('Options ')}<span class="caret"></span></button>
-      <ul class="dropdown-menu">
-          <li>
-            <table class="table table-condensed">
-              % for key, value in saved_searches.iteritems():
-              <tr>
-                <td>
-                  <a tabindex="-1"
-                  href="${url}?form=search&saved=${key}">${_(value[2])}</a>
-                </td>
-                <td width="20">
-                  <a class="pull-right" tabindex="-1" href="${url}?form=search&delete=${key}"><i class="glyphicon glyphicon-remove"></i></a>
-                </td>
-              </tr>
-              % endfor
-            </table>
-          </li>
-        <li class="divider"></li>
-        <li><a tabindex="-1" href="#" data-toggle="modal" data-target="#savequerydialog">${_('Save current search filter')}</a></li>
-        <li><a tabindex="-1" href="${url}?form=search&reset">${_('Reset current search filter')}</a></li>
-        % if request.session.get('%s.list.search.regexpr' % clazz.__tablename__, False):
-          <li><a tabindex="-1" href="${url}?form=search&disableregexpr">${_('Disable regexpr in search')}</a></li>
+  <div class="row">
+    <div class="col-xs-6">
+      <form name="search" class="form-inline" role="form" action="${url}" method="POST">
+        <input name="csrf_token" type="hidden" value="${request.session.get_csrf_token()}">
+        <input name="form" type="hidden" value="search">
+        <div class="form-group">
+          <label class="sr-only" for="search">${_('Search')}</label>
+          <input name="search" class="form-control input-large" type="text" value="${search}" placeholder="${_('Search for in ...')}"/>
+        </div>
+        <div class="form-group">
+          <label class="sr-only" for="field">${_('Fields')}</label>
+          <select name="field"  class="form-control input-small">
+            <option value="">${_('All columns')}</option>
+            % for field in tableconfig.get_columns():
+              % if field.get('name') == search_field:
+                <option value="${field.get('name')}" selected>${_(field.get('label'))}</option>
+              % else:
+                <option value="${field.get('name')}">${_(field.get('label'))}</option>
+              % endif
+            % endfor
+          </select>
+        </div>
+        <button class="btn btn-default">
+        % if regexpr or request.session.get('%s.list.search.regexpr' % clazz.__tablename__, False):
+            ${_('Search+')}
         % else:
-          <li><a tabindex="-1" href="${url}?form=search&enableregexpr">${_('Enable regexpr in search')}</a></li>
+            ${_('Search')}
         % endif
-      </ul>
+        </button>
+        <div class="btn-group">
+          <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" tabindex="-1">${_('Options ')}<span class="caret"></span></button>
+          <ul class="dropdown-menu">
+              <li>
+                <table class="table table-condensed">
+                  % for key, value in saved_searches.iteritems():
+                  <tr>
+                    <td>
+                      <a tabindex="-1"
+                      href="${url}?form=search&saved=${key}">${_(value[2])}</a>
+                    </td>
+                    <td width="20">
+                      <a class="pull-right" tabindex="-1" href="${url}?form=search&delete=${key}"><i class="glyphicon glyphicon-remove"></i></a>
+                    </td>
+                  </tr>
+                  % endfor
+                </table>
+              </li>
+            <li class="divider"></li>
+            <li><a tabindex="-1" href="#" data-toggle="modal" data-target="#savequerydialog">${_('Save current search filter')}</a></li>
+            <li><a tabindex="-1" href="${url}?form=search&reset">${_('Reset current search filter')}</a></li>
+            % if request.session.get('%s.list.search.regexpr' % clazz.__tablename__, False):
+              <li><a tabindex="-1" href="${url}?form=search&disableregexpr">${_('Disable regexpr in search')}</a></li>
+            % else:
+              <li><a tabindex="-1" href="${url}?form=search&enableregexpr">${_('Enable regexpr in search')}</a></li>
+            % endif
+          </ul>
+        </div>
+        % if len(listing.search_filter) > 0:
+          <span class="muted"><small>(${_('${num_filter} filter applied', mapping=mapping )})</small></span>
+        % endif
+      </form>
     </div>
-    % if len(listing.search_filter) > 0:
-      <span class="muted"><small>(${_('${num_filter} filter applied', mapping=mapping )})</small></span>
+    %if tableconfig.is_pageinated(): 
+    <div class="col-xs-6">
+      <div class="pull-right">
+        ${_('Show')}
+        <select id="pageination-size-selector" class="form-control input-small">
+          <option>50</option>
+          <option>100</option>
+          <option>250</option>
+          <option>500</option>
+          <option>All</option>
+        </select>
+        ${_('items')}
+      </div>
+    </div>
     % endif
-  </form>
+  </div>
 </div>
 <form id="data-table" name="data-table" role="form" action="${request.route_path(h.get_action_routename(clazz, 'bundle'))}" method="POST">
 <table id="data" class="table table-striped table-hover table-condensed table-bordered">
@@ -180,19 +199,39 @@ autoresponsive = tableconfig.is_autoresponsive()
   </tr>
   % endif
 </table>
-% if enable_bundled_actions:
-  <div class="well well-small">
-    <input name="csrf_token" type="hidden" value="${request.session.get_csrf_token()}">
-    <select class="form-control input-small" name="bundle_action" style="display:inline;width:auto;">
-      % for action in h.get_item_actions(request, clazz):
-        ${action.bundle}
-        % if action.bundle:
-          <option value="${action.name}">${action.name}</option>
-        % endif
-      % endfor
-    </select>
-    <input class="btn btn-default input-small" type="submit" value="${_('Perform')}"/>
+% if enable_bundled_actions or tableconfig.is_pageinated():
+<div class="well well-small">
+  <div class="row">
+    <div class="col-xs-6">
+      % if enable_bundled_actions: 
+      <input name="csrf_token" type="hidden" value="${request.session.get_csrf_token()}">
+      <select class="form-control input-small" name="bundle_action" style="display:inline;width:auto;">
+        % for action in h.get_item_actions(request, clazz):
+          ${action.bundle}
+          % if action.bundle:
+            <option value="${action.name}">${action.name}</option>
+          % endif
+        % endfor
+      </select>
+      <input class="btn btn-default input-small" type="submit" value="${_('Perform')}"/>
+      % endif
+    </div>
+    %if tableconfig.is_pageinated(): 
+    <div class="col-xs-6">
+      <div class="pull-right text-right">
+        <div>
+          <nav>
+            <ul class="pageination">
+              <li class="disabled"><a href="#">&laquo;</a></li>
+              <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+    % endif
   </div>
+</div>
 % endif
 </form>
 
