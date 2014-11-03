@@ -238,6 +238,7 @@ def list_(request):
     listing = get_item_list(request, clazz, user=request.user)
     listing.sort(sorting[0], sorting[1])
     listing.filter(search)
+    listing.pageinate(pageination_page, pageination_size)
     # Only save the search if there are items
     if len(listing.items) > 0:
         request.session['%s.list.search' % clazz.__tablename__] = search
