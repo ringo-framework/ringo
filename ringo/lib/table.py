@@ -104,6 +104,9 @@ class TableConfig:
     * *auto-responsive*: If True than only the first column of a table
       will be displayed on small devices. Else you need to configure the
       "screen" attribute for the fields.
+    * *pageination*: If True pageination of the results will be enabled.
+      The table will have gui element to configure pageination of the
+      table. Defaults to false.
     """
 
     def __init__(self, clazz, name):
@@ -130,6 +133,10 @@ class TableConfig:
     def is_autoresponsive(self):
         settings = self.get_settings()
         return settings.get("auto-responsive", True)
+
+    def is_pageinated(self):
+        settings = self.get_settings()
+        return settings.get("pageination") == True
 
     def get_columns(self):
         """Return a list of configured columns within the configuration.
