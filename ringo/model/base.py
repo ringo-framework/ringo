@@ -1,4 +1,5 @@
 import logging
+import operator
 import math
 import json
 import re
@@ -17,6 +18,14 @@ from ringo.model.mixins import Logged, StateMixin, Owned
 
 log = logging.getLogger(__name__)
 
+opmapping = {
+    "<": operator.lt,
+    "<=": operator.le,
+    ">": operator.gt,
+    ">=": operator.ge,
+    "!=": operator.ne,
+    "==": operator.eq
+}
 
 def nonecmp(a, b):
     if a is None and b is None:
@@ -447,11 +456,16 @@ class BaseList(object):
         filter stack. The list will get reduced with every iteration on
         the filter stack.
 
-        For each filter in the stack The search word will be compiled to
-        the regular expression. Then all items are iterated.  For each
-        item the function will try to match the value of either all, or
-        from the configued search field with the regular expression. If
-        the value matches, then the item is kept in the list.
+        For each filter in the stack the function will first look for an
+        optional operator which must be the first word of the search
+        expression. If a operator can be found the search will be done
+        with the given operator. Otherwise the search word will be
+        compiled to the regular expression.
+
+        Then all items are iterated. For each item the function will try
+        to match the value of either all, or from the configued search
+        field with the regular expression or configured operator. If the
+        value matches, then the item is kept in the list.
         """
         self.search_filter = filter_stack
         log.debug('Length filterstack: %s' % len(filter_stack))
@@ -463,14 +477,20 @@ class BaseList(object):
             table_columns[col.get('name')] = col
 
         for search, search_field, regexpr in filter_stack:
+            search_op = None
+            # Get soperator
+            x = search.split(" ")
+            if x[0] in ["<", "<=", ">", ">=", "!="]:
+                search_op = x[0]
+                search = " ".join(x[1:])
             # Build a regular expression
             if regexpr:
                 re_expr = re.compile(search, re.IGNORECASE)
             else:
                 re_expr = re.compile(re.escape(search), re.IGNORECASE)
             filtered_items = []
-            log.debug('Filtering "%s" in "%s" on %s items'
-                      % (search, search_field, len(self.items)))
+            log.debug('Filtering "%s" in "%s" with operator "%s" on %s items'
+                      % (search, search_field, search_op, len(self.items)))
             if search_field != "":
                 fields = [search_field]
             else:
@@ -483,9 +503,14 @@ class BaseList(object):
                         value = ", ".join([unicode(x) for x in value])
                     else:
                         value = unicode(value)
-                    if re_expr.search(value):
-                        filtered_items.append(item)
-                        break
+                    if search_op:
+                        if opmapping[search_op](value, search):
+                            filtered_items.append(item)
+                            break
+                    else:
+                        if re_expr.search(value):
+                            filtered_items.append(item)
+                            break
             self.items = filtered_items
 
 
