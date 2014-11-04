@@ -101,6 +101,7 @@ autoresponsive = tableconfig.is_autoresponsive()
       <div class="pull-right">
         ${_('Show')}
         <select id="pageination-size-selector" class="form-control input-small" url="${request.current_route_path().split('?')[0]}">
+          <option value="25" ${listing.pageination_size == 25 and 'selected'}>25</option>
           <option value="50" ${listing.pageination_size == 50 and 'selected'}>50</option>
           <option value="100" ${listing.pageination_size == 100 and 'selected'}>100</option>
           <option value="250" ${listing.pageination_size == 250 and 'selected'}>250</option>
