@@ -227,9 +227,15 @@ autoresponsive = tableconfig.is_autoresponsive()
               % else:
                 <li><a href="${request.current_route_path().split('?')[0]}?pageination_page=${listing.pageination_current-1}">&laquo;</a></li>
               % endif
-              % for page in range(listing.pageination_pages):
-                <li class="${(page == listing.pageination_current) and 'active'}"><a href="${request.current_route_path().split('?')[0]}?pageination_page=${page}">${page+1}<span class="sr-only">(current)</span></a></li>
-              % endfor
+              % if listing.pageination_pages > 9:
+                % for page in range(listing.pageination_first, listing.pageination_last):
+                  <li class="${(page == listing.pageination_current) and 'active'}"><a href="${request.current_route_path().split('?')[0]}?pageination_page=${page}">${page+1}<span class="sr-only">(current)</span></a></li>
+                % endfor
+              % else:
+                % for page in range(listing.pageination_pages):
+                  <li class="${(page == listing.pageination_current) and 'active'}"><a href="${request.current_route_path().split('?')[0]}?pageination_page=${page}">${page+1}<span class="sr-only">(current)</span></a></li>
+                % endfor
+              % endif
               % if listing.pageination_pages == listing.pageination_current+1:
                 <li class="disabled"><a href="#">&raquo;</a></li>
               % else:
