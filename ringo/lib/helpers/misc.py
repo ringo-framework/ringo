@@ -20,6 +20,37 @@ def serialize(value):
     return unicode(value)
 
 
+def get_raw_value(element, name):
+    """This function tries to get the given attribute of the item if
+    it can not be found using the usual way to get attributes. In
+    this case we will split the attribute name by "." and try to get
+    the attribute along the "." separated attribute name. The
+    function also offers basic support for accessing individual
+    elements in lists in case one attribute is a list while
+    iterating over all attributes. Currently only flat lists are
+    supported.
+
+    Example: x.y[1].z"""
+    attributes = name.split('.')
+    for attr in attributes:
+        splitmark_s = attr.find("[")
+        splitmark_e = attr.find("]")
+        if splitmark_s > 0:
+            index = int(attr[splitmark_s + 1:splitmark_e])
+            attr = attr[:splitmark_s]
+            element_list = object.__getattribute__(element, attr)
+            if len(element_list) > 0:
+                element = element_list[index]
+            else:
+                log.error("IndexError in %s on %s for %s"
+                          % (name, attr, self))
+                element = None
+                break
+        else:
+            element = object.__getattribute__(element, attr)
+    return element
+
+
 def dynamic_import(cl):
     d = cl.rfind(".")
     classname = cl[d + 1:len(cl)]

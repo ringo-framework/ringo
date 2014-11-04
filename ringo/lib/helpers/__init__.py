@@ -17,6 +17,7 @@ from ringo.lib.helpers.format import (
 
 from ringo.lib.helpers.misc import (
     serialize,
+    get_raw_value,
     dynamic_import,
     import_model,
     get_item_modul,
