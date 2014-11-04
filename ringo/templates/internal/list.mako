@@ -101,6 +101,7 @@ autoresponsive = tableconfig.is_autoresponsive()
       <div class="pull-right">
         ${_('Show')}
         <select id="pageination-size-selector" class="form-control input-small" url="${request.current_route_path().split('?')[0]}">
+          <option value="25" ${listing.pageination_size == 25 and 'selected'}>25</option>
           <option value="50" ${listing.pageination_size == 50 and 'selected'}>50</option>
           <option value="100" ${listing.pageination_size == 100 and 'selected'}>100</option>
           <option value="250" ${listing.pageination_size == 250 and 'selected'}>250</option>
@@ -227,9 +228,15 @@ autoresponsive = tableconfig.is_autoresponsive()
               % else:
                 <li><a href="${request.current_route_path().split('?')[0]}?pageination_page=${listing.pageination_current-1}">&laquo;</a></li>
               % endif
-              % for page in range(listing.pageination_pages):
-                <li class="${(page == listing.pageination_current) and 'active'}"><a href="${request.current_route_path().split('?')[0]}?pageination_page=${page}">${page+1}<span class="sr-only">(current)</span></a></li>
-              % endfor
+              % if listing.pageination_pages > 9:
+                % for page in range(listing.pageination_first, listing.pageination_last):
+                  <li class="${(page == listing.pageination_current) and 'active'}"><a href="${request.current_route_path().split('?')[0]}?pageination_page=${page}">${page+1}<span class="sr-only">(current)</span></a></li>
+                % endfor
+              % else:
+                % for page in range(listing.pageination_pages):
+                  <li class="${(page == listing.pageination_current) and 'active'}"><a href="${request.current_route_path().split('?')[0]}?pageination_page=${page}">${page+1}<span class="sr-only">(current)</span></a></li>
+                % endfor
+              % endif
               % if listing.pageination_pages == listing.pageination_current+1:
                 <li class="disabled"><a href="#">&raquo;</a></li>
               % else:

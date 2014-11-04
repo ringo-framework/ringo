@@ -17,14 +17,16 @@ from ringo.model.mixins import Logged, StateMixin, Owned
 
 log = logging.getLogger(__name__)
 
+
 def nonecmp(a, b):
-  if a is None and b is None:
-    return 0
-  if a is None:
-    return -1
-  if b is None:
-    return 1
-  return cmp(a, b)
+    if a is None and b is None:
+        return 0
+    if a is None:
+        return -1
+    if b is None:
+        return 1
+    return cmp(a, b)
+
 
 def attrgetter(field, expand):
     def g(obj):
@@ -412,34 +414,60 @@ class BaseList(object):
         :returns: Sorted item list
 
         """
-        sorted_items = sorted(self.items, cmp=nonecmp, key=attrgetter(field, expand))
+        sorted_items = sorted(self.items,
+                              cmp=nonecmp,
+                              key=attrgetter(field, expand))
         if order == "desc":
             sorted_items.reverse()
         self.items = sorted_items
 
     def pageinate(self, page=0, size=None):
-        """This function will set the range for pagination (page) of the
-        items in the list. The subset is defined by the size of the page
-        and the current page. So if the list contains 1000 entries and
-        the paginated should be done on 100 entries per page and the
-        current page is 4 the list will return item 400 to 499.
+        """This function will set some internal values for the
+        pagination function based on the given params.
 
         :page: Integer of the current page
         :size: Items per page
         :returns:
 
         """
-        self.pageination_current = page
         self.pageination_size = size
+        """Number of items per page"""
+        self.pageination_current = page
+        """Current selected page"""
+        self.pageination_pages = None
+        """Number of total pages in the pagination"""
+        self.pageination_first = None
+        """First page in pageination navigation"""
+        self.pageination_last = None
+        """Last page in pageination navigation"""
+        self.pageination_start = None
+        """Start index for slicing the items list on the current page"""
+        self.pageination_end = None
+        """End index for slicing the items list on the current page"""
+
+        # Calulate the slicing indexes for paginating and the total
+        # number of pages.
         if size is None:
             pages = 1
             self.pageination_start = 0
             self.pageination_end = len(self.items)
         else:
-            pages = int(math.ceil(float(len(self.items))/size))
+            pages = int(math.ceil(float(len(self.items)) / size))
             self.pageination_start = page * size
-            self.pageination_end = (page+1) * size
+            self.pageination_end = (page + 1) * size
         self.pageination_pages = pages
+
+        ## Calculate the range to the pageination navigation
+        start = self.pageination_current - 4
+        end = self.pageination_current + 5
+        if start < 0:
+            end += abs(start)
+            start = 0
+        elif end > self.pageination_pages:
+            end = self.pageination_pages
+            start -= (abs((self.pageination_pages + 5) - end))
+        self.pageination_first = start
+        self.pageination_last = end
 
     def filter(self, filter_stack):
         """This function will filter the list of items by only leaving
