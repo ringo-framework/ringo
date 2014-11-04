@@ -17,14 +17,16 @@ from ringo.model.mixins import Logged, StateMixin, Owned
 
 log = logging.getLogger(__name__)
 
+
 def nonecmp(a, b):
-  if a is None and b is None:
-    return 0
-  if a is None:
-    return -1
-  if b is None:
-    return 1
-  return cmp(a, b)
+    if a is None and b is None:
+        return 0
+    if a is None:
+        return -1
+    if b is None:
+        return 1
+    return cmp(a, b)
+
 
 def attrgetter(field, expand):
     def g(obj):
