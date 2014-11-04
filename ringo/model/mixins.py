@@ -46,7 +46,7 @@ from sqlalchemy.orm import (
 )
 
 from ringo.model import Base
-from ringo.lib.helpers import serialize
+from ringo.lib.helpers import serialize, get_raw_value
 from ringo.lib.alchemy import get_columns_from_instance
 
 log = logging.getLogger(__name__)
@@ -191,12 +191,7 @@ class Blobform(object):
             json_data = json.loads(getattr(self, 'data'))
             if name in json_data:
                 return json_data[name]
-
-        element = self
-        attributes = name.split('.')
-        for attr in attributes:
-            element = object.__getattribute__(element, attr)
-        return element
+        return get_raw_value(self, name)
 
     def set_values(self, values):
         """Will set the given values into Blobform items. This function

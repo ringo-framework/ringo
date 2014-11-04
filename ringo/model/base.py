@@ -5,7 +5,7 @@ import re
 import uuid
 from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload, Session
-from ringo.lib.helpers import serialize, get_item_modul
+from ringo.lib.helpers import serialize, get_item_modul, get_raw_value
 from ringo.lib.cache import CACHE_MODULES
 from ringo.lib.form import get_form_config
 from ringo.lib.table import get_table_config
@@ -99,35 +99,7 @@ class BaseItem(object):
         return self.get_value(name)
 
     def __getattr__(self, name):
-        """This function tries to get the given attribute of the item if
-        it can not be found using the usual way to get attributes. In
-        this case we will split the attribute name by "." and try to get
-        the attribute along the "." separated attribute name. The
-        function also offers basic support for accessing individual
-        elements in lists in case one attribute is a list while
-        iterating over all attributes. Currently only flat lists are
-        supported.
-
-        Example: x.y[1].z"""
-        element = self
-        attributes = name.split('.')
-        for attr in attributes:
-            splitmark_s = attr.find("[")
-            splitmark_e = attr.find("]")
-            if splitmark_s > 0:
-                index = int(attr[splitmark_s + 1:splitmark_e])
-                attr = attr[:splitmark_s]
-                element_list = object.__getattribute__(element, attr)
-                if len(element_list) > 0:
-                    element = element_list[index]
-                else:
-                    log.error("IndexError in %s on %s for %s"
-                              % (name, attr, self))
-                    element = None
-                    break
-            else:
-                element = object.__getattribute__(element, attr)
-        return element
+        return get_raw_value(self, name)
 
     def __unicode__(self):
         """Will return the string representation for the item based on a
