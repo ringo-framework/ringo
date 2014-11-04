@@ -414,7 +414,9 @@ class BaseList(object):
         :returns: Sorted item list
 
         """
-        sorted_items = sorted(self.items, cmp=nonecmp, key=attrgetter(field, expand))
+        sorted_items = sorted(self.items,
+                              cmp=nonecmp,
+                              key=attrgetter(field, expand))
         if order == "desc":
             sorted_items.reverse()
         self.items = sorted_items
