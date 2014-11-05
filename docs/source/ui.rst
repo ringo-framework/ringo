@@ -138,3 +138,35 @@ option from the options drop-down. You can enter your desired name for the
 query and then save it in your user settings.
 The saved searches are then listed in the options dropdown. You can delete a
 saved search by clicking on the cross symbol next to each filter.
+
+Using operators
+^^^^^^^^^^^^^^^
+Operators can be put as first word of the search term. The operator changes
+the search mode in the way that the search will evaluate the search term with the values in the list using the given operator. This can become handy to find items which to not match a certain criteria or for searches on dates.
+
+.. note::
+   Operators do not work in connection with regular expressions.
+
+The follwing operators are supported:
+
+ * "<" lower than
+ * "<=" lower equal than
+ * ">" greater than
+ * ">=" greater equal than
+ * "==" equal
+ * "!=" not equal
+
+Examples:
+
+ * "== Foo" will match all values with match exactly the valie Foo.
+ * "< 2015-04-01" will match all values lower than 2015-04-01. This is usefull for search on dates. Please limit the search on the datefield to get reasonable result.
+
+Using regular expressions
+^^^^^^^^^^^^^^^^^^^^^^^^^
+You can change the behavior of the search by enabling regular expressions as
+search term. To enabled regular expressions select "Enable regexpr in search"
+from the search options menu. The search button will now have an additional
+"+" sign to indicate that the regular expression is enabled.
+
+For more details on regular expressions see `Regular Expression HOWTO <https://docs.python.org/2/howto/regex.html>`_
+
