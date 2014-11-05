@@ -40,8 +40,31 @@ from ringo.scripts.modul import (
     handle_modul_fields_command,
 )
 
+from ringo.scripts.user import (
+    handle_user_passwd_command
+)
+
 def modul_name(var):
     return str(var).lower()
+
+def setup_user_parser(subparsers, parent):
+    p = subparsers.add_parser('user',
+                              help='User administration',
+                              parents=[parent])
+    sp = p.add_subparsers(help='User command help')
+
+    # Init command
+    passwd_parser = sp.add_parser('passwd',
+                                help='Set the password for a user',
+                                parents=[parent])
+    passwd_parser.add_argument('user',
+                              metavar='user',
+                              help='Name of the user')
+    passwd_parser.add_argument('--password',
+                              metavar='password',
+                              help='Password for the user')
+    passwd_parser.set_defaults(func=handle_user_passwd_command)
+
 
 def setup_modul_parser(subparsers, parent):
     p = subparsers.add_parser('modul',
@@ -173,6 +196,7 @@ def setup_parser():
     subparsers = parser.add_subparsers(help='Command help')
     setup_db_parser(subparsers, global_arguments)
     setup_modul_parser(subparsers, global_arguments)
+    setup_user_parser(subparsers, global_arguments)
     return parser
 
 
