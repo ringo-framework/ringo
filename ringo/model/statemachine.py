@@ -102,9 +102,9 @@ class Statemachine(object):
         """
         self._item = item
         self._item_state_attr = item_state_attr
+        self._request = request
         self._root = self.setup()
         self._current = self._root
-        self._request = request
 
         # Try to set the current state of the statemaching by getting
         # the current state from the item.
