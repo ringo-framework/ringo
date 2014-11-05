@@ -35,7 +35,7 @@ autoresponsive = tableconfig.is_autoresponsive()
 %>
 <div class="well well-small search-widget">
   <div class="row">
-    <div class="col-xs-6">
+    <div class="col-xs-9">
       <form name="search" class="form-inline" role="form" action="${url}" method="POST">
         <input name="csrf_token" type="hidden" value="${request.session.get_csrf_token()}">
         <input name="form" type="hidden" value="search">
@@ -97,7 +97,7 @@ autoresponsive = tableconfig.is_autoresponsive()
       </form>
     </div>
     %if tableconfig.is_pageinated(): 
-    <div class="col-xs-6">
+    <div class="col-xs-3">
       <div class="pull-right">
         ${_('Show')}
         <select id="pageination-size-selector" class="form-control input-small" url="${request.current_route_path().split('?')[0]}">
