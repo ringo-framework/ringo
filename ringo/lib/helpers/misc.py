@@ -90,10 +90,12 @@ def get_item_modul(request, item):
 def _get_item_modul(request, item):
     if not request:
         request = get_current_request()
-        if request:
+        # Log this message only once per request!
+        if request and not hasattr(request, "has_logged_get_current_request_warning"):
             log.warning("Calling get_item_modul with no request although "
                         "there is a request available. "
                         "Using 'get_current_request'...")
+            request.has_logged_get_current_request_warning = True
     if not request or not request.cache_item_modul.get(item._modul_id):
         from ringo.model.modul import ModulItem
         factory = ModulItem.get_item_factory()
