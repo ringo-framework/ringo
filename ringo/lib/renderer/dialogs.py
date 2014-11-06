@@ -7,6 +7,7 @@ from mako.lookup import TemplateLookup
 from formbar.config import Config, load
 from formbar.form import Form
 
+import ringo.lib.helpers
 from ringo.lib.helpers import (
     get_action_routename,
     get_item_modul
@@ -179,6 +180,7 @@ class ImportDialogRenderer(DialogRenderer):
         values['cancel_url'] = self._request.referrer
         values['overview_url'] = self._request.route_path(get_action_routename(self._item, 'list'))
         values['items'] = items
+        values['h'] = ringo.lib.helpers
         return self.template.render(**values)
 
     def _render_body(self):
