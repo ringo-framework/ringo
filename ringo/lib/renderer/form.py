@@ -220,6 +220,8 @@ class ListingFieldRenderer(FormbarSelectionField):
     * multiple: "true" or "false". If false only one option can be
       selected. Defaults to true. Note that this restriction is only
       implemented on client side.
+    * openmodal: "true" or "false". If true the item will be opened in a
+      modal popup.
     """
 
     def __init__(self, field, translate):

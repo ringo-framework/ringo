@@ -81,6 +81,11 @@ $( document ).ready(function() {
             event.preventDefault();
             return false;
     });
+    $("td.modalform").click(openModalForm);
+        $("td.modalform").click(function(event) {
+            event.preventDefault();
+            return false;
+    });
 
 });
 
