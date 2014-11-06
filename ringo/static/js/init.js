@@ -98,7 +98,13 @@ function logoutCountdown(time, url) {
 function openModalForm(event) {
   var element = event.target;
   console.log(element);
-  var url = $(element).attr("href");
+  var target = $(element).attr("href");
+  var url = null;
+  if (target.indexOf("?") >= 0) {
+    url = target + "&backurl=" + window.location;
+  } else {
+    url = target + "?backurl=" + window.location;
+  }
   console.log(url);
   // Load page
   var page = $.ajax({
