@@ -1,3 +1,13 @@
+#spinnerContainer .modal-dialog {
+  width: 200px;
+  top: 30%;
+}
+#spinnerContainer .modal-content {
+  height: 200px;
+}
+#spinnerContainer .modal-body {
+  height: 200px;
+}
 /* Context menu
  * *************************************************************************/
 /* Chane positon to align the menu with the page header on the left side. */

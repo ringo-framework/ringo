@@ -105,7 +105,7 @@ $( document ).ready(function() {
             event.preventDefault();
             return false;
     });
-
+    $('#spinnerContainer').modal("hide");
 });
 
 function logoutCountdown(time, url) {

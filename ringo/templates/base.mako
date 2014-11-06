@@ -89,6 +89,15 @@
       </div>
     </div>
   </div>
+  <div id="spinnerContainer" class="modal fade">
+    <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        Loading...
+      </div>
+    </div>
+  </div>
+  </div>
   </body>
 </html>
 
