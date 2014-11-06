@@ -76,7 +76,11 @@ $( document ).ready(function() {
         var url = $(this).attr('url') + "?pageination_size=" + value;
         window.open(url,"_self");
     });
-
+    $("a.modalform").click(openModalForm);
+        $("a.modalform").click(function(event) {
+            event.preventDefault();
+            return false;
+    });
 
 });
 
@@ -89,4 +93,27 @@ function logoutCountdown(time, url) {
         location.href=url;
     });
     logout.set({ time : time*1000-500, autostart : true });
+}
+
+function openModalForm(event) {
+  var element = event.target;
+  console.log(element);
+  var url = $(element).attr("href");
+  console.log(url);
+  // Load page
+  var page = $.ajax({
+      url: url,
+      async: false
+  });
+  // now strip the content
+  var title = $("h1", page.responseText).text();
+  var content = $("#form", page.responseText);
+  // Better leave url and attach some kind of javascript action to load the
+  // result of the POST into the popup.
+  $("form", content).attr("action", url);
+  // Set title and body of the popup
+  $("#modalform .modal-title").text(title);
+  $("#modalform .modal-body").html(content);
+  // Show the popup
+  $("#modalform").modal("toggle");
 }
