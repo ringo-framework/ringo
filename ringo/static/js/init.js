@@ -105,6 +105,7 @@ $( document ).ready(function() {
             event.preventDefault();
             return false;
     });
+    $('#spinnerContainer .modal-body').append(spinner.el);
     $('#spinnerContainer').modal("hide");
 });
 
