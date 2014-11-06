@@ -121,6 +121,7 @@ function logoutCountdown(time, url) {
 }
 
 function openModalForm(event) {
+  $('#spinnerContainer').modal("show");
   var element = event.target;
   console.log(element);
   var target = $(element).attr("href");
@@ -141,6 +142,7 @@ function openModalForm(event) {
   var content = $("#form", page.responseText);
   // Better leave url and attach some kind of javascript action to load the
   // result of the POST into the popup.
+  $('#spinnerContainer').modal("hide");
   $("form", content).attr("action", url);
   // Set title and body of the popup
   $("#modalform .modal-title").text(title);
