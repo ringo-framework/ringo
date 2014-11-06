@@ -30,6 +30,7 @@
     <script src="${request.static_path('ringo:static/js/datatables/dataTables.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.jcountdown.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.timer.js')}"></script>
+    <script src="${request.static_path('ringo:static/js/spin.min.js')}"></script>
     % for filename in formbar_js_filenames: 
       <script src="${request.static_path('ringo:static/formbar/%s' % filename)}"></script>
     % endfor
