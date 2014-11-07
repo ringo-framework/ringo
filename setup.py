@@ -12,6 +12,7 @@ requires = [
     'pyramid',
     'SQLAlchemy',
     'alembic',
+    'alembic_sqlite',
     'transaction',
     'pyramid_tm',
     'pyramid_mako',
@@ -59,6 +60,7 @@ setup(name='ringo',
       install_requires=requires,
       tests_require=tests_requires,
       setup_requires=["hgtools", "nose"],
+      dependency_links=['https://github.com/klugjohannes/alembic-sqlite/archive/master.zip#egg=alembic_sqlite'],
       entry_points="""\
       [paste.app_factory]
       main = ringo:main
