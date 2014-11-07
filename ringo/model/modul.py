@@ -29,9 +29,6 @@ class ActionItem(BaseItem, Base):
     'read', 'update', 'delete', 'import', 'export'. If empty the
     permission system will use the the lowered name of the action."""
 
-    def __unicode__(self):
-        return u"%s (%s/%s)" % (self.name, self.modul, self.url)
-
 
 class ModulItem(BaseItem, Base):
     __tablename__ = 'modules'
