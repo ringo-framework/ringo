@@ -108,14 +108,16 @@ class ErrorDialogRenderer(DialogRenderer):
         DialogRenderer.__init__(self, request, None, None, title, body)
         self.template = template_lookup.get_template("internal/error.mako")
 
-    def render(self):
+    def render(self, url=None):
         values = {}
         values['icon'] = self._request.static_url(
             'ringo:static/images/icons/32x32/dialog-error.png')
         values['header'] = self._title
         values['body'] = self._render_body()
         history = self._request.session.get('history')
-        if history:
+        if ok_url:
+            values['ok_url'] = url
+        elif history:
             values['ok_url'] = self._request.session['history'].pop()
         else:
             values['ok_url'] = self._request.route_path('home')
