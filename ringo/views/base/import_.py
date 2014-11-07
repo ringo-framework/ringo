@@ -108,8 +108,6 @@ def import_(request, callback=None):
         redirect = _handle_redirect(request)
         if redirect:
             return redirect
-    # FIXME: Get the ActionItem here and provide this in the Dialog to get
-    # the translation working (torsten) <2013-07-10 09:32>
     rvalue = {}
     rvalue['dialog'] = renderer.render(imported_items)
     rvalue['clazz'] = clazz
