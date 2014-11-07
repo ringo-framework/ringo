@@ -115,7 +115,7 @@ class ErrorDialogRenderer(DialogRenderer):
         values['header'] = self._title
         values['body'] = self._render_body()
         history = self._request.session.get('history')
-        if ok_url:
+        if url:
             values['ok_url'] = url
         elif history:
             values['ok_url'] = self._request.session['history'].pop()
