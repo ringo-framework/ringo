@@ -13,7 +13,13 @@ class History:
             del self.history[0]
         print self.history
 
-    def pop(self):
-        if len(self.history) > 0:
-            return self.history.pop()
-        return None
+    def pop(self, num=1):
+        """Returns a url form the history and deletes the item and all
+        decendants from the history. On default it will return the last
+        recent entry in the history. Optionally you can provide a number
+        to the pop method to get e.g the 2 most recent entry."""
+        url = None
+        for x in range(num):
+            if len(self.history) > 0:
+                url = self.history.pop()
+        return url
