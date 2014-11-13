@@ -58,7 +58,7 @@ def _get_default_actions_sql(session, mid, action_id, ignore=[]):
         if action == "update":
             name = "Update"
             url = "update/{id}"
-            icon = "icon-eye-open"
+            icon = "icon-edit"
             bundle = 0
         if action == "delete":
             name = "Delete"
