@@ -38,7 +38,12 @@ def create(request, callback=None, renderers={}):
     # Create a new item
     clazz = request.context.__model__
     factory = clazz.get_item_factory()
-    request.context.item = factory.create(request.user)
+    # Only create a new item if ther isn't already an item in the
+    # request.context. This can happen if we define a custom view for
+    # create where the item gets created before to set some feault
+    # values e.g (See create function of forms)
+    if not request.context.item:
+        request.context.item = factory.create(request.user)
     form = get_item_form('create', request, renderers)
     if request.POST and 'blobforms' not in request.params:
         if handle_POST_request(form, request, callback, 'create', renderers):
