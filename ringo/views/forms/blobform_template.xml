@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <configuration xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="ringo">
   <source>
-    <!-- Define different entity types -->
+    <!-- DO NOT DELETE THE FOLLOWING ENTITIES-->
+    <entity id="fid" name="fid">
+      <renderer type="hidden"/>
+    </entity>
+    <entity id="_roles" name="_roles">
+      <renderer type="hidden"/>
+    </entity>
+    <entity id="created" name="created" label="Created" type="datetime" readonly="true"/>
+    <entity id="updated" name="updated" label="Updated" type="datetime" readonly="true"/>
+    <!-- CUSTOM FIELDS -->
     <entity id="dummy" name="dummy" label="Dummy"/>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
