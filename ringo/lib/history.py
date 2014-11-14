@@ -11,7 +11,7 @@ class History:
             self.history.append(url)
         if len(self.history) > 10:
             del self.history[0]
-        print self.history
+        #print self.history
 
     def pop(self, num=1):
         """Returns a url form the history and deletes the item and all
