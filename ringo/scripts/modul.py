@@ -5,10 +5,10 @@ import transaction
 import pkg_resources
 from sqlalchemy import func
 from mako.lookup import TemplateLookup
-from ringo.lib.helpers import get_app_location
+from ringo.lib.helpers import get_app_location, dynamic_import
 from ringo.scripts.db import (
     get_session, create_new_revision,
-    handle_db_upgrade_command
+    handle_db_upgrade_command, replace_insert_stmt
 )
 from ringo.model.modul import ModulItem, ActionItem
 
@@ -187,6 +187,9 @@ def add_model_file(package, modul, id, clazz, mixins):
         outfile = open(target_file, 'w+')
         outfile.write(generated)
         outfile.close()
+        # Import the new model file. This is needed to be able to
+        # generate the migration script properly.
+        dynamic_import(clazzpath)
         print 'Ok.'
     except Exception:
         print 'Failed.'
@@ -318,4 +321,5 @@ def handle_modul_add_command(args):
     add_form_file(package, name)
     add_table_file(package, name)
     msg = "Added %s modul" % name
-    create_new_revision(args, sql, msg)
+    path = create_new_revision(args, msg)
+    replace_insert_stmt(path, sql)
