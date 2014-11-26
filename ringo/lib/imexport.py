@@ -7,6 +7,7 @@ import codecs
 import cStringIO
 import sets
 
+from ringo.lib.helpers import serialize
 from ringo.lib.alchemy import get_columns_from_clazz
 
 log = logging.getLogger(__name__)
@@ -56,13 +57,30 @@ class Exporter(object):
 
     """Docstring for Exporter. """
 
-    def __init__(self, clazz):
-        """@todo: to be defined1.
+    def __init__(self, clazz, fields=None, serialized=True):
+        """Base exporter to export items of the given class. The
+        exporter will return a list of dictionarys with key values pairs
+        of the values for each items which should be exported. The
+        fields to be exported can be configured. You can configure if
+        the values should be serialized too. Note behaviour on
+        serialized relations.
 
-        :clazz: @todo
+        :clazz: Clazz of the items which will be exported
+        :fields: List of fields and relations which should be exported.
+        If no fields are provided all fields excluding the relations
+        will be exported. The order of the configured fields will
+        determine the order of the fields in the export (If supported
+        e.g CSV).
+        :serialized: Flag to indicate that the exported values should be
+        serialized e.g dates will be converted into ISO8601 format. If
+        realtions are included in the export the serialzed form will be
+        the string representation of the item.
+        Defaults to True.
 
         """
         self._clazz = clazz
+        self._fields = fields
+        self._serialized = serialized
 
     def serialize(self, data):
         """Will convert the given python data dictionary into a string
@@ -100,7 +118,17 @@ class Exporter(object):
             # if the item has no uuid set yet.
             if not item.uuid:
                 item.reset_uuid()
-            data.append(self.flatten(item.get_values(serialized=True)))
+            if self._fields is None:
+                # Default export. Export all fields excluding relations
+                values = item.get_values(serialized=self._serialized)
+            else:
+                values = {}
+                for field in self._fields:
+                    value = item.get_value(field)
+                    if self._serialized:
+                        value = serialize(value)
+                    values[field] = value
+            data.append(self.flatten(values))
         return self.serialize(data)
 
 
