@@ -18,6 +18,33 @@ from ringo.model.modul import ModulItem
 
 log = logging.getLogger(__name__)
 
+def is_locked(filepath):
+    """Checks if a file is locked by opening it in append mode.
+    If no exception thrown, then the file is not locked.
+    """
+    locked = None
+    file_object = None
+    if os.path.exists(filepath):
+        try:
+            #print "Trying to open %s." % filepath
+            buffer_size = 8
+            # Opening file in append mode and read the first 8 characters.
+            file_object = open(filepath, 'a', buffer_size)
+            if file_object:
+                #print "%s is not locked." % filepath
+                locked = False
+        except IOError, message:
+            print "File is locked (unable to open in append mode). %s." % \
+                  message
+            locked = True
+        finally:
+            if file_object:
+                file_object.close()
+                #print "%s closed." % filepath
+    else:
+        print "%s not found." % filepath
+    return locked
+
 
 def get_last_revision_file(args):
     """Will return the name of the latest revision file of the application"""
@@ -27,7 +54,7 @@ def get_last_revision_file(args):
     script_path.append("versions")
     cwd = os.getcwd()
     os.chdir(os.path.join(*script_path))
-    script_path.append(max(os.listdir("."),
+    script_path.append(max([fn for fn in os.listdir(".") if fn.endswith("py")],
                        key=os.path.getctime))
     os.chdir(cwd)
     return os.path.join(*script_path)
@@ -75,17 +102,14 @@ def create_new_revision(args, msg=None):
     cfg = get_alembic_config(args)
     command.revision(cfg, message=msg, autogenerate=True)
     revision_file = get_last_revision_file(args)
+    while is_locked(revision_file):
+        time.sleep(1)
     return revision_file
 
 
 def replace_insert_stmt(revision_file, sql):
     """Will replace the empty INSERT statement in the given revison file
     with the given sql statements."""
-    # FIXME: The following sleep statement is used until the new reviosn
-    # file is completly written. Instead of waiting until the file is
-    # written we should better check if the file is still open.
-    # (torsten) <2014-11-26 21:02>
-    time.sleep(10)
     with open(revision_file, "r") as f:
         data = f.read()
     with open(revision_file, "w") as f:
