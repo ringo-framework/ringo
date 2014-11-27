@@ -13,6 +13,140 @@ from ringo.lib.alchemy import get_columns_from_clazz
 log = logging.getLogger(__name__)
 
 
+class RecursiveExporter(object):
+
+    """Recurisve exporter for items of type clazz. For each item in the
+    export the exporter will traverse down the relations of the items
+    based on a given export configuration. If no export configuration is
+    given the Exporter exports all fields of the items excluding
+    relations and blobforms.
+
+    Example export configuration::
+
+    ["id", "foo", "bar", {"baz": ["f1", "f2", {"r1": [...]}, "baq": [...]}]
+
+    In this configuration "id", "foo", "bar"... "f2" are considered as
+    fields of the exported items. In contrast the keys of the nested
+    dictionarys are taken as the name of the relations. The following
+    list defines again the fields of the items in the relation.
+    """
+
+    def __init__(self, clazz, config):
+        """@todo: to be defined1.
+
+        :clazz: Clazz
+        :config: Export configuration
+
+        """
+        if config:
+            self._config = self._parse_config(config)
+        else:
+            self._config = {"root": None}
+        self._clazz = clazz
+        self._data = {}
+
+    def _parse_config(self, config, relation="root", result=None):
+        """Will return a dictionary with the field configuration for each
+        relation found in the export configuration. The field configuration
+        is a list of fieldnames.
+
+        :config: Export configuration
+        :relation: Name of the "current" relation. The name "root" is a
+        placeholder for the elements on the first level of the export.
+        :result: temporary relation configuration. Is neeed for recursion in
+        this function
+        :returns: Dict with realtion configuration
+
+        """
+        if result is None:
+            result = {}
+        result[relation] = []
+        for field in config:
+            if isinstance(field, dict):
+                for rel in field:
+                    result[rel] = self._parse_config(field[rel],
+                                                     rel,
+                                                     result)[rel]
+                    result[relation].append(rel)
+            else:
+                result[relation].append(field)
+        return result
+
+    def _iter_export(self, export, relation_config, relation):
+        raise NotImplementedError()
+
+    def _remove_duplicates(self):
+        raise NotImplementedError()
+
+    def perform(self, items):
+        """@todo: Docstring for perform.
+        function
+
+        :arg1: @todo
+        :returns: @todo
+
+        """
+        fields_to_export = self._config["root"]
+        exporter = Exporter(self._clazz, fields_to_export, serialized=False)
+        export = exporter.perform(items)
+        self._iter_export(export, self._config, "root")
+        self._remove_duplicates()
+        return self._data
+
+
+class RecursiveRelationExporter(RecursiveExporter):
+
+    """Recursive Expoert for items of type clazz. After the export has
+    finished the exported data will are returned as a dictionary. Each
+    key in the dictionary will hold the exported values of the
+    configured relations in the export configuration. The items of type
+    clazz acn be found in the dict under the key 'root'"""
+
+    def get_relation_config(self):
+        return self._config
+
+    def _iter_export(self, export, relation_config, relation):
+        if self._data.get(relation) is None:
+            self._data[relation] = []
+        for item in export:
+            temp = {}
+            for field in item:
+                if field in relation_config:
+                    fields_to_export = relation_config[field]
+                    if isinstance(item[field], list) and len(item[field]) > 0:
+                        clazz = item[field][0].__class__
+                        exporter = Exporter(clazz,
+                                            fields_to_export,
+                                            serialized=False)
+                        self._iter_export(exporter.perform(item[field]),
+                                          relation_config,
+                                          field)
+                    elif item[field] is not None:
+                        clazz = item[field]
+                        exporter = Exporter(clazz,
+                                            fields_to_export,
+                                            serialized=False)
+                        self._iter_export(exporter.perform([item[field]]),
+                                          relation_config,
+                                          field)
+                else:
+                    temp[field] = item[field]
+            self._data[relation].append(temp)
+
+    def _remove_duplicates(self):
+        for relation in self._data:
+            visited = []
+            unique = []
+            for item in self._data[relation]:
+                hashv = hash(unicode(item))
+                if hashv not in visited:
+                    visited.append(hashv)
+                    unique.append(item)
+                else:
+                    continue
+            self._data[relation] = unique
+
+
 class UnicodeCSVWriter:
     """
     A CSV writer which will write rows to CSV file "f",

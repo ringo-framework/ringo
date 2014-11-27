@@ -18,6 +18,7 @@ to the tracker.
 - Insert scaffold of a formdefinition when creating a new form.
 - #67: No ISE on reading data from the import file. Show error dialog now.
 - #48: Add support to drop columns in SQLite.
+- Added RecursiveRelation Exporter.
 
 0.16.3
 ======
