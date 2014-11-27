@@ -39,7 +39,7 @@ class RecursiveExporter(object):
 
         """
         if config:
-            self._config = self._parse_config(config)
+            self._config = self._parse_config(json.loads(config))
         else:
             self._config = {"root": None}
         self._clazz = clazz
