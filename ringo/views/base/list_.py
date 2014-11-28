@@ -22,37 +22,37 @@ log = logging.getLogger(__name__)
 def set_bundle_action_handler(key, handler):
     _bundle_request_handlers[key] = handler
 
-def handle_pageinating(clazz, request):
+def handle_paginating(clazz, request):
     """Returns a tupe of current page and pagesize. The default page and
     size is page on and all items on one page. This is also the default
-    if pageination is not enabled for the table."""
+    if pagination is not enabled for the table."""
 
     name = clazz.__tablename__
-    # Default pageination options
-    if get_table_config(clazz).is_pageinated():
+    # Default pagination options
+    if get_table_config(clazz).is_paginated():
         default_page = 0 # First page
         default_size = 50
     else:
         return (0, None)
 
-    # Get pageination from session
-    page = request.session.get('%s.list.pageination_page' % name, default_page)
-    size = request.session.get('%s.list.pageination_size' % name, default_size)
+    # Get pagination from session
+    page = request.session.get('%s.list.pagination_page' % name, default_page)
+    size = request.session.get('%s.list.pagination_size' % name, default_size)
 
     # Overwrite options with options from get request
-    page = int(request.GET.get('pageination_page', page))
-    size = request.GET.get('pageination_size', size)
+    page = int(request.GET.get('pagination_page', page))
+    size = request.GET.get('pagination_size', size)
     if size:
         size = int(size)
     else:
         size = None
 
     if 'reset' in request.params:
-        request.session['%s.list.pageination_page' % name] = default_page
-        request.session['%s.list.pageination_size' % name] = default_size
+        request.session['%s.list.pagination_page' % name] = default_page
+        request.session['%s.list.pagination_size' % name] = default_size
     else:
-        request.session['%s.list.pageination_page' % name] = page
-        request.session['%s.list.pageination_size' % name] = size
+        request.session['%s.list.pagination_page' % name] = page
+        request.session['%s.list.pagination_size' % name] = size
     request.session.save()
 
     return (page, size)
@@ -234,11 +234,11 @@ def list_(request):
     rvalue = {}
     search = get_search(clazz, request)
     sorting = handle_sorting(clazz, request)
-    pageination_page, pageination_size = handle_pageinating(clazz, request)
+    pagination_page, pagination_size = handle_paginating(clazz, request)
     listing = get_item_list(request, clazz, user=request.user)
     listing.sort(sorting[0], sorting[1])
     listing.filter(search)
-    listing.pageinate(pageination_page, pageination_size)
+    listing.paginate(pagination_page, pagination_size)
     # Only save the search if there are items
     if len(listing.items) > 0:
         request.session['%s.list.search' % clazz.__tablename__] = search

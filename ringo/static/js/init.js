@@ -7,7 +7,7 @@ $( document ).ready(function() {
     $('#logoutWarning').modal({
         show: false
     });
-    $('.datatable-pageinated').dataTable( {
+    $('.datatable-paginated').dataTable( {
            "oLanguage": {
                 "sUrl": "/static/js/datatables/i18n/"+getLanguageFromBrowser()+".json"
            },
@@ -71,9 +71,9 @@ $( document ).ready(function() {
        $('.main-pane').hide();
        $('#'+pane).show();
     });
-    $('#pageination-size-selector').change(function() {
+    $('#pagination-size-selector').change(function() {
         var value = $(this).val();
-        var url = $(this).attr('url') + "?pageination_size=" + value;
+        var url = $(this).attr('url') + "?pagination_size=" + value;
         window.open(url,"_self");
     });
 

@@ -50,7 +50,7 @@ img.icon {
   width: 80%;
 }
 
-/* pageination margin must be 0 to match ringo layout */
+/* pagination margin must be 0 to match ringo layout */
 nav ul.pagination {
   margin: 0;
 }

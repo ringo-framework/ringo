@@ -51,7 +51,7 @@ table.content-shorten td {
   text-overflow: ellipsis;
 }
 
-#pageination-size-selector {
+#pagination-size-selector {
   width: auto;
   display: inline;
 }

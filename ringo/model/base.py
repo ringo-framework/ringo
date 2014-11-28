@@ -402,7 +402,7 @@ class BaseList(object):
             sorted_items.reverse()
         self.items = sorted_items
 
-    def pageinate(self, page=0, size=None):
+    def paginate(self, page=0, size=None):
         """This function will set some internal values for the
         pagination function based on the given params.
 
@@ -411,44 +411,44 @@ class BaseList(object):
         :returns:
 
         """
-        self.pageination_size = size
+        self.pagination_size = size
         """Number of items per page"""
-        self.pageination_current = page
+        self.pagination_current = page
         """Current selected page"""
-        self.pageination_pages = None
+        self.pagination_pages = None
         """Number of total pages in the pagination"""
-        self.pageination_first = None
-        """First page in pageination navigation"""
-        self.pageination_last = None
-        """Last page in pageination navigation"""
-        self.pageination_start = None
+        self.pagination_first = None
+        """First page in pagination navigation"""
+        self.pagination_last = None
+        """Last page in pagination navigation"""
+        self.pagination_start = None
         """Start index for slicing the items list on the current page"""
-        self.pageination_end = None
+        self.pagination_end = None
         """End index for slicing the items list on the current page"""
 
         # Calulate the slicing indexes for paginating and the total
         # number of pages.
         if size is None:
             pages = 1
-            self.pageination_start = 0
-            self.pageination_end = len(self.items)
+            self.pagination_start = 0
+            self.pagination_end = len(self.items)
         else:
             pages = int(math.ceil(float(len(self.items)) / size))
-            self.pageination_start = page * size
-            self.pageination_end = (page + 1) * size
-        self.pageination_pages = pages
+            self.pagination_start = page * size
+            self.pagination_end = (page + 1) * size
+        self.pagination_pages = pages
 
-        ## Calculate the range to the pageination navigation
-        start = self.pageination_current - 4
-        end = self.pageination_current + 5
+        ## Calculate the range to the pagination navigation
+        start = self.pagination_current - 4
+        end = self.pagination_current + 5
         if start < 0:
             end += abs(start)
             start = 0
-        elif end > self.pageination_pages:
-            end = self.pageination_pages
-            start -= (abs((self.pageination_pages + 5) - end))
-        self.pageination_first = start
-        self.pageination_last = end
+        elif end > self.pagination_pages:
+            end = self.pagination_pages
+            start -= (abs((self.pagination_pages + 5) - end))
+        self.pagination_first = start
+        self.pagination_last = end
 
     def filter(self, filter_stack):
         """This function will filter the list of items by only leaving
