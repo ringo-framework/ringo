@@ -4,14 +4,14 @@ from ringo.lib.helpers import dynamic_import
 
 # Import models so that alembic is able to autogenerate migrations
 # scripts.
-from ringo_{{package}}.model import Extension
+from ringo_{{package}}.model import {{Package}}
 
 log = logging.getLogger(__name__)
 
 modul_config = {
     "name": "{{package}}",
     "label": "",
-    "clazzpath": "ringo_{{package}}.model.Extension",
+    "clazzpath": "ringo_{{package}}.model.{{Package}}",
     "label_plural": "",
     "str_repr": "",
     "display": "",
@@ -26,4 +26,4 @@ def includeme(config):
 
     """
     modul = register_modul(config, modul_config)
-    Extension._modul_id = modul.get_value("id")
+    {{Package}}._modul_id = modul.get_value("id")
