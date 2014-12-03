@@ -32,6 +32,7 @@ requires = [
     'webtest',
     'mock',
     'py3o.template',
+    'py3o.renderers.pyuno',
     'passlib',
     'dateutils'
 ]
