@@ -1,3 +1,24 @@
 [egg_info]
 tag_build = dev
 tag_svn_revision = true
+
+[compile_catalog]
+directory = ringo_{{package}}/locale
+domain = ringo_{{package}}
+statistics = true
+
+[extract_messages]
+add_comments = TRANSLATORS:
+output_file = ringo_{{package}}/locale/ringo_{{package}}.pot
+width = 80
+
+[init_catalog]
+domain = ringo_{{package}}
+input_file = ringo_{{package}}/locale/ringo_{{package}}.pot
+output_dir = ringo_{{package}}/locale
+
+[update_catalog]
+domain = ringo_{{package}}
+input_file = ringo_{{package}}/locale/ringo_{{package}}.pot
+output_dir = ringo_{{package}}/locale
+previous = true

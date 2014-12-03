@@ -20,6 +20,7 @@ to the tracker.
 - #48: Add support to drop columns in SQLite.
 - Added RecursiveRelation Exporter.
 - Added ODF Converter.
+- Added support for translations in extensions.
 
 0.16.3
 ======
