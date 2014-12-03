@@ -19,6 +19,7 @@ to the tracker.
 - #67: No ISE on reading data from the import file. Show error dialog now.
 - #48: Add support to drop columns in SQLite.
 - Added RecursiveRelation Exporter.
+- Added ODF Converter.
 
 0.16.3
 ======
