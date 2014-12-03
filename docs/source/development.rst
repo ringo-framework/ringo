@@ -175,22 +175,6 @@ install it in your system to make it available for other applications::
     cd evaluation 
     python setup.py develop
 
-Now can can register the new extension for the first time with your
-application. Registering is done in three steps.
-
-In the model/__init__.py file of your application::
-
-    import os
-    from ringo.model import Base, extensions
-    from ringo.lib import helpers
-    
-    extensions.append("ringo_evaluation")
-    
-    # Dynamically import all model files here to have the model available in
-    # the sqlalchemy metadata. This is needed for the schema migration with
-    # alembic. Otherwise the migration will produce many table drops as the
-    # tables of the models are not present in the metadata
-
 If your extension provides some extension specific actions they should be
 implemented in a Extension Mixin class. Overwrite the 'get_mixin_actions'
 method to define the actions the extension should provide to other modules::
@@ -210,10 +194,23 @@ method to define the actions the extension should provide to other modules::
                 actions.append(action)
                 return actions
 
-To make the actions available in other modules you need to Inherit form this
-mixin::
+Registering an extension in your application
+============================================
+You can register an extension with your application. Registering is done in
+three steps.
 
-        class MyClass(Evaluable, Blobform, ..., BaseItem, Base):
+In the model/__init__.py file of your application::
+
+    import os
+    from ringo.model import Base, extensions
+    from ringo.lib import helpers
+    
+    extensions.append("ringo_evaluation")
+    
+    # Dynamically import all model files here to have the model available in
+    # the sqlalchemy metadata. This is needed for the schema migration with
+    # alembic. Otherwise the migration will produce many table drops as the
+    # tables of the models are not present in the metadata
 
 In case your extention provides custom templates you need to configure an
 additional search path for your templates in the ini file::
@@ -223,7 +220,22 @@ additional search path for your templates in the ini file::
        mako.directories = ringo_evaluation:templates
 
 On the next start of your application the extension will be registerd with
-your application and a new modul entry will be created.
+your application and a new modul entry in the modules table of your application will be created.
+
+If the extension extends the model of the application you will need to
+generate a new migration script to migrate the data model and finally migrate
+the model::
+
+        alembic revision --autogenerate
+        yourapp-admin db upgrade
+
+If the extension provides a Mixin to enhance your modules functionality then
+you will need to inherit from the mixin::
+
+        class MyClass(Evaluable, Blobform, ..., BaseItem, Base):
+
+This step can require an additional migration of your model. Please repeat the
+steps to create a new migration step described before.
 
 .. _add_modules:
 
