@@ -35,6 +35,7 @@ def includeme(config):
     config.include('pyramid_beaker')
     config.include('pyramid_mako')
     config.include('ringo.config.setup')
+    config.include('ringo.lib.odfconv.setup')
     config = setup_static_views(config)
     config = setup_routes(config)
     config.scan()
