@@ -1,9 +1,19 @@
 from tempfile import NamedTemporaryFile
 import logging
 from py3o.renderers.pyuno.main import Convertor
+from ringo.lib.cache import CACHE_MISC
 
 log = logging.getLogger(__name__)
 
+
+def setup(config):
+    #  TODO: Load configuration for the python path which is needed for
+    #  pyuno () <2014-12-03 20:32>
+    pythonpath = None
+    CACHE_MISC.set("converter", Converter(python=pythonpath))
+
+def get_converter():
+    return CACHE_MISC.get("converter")
 
 class Converter(object):
 
@@ -45,6 +55,3 @@ class Converter(object):
         infile.close()
         outfile.close()
         return result
-
-# Global converter instance
-converter = Converter()
