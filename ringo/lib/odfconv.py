@@ -10,8 +10,8 @@ class Converter(object):
     """Converter to convert ODF documents into other formats like pdf,
     xls, doc."""
 
-    def __init__(self):
-        self._converter = Convertor()
+    def __init__(self, python=None):
+        self._converter = Convertor(python=python)
         try:
             self._converter._init_server()
             self._available = True
