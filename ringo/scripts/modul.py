@@ -78,7 +78,7 @@ def _get_default_actions_sql(session, mid, action_id, ignore=[]):
 
         sql.append("""INSERT INTO "actions" """
                    """(id, mid, name, url, icon, uuid, bundle) """
-                   """VALUES (%s, %s, '%s', '%s', '%s', '%s', '%s');""" %
+                   """VALUES (%s, %s, '%s', '%s', '%s', '%s', '%s')""" %
                    (action_id, mid, name, url, icon, myuuid, bundle))
         action_id += 1
     return sql
@@ -140,7 +140,7 @@ def get_insert_statements(package, name, session):
     sql = []
     sql.append("""INSERT INTO "modules" """
                """VALUES (%s,'%s','%s','%s','%s', """
-               """NULL, '%s','%s','%s', NULL); """
+               """NULL, '%s','%s','%s', NULL)"""
                % (id, modul_name, clazzpath, label,
                   label_plural, str_repr, location, myuuid))
     sql.extend(_get_default_actions_sql(session, id, action_id))
