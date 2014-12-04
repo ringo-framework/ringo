@@ -53,8 +53,8 @@ auth.password_reminder = false
 # defaults to enabled checks
 security.enable_csrf_check = true
 # Set timeout in seconds for the http client caching. A value of 0 means no #
-# caching at all. Defaults to 3600 seconds.
-security.page_http_cache = 3600
+# caching at all. Defaults to 0 seconds.
+security.page_http_cache = 0
 security.static_http_cache = 3600
 # Set cookie options.
 security.cookie_secret = secret
