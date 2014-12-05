@@ -20,6 +20,22 @@ def serialize(value):
     return unicode(value)
 
 
+def age(when, on=None):
+    """Returns the age in years from the given date "when" since today. If
+    "on" is provided the age will be calculated relative to the given
+    date. See http://keyes.ie/calculate-age-with-python/
+
+    :when: datetime object
+    :on: datetime object
+    :returns: integer
+
+    """
+    if on is None:
+        on = datetime.today()
+    was_earlier = (on.month, on.day) < (when.month, when.day)
+    return on.year - when.year - (was_earlier)
+
+
 def get_raw_value(element, name):
     """This function tries to get the given attribute of the item if
     it can not be found using the usual way to get attributes. In
