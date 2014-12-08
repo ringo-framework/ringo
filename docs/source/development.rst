@@ -137,6 +137,40 @@ can be created with the following commands::
 This will trigger the creation of an application skeleton based on the
 :ref:`scaffold_basic`.
 
+Create a new application based on another application
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Lets say you have a appliation called ''Foo'' which should be used as a
+platform in the same way as ringo was a platform for the ''Foo'' application.
+Now you want to create an application ''Bar'' based on ''Foo''.
+
+The procedure to this is almost the same despite three things.
+
+1. After creating the application you need to modify the `__init__.py` file of
+your application to include the configuration of the ''Foo'' application::
+
+        # Include basic ringo configuration.
+        config.include('ringo')
+        config.include('foo')
+        config.include('bar')
+        for extension in extensions:
+            config.include(extension)
+
+2. The search path for the mako templates need to be extended as we want the
+templates of the ''Foo'' application in our application too::
+
+        # mako template settings
+        mako.directories =
+                bar:templates
+                foo:templates
+                ringo:templates
+
+3. The initialisation of the database is a little bit different as we want to
+initialize the database with the migration scripts of ''Foo''::
+        
+        bar-admin db init --base foo
+
+Voilà! That is it.
+
 
 Customisation / Recipes
 ***********************
