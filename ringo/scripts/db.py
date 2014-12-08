@@ -79,7 +79,7 @@ def copy_initial_migration_scripts(args):
     dst_path.append("alembic")
     dst_path.append("versions")
     src_path = []
-    src_path.append(get_app_location("ringo"))
+    src_path.append(get_app_location(args.base))
     src_path.append("alembic")
     src_path.append("versions")
 

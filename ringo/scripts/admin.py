@@ -185,6 +185,10 @@ def setup_global_argument_parser():
                         default=_get_app_name(),
                         metavar="APP",
                         help="Name of the application")
+    parser.add_argument('--base',
+                        default="ringo",
+                        metavar="BASEAPP",
+                        help="Name of the base application")
     parser.add_argument('--config',
                         default="development.ini",
                         metavar="INI",
