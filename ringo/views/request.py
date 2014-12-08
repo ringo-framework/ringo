@@ -67,14 +67,6 @@ def handle_POST_request(form, request, callback, event, renderers=None):
         # relation was provided as GET parameter in the current
         # request and is now saved in the session.
         addrelation = request.session.get('%s.addrelation' % clazz)
-        if addrelation:
-            rrel, rclazz, rid = addrelation.split(':')
-            parent = import_model(rclazz)
-            pfactory = parent.get_item_factory()
-            pitem = pfactory.load(rid)
-            log.debug('Linking %s to %s in %s' % (item, pitem, rrel))
-            tmpattr = getattr(pitem, rrel)
-            tmpattr.append(item)
         try:
             item.save(form.data, request)
             msg = _('Edited ${item_type} "${item}" successfull.',
@@ -83,6 +75,16 @@ def handle_POST_request(form, request, callback, event, renderers=None):
             request.session.flash(msg, 'success')
             handle_event(request, item, form._config.id)
             handle_callback(request, callback)
+
+            if addrelation:
+                rrel, rclazz, rid = addrelation.split(':')
+                parent = import_model(rclazz)
+                pfactory = parent.get_item_factory()
+                pitem = pfactory.load(rid)
+                log.debug('Linking %s to %s in %s' % (item, pitem, rrel))
+                tmpattr = getattr(pitem, rrel)
+                tmpattr.append(item)
+
             # Invalidate cache
             invalidate_cache()
             if request.session.get('%s.form' % clazz):
