@@ -256,7 +256,7 @@ class Versioned(object):
         item_values = item.get_values(serialized=True)
         version.values = json.dumps(item_values)
         version.author = request.user.login
-        version.date = datetime.datetime.now()
+        version.date = datetime.datetime.utcnow()
         item.versions.append(version)
 
     def _get_version(self, author, id):
