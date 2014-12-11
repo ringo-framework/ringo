@@ -1,3 +1,12 @@
+"""Items are instances of a certain type of data which is defined in a
+of a :mod:`.modul`.
+
+All items in ringo are derived at least from :class:`.BaseItem` and one ore
+more mixins from the :mod:`.mixins` modul.
+
+Further ringo provides a :class:`.BaseFactory` to create new items and a
+:class:`.BaseList` to handle lists of items for all modules.
+"""
 import logging
 import operator
 import math
