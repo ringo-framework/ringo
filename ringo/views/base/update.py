@@ -46,7 +46,7 @@ def update(request, callback=None, renderers={}):
 
     rvalues = get_return_value(request)
     rvalues['owner'] = get_rendered_ownership_form(request)
-    rvalues['logbook'] = get_rendered_logbook_form(request, readonly=True)
+    rvalues['logbook'] = get_rendered_logbook_form(request)
     values = {'_roles': [str(r.name) for r in request.user.get_roles()]}
     rvalues['form'] = render_item_form(request, form, values)
     return rvalues
