@@ -194,7 +194,7 @@ class ModulItem(BaseItem, Base):
         # "%s - %s"|field1, field2 -> ("%s - %s", ["field1", "field2"])
         try:
             format_str, fields = self.str_repr.split("|")
-            return (format_str, fields.split(","))
+            return (format_str, [f.strip() for f in fields.split(",")])
         except:
             return ("%s", ["id"])
 
