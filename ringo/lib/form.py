@@ -14,10 +14,13 @@ def get_ownership_form(item, db, csrf_token, readonly=None):
         config = _get_form_config('ringo', 'ownership.xml', 'ownership-form-update')
     return Form(config, item, db,
                 csrf_token=csrf_token,
+                translate=translate,
+                renderers=renderers,
                 eval_url='/rest/rule/evaluate')
 
 
-def get_logbook_form(item, db, csrf_token, readonly=None):
+def get_logbook_form(item, db, translate, renderers,
+                     csrf_token, readonly=None):
     if readonly:
         config = _get_form_config('ringo', 'logbook.xml', 'logbook-form-read')
     else:

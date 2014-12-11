@@ -98,8 +98,11 @@ def get_rendered_logbook_form(request, readonly=None):
 def get_logbook_form(request, readonly=None):
     item = get_item_from_request(request)
     db = request.db
+    translate = request.translate
+    renderers = add_renderers({})
     csrf_token = request.session.get_csrf_token()
-    return _get_logbook_form(item, db, csrf_token, readonly)
+    return _get_logbook_form(item, db, translate, renderers,
+                             csrf_token, readonly)
 
 
 def render_item_form(request, form, values=None, validate=True):
