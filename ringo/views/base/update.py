@@ -21,8 +21,8 @@ log = logging.getLogger(__name__)
 
 def update(request, callback=None, renderers={}):
     """Base method to handle update requests. This view will render a
-    update form to update items on (GET) requests. 
-    
+    update form to update items on (GET) requests.
+
     It the user submits the data (POST) that the data will be validated.
     If validation is successfull the item will be saved in the datebase
     and the callback method will be called. Finally a redirect to either
