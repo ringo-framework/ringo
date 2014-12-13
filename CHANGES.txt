@@ -21,6 +21,7 @@ to the tracker.
 - Added RecursiveRelation Exporter.
 - Added ODF Converter.
 - Added support for translations in extensions.
+- Status messages are now rendered at the top of the page.
 
 0.16.3
 ======
