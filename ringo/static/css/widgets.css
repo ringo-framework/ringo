@@ -170,6 +170,11 @@ html[xmlns] .dataTables_wrapper { display: block; }
  * overviewtable to indicate that they are clickable. */
 .search-widget {
   margin-bottom: 10px;
+  padding: 7px;
+  border: 1px dashed;
+  border-color: #ddd;
+  background: #f7f7f7;
+  border-radius: 4px;
 }
 .search-widget form {
   margin-bottom: 0px;

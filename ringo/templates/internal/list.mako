@@ -33,7 +33,7 @@ def render_responsive_class(visibleonsize):
 
 autoresponsive = tableconfig.is_autoresponsive()
 %>
-<div class="well well-small search-widget">
+<div class="search-widget">
   <div class="row">
     <div class="col-xs-9">
       <form name="search" class="form-inline" role="form" action="${url}" method="POST">
@@ -201,7 +201,7 @@ autoresponsive = tableconfig.is_autoresponsive()
   % endif
 </table>
 % if enable_bundled_actions or tableconfig.is_paginated():
-<div class="well well-small">
+<div class="search-widget">
   <div class="row">
     <div class="col-xs-6">
       % if enable_bundled_actions: 
