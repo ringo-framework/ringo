@@ -16,6 +16,16 @@
   display: inline;
 }
 
+/****************************************************************************
+ *                               Header/Logo                                *
+ ****************************************************************************/
+#logo a {
+  color: rgb(119, 119, 119);
+  font-size: small;
+  text-decoration: none;
+}
+
+
 /* Status message
  * *************************************************************************/
 /* Push the status message a littlebit down from the page header. */

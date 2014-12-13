@@ -16,6 +16,21 @@ img.icon {
   display:none;
 }
 
+/* Overwrite the following CSS to change the color of the navigation bar
+.navbar-default {
+  background-color: #f8f8f8;
+  border-color: #e7e7e7;
+  background-image: linear-gradient(to bottom,#f8f8f8 0,#e7e7e7 100%);
+}
+*/
+
+
+/* Render the top border of the navigation bar to have a better visual
+ * separatin to the logo above the navigation. */
+.navbar-static-top {
+  border-width: 1px 0px;
+}
+
 /* Reduce bottom margin from 30 to 20 (was 20 0 30) to make the content
  * under the page-header more compact. */
 .page-header {
