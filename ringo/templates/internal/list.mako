@@ -115,7 +115,7 @@ autoresponsive = tableconfig.is_autoresponsive()
   </div>
 </div>
 <form id="data-table" name="data-table" role="form" action="${request.route_path(h.get_action_routename(clazz, 'bundle'))}" method="POST">
-<table id="data" class="table table-striped table-hover table-condensed table-bordered">
+<table id="data" class="table table-striped table-hover table-condensed">
   <tr>
   % if enable_bundled_actions:
     <th width="2em">

@@ -13,9 +13,9 @@ for item in items:
     hidden_items.append(item)
 %>
 % if field.renderer.showsearch == "true" and not field.is_readonly():
-<table class="table table-condensed table-striped table-bordered datatable-simple">
+<table class="table table-condensed table-striped datatable-simple">
 % else:
-<table class="table table-condensed table-striped table-bordered datatable-blank">
+<table class="table table-condensed table-striped datatable-blank">
 % endif
   <thead>
     % if not field.is_readonly() and not field.renderer.hideadd == "true" and s.has_permission("create", clazz, request):
