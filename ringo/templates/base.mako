@@ -142,6 +142,25 @@
   </div>
 </%def>
 
+## flash messages with css class und fade in options
+<%def name="flash_messages()">
+  % for message in request.session.pop_flash('success'):
+    <div class="alert alert-success fade in out">
+      ${message}
+    </div>
+  % endfor
+  % for message in request.session.pop_flash('info'):
+    <div class="alert alert-info">
+      ${message}
+    </div>
+  % endfor
+  % for message in request.session.pop_flash('error'):
+    <div class="alert alert-danger fade in out">
+      ${message}
+    </div>
+  % endfor
+</%def>
+
 <%def name="render_item_specific_actions(item)">
   ##<a href="${h.get_action_url(request, item, 'list')}" class="btn"><i class="icon-list-alt"></i></a>
   ##<a href="${h.get_action_url(request, item, 'update')}" class="btn"><i class="icon-edit"></i></a>

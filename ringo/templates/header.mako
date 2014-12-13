@@ -1,3 +1,7 @@
+<%namespace name="base" file="base.mako"/>
+  <div id="status-messages">
+    ${base.flash_messages()}
+  </div>
 <div class="navbar navbar-default navbar-static-top">
   <div class="container">
     <div class="navbar-header">
