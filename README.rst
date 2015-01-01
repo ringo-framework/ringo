@@ -55,8 +55,8 @@ following command::
         invoke docs
 
 You need to have the sphinx package installed in order to generate the documentation.
-A generated  (and maybe outdated) version of the documentation is available on
-`<http://pythonhosted.org/ringo/>`_
+A generated version of the documentation is available on
+`<http://ringo.readthedocs.org/>`_
 
 
 Getting Started
