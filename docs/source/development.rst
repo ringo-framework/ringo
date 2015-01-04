@@ -300,11 +300,11 @@ steps.
 
  .. hint::
 
-    If you not only add entities but also design the form, you can design the
-    model and the form on the fly by reloaded the create, read or update page
-    of the module, depending on which form you configure. The form will be
-    rendered and you can see the result. Note, that saving data will work only
-    if you complete all the following steps.
+    If you not only add entities but also design the form, you can see the
+    result immediately by reloading the create, read or update page of the
+    module, depending on which form you configure. This allows you a very nice
+    workflow when it comes to filling your new module with life :) Note, that
+    saving data will work only if you complete all the following steps.
 
  3. Generate the python code to be placed in the model file by calling::
 
