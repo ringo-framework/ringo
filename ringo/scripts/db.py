@@ -112,6 +112,7 @@ def replace_insert_stmt(revision_file, sql):
     with the given sql statements."""
     with open(revision_file, "r") as f:
         data = f.read()
+    time.sleep(2)
     with open(revision_file, "w") as f:
         f.write(data.replace('INSERTS = """"""',
                               'INSERTS = """%s"""' % "\n".join(sql)))
