@@ -296,7 +296,7 @@ Adding new fields to the model of a modul can be achieved by the following
 steps.
 
  1. First open the form definiton which is located under `views/forms/<modulname>.xml`. 
- 2. Add new fields (entities) to the form. See `formbar documentation <http://pythonhosted.org//formbar/>`_ for more information on how to add new entities.
+ 2. Add new fields (entities) to the form. See `formbar documentation <http://formbar.readthedocs.org/>`_ for more information on how to add new entities.
  3. Generate the python code to be placed in the model file by calling::
 
         ringo-admin model fields <modulname>
