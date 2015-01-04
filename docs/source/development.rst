@@ -311,6 +311,10 @@ steps.
 
         almebic revision --autogenerate -m "Your message here"
 
+ .. hint::
+    Before migrating the database please make sure you have a backup of your
+    database.
+
  6. Migrate database::
 
         ringo-admin db upgrade

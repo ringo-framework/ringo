@@ -23,7 +23,7 @@ for item in items:
       <th colspan="${len(tableconfig.get_columns())+1}">
       <a href="#"
       onclick="addItem('${request.route_path(h.get_action_routename(clazz, "create"))}', '${field.name}', '${field.renderer.form}', '${field._form._item.id}', '${h.get_item_modul(request, pclazz).clazzpath}')"
-      class="btn btn-default btn-small">${_('Add')}</a>
+      ><i class="glyphicon glyphicon-plus"></i></a>
       </th>
     </tr>
     % endif
