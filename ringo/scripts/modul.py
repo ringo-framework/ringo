@@ -323,3 +323,6 @@ def handle_modul_add_command(args):
     msg = "Added %s modul" % name
     path = create_new_revision(args, msg)
     replace_insert_stmt(path, sql)
+    #print "Touching"
+    #subprocess.call(["touch", path])
+    #print "Finished Touching"
