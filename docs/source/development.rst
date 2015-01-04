@@ -297,6 +297,15 @@ steps.
 
  1. First open the form definiton which is located under `views/forms/<modulname>.xml`. 
  2. Add new fields (entities) to the form. See `formbar documentation <http://formbar.readthedocs.org/>`_ for more information on how to add new entities.
+
+ .. hint::
+
+    If you not only add entities but also design the form, you can design the
+    model and the form on the fly by reloaded the create, read or update page
+    of the module, depending on which form you configure. The form will be
+    rendered and you can see the result. Note, that saving data will work only
+    if you complete all the following steps.
+
  3. Generate the python code to be placed in the model file by calling::
 
         ringo-admin model fields <modulname>
@@ -311,7 +320,7 @@ steps.
 
         almebic revision --autogenerate -m "Your message here"
 
- .. hint::
+ .. important::
     Before migrating the database please make sure you have a backup of your
     database.
 
