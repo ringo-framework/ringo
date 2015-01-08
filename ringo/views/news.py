@@ -9,15 +9,19 @@ log = logging.getLogger(__name__)
 
 
 def _mark_news_as_read(request, item):
-    """Will mark the given news item as read for the current user of the request.
+    """Will mark the given news item as read for the current user of the
+    request.
 
     :request: current request
     :item: news item
     :returns: news item
 
     """
-    user = request.user
-    user.news.remove(item)
+    # A news item will be shown for all users in item.users. To make it
+    # read we remove the entry of the current user from the item.users
+    # list.
+    users = item.users
+    users.remove(request.user)
     return item
 
 
