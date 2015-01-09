@@ -154,6 +154,13 @@ your application to include the configuration of the ''Foo'' application::
         config.include('bar')
         for extension in extensions:
             config.include(extension)
+        ...
+        config.scan('foo')
+        config.scan()
+        
+If you also have overwritten views in your ''Foo'' application you must also 
+scan the foo package. Otherwide you application is not aware of these overwritten 
+methods.
 
 2. The search path for the mako templates need to be extended as we want the
 templates of the ''Foo'' application in our application too::
