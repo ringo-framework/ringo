@@ -7,7 +7,7 @@ def render_filter_link(request, field, value, clazz):
   url = request.current_route_path().split("?")[0]
   params = "form=search&search=%s&field=%s" % (value, field.get('name'))
   out.append('<a href="%s?%s" data-toggle="tooltip"' % (url, params))
-  out.append('class="filter"')
+  out.append('class="link filter"')
   out.append('title="Filter %s on %s in %s">' % (h.get_item_modul(request, clazz).get_label(plural=True), value, field.get('label')))
   if hasattr(value, "render"):
     out.append('%s</a>' % value.render())
@@ -161,9 +161,9 @@ autoresponsive = tableconfig.is_autoresponsive()
     % endif
     % for num, field in enumerate(tableconfig.get_columns()):
       % if autoresponsive:
-        <td onclick="openItem('${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}')" class="${num > 0 and 'hidden-xs'} link">
+        <td class="${num > 0 and 'hidden-xs'}">
       % else:
-        <td onclick="openItem('${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}')" class="${render_responsive_class(field.get('screen'))} link">
+        <td class="${render_responsive_class(field.get('screen'))}">
       % endif
         <%
             try:
@@ -171,18 +171,25 @@ autoresponsive = tableconfig.is_autoresponsive()
             except:
               value = "NaF"
         %>
-        % if isinstance(value, list):
-          ## TODO: Expandation needed here? As this are very likely
-          ## linked items and the representation is determined by the
-          ## items __unicode__ method (ti) <2013-10-05 12:31> -->
-          <%
-            links = []
-            for v in value:
-              links.append(render_filter_link(request, field, v, clazz))
-          %>
-          ${", ".join(links)}
+        % if field.get('filter'):
+          ## Render a filter link. A filter link will a shortcut to tritter a
+          ## a new search based on the clicked value.
+          % if isinstance(value, list):
+            ## TODO: Expandation needed here? As this are very likely
+            ## linked items and the representation is determined by the
+            ## items __unicode__ method (ti) <2013-10-05 12:31> -->
+            <%
+              links = []
+              for v in value:
+                links.append(render_filter_link(request, field, v, clazz))
+            %>
+            ${", ".join(links)}
+          % else:
+            ${render_filter_link(request, field, value, clazz)}
+          % endif
         % else:
-          ${render_filter_link(request, field, value, clazz)}
+        ## Render a usual Link which will open the item.
+        <a class="link" title="${_('Open item in %s mode' % permission)}" href="${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}">${value}</a>
         % endif
     </td>
     % endfor
