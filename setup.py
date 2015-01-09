@@ -11,7 +11,7 @@ CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 requires = [
     'pyramid',
     'SQLAlchemy',
-    'alembic<=0.7.0',
+    'alembic==0.7.0',
     'alembic_sqlite',
     'transaction',
     'pyramid_tm',
