@@ -64,11 +64,32 @@ def get_blobform_config(request, item, formname):
 def get_rendered_ownership_form(request, readonly=None):
     """Returns the rendered logbook form for the item in the current
     request. If the item is not an instance of Owned, than an empty
-    string is returned."""
+    string is returned.
+
+    Changing the owner of the item will only be available for users with
+    a administrative role and update permissions on the current item.
+    Changing the group is restricted to the groups the user is member if
+    the user has not an administrative role.
+    """
+
+    def _has_administrational_role(modul):
+        for action in modul.actions:
+            if action.name == "update":
+                for role in action.roles:
+                    if role.admin:
+                        return True
+        return False
+
     item = get_item_from_request(request)
     form = get_ownership_form(request, readonly)
+    modul = get_item_modul(request, item)
+    _groups = [str(g.name) for g in request.user.groups]
+    _admin = _has_administrational_role(modul)
+    values = {"_admin": _admin,
+              "_groups": _groups
+    }
     if isinstance(item, Owned):
-        return form.render()
+        return form.render(values=values)
     else:
         return ""
 
