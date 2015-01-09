@@ -27,6 +27,7 @@ to the tracker.
 - #85: News can't be marked as read
 - #50: Change behavior of "click-seaerch-filter" in overviews
 - #37: Change ownership only for admins
+- #64: Better indication of current edit mode
 
 0.16.3
 ======
