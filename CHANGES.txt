@@ -25,6 +25,7 @@ to the tracker.
 - Added option to set a custom header with logo above the navbar more easily.
 - #82: Migration of the database for the first module sometimes does not work
 - #85: News can't be marked as read
+- #50: Change behavior of "click-seaerch-filter" in overviews
 
 0.16.3
 ======
