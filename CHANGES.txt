@@ -26,6 +26,7 @@ to the tracker.
 - #82: Migration of the database for the first module sometimes does not work
 - #85: News can't be marked as read
 - #50: Change behavior of "click-seaerch-filter" in overviews
+- #37: Change ownership only for admins
 
 0.16.3
 ======
