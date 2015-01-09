@@ -13,6 +13,7 @@
     <link href="${request.static_path('ringo:static/css/layout.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/css/widgets.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/css/style.css')}" rel="stylesheet" media="screen">
+    <link href="${request.static_path('ringo:static/font-awesome/css/font-awesome.min.css')}" rel="stylesheet">
     % for filename in formbar_css_filenames: 
       <link href="${request.static_path('ringo:static/formbar/%s' % filename)}" rel="stylesheet" media="screen">
     % endfor
