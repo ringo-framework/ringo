@@ -64,7 +64,8 @@ class TableConfig:
                         "label": "Label",
                         "width": "width",
                         "screen": "xlarge",
-                        "expand": true
+                        "expand": true,
+                        "filter": false
                     }
                 ]
                 "settings": {
@@ -94,7 +95,10 @@ class TableConfig:
       option. Note that this option is only usefull for selection fields
       in *formbar* which do not have a real relation attached. In all
       other cases the reference values are expanded automatically.
-
+    * *filter*: The filter determines if the rendered link is a filter
+      link. A filter link is a shortcut to trigger a search with the
+      current value of the field in the current column over all items.
+      Defaults to No.
 
     Further the table has some table wide configuration options:
 
