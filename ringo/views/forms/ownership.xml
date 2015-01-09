@@ -2,11 +2,19 @@
 <configuration>
   <source>
     <!-- Define different entity types -->
+    <entity id="_admin" name="_admin">
+      <renderer type="hidden"></renderer>
+    </entity>
+    <entity id="_groups" name="_groups">
+      <renderer type="hidden"></renderer>
+    </entity>
     <entity id="e1" name="owner" label="Owner">
       <renderer type="dropdown"/>
+      <help>Only users with a administrative role for this item is allowed to
+      change the owner.</help>
     </entity>
     <entity id="e2" name="group" label="Group">
-      <renderer type="dropdown"/>
+      <renderer type="dropdown" filter="( %name in $_groups ) or ( $_admin == 'True' )"/>
     </entity>
   </source>
   <form id="ownership-form-read" readonly="true">
@@ -19,10 +27,16 @@
   </form>
   <form id="ownership-form-update" autocomplete="off" method="POST" enctype="multipart/form-data">
     <row>
-      <col><field ref="e1"/></col>
+      <if expr="$_admin == 'True'" type="readonly">
+        <col><field ref="e1"/></col>
+      </if>
     </row>
     <row>
-      <col><field ref="e2"/></col>
+      <col>
+        <field ref="_admin"/>
+        <field ref="_groups"/>
+        <field ref="e2"/>
+      </col>
     </row>
   </form>
 </configuration>
