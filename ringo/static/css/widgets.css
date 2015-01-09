@@ -53,14 +53,14 @@
     margin-bottom: 10px;
 }
 
-.table td.link:hover {
-    cursor: pointer;
+.table td a.link {
+  text-decoration: none;
+  color: black;
 }
 
 .table td a.filter {
-  text-decoration: None;
-  color: black;
-  cursor:zoom-in;
+  border-top: 1px dotted;
+  cursor: zoom-in;
 }
 
 table.content-shorten {
