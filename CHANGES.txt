@@ -10,24 +10,27 @@ to the tracker.
 
 0.17.0
 ======
-- Added clientsided pageination function.
-- Enhanced search. Added option to add a operators (<, <=, =>, >, ==,
-  !=) to the search. If the user has provided a opertors the search will
-  use this operator to do the search instead of a search based on a
-  regular expression. This is usefull for searches on dates.
+- Improved overview and searching.
+	- Added clientsided pageination function.
+	- Added option to add a operators (<, <=, =>, >, ==, !=) to the
+	  search. If the user has provided a opertors the search will use this
+	  operator to do the search instead of a search based on a regular
+	  expression. This is usefull for searches on dates.
+- Improved exporting.
+	- Added RecursiveRelation Exporter.
+	- Added ODF Converter.
 - Insert scaffold of a formdefinition when creating a new form.
-- #67: No ISE on reading data from the import file. Show error dialog now.
-- #48: Add support to drop columns in SQLite.
-- Added RecursiveRelation Exporter.
-- Added ODF Converter.
 - Added support for translations in extensions.
 - Status messages are now rendered at the top of the page.
 - Added option to set a custom header with logo above the navbar more easily.
+- #37: Change ownership only for admins
+- #48: Add support to drop columns in SQLite.
+- #50: Change behavior of "click-seaerch-filter" in overviews
+- #64: Better indication of current edit mode
+- #67: No ISE on reading data from the import file. Show error dialog now.
+- #68: Installation/Setup fails because of missing files
 - #82: Migration of the database for the first module sometimes does not work
 - #85: News can't be marked as read
-- #50: Change behavior of "click-seaerch-filter" in overviews
-- #37: Change ownership only for admins
-- #64: Better indication of current edit mode
 
 0.16.3
 ======
