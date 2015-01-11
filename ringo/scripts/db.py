@@ -50,6 +50,7 @@ def get_last_revision_file(args):
     """Will return the name of the latest revision file of the application"""
     script_path = []
     script_path.append(get_app_location(args.app))
+    script_path.append(args.app)
     script_path.append("alembic")
     script_path.append("versions")
     cwd = os.getcwd()
@@ -76,10 +77,12 @@ def copy_initial_migration_scripts(args):
     """
     dst_path = []
     dst_path.append(get_app_location(args.app))
+    dst_path.append(args.app)
     dst_path.append("alembic")
     dst_path.append("versions")
     src_path = []
     src_path.append(get_app_location(args.base))
+    src_path.append(args.base)
     src_path.append("alembic")
     src_path.append("versions")
 
