@@ -1,3 +1,11 @@
+function getLanguage() {
+    var lang = getLanguageFromBrowser();
+    if ( lang == "german" ) {
+        return lang
+    } else {
+        return "default"
+    }
+}
 $( document ).ready(function() {
     $('.dialog').modal();
     $('.fade.out').delay(3 * 1000).fadeOut();
@@ -9,7 +17,7 @@ $( document ).ready(function() {
     });
     $('.datatable-paginated').dataTable( {
            "oLanguage": {
-                "sUrl": "/static/js/datatables/i18n/"+getLanguageFromBrowser()+".json"
+                "sUrl": "/static/js/datatables/i18n/"+getLanguage()+".json"
            },
            "bPaginate": true,
            "sPaginationType": "full_numbers",
@@ -23,7 +31,7 @@ $( document ).ready(function() {
      });
     $('.datatable-simple').dataTable( {
            "oLanguage": {
-                "sUrl": "/static/js/datatables/i18n/"+getLanguageFromBrowser()+".json"
+                "sUrl": "/static/js/datatables/i18n/"+getLanguage()+".json"
            },
            "bPaginate": false,
            "bLengthChange": false,
@@ -36,7 +44,7 @@ $( document ).ready(function() {
     });
     $('.datatable-blank').dataTable({
           "oLanguage": {
-               "sUrl": "/static/js/datatables/i18n/"+getLanguageFromBrowser()+".json"
+               "sUrl": "/static/js/datatables/i18n/"+getLanguage()+".json"
           },
           "bPaginate": false,
           "bLengthChange": false,
