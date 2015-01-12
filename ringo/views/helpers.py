@@ -84,10 +84,10 @@ def get_rendered_ownership_form(request, readonly=None):
     form = get_ownership_form(request, readonly)
     modul = get_item_modul(request, item)
     _groups = [str(g.name) for g in request.user.groups]
-    _admin = _has_administrational_role(modul)
+    _admin = (_has_administrational_role(modul)
+              or has_role(request.user, "admin"))
     values = {"_admin": _admin,
-              "_groups": _groups
-    }
+              "_groups": _groups}
     if isinstance(item, Owned):
         return form.render(values=values)
     else:
