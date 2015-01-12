@@ -110,10 +110,11 @@ def get_ownership_form(request, readonly=None):
     item = get_item_from_request(request)
     db = request.db
     csrf_token = request.session.get_csrf_token()
+    eval_url=build_eval_url(request)
     if (readonly is None and isinstance(item, Owned)):
         readonly = not (item.is_owner(request.user)
                         or has_role(request.user, "admin"))
-    return _get_ownership_form(item, db, csrf_token, readonly)
+    return _get_ownership_form(item, db, csrf_token, eval_url, readonly)
 
 
 def get_rendered_logbook_form(request, readonly=None):
@@ -134,8 +135,9 @@ def get_logbook_form(request, readonly=None):
     translate = request.translate
     renderers = add_renderers({})
     csrf_token = request.session.get_csrf_token()
+    eval_url=build_eval_url(request)
     return _get_logbook_form(item, db, translate, renderers,
-                             csrf_token, readonly)
+                             csrf_token, eval_url, readonly)
 
 
 def render_item_form(request, form, values=None, validate=True):
@@ -191,7 +193,7 @@ def get_item_form(name, request, renderers=None):
                                       'itemid': item.id},
                 request=request,
                 csrf_token=request.session.get_csrf_token(),
-                eval_url='/rest/rule/evaluate')
+                eval_url=build_eval_url(request))
     return form
 
 
