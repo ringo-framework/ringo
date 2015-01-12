@@ -87,7 +87,7 @@ function markNewsAsRead(row, id) {
       'Accept' : 'application/json',
       'Content-Type' : 'application/json'
     },
-    url : '${request.host_url}/rest/news/'+id+'/markasread',
+    url : '${request.application_url}/rest/news/'+id+'/markasread',
     type : 'PUT',
     success : function(response, textStatus, jqXhr) {
       /* TODO: Try to animate the deletion of the column. Tried to
