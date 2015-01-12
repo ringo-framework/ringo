@@ -23,6 +23,18 @@ from ringo.model.mixins import (
 
 log = logging.getLogger(__name__)
 
+def build_eval_url(request, eval_url='/rest/rule/evaluate'):
+    """Will build the eval_url based on the current application_url.
+    This is needed in case the application is hosted on a subpath. e.g.
+    localhost:6543/foo.
+
+    :request: current request
+    :eval_url: eval_url
+    :returns: eval_url
+    """
+    base_url = request.application_url
+    return base_url + eval_url
+
 
 def get_blobform_config(request, item, formname):
     """Helper function used in the create_ method to setup the create
