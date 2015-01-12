@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.com
+
+[ringo.main]
+file_filer = ringo/locale/en/LC_MESSAGES/ringo.po
+source_file = ringo/locale/ringo.pot
+source_lang = en
+type = PO
+trans.de = ringo/locale/de/LC_MESSAGES/ringo.po
