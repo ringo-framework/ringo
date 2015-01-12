@@ -8,6 +8,11 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
+0.17.1
+======
+- Added configuration for transifex
+- Fixed error when opening News items.
+
 0.17.0
 ======
 - Improved overview and searching.
