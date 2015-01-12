@@ -24,7 +24,7 @@ from ringo.lib.helpers import prettify
     <tr id="newsentry_${item.id}">
       % for field in tableconfig.get_columns():
       % if url:
-      <td onclick="openItem('${url}')" class="link">
+      <td class="link">
       % else:
       <td>
       % endif
@@ -34,12 +34,14 @@ from ringo.lib.helpers import prettify
             except AttributeError:
               value = "NaF"
           %>
+          <a href="${url}">
           ## Escape value here
           % if isinstance(value, list):
             ${", ".join(unicode(v) for v in value) | h}
           % else:
             ${value}
           % endif
+          </a>
       </td>
       % endfor
       <td>
