@@ -17,7 +17,8 @@ def get_ownership_form(item, db, csrf_token, eval_url,
         config = _get_form_config('ringo', 'ownership.xml', 'ownership-form-update')
     return Form(config, item, db,
                 csrf_token=csrf_token,
-                eval_url=eval_url)
+                eval_url=eval_url,
+                url_prefix=url_prefix)
 
 
 def get_logbook_form(item, db, translate, renderers,
@@ -30,7 +31,8 @@ def get_logbook_form(item, db, translate, renderers,
                 csrf_token=csrf_token,
                 translate=translate,
                 renderers=renderers,
-                eval_url=eval_url)
+                eval_url=eval_url,
+                url_prefix=url_prefix)
 
 
 def get_item_form(item, name, db, translate, renderers,
