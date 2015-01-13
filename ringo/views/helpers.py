@@ -23,17 +23,7 @@ from ringo.model.mixins import (
 
 log = logging.getLogger(__name__)
 
-def build_eval_url(request, eval_url='/rest/rule/evaluate'):
-    """Will build the eval_url based on the current application_url.
-    This is needed in case the application is hosted on a subpath. e.g.
-    localhost:6543/foo.
-
-    :request: current request
-    :eval_url: eval_url
-    :returns: eval_url
-    """
-    base_url = request.application_url
-    return base_url + eval_url
+eval_url = '/rest/rule/evaluate'
 
 
 def get_blobform_config(request, item, formname):
@@ -110,11 +100,12 @@ def get_ownership_form(request, readonly=None):
     item = get_item_from_request(request)
     db = request.db
     csrf_token = request.session.get_csrf_token()
-    eval_url=build_eval_url(request)
+    url_prefix = request.application_url
     if (readonly is None and isinstance(item, Owned)):
         readonly = not (item.is_owner(request.user)
                         or has_role(request.user, "admin"))
-    return _get_ownership_form(item, db, csrf_token, eval_url, readonly)
+    return _get_ownership_form(item, db, csrf_token, eval_url,
+                               readonly, url_prefix)
 
 
 def get_rendered_logbook_form(request, readonly=None):
@@ -135,9 +126,9 @@ def get_logbook_form(request, readonly=None):
     translate = request.translate
     renderers = add_renderers({})
     csrf_token = request.session.get_csrf_token()
-    eval_url=build_eval_url(request)
+    url_prefix = request.application_url
     return _get_logbook_form(item, db, translate, renderers,
-                             csrf_token, eval_url, readonly)
+                             csrf_token, eval_url, readonly, url_prefix)
 
 
 def render_item_form(request, form, values=None, validate=True):
@@ -193,7 +184,8 @@ def get_item_form(name, request, renderers=None):
                                       'itemid': item.id},
                 request=request,
                 csrf_token=request.session.get_csrf_token(),
-                eval_url=build_eval_url(request))
+                eval_url=eval_url,
+                url_prefix=request.application_url)
     return form
 
 

@@ -7,7 +7,8 @@ from ringo.lib.cache import CACHE_FORM_CONFIG
 from ringo.lib.helpers import get_path_to
 
 
-def get_ownership_form(item, db, csrf_token, eval_url, readonly=None):
+def get_ownership_form(item, db, csrf_token, eval_url,
+                       readonly=None, url_prefix=None):
     if readonly:
         config = _get_form_config('ringo', 'ownership.xml', 'ownership-form-read')
     else:
@@ -18,7 +19,7 @@ def get_ownership_form(item, db, csrf_token, eval_url, readonly=None):
 
 
 def get_logbook_form(item, db, translate, renderers,
-                     csrf_token, eval_url, readonly=None):
+                     csrf_token, eval_url, readonly=None, url_prefix=None):
     if readonly:
         config = _get_form_config('ringo', 'logbook.xml', 'logbook-form-read')
     else:
