@@ -142,7 +142,10 @@ class ExportDialogRenderer(DialogRenderer):
         config = Config(load(get_path_to_form_config('export.xml', 'ringo')))
         form_config = config.get_form('default')
         self.form = Form(form_config,
-                         csrf_token=self._request.session.get_csrf_token())
+                         csrf_token=self._request.session.get_csrf_token(),
+                         dbsession=request.db,
+                         eval_url=eval_url,
+                         url_prefix=request.application_url)
 
     def render(self, items):
         values = {}
@@ -173,7 +176,10 @@ class ImportDialogRenderer(DialogRenderer):
         config = Config(load(get_path_to_form_config('import.xml', 'ringo')))
         form_config = config.get_form('default')
         self.form = Form(form_config,
-                         csrf_token=self._request.session.get_csrf_token())
+                         csrf_token=self._request.session.get_csrf_token(),
+                         dbsession=request.db,
+                         eval_url=eval_url,
+                         url_prefix=request.application_url)
 
     def render(self, items):
         values = {}
@@ -208,7 +214,9 @@ class PrintDialogRenderer(DialogRenderer):
         self.form = Form(form_config,
                          item=clazz,
                          csrf_token=self._request.session.get_csrf_token(),
-                         dbsession=request.db)
+                         dbsession=request.db,
+                         eval_url=eval_url,
+                         url_prefix=request.application_url)
 
     def render(self):
         values = {}
