@@ -2,6 +2,9 @@
 <configuration>
   <source>
     <!-- Define different entity types -->
+    <entity id="_isownershipform" name="_isownershipform" value="1">
+      <renderer type="hidden"></renderer>
+    </entity>
     <entity id="_admin" name="_admin">
       <renderer type="hidden"></renderer>
     </entity>
@@ -33,6 +36,7 @@
     </row>
     <row>
       <col>
+        <field ref="_isownershipform"/>
         <field ref="_admin"/>
         <field ref="_groups"/>
         <field ref="e2"/>

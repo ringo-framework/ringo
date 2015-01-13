@@ -35,7 +35,7 @@ def update(request, callback=None, renderers={}):
     """
     handle_history(request)
     handle_params(request)
-    if 'owner' in request.params:
+    if '_isownershipform' in request.params:
         form = get_ownership_form(request)
     else:
         form = get_item_form('update', request, renderers)
