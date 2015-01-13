@@ -3,6 +3,7 @@ import logging
 from ringo.model.base import BaseFactory, get_item_list
 from ringo.model.user import User
 from ringo.lib.table import get_table_config
+from ringo.lib.helpers.misc import get_item_modul
 from ringo.lib.security import has_permission
 from ringo.lib.renderer import (
     ListRenderer
@@ -19,8 +20,24 @@ _bundle_request_handlers = {}
 
 log = logging.getLogger(__name__)
 
-def set_bundle_action_handler(key, handler):
-    _bundle_request_handlers[key] = handler
+
+def get_bundle_action_handler(mapping, action, module):
+    if module in mapping:
+        views = mapping[module]
+        if action in views:
+            return views[action]
+    return mapping["default"].get(action)
+
+
+def set_bundle_action_handler(key, handler, module="default"):
+    if module in _bundle_request_handlers:
+        mod_actions = _bundle_request_handlers.get(module)
+    else:
+        _bundle_request_handlers[module] = {}
+        mod_actions = _bundle_request_handlers.get(module)
+    mod_actions[key] = handler
+    _bundle_request_handlers[module] = mod_actions
+
 
 def handle_paginating(clazz, request):
     """Returns a tupe of current page and pagesize. The default page and
@@ -56,6 +73,7 @@ def handle_paginating(clazz, request):
     request.session.save()
 
     return (page, size)
+
 
 def handle_sorting(clazz, request):
     """Return a tuple of *fieldname* and *sortorder* (asc, desc). The
@@ -181,6 +199,7 @@ def get_search(clazz, request):
 
 def bundle_(request):
     clazz = request.context.__model__
+    module = get_item_modul(request, clazz)
     handle_history(request)
     handle_params(request)
 
@@ -212,7 +231,10 @@ def bundle_(request):
         item = factory.load(id)
         if has_permission(bundle_action.lower(), item, request):
             items.append(item)
-    return _bundle_request_handlers[bundle_action.lower()](request, items)
+    handler = get_bundle_action_handler(_bundle_request_handlers,
+                                        bundle_action.lower(),
+                                        module.name)
+    return handler(request, items)
 
 
 def list_(request):

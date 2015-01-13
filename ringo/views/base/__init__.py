@@ -30,29 +30,52 @@ from ringo.views.base.print_ import (
 )
 
 web_action_view_mapping = {
-    "list": list_,
-    "create": create,
-    "read": read,
-    "update": update,
-    "delete": delete,
-    "import": import_,
-    "export": export,
-    "print":  print_,
-    "bundle": bundle_,
+    "default": {
+        "list": list_,
+        "create": create,
+        "read": read,
+        "update": update,
+        "delete": delete,
+        "import": import_,
+        "export": export,
+        "print":  print_,
+        "bundle": bundle_,
+    }
 }
 
 rest_action_view_mapping = {
-    "list": rest_list,
-    "create": rest_create,
-    "read": rest_read,
-    "update": rest_update,
-    "delete": rest_delete,
+    "default": {
+        "list": rest_list,
+        "create": rest_create,
+        "read": rest_read,
+        "update": rest_update,
+        "delete": rest_delete,
+    }
 }
 
+def get_action_view(mapping, action, module):
+    if module in mapping:
+        views = mapping[module]
+        if action in views:
+            return views[action]
+    return mapping["default"].get(action)
 
-def set_web_action_view(key, view):
-    web_action_view_mapping[key] = view
+
+def set_web_action_view(key, view, module="default"):
+    if module in web_action_view_mapping:
+        mod_actions = web_action_view_mapping.get(module)
+    else:
+        web_action_view_mapping[module] = {}
+        mod_actions = web_action_view_mapping.get(module)
+    mod_actions[key] = view
+    web_action_view_mapping[module] = mod_actions
 
 
-def set_rest_action_view(key, view):
-    rest_action_view_mapping[key] = view
+def set_rest_action_view(key, view, module="default"):
+    if module in rest_action_view_mapping:
+        mod_actions = rest_action_view_mapping.get(module)
+    else:
+        rest_action_view_mapping[module] = {}
+        mod_actions = rest_action_view_mapping.get(module)
+    mod_actions[key] = view
+    rest_action_view_mapping[module] = mod_actions

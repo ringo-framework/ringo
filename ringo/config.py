@@ -13,7 +13,8 @@ from ringo.model.mixins import Mixin
 from ringo.resources import get_resource_factory
 from ringo.views.base import (
     web_action_view_mapping,
-    rest_action_view_mapping
+    rest_action_view_mapping,
+    get_action_view
 )
 
 log = logging.getLogger(__name__)
@@ -80,9 +81,11 @@ def _setup_web_action(config, action, clazz, view_mapping):
     log.debug("Adding WEB route: %s, %s" % (route_name, route_url))
     config.add_route(route_name, route_url,
                      factory=get_resource_factory(clazz))
-    view_func = view_mapping.get(action_name)
     settings = config.registry.settings
     http_cache = settings.get('security.page_http_cache', '0')
+    view_func = get_action_view(view_mapping,
+                                  action_name,
+                                  name)
     if view_func:
         if action_name == "delete":
             template = "confirm"
@@ -98,10 +101,13 @@ def _setup_web_action(config, action, clazz, view_mapping):
        action_name = "bundle"
        route_name = "%s-%s" % (name, action_name)
        route_url = "%s/%s" % (name, action_name)
+       view_func = get_action_view(view_mapping,
+                                     action_name,
+                                     name)
        log.debug("Adding route: %s, %s" % (route_name, route_url))
        config.add_route(route_name, route_url,
                         factory=get_resource_factory(clazz))
-       config.add_view(view_mapping.get(action_name), route_name=route_name,
+       config.add_view(view_func, route_name=route_name,
                        renderer='/default/bundle.mako',
                        permission='list')
 
@@ -133,7 +139,9 @@ def _setup_rest_action(config, action, clazz, view_mapping):
     }
     name = clazz.__tablename__
     action_name = action.name.lower()
-    view_func = view_mapping.get(action_name)
+    view_func = get_action_view(view_mapping,
+                                  action_name,
+                                  name)
     if not view_func:
         return
     route_name = get_action_routename(clazz, action_name,
@@ -184,7 +192,6 @@ def setup_modul(config, modul):
     for action in modul.actions:
         _setup_web_action(config, action, clazz, web_action_view_mapping)
         _setup_rest_action(config, action, clazz, rest_action_view_mapping)
-
 
 def write_formbar_static_files():
     """Will write the formbar specific css and js files into the formbar
