@@ -13,6 +13,7 @@ from ringo.lib.helpers import (
     get_item_modul
 )
 from ringo.lib.form import (
+    eval_url,
     get_path_to_form_config,
 )
 
@@ -75,6 +76,7 @@ class ConfirmDialogRenderer(DialogRenderer):
         values['ok_url'] = self._request.current_route_path()
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
+        values['eval_url'] = self._request.application_url+eval_url
         return self.template.render(**values)
 
     def _render_body(self, items):
@@ -121,6 +123,7 @@ class ErrorDialogRenderer(DialogRenderer):
             values['ok_url'] = self._request.session['history'].pop()
         else:
             values['ok_url'] = self._request.route_path('home')
+        values['eval_url'] = self._request.application_url+eval_url
         return self.template.render(**values)
 
     def _render_body(self):
@@ -151,6 +154,7 @@ class ExportDialogRenderer(DialogRenderer):
         values['ok_url'] = self._request.current_route_path()
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
+        values['eval_url'] = self._request.application_url+eval_url
         return self.template.render(**values)
 
     def _render_body(self):
@@ -181,6 +185,7 @@ class ImportDialogRenderer(DialogRenderer):
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
         values['overview_url'] = self._request.route_path(get_action_routename(self._item, 'list'))
+        values['eval_url'] = self._request.application_url+eval_url
         values['items'] = items
         values['h'] = ringo.lib.helpers
         return self.template.render(**values)
@@ -214,6 +219,7 @@ class PrintDialogRenderer(DialogRenderer):
         values['ok_url'] = self._request.current_route_path()
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
+        values['eval_url'] = self._request.application_url+eval_url
         return self.template.render(**values)
 
     def _render_body(self):
