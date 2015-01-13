@@ -12,8 +12,9 @@ to the tracker.
 ======
 - Added configuration for transifex
 - Fixed error when opening News items.
-- #37: Further fixes.
 - Init the form with the correct eval_url.
+- #37: Further fixes.
+- #86: Fixed extension specific view mapping.
 
 0.17.0
 ======
