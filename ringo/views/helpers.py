@@ -7,6 +7,7 @@ from formbar.config import (
 from formbar.form import Form
 from ringo.lib.helpers import get_item_modul
 from ringo.lib.form import (
+    eval_url,
     get_form_config,
     get_ownership_form as _get_ownership_form,
     get_logbook_form as _get_logbook_form
@@ -22,8 +23,6 @@ from ringo.model.mixins import (
 )
 
 log = logging.getLogger(__name__)
-
-eval_url = '/rest/rule/evaluate'
 
 
 def get_blobform_config(request, item, formname):

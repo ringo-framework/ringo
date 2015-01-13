@@ -6,6 +6,8 @@ from formbar.helpers import get_css_files, get_js_files
 from ringo.lib.cache import CACHE_FORM_CONFIG
 from ringo.lib.helpers import get_path_to
 
+eval_url = '/rest/rule/evaluate'
+
 
 def get_ownership_form(item, db, csrf_token, eval_url,
                        readonly=None, url_prefix=None):
