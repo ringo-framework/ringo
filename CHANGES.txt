@@ -12,7 +12,9 @@ to the tracker.
 ======
 - Added configuration for transifex
 - Fixed error when opening News items.
-- Init the form with the correct eval_url.
+- Init the form with the correct eval_url. Provide url_prefix when
+  initialising the form.
+- Show hint on errors in formdefinition in formeditor.
 - #37: Further fixes.
 - #86: Fixed extension specific view mapping.
 
