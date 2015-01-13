@@ -37,14 +37,18 @@ def evaluate(request):
 def render(request):
     """Will return a JSONResponse with a rendererd form. The form
     defintion and the formid is provided in the POST request."""
+    _ = request.translate
     form_config = request.POST.get("definition")
     config_name = request.POST.get("formid")
-    config = Config(parse(form_config))
     out = []
-    form_config = config.get_form(config_name)
-    form = Form(form_config, None, request.db,
-                csrf_token=request.session.get_csrf_token())
-    out.append(form.render(buttons=False, outline=False))
+    try:
+        config = Config(parse(form_config))
+        form_config = config.get_form(config_name)
+        form = Form(form_config, None, request.db,
+                    csrf_token=request.session.get_csrf_token())
+        out.append(form.render(buttons=False, outline=False))
+    except Exception as ex:
+        out.append(_('ERROR: %s' % str(ex)))
     data = {"form": "".join(out)}
     return JSONResponse(True, data, {"msg": "Ole!"})
 
