@@ -69,7 +69,11 @@ for item in items:
       % endif
       % for num, col in enumerate(tableconfig.get_columns()):
         % if permission and not field.renderer.nolinks == "true":
+          % if field.renderer.openmodal == "true":
+            <td href="${request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)}" class="${num > 0 and 'hidden-xs'} link modalform">
+          % else:
           <td onclick="openItem('${request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)}')" class="${num > 0 and 'hidden-xs'} link">
+          % endif
         % else:
           <td class="${num > 0 and 'hidden-xs'}">
         % endif

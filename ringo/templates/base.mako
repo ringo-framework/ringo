@@ -31,6 +31,7 @@
     <script src="${request.static_path('ringo:static/js/datatables/dataTables.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.jcountdown.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.timer.js')}"></script>
+    <script src="${request.static_path('ringo:static/js/spin.min.js')}"></script>
     % for filename in formbar_js_filenames: 
       <script src="${request.static_path('ringo:static/formbar/%s' % filename)}"></script>
     % endfor
@@ -76,6 +77,28 @@
     </div>
   </div>
   % endif
+  <div class="modal fade" id="modalform">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Modal title</h4>
+        </div>
+        <div class="modal-body">
+          <p>One fine body&hellip;</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="spinnerContainer" class="modal fade">
+    <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        Loading...
+      </div>
+    </div>
+  </div>
+  </div>
   </body>
 </html>
 
