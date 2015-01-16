@@ -8,6 +8,11 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
+0.18.0
+======
+- Added option to open items in a modal window.
+- Show spinner when opening items in a modal window.
+
 0.17.1
 ======
 - Added configuration for transifex
