@@ -11,20 +11,11 @@ revision = ${repr(up_revision)}
 down_revision = ${repr(down_revision)}
 
 from alembic import op
-from alembic_sqlite.op import drop_column_sqlite
 import sqlalchemy as sa
 ${imports if imports else ""}
 
-drop_column_default = op.drop_column
-def drop_column(tablename, columnname):
-    if op.get_context().dialect.name == 'sqlite':
-        drop_column_sqlite(tablename, [columnname])
-    else:
-        drop_column_default(tablename, columnname)
-op.drop_column = drop_column
-
-INSERTS = """"""
-DELETES = """"""
+UPGRADE = """"""
+DOWNGRADE = """"""
 
 
 def iter_statements(stmts):
@@ -34,9 +25,9 @@ def iter_statements(stmts):
 
 def upgrade():
     ${upgrades if upgrades else "pass"}
-    iter_statements(INSERTS)
+    iter_statements(UPGRADE)
 
 
 def downgrade():
     ${downgrades if downgrades else "pass"}
-    iter_statements(DELETES)
+    iter_statements(DOWNGRADE)

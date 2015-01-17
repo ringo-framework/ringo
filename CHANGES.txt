@@ -23,6 +23,12 @@ to the tracker.
     keys they will be generated now. If you are using SQLite please refer to
     ringo/alembic/versions/46edfd16f379_.py and see how migration is done for
     the base tables.
+- #87 Remove alembic_sqlite dependeny.
+  As alembic now supports some missing operations like add and drop column on
+  SQLite the helper library alembic_sqlite is not needed anymore.
+  Important:
+  * Please search for the string "drop_column_default" and remove this and the
+    following codeblock from your existing migration files.
 
 
 0.17.1
