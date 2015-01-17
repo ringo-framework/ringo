@@ -12,6 +12,18 @@ to the tracker.
 ======
 - Added option to open items in a modal window.
 - Show spinner when opening items in a modal window.
+- #77 Support alembic >= 0.7.1
+  This will detect missing foreign keys in your datatable.
+  Important:
+  * Please update to a recent version of alembic (currently 0.7.4)
+  * In case you are using SQLite: Import
+    ringo/alembic/versions/46edfd16f379_.py migration script to your migration
+    scripts and apply it. This will fix errors in the base ringo model.
+  * Please generate a new migration and apply it. If your missing any foreign
+    keys they will be generated now. If you are using SQLite please refer to
+    ringo/alembic/versions/46edfd16f379_.py and see how migration is done for
+    the base tables.
+
 
 0.17.1
 ======
