@@ -171,7 +171,15 @@ templates of the ''Foo'' application in our application too::
                 foo:templates
                 ringo:templates
 
-3. The initialisation of the database is a little bit different as we want to
+3. In order to have a working migration setup you will need to import the
+model of the base appliction to the model of the inherited application::
+
+       import bar.Model
+
+This will ensure that all the model will be available to alembic. Otherwise
+many tables would be scheduled for a drop.
+
+4. The initialisation of the database is a little bit different as we want to
 initialize the database with the migration scripts of ''Foo''::
         
         bar-admin db init --base foo
