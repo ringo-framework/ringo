@@ -16,9 +16,11 @@ to the tracker.
   This will detect missing foreign keys in your datatable.
   Important:
   * Please update to a recent version of alembic (currently 0.7.4)
-  * In case you are using SQLite: Import
+  * In case you are using SQLite: Merge
     ringo/alembic/versions/46edfd16f379_.py migration script to your migration
-    scripts and apply it. This will fix errors in the base ringo model.
+    scripts and apply it. See
+    http://alembic.readthedocs.org/en/latest/branches.html for more details on
+    merging. This will fix errors in the base ringo model.
   * Please generate a new migration and apply it. If your missing any foreign
     keys they will be generated now. If you are using SQLite please refer to
     ringo/alembic/versions/46edfd16f379_.py and see how migration is done for
