@@ -23,7 +23,7 @@ requires = [
     'waitress',
     'babel',
     'Sphinx',
-    'formbar>=0.8.0',
+    'formbar>=0.9.4',
     'invoke',
     'dogpile.cache',
     'behave',

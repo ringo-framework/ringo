@@ -12,6 +12,7 @@ to the tracker.
 ======
 - Added option to open items in a modal window.
 - Show spinner when opening items in a modal window.
+- Set requirment of formbar to >= 0.9.4.
 - #77 Support alembic >= 0.7.1
   This will detect missing foreign keys in your datatable.
   Important:
