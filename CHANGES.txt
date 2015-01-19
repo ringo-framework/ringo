@@ -13,6 +13,9 @@ to the tracker.
 - Added option to open items in a modal window.
 - Show spinner when opening items in a modal window.
 - Set requirment of formbar to >= 0.9.4.
+- Added 'url_prefix' and 'url_scheme' the server configuration in the template
+  of the ini file in base scaffold. This is usefull if the server is running
+  behind a reverse proxy.
 - #77 Support alembic >= 0.7.1
   This will detect missing foreign keys in your datatable.
   Important:
