@@ -16,6 +16,8 @@ to the tracker.
 - Added 'url_prefix' and 'url_scheme' the server configuration in the template
   of the ini file in base scaffold. This is usefull if the server is running
   behind a reverse proxy.
+- Added options to configure the startup of the ODFConverter. On default the
+  converter is not started! This is a change to the previous behaviour!
 - #77 Support alembic >= 0.7.1
   This will detect missing foreign keys in your datatable.
   Important:

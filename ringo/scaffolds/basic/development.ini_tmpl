@@ -68,6 +68,15 @@ security.header_clickjacking = true
 security.header_csp = false
 
 ###
+# Settings for the Converter
+###
+# Should the converter be started on application start? Set to true to
+# enable converter startup.
+converter.start = false
+# Set python path for the Converter. Defaults to the system python
+# converter.python =
+
+###
 # Mailserver settings
 ###
 mail.host =

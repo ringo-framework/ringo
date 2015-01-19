@@ -95,3 +95,8 @@ Mail
  * mail.default_sender =
  * mail.username =
  * mail.password =
+
+Converter
+=========
+ * converter.start = false
+ * converter.pythonpath =

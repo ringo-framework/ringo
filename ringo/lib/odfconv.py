@@ -7,10 +7,12 @@ log = logging.getLogger(__name__)
 
 
 def setup(config):
-    #  TODO: Load configuration for the python path which is needed for
-    #  pyuno () <2014-12-03 20:32>
-    pythonpath = None
-    CACHE_MISC.set("converter", Converter(python=pythonpath))
+    settings = config.registry.settings
+    pythonpath = settings.get('converter.pythonpath')
+    converter = Converter(python=pythonpath)
+    if settings.get('converter.start') == 'true':
+        converter.start()
+    CACHE_MISC.set("converter", converter)
 
 def get_converter():
     return CACHE_MISC.get("converter")
@@ -22,6 +24,9 @@ class Converter(object):
 
     def __init__(self, python=None):
         self._converter = Convertor(python=python)
+        self._available = False
+
+    def start(self):
         try:
             self._converter._init_server()
             self._available = True
@@ -29,7 +34,6 @@ class Converter(object):
         except:
             log.warning("Office not started. Converter is not"
                         "available. Forgot to install Libreoffice?")
-            self._available = False
 
     def is_available(self):
         return self._available
