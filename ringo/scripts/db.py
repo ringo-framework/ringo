@@ -201,7 +201,7 @@ def handle_db_uuid_command(args):
                 item.reset_uuid()
                 updated += 1
         else:
-            item.uuid.reset_uuid()
+            item.reset_uuid()
             created += 1
     try:
         transaction.commit()
