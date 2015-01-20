@@ -165,6 +165,9 @@ def setup_db_parser(subparsers, parent):
     loaddata_parser.add_argument('fixture',
                         metavar="fixture",
                         help="Path to the importfile")
+    loaddata_parser.add_argument('--loadbyid',
+                        action="store_true",
+                        help="Load data by id and not by uuid")
 
     # UUID command
     uuid_parser = sp.add_parser('resetuuid',

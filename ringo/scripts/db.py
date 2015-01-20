@@ -170,7 +170,7 @@ def handle_db_loaddata_command(args):
     updated = 0
     created = 0
     with open(args.fixture) as f:
-        items = importer.perform(f.read())
+        items = importer.perform(f.read(), use_uuid=(not args.loadbyid))
         for item in [item[0] for item in items]:
             # Add all new items to the session
             if not item.id:

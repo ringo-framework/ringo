@@ -351,7 +351,7 @@ class Importer(object):
         """
         return {}
 
-    def perform(self, data, user=None, translate=lambda x: x):
+    def perform(self, data, user=None, translate=lambda x: x, use_uuid=True):
         """Will return a list of imported items. The list will contain a
         tupel of the item and a string which gives information on the
         operaten (update, create). For create operations the new item
@@ -360,6 +360,7 @@ class Importer(object):
         :data: Importdata as string (JSON, XML...)
         :user: User object. Used when creating objects.
         :translate: Translation method.
+        :use_uuid: Loading items by their uuid.
         :returns: List of imported items
 
         """
@@ -368,20 +369,25 @@ class Importer(object):
         factory = self._clazz.get_item_factory()
         _ = translate
         for values in import_data:
-            uuid = values.get('uuid')
+            if use_uuid:
+                id = values.get('uuid')
+            else:
+                id = values.get('id')
             try:
+                print id, use_uuid
                 # uuid might be empty for new items, which will raise an
                 # error on loading.
-                item = factory.load(uuid or "thisuuiddoesnotexist", uuid=True)
+                item = factory.load(id or "thisiddoesnotexist",
+                                    uuid=use_uuid)
                 operation = _("UPDATE")
             except:
                 item = factory.create(user=user)
                 operation = _("CREATE")
             # Ignore id, uuid field in import.
-            if "id" in values:
+            if use_uuid and "id" in values:
                 del values["id"]
-            if "uuid" in values:
-                del values["uuid"]
+            #if "uuid" in values:
+            #    del values["uuid"]
             item.set_values(values)
             imported_items.append((item, operation))
         return imported_items
