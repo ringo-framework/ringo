@@ -18,6 +18,10 @@ to the tracker.
   behind a reverse proxy.
 - Added options to configure the startup of the ODFConverter. On default the
   converter is not started! This is a change to the previous behaviour!
+- Loading data in ringo-admin command can optinally be done by using the ID of
+  the item instead of the default UUID. This is usefull for initially loading
+  data after creating a database in case not all entries in the database have
+  a UUID.
 - #77 Support alembic >= 0.7.1
   This will detect missing foreign keys in your datatable.
   Important:
