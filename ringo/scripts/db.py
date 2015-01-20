@@ -181,7 +181,8 @@ def handle_db_loaddata_command(args):
         try:
             transaction.commit()
             print "Updated %s items, Created %s items" % (updated, created)
-        except:
+        except Exception as e:
+            print str(e)
             print "Loading data failed!"
 
 def handle_db_uuid_command(args):
