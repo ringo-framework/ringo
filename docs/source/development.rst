@@ -554,6 +554,60 @@ Change the name of the application
 The name of the application is defined in the "ini" file. Check the
 ``app.title`` configuration variable.
 
+Providing initial data for the models
+=====================================
+Initial data can inserted in the application by loading fixtures. Fixtures are
+basically the export of the item of a model in JSON format. Actually the whole
+loading and saving data is implemented by using the importer and exporter.
+
+The folder for the fixtures should be named *fixtures* and located in the
+application folder.
+
+Creating and saving initial data
+--------------------------------
+Initial data can be created by entering the data in the web interface or by
+directly editing the fixtures. I recommend to edit the data in the web interface.
+
+After the initial data has been entered it is time to save the data as
+fixture. This can be achieved by invoking the ringo-admin command::
+
+        ringo-admin db savedata <modulname> > fixture.json
+
+This print the export **all** items of the modul to stdout.
+
+The name of the modul name is identical with the name of the database table
+which has a appended "s". E.g the *user* modul becomes to *users*. This is
+even true if the appended "s" is written wrong.
+
+I recommend to save the fixture with a name that make it possible to know in
+which order the fixture must be loaded e.g
+
+ #. 01_users.json
+ #. 02_usergroups.json
+ #. 03_profiles
+ #. ...
+ #. 99_foo.json
+
+Loading initial data
+--------------------
+The initial data can inserted or updated in the application by loading the
+fixture::
+        
+        ringo-admin db loaddata --loadbyid <modulname> <fixture>
+
+This will load the data in the fixture and insert or update the items in the
+database. Deleting items is not supported.
+
+The option *--loadbyid* changes the mode how exiting items in the database are
+loaded for either update or, in case there is no record found, creating a new
+item. The default is loading mechanism is loading by  the items UUID. But this
+isn't practical for loading initial data.
+
+.. important::
+   Please note that you must take care to load the fixtures in correct order,
+   because to keep the integrity of the database.
+
+
 Tests
 *****
 Ringo come two types of tests:
