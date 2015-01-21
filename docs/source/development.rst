@@ -624,4 +624,4 @@ the code coverage.
 
 Translation
 ***********
-Translation of ringo is managed using `the Transifex webservice <https://www.transifex.com/projects/p/plorma/>`_
+Translation of ringo is managed using `the Transifex webservice <https://www.transifex.com/projects/p/ringo/>`_
