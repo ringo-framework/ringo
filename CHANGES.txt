@@ -22,6 +22,9 @@ to the tracker.
   the item instead of the default UUID. This is usefull for initially loading
   data after creating a database in case not all entries in the database have
   a UUID.
+- Add support for import and and export of NM-relations. (Experimental). To
+  enable this feature simply add the --include-relations to the savedata
+  command.
 - #77 Support alembic >= 0.7.1
   This will detect missing foreign keys in your datatable.
   Important:
