@@ -166,7 +166,7 @@ def handle_db_loaddata_command(args):
     session = get_session(os.path.join(*path))
     modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == args.modul).all()[0].clazzpath
     modul = dynamic_import(modul_clazzpath)
-    importer = JSONImporter(modul)
+    importer = JSONImporter(modul, session)
     items = []
     updated = 0
     created = 0

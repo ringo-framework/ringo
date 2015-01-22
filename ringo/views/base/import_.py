@@ -35,7 +35,7 @@ def _import(request):
     request.POST.get('file').file.seek(0)
     importfile = request.POST.get('file').file.read()
     if request.POST.get('format') == 'json':
-        importer = JSONImporter(clazz)
+        importer = JSONImporter(clazz, request.db)
     elif request.POST.get('format') == 'csv':
         importer = CSVImporter(clazz)
     return importer.perform(importfile, request.user, request.translate)
