@@ -199,13 +199,18 @@ class Exporter(object):
 
     """Docstring for Exporter. """
 
-    def __init__(self, clazz, fields=None, serialized=True):
+    def __init__(self, clazz, fields=None, serialized=True, relations=False):
         """Base exporter to export items of the given class. The
         exporter will return a list of dictionarys with key values pairs
         of the values for each items which should be exported. The
         fields to be exported can be configured. You can configure if
-        the values should be serialized too. Note behaviour on
-        serialized relations.
+        the values should be serialized too.
+
+        On default no relations will be exported. This can be changed by
+        either setting the relations flag to true or defining relations
+        explicit in the fields attribute.
+
+        Exported relations will the id of the linked items.
 
         :clazz: Clazz of the items which will be exported
         :fields: List of fields and relations which should be exported.
@@ -223,6 +228,7 @@ class Exporter(object):
         self._clazz = clazz
         self._fields = fields
         self._serialized = serialized
+        self._relations = relations
 
     def serialize(self, data):
         """Will convert the given python data dictionary into a string
@@ -262,7 +268,8 @@ class Exporter(object):
                 item.reset_uuid()
             if self._fields is None:
                 # Default export. Export all fields excluding relations
-                values = item.get_values(serialized=self._serialized)
+                values = item.get_values(serialized=self._serialized,
+                                         include_relations=self._relations)
             else:
                 values = {}
                 for field in self._fields:
