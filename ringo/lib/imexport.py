@@ -6,10 +6,10 @@ import csv
 import codecs
 import cStringIO
 import sets
+import sqlalchemy as sa
 
 from ringo.model.base import BaseItem
 from ringo.lib.helpers import serialize
-from ringo.lib.alchemy import get_columns_from_clazz
 
 log = logging.getLogger(__name__)
 
@@ -314,20 +314,24 @@ class CSVExporter(Exporter):
 class Importer(object):
     """Docstring for Importer."""
 
-    def __init__(self, clazz):
+    def __init__(self, clazz, db=None):
         """@todo: to be defined1.
 
         :clazz: The clazz for which we will import data
 
         """
         self._clazz = clazz
+        self._db = db
         self._clazz_type = self._get_types(clazz)
 
     def _get_types(self, clazz):
         type_mapping = {}
-        for col in get_columns_from_clazz(clazz):
-            prop = getattr(clazz, col)
-            type_mapping[col] = str(prop.type)
+        mapper = sa.orm.class_mapper(clazz)
+        for prop in mapper.iterate_properties:
+            if isinstance(prop, sa.orm.RelationshipProperty):
+                type_mapping[prop.key] = str(prop.direction.name)
+            else:
+                type_mapping[prop.key] = str(prop.columns[0].type)
         return type_mapping
 
     def _deserialize_dates(self, obj):
@@ -356,6 +360,30 @@ class Importer(object):
                 obj[field] = datetime.datetime.strptime(
                     obj[field], "%Y-%m-%d %H:%M:%S")
         return obj
+
+    def _deserialize_relations(self, obj):
+        """Will deserialize items in a MANYTOMANY relation. It will
+        replace the id values of the related items with the loaded
+        items. This only works if there is a db connection available.
+
+        :obj: Deserialized dictionary from basic deserialisation
+        :returns: Deserialized dictionary with additional MANYTOMANY
+        relations.
+        """
+        for field in obj.keys():
+            if self._clazz_type[field] == "MANYTOMANY":
+                # Remove the items from the list if there is no db
+                # connection.
+                if not self._db:
+                    del obj[field]
+                    continue
+                clazz = getattr(self._clazz, field).mapper.class_
+                obj[field] = []
+                for item_id in obj[field]:
+                    q = self._db.query(clazz).filter(clazz.id == item_id)
+                    obj[field].append(q.one())
+        return obj
+
 
     def deserialize(self, data):
         """Will convert the string data into a dictionary like data.
@@ -411,7 +439,8 @@ class JSONImporter(Importer):
     """Docstring for JSONImporter."""
 
     def _deserialize_hook(self, obj):
-        return self._deserialize_dates(obj)
+        obj = self._deserialize_dates(obj)
+        return self._deserialize_relations(obj)
 
     def deserialize(self, data):
         """Will convert the JSON data back into a dictionary with python values
