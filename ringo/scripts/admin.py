@@ -135,6 +135,9 @@ def setup_db_parser(subparsers, parent):
     savedata_parser.add_argument('modul',
                         metavar="modul",
                         help="Name of the Modul")
+    savedata_parser.add_argument('--include-relations',
+                        action="store_true",
+                        help="Include relations in the export")
 
     # restrict command
     savedata_parser = sp.add_parser('restrict',
