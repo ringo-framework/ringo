@@ -7,11 +7,19 @@ import codecs
 import cStringIO
 import sets
 
+from ringo.model.base import BaseItem
 from ringo.lib.helpers import serialize
 from ringo.lib.alchemy import get_columns_from_clazz
 
 log = logging.getLogger(__name__)
 
+
+class ExtendedJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, BaseItem):
+            return obj.id
+            # Let the base class default method raise the TypeError
+        return json.JSONEncoder.default(self, obj)
 
 class RecursiveExporter(object):
 
@@ -270,7 +278,7 @@ class JSONExporter(Exporter):
     """Docstring for JSONExporter. """
 
     def serialize(self, data):
-        return json.dumps(data)
+        return json.dumps(data, cls=ExtendedJSONEncoder)
 
 
 class CSVExporter(Exporter):
