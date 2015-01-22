@@ -374,7 +374,6 @@ class Importer(object):
             else:
                 id = values.get('id')
             try:
-                print id, use_uuid
                 # uuid might be empty for new items, which will raise an
                 # error on loading.
                 item = factory.load(id or "thisiddoesnotexist",
