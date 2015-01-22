@@ -155,7 +155,8 @@ def handle_db_savedata_command(args):
     session = get_session(os.path.join(*path))
     modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == args.modul).all()[0].clazzpath
     modul = dynamic_import(modul_clazzpath)
-    exporter = JSONExporter(modul)
+    exporter = JSONExporter(modul, serialized=False,
+                            relations=args.include_relations)
     print exporter.perform(session.query(modul).all())
 
 def handle_db_loaddata_command(args):
