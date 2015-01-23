@@ -19,6 +19,9 @@ class ExtendedJSONEncoder(json.JSONEncoder):
         if isinstance(obj, BaseItem):
             return obj.id
             # Let the base class default method raise the TypeError
+        if isinstance(obj, datetime.date):
+            return str(obj)
+            # Let the base class default method raise the TypeError
         return json.JSONEncoder.default(self, obj)
 
 class RecursiveExporter(object):
