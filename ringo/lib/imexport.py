@@ -365,26 +365,33 @@ class Importer(object):
         return obj
 
     def _deserialize_relations(self, obj):
-        """Will deserialize items in a MANYTOMANY relation. It will
-        replace the id values of the related items with the loaded
-        items. This only works if there is a db connection available.
+        """Will deserialize items in a MANYTOMANY relation. Other
+        relations do not need to be handled as they should have a
+        foreign key to the related item which is part of the items field
+        anyway. It will replace the id values of the related items with
+        the loaded items. This only works if there is a db connection
+        available.
 
         :obj: Deserialized dictionary from basic deserialisation
         :returns: Deserialized dictionary with additional MANYTOMANY
         relations.
         """
         for field in obj.keys():
-            if self._clazz_type[field] == "MANYTOMANY":
+            ftype = self._clazz_type[field]
+            # Handle all types of relations...
+            if  ftype in ["MANYTOMANY", "MANYTOONE",
+                          "ONETOONE", "ONETOMANY"]:
                 # Remove the items from the list if there is no db
-                # connection.
-                if not self._db:
+                # connection or of there are not MANYTOMANY.
+                if not self._db or (ftype != "MANYTOMANY"):
                     del obj[field]
                     continue
                 clazz = getattr(self._clazz, field).mapper.class_
-                obj[field] = []
+                tmp = []
                 for item_id in obj[field]:
                     q = self._db.query(clazz).filter(clazz.id == item_id)
-                    obj[field].append(q.one())
+                    tmp.append(q.one())
+                obj[field] = tmp
         return obj
 
 
