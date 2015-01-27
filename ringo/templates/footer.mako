@@ -39,12 +39,11 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">${_('Ringo Documentation')}</h4>
+        <h4 class="modal-title" id="myModalLabel">${_('%s Documentation' % h.get_app_title())}</h4>
       </div>
       <div class="modal-body">
         <iframe
-        src="${request.static_path('ringo:static/doc/html/index.html')}"
-        frameborder="0" width="100%" height="300"></iframe>
+        src="${request.static_path('%s:static/doc/html/index.html' % h.get_app_name())}" frameborder="0" width="100%" height="300"></iframe>
       </div>
     </div>
   </div>
