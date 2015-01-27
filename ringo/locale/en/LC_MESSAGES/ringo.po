@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-01-11 19:57+0100\n"
+"POT-Creation-Date: 2015-01-27 16:29+0100\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -17,29 +17,29 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: ringo/lib/imexport.py:376
+#: ringo/lib/imexport.py:437
 msgid "UPDATE"
 msgstr ""
 
-#: ringo/lib/imexport.py:379
+#: ringo/lib/imexport.py:440
 msgid "CREATE"
 msgstr ""
 
-#: ringo/lib/renderer/dialogs.py:72
+#: ringo/lib/renderer/dialogs.py:73
 msgid "Confirm ${Action}"
 msgstr ""
 
-#: ringo/lib/renderer/dialogs.py:86
+#: ringo/lib/renderer/dialogs.py:88
 msgid "Do you really want to ${action} the following ${item} items?"
 msgstr ""
 
-#: ringo/lib/renderer/dialogs.py:96
+#: ringo/lib/renderer/dialogs.py:98
 msgid ""
 "Please press \"${Action}\" to ${action} the item. Press \"Cancel\" to "
 "cancel the action."
 msgstr ""
 
-#: ringo/lib/renderer/form.py:429
+#: ringo/lib/renderer/form.py:431
 msgid "New entry"
 msgstr ""
 
@@ -61,42 +61,42 @@ msgstr ""
 msgid "This application is based on the Ringo web application framework."
 msgstr ""
 
-#: ringo/templates/base.mako:68
+#: ringo/templates/base.mako:69
 msgid "Logout will happen soon"
 msgstr ""
 
-#: ringo/templates/base.mako:70
+#: ringo/templates/base.mako:71
 msgid ""
 "You will be logged out automatically in a short time because of "
 "inactivity. Please close this dialog and init a new request to renew your"
 " session timer."
 msgstr ""
 
-#: ringo/templates/base.mako:73 ringo/templates/internal/import.mako:41
+#: ringo/templates/base.mako:74 ringo/templates/internal/import.mako:41
 msgid "Ok"
 msgstr ""
 
-#: ringo/templates/base.mako:121
+#: ringo/templates/base.mako:144
 msgid "Advanced"
 msgstr ""
 
-#: ringo/templates/base.mako:123
+#: ringo/templates/base.mako:146
 msgid "Back to"
 msgstr ""
 
-#: ringo/templates/base.mako:126 ringo/templates/footer.mako:7
+#: ringo/templates/base.mako:149 ringo/templates/footer.mako:7
 msgid "Administration"
 msgstr ""
 
-#: ringo/templates/base.mako:127
+#: ringo/templates/base.mako:150
 msgid "Change ownership"
 msgstr ""
 
-#: ringo/templates/base.mako:130
+#: ringo/templates/base.mako:153
 msgid "Show logbook"
 msgstr ""
 
-#: ringo/templates/base.mako:134
+#: ringo/templates/base.mako:157
 msgid "Advanced actions"
 msgstr ""
 
@@ -143,7 +143,8 @@ msgid "Show version information"
 msgstr ""
 
 #: ringo/templates/footer.mako:42
-msgid "Ringo Documentation"
+#, python-format
+msgid "%s Documentation"
 msgstr ""
 
 #: ringo/templates/header.mako:24
@@ -376,7 +377,7 @@ msgid "You have selected %s %s for export:"
 msgstr ""
 
 #: ringo/templates/internal/export.mako:17
-#: ringo/templates/internal/list.mako:277
+#: ringo/templates/internal/list.mako:290
 #: ringo/templates/internal/print.mako:11
 msgid "Close"
 msgstr ""
@@ -443,7 +444,7 @@ msgstr ""
 msgid "Options "
 msgstr ""
 
-#: ringo/templates/internal/list.mako:85 ringo/templates/internal/list.mako:268
+#: ringo/templates/internal/list.mako:85 ringo/templates/internal/list.mako:281
 msgid "Save current search filter"
 msgstr ""
 
@@ -471,30 +472,30 @@ msgstr ""
 msgid "items"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:192
+#: ringo/templates/internal/list.mako:205
 #, python-format
 msgid "Open item in %s mode"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:205
+#: ringo/templates/internal/list.mako:218
 msgid "No items found"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:224
+#: ringo/templates/internal/list.mako:237
 msgid "Perform"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:270
+#: ringo/templates/internal/list.mako:283
 msgid "Queryname"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:273
+#: ringo/templates/internal/list.mako:286
 msgid ""
 "Please insert a name for your query. It it will be selectable under this "
 "name in the options menu of the search after saving."
 msgstr ""
 
-#: ringo/templates/internal/list.mako:276
+#: ringo/templates/internal/list.mako:289
 msgid "Save Query"
 msgstr ""
 
@@ -594,6 +595,11 @@ msgstr ""
 
 #: ringo/templates/users/changepassword.mako:6
 msgid "Change Password for"
+msgstr ""
+
+#: ringo/views/api.py:51
+#, python-format
+msgid "ERROR: %s"
 msgstr ""
 
 #: ringo/views/auth.py:57
@@ -1074,16 +1080,16 @@ msgid "Users"
 msgstr ""
 
 #. Label for owner field in form config
-#: ringo/views/forms/ownership.xml:3
+#: ringo/views/forms/ownership.xml:4
 msgid "Owner"
 msgstr ""
 
 #. Label for group field in form config
-#: ringo/views/forms/ownership.xml:4
+#: ringo/views/forms/ownership.xml:5
 msgid "Group"
 msgstr ""
 
-#: ringo/views/forms/ownership.xml:5
+#: ringo/views/forms/ownership.xml:6
 msgid ""
 "Only users with a administrative role for this item is allowed to\n"
 "      change the owner."
@@ -1423,5 +1429,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Add"
+#~ msgstr ""
+
+#~ msgid "Ringo Documentation"
 #~ msgstr ""
 
