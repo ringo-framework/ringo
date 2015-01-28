@@ -79,7 +79,7 @@ for item in items:
         % endif
         <%
           try:
-            value = prettify(request, _(item[0].get_value(col.get('name'), expand=col.get('expand'))))
+            value = _(prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand'))))
           except AttributeError:
             value = "NaF"
         %>
