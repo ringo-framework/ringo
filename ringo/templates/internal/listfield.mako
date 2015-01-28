@@ -36,7 +36,7 @@ for item in items:
       </th>
     % endif
       % for num, col in enumerate(tableconfig.get_columns()):
-      <th class="${num > 0 and 'hidden-xs'}" width="${col.get('width')}">${col.get('label')}</th>
+      <th class="${num > 0 and 'hidden-xs'}" width="${col.get('width')}">${_(col.get('label'))}</th>
       % endfor
     </tr>
   </thead>
@@ -79,7 +79,7 @@ for item in items:
         % endif
         <%
           try:
-            value = prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand')))
+            value = prettify(request, _(item[0].get_value(col.get('name'), expand=col.get('expand'))))
           except AttributeError:
             value = "NaF"
         %>
