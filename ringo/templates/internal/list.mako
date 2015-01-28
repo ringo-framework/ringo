@@ -167,7 +167,7 @@ autoresponsive = tableconfig.is_autoresponsive()
       % endif
         <%
             try:
-              value = h.prettify(request, item.get_value(field.get('name'), expand=field.get('expand')))
+              value = h.prettify(request, _(item.get_value(field.get('name'), expand=field.get('expand'))))
             except:
               value = "NaF"
         %>
