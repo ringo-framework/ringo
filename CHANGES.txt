@@ -27,6 +27,8 @@ to the tracker.
   command.
 - Improved translations. Added missing calls to translate function at various
   places.
+- Added experimental support for exanding values for dotted attributes (e.g
+  relation.value).
 - #77 Support alembic >= 0.7.1
   This will detect missing foreign keys in your datatable.
   Important:
