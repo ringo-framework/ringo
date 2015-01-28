@@ -25,6 +25,8 @@ to the tracker.
 - Add support for import and and export of NM-relations. (Experimental). To
   enable this feature simply add the --include-relations to the savedata
   command.
+- Improved translations. Added missing calls to translate function at various
+  places.
 - #77 Support alembic >= 0.7.1
   This will detect missing foreign keys in your datatable.
   Important:
