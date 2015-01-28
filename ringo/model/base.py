@@ -161,7 +161,19 @@ class BaseItem(object):
                           % (name, repr(self)))
             raw_value = None
         if expand:
-            form_config = get_form_config(self, form_id)
+            # In case the fieldname is dotted and refers to values in
+            # related items then we need some special logic.
+            elements = name.split(".")
+            if len(elements) == 2:
+                obj = getattr(self, elements[0])
+                name = elements[1]
+            elif len(elements) > 2:
+                obj = getattr(self, ".".join(elements[0:-2]))
+                name = elements[-1]
+            else:
+                obj = self
+
+            form_config = get_form_config(obj, form_id)
             try:
                 field_config = form_config.get_field(name)
                 for option in field_config.options:
