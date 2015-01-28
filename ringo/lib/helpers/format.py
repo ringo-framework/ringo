@@ -1,11 +1,15 @@
 """Modul with various methods to format and transform values"""
 from datetime import (
     datetime,
+    date,
     timedelta
 )
 from dateutil import tz
 from babel.core import Locale
-from babel.dates import format_datetime as babel_format_datetime
+from babel.dates import (
+    format_datetime as babel_format_datetime,
+    format_date as babel_format_date
+)
 from pyramid.i18n import get_locale_name
 
 ########################################################################
@@ -29,6 +33,9 @@ def prettify(request, value):
     if isinstance(value, datetime):
         return format_datetime(get_local_datetime(value),
                                locale_name=locale_name, format="short")
+    if isinstance(value, date):
+        return format_date(value,
+                           locale_name=locale_name, format="short")
     return value
 
 ###########################################################################
@@ -86,6 +93,15 @@ def format_datetime(dt, locale_name=None, format="medium"):
     datetime will be formatted into the form YYYY-MM-DD hh:ss"""
     if locale_name:
         locale = Locale(locale_name)
-
         return babel_format_datetime(dt, locale=locale, format=format)
     return dt.strftime("%Y-%m-%d %H:%M")
+
+
+def format_date(dt, locale_name=None, format="medium"):
+    """Returns a prettyfied version of a date. If a locale_name is
+    provided the date will be localized. Without a locale the
+    datetime will be formatted into the form YYYY-MM-DD hh:ss"""
+    if locale_name:
+        locale = Locale(locale_name)
+        return babel_format_date(dt, locale=locale, format=format)
+    return dt.strftime("%Y-%m-%d")
