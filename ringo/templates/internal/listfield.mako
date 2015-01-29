@@ -79,15 +79,15 @@ for item in items:
         % endif
         <%
           try:
-            value = _(prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand'))))
+            value = prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand')))
           except AttributeError:
             value = "NaF"
         %>
         ## Escape value here
         % if isinstance(value, list):
-          ${", ".join(unicode(v) for v in value) | h}
+          ${", ".join(unicode(_(v)) for v in value) | h}
         % else:
-          ${value}
+          ${_(value)}
         % endif
       </td>
       % endfor

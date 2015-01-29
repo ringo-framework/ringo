@@ -10,9 +10,9 @@ def render_filter_link(request, field, value, clazz):
   out.append('class="link filter"')
   out.append('title="Filter %s on %s in %s">' % (h.get_item_modul(request, clazz).get_label(plural=True), value, field.get('label')))
   if hasattr(value, "render"):
-    out.append('%s</a>' % value.render())
+    out.append('%s</a>' % _(value.render()))
   else:
-    out.append('%s</a>' % value)
+    out.append('%s</a>' % _(value))
   return " ".join(out)
 
 def render_responsive_class(visibleonsize):
@@ -167,7 +167,7 @@ autoresponsive = tableconfig.is_autoresponsive()
       % endif
         <%
             try:
-              value = _(h.prettify(request, item.get_value(field.get('name'), expand=field.get('expand'))))
+              value = h.prettify(request, item.get_value(field.get('name'), expand=field.get('expand')))
             except:
               value = "NaF"
         %>
