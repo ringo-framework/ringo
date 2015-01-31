@@ -252,10 +252,6 @@ Todo
 
 .. __mixin_printable:
 
-Printable
----------
-.. autoclass:: ringo.model.mixins.Printable
-
 Event Handlers
 ==============
 Each modul can implement one of the following event handlers to realize
