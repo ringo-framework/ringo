@@ -25,9 +25,6 @@ from ringo.views.base.export import (
 from ringo.views.base.import_ import (
     import_,
 )
-from ringo.views.base.print_ import (
-    print_
-)
 
 web_action_view_mapping = {
     "default": {
@@ -38,7 +35,6 @@ web_action_view_mapping = {
         "delete": delete,
         "import": import_,
         "export": export,
-        "print":  print_,
         "bundle": bundle_,
     }
 }

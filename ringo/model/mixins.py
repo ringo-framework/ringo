@@ -353,36 +353,6 @@ class Logged(object):
         self.logs.append(log)
 
 
-class Printable(Mixin):
-
-    @classmethod
-    def get_mixin_actions(cls):
-        from ringo.model.modul import ActionItem
-        actions = []
-        # Add Print action
-        action = ActionItem()
-        action.name = 'Print'
-        action.url = 'print/{id}'
-        action.icon = 'glyphicon glyphicon-print'
-        action.display = 'secondary'
-        actions.append(action)
-        return actions
-
-    # FIXME: Remove this declared attribute/relation. No item will ever
-    # be inserted in this table. Only used to get a list of items in the
-    # printdialog (ti) <2014-10-27 12:28>
-    @declared_attr
-    def printtemplates(cls):
-        from ringo.model.printtemplate import Printtemplate
-        tbl_name = "nm_%s_printtemplates" % cls.__name__.lower()
-        nm_table = Table(tbl_name, Base.metadata,
-                         Column('iid', Integer, ForeignKey(cls.id)),
-                         Column('tid', Integer,
-                                ForeignKey("printtemplates.id")))
-        logs = relationship(Printtemplate, secondary=nm_table)
-        return logs
-
-
 class Owned(object):
     """Mixin to add references to a user and a usergroup. This
     references are used to build some kind of ownership of the item. The

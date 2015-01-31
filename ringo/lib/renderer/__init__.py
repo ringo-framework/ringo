@@ -13,7 +13,6 @@ from ringo.lib.renderer.dialogs import (
     ErrorDialogRenderer,
     ExportDialogRenderer,
     ImportDialogRenderer,
-    PrintDialogRenderer
 )
 from ringo.lib.renderer.lists import (
     ListRenderer,
