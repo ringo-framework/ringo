@@ -22,8 +22,6 @@ modules.
   | admin     | modul  | 200      |
   | anonymous | file  | 403      |
   | admin     | file  | 200      |
-  | anonymous | news  | 403      |
-  | admin     | news  | 200      |
   | anonymous | comments  | 403      |
   | admin     | comments  | 200      |
   | anonymous | tags  | 403      |
@@ -49,8 +47,6 @@ modules.
   | admin     | modul  | 200      |
   | anonymous | file  | 403      |
   | admin     | file  | 200      |
-  | anonymous | news  | 403      |
-  | admin     | news  | 200      |
   | anonymous | comments  | 403      |
   | admin     | comments  | 200      |
   | anonymous | tags  | 403      |
@@ -76,8 +72,6 @@ modules.
   | admin     | modul  | 1  | 200      |
   | anonymous | file  | 1  | 403      |
   | admin     | file  | 1  | 400      |
-  | anonymous | news  | 1  | 403      |
-  | admin     | news  | 1  | 400      |
   | anonymous | comments  | 1  | 403      |
   | admin     | comments  | 1  | 400      |
   | anonymous | tags  | 1  | 403      |
@@ -104,8 +98,6 @@ modules.
   | admin     | modul  | 1  | 200      |
   | anonymous | file  | 1  | 403      |
   | admin     | file  | 1  | 400      |
-  | anonymous | news  | 1  | 403      |
-  | admin     | news  | 1  | 400      |
   | anonymous | comments  | 1  | 403      |
   | admin     | comments  | 1  | 400      |
   | anonymous | tags  | 1  | 403      |
@@ -132,8 +124,6 @@ modules.
   | admin     | modul  | 1  | 200      |
   | anonymous | file  | 1  | 403      |
   | admin     | file  | 1  | 400      |
-  | anonymous | news  | 1  | 403      |
-  | admin     | news  | 1  | 400      |
   | anonymous | comments  | 1  | 403      |
   | admin     | comments  | 1  | 400      |
   | anonymous | tags  | 1  | 403      |
