@@ -1,14 +1,14 @@
 """Removed todo module
 
 Revision ID: 1f9f8114a7c9
-Revises: 46edfd16f379
+Revises: 28c50d6d4971
 Create Date: 2015-01-31 14:15:54.104686
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '1f9f8114a7c9'
-down_revision = '46edfd16f379'
+down_revision = '28c50d6d4971'
 
 from alembic import op
 
@@ -26,6 +26,8 @@ def iter_statements(stmts):
 
 
 def upgrade():
+    op.drop_table("todos")
+    op.drop_table("nm_todo_users")
     iter_statements(UPGRADE)
 
 
