@@ -17,7 +17,6 @@ from ringo.lib.renderer import add_renderers
 from ringo.model.form import Form as BlobformForm
 from ringo.model.mixins import (
     Owned,
-    Logged,
     Versioned,
     Blobform
 )
@@ -105,29 +104,6 @@ def get_ownership_form(request, readonly=None):
                         or has_role(request.user, "admin"))
     return _get_ownership_form(item, db, csrf_token, eval_url,
                                readonly, url_prefix)
-
-
-def get_rendered_logbook_form(request, readonly=None):
-    """Returns the rendered logbook form for the item in the current
-    request. If the item is not an instance of Owned, than an empty
-    string is returned."""
-    item = get_item_from_request(request)
-    form = get_logbook_form(request, readonly)
-    if isinstance(item, Logged):
-        return form.render()
-    else:
-        return ""
-
-
-def get_logbook_form(request, readonly=None):
-    item = get_item_from_request(request)
-    db = request.db
-    translate = request.translate
-    renderers = add_renderers({})
-    csrf_token = request.session.get_csrf_token()
-    url_prefix = request.application_url
-    return _get_logbook_form(item, db, translate, renderers,
-                             csrf_token, eval_url, readonly, url_prefix)
 
 
 def render_item_form(request, form, values=None, validate=True):
