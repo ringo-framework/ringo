@@ -82,9 +82,3 @@ class DTListRenderer(object):
                   'h': ringo.lib.helpers,
                   'tableconfig': self.config}
         return self.template.render(**values)
-
-
-class NewsListRenderer(DTListRenderer):
-    def __init__(self, listing):
-        DTListRenderer.__init__(self, listing)
-        self.template = template_lookup.get_template("internal/newslist.mako")

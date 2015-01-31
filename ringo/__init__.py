@@ -3,12 +3,10 @@ from pyramid.config import Configurator
 from pyramid_beaker import session_factory_from_settings
 
 from ringo.resources import get_resource_factory
-from ringo.lib.helpers import get_action_routename
 from ringo.lib.i18n import locale_negotiator
 from ringo.lib.sql.db import setup_db_session, setup_db_engine
 from ringo.model import Base
 from ringo.model.user import User
-from ringo.model.news import News
 
 log = logging.getLogger(__name__)
 
@@ -74,9 +72,6 @@ def setup_routes(config):
     config.add_route('users-changepassword',
                      'users/changepassword/{id}',
                      factory=get_resource_factory(User))
-    config.add_route(get_action_routename(News, 'markasread', prefix="rest"),
-                     'rest/news/{id}/markasread',
-                     factory=get_resource_factory(News))
     config.add_route('rules-evaluate', 'rest/rule/evaluate')
     config.add_route('form-render', 'rest/form/render')
     return config

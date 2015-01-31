@@ -349,6 +349,11 @@ If you are need specific single action to your modul you need to do the followin
    So will not be able to configure the permission in the webinterface and the
    actions will not be listed automatically anywhere in the application.
 
+.. important::
+   This expample is outdated. The news modul has been removed from the ringo
+   core and is now an external extension. Anyway see it as an example for how
+   to do this in general.
+
 I will explain it with the example of adding a "Mark as read" operation for
 the news modul. This is a very specific actions which is only used in the
 newslisting. Adding such a specific action as new generic action for the modul

@@ -9,12 +9,9 @@ from ringo.lib.helpers import (
     get_app_title
 )
 from ringo.lib.renderer import (
-    DTListRenderer,
-    NewsListRenderer
+    DTListRenderer
 )
 
-from ringo.model.base import get_item_list
-from ringo.model.news import News
 from ringo.views.request import handle_history
 
 
@@ -22,11 +19,6 @@ from ringo.views.request import handle_history
 def index_view(request):
     handle_history(request)
     values = {}
-    if request.user:
-        # News
-        news = get_item_list(request, News, items=request.user.news)
-        news_renderer = NewsListRenderer(news)
-        values['news'] = news_renderer.render(request)
     return values
 
 
