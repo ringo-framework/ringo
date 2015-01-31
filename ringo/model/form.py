@@ -3,7 +3,7 @@ from ringo.model import Base
 from ringo.model.base import BaseItem
 from ringo.model.statemachine import Statemachine, State, \
 null_handler as handler, null_condition as condition
-from ringo.model.mixins import Owned, Meta, Logged, StateMixin, Tagged, \
+from ringo.model.mixins import Owned, Meta, StateMixin, Tagged, \
 Commented
 
 d1 = """The form is currently marked as draft. This means it is
@@ -32,7 +32,7 @@ class ReviewStateMixin(StateMixin):
         return state.get_state()
 
 
-class Form(BaseItem, ReviewStateMixin, Owned, Meta, Logged, Tagged,
+class Form(BaseItem, ReviewStateMixin, Owned, Meta, Tagged,
            Commented, Base):
     __tablename__ = 'forms'
     _modul_id = 14
