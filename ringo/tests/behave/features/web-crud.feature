@@ -19,8 +19,6 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | profil | 200      |
   | anonymous | modul  | 403      |
   | admin     | modul  | 200      |
-  | anonymous | appointment  | 403      |
-  | admin     | appointment  | 200      |
   | anonymous | file  | 403      |
   | admin     | file  | 200      |
   | anonymous | news  | 403      |
@@ -50,8 +48,6 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | profil | 404      |
   | anonymous | modul  | 404      |
   | admin     | modul  | 404      |
-  | anonymous | appointment  | 403      |
-  | admin     | appointment  | 200      |
   | anonymous | file  | 403      |
   | admin     | file  | 200      |
   | anonymous | news  | 403      |
@@ -81,8 +77,6 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | profil | 1  | 200      |
   | anonymous | modul  | 1  | 403      |
   | admin     | modul  | 1  | 200      |
-  | anonymous | appointment  | 1  | 403      |
-  | admin     | appointment  | 1  | 400      |
   | anonymous | file  | 1  | 403      |
   | admin     | file  | 1  | 400      |
   | anonymous | news  | 1  | 403      |
@@ -111,8 +105,6 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | profil | 1  | 200      |
   | anonymous | modul  | 1  | 403      |
   | admin     | modul  | 1  | 200      |
-  | anonymous | appointment  | 1  | 403      |
-  | admin     | appointment  | 1  | 400      |
   | anonymous | file  | 1  | 403      |
   | admin     | file  | 1  | 400      |
   | anonymous | news  | 1  | 403      |
@@ -141,8 +133,6 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | profil | 1  | 404      |
   | anonymous | modul  | 1  | 404      |
   | admin     | modul  | 1  | 404      |
-  | anonymous | appointment  | 1  | 403      |
-  | admin     | appointment  | 1  | 400      |
   | anonymous | file  | 1  | 403      |
   | admin     | file  | 1  | 400      |
   | anonymous | news  | 1  | 403      |
@@ -189,8 +179,6 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | profil | 1  | 200      |
   | anonymous | modul  | 1  | 404      |
   | admin     | modul  | 1  | 404      |
-  | anonymous | appointment  | 1  | 403      |
-  | admin     | appointment  | 1  | 200      |
   | anonymous | file  | 1  | 403      |
   | admin     | file  | 1  | 200      |
   | anonymous | news  | 1  | 403      |
