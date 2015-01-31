@@ -21,9 +21,6 @@
       <renderer type="state"></renderer>
       <help>Only forms in the state "published" will be available for other users.</help>
     </entity>
-    <entity id="e5" name="tags" label="Keywords">
-      <renderer type="listing" filter="'forms' eq %modul"/>
-    </entity>
     <entity id="e6" name="comments" label="Comments">
       <renderer type="comments"/>
     </entity>
@@ -58,9 +55,6 @@
       </row>
       <row>
         <col><field ref="e4"/></col>
-      </row>
-      <row>
-        <col><field ref="e5"/></col>
       </row>
     </page>
     <page id="p2" label="State/Comments">
