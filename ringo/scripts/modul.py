@@ -24,7 +24,6 @@ mixinmap = {
     'state': 'StateMixin',
     'blobform': 'Blobform',
     'versioned': 'Versioned',
-    'printable': 'Printable',
     'nested': 'Nested',
     'commented': 'Commented',
     'tagged': 'Tagged',
