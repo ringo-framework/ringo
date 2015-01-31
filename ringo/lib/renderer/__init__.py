@@ -18,8 +18,7 @@ from ringo.lib.renderer.dialogs import (
 from ringo.lib.renderer.lists import (
     ListRenderer,
     DTListRenderer,
-    NewsListRenderer,
-    TodoListRenderer
+    NewsListRenderer
 )
 
 def setup_render_globals(config):
