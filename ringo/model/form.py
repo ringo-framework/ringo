@@ -6,7 +6,7 @@ from ringo.model.statemachine import (
     null_handler as handler,
     null_condition as condition
 )
-from ringo.model.mixins import Owned, Meta, Logged, StateMixin
+from ringo.model.mixins import Owned, Meta, StateMixin
 
 d1 = """The form is currently marked as draft. This means it is
 currently under work and may change."""
@@ -36,7 +36,7 @@ class ReviewStateMixin(StateMixin):
         return state.get_state()
 
 
-class Form(BaseItem, ReviewStateMixin, Owned, Meta, Logged, Base):
+class Form(BaseItem, ReviewStateMixin, Owned, Meta, Base):
     __tablename__ = 'forms'
     _modul_id = 14
     id = sa.Column(sa.Integer, primary_key=True)

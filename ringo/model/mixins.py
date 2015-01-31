@@ -50,7 +50,7 @@ from sqlalchemy.orm import (
 )
 
 from ringo.model import Base
-from ringo.lib.helpers import serialize, get_raw_value
+from ringo.lib.helpers import, get_raw_value
 from ringo.lib.alchemy import get_columns_from_instance
 
 log = logging.getLogger(__name__)
@@ -118,13 +118,6 @@ class StateMixin(object):
         sm.set_state(new_state_id)
         # clear cached statemachines
         setattr(self, '_cache_statemachines', {})
-        # Add logentry on statechange if the item is loggend
-        if isinstance(self, Logged):
-            from ringo.model.log import Log
-            factory = Log.get_item_factory()
-            logentry = factory.create(user=request.user)
-            logentry.subject = "State Changed: %s" % self
-            self.logs.append(logentry)
 
     def get_statemachine(self, key, state_id=None, request=None):
         """Returns a statemachine instance for the given key
@@ -297,65 +290,8 @@ class Versioned(object):
         return pvalues
 
 
-class Logged(object):
-    """Mixin to add logging functionallity to a modul. Adding this Mixin
-    the item of a modul will have a "logs" relationship containing all
-    the log entries for this item. Log entries can be created
-    automatically by the system or may be created manual by the user.
-    Manual log entries. Needs to be configured (Permissions)"""
-
     @declared_attr
-    def logs(cls):
-        from ringo.model.log import Log
-        tbl_name = "nm_%s_logs" % cls.__name__.lower()
-        nm_table = Table(tbl_name, Base.metadata,
-                         Column('iid', Integer, ForeignKey(cls.id)),
-                         Column('lid', Integer, ForeignKey("logs.id")))
-        logs = relationship(Log, secondary=nm_table, cascade="all")
         return logs
-
-    def build_changes(self, old_values, new_values):
-        """Returns a dictionary with the old and new values for each
-        field which has changed"""
-        diff = {}
-        if isinstance(self, Blobform):
-            data = json.loads(old_values.get("data") or "{}")
-            old_values = dict(old_values.items() + data.items())
-        for field in new_values:
-            oldv = serialize(old_values.get(field))
-            newv = serialize(new_values.get(field))
-            if newv == oldv:
-                continue
-            if field == "data":
-                diff[field] = {"old": oldv, "new": newv}
-            else:
-                diff[field] = {"old": serialize(oldv), "new": serialize(newv)}
-        return diff
-
-    def add_log_entry(self, subject, text, request):
-        """Will add a log entry for the updated item.
-        The mapper and the target parameter will be the item which
-        iherits this logged mixin.
-
-        :request: Current request
-        :subject: Subject of the logentry.
-        :text: Text of the logentry.
-
-        """
-        from ringo.model.log import Log
-        factory = Log.get_item_factory()
-        log = factory.create(user=request.user)
-        if not subject:
-            log.subject = "Update: %s" % self
-        else:
-            log.subject = subject
-        if not text:
-            log.text = self._build_changes()
-        else:
-            log.text = text
-        log.author = str(request.user)
-        self.logs.append(log)
-
 
 class Owned(object):
     """Mixin to add references to a user and a usergroup. This

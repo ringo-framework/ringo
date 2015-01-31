@@ -149,9 +149,6 @@
         <li role="presentation" class="dropdown-header">${_('Administration')}</li>
         <li><a href="#ownership">${_('Change ownership')}</a></li>
       % endif
-      % if logbook:
-        <li><a href="#logbook">${_('Show logbook')}</a></li>
-      % endif
       % if len(context_actions) > 0:
         <li class="divider"></li>
         <li role="presentation" class="dropdown-header">${_('Advanced actions')}</li>
