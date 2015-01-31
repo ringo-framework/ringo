@@ -1,14 +1,14 @@
 """Removed comments module
 
 Revision ID: 1aba8cde1f01
-Revises: 46edfd16f379
+Revises: 4b9efcf216dc
 Create Date: 2015-01-31 15:48:25.904895
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '1aba8cde1f01'
-down_revision = '46edfd16f379'
+down_revision = '4b9efcf216dc'
 
 from alembic import op
 import sqlalchemy as sa
