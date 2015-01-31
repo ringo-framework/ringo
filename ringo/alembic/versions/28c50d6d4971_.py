@@ -1,14 +1,14 @@
 """Remove Printtemplate module
 
 Revision ID: 28c50d6d4971
-Revises: 46edfd16f379
+Revises: 13822f7a643c
 Create Date: 2015-01-31 12:49:58.945070
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '28c50d6d4971'
-down_revision = '46edfd16f379'
+down_revision = '13822f7a643c'
 
 from alembic import op
 
@@ -27,6 +27,7 @@ def iter_statements(stmts):
 
 
 def upgrade():
+    op.drop_table("printtemplates")
     iter_statements(UPGRADE)
 
 
