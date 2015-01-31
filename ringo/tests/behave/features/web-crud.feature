@@ -21,8 +21,6 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | modul  | 200      |
   | anonymous | file  | 403      |
   | admin     | file  | 200      |
-  | anonymous | comments  | 403      |
-  | admin     | comments  | 200      |
   | anonymous | tags  | 403      |
   | admin     | tags  | 200      |
 
@@ -46,8 +44,6 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | modul  | 404      |
   | anonymous | file  | 403      |
   | admin     | file  | 200      |
-  | anonymous | comments  | 403      |
-  | admin     | comments  | 200      |
   | anonymous | tags  | 403      |
   | admin     | tags  | 200      |
 
@@ -71,8 +67,6 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | modul  | 1  | 200      |
   | anonymous | file  | 1  | 403      |
   | admin     | file  | 1  | 400      |
-  | anonymous | comments  | 1  | 403      |
-  | admin     | comments  | 1  | 400      |
   | anonymous | tags  | 1  | 403      |
   | admin     | tags  | 1  | 400      |
 
@@ -95,8 +89,6 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | modul  | 1  | 200      |
   | anonymous | file  | 1  | 403      |
   | admin     | file  | 1  | 400      |
-  | anonymous | comments  | 1  | 403      |
-  | admin     | comments  | 1  | 400      |
   | anonymous | tags  | 1  | 403      |
   | admin     | tags  | 1  | 400      |
 
@@ -119,8 +111,6 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | modul  | 1  | 404      |
   | anonymous | file  | 1  | 403      |
   | admin     | file  | 1  | 400      |
-  | anonymous | comments  | 1  | 403      |
-  | admin     | comments  | 1  | 400      |
   | anonymous | tags  | 1  | 403      |
   | admin     | tags  | 1  | 400      |
 
@@ -161,7 +151,5 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | modul  | 1  | 404      |
   | anonymous | file  | 1  | 403      |
   | admin     | file  | 1  | 200      |
-  | anonymous | comments  | 1  | 403      |
-  | admin     | comments  | 1  | 200 |
   | anonymous | tags  | 1  | 403      |
   | admin     | tags  | 1  | 200 |
