@@ -8,6 +8,9 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
+1.0
+===
+
 0.18.0
 ======
 - Added option to open items in a modal window.
