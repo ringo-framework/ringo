@@ -1,15 +1,20 @@
 import sqlalchemy as sa
 from ringo.model import Base
 from ringo.model.base import BaseItem
-from ringo.model.statemachine import Statemachine, State, \
-null_handler as handler, null_condition as condition
-from ringo.model.mixins import Owned, Meta, StateMixin, Tagged, \
-Commented
+from ringo.model.statemachine import (
+    Statemachine, State,
+    null_handler as handler, null_condition as condition
+)
+
+from ringo.model.mixins import (
+    Owned, Meta, StateMixin, Tagged, Commented
+)
 
 d1 = """The form is currently marked as draft. This means it is
 currently under work and may change."""
 d2 = """The form  is published and can be used in the application. The
 form can not be changed."""
+
 
 class ReviewStatemachine(Statemachine):
 
@@ -20,6 +25,7 @@ class ReviewStatemachine(Statemachine):
         s1.add_transition(s2, "Publish", handler, condition)
         s2.add_transition(s1, "Revise", handler, condition)
         return s1
+
 
 class ReviewStateMixin(StateMixin):
     """Mixin to add Review state functionallity to the Forms"""
