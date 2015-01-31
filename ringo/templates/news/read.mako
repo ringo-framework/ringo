@@ -41,10 +41,5 @@
         ${owner| n}
       </div>
     % endif
-    % if logbook:
-      <div class="main-pane" id="logbook">
-        ${logbook| n}
-      </div>
-    % endif
   </div>
 </div>
