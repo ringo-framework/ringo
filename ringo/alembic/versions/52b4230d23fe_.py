@@ -1,14 +1,14 @@
 """Removed tags module
 
 Revision ID: 52b4230d23fe
-Revises: 46edfd16f379
+Revises: 1aba8cde1f01
 Create Date: 2015-01-31 16:22:10.572782
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '52b4230d23fe'
-down_revision = '46edfd16f379'
+down_revision = '1aba8cde1f01'
 
 from alembic import op
 import sqlalchemy as sa
