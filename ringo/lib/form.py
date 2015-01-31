@@ -7,14 +7,18 @@ from ringo.lib.cache import CACHE_FORM_CONFIG
 from ringo.lib.helpers import get_path_to
 
 eval_url = '/rest/rule/evaluate'
+formbar_css_filenames = []
+formbar_js_filenames = []
 
 
 def get_ownership_form(item, db, csrf_token, eval_url,
                        readonly=None, url_prefix=None):
     if readonly:
-        config = _get_form_config('ringo', 'ownership.xml', 'ownership-form-read')
+        config = _get_form_config('ringo', 'ownership.xml',
+                                  'ownership-form-read')
     else:
-        config = _get_form_config('ringo', 'ownership.xml', 'ownership-form-update')
+        config = _get_form_config('ringo', 'ownership.xml',
+                                  'ownership-form-update')
     return Form(config, item, db,
                 csrf_token=csrf_token,
                 eval_url=eval_url,
@@ -82,7 +86,8 @@ def _get_form_config(name, filename, formname):
         loaded_config = load(get_path_to_form_config(filename, name))
     except IOError:
         try:
-            loaded_config = load(get_path_to_form_config(filename, name, location="."))
+            loaded_config = load(get_path_to_form_config(filename,
+                                                         name, location="."))
         except IOError:
             loaded_config = load(get_path_to_form_config(filename, "ringo"))
     return Config(loaded_config).get_form(formname)
@@ -96,7 +101,6 @@ def _get_blobform_config(fid, formname):
     return Config(parse(form.definition.encode('utf-8'))).get_form(formname)
 
 
-formbar_css_filenames = []
 def get_formbar_css():
     result = get_css_files()
     for filename, content in result:
@@ -104,7 +108,6 @@ def get_formbar_css():
     return result
 
 
-formbar_js_filenames = []
 def get_formbar_js():
     result = get_js_files()
     for filename, content in result:
