@@ -25,7 +25,6 @@ mixinmap = {
     'blobform': 'Blobform',
     'versioned': 'Versioned',
     'nested': 'Nested',
-    'commented': 'Commented',
     'tagged': 'Tagged'
 }
 

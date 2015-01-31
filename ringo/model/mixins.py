@@ -20,6 +20,10 @@ Further the 'Nested' mixin will ensure the comments can reference each other
 to be able to build a hierarchy structure (e.g Threads in the example of the
 comments).
 
+.. note::
+   The Comment Mixin has been removed from ringo and converted in the
+   the ringo comment extension.
+
 .. important::
 
     As most of the mixins will add additional tables and database fields
@@ -444,45 +448,6 @@ class Nested(object):
             childs.append(child)
             childs.extend(child.get_children())
         return childs
-
-
-class Commented(object):
-    """Mixin to add comment functionallity to a modul. Adding this Mixin
-    the item of a modul will have a "comments" relationship containing all
-    the comment entries for this item."""
-
-    @declared_attr
-    def comments(cls):
-        from ringo.model.comment import Comment
-        tbl_name = "nm_%s_comments" % cls.__name__.lower()
-        nm_table = Table(tbl_name, Base.metadata,
-                         Column('iid', Integer, ForeignKey(cls.id)),
-                         Column('cid', Integer, ForeignKey("comments.id")))
-        comments = relationship(Comment, secondary=nm_table, cascade="all")
-        return comments
-
-    @classmethod
-    def create_handler(cls, request, item):
-        cls.update_handler(request, item)
-
-    @classmethod
-    def update_handler(cls, request, item):
-        """Will add a comment entry for the updated item if the request
-        contains a parameter 'comment'.  The mapper and the target
-        parameter will be the item which inherits this commented mixin.
-
-        :request: Current request
-        :item: Item handled in the update.
-        """
-        from ringo.model.comment import Comment
-        log.debug("Called update_handler for %s" % cls)
-        user_comment = request.params.get('comment')
-        if user_comment:
-            factory = Comment.get_item_factory()
-            comment = factory.create(request.user)
-            comment.text = user_comment
-            item.comments.append(comment)
-        return item
 
 
 class Tagged(object):
