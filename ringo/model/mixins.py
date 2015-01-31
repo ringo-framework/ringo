@@ -529,21 +529,3 @@ class Tagged(object):
                          Column('tid', Integer, ForeignKey("tags.id")))
         tags = relationship(Tag, secondary=nm_table)
         return tags
-
-
-class Todo(object):
-    """Mixin to add todo functionallity to a modul. Adding this Mixin
-    the item of a modul will have a "todo" relationship containing all
-    the todo entries for this item."""
-
-    @declared_attr
-    def todo(cls):
-        from ringo.model.todo import Todo
-        clsname = cls.__name__.lower()
-        tbl_name = "nm_%s_todos" % clsname
-        nm_table = Table(tbl_name, Base.metadata,
-                         Column('iid', Integer, ForeignKey(cls.id)),
-                         Column('tid', Integer, ForeignKey("todos.id")))
-        rel = relationship(Todo, secondary=nm_table,
-                           backref=clsname + "s", cascade="all")
-        return rel
