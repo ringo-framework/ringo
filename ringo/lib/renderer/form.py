@@ -296,12 +296,3 @@ class ListingFieldRenderer(FormbarSelectionField):
                                                   config.table)}
         html.append(self.template.render(**values))
         return "".join(html)
-
-
-
-    def __init__(self, field, translate):
-        FieldRenderer.__init__(self, field, translate)
-
-        html = []
-        html.append('<label for="">%s (%s)</label>'
-        return "".join(html)
