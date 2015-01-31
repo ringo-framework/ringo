@@ -9,8 +9,7 @@ from ringo.lib.helpers import get_item_modul
 from ringo.lib.form import (
     eval_url,
     get_form_config,
-    get_ownership_form as _get_ownership_form,
-    get_logbook_form as _get_logbook_form
+    get_ownership_form as _get_ownership_form
 )
 from ringo.lib.security import has_role
 from ringo.lib.renderer import add_renderers
