@@ -22,8 +22,6 @@ modules.
   | admin     | modul  | 200      |
   | anonymous | file  | 403      |
   | admin     | file  | 200      |
-  | anonymous | tags  | 403      |
-  | admin     | tags  | 200      |
 
   @wip
   Scenario Outline: CREATE POST
@@ -45,8 +43,6 @@ modules.
   | admin     | modul  | 200      |
   | anonymous | file  | 403      |
   | admin     | file  | 200      |
-  | anonymous | tags  | 403      |
-  | admin     | tags  | 200      |
 
   Scenario Outline: Read GET
     Given a <role> user
@@ -68,8 +64,6 @@ modules.
   | admin     | modul  | 1  | 200      |
   | anonymous | file  | 1  | 403      |
   | admin     | file  | 1  | 400      |
-  | anonymous | tags  | 1  | 403      |
-  | admin     | tags  | 1  | 400      |
 
   @wip
   Scenario Outline: Edit PUT
@@ -92,8 +86,6 @@ modules.
   | admin     | modul  | 1  | 200      |
   | anonymous | file  | 1  | 403      |
   | admin     | file  | 1  | 400      |
-  | anonymous | tags  | 1  | 403      |
-  | admin     | tags  | 1  | 400      |
 
   @wip
   Scenario Outline: Delete DELETE
@@ -116,5 +108,3 @@ modules.
   | admin     | modul  | 1  | 200      |
   | anonymous | file  | 1  | 403      |
   | admin     | file  | 1  | 400      |
-  | anonymous | tags  | 1  | 403      |
-  | admin     | tags  | 1  | 400      |
