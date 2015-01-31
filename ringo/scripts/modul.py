@@ -26,7 +26,6 @@ mixinmap = {
     'versioned': 'Versioned',
     'printable': 'Printable',
     'nested': 'Nested',
-    'commented': 'Commented',
     'tagged': 'Tagged',
     'todo': 'Todo'
 }
