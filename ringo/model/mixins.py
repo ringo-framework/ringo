@@ -515,22 +515,6 @@ class Commented(object):
         return item
 
 
-class Tagged(object):
-    """Mixin to add tag (keyword) functionallity to a modul. Adding this Mixin
-    the item of a modul will have a "tags" relationship containing all
-    the tag entries for this item."""
-
-    @declared_attr
-    def tags(cls):
-        from ringo.model.tag import Tag
-        tbl_name = "nm_%s_tags" % cls.__name__.lower()
-        nm_table = Table(tbl_name, Base.metadata,
-                         Column('iid', Integer, ForeignKey(cls.id)),
-                         Column('tid', Integer, ForeignKey("tags.id")))
-        tags = relationship(Tag, secondary=nm_table)
-        return tags
-
-
 class Todo(object):
     """Mixin to add todo functionallity to a modul. Adding this Mixin
     the item of a modul will have a "todo" relationship containing all
