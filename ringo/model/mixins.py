@@ -20,6 +20,10 @@ Further the 'Nested' mixin will ensure the comments can reference each other
 to be able to build a hierarchy structure (e.g Threads in the example of the
 comments).
 
+.. note::
+   The Comment Mixin has been removed from ringo and converted in the
+   the ringo comment extension.
+
 .. important::
 
     As most of the mixins will add additional tables and database fields
