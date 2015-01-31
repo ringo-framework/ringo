@@ -113,7 +113,7 @@ class HelpersAuthTests(BaseUnitTest):
     def test_get_modules(self):
         from ringo.lib.helpers import get_modules
         result = get_modules(self.request, 'admin-menu')
-        self.assertEquals(len(result), 7)
+        self.assertEquals(len(result), 6)
 
     def test_get_formbar_css(self):
         from ringo.lib.form import get_formbar_css
