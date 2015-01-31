@@ -21,20 +21,6 @@ def get_ownership_form(item, db, csrf_token, eval_url,
                 url_prefix=url_prefix)
 
 
-def get_logbook_form(item, db, translate, renderers,
-                     csrf_token, eval_url, readonly=None, url_prefix=None):
-    if readonly:
-        config = _get_form_config('ringo', 'logbook.xml', 'logbook-form-read')
-    else:
-        config = _get_form_config('ringo', 'logbook.xml', 'logbook-form-update')
-    return Form(config, item, db,
-                csrf_token=csrf_token,
-                translate=translate,
-                renderers=renderers,
-                eval_url=eval_url,
-                url_prefix=url_prefix)
-
-
 def get_item_form(item, name, db, translate, renderers,
                   csrf_token, readonly=None):
     # TODO: Check if this method is ever called. I think the
