@@ -246,10 +246,6 @@ Tagged
 ------
 .. autoclass:: ringo.model.mixins.Tagged
 
-Todo
-----
-.. autoclass:: ringo.model.mixins.Todo
-
 .. __mixin_printable:
 
 Event Handlers

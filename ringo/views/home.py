@@ -10,13 +10,11 @@ from ringo.lib.helpers import (
 )
 from ringo.lib.renderer import (
     DTListRenderer,
-    NewsListRenderer,
-    TodoListRenderer
+    NewsListRenderer
 )
 
 from ringo.model.base import get_item_list
 from ringo.model.news import News
-from ringo.model.todo import get_todo_reminder_list
 from ringo.views.request import handle_history
 
 
@@ -29,10 +27,6 @@ def index_view(request):
         news = get_item_list(request, News, items=request.user.news)
         news_renderer = NewsListRenderer(news)
         values['news'] = news_renderer.render(request)
-        # Todos
-        todos = get_todo_reminder_list(request, user=request.user)
-        todo_renderer = TodoListRenderer(todos)
-        values['todos'] = todo_renderer.render(request)
     return values
 
 
