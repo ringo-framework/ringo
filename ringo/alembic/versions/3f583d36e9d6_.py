@@ -14,7 +14,10 @@ from alembic import op
 import sqlalchemy as sa
 
 
-UPGRADE = """"""
+UPGRADE = """
+DELETE FROM "actions" WHERE mid = 8;
+DELETE FROM "modules" WHERE id = 8;
+"""
 DOWNGRADE = """"""
 
 
