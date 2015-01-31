@@ -50,7 +50,7 @@ from sqlalchemy.orm import (
 )
 
 from ringo.model import Base
-from ringo.lib.helpers import, get_raw_value
+from ringo.lib.helpers import get_raw_value
 from ringo.lib.alchemy import get_columns_from_instance
 
 log = logging.getLogger(__name__)
@@ -290,9 +290,6 @@ class Versioned(object):
         return pvalues
 
 
-    @declared_attr
-        return logs
-
 class Owned(object):
     """Mixin to add references to a user and a usergroup. This
     references are used to build some kind of ownership of the item. The
@@ -384,6 +381,3 @@ class Nested(object):
             childs.append(child)
             childs.extend(child.get_children())
         return childs
-
-
-
