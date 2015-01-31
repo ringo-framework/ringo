@@ -28,6 +28,7 @@ def iter_statements(stmts):
 
 
 def upgrade():
+    op.drop_table("appointments")
     iter_statements(UPGRADE)
 
 
