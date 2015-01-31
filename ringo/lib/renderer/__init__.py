@@ -12,7 +12,7 @@ from ringo.lib.renderer.dialogs import (
     ConfirmDialogRenderer,
     ErrorDialogRenderer,
     ExportDialogRenderer,
-    ImportDialogRenderer,
+    ImportDialogRenderer
 )
 from ringo.lib.renderer.lists import (
     ListRenderer,
