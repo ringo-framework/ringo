@@ -1,14 +1,14 @@
 """Removed news module
 
 Revision ID: 4b9efcf216dc
-Revises: 46edfd16f379
+Revises: 1f9f8114a7c9
 Create Date: 2015-01-31 14:58:39.617403
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '4b9efcf216dc'
-down_revision = '46edfd16f379'
+down_revision = '1f9f8114a7c9'
 
 from alembic import op
 
@@ -26,10 +26,10 @@ def iter_statements(stmts):
 
 
 def upgrade():
-    pass
+    op.drop_table("news")
+    op.drop_table("nm_news_user")
     iter_statements(UPGRADE)
 
 
 def downgrade():
-    pass
     iter_statements(DOWNGRADE)
