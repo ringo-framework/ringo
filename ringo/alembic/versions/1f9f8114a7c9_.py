@@ -26,8 +26,8 @@ def iter_statements(stmts):
 
 
 def upgrade():
-    op.drop_table("todos")
     op.drop_table("nm_todo_users")
+    op.drop_table("todos")
     iter_statements(UPGRADE)
 
 

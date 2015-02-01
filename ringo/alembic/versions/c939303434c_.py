@@ -22,7 +22,7 @@ DELETES = """"""
 
 
 def iter_statements(stmts):
-    for st in stmts.split('\n'):
+    for st in [st for st in stmts.split('\n') if st]:
         op.execute(st)
 
 
