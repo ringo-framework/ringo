@@ -12,14 +12,11 @@ from ringo.lib.renderer.dialogs import (
     ConfirmDialogRenderer,
     ErrorDialogRenderer,
     ExportDialogRenderer,
-    ImportDialogRenderer,
-    PrintDialogRenderer
+    ImportDialogRenderer
 )
 from ringo.lib.renderer.lists import (
     ListRenderer,
-    DTListRenderer,
-    NewsListRenderer,
-    TodoListRenderer
+    DTListRenderer
 )
 
 def setup_render_globals(config):

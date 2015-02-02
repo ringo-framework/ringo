@@ -20,15 +20,10 @@ template_lookup = TemplateLookup(directories=[modul_template_dir])
 mixinmap = {
     'owned': 'Owned',
     'meta': 'Meta',
-    'logged': 'Logged',
     'state': 'StateMixin',
     'blobform': 'Blobform',
     'versioned': 'Versioned',
-    'printable': 'Printable',
-    'nested': 'Nested',
-    'commented': 'Commented',
-    'tagged': 'Tagged',
-    'todo': 'Todo'
+    'nested': 'Nested'
 }
 
 

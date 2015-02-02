@@ -10,7 +10,6 @@ Further ringo provides a :class:`.BaseFactory` to create new items and a
 import logging
 import operator
 import math
-import json
 import re
 import uuid
 from sqlalchemy import Column, CHAR
@@ -23,7 +22,7 @@ from ringo.lib.sql import DBSession
 from ringo.lib.sql.cache import regions
 from ringo.lib.sql.query import FromCache, set_relation_caching
 from ringo.lib.alchemy import get_columns_from_instance
-from ringo.model.mixins import Logged, StateMixin, Owned
+from ringo.model.mixins import StateMixin, Owned
 
 log = logging.getLogger(__name__)
 
@@ -35,6 +34,7 @@ opmapping = {
     "!=": operator.ne,
     "==": operator.eq
 }
+
 
 def nonecmp(a, b):
     if a is None and b is None:
@@ -269,15 +269,18 @@ class BaseItem(object):
                     self.change_state(request, key,
                                       old_state_id, new_state_id)
 
-        # Handle logentry
-        if isinstance(self, Logged):
-            if not self.id:
-                subject = "Create"
-                text = json.dumps(self.build_changes(old_values, data))
-            else:
-                subject = "Update"
-                text = json.dumps(self.build_changes(old_values, data))
-            self.add_log_entry(subject, text, request)
+        #  FIXME: Fix building a log entry. The log modul has been
+        #  converted to an extension and is not available in the ringo
+        #  core (ti) <2015-01-31 19:04>
+        ## Handle logentry
+        #if isinstance(self, Logged):
+        #    if not self.id:
+        #        subject = "Create"
+        #        text = json.dumps(self.build_changes(old_values, data))
+        #    else:
+        #        subject = "Update"
+        #        text = json.dumps(self.build_changes(old_values, data))
+        #    self.add_log_entry(subject, text, request)
 
         # If the item has no id, then we assume it is a new item. So
         # add it to the database session.

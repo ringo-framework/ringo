@@ -19,18 +19,6 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | profil | 200      |
   | anonymous | modul  | 403      |
   | admin     | modul  | 200      |
-  | anonymous | appointment  | 403      |
-  | admin     | appointment  | 200      |
-  | anonymous | file  | 403      |
-  | admin     | file  | 200      |
-  | anonymous | news  | 403      |
-  | admin     | news  | 200      |
-  | anonymous | comments  | 403      |
-  | admin     | comments  | 200      |
-  | anonymous | tags  | 403      |
-  | admin     | tags  | 200      |
-  | anonymous | todos  | 403      |
-  | admin     | todos | 200      |
 
 
   Scenario Outline: Create GET
@@ -50,18 +38,6 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | profil | 404      |
   | anonymous | modul  | 404      |
   | admin     | modul  | 404      |
-  | anonymous | appointment  | 403      |
-  | admin     | appointment  | 200      |
-  | anonymous | file  | 403      |
-  | admin     | file  | 200      |
-  | anonymous | news  | 403      |
-  | admin     | news  | 200      |
-  | anonymous | comments  | 403      |
-  | admin     | comments  | 200      |
-  | anonymous | tags  | 403      |
-  | admin     | tags  | 200      |
-  | anonymous | todos  | 403      |
-  | admin     | todos | 200      |
 
   Scenario Outline: Read GET
     Given a <role> user
@@ -81,18 +57,6 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | profil | 1  | 200      |
   | anonymous | modul  | 1  | 403      |
   | admin     | modul  | 1  | 200      |
-  | anonymous | appointment  | 1  | 403      |
-  | admin     | appointment  | 1  | 400      |
-  | anonymous | file  | 1  | 403      |
-  | admin     | file  | 1  | 400      |
-  | anonymous | news  | 1  | 403      |
-  | admin     | news  | 1  | 400      |
-  | anonymous | comments  | 1  | 403      |
-  | admin     | comments  | 1  | 400      |
-  | anonymous | tags  | 1  | 403      |
-  | admin     | tags  | 1  | 400      |
-  | anonymous | todos  | 1  | 403      |
-  | admin     | todos  | 1  | 400      |
 
   Scenario Outline: Edit GET
     Given a <role> user
@@ -111,18 +75,6 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | profil | 1  | 200      |
   | anonymous | modul  | 1  | 403      |
   | admin     | modul  | 1  | 200      |
-  | anonymous | appointment  | 1  | 403      |
-  | admin     | appointment  | 1  | 400      |
-  | anonymous | file  | 1  | 403      |
-  | admin     | file  | 1  | 400      |
-  | anonymous | news  | 1  | 403      |
-  | admin     | news  | 1  | 400      |
-  | anonymous | comments  | 1  | 403      |
-  | admin     | comments  | 1  | 400      |
-  | anonymous | tags  | 1  | 403      |
-  | admin     | tags  | 1  | 400      |
-  | anonymous | todos  | 1  | 403      |
-  | admin     | todos  | 1  | 400      |
 
   Scenario Outline: Delete GET
     Given a <role> user
@@ -141,18 +93,6 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | profil | 1  | 404      |
   | anonymous | modul  | 1  | 404      |
   | admin     | modul  | 1  | 404      |
-  | anonymous | appointment  | 1  | 403      |
-  | admin     | appointment  | 1  | 400      |
-  | anonymous | file  | 1  | 403      |
-  | admin     | file  | 1  | 400      |
-  | anonymous | news  | 1  | 403      |
-  | admin     | news  | 1  | 400      |
-  | anonymous | comments  | 1  | 403      |
-  | admin     | comments  | 1  | 400      |
-  | anonymous | tags  | 1  | 403      |
-  | admin     | tags  | 1  | 400      |
-  | anonymous | todos  | 1  | 403      |
-  | admin     | todos  | 1  | 400      |
 
   Scenario Outline: Export GET
     Given a <role> user
@@ -189,15 +129,3 @@ Feature: Default GET requests of various actions of the modules.
   | admin     | profil | 1  | 200      |
   | anonymous | modul  | 1  | 404      |
   | admin     | modul  | 1  | 404      |
-  | anonymous | appointment  | 1  | 403      |
-  | admin     | appointment  | 1  | 200      |
-  | anonymous | file  | 1  | 403      |
-  | admin     | file  | 1  | 200      |
-  | anonymous | news  | 1  | 403      |
-  | admin     | news  | 1  | 200      |
-  | anonymous | comments  | 1  | 403      |
-  | admin     | comments  | 1  | 200 |
-  | anonymous | tags  | 1  | 403      |
-  | admin     | tags  | 1  | 200 |
-  | anonymous | todos  | 1  | 403      |
-  | admin     | todos  | 1  | 200 |

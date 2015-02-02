@@ -8,6 +8,20 @@ to the tracker.
 - Send notification mail when a new user registers a new account.
 - Send notification mail when a new user confirms the new account.
 
+1.0
+===
+Removed most of the modules from the ringo core. The modules are about to be
+converted into extensions.
+
+- Removed Log module
+- Removed Tags module
+- Removed Printtemplate module
+- Removed Appointment module
+- Removed Comments module
+- Removed File module
+- Removed News module
+- Removed Todo module
+
 0.18.0
 ======
 - Added option to open items in a modal window.

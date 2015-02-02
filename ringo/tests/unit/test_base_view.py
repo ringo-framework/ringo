@@ -57,37 +57,3 @@ class ViewHelpersTests(BaseUnitTest):
         result = get_ownership_form(self.request, True)
         self.assertEqual(len(result.fields.keys()), 2)
         self.assertEqual(result._item, item)
-
-    def test_get_logbook_form(self):
-        from ringo.views.helpers import (
-            get_logbook_form,
-            get_item_from_request
-        )
-        item = get_item_from_request(self.request)
-        result = get_logbook_form(self.request)
-        self.assertEqual(len(result.fields.keys()), 1)
-        self.assertEqual(result._item, item)
-
-    def test_get_logbook_form_readonly(self):
-        from ringo.views.helpers import (
-            get_logbook_form,
-            get_item_from_request
-        )
-        item = get_item_from_request(self.request)
-        result = get_logbook_form(self.request, True)
-        self.assertEqual(len(result.fields.keys()), 1)
-        self.assertEqual(result._item, item)
-
-#class CRUDViewTests(BaseUnitTest):
-#
-#    def setUp(self):
-#        super(CRUDViewTests, self).setUp()
-#        # TODO: Load modul item and put it into the context of the
-#        # request (ti) <2014-04-07 20:32>
-#        self.request.context = Mock()
-#
-#    def test_read(self):
-#        from ringo.model.modul import ModulItem
-#        from ringo.views.base import read_
-#        result = read_(ModulItem, self.request)
-#        self.assertEqual(len(result), 3)

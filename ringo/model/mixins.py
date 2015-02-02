@@ -20,6 +20,10 @@ Further the 'Nested' mixin will ensure the comments can reference each other
 to be able to build a hierarchy structure (e.g Threads in the example of the
 comments).
 
+.. note::
+   The Comment Mixin has been removed from ringo and converted in the
+   the ringo comment extension.
+
 .. important::
 
     As most of the mixins will add additional tables and database fields
@@ -46,7 +50,7 @@ from sqlalchemy.orm import (
 )
 
 from ringo.model import Base
-from ringo.lib.helpers import serialize, get_raw_value
+from ringo.lib.helpers import get_raw_value
 from ringo.lib.alchemy import get_columns_from_instance
 
 log = logging.getLogger(__name__)
@@ -114,13 +118,6 @@ class StateMixin(object):
         sm.set_state(new_state_id)
         # clear cached statemachines
         setattr(self, '_cache_statemachines', {})
-        # Add logentry on statechange if the item is loggend
-        if isinstance(self, Logged):
-            from ringo.model.log import Log
-            factory = Log.get_item_factory()
-            logentry = factory.create(user=request.user)
-            logentry.subject = "State Changed: %s" % self
-            self.logs.append(logentry)
 
     def get_statemachine(self, key, state_id=None, request=None):
         """Returns a statemachine instance for the given key
@@ -293,96 +290,6 @@ class Versioned(object):
         return pvalues
 
 
-class Logged(object):
-    """Mixin to add logging functionallity to a modul. Adding this Mixin
-    the item of a modul will have a "logs" relationship containing all
-    the log entries for this item. Log entries can be created
-    automatically by the system or may be created manual by the user.
-    Manual log entries. Needs to be configured (Permissions)"""
-
-    @declared_attr
-    def logs(cls):
-        from ringo.model.log import Log
-        tbl_name = "nm_%s_logs" % cls.__name__.lower()
-        nm_table = Table(tbl_name, Base.metadata,
-                         Column('iid', Integer, ForeignKey(cls.id)),
-                         Column('lid', Integer, ForeignKey("logs.id")))
-        logs = relationship(Log, secondary=nm_table, cascade="all")
-        return logs
-
-    def build_changes(self, old_values, new_values):
-        """Returns a dictionary with the old and new values for each
-        field which has changed"""
-        diff = {}
-        if isinstance(self, Blobform):
-            data = json.loads(old_values.get("data") or "{}")
-            old_values = dict(old_values.items() + data.items())
-        for field in new_values:
-            oldv = serialize(old_values.get(field))
-            newv = serialize(new_values.get(field))
-            if newv == oldv:
-                continue
-            if field == "data":
-                diff[field] = {"old": oldv, "new": newv}
-            else:
-                diff[field] = {"old": serialize(oldv), "new": serialize(newv)}
-        return diff
-
-    def add_log_entry(self, subject, text, request):
-        """Will add a log entry for the updated item.
-        The mapper and the target parameter will be the item which
-        iherits this logged mixin.
-
-        :request: Current request
-        :subject: Subject of the logentry.
-        :text: Text of the logentry.
-
-        """
-        from ringo.model.log import Log
-        factory = Log.get_item_factory()
-        log = factory.create(user=request.user)
-        if not subject:
-            log.subject = "Update: %s" % self
-        else:
-            log.subject = subject
-        if not text:
-            log.text = self._build_changes()
-        else:
-            log.text = text
-        log.author = str(request.user)
-        self.logs.append(log)
-
-
-class Printable(Mixin):
-
-    @classmethod
-    def get_mixin_actions(cls):
-        from ringo.model.modul import ActionItem
-        actions = []
-        # Add Print action
-        action = ActionItem()
-        action.name = 'Print'
-        action.url = 'print/{id}'
-        action.icon = 'glyphicon glyphicon-print'
-        action.display = 'secondary'
-        actions.append(action)
-        return actions
-
-    # FIXME: Remove this declared attribute/relation. No item will ever
-    # be inserted in this table. Only used to get a list of items in the
-    # printdialog (ti) <2014-10-27 12:28>
-    @declared_attr
-    def printtemplates(cls):
-        from ringo.model.printtemplate import Printtemplate
-        tbl_name = "nm_%s_printtemplates" % cls.__name__.lower()
-        nm_table = Table(tbl_name, Base.metadata,
-                         Column('iid', Integer, ForeignKey(cls.id)),
-                         Column('tid', Integer,
-                                ForeignKey("printtemplates.id")))
-        logs = relationship(Printtemplate, secondary=nm_table)
-        return logs
-
-
 class Owned(object):
     """Mixin to add references to a user and a usergroup. This
     references are used to build some kind of ownership of the item. The
@@ -474,76 +381,3 @@ class Nested(object):
             childs.append(child)
             childs.extend(child.get_children())
         return childs
-
-
-class Commented(object):
-    """Mixin to add comment functionallity to a modul. Adding this Mixin
-    the item of a modul will have a "comments" relationship containing all
-    the comment entries for this item."""
-
-    @declared_attr
-    def comments(cls):
-        from ringo.model.comment import Comment
-        tbl_name = "nm_%s_comments" % cls.__name__.lower()
-        nm_table = Table(tbl_name, Base.metadata,
-                         Column('iid', Integer, ForeignKey(cls.id)),
-                         Column('cid', Integer, ForeignKey("comments.id")))
-        comments = relationship(Comment, secondary=nm_table, cascade="all")
-        return comments
-
-    @classmethod
-    def create_handler(cls, request, item):
-        cls.update_handler(request, item)
-
-    @classmethod
-    def update_handler(cls, request, item):
-        """Will add a comment entry for the updated item if the request
-        contains a parameter 'comment'.  The mapper and the target
-        parameter will be the item which inherits this commented mixin.
-
-        :request: Current request
-        :item: Item handled in the update.
-        """
-        from ringo.model.comment import Comment
-        log.debug("Called update_handler for %s" % cls)
-        user_comment = request.params.get('comment')
-        if user_comment:
-            factory = Comment.get_item_factory()
-            comment = factory.create(request.user)
-            comment.text = user_comment
-            item.comments.append(comment)
-        return item
-
-
-class Tagged(object):
-    """Mixin to add tag (keyword) functionallity to a modul. Adding this Mixin
-    the item of a modul will have a "tags" relationship containing all
-    the tag entries for this item."""
-
-    @declared_attr
-    def tags(cls):
-        from ringo.model.tag import Tag
-        tbl_name = "nm_%s_tags" % cls.__name__.lower()
-        nm_table = Table(tbl_name, Base.metadata,
-                         Column('iid', Integer, ForeignKey(cls.id)),
-                         Column('tid', Integer, ForeignKey("tags.id")))
-        tags = relationship(Tag, secondary=nm_table)
-        return tags
-
-
-class Todo(object):
-    """Mixin to add todo functionallity to a modul. Adding this Mixin
-    the item of a modul will have a "todo" relationship containing all
-    the todo entries for this item."""
-
-    @declared_attr
-    def todo(cls):
-        from ringo.model.todo import Todo
-        clsname = cls.__name__.lower()
-        tbl_name = "nm_%s_todos" % clsname
-        nm_table = Table(tbl_name, Base.metadata,
-                         Column('iid', Integer, ForeignKey(cls.id)),
-                         Column('tid', Integer, ForeignKey("todos.id")))
-        rel = relationship(Todo, secondary=nm_table,
-                           backref=clsname + "s", cascade="all")
-        return rel
