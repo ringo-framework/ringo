@@ -6,5 +6,4 @@ def step_impl(context, response):
     if ok:
         assert True
     else:
-        print context.resp.status_int, response
         assert False
