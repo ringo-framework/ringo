@@ -78,7 +78,6 @@ def login(context, username, password):
     logout(context)
     response = context.app.get('/auth/login')
     csrf = get_csrf_token(response)
-    print csrf
     response = context.app.post('/auth/login',
         params={'login': username,
                 'pass': password,
