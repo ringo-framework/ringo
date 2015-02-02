@@ -39,8 +39,13 @@ requires = [
 tests_requires = [
 ]
 
+# Major release
+increment_version = "0.1"
+# Minor/Bugfix release
+#increment_version = "0.0.1"
+
 setup(name='ringo',
-      version='0.18.0',
+      use_vcs_version= {"increment": increment_version},
       description='A simple web framework with base functionality to build web applications.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
