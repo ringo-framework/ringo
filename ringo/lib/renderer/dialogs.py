@@ -68,7 +68,7 @@ class ConfirmDialogRenderer(DialogRenderer):
         mapping = {'Action': self._action.capitalize()}
         values = {}
         values['request'] = self._request
-        values['icon'] = self._request.static_url(
+        values['icon'] = self._request.static_path(
             'ringo:static/images/icons/32x32/dialog-warning.png')
         values['header'] = _("Confirm ${Action}", mapping=mapping)
         values['body'] = self._render_body(items)
@@ -112,7 +112,7 @@ class ErrorDialogRenderer(DialogRenderer):
 
     def render(self, url=None):
         values = {}
-        values['icon'] = self._request.static_url(
+        values['icon'] = self._request.static_path(
             'ringo:static/images/icons/32x32/dialog-error.png')
         values['header'] = self._title
         values['body'] = self._render_body()
