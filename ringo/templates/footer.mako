@@ -23,28 +23,12 @@
           <a href="${request.route_path('contact')}">${_('Contact')}</a>
         </li>
         <li>
-          <a href="" data-toggle="modal" data-target="#helpModal">${_('Documentation')}</a>
+          <a href="${request.static_path('%s:static/doc/html/index.html' % h.get_app_name())}" target="_blank">${_('Documentation')}</a>
         </li>
         <li>
           <a href="${request.route_path('version')}" title="${_('Show version information')}">${h.get_app_title()} ver. ${h.get_app_version()}</a>
         </li>
       </ul>
-    </div>
-  </div>
-</div>
-
-<!-- Modal Help Dialog-->
-<div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="Help" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">${_('%s Documentation' % h.get_app_title())}</h4>
-      </div>
-      <div class="modal-body">
-        <iframe
-        src="${request.static_path('%s:static/doc/html/index.html' % h.get_app_name())}" frameborder="0" width="100%" height="300"></iframe>
-      </div>
     </div>
   </div>
 </div>
