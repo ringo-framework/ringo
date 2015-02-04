@@ -11,10 +11,10 @@ revision = '13822f7a643c'
 down_revision = '46edfd16f379'
 
 from alembic import op
-import sqlalchemy as sa
 
 
 UPGRADE = """
+DELETE FROM "nm_action_roles" WHERE aid IN (SELECT id FROM "actions" WHERE mid = 7);
 DELETE FROM "actions" WHERE mid = 7;
 DELETE FROM "modules" WHERE id = 7;
 """

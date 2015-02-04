@@ -15,6 +15,7 @@ import sqlalchemy as sa
 
 
 UPGRADE = """
+DELETE FROM "nm_action_roles" WHERE aid IN (SELECT id FROM actions WHERE mid = 11);
 DELETE FROM "actions" WHERE mid = 11;
 DELETE FROM "modules" WHERE id = 11;
 """

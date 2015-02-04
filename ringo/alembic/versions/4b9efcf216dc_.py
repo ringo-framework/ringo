@@ -14,7 +14,7 @@ from alembic import op
 
 
 UPGRADE = """
-DELETE FROM "nm_action_roles" WHERE aid IN (SELECT id FROM actions WHERE mid =9);
+DELETE FROM "nm_action_roles" WHERE aid IN (SELECT id FROM actions WHERE mid = 9);
 DELETE FROM "actions" WHERE mid = 9;
 DELETE FROM "modules" WHERE id = 9;
 """
