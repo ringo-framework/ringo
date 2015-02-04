@@ -757,7 +757,7 @@ msgstr ""
 
 #: ringo/views/request.py:72
 msgid "Edited ${item_type} \"${item}\" successfull."
-msgstr "${item_type} \"${item}\" wurde erfolgreich bearbeitet."
+msgstr "${item_type} \"${item}\" wurde erfolgreich gespeichert."
 
 #: ringo/views/request.py:96
 msgid "Error while saving ${item_type} \"${item}\": ${error}."
