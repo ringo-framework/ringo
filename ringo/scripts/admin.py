@@ -34,6 +34,11 @@ from ringo.scripts.db import (
     handle_db_unrestrict_command
 )
 
+from ringo.scripts.fixture import (
+    handle_fixture_load_command,
+    handle_fixture_save_command
+)
+
 from ringo.scripts.modul import (
     handle_modul_add_command,
     handle_modul_delete_command,
@@ -44,8 +49,30 @@ from ringo.scripts.user import (
     handle_user_passwd_command
 )
 
+def get_config_path(config="development.ini"):
+    return os.path.join(os.getcwd(), config)
+
 def modul_name(var):
     return str(var).lower()
+
+def setup_fixture_parser(subparsers, parent):
+    p = subparsers.add_parser('fixtures',
+                              help='Fixture loading and saving',
+                              parents=[parent])
+    sp = p.add_subparsers(help='Fixture command help')
+
+    # Load
+    passwd_parser = sp.add_parser('load',
+                                help=('Loads all fixture files.'),
+                                parents=[parent])
+    passwd_parser.set_defaults(func=handle_fixture_load_command)
+
+    # Save
+    passwd_parser = sp.add_parser('save',
+                                help=('Saves all fixture files.'),
+                                parents=[parent])
+    passwd_parser.set_defaults(func=handle_fixture_save_command)
+
 
 def setup_user_parser(subparsers, parent):
     p = subparsers.add_parser('user',
@@ -196,7 +223,7 @@ def setup_global_argument_parser():
                         metavar="BASEAPP",
                         help="Name of the base application")
     parser.add_argument('--config',
-                        default="development.ini",
+                        default=get_config_path(),
                         metavar="INI",
                         help="Configuration file for the application")
     return parser
@@ -210,6 +237,7 @@ def setup_parser():
     setup_db_parser(subparsers, global_arguments)
     setup_modul_parser(subparsers, global_arguments)
     setup_user_parser(subparsers, global_arguments)
+    setup_fixture_parser(subparsers, global_arguments)
     return parser
 
 
