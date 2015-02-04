@@ -199,6 +199,7 @@ class Role(BaseItem, Base):
     __tablename__ = 'roles'
     _modul_id = 5
     id = sa.Column(sa.Integer, primary_key=True)
+    label = sa.Column(sa.Text, unique=True, nullable=False, server_default="")
     name = sa.Column(sa.Text, unique=True, nullable=False)
     description = sa.Column(sa.Text)
     admin = sa.Column(sa.Boolean, default=False)

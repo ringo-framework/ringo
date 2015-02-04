@@ -1,7 +1,7 @@
 {
     "overview": {
         "columns": [
-            {"name": "name", "label": "Name", "width": "200"},
+            {"name": "label", "label": "Label", "width": "200"},
             {"name": "permissions", "label": "Roles"},
             {"name": "admin", "label": "Administrational role", "width": "100"}
         ]
