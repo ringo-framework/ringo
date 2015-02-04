@@ -1,5 +1,5 @@
 from invoke import run
-from ringo.scripts.application import get_db, get_package_name, get_fixtures
+from ringo.scripts.helpers import get_db, get_package_name, get_fixtures
 
 
 def handle_fixture_load_command(args):
