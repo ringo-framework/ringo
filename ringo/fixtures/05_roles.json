@@ -1,0 +1,1 @@
+[{"users": [1], "name": "admin", "admin": true, "uuid": "38db659bde2843c6b3a052010d40c633", "label": "", "permissions": [], "id": 1, "description": null}, {"users": [], "name": "user", "admin": false, "uuid": "abbfbcabd04344c1983ba628baea6fde", "label": "", "permissions": [20, 21], "id": 2, "description": null}]
