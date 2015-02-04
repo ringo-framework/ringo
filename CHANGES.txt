@@ -29,6 +29,8 @@ rock solid web application in Ringo.
 
 New:
 - Added Label field to the roles module.
+- Added new fixture command in ringo-admin to load and save fixtures.
+- Added fixtures for initial data.
 
 Changed:
 - The documentation is now opened in a new browser window instead of opening
