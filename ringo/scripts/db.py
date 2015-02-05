@@ -148,6 +148,10 @@ def handle_db_upgrade_command(args):
     cfg = get_alembic_config(args)
     command.upgrade(cfg, "head")
 
+def handle_db_revision_command(args):
+    path = create_new_revision(args)
+    print "New migration script created: %s" % path
+
 def handle_db_savedata_command(args):
     path = []
     path.append(get_app_location(args.app))
