@@ -80,8 +80,7 @@ class ActionItem(BaseItem, Base):
     description = sa.Column(sa.Text)
     """Short description what the action does. Should be obvious by the
     name of the action anyway."""
-    bundle = sa.Column(sa.Boolean, nullable=False,
-                       server_default=sa.sql.expression.false())
+    bundle = sa.Column(sa.Boolean, nullable=False, default=False)
     """Flag to indicate if the action should be available in the bundled
     actions"""
     display = sa.Column(sa.Text, default="primary")
