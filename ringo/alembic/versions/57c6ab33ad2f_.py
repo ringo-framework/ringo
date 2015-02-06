@@ -144,7 +144,7 @@ def upgrade():
     sa.Column('url', sa.Text(), nullable=False),
     sa.Column('icon', sa.Text(), nullable=False),
     sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('bundle', sa.Boolean(), server_default=sa.text(u'0'), nullable=False),
+    sa.Column('bundle', sa.Boolean(), nullable=False),
     sa.Column('display', sa.Text(), nullable=True),
     sa.Column('permission', sa.Text(), nullable=True),
     sa.ForeignKeyConstraint(['mid'], ['modules.id'], ),
