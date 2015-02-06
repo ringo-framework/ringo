@@ -392,7 +392,12 @@ class Importer(object):
                 tmp = []
                 for item_id in obj[field]:
                     q = self._db.query(clazz).filter(clazz.id == item_id)
-                    tmp.append(q.one())
+                    try:
+                        tmp.append(q.one())
+                    except:
+                        log.warning(("Can not load '%s' id: %s "
+                                     "Relation '%s' of '%s' not set"
+                                     % (clazz, item_id, field, self._clazz)))
                 obj[field] = tmp
         return obj
 
