@@ -70,6 +70,8 @@ class BaseUnitTest(BaseTestCase):
         user.settings = {'searches': {'foo': 'bar'}}
 
         request.user = user
+
+        request.accept_language = Mock(return_value="en")
         request.translate = lambda x: x
         request.db = self.session
         request.context = Mock()
