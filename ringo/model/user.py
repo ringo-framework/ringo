@@ -15,7 +15,7 @@ password_reset_requests = sa.Table(
     sa.Column('id', sa.Integer, primary_key=True),
     sa.Column('uid', sa.Integer, sa.ForeignKey('users.id')),
     sa.Column('created', sa.DateTime),
-    sa.Column('token', sa.Text)
+    sa.Column('token', sa.String)
 )
 
 # NM-Table definitions
@@ -94,10 +94,10 @@ class User(BaseItem, Base):
     _modul_id = 3
     _sql_eager_loads = ['roles', 'groups']
     id = sa.Column(sa.Integer, primary_key=True)
-    login = sa.Column(sa.Text, unique=True, nullable=False)
-    password = sa.Column(sa.Text, nullable=False)
+    login = sa.Column(sa.String, unique=True, nullable=False)
+    password = sa.Column(sa.String, nullable=False)
     activated = sa.Column(sa.Boolean, default=True)
-    activation_token = sa.Column(sa.Text)
+    activation_token = sa.Column(sa.String, nullable=False, default='')
     gid = sa.Column(sa.Integer, sa.ForeignKey('usergroups.id'))
     sid = sa.Column(sa.Integer, sa.ForeignKey('user_settings.id'))
     last_login = sa.Column(sa.DateTime)
@@ -167,8 +167,8 @@ class Usergroup(BaseItem, Base):
     __tablename__ = 'usergroups'
     _modul_id = 4
     id = sa.Column(sa.Integer, primary_key=True)
-    name = sa.Column(sa.Text, unique=True, nullable=False)
-    description = sa.Column(sa.Text)
+    name = sa.Column(sa.String, unique=True, nullable=False)
+    description = sa.Column(sa.String, nullable=False, default='')
 
     # Relations
     roles = sa.orm.relationship("Role", secondary=nm_usergroup_roles)
@@ -199,9 +199,9 @@ class Role(BaseItem, Base):
     __tablename__ = 'roles'
     _modul_id = 5
     id = sa.Column(sa.Integer, primary_key=True)
-    label = sa.Column(sa.Text, unique=True, nullable=False, server_default="")
-    name = sa.Column(sa.Text, unique=True, nullable=False)
-    description = sa.Column(sa.Text)
+    label = sa.Column(sa.String, unique=True, nullable=False)
+    name = sa.Column(sa.String, unique=True, nullable=False)
+    description = sa.Column(sa.Text, nullable=False, default='')
     admin = sa.Column(sa.Boolean, default=False)
     """Flag to set the role as administrational role which means that
     the user will gain the assigned permissions irrespective from
@@ -216,17 +216,18 @@ class Profile(BaseItem, Owned, Base):
     __tablename__ = 'profiles'
     _modul_id = 6
     id = sa.Column(sa.Integer, primary_key=True)
-    first_name = sa.Column(sa.Text, nullable=True)
-    last_name = sa.Column(sa.Text, nullable=True)
+    first_name = sa.Column(sa.String, nullable=True, default='')
+    last_name = sa.Column(sa.String, nullable=True, default='')
     gender = sa.Column(sa.Integer)
     birthday = sa.Column(sa.Date)
-    address = sa.Column(sa.Text)
-    phone = sa.Column(sa.Text)
-    email = sa.Column(sa.Text, nullable=True)
-    web = sa.Column(sa.Text)
+    address = sa.Column(sa.Text, nullable=True, default='')
+    phone = sa.Column(sa.String, nullable=True, default='')
+    email = sa.Column(sa.String, nullable=True)
+    web = sa.Column(sa.String, nullable=True, default='')
 
     # The foreign key to the user is injected from the Owned mixin.
     user = sa.orm.relation("User", cascade="all, delete",
-                           backref=sa.orm.backref("profile", cascade="all, delete-orphan"),
+                           backref=sa.orm.backref("profile",
+                                                  cascade="all,delete-orphan"),
                            single_parent=True,
                            uselist=False)

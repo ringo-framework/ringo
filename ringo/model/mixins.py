@@ -38,6 +38,7 @@ from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy import (
     Column,
     Text,
+    String,
     Integer,
     DateTime,
     ForeignKey,
@@ -215,9 +216,9 @@ class Blobform(object):
 class Version(Base):
     __tablename__ = 'versions'
     id = Column(Integer, primary_key=True)
-    values = Column(Text, default=None)
-    author = Column(Text, default=None)
-    date = Column(DateTime, default=None)
+    values = Column(Text, nullable=False)
+    author = Column(String, nullable=False)
+    date = Column(DateTime, nullable=False)
 
 
 class Versioned(object):

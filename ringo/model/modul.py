@@ -53,17 +53,17 @@ class ActionItem(BaseItem, Base):
     id = sa.Column(sa.Integer, primary_key=True)
     mid = sa.Column(sa.Integer, sa.ForeignKey('modules.id'))
     """Foreign Key to the modull to which the action belongs to."""
-    name = sa.Column(sa.Text, nullable=False)
+    name = sa.Column(sa.String, nullable=False)
     """Name of the Action. E.g "Create" or "Read". The will be used for
      * rendering the action and
      * internal identification (lowercase version of the name) on
      * permission checks (see :attr:`.permission`).
     """
-    url = sa.Column(sa.Text, nullable=False)
+    url = sa.Column(sa.String, nullable=False)
     """The url which is called for this action if a user calls this
     actions. Used for rendering links in the application and while
     initialising the moduls on application start to setup the views."""
-    icon = sa.Column(sa.Text, nullable=False)
+    icon = sa.Column(sa.String, nullable=False, default='')
     """A string which configures which icons should be used when
     rendering the action in the UI. The string will be usually rendered
     as class attribute of a bootstrap <i> element. Known predefined values are:
@@ -77,17 +77,17 @@ class ActionItem(BaseItem, Base):
      * Export: icon-export
      * Import: icon-import
      """
-    description = sa.Column(sa.Text)
+    description = sa.Column(sa.Text, nullable=False, default='')
     """Short description what the action does. Should be obvious by the
     name of the action anyway."""
     bundle = sa.Column(sa.Boolean, nullable=False, default=False)
     """Flag to indicate if the action should be available in the bundled
     actions"""
-    display = sa.Column(sa.Text, default="primary")
+    display = sa.Column(sa.String, nullable=False, default="primary")
     """Optional. Configure where the action will be displayed. If display is
     'secondary' the action will be rendererd in the advanced dropdown
     context menu. Default is 'primary'"""
-    permission = sa.Column(sa.Text)
+    permission = sa.Column(sa.String, nullable=False, default='')
     """Optional. Configure an alternative permission the user must have
     to be allowed to call this action. Known values are 'list', 'create',
     'read', 'update', 'delete', 'import', 'export'. If empty the
@@ -114,23 +114,23 @@ class ModulItem(BaseItem, Base):
     _modul_id = 1
     id = sa.Column(sa.Integer, primary_key=True)
     """Internal ID of the modul."""
-    name = sa.Column(sa.Text, unique=True, nullable=False)
+    name = sa.Column(sa.String, unique=True, nullable=False)
     """Internal name of the modul which is usually autogenrated and must
     not be changed!. The name is crucial for the application as it also
     defines some other namings as the name of configuration files for
     forms or tables."""
-    clazzpath = sa.Column(sa.Text, unique=True, nullable=False)
+    clazzpath = sa.Column(sa.String, unique=True, nullable=False)
     """Path to the moduls model in dot notation"""
-    label = sa.Column(sa.Text, nullable=False)
+    label = sa.Column(sa.String, nullable=False, default='')
     """The label in single form of the modul. Used for display in
     various places of the application."""
-    label_plural = sa.Column(sa.Text, nullable=False)
+    label_plural = sa.Column(sa.String, nullable=False, default='')
     """The label in plural form of the modul. Used for display in
     various places of the application."""
-    description = sa.Column(sa.Text)
+    description = sa.Column(sa.Text, nullable=False, default='')
     """The label in plural form of the modul. Used for display in
     various places of the application."""
-    str_repr = sa.Column(sa.Text)
+    str_repr = sa.Column(sa.String, nullable=False, default='%s|id')
     """Format string which defines how items of the modul will be renderered
     when the __unicode__ or __str__ method is called for the items. This
     is often the case in dropdown lists or overview tables. The string
@@ -138,7 +138,7 @@ class ModulItem(BaseItem, Base):
     side of the configuration defines the "layout" with placeholder (%s)
     and the right part the attributes which will be used to replace the
     placeholders."""
-    display = sa.Column(sa.Text)
+    display = sa.Column(sa.String, nullable=False, default='hidden')
     """Configures where the items will be displayed in the web
     application. Possibile options are:
 
