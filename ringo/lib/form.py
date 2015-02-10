@@ -12,7 +12,7 @@ formbar_js_filenames = []
 
 
 def get_ownership_form(item, db, csrf_token, eval_url,
-                       readonly=None, url_prefix=None):
+                       readonly=None, url_prefix=None, locale=None):
     if readonly:
         config = _get_form_config('ringo', 'ownership.xml',
                                   'ownership-form-read')
@@ -22,7 +22,8 @@ def get_ownership_form(item, db, csrf_token, eval_url,
     return Form(config, item, db,
                 csrf_token=csrf_token,
                 eval_url=eval_url,
-                url_prefix=url_prefix)
+                url_prefix=url_prefix,
+                locale=locale)
 
 
 def get_item_form(item, name, db, translate, renderers,
