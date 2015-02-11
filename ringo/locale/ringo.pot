@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.19.dev0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-11 14:40+0100\n"
+"POT-Creation-Date: 2015-02-11 15:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -688,8 +688,20 @@ msgstr ""
 msgid "Empty selection"
 msgstr ""
 
+#: ringo/views/base/list_.py:229
+msgid ""
+"You have not selected any item in the list. Click 'OK' to return to the "
+"overview."
+msgstr ""
+
 #: ringo/views/base/list_.py:258
 msgid "${action} not applicable"
+msgstr ""
+
+#: ringo/views/base/list_.py:264
+msgid ""
+"After checking the permissions no items remain for which an '${action}' can "
+"be performed. (${num} items were filtered out.)"
 msgstr ""
 
 #. Label for start field in form config

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-11 14:40+0100\n"
-"PO-Revision-Date: 2015-02-11 13:44+0000\n"
+"POT-Creation-Date: 2015-02-11 15:46+0100\n"
+"PO-Revision-Date: 2015-02-11 14:52+0000\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/ringo/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -699,9 +699,21 @@ msgstr "Schlechte Nachrichten! Der Import konnte nicht beendet werden und meldet
 msgid "Empty selection"
 msgstr "Leere Auswahl"
 
+#: ringo/views/base/list_.py:229
+msgid ""
+"You have not selected any item in the list. Click 'OK' to return to the "
+"overview."
+msgstr "Sie haben keinen Eintrag aus der Liste ausgewählt. Klicken Sie 'OK', um zur Übersicht zurückzukehren."
+
 #: ringo/views/base/list_.py:258
 msgid "${action} not applicable"
 msgstr "${action} nicht anwendbar"
+
+#: ringo/views/base/list_.py:264
+msgid ""
+"After checking the permissions no items remain for which an '${action}' can "
+"be performed. (${num} items were filtered out.)"
+msgstr "Nach der Überprüfung der Berechtigungen verbleiben keine Einträge, auf die die Aktion '${action}' angewendet werden kann. (${num} Einträge wurden ausgefiltert.)"
 
 #. Label for start field in form config
 #. Label for start column in overview table config

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-11 14:40+0100\n"
+"POT-Creation-Date: 2015-02-11 15:46+0100\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -695,8 +695,20 @@ msgstr ""
 msgid "Empty selection"
 msgstr ""
 
+#: ringo/views/base/list_.py:229
+msgid ""
+"You have not selected any item in the list. Click 'OK' to return to the "
+"overview."
+msgstr ""
+
 #: ringo/views/base/list_.py:258
 msgid "${action} not applicable"
+msgstr ""
+
+#: ringo/views/base/list_.py:264
+msgid ""
+"After checking the permissions no items remain for which an '${action}' "
+"can be performed. (${num} items were filtered out.)"
 msgstr ""
 
 #. Label for start field in form config
@@ -1240,11 +1252,6 @@ msgstr ""
 #~ msgid "Mime"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "You can define an alternative name for the file. If left blank\n"
-#~ "      than the origin filename will be used as name."
-#~ msgstr ""
-
 #~ msgid "Keywords"
 #~ msgstr ""
 
@@ -1270,15 +1277,6 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "The type of the tag will determine how the tag is displayed (colored)"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Optional. Choose a modul this keyword"
-#~ " belongs to. If not selected the "
-#~ "keyword is considrered as global keyword"
-#~ " which is available in all moduls."
-#~ " Otherwise the keyword is only "
-#~ "available in the selected modul."
 #~ msgstr ""
 
 #~ msgid "Primary"
@@ -1315,18 +1313,6 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Please give the date and time until this task must be finished."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Please give the date from which "
-#~ "you will be reminded (e.g on the"
-#~ " dashboad) for this task."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Please select the users which are responsibly for this task.\n"
-#~ "      The task will be listed for this users in their Todo\n"
-#~ "      overview."
 #~ msgstr ""
 
 #~ msgid "Yes, show it immediately"

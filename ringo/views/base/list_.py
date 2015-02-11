@@ -226,8 +226,8 @@ def bundle_(request):
     # dialog informing that the selection is empty.
     if not ids:
         title =  _("Empty selection")
-        body =  _(("You have not selected any item in the list. "
-                   "Click 'OK' to return to the overview."))
+        body =  _("You have not selected any item in the list. "
+                  "Click 'OK' to return to the overview.")
         renderer = WarningDialogRenderer(request, title, body)
         rvalue = {}
         rvalue['dialog'] = renderer.render(url=request.referrer)
@@ -257,9 +257,9 @@ def bundle_(request):
     if not items:
         title = _("${action} not applicable",
                   mapping={"action": bundle_action})
-        body = _(("After checking the permissions no items remain "
-                  "for which an '${action}' can be performed. "
-                  "(${num} items were filtered out.)"),
+        body = _("After checking the permissions no items remain "
+                 "for which an '${action}' can be performed. "
+                 "(${num} items were filtered out.)",
                  mapping={"action": bundle_action,
                           "num": len(ignored_items)})
         renderer = WarningDialogRenderer(request, title, body)
