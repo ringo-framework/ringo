@@ -8,6 +8,9 @@ from ringo.lib.security import has_permission
 from ringo.lib.renderer import (
     ListRenderer
 )
+from ringo.lib.renderer.dialogs import (
+    WarningDialogRenderer
+)
 from ringo.views.response import JSONResponse
 from ringo.views.request import (
     handle_params,
@@ -202,6 +205,7 @@ def bundle_(request):
     module = get_item_modul(request, clazz)
     handle_history(request)
     handle_params(request)
+    _ = request.translate
 
     # Handle bundle params. If the request has the bundle_action param
     # the request is the intial request for a bundled action. In this
@@ -217,6 +221,18 @@ def bundle_(request):
         request.session['%s.bundle.items' % clazz] = params.get('id', [])
     bundle_action = request.session.get('%s.bundle.action' % clazz)
     ids = request.session.get('%s.bundle.items' % clazz)
+
+    # Check if the user selected at least one item. If not show an
+    # dialog informing that the selection is empty.
+    if not ids:
+        title =  _("Empty selection")
+        body =  _(("You have not selected any item in the list. "
+                   "Click 'OK' to return to the overview."))
+        renderer = WarningDialogRenderer(request, title, body)
+        rvalue = {}
+        rvalue['dialog'] = renderer.render(url=request.referrer)
+        return rvalue
+
     # If the user only selects one single item it is not a list. So
     # convert it to a list with one item.
     if not isinstance(ids, list):
