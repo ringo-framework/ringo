@@ -195,14 +195,14 @@ autoresponsive = tableconfig.is_autoresponsive()
                 if hasattr(v, "render"):
                   x.append(v.render())
                 else:
-                  x.append(unicode(v))
+                  x.append(_(v))
                 endif
               endfor
               value = ", ".join(x)
              %>
         % endif
         ## Render a usual Link which will open the item.
-        <a class="link" title="${_('Open item in %s mode' % permission)}" href="${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}">${value}</a>
+        <a class="link" title="${_('Open item in %s mode' % permission)}" href="${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}">${_(value)}</a>
         % endif
     </td>
     % endfor
