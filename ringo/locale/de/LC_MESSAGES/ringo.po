@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-01-27 16:29+0100\n"
-"PO-Revision-Date: 2015-01-27 16:33+0100\n"
+"PO-Revision-Date: 2015-02-09 18:38+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language-Team: German "
 "(http://www.transifex.com/projects/p/ringo/language/de/)\n"
@@ -161,7 +161,7 @@ msgstr "%s Dokumentation"
 
 #: ringo/templates/header.mako:24
 msgid "Home"
-msgstr "Home"
+msgstr "Startseite"
 
 #: ringo/templates/header.mako:35
 msgid "Settings"
