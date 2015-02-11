@@ -1,4 +1,4 @@
-"""Initial 1.0 migration
+"""Initial Ringo 1.0 migration
 
 Revision ID: 57c6ab33ad2f
 Revises: None
