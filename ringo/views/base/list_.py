@@ -240,6 +240,7 @@ def bundle_(request):
 
     factory = clazz.get_item_factory()
     items = []
+    ignored_items = []
     for id in ids:
         # Check if the user is allowed to call the requested action on
         # the loaded item. If so append it the the bundle, if not ignore
@@ -247,6 +248,25 @@ def bundle_(request):
         item = factory.load(id)
         if has_permission(bundle_action.lower(), item, request):
             items.append(item)
+        else:
+            ignored_items.append(item)
+
+    # After checking the permissions the list of items might be empty.
+    # If so show a warning to the user to inform him that the selected
+    # action is not applicable.
+    if not items:
+        title = _("${action} not applicable",
+                  mapping={"action": bundle_action})
+        body = _(("After checking the permissions no items remain "
+                  "for which an '${action}' can be performed. "
+                  "(${num} items were filtered out.)"),
+                 mapping={"action": bundle_action,
+                          "num": len(ignored_items)})
+        renderer = WarningDialogRenderer(request, title, body)
+        rvalue = {}
+        rvalue['dialog'] = renderer.render(url=request.referrer)
+        return rvalue
+
     handler = get_bundle_action_handler(_bundle_request_handlers,
                                         bundle_action.lower(),
                                         module.name)
