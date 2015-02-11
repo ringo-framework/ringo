@@ -62,14 +62,15 @@ class ConfirmDialogRenderer(DialogRenderer):
         """@todo: to be defined """
         DialogRenderer.__init__(self, request, clazz, action, title, body)
         self.template = template_lookup.get_template("internal/confirm.mako")
+        self.icon = self._request.static_path(
+            'ringo:static/images/icons/32x32/dialog-warning.png')
 
     def render(self, items):
         _ = self._request.translate
         mapping = {'Action': self._action.capitalize()}
         values = {}
         values['request'] = self._request
-        values['icon'] = self._request.static_path(
-            'ringo:static/images/icons/32x32/dialog-warning.png')
+        values['icon'] = self.icon
         values['header'] = _("Confirm ${Action}", mapping=mapping)
         values['body'] = self._render_body(items)
         values['action'] = self._action.capitalize()
@@ -109,11 +110,12 @@ class ErrorDialogRenderer(DialogRenderer):
         """@todo: to be defined """
         DialogRenderer.__init__(self, request, None, None, title, body)
         self.template = template_lookup.get_template("internal/error.mako")
+        self.icon = self._request.static_path(
+            'ringo:static/images/icons/32x32/dialog-error.png')
 
     def render(self, url=None):
         values = {}
-        values['icon'] = self._request.static_path(
-            'ringo:static/images/icons/32x32/dialog-error.png')
+        values['icon'] = self.icon
         values['header'] = self._title
         values['body'] = self._render_body()
         history = self._request.session.get('history')
@@ -130,6 +132,15 @@ class ErrorDialogRenderer(DialogRenderer):
         out = []
         out.append(self._body)
         return "".join(out)
+
+
+class WarningDialogRenderer(ErrorDialogRenderer):
+    def __init__(self, request, title, body):
+        """@todo: to be defined """
+        ErrorDialogRenderer.__init__(self, request, title, body)
+        self.template = template_lookup.get_template("internal/warning.mako")
+        self.icon = self._request.static_path(
+            'ringo:static/images/icons/32x32/dialog-warning.png')
 
 
 class ExportDialogRenderer(DialogRenderer):
