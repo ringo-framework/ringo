@@ -26,13 +26,17 @@ var opts = {
 };
 var spinner = new Spinner(opts).spin();
 $( document ).ready(function() {
-    $('.dialog').modal();
+    $('.dialog').modal({
+        backdrop: "static"
+    });
     $('.fade.out').delay(3 * 1000).fadeOut();
     $('#savequerydialog').modal({
-        show: false
+        show: false,
+        backdrop: "static"
     });
     $('#logoutWarning').modal({
-        show: false
+        show: false,
+        backdrop: "static"
     });
     $('.datatable-paginated').dataTable( {
            "oLanguage": {

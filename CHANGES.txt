@@ -38,6 +38,7 @@ New:
 Changed:
 - The documentation is now opened in a new browser window instead of opening
   it in a modal popup window.
+- Modal dialogs can not be closed by clicking in the background.
 
 Removed:
 - Pre 1.0 Migration scripts removed. The older migrations scripts are now
