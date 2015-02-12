@@ -1,5 +1,8 @@
 from invoke import run
+import pkg_resources
 
+def get_package_location(name):
+    return pkg_resources.get_distribution(name).location
 
 def get_package_name(config_file):
     result = run("sed -n 's|^use = egg:\\([[:graph:]]*\\).*|\\1|p' %s | head -1" % config_file, hide="out")
