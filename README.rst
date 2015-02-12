@@ -62,6 +62,8 @@ start the standalone application of ringo with the following steps:
 
 - $ ringo-admin db init
 
+- $ ringo-admin fixtures load
+
 - $ invoke docs
 
 - $ pserve development.ini
