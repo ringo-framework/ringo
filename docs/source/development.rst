@@ -183,6 +183,7 @@ many tables would be scheduled for a drop.
 initialize the database with the migration scripts of ''Foo''::
         
         bar-admin db init --base foo
+        bar-admin fixtures load --app foo
 
 Voilà! That is it.
 
