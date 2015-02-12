@@ -1,0 +1,27 @@
+[
+    {
+        "admin": true,
+        "description": null,
+        "id": 1,
+        "label": "Administration",
+        "name": "admin",
+        "permissions": [],
+        "users": [
+            1
+        ],
+        "uuid": "38db659bde2843c6b3a052010d40c633"
+    },
+    {
+        "admin": false,
+        "description": null,
+        "id": 2,
+        "label": "Users",
+        "name": "user",
+        "permissions": [
+            20,
+            21
+        ],
+        "users": [],
+        "uuid": "abbfbcabd04344c1983ba628baea6fde"
+    }
+]
