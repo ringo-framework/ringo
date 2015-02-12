@@ -1,11 +1,11 @@
 function getLanguage() {
     var lang = getLanguageFromBrowser();
     if ( lang == "german" ) {
-        return lang
+        return lang;
     } else {
-        return "default"
+        return "default";
     }
-};
+}
 var opts = {
   lines: 9, // The number of lines to draw
   length: 21, // The length of each line
