@@ -1,3 +1,4 @@
+import os
 from invoke import run
 import pkg_resources
 
@@ -15,7 +16,8 @@ def get_db(config_file):
 
 
 def get_fixtures(appname):
-    result = run("ls %s/fixtures/*.json" % appname, hide="out").stdout.strip()
+    apppath = os.path.join(get_package_location(appname), appname)
+    result = run("ls %s/fixtures/*.json" % apppath, hide="out").stdout.strip()
     fixtures = []
     for fixture in sorted(result.split("\n")):
         fixtures.append((fixture, fixture.split("_")[1].split(".")[0]))
