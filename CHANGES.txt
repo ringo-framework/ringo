@@ -39,6 +39,12 @@ Changed:
 - The documentation is now opened in a new browser window instead of opening
   it in a modal popup window.
 
+Removed:
+- Pre 1.0 Migration scripts removed. The older migrations scripts are now
+  replaced by one single script. The alembic version of this version is still
+  the same so that future migration scripts can be applied to old applications
+  as well.
+
 0.18.0
 ======
 - Added option to open items in a modal window.

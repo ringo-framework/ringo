@@ -41,9 +41,9 @@ class Form(BaseItem, ReviewStateMixin, Owned, Meta, Base):
     _modul_id = 14
     id = sa.Column(sa.Integer, primary_key=True)
     category = sa.Column(sa.Integer)
-    title = sa.Column(sa.String)
-    description = sa.Column(sa.Text)
-    definition = sa.Column(sa.Text)
+    title = sa.Column(sa.String, nullable=True, default='')
+    description = sa.Column(sa.Text, nullable=True, default='')
+    definition = sa.Column(sa.Text, nullable=True, default='')
     mid = sa.Column(sa.Integer, sa.ForeignKey('modules.id'))
 
     # relations

@@ -1,0 +1,19 @@
+[
+    {
+        "address": null,
+        "birthday": null,
+        "email": "mail@example.com",
+        "first_name": "Firstname",
+        "gender": null,
+        "gid": null,
+        "group": null,
+        "id": 1,
+        "last_name": "Lastname",
+        "owner": 1,
+        "phone": null,
+        "uid": 1,
+        "user": 1,
+        "uuid": "f355e8336b97436e9e9773e934eb6f6d",
+        "web": null
+    }
+]

@@ -9,6 +9,7 @@ import sets
 import sqlalchemy as sa
 
 from ringo.model.base import BaseItem
+from ringo.model.user import UserSetting
 from ringo.lib.helpers import serialize
 
 log = logging.getLogger(__name__)
@@ -19,12 +20,15 @@ class ExtendedJSONEncoder(json.JSONEncoder):
         if isinstance(obj, BaseItem):
             return obj.id
             # Let the base class default method raise the TypeError
-        if isinstance(obj, datetime.datetime):
+        elif isinstance(obj, datetime.datetime):
             return obj.strftime("%Y-%m-%d %H:%M:%S")
-        if isinstance(obj, datetime.date):
+        elif isinstance(obj, datetime.date):
             return obj.strftime("%Y-%m-%d")
             # Let the base class default method raise the TypeError
-        return json.JSONEncoder.default(self, obj)
+        elif isinstance(obj, UserSetting):
+            return obj.id
+        else:
+            return json.JSONEncoder.default(self, obj)
 
 
 class RecursiveExporter(object):
@@ -392,7 +396,12 @@ class Importer(object):
                 tmp = []
                 for item_id in obj[field]:
                     q = self._db.query(clazz).filter(clazz.id == item_id)
-                    tmp.append(q.one())
+                    try:
+                        tmp.append(q.one())
+                    except:
+                        log.warning(("Can not load '%s' id: %s "
+                                     "Relation '%s' of '%s' not set"
+                                     % (clazz, item_id, field, self._clazz)))
                 obj[field] = tmp
         return obj
 
