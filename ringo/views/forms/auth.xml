@@ -2,7 +2,7 @@
 <configuration>
   <source>
     <!-- Define different entity types -->
-    <entity id="e1" name="login" label="Loginname" type="string" required="true"/>
+    <entity id="e1" name="login" label="Loginname" type="string" required="true" autofocus="true"/>
     <entity id="e2" name="pass" label="Password">
       <renderer type="password"/>
       <rule expr="bool($pass)" msg="Password is required" method="pre"/>
