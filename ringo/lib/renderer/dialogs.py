@@ -170,12 +170,13 @@ class ExportDialogRenderer(DialogRenderer):
                          url_prefix=request.application_url)
 
     def render(self, items):
+        _ = self._request.translate
         values = {}
         values['request'] = self._request
         values['items'] = items
         values['body'] = self._render_body()
         values['modul'] = get_item_modul(self._request, self._item).get_label(plural=True)
-        values['action'] = self._action.capitalize()
+        values['action'] = _(self._action.capitalize())
         values['ok_url'] = self._request.current_route_path()
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer

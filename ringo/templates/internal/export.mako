@@ -5,7 +5,7 @@
         <div class="panel-heading"><strong>${_('Export configuration for')} ${modul}</strong></div>
           <div class="panel-body">
             <p>${body}</p>
-            <p>${_('You have selected %s %s for export:' % (len(items), modul))}</p>
+            <p>${_('You have selected %s %s for export:') % (len(items), modul)}</p>
             <ol>
             % for item in items:
                 <li>${item}</li>
