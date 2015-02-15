@@ -67,13 +67,13 @@ class ConfirmDialogRenderer(DialogRenderer):
 
     def render(self, items):
         _ = self._request.translate
-        mapping = {'Action': self._action.capitalize()}
+        mapping = {'Action': _(self._action.capitalize())}
         values = {}
         values['request'] = self._request
         values['icon'] = self.icon
         values['header'] = _("Confirm ${Action}", mapping=mapping)
         values['body'] = self._render_body(items)
-        values['action'] = self._action.capitalize()
+        values['action'] = _(self._action.capitalize())
         values['ok_url'] = self._request.current_route_path()
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
@@ -83,9 +83,11 @@ class ConfirmDialogRenderer(DialogRenderer):
     def _render_body(self, items):
         out = []
         _ = self._request.translate
-        item_label = cgi.escape(get_item_modul(self._request, self._item).get_label())
-        mapping = {'action': cgi.escape(self._action), 'item': item_label,
-                   'Action': cgi.escape(self._action.capitalize())}
+        item_label = cgi.escape(get_item_modul(self._request,
+                                               self._item).get_label())
+        mapping = {'action': cgi.escape(_(self._action.capitalize()).lower()),
+                   'item': item_label,
+                   'Action': cgi.escape(_(self._action.capitalize()))}
         out.append(_("Do you really want to ${action}"
                      " the following ${item} items?",
                      mapping=mapping))
