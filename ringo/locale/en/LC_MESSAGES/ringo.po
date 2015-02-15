@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-15 20:11+0100\n"
+"POT-Creation-Date: 2015-02-15 20:28+0100\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -37,6 +37,34 @@ msgstr ""
 msgid ""
 "Please press \"${Action}\" to ${action} the item. Press \"Cancel\" to "
 "cancel the action."
+msgstr ""
+
+#: ringo/model/modul.py:202
+msgid "List"
+msgstr ""
+
+#: ringo/model/modul.py:205 ringo/templates/default/list.mako:36
+msgid "Create"
+msgstr ""
+
+#: ringo/model/modul.py:208
+msgid "Read"
+msgstr ""
+
+#: ringo/model/modul.py:211
+msgid "Update"
+msgstr ""
+
+#: ringo/model/modul.py:214
+msgid "Delete"
+msgstr ""
+
+#: ringo/model/modul.py:218 ringo/templates/default/list.mako:41
+msgid "Import"
+msgstr ""
+
+#: ringo/model/modul.py:221
+msgid "Export"
 msgstr ""
 
 #: ringo/model/statemachine.py:159
@@ -336,14 +364,6 @@ msgstr ""
 #: ringo/templates/default/create.mako:5 ringo/templates/default/list.mako:12
 #: ringo/templates/default/list.mako:27 ringo/templates/default/list.mako:29
 msgid "New"
-msgstr ""
-
-#: ringo/templates/default/list.mako:36
-msgid "Create"
-msgstr ""
-
-#: ringo/templates/default/list.mako:41
-msgid "Import"
 msgstr ""
 
 #: ringo/templates/internal/confirm.mako:13

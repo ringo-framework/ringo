@@ -197,27 +197,28 @@ class ModulItem(BaseItem, Base):
         except:
             return ("%s", ["id"])
 
+_ = lambda msgid: msgid
 ACTIONS = {
-    "list":   ActionItem(name="List",
+    "list":   ActionItem(name=_("List"),
                          url="list",
                          icon="icon-list-alt"),
-    "create": ActionItem(name="Create",
+    "create": ActionItem(name=_("Create"),
                          url="create",
                          icon=" icon-plus"),
-    "read":   ActionItem(name="Read",
+    "read":   ActionItem(name=_("Read"),
                          url="read/{id}",
                          icon="icon-eye-open"),
-    "update": ActionItem(name="Update",
+    "update": ActionItem(name=_("Update"),
                          url="update/{id}",
                          icon="icon-edit"),
-    "delete": ActionItem(name="Delete",
+    "delete": ActionItem(name=_("Delete"),
                          url="delete/{id}",
                          icon="icon-trash",
                          bundle=True),
-    "import": ActionItem(name="Import",
+    "import": ActionItem(name=_("Import"),
                          url="import",
                          icon="icon-import"),
-    "export": ActionItem(name="Export",
+    "export": ActionItem(name=_("Export"),
                          url="export/{id}",
                          icon="icon-export",
                          bundle=True)

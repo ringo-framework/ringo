@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-15 20:11+0100\n"
-"PO-Revision-Date: 2015-02-15 20:18+0100\n"
+"POT-Creation-Date: 2015-02-15 20:28+0100\n"
+"PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language-Team: German "
 "(http://www.transifex.com/projects/p/ringo/language/de/)\n"
@@ -43,6 +43,34 @@ msgid ""
 msgstr ""
 "Bitte klicken Sie auf \"${Action}\", um den Eintrag zu ${action}. Klicken"
 " sie auf \"Abbrechen\", um den Vorgang abzubrechen."
+
+#: ringo/model/modul.py:202
+msgid "List"
+msgstr "Auflisten"
+
+#: ringo/model/modul.py:205 ringo/templates/default/list.mako:36
+msgid "Create"
+msgstr "Anlegen"
+
+#: ringo/model/modul.py:208
+msgid "Read"
+msgstr "Lesen"
+
+#: ringo/model/modul.py:211
+msgid "Update"
+msgstr "Bearbeiten"
+
+#: ringo/model/modul.py:214
+msgid "Delete"
+msgstr "Löschen"
+
+#: ringo/model/modul.py:218 ringo/templates/default/list.mako:41
+msgid "Import"
+msgstr "Importieren"
+
+#: ringo/model/modul.py:221
+msgid "Export"
+msgstr "Exportieren"
 
 #: ringo/model/statemachine.py:159
 msgid ""
@@ -390,14 +418,6 @@ msgstr "Password nicht zurückgesetzt"
 #: ringo/templates/default/list.mako:27 ringo/templates/default/list.mako:29
 msgid "New"
 msgstr "Neu"
-
-#: ringo/templates/default/list.mako:36
-msgid "Create"
-msgstr "Anlegen"
-
-#: ringo/templates/default/list.mako:41
-msgid "Import"
-msgstr "Importieren"
 
 #: ringo/templates/internal/confirm.mako:13
 #: ringo/templates/internal/import.mako:14
