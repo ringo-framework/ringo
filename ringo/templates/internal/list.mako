@@ -230,7 +230,7 @@ autoresponsive = tableconfig.is_autoresponsive()
         % for action in h.get_item_actions(request, clazz):
           ${action.bundle}
           % if action.bundle:
-            <option value="${action.name}">${action.name}</option>
+            <option value="${action.name}">${_(action.name)}</option>
           % endif
         % endfor
       </select>
