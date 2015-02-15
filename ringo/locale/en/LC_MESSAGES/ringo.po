@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-11 15:46+0100\n"
+"POT-Creation-Date: 2015-02-15 20:11+0100\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: ringo/lib/imexport.py:436
+#: ringo/lib/imexport.py:445
 msgid "UPDATE"
 msgstr ""
 
-#: ringo/lib/imexport.py:439
+#: ringo/lib/imexport.py:448
 msgid "CREATE"
 msgstr ""
 
@@ -675,7 +675,19 @@ msgstr ""
 msgid "Error on changing the password for \"${item}\"."
 msgstr ""
 
-#: ringo/views/base/delete.py:50
+#: ringo/views/base/delete.py:55
+msgid "Can not delete ${item_type} items."
+msgstr ""
+
+#: ringo/views/base/delete.py:57
+msgid ""
+"There has been an integrity error which prevents the request to be "
+"fulfilled. There are still depended items on the item to be deleted. "
+"Please remove all depended relations to this item before deleting it and "
+"try again. Hint: ${error}"
+msgstr ""
+
+#: ringo/views/base/delete.py:69
 msgid "Deleted ${num} ${item_type} successfull."
 msgstr ""
 
