@@ -11,6 +11,8 @@ from ringo.lib.renderer.dialogs import (
     DialogRenderer,
     ConfirmDialogRenderer,
     ErrorDialogRenderer,
+    WarningDialogRenderer,
+    InfoDialogRenderer,
     ExportDialogRenderer,
     ImportDialogRenderer
 )

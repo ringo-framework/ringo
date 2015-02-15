@@ -143,6 +143,15 @@ class WarningDialogRenderer(ErrorDialogRenderer):
             'ringo:static/images/icons/32x32/dialog-warning.png')
 
 
+class InfoDialogRenderer(ErrorDialogRenderer):
+    def __init__(self, request, title, body):
+        """@todo: to be defined """
+        ErrorDialogRenderer.__init__(self, request, title, body)
+        self.template = template_lookup.get_template("internal/info.mako")
+        self.icon = self._request.static_path(
+            'ringo:static/images/icons/32x32/dialog-information.png')
+
+
 class ExportDialogRenderer(DialogRenderer):
     """Docstring for ExportDialogRenderer"""
 
