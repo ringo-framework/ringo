@@ -36,6 +36,9 @@
     <entity id="e9" name="profile" label="Profile" readonly="true">
       <renderer type="dropdown"/>
     </entity>
+    <entity id="p1" name="first_name" label="Firstname" type="string" required="true"/>
+    <entity id="p2" name="last_name" label="Lastname" type="string" required="true"/>
+    <entity id="p3" name="email" label="E-Mail" type="email" required="true"/>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>
@@ -61,9 +64,12 @@
 
   <!-- Create-->
   <snippet id="create_snippet">
+    <snippet ref="profile"/>
+    <fieldset label="User data">
     <snippet ref="s1c"/>
     <snippet ref="s2"/>
     <snippet ref="s3"/>
+    </fieldset>
   </snippet>
   <!-- Create-->
   <snippet id="update_snippet">
@@ -72,6 +78,17 @@
   </snippet>
 
   <!-- Login -->
+  <snippet id="profile">
+    <fieldset label="Profile data">
+    <row>
+      <col><field ref="p1"/></col>
+      <col><field ref="p2"/></col>
+    </row>
+    <row>
+      <col><field ref="p3"/></col>
+    </row>
+    </fieldset>
+  </snippet>
   <snippet id="s1c">
     <row>
       <col><field ref="e1"/></col>
