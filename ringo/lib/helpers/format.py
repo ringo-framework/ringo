@@ -36,6 +36,8 @@ def prettify(request, value):
     if isinstance(value, date):
         return format_date(value,
                            locale_name=locale_name, format="short")
+    if value is None:
+        return ""
     return value
 
 ###########################################################################
