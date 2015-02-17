@@ -8,6 +8,9 @@ def step_impl(context, error):
     csrf = get_csrf_token(context.resp)
     values = {
         "login": "test",
+        "first_name": "xxx",
+        "last_name": "yyy",
+        "email": "test@test.de",
         "password": "test",
         "retype_password": "test",
         "csrf_token": csrf
@@ -27,6 +30,9 @@ def step_impl(context, error, id):
     values = {
         "id": id,
         "login": "test2",
+        "first_name": "xxx",
+        "last_name": "yyy",
+        "email": "test@test.de",
         "password": "test",
         "retype_password": "test",
         "csrf_token": csrf
