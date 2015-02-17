@@ -8,6 +8,7 @@ Further ringo provides a :class:`.BaseFactory` to create new items and a
 :class:`.BaseList` to handle lists of items for all modules.
 """
 import logging
+import warnings
 import operator
 import math
 import re
@@ -574,7 +575,7 @@ class BaseFactory(object):
                 item.gid = default_gid
         return item
 
-    def load(self, id, db=None, cache="", uuid=False):
+    def load(self, id, db=None, cache="", uuid=False, field=None):
         """Loads the item with id from the database and returns it.
 
         :id: ID of the item to be loaded
@@ -582,6 +583,8 @@ class BaseFactory(object):
         :cache: Name of the cache region. If empty then no caching is
                 done.
         :uuid: If true the given id is a uuid. Default to false
+        :field: If given the item can be loaded by an alternative field.
+                Default to None
         :returns: Instance of clazz
 
         """
@@ -593,7 +596,12 @@ class BaseFactory(object):
             q = q.options(FromCache(cache))
         for relation in self._clazz._sql_eager_loads:
             q = q.options(joinedload(relation))
+        if field:
+            return q.filter(getattr(self._clazz, field) == id).one()
         if uuid:
+            warnings.warn("Use of 'uuid' is deprecated in load function "
+                          "and will be removed in the future. Use "
+                          "field='uuid' instead", DeprecationWarning)
             return q.filter(self._clazz.uuid == id).one()
         else:
             return q.filter(self._clazz.id == id).one()
