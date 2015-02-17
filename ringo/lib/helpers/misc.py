@@ -120,7 +120,14 @@ def _get_item_modul(request, item):
     if not request or not request.cache_item_modul.get(item._modul_id):
         from ringo.model.modul import ModulItem
         factory = ModulItem.get_item_factory()
-        modul = factory.load(item._modul_id)
+        if item._modul_id is None:
+            # FIXME: Special case when loading fixtures for extensions.
+            # As the id of an extension is set dynamically on
+            # application startup the id is not yet present at time of
+            # fixture loading. (ti) <2015-02-17 23:00>
+            modul = factory.load(item.__tablename__, field="name")
+        else:
+            modul = factory.load(item._modul_id)
         if request:
             if not request.cache_item_modul.get(item._modul_id):
                 request.cache_item_modul.set(item._modul_id, modul)
