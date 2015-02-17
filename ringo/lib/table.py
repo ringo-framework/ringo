@@ -186,6 +186,12 @@ def _load_overview_config(clazz):
     cfile = "%s.json" % clazz.__tablename__
     config = None
     name = clazz.__module__.split(".")[0]
+    # FIXME: Add support loading configurations in case of derived
+    # models. In this case we should try to look for a
+    # configuration in the application which inherits from a model.
+    # If there is no configuration. Try to figure out from which
+    # model it is derived and load the configuration of the base
+    # class () <2015-02-17 15:57>
     try:
         # Always first try to load from the current application. No
         # matter what the current name is as name can be different from
