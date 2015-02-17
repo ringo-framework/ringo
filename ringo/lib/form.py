@@ -80,9 +80,9 @@ def get_form_config(item, formname):
 
 def _get_form_config(name, filename, formname):
     """Return the file based configuration for a given form. The
-    configuration tried to be loaded from the application first. If this
-    fails it tries to load it from the extension and finally from the
-    ringo application."""
+    configuration tried to be loaded from the current application first.
+    If this fails it tries to load it from the extension or orign
+    application and finally from the ringo application."""
     try:
         # Always first try to load from the current application. No
         # matter what the current name is as name can be different from
@@ -93,8 +93,13 @@ def _get_form_config(name, filename, formname):
     except IOError:
         try:
             # This path is working for extensions.
-            loaded_config = load(get_path_to_form_config(filename,
-                                                         name, location="."))
+            if name.startswith("ringo_"):
+                loaded_config = load(get_path_to_form_config(filename, name,
+                                                             location="."))
+            # This path is working for base config of the application.
+            else:
+                loaded_config = load(get_path_to_form_config(filename,
+                                                             name))
         except IOError:
             # Final fallback try to load from ringo.
             loaded_config = load(get_path_to_form_config(filename, "ringo"))

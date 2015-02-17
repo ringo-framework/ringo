@@ -180,8 +180,9 @@ def _load_overview_config(clazz):
     configuration. The configuration is loaded from a JSON
     configuration file. The function will first try to load the
     application specific configuration. If this fails it will try to
-    load it form the extension specific loaction and finally from ringo.
-    If no configuration can be found an exception is raised."""
+    load it form the extension specific loaction or orign application
+    and finally from ringo.  If no configuration can be found an
+    exception is raised."""
     cfile = "%s.json" % clazz.__tablename__
     config = None
     name = clazz.__module__.split(".")[0]
@@ -195,9 +196,13 @@ def _load_overview_config(clazz):
     except IOError:
         try:
             # This path is working for extensions.
-            config = open(get_path_to_overview_config(cfile,
-                                                      name,
-                                                      location="."), "r")
+            if name.startswith("ringo_"):
+                config = open(get_path_to_overview_config(cfile,
+                                                          name,
+                                                          location="."), "r")
+            # This path is working for base config of the application.
+            else:
+                config = open(get_path_to_overview_config(cfile, name), "r")
         except IOError:
             # Final fallback try to load from ringo.
             config = open(get_path_to_overview_config(cfile, "ringo"), "r")
