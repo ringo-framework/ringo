@@ -4,7 +4,7 @@ from formbar.form import Form
 from formbar.config import Config, load, parse
 from formbar.helpers import get_css_files, get_js_files
 from ringo.lib.cache import CACHE_FORM_CONFIG
-from ringo.lib.helpers import get_path_to
+from ringo.lib.helpers import get_path_to, get_app_name
 
 eval_url = '/rest/rule/evaluate'
 formbar_css_filenames = []
@@ -84,12 +84,19 @@ def _get_form_config(name, filename, formname):
     fails it tries to load it from the extension and finally from the
     ringo application."""
     try:
-        loaded_config = load(get_path_to_form_config(filename, name))
+        # Always first try to load from the current application. No
+        # matter what the current name is as name can be different from
+        # the appname in case of loading forms for an extension. In this
+        # case first try to load the form configuration from the
+        # application to be able to overwrite the forms.
+        loaded_config = load(get_path_to_form_config(filename, get_app_name()))
     except IOError:
         try:
+            # This path is working for extensions.
             loaded_config = load(get_path_to_form_config(filename,
                                                          name, location="."))
         except IOError:
+            # Final fallback try to load from ringo.
             loaded_config = load(get_path_to_form_config(filename, "ringo"))
     return Config(loaded_config).get_form(formname)
 

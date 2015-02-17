@@ -2,7 +2,7 @@
 import logging
 import os
 import json
-from ringo.lib.helpers import get_path_to
+from ringo.lib.helpers import get_path_to, get_app_name
 from ringo.lib.cache import CACHE_TABLE_CONFIG
 
 log = logging.getLogger(__name__)
@@ -186,12 +186,19 @@ def _load_overview_config(clazz):
     config = None
     name = clazz.__module__.split(".")[0]
     try:
-        config = open(get_path_to_overview_config(cfile, name), "r")
+        # Always first try to load from the current application. No
+        # matter what the current name is as name can be different from
+        # the appname in case of loading forms for an extension. In this
+        # case first try to load the form configuration from the
+        # application to be able to overwrite the forms.
+        config = open(get_path_to_overview_config(cfile, get_app_name()), "r")
     except IOError:
         try:
+            # This path is working for extensions.
             config = open(get_path_to_overview_config(cfile,
                                                       name,
                                                       location="."), "r")
         except IOError:
+            # Final fallback try to load from ringo.
             config = open(get_path_to_overview_config(cfile, "ringo"), "r")
     return json.load(config)
