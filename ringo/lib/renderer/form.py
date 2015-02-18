@@ -222,6 +222,8 @@ class ListingFieldRenderer(FormbarSelectionField):
       implemented on client side.
     * openmodal: "true" or "false". If true the item will be opened in a
       modal popup.
+    * backlink: "true" or "false". If true the user will be redirected
+      back to the listing after creating a new item. Defaults to true.
     """
 
     def __init__(self, field, translate):
