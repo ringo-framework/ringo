@@ -17,11 +17,14 @@ def serialize(value):
         # use 1 and 0 here to be able to set this values on import,
         # "True" and "False" will fail.
         return value and "1" or "0"
+    # Now handle relations, 3 cases: empty, 1 item and 2+ items.
     if isinstance(value, list) and not value:
         return []
     # cannot import BaseItem here, so check for BaseItem with hasattr.
     if isinstance(value, list) and hasattr(value[0], 'id'):
-        return [v.id for v in value]
+        return sorted([v.id for v in value])
+    if hasattr(value, 'id'):
+        return [value.id]
     return unicode(value)
 
 
