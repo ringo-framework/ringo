@@ -20,8 +20,11 @@ def _mark_news_as_read(request, item):
     # A news item will be shown for all users in item.users. To make it
     # read we remove the entry of the current user from the item.users
     # list.
-    users = item.users
-    users.remove(request.user)
+    remaining_users = []
+    for user in item.users:
+        if user.id != request.user.id:
+            remaining_users.append(user)
+    item.users = remaining_users
     return item
 
 
