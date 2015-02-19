@@ -216,6 +216,8 @@ class ListingFieldRenderer(FormbarSelectionField):
       implemented on client side.
     * openmodal: "true" or "false". If true the item will be opened in a
       modal popup.
+    * backlink: "true" or "false". If true the user will be redirected
+      back to the listing after creating a new item. Defaults to true.
     """
 
     def __init__(self, field, translate):
@@ -272,6 +274,9 @@ class ListingFieldRenderer(FormbarSelectionField):
         """Initialize renderer"""
         html = []
         config = self._field._config.renderer
+        has_errors = len(self._field.get_errors())
+        has_warnings = len(self._field.get_warnings())
+        html.append('<div class="form-group %s %s">' % ((has_errors and 'has-error'), (has_warnings and 'has-warning')))
         html.append(self._render_label())
         if self._field.is_readonly() or self.onlylinked == "true":
             items = self._get_selected_items(self.itemlist.items)
@@ -295,4 +300,7 @@ class ListingFieldRenderer(FormbarSelectionField):
                   'tableconfig': get_table_config(self.itemlist.clazz,
                                                   config.table)}
         html.append(self.template.render(**values))
+        html.append(self._render_errors())
+        html.append(self._render_help())
+        html.append('</div>')
         return "".join(html)
