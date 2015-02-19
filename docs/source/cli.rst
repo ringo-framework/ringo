@@ -8,13 +8,7 @@ Init database
 -------------
 The database can be initiated with the following command::
 
-        ringo-admin db init --with-data
-
-This will init the database and executes all migration scripts to setup up the
-database.
-
-The option *--with-data* is used to load all fixtures after the database has
-been setup.
+        ringo-admin db init
 
 Export data
 -----------
