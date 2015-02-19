@@ -3,21 +3,19 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Ringo's documentation!
-=================================
-This is the documentation of the Ringo application framework. After a short overview we
-will explain the user interface and some basic concepts in Ringo.
+Ringo documentation
+===================
 
 .. toctree::
    :maxdepth: 3
 
    overview
-   ui
    usage
-   architecture
-   development
    config
-   api
+   cli
+   development
+   recipes
+
 
 Indices and tables
 ==================
@@ -25,4 +23,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
