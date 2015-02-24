@@ -105,12 +105,9 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
         %>
         <td class="${num > 0 and 'hidden-xs'}">
         % if permission and not field.renderer.nolinks == "true":
-          % if field.renderer.openmodal == "true":
-            <a href="${request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)}" class="link modalform">
-          % else:
-            <a href="${request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)}" class="link">
-          % endif
-          ${_(value)}
+            ${render_item_link(request, clazz, permission, item, value,
+                              (field.renderer.openmodal == "true"),
+                              (field.renderer.backlink != "false"))}
           </a>
         % else:
           ${_(value)}
