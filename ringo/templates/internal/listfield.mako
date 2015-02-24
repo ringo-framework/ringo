@@ -71,28 +71,29 @@ for item in items:
         </td>
       % endif
       % for num, col in enumerate(tableconfig.get_columns()):
-        % if permission and not field.renderer.nolinks == "true":
-          % if field.renderer.openmodal == "true":
-            <td href="${request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)}" class="${num > 0 and 'hidden-xs'} link modalform">
-          % else:
-            <td onclick="openItem('${request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)}')" class="${num > 0 and 'hidden-xs'} link">
-          % endif
-        % else:
-          <td class="${num > 0 and 'hidden-xs'}">
-        % endif
         <%
           try:
-            value = prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand')))
+            rvalue = prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand')))
+            if isinstance(rvalue, list):
+              value = ", ".join(unicode(_(v)) for v in rvalue)
+            else:
+              value = rvalue
           except AttributeError:
             value = "NaF"
         %>
-        ## Escape value here
-        % if isinstance(value, list):
-          ${", ".join(unicode(_(v)) for v in value) | h}
+        <td class="${num > 0 and 'hidden-xs'}">
+        % if permission and not field.renderer.nolinks == "true":
+          % if field.renderer.openmodal == "true":
+            <a href="${request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)}" class="link modalform">
+          % else:
+            <a href="${request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)}" class="link">
+          % endif
+          ${_(value)}
+          </a>
         % else:
           ${_(value)}
         % endif
-      </td>
+        </td>
       % endfor
     </tr>
     % endfor
