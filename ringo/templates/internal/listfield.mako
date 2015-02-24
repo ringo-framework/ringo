@@ -72,7 +72,7 @@ for item in items:
           % if field.renderer.openmodal == "true":
             <td href="${request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)}" class="${num > 0 and 'hidden-xs'} link modalform">
           % else:
-          <td onclick="openItem('${request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)}')" class="${num > 0 and 'hidden-xs'} link">
+            <td onclick="openItem('${request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)}')" class="${num > 0 and 'hidden-xs'} link">
           % endif
         % else:
           <td class="${num > 0 and 'hidden-xs'}">
