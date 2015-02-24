@@ -171,7 +171,7 @@ class BaseItem(object):
                 obj = getattr(self, elements[0])
                 name = elements[1]
             elif len(elements) > 2:
-                obj = getattr(self, ".".join(elements[0:-2]))
+                obj = getattr(self, ".".join(elements[0:-1]))
                 name = elements[-1]
             else:
                 obj = self

@@ -22,7 +22,10 @@ for item in items:
     <tr class="table-toolbar">
       <th colspan="${len(tableconfig.get_columns())+1}">
       <a href="#"
-      onclick="addItem('${request.route_path(h.get_action_routename(clazz, "create"))}', '${field.name}', '${field.renderer.form}', '${field._form._item.id}', '${h.get_item_modul(request, pclazz).clazzpath}')"
+      onclick="addItem('${request.route_path(h.get_action_routename(clazz,
+      "create"))}', '${field.name}', '${field.renderer.form}',
+      '${field._form._item.id}', '${h.get_item_modul(request,
+      pclazz).clazzpath}', '${field.renderer.backlink != 'false'}')"
       ><i class="glyphicon glyphicon-plus"></i></a>
       </th>
     </tr>
@@ -107,12 +110,20 @@ function openItem(url) {
   location.href = url + '?backurl=' + document.URL;
 };
 
-function addItem(url, foreignkey, form, id, clazz) {
+function addItem(url, foreignkey, form, id, clazz, backlink) {
   //var activetab = $('.tab-pane.active');
   if (form == "None") {
-    location.href = url + '?addrelation=' + foreignkey + ':' + clazz + ':' + id + '&backurl=' + document.URL;
+    if (backlink == 'False') {
+      location.href = url + '?addrelation=' + foreignkey + ':' + clazz + ':' + id;
+    } else {
+      location.href = url + '?addrelation=' + foreignkey + ':' + clazz + ':' + id + '&backurl=' + document.URL;
+    }
   } else {
-    location.href = url + '?addrelation=' + foreignkey + ':' + clazz + ':' + id + '&form=' + form + '&backurl=' + document.URL;
+    if (backlink == 'False') {
+      location.href = url + '?addrelation=' + foreignkey + ':' + clazz + ':' + id;
+    } else {
+      location.href = url + '?addrelation=' + foreignkey + ':' + clazz + ':' + id + '&form=' + form + '&backurl=' + document.URL;
+    }
   }
 };
 
