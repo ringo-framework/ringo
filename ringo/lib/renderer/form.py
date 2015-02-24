@@ -1,6 +1,5 @@
 import logging
 import cgi
-import json
 import os
 import pkg_resources
 from mako.lookup import TemplateLookup
@@ -10,10 +9,7 @@ from formbar.renderer import (
     SelectionFieldRenderer as FormbarSelectionField
 )
 import ringo.lib.helpers as helpers
-from ringo.lib.helpers import (
-    get_action_routename,
-    get_item_modul
-)
+from ringo.lib.helpers import get_action_routename
 from ringo.model.base import BaseItem, BaseList, get_item_list
 from ringo.lib.table import get_table_config
 import ringo.lib.security as security
@@ -131,8 +127,8 @@ class DropdownFieldRenderer(FormbarDropdown):
         try:
             item = getattr(self._field._form._item, self._field.name)
         except AttributeError:
-            log.warning("Missing %s attribute in %s" % (self._field.name,
-                                                        self._field._form._item))
+            log.warning("Missing %s attribute in %s"
+                        % (self._field.name, self._field._form._item))
             return "".join(html)
 
         if not isinstance(item, list):
@@ -142,7 +138,8 @@ class DropdownFieldRenderer(FormbarDropdown):
         for item in items:
             url = get_link_url(item, self._field._form._request)
             if url:
-                html.append('<a href="%s">%s</a>' % (url, cgi.escape(unicode(item))))
+                html.append('<a href="%s">%s</a>'
+                            % (url, cgi.escape(unicode(item))))
         return "".join(html)
 
     def _render_label(self):
@@ -175,7 +172,8 @@ class StateFieldRenderer(FormbarDropdown):
     def __init__(self, field, translate):
         """@todo: to be defined"""
         FormbarDropdown.__init__(self, field, translate)
-        self.template = template_lookup.get_template("internal/statefield.mako")
+        self.template = template_lookup.get_template("internal/"
+                                                     "statefield.mako")
 
     def _render_label(self):
         return ""
@@ -264,8 +262,8 @@ class ListingFieldRenderer(FormbarSelectionField):
         except AttributeError:
             # Can happen when designing forms an the model of the item
             # is not yet configured.
-            log.warning("Missing %s attribute in %s" % (self._field.name,
-                                                        repr(self._field._form._item)))
+            log.warning("Missing %s attribute in %s"
+                        % (self._field.name, repr(self._field._form._item)))
         return []
 
     def render(self):
@@ -282,7 +280,8 @@ class ListingFieldRenderer(FormbarSelectionField):
         # in the origin items list and has passed filtering.
         items = self._field.filter_options(items)
         # Now filter the items based on the user permissions
-        items = filter_options_on_permissions(self._field._form._request, items)
+        items = filter_options_on_permissions(self._field._form._request,
+                                              items)
 
         values = {'items': items,
                   'field': self._field,
