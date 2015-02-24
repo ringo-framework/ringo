@@ -125,11 +125,6 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
 % endfor
 
 <script type="text/javascript">
-function openItem(url) {
-  //var activetab = $('.tab-pane.active');
-  location.href = url + '?backurl=' + document.URL;
-};
-
 function addItem(url, foreignkey, form, id, clazz, backlink) {
   //var activetab = $('.tab-pane.active');
   if (form == "None") {
