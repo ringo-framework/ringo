@@ -39,6 +39,11 @@ Changed:
 - The documentation is now opened in a new browser window instead of opening
   it in a modal popup window.
 - Modal dialogs can not be closed by clicking in the background.
+- Reimplemented openmodal function in listingfields. Has been removed by
+  accident.
+- Changed behaviour of the onlylined attribute in listingfields. Also removes
+  the checkboxes now as there is no reason to link/unlink items if only the
+  linked items should be displayed.
 
 Removed:
 - Pre 1.0 Migration scripts removed. The older migrations scripts are now
