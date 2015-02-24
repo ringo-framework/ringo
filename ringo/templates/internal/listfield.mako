@@ -11,7 +11,29 @@ for item in items:
     visible_items.append(item)
   else:
     hidden_items.append(item)
+
+
+def render_item_link(request, clazz, permission, item, value, modal=False, backlink=True):
+  out = []
+  css_class = ["link"]
+  # Only take the path of the url and ignore any previous search filters.
+  url = request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)
+  if backlink:
+    out.append('<a href="%s?backurl=%s" ' % (url, request.current_route_path()))
+  else:
+    out.append('<a href="%s" ' % (url))
+  if modal:
+    css_class.append("modalform")
+  out.append('class="%s"' % " ".join(css_class))
+  out.append('>')
+  if hasattr(value, "render"):
+    out.append('%s' % _(value.render()))
+  else:
+    out.append('%s' % _(value))
+  out.append('</a>')
+  return " ".join(out)
 %>
+
 % if field.renderer.showsearch == "true" and not field.is_readonly():
 <table class="table table-condensed table-striped datatable-simple">
 % else:
