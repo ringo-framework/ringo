@@ -40,7 +40,7 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
 <table class="table table-condensed table-striped datatable-blank">
 % endif
   <thead>
-    % if not field.is_readonly() and not field.renderer.hideadd == "true" and s.has_permission("create", clazz, request):
+    % if not field.is_readonly() and not field.renderer.hideadd == "true" and s.has_permission("create", clazz, request) and h.get_item_modul(request, clazz).has_action("create"):
     <tr class="table-toolbar">
       <th colspan="${len(tableconfig.get_columns())+1}">
       <a href="#"
