@@ -66,13 +66,15 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
     </tr>
   </thead>
   <tbody>
-    % for item in visible_items:
+    % for item in items:
       <%
       permission = None
       if s.has_permission("update", item[0], request):
         permission = "update"
       elif s.has_permission("read", item[0], request):
         permission = "read"
+      elif not field.renderer.showall == "true":
+        continue
       %>
       <tr>
       % if not field.is_readonly() and field.renderer.onlylinked != "true":

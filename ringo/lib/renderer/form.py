@@ -207,6 +207,11 @@ class ListingFieldRenderer(FormbarSelectionField):
       linking.
     * showsearch: Flag "true" or "false" to configure rendering a search
       field.
+    * showall: "true" or "false". If true all items (linked and
+      unlinked) regardless if the current user is allowed to read
+      or update the item will be listed. However clicking on items the
+      user has no permission to read will have no effect as no links are
+      rendered for those items. Defaults to false.
     * onlylinked: "true" or "false". If true only linked items will be
       rendered. Checkboxes will be hidden.
     * multiple: "true" or "false". If false only one option can be
