@@ -1,7 +1,8 @@
-function getLanguage() {
-    var lang = getLanguageFromBrowser();
-    if ( lang == "german" ) {
-        return lang;
+var language = getLanguageFromBrowser();
+
+function getDTLanguage() {
+    if (language.indexOf("de") >= 0) {
+        return "german"
     } else {
         return "default";
     }
@@ -40,7 +41,7 @@ $( document ).ready(function() {
     });
     $('.datatable-paginated').dataTable( {
            "oLanguage": {
-                "sUrl": "/static/js/datatables/i18n/"+getLanguage()+".json"
+                "sUrl": "/static/js/datatables/i18n/"+getDTLanguage()+".json"
            },
            "bPaginate": true,
            "sPaginationType": "full_numbers",
@@ -54,7 +55,7 @@ $( document ).ready(function() {
      });
     $('.datatable-simple').dataTable( {
            "oLanguage": {
-                "sUrl": "/static/js/datatables/i18n/"+getLanguage()+".json"
+                "sUrl": "/static/js/datatables/i18n/"+getDTLanguage()+".json"
            },
            "bPaginate": false,
            "bLengthChange": false,
@@ -67,7 +68,7 @@ $( document ).ready(function() {
     });
     $('.datatable-blank').dataTable({
           "oLanguage": {
-               "sUrl": "/static/js/datatables/i18n/"+getLanguage()+".json"
+               "sUrl": "/static/js/datatables/i18n/"+getDTLanguage()+".json"
           },
           "bPaginate": false,
           "bLengthChange": false,
