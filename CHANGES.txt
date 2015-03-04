@@ -47,6 +47,8 @@ Changed:
 - Changed behaviour of the onlylinked attribute in listingfields. Also removes
   the checkboxes now as there is no reason to link/unlink items if only the
   linked items should be displayed.
+- Improved user language detection in Javascript. Language setting is now
+  determined by calling a remote function in the Rest API.
 
 Removed:
 - Pre 1.0 Migration scripts removed. The older migrations scripts are now
