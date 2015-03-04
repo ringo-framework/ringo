@@ -14,10 +14,10 @@ formbar_js_filenames = []
 def get_ownership_form(item, db, csrf_token, eval_url,
                        readonly=None, url_prefix=None, locale=None):
     if readonly:
-        config = _get_form_config('ringo', 'ownership.xml',
+        config = get_form_config_from_file('ringo', 'ownership.xml',
                                   'ownership-form-read')
     else:
-        config = _get_form_config('ringo', 'ownership.xml',
+        config = get_form_config_from_file('ringo', 'ownership.xml',
                                   'ownership-form-update')
     return Form(config, item, db,
                 csrf_token=csrf_token,
@@ -70,15 +70,15 @@ def get_form_config(item, formname):
     name = item.__module__.split(".")[0]
     if not CACHE_FORM_CONFIG.get(cachename):
         if hasattr(item, 'fid'):
-            config = _get_blobform_config(item.fid, formname)
+            config = get_form_config_from_db(item.fid, formname)
         else:
             filename = "%s.xml" % item.__class__.__tablename__
-            config = _get_form_config(name, filename, formname)
+            config = get_form_config_from_file(name, filename, formname)
         CACHE_FORM_CONFIG.set(cachename, config)
     return CACHE_FORM_CONFIG.get(cachename)
 
 
-def _get_form_config(name, filename, formname):
+def get_form_config_from_file(name, filename, formname):
     """Return the file based configuration for a given form. The
     configuration tried to be loaded from the current application first.
     If this fails it tries to load it from the extension or orign
@@ -112,7 +112,7 @@ def _get_form_config(name, filename, formname):
     return Config(loaded_config).get_form(formname)
 
 
-def _get_blobform_config(fid, formname):
+def get_form_config_from_db(fid, formname):
     """Return the blobform configuration for a given form."""
     from ringo.model.form import Form
     factory = Form.get_item_factory()
