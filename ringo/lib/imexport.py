@@ -340,7 +340,7 @@ class Importer(object):
                 type_mapping[prop.key] = str(prop.columns[0].type)
         return type_mapping
 
-    def _deserialize_dates(self, obj):
+    def _deserialize_values(self, obj):
         """This function can be called after the basic deserialisation has
         finished. It is used to convert integer, date and datetime objects which
         are either not supported by the defaults decoders or not decoded
@@ -451,7 +451,7 @@ class JSONImporter(Importer):
     """Docstring for JSONImporter."""
 
     def _deserialize_hook(self, obj):
-        obj = self._deserialize_dates(obj)
+        obj = self._deserialize_values(obj)
         return self._deserialize_relations(obj)
 
     def deserialize(self, data):
@@ -473,7 +473,7 @@ class CSVImporter(Importer):
         conv = {}
         for k, v in obj.iteritems():
             conv[k] = unicode(v, "utf-8")
-        conv = self._deserialize_dates(conv)
+        conv = self._deserialize_values(conv)
         return conv
 
     def deserialize(self, data):
