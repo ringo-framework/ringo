@@ -5,7 +5,7 @@ from ringo.lib.helpers import prettify
   <thead>
     <tr>
       % for field in tableconfig.get_columns():
-      <th width="${field.get('width')}">${field.get('label')}</th>
+      <th width="${field.get('width')}">${_(field.get('label'))}</th>
       % endfor
     </tr>
   </thead>
