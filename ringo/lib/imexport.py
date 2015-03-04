@@ -354,7 +354,12 @@ class Importer(object):
             if (not field in self._clazz_type or
                 not self._clazz_type[field] in ['DATE', 'DATETIME', 'INTEGER']):
                 continue
-            elif obj[field] is None:
+            else:
+                print field, obj[field], type(obj[field]), self._clazz_type[field]
+            if obj[field] is None:
+                continue
+            elif obj[field] == "":
+                obj[field] = None
                 continue
             elif self._clazz_type[field] == "INTEGER":
                 obj[field] = int(obj[field])
