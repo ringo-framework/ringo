@@ -22,3 +22,5 @@ def handle_fixture_save_command(args):
         except:
             print "Ups... Trying again without relations included"
             run("%s-admin db savedata --config %s %s > %s" % (appname, args.config, modul, fixture))
+        run("python -m json.tool %s > %s.tmp" % (fixture, fixture))
+        run("mv %s.tmp %s" % (fixture, fixture))
