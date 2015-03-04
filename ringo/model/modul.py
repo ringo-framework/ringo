@@ -86,7 +86,8 @@ class ActionItem(BaseItem, Base):
     display = sa.Column(sa.String, nullable=False, default="primary")
     """Optional. Configure where the action will be displayed. If display is
     'secondary' the action will be rendererd in the advanced dropdown
-    context menu. Default is 'primary'"""
+    context menu. If set to 'hide' the action will not be rendered at
+    all. Default is 'primary'"""
     permission = sa.Column(sa.String, nullable=False, default='')
     """Optional. Configure an alternative permission the user must have
     to be allowed to call this action. Known values are 'list', 'create',
