@@ -20,7 +20,9 @@
     </entity>
     <entity id="e4" name="roles" label="Roles"/>
     <entity id="e5" name="groups" label="Usergroups"/>
-    <entity id="e6" name="default_group" label="Default group"/>
+    <entity id="e6" name="usergroup" label="Default group">
+      <help>The default group determines which group will be used for new entries of this user.</help>
+    </entity>
     <entity id="e7" name="activated" label="Activated">
       <renderer type="radio">
         <label align="left"/>

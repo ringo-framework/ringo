@@ -129,7 +129,6 @@ def register_user(request):
             role = rfac.load(USER_ROLE_ID)
             user.roles.append(role)
             # Set default user group.
-            user.default_group = group
             request.db.add(user)
 
             # 4. Send confirmation email. The user will be activated
