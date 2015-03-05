@@ -103,6 +103,7 @@ def handle_POST_request(form, request, callback, event, renderers=None):
             if event == "create":
                 factory = clazz.get_item_factory()
                 item = factory.create(request.user, form.data)
+                mapping['item'] = item
                 item.save({}, request)
                 request.context.item = item
             else:
