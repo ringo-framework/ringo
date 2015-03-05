@@ -100,7 +100,13 @@ def handle_POST_request(form, request, callback, event, renderers=None):
 
     if form.validate(request.params) and "blobforms" not in request.params:
         try:
-            item.save(form.data, request)
+            if event == "create":
+                factory = clazz.get_item_factory()
+                item = factory.create(request.user, form.data)
+                item.save({}, request)
+                request.context.item = item
+            else:
+                item.save(form.data, request)
             handle_event(request, item, form._config.id)
             handle_callback(request, callback)
             handle_add_relation(request, item)
