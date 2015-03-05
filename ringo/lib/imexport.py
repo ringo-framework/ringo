@@ -355,12 +355,11 @@ class Importer(object):
         and datetime deserialisation
         """
         for field in obj:
-            if (not field in self._clazz_type or
-                not self._clazz_type[field] in ['DATE', 'DATETIME', 'INTEGER']):
-                continue
-            else:
-                print field, obj[field], type(obj[field]), self._clazz_type[field]
-            if obj[field] is None:
+            if (not field in self._clazz_type
+                or not self._clazz_type[field] in ['DATE',
+                                                   'DATETIME',
+                                                   'INTEGER']
+                or obj[field] is None):
                 continue
             elif obj[field] == "":
                 obj[field] = None
