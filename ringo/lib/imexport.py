@@ -438,6 +438,8 @@ class Importer(object):
         for values in import_data:
             if use_uuid:
                 id = values.get('uuid')
+                if "id" in values:
+                    del values["id"]
             else:
                 id = values.get('id')
             try:
@@ -450,11 +452,6 @@ class Importer(object):
             except:
                 item = factory.create(user=user, values=values)
                 operation = _("CREATE")
-            # Ignore id, uuid field in import.
-            if use_uuid and "id" in values:
-                del values["id"]
-            #if "uuid" in values:
-            #    del values["uuid"]
             imported_items.append((item, operation))
         return imported_items
 
