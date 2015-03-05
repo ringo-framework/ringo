@@ -445,6 +445,7 @@ class Importer(object):
                 # error on loading.
                 item = factory.load(id or "thisiddoesnotexist",
                                     uuid=use_uuid)
+                item.set_values(values)
                 operation = _("UPDATE")
             except:
                 item = factory.create(user=user, values=values)
@@ -454,7 +455,6 @@ class Importer(object):
                 del values["id"]
             #if "uuid" in values:
             #    del values["uuid"]
-            item.set_values(values)
             imported_items.append((item, operation))
         return imported_items
 
