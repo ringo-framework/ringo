@@ -345,10 +345,10 @@ class Importer(object):
         return type_mapping
 
     def _deserialize_values(self, obj):
-        """This function can be called after the basic deserialisation has
-        finished. It is used to convert integer, date and datetime objects which
-        are either not supported by the defaults decoders or not decoded
-        correct (NULL values)
+        """This function can be called after the basic deserialisation
+        has finished. It is used to convert integer, date and datetime
+        objects which are either not supported by the defaults decoders
+        or not decoded correct (NULL values)
 
         :obj: Deserialized dictionary from basic deserialisation
         :returns: Deserialized dictionary with additional integer, date
@@ -356,10 +356,10 @@ class Importer(object):
         """
         for field in obj:
             if (not field in self._clazz_type
-                or not self._clazz_type[field] in ['DATE',
-                                                   'DATETIME',
-                                                   'INTEGER']
-                or obj[field] is None):
+               or not self._clazz_type[field] in ['DATE',
+                                                  'DATETIME',
+                                                  'INTEGER']
+               or obj[field] is None):
                 continue
             elif obj[field] == "":
                 obj[field] = None
@@ -389,8 +389,8 @@ class Importer(object):
         for field in obj.keys():
             ftype = self._clazz_type[field]
             # Handle all types of relations...
-            if  ftype in ["MANYTOMANY", "MANYTOONE",
-                          "ONETOONE", "ONETOMANY"]:
+            if ftype in ["MANYTOMANY", "MANYTOONE",
+                         "ONETOONE", "ONETOMANY"]:
                 # Remove the items from the list if there is no db
                 # connection or of there are not MANYTOMANY.
                 if not self._db or (ftype != "MANYTOMANY"):
@@ -408,7 +408,6 @@ class Importer(object):
                                      % (clazz, item_id, field, self._clazz)))
                 obj[field] = tmp
         return obj
-
 
     def deserialize(self, data):
         """Will convert the string data into a dictionary like data.
