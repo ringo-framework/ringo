@@ -447,7 +447,7 @@ class Importer(object):
                                     uuid=use_uuid)
                 operation = _("UPDATE")
             except:
-                item = factory.create(user=user)
+                item = factory.create(user=user, values=values)
                 operation = _("CREATE")
             # Ignore id, uuid field in import.
             if use_uuid and "id" in values:
