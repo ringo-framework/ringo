@@ -77,14 +77,17 @@ class UserSetting(Base):
 
 class UserFactory(BaseFactory):
 
-    def create(self, user=None):
-        new_user = BaseFactory.create(self, user)
+    def create(self, user, values):
+        new_user = BaseFactory.create(self, user, values)
+
         # Now create a a new Profile
         profile_factory = BaseFactory(Profile)
-        settings_factory = BaseFactory(UserSetting)
-        settings = settings_factory.create(user)
-        profile = profile_factory.create(user)
+        profile = profile_factory.create(user, {})
         new_user.profile.append(profile)
+
+        # Create settings
+        settings_factory = BaseFactory(UserSetting)
+        settings = settings_factory.create(user, {})
         new_user.settings = settings
         return new_user
 
