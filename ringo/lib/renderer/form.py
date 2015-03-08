@@ -181,13 +181,17 @@ class StateFieldRenderer(FormbarDropdown):
         sm = item.get_statemachine(self._field.name,
                                    request=self._field._form._request)
         state = sm.get_state()
+        has_errors = len(self._field.get_errors())
+        has_warnings = len(self._field.get_warnings())
 
+        html.append('<div class="form-group %s %s">' % ((has_errors and 'has-error'), (has_warnings and 'has-warning')))
         html.append(self._render_label())
         values = {'field': self._field,
                   'request': self._field._form._request,
                   'state': state,
                   '_': self._field._form._translate}
         html.append(self.template.render(**values))
+        html.append('</div>')
         return "".join(html)
 
 
