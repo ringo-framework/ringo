@@ -5,5 +5,11 @@
             {"name": "permissions", "label": "Roles"},
             {"name": "admin", "label": "Administrational role", "width": "100"}
         ]
+    },
+    "selection": {
+        "columns": [
+            {"name": "label", "label": "Label"},
+            {"name": "admin", "label": "Administrational role"}
+        ]
     }
 }

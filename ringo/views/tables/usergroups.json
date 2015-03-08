@@ -5,5 +5,11 @@
             {"name": "members", "label": "Members"},
             {"name": "roles", "label": "Roles"}
         ]
+    },
+    "selection": {
+        "columns": [
+            {"name": "name", "label": "Name"},
+            {"name": "members", "label": "Members"}
+        ]
     }
 }
