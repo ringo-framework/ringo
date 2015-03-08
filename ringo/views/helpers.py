@@ -11,6 +11,7 @@ from ringo.lib.form import (
     get_form_config,
     get_ownership_form as _get_ownership_form
 )
+from ringo.lib.i18n import locale_negotiator
 from ringo.lib.security import has_role
 from ringo.lib.renderer import add_renderers
 from ringo.model.form import Form as BlobformForm
@@ -102,7 +103,8 @@ def get_ownership_form(request, readonly=None):
         readonly = not (item.is_owner(request.user)
                         or has_role(request.user, "admin"))
     return _get_ownership_form(item, db, csrf_token, eval_url,
-                               readonly, url_prefix)
+                               readonly, url_prefix,
+                               locale=locale_negotiator(request))
 
 
 def render_item_form(request, form, values=None, validate=True):
@@ -159,7 +161,8 @@ def get_item_form(name, request, renderers=None):
                 request=request,
                 csrf_token=request.session.get_csrf_token(),
                 eval_url=eval_url,
-                url_prefix=request.application_url)
+                url_prefix=request.application_url,
+                locale=locale_negotiator(request))
     return form
 
 

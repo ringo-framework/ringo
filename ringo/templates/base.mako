@@ -71,7 +71,7 @@
           <p>${_('You will be logged out automatically in a short time because of inactivity. Please close this dialog and init a new request to renew your session timer.')}</p>
         </div>
         <div class="panel-footer">
-          <a class="btn btn-default" href="${request.session['history'].pop()}">${_('Ok')}</a>
+          <a class="btn btn-default" href="${request.session['history'].last()}">${_('Ok')}</a>
         </div>
       </div>
     </div>
@@ -131,7 +131,9 @@
     % if (request.url.find(action.name.lower()) < 0) and s.has_permission((action.permission or action.name.lower()), request.context.item, request):
       <%
       icon = get_icon(action)
-      if action.name.lower() in ['import', 'export'] or action.display == "secondary":
+      if action.display == "hide":
+        continue
+      elif action.name.lower() in ['import', 'export'] or action.display == "secondary":
         context_actions.append((action, icon))
         continue
       %>

@@ -91,7 +91,7 @@ def copy_initial_migration_scripts(args):
     dst_files = os.listdir(dst)
     src_files = os.listdir(src)
     # Only copy the initial files if the directory is empty.
-    if len(dst_files) >= 3:
+    if len(dst_files) >= 1:
         return
     for file_name in src_files:
         full_file_name = os.path.join(src, file_name)
@@ -148,6 +148,10 @@ def handle_db_upgrade_command(args):
     cfg = get_alembic_config(args)
     command.upgrade(cfg, "head")
 
+def handle_db_revision_command(args):
+    path = create_new_revision(args)
+    print "New migration script created: %s" % path
+
 def handle_db_savedata_command(args):
     path = []
     path.append(get_app_location(args.app))
@@ -157,7 +161,9 @@ def handle_db_savedata_command(args):
     modul = dynamic_import(modul_clazzpath)
     exporter = JSONExporter(modul, serialized=False,
                             relations=args.include_relations)
-    print exporter.perform(session.query(modul).all())
+    print exporter.perform(session.query(modul)
+                          .order_by(modul.id)
+                          .all())
 
 def handle_db_loaddata_command(args):
     path = []

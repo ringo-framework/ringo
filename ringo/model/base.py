@@ -8,6 +8,7 @@ Further ringo provides a :class:`.BaseFactory` to create new items and a
 :class:`.BaseList` to handle lists of items for all modules.
 """
 import logging
+import warnings
 import operator
 import math
 import re
@@ -89,6 +90,8 @@ class BaseItem(object):
     # Added UUID column for every BaseItem. This is needed to identify
     # item on imports and exports.
     uuid = Column('uuid', CHAR(32),
+                  unique=True,
+                  nullable=False,
                   default=lambda x: '%.32x' % uuid.uuid4())
 
     def render(self):
@@ -168,7 +171,7 @@ class BaseItem(object):
                 obj = getattr(self, elements[0])
                 name = elements[1]
             elif len(elements) > 2:
-                obj = getattr(self, ".".join(elements[0:-2]))
+                obj = getattr(self, ".".join(elements[0:-1]))
                 name = elements[-1]
             else:
                 obj = self
@@ -548,15 +551,18 @@ class BaseFactory(object):
         """
         self._clazz = clazz
 
-    def create(self, user):
+    def create(self, user, values):
         """Will create a new instance of clazz. The instance is it is not saved
         persistent at this moment. The method will also take care of
         setting the correct ownership.
 
         :user: User instance will own the new created item
+        :values: Optional provide a dictionary with values for the new item
         :returns: Instance of clazz
 
         """
+        if not isinstance(values, dict):
+            raise ValueError("Values must be a dictionary")
         item = self._clazz()
         # Try to set the ownership of the entry if the item provides the
         # fields.
@@ -570,9 +576,11 @@ class BaseFactory(object):
                 modul = get_item_modul(None, item)
                 default_gid = modul.gid
                 item.gid = default_gid
+        if values:
+            item.set_values(values)
         return item
 
-    def load(self, id, db=None, cache="", uuid=False):
+    def load(self, id, db=None, cache="", uuid=False, field=None):
         """Loads the item with id from the database and returns it.
 
         :id: ID of the item to be loaded
@@ -580,6 +588,8 @@ class BaseFactory(object):
         :cache: Name of the cache region. If empty then no caching is
                 done.
         :uuid: If true the given id is a uuid. Default to false
+        :field: If given the item can be loaded by an alternative field.
+                Default to None
         :returns: Instance of clazz
 
         """
@@ -591,7 +601,12 @@ class BaseFactory(object):
             q = q.options(FromCache(cache))
         for relation in self._clazz._sql_eager_loads:
             q = q.options(joinedload(relation))
+        if field:
+            return q.filter(getattr(self._clazz, field) == id).one()
         if uuid:
+            warnings.warn("Use of 'uuid' is deprecated in load function "
+                          "and will be removed in the future. Use "
+                          "field='uuid' instead", DeprecationWarning)
             return q.filter(self._clazz.uuid == id).one()
         else:
             return q.filter(self._clazz.id == id).one()

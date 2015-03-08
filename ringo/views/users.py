@@ -21,6 +21,13 @@ User = import_model('ringo.model.user.User')
 
 log = logging.getLogger(__name__)
 
+def user_create_callback(request, user):
+    user = encrypt_password_callback(request, user)
+    # Set profile data
+    user.profile[0].first_name = request.params.get("first_name")
+    user.profile[0].last_name = request.params.get("last_name")
+    user.profile[0].email = request.params.get("email")
+    return user
 
 def encrypt_password_callback(request, user):
     """Callback helper function. This function is called within the base
@@ -45,7 +52,7 @@ def check_password(field, data):
              renderer='/default/create.mako',
              permission='create')
 def create_(request):
-    return create(request, encrypt_password_callback)
+    return create(request, user_create_callback)
 
 
 @view_config(route_name=get_action_routename(User, 'changepassword'),
@@ -121,4 +128,4 @@ def changepassword(request):
              request_method="POST",
              permission='create')
 def rest_create_(request):
-    return rest_create(User, request, encrypt_password)
+    return rest_create(User, request, user_create_callback)

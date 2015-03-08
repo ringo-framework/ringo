@@ -26,12 +26,18 @@ import argparse
 
 from ringo.scripts.db import (
     handle_db_init_command,
+    handle_db_revision_command,
     handle_db_upgrade_command,
     handle_db_savedata_command,
     handle_db_loaddata_command,
     handle_db_uuid_command,
     handle_db_restrict_command,
     handle_db_unrestrict_command
+)
+
+from ringo.scripts.fixture import (
+    handle_fixture_load_command,
+    handle_fixture_save_command
 )
 
 from ringo.scripts.modul import (
@@ -44,8 +50,30 @@ from ringo.scripts.user import (
     handle_user_passwd_command
 )
 
+def get_config_path(config="development.ini"):
+    return os.path.join(os.getcwd(), config)
+
 def modul_name(var):
     return str(var).lower()
+
+def setup_fixture_parser(subparsers, parent):
+    p = subparsers.add_parser('fixtures',
+                              help='Fixture loading and saving',
+                              parents=[parent])
+    sp = p.add_subparsers(help='Fixture command help')
+
+    # Load
+    passwd_parser = sp.add_parser('load',
+                                help=('Loads all fixture files.'),
+                                parents=[parent])
+    passwd_parser.set_defaults(func=handle_fixture_load_command)
+
+    # Save
+    passwd_parser = sp.add_parser('save',
+                                help=('Saves all fixture files.'),
+                                parents=[parent])
+    passwd_parser.set_defaults(func=handle_fixture_save_command)
+
 
 def setup_user_parser(subparsers, parent):
     p = subparsers.add_parser('user',
@@ -127,6 +155,12 @@ def setup_db_parser(subparsers, parent):
                                 parents=[parent])
     upgrade_parser.set_defaults(func=handle_db_upgrade_command)
 
+    # Revision command
+    revision_parser = sp.add_parser('revision',
+                                help='Creates a new alembic revision command',
+                                parents=[parent])
+    revision_parser.set_defaults(func=handle_db_revision_command)
+
     # Savedata command
     savedata_parser = sp.add_parser('savedata',
                                 help='Saves the data of a given modul',
@@ -196,7 +230,7 @@ def setup_global_argument_parser():
                         metavar="BASEAPP",
                         help="Name of the base application")
     parser.add_argument('--config',
-                        default="development.ini",
+                        default=get_config_path(),
                         metavar="INI",
                         help="Configuration file for the application")
     return parser
@@ -210,6 +244,7 @@ def setup_parser():
     setup_db_parser(subparsers, global_arguments)
     setup_modul_parser(subparsers, global_arguments)
     setup_user_parser(subparsers, global_arguments)
+    setup_fixture_parser(subparsers, global_arguments)
     return parser
 
 

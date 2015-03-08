@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-01-27 16:29+0100\n"
-"PO-Revision-Date: 2015-01-27 16:33+0100\n"
+"POT-Creation-Date: 2015-03-09 00:37+0100\n"
+"PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language-Team: German "
 "(http://www.transifex.com/projects/p/ringo/language/de/)\n"
@@ -20,33 +20,57 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: ringo/lib/imexport.py:437
+#: ringo/lib/imexport.py:451
 msgid "UPDATE"
 msgstr "AKTUALISIERUNG"
 
-#: ringo/lib/imexport.py:440
+#: ringo/lib/imexport.py:454
 msgid "CREATE"
 msgstr "ANLEGEN"
 
-#: ringo/lib/renderer/dialogs.py:73
+#: ringo/lib/renderer/dialogs.py:74
 msgid "Confirm ${Action}"
 msgstr "Bestätigen ${Action}"
 
-#: ringo/lib/renderer/dialogs.py:88
+#: ringo/lib/renderer/dialogs.py:91
 msgid "Do you really want to ${action} the following ${item} items?"
 msgstr "Wollen Sie wirklich die folgenden ${item} Einträge ${action}?"
 
-#: ringo/lib/renderer/dialogs.py:98
+#: ringo/lib/renderer/dialogs.py:101
 msgid ""
 "Please press \"${Action}\" to ${action} the item. Press \"Cancel\" to "
 "cancel the action."
 msgstr ""
 "Bitte klicken Sie auf \"${Action}\", um den Eintrag zu ${action}. Klicken"
-" sie auf \"Abbrechen\", um den Vorgang zuzubrechen."
+" sie auf \"Abbrechen\", um den Vorgang abzubrechen."
 
-#: ringo/lib/renderer/form.py:431
-msgid "New entry"
-msgstr "Neuer Eintrag"
+#: ringo/model/modul.py:203
+msgid "List"
+msgstr "Auflisten"
+
+#: ringo/model/modul.py:206 ringo/templates/default/list.mako:36
+msgid "Create"
+msgstr "Anlegen"
+
+#: ringo/model/modul.py:209
+msgid "Read"
+msgstr "Lesen"
+
+#: ringo/model/modul.py:212
+msgid "Update"
+msgstr "Bearbeiten"
+
+#: ringo/model/modul.py:215
+msgid "Delete"
+msgstr "Löschen"
+
+#: ringo/model/modul.py:219 ringo/templates/default/list.mako:41
+msgid "Import"
+msgstr "Importieren"
+
+#: ringo/model/modul.py:222
+msgid "Export"
+msgstr "Exportieren"
 
 #: ringo/model/statemachine.py:159
 msgid ""
@@ -86,27 +110,23 @@ msgstr ""
 msgid "Ok"
 msgstr "Ok"
 
-#: ringo/templates/base.mako:144
+#: ringo/templates/base.mako:146
 msgid "Advanced"
 msgstr "Erweitert"
 
-#: ringo/templates/base.mako:146
+#: ringo/templates/base.mako:148
 msgid "Back to"
 msgstr "Zurück zu"
 
-#: ringo/templates/base.mako:149 ringo/templates/footer.mako:7
+#: ringo/templates/base.mako:151 ringo/templates/footer.mako:7
 msgid "Administration"
 msgstr "Administration"
 
-#: ringo/templates/base.mako:150
+#: ringo/templates/base.mako:152
 msgid "Change ownership"
 msgstr "Ändere Eigentumsrechte"
 
-#: ringo/templates/base.mako:153
-msgid "Show logbook"
-msgstr "Zeige Logbuch"
-
-#: ringo/templates/base.mako:157
+#: ringo/templates/base.mako:156
 msgid "Advanced actions"
 msgstr "Erweiterte Aktionen"
 
@@ -114,10 +134,7 @@ msgstr "Erweiterte Aktionen"
 msgid "Contact"
 msgstr "Kontakt"
 
-#. Label for author field in form config
-#. Label for author column in overview table config
-#: ringo/templates/contact.mako:6 ringo/views/forms/logs.xml:1
-#: ringo/views/tables/logs.json:4
+#: ringo/templates/contact.mako:6
 msgid "Author"
 msgstr "Author"
 
@@ -127,6 +144,7 @@ msgstr "Wenn Sie fragen haben, dann zögen Sie nicht mich zu kontaktieren."
 
 #. Label for email field in form config
 #: ringo/templates/contact.mako:10 ringo/views/forms/profiles.xml:5
+#: ringo/views/forms/users.xml:14
 msgid "E-Mail"
 msgstr "E-Mail"
 
@@ -154,33 +172,28 @@ msgstr "Dokumentation"
 msgid "Show version information"
 msgstr "Zeige Informationen zur Version"
 
-#: ringo/templates/footer.mako:42
-#, python-format
-msgid "%s Documentation"
-msgstr "%s Dokumentation"
-
 #: ringo/templates/header.mako:24
 msgid "Home"
-msgstr "Home"
+msgstr "Startseite"
 
-#: ringo/templates/header.mako:35
+#: ringo/templates/header.mako:36
 msgid "Settings"
 msgstr "Einstellungen"
 
 #. Label for profile field in form config
-#: ringo/templates/header.mako:37 ringo/views/forms/users.xml:11
+#: ringo/templates/header.mako:38 ringo/views/forms/users.xml:11
 msgid "Profile"
 msgstr "Profil"
 
-#: ringo/templates/header.mako:38
+#: ringo/templates/header.mako:39
 msgid "Change Password"
 msgstr "Ändere Passwort"
 
-#: ringo/templates/header.mako:42
+#: ringo/templates/header.mako:43
 msgid "Service"
 msgstr "Dienste"
 
-#: ringo/templates/header.mako:49
+#: ringo/templates/header.mako:50
 msgid "Logout"
 msgstr "Abmelden"
 
@@ -188,7 +201,7 @@ msgstr "Abmelden"
 #. Label for login field in form config
 #. Label for user.login column in overview table config
 #. Label for login column in overview table config
-#: ringo/templates/header.mako:53 ringo/templates/index.mako:18
+#: ringo/templates/header.mako:54 ringo/templates/index.mako:18
 #: ringo/templates/auth/autologout.mako:6
 #: ringo/templates/auth/confirm_user.mako:19
 #: ringo/templates/auth/confirm_user.mako:24 ringo/templates/auth/login.mako:5
@@ -407,14 +420,6 @@ msgstr "Password nicht zurückgesetzt"
 msgid "New"
 msgstr "Neu"
 
-#: ringo/templates/default/list.mako:36
-msgid "Create"
-msgstr "Anlegen"
-
-#: ringo/templates/default/list.mako:41
-msgid "Import"
-msgstr "Importieren"
-
 #: ringo/templates/internal/confirm.mako:13
 #: ringo/templates/internal/import.mako:14
 msgid "Cancel"
@@ -445,19 +450,15 @@ msgstr "Importergebnis"
 
 #. Label for name field in form config
 #. Label for name column in overview table config
-#: ringo/templates/internal/import.mako:31 ringo/views/forms/files.xml:1
-#: ringo/views/forms/modules.xml:1 ringo/views/forms/printtemplates.xml:1
-#: ringo/views/forms/roles.xml:1 ringo/views/forms/tags.xml:1
-#: ringo/views/forms/usergroups.xml:1 ringo/views/tables/files.json:2
-#: ringo/views/tables/modules.json:3 ringo/views/tables/printtemplates.json:2
-#: ringo/views/tables/roles.json:2 ringo/views/tables/usergroups.json:2
+#. Label for name column in selection table config
+#: ringo/templates/internal/import.mako:31 ringo/views/forms/modules.xml:1
+#: ringo/views/forms/roles.xml:2 ringo/views/forms/usergroups.xml:1
+#: ringo/views/tables/modules.json:3 ringo/views/tables/usergroups.json:2
+#: ringo/views/tables/usergroups.json:6
 msgid "Name"
 msgstr "Name"
 
-#. Label for tagtype field in form config
-#. Label for tagtype column in overview table config
-#: ringo/templates/internal/import.mako:32 ringo/views/forms/tags.xml:3
-#: ringo/views/tables/tags.json:3
+#: ringo/templates/internal/import.mako:32
 msgid "Type"
 msgstr "Art"
 
@@ -559,20 +560,18 @@ msgid "Print configuration for"
 msgstr "Druckkonfiguration für"
 
 #. Label for review_state column in overview table config
-#. Label for todo_state column in overview table config
-#: ringo/templates/internal/statefield.mako:2 ringo/views/tables/forms.json:5
-#: ringo/views/tables/todos.json:5
+#: ringo/templates/internal/statefield.mako:2 ringo/views/forms/forms.xml:10
+#: ringo/views/tables/forms.json:5
 msgid "State"
 msgstr "Status"
-
-#: ringo/templates/internal/statefield.mako:4
-#: ringo/templates/internal/statefield.mako:19
-msgid "No Transition"
-msgstr "Kein Wechsel"
 
 #: ringo/templates/internal/statefield.mako:17
 msgid "State transition"
 msgstr "Zustandswechsel"
+
+#: ringo/templates/internal/statefield.mako:19
+msgid "No Transition"
+msgstr "Kein Wechsel"
 
 #: ringo/templates/internal/statefield.mako:29
 msgid "Current state"
@@ -664,10 +663,10 @@ msgstr ""
 msgid "Change Password for"
 msgstr "Ändere Passwort für"
 
-#: ringo/views/api.py:51
+#: ringo/views/api.py:61
 #, python-format
 msgid "ERROR: %s"
-msgstr ""
+msgstr "FEHLER: %s"
 
 #: ringo/views/auth.py:57
 msgid "Login failed!"
@@ -681,11 +680,11 @@ msgstr "Anmeldung war erfolgreich :)"
 msgid "Logout was successfull :)"
 msgstr "Abmeldung war erfolgreich :)"
 
-#: ringo/views/auth.py:139
+#: ringo/views/auth.py:138
 msgid "Confirm user registration"
 msgstr "Bestätigung Nutzerregistrierung"
 
-#: ringo/views/auth.py:149
+#: ringo/views/auth.py:148
 msgid ""
 "User has been created and a confirmation mail was sent to the users email"
 " adress. Please check your email :)"
@@ -693,21 +692,21 @@ msgstr ""
 "Der Zugang wurde eingerichtet und eine Bestätigungsmail wurde an die "
 "angegebene Email-Adresse versendet. Bitte prüfen Sie Ihre Email"
 
-#: ringo/views/auth.py:169
+#: ringo/views/auth.py:168
 msgid "The user has beed successfull confirmed."
 msgstr "Der Zugang wurde erfolgreich bestätigt."
 
-#: ringo/views/auth.py:171
+#: ringo/views/auth.py:170
 msgid "The user was not confirmed. Maybe the confirmation token was not valid?"
 msgstr ""
 "Der Zugang konnte nicht bestätigt werden. Vielleicht ist das Best"
 "ätigungs-Token nicht gülitg?"
 
-#: ringo/views/auth.py:195
+#: ringo/views/auth.py:194
 msgid "Password reset request"
 msgstr "Anfrage Passwort zurücksetzen"
 
-#: ringo/views/auth.py:204
+#: ringo/views/auth.py:203
 msgid ""
 "Password reset token has been sent to the users email address. Please "
 "check your email :)"
@@ -715,11 +714,11 @@ msgstr ""
 "Eine Token zum Zurücksetzen des Passworts wurde an die Email des Nutzers "
 "geschickt. Bitte prüfen Sie Ihre Email :)"
 
-#: ringo/views/auth.py:225
+#: ringo/views/auth.py:224
 msgid "Password has been reseted"
 msgstr "Passwort wurde zurückgesetzt"
 
-#: ringo/views/auth.py:232
+#: ringo/views/auth.py:231
 msgid ""
 "Password was resetted and sent to the users email address. Please check "
 "your email :)"
@@ -727,7 +726,7 @@ msgstr ""
 "Eine Token zum Zurücksetzen des Passworts wurde an die Email des Nutzers "
 "geschickt. Bitte prüfen Sie Ihre Email :)"
 
-#: ringo/views/auth.py:236
+#: ringo/views/auth.py:235
 msgid "Password was not resetted. Maybe the request token was not valid?"
 msgstr ""
 "Das Passwort wurde nicht zurückgesetzt. Vielleicht ist das Token nicht "
@@ -755,31 +754,47 @@ msgstr ""
 "Authorisierung fehlgeschlagen. Es tut mir leid, aber Sie haben nicht die "
 "erforderlichen Rechte, um auf die Ressource zuzugreifen."
 
-#: ringo/views/request.py:72
+#: ringo/views/request.py:116
 msgid "Edited ${item_type} \"${item}\" successfull."
 msgstr "${item_type} \"${item}\" wurde erfolgreich gespeichert."
 
-#: ringo/views/request.py:96
+#: ringo/views/request.py:124
 msgid "Error while saving ${item_type} \"${item}\": ${error}."
 msgstr "Fehler beim Speicher von ${item_type} \"${item}\": ${error}."
 
-#: ringo/views/request.py:103
+#: ringo/views/request.py:131
 msgid "Error on validation the data for ${item_type} \"${item}\"."
 msgstr "Fehler bei der Überprüfung der Daten für ${item_type} \"${item}\""
 
-#: ringo/views/users.py:87
+#: ringo/views/users.py:94
 msgid "The given password is not correct"
 msgstr "Das angegebene Passwort ist nicht korrekt"
 
-#: ringo/views/users.py:95
+#: ringo/views/users.py:102
 msgid "Changed password for \"${item}\" successfull."
 msgstr "Password für \"${item}\" erfolgreich geändert."
 
-#: ringo/views/users.py:105
+#: ringo/views/users.py:112
 msgid "Error on changing the password for \"${item}\"."
 msgstr "Fehler bei der Änderung des Passworts für \"${item}\"."
 
-#: ringo/views/base/delete.py:50
+#: ringo/views/base/delete.py:55
+msgid "Can not delete ${item_type} items."
+msgstr "Kann ${item_type} Einträge nicht löschen."
+
+#: ringo/views/base/delete.py:57
+msgid ""
+"There has been an integrity error which prevents the request to be "
+"fulfilled. There are still depended items on the item to be deleted. "
+"Please remove all depended relations to this item before deleting it and "
+"try again. Hint: ${error}"
+msgstr ""
+"Es gab einen Integritäts-Fehler, der verhindert, dass die Anfrage erfüllt"
+" werden konnte. Es gibt noch abhängige Einträge zu dem zu löschenden "
+"Eintrag. Bitte entfernen Sie alle abhängigen Beziehungen zu diesem "
+"Eintrag und versuchen Sie es noch einmal. Hinweis: ${error}"
+
+#: ringo/views/base/delete.py:69
 msgid "Deleted ${num} ${item_type} successfull."
 msgstr "${item_type} wurde erfolgreich gelöscht."
 
@@ -797,6 +812,31 @@ msgstr ""
 "Schlechte Nachrichten! Der Import konnte nicht beendet werden und meldet "
 "einen Fehler. Es wurden keine Einträge importiert oder verändert. Die "
 "letzte Nachricht aus dem Import war: %s"
+
+#: ringo/views/base/list_.py:228
+msgid "Empty selection"
+msgstr "Leere Auswahl"
+
+#: ringo/views/base/list_.py:229
+msgid ""
+"You have not selected any item in the list. Click 'OK' to return to the "
+"overview."
+msgstr ""
+"Sie haben keinen Eintrag aus der Liste ausgewählt. Klicken Sie 'OK', um "
+"zur Übersicht zurückzukehren."
+
+#: ringo/views/base/list_.py:258
+msgid "${action} not applicable"
+msgstr "${action} nicht anwendbar"
+
+#: ringo/views/base/list_.py:264
+msgid ""
+"After checking the permissions no items remain for which an '${action}' "
+"can be performed. (${num} items were filtered out.)"
+msgstr ""
+"Nach der Überprüfung der Berechtigungen verbleiben keine Einträge, auf "
+"die die Aktion '${action}' angewendet werden kann. (${num} Einträge "
+"wurden ausgefiltert.)"
 
 #. Label for start field in form config
 #. Label for start column in overview table config
@@ -831,25 +871,19 @@ msgid "Send a reminder email"
 msgstr "Sende Erinnerungsmail"
 
 #. Label for title field in form config
-#. Label for name field in form config
 #. Label for title column in overview table config
 #. Label for title column in fieldlist table config
-#. Label for name column in overview table config
 #: ringo/views/forms/appointments.xml:6 ringo/views/forms/forms.xml:1
-#: ringo/views/forms/todos.xml:1 ringo/views/tables/appointments.json:2
+#: ringo/views/tables/appointments.json:2
 #: ringo/views/tables/appointments.json:7 ringo/views/tables/forms.json:2
-#: ringo/views/tables/todos.json:2
 msgid "Title"
 msgstr "Titel"
 
 #. Label for description field in form config
 #. Label for description column in overview table config
-#: ringo/views/forms/appointments.xml:7 ringo/views/forms/files.xml:3
-#: ringo/views/forms/forms.xml:2 ringo/views/forms/modules.xml:4
-#: ringo/views/forms/printtemplates.xml:3 ringo/views/forms/roles.xml:4
-#: ringo/views/forms/tags.xml:2 ringo/views/forms/todos.xml:6
+#: ringo/views/forms/appointments.xml:7 ringo/views/forms/forms.xml:2
+#: ringo/views/forms/modules.xml:4 ringo/views/forms/roles.xml:5
 #: ringo/views/forms/usergroups.xml:4 ringo/views/tables/forms.json:3
-#: ringo/views/tables/printtemplates.json:3
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -922,16 +956,12 @@ msgid "Password are not equal"
 msgstr "Passwörter sind nicht identisch"
 
 #. Label for created field in form config
-#. Label for created column in overview table config
-#: ringo/views/forms/blobform_template.xml:3 ringo/views/forms/comments.xml:3
-#: ringo/views/forms/logs.xml:2 ringo/views/tables/logs.json:2
+#: ringo/views/forms/blobform_template.xml:3
 msgid "Created"
 msgstr "Erstellt"
 
 #. Label for updated field in form config
-#. Label for updated column in overview table config
-#: ringo/views/forms/blobform_template.xml:4 ringo/views/forms/comments.xml:2
-#: ringo/views/tables/news.json:2
+#: ringo/views/forms/blobform_template.xml:4
 msgid "Updated"
 msgstr "Aktualisiert"
 
@@ -939,11 +969,6 @@ msgstr "Aktualisiert"
 #: ringo/views/forms/blobform_template.xml:5
 msgid "Dummy"
 msgstr "Dummy"
-
-#. Label for text field in form config
-#: ringo/views/forms/comments.xml:1
-msgid "Comment"
-msgstr "Kommentar"
 
 #. Label for format field in form config
 #: ringo/views/forms/export.xml:1
@@ -958,38 +983,8 @@ msgstr "JSON"
 msgid "CSV"
 msgstr "CSV"
 
-#. Label for file field in form config
-#: ringo/views/forms/files.xml:2 ringo/views/forms/printtemplates.xml:2
-msgid "File"
-msgstr "Datei"
-
-#. Label for size field in form config
-#. Label for size column in overview table config
-#: ringo/views/forms/files.xml:4 ringo/views/forms/printtemplates.xml:4
-#: ringo/views/tables/files.json:4
-msgid "Size"
-msgstr "Größe"
-
-#. Label for mime field in form config
-#. Label for mime column in overview table config
-#: ringo/views/forms/files.xml:5 ringo/views/forms/printtemplates.xml:5
-#: ringo/views/tables/files.json:3
-msgid "Mime"
-msgstr "Mime"
-
-#: ringo/views/forms/files.xml:6
-msgid ""
-"You can define an alternative name for the file. If left blank\n"
-"      than the origin filename will be used as name."
-msgstr ""
-"Sie können einen alternativen Namen für die Datei angeben. Wenn dieses "
-"Feld leer gelassen wird, dann wird der ursprüngliche Name der "
-"hochgeladenen Datei verwendet."
-
 #. Label for category field in form config
-#. Label for category column in overview table config
-#: ringo/views/forms/forms.xml:3 ringo/views/forms/logs.xml:3
-#: ringo/views/tables/logs.json:3
+#: ringo/views/forms/forms.xml:3
 msgid "Category"
 msgstr "Kategorie"
 
@@ -1000,10 +995,8 @@ msgstr "Formulardefinition"
 
 #. Label for modul field in form config
 #. Label for modul.label column in overview table config
-#. Label for modul column in overview table config
-#: ringo/views/forms/forms.xml:5 ringo/views/forms/printtemplates.xml:6
-#: ringo/views/forms/tags.xml:4 ringo/views/tables/actions.json:2
-#: ringo/views/tables/forms.json:4 ringo/views/tables/printtemplates.json:4
+#: ringo/views/forms/forms.xml:5 ringo/views/tables/actions.json:2
+#: ringo/views/tables/forms.json:4
 msgid "Modul"
 msgstr "Modul"
 
@@ -1012,35 +1005,21 @@ msgstr "Modul"
 msgid "Review state"
 msgstr "Status Review"
 
-#. Label for tags field in form config
 #: ringo/views/forms/forms.xml:7
-msgid "Keywords"
-msgstr "Schlüsselwörter"
-
-#. Label for comments field in form config
-#: ringo/views/forms/forms.xml:8
-msgid "Comments"
-msgstr "Kommentare"
-
-#: ringo/views/forms/forms.xml:9
 msgid "Select the modul for which this form will be available"
 msgstr "Wählen Sie ein Modul, für das dieses Formular verfügbar sein wird"
 
-#: ringo/views/forms/forms.xml:10
+#: ringo/views/forms/forms.xml:8
 msgid "Only forms in the state \"published\" will be available for other users."
 msgstr ""
 "Nur Formulare mit dem Status \"veröffentlicht\" werden für andere Nutzer "
 "verfügbar sein."
 
-#: ringo/views/forms/forms.xml:11
+#: ringo/views/forms/forms.xml:9
 msgid "Form"
 msgstr "Formular"
 
-#: ringo/views/forms/forms.xml:12
-msgid "State/Comments"
-msgstr "Zustände/Kommentare"
-
-#: ringo/views/forms/forms.xml:13 ringo/views/forms/tags.xml:7
+#: ringo/views/forms/forms.xml:11
 msgid "Default"
 msgstr "Vorgabe"
 
@@ -1059,31 +1038,13 @@ msgstr "Importformat"
 msgid "Logs"
 msgstr "Logs"
 
-#. Label for subject field in form config
-#. Label for subject column in overview table config
-#: ringo/views/forms/logs.xml:4 ringo/views/forms/news.xml:1
-#: ringo/views/tables/logs.json:5 ringo/views/tables/news.json:3
-msgid "Subject"
-msgstr "Titel"
-
-#. Label for text field in form config
-#: ringo/views/forms/logs.xml:5 ringo/views/forms/news.xml:2
-msgid "Text"
-msgstr "Text"
-
-#: ringo/views/forms/logs.xml:6
-msgid "System"
-msgstr "System"
-
-#: ringo/views/forms/logs.xml:7
-msgid "User"
-msgstr "Benutzer"
-
 #. Label for label field in form config
 #. Label for label_plural field in form config
 #. Label for label column in overview table config
+#. Label for label column in selection table config
 #: ringo/views/forms/modules.xml:2 ringo/views/forms/modules.xml:3
-#: ringo/views/tables/modules.json:2
+#: ringo/views/forms/roles.xml:1 ringo/views/tables/modules.json:2
+#: ringo/views/tables/roles.json:2 ringo/views/tables/roles.json:6
 msgid "Label"
 msgstr "Bezeichnung"
 
@@ -1104,6 +1065,7 @@ msgid "Display location"
 msgstr "Darstellungsort"
 
 #. Label for default_group field in form config
+#. Label for usergroup field in form config
 #: ringo/views/forms/modules.xml:8 ringo/views/forms/users.xml:8
 msgid "Default group"
 msgstr "Vorgabe Gruppe"
@@ -1167,11 +1129,6 @@ msgstr "Administration-Menü"
 msgid "User menu"
 msgstr "Benuter-Menü"
 
-#. Label for users field in form config
-#: ringo/views/forms/news.xml:3 ringo/views/forms/roles.xml:5
-msgid "Users"
-msgstr "Benutzer"
-
 #. Label for owner field in form config
 #: ringo/views/forms/ownership.xml:4
 msgid "Owner"
@@ -1190,24 +1147,19 @@ msgstr ""
 "Nur Nutzer mit einer administrativen Rolle für diesen Eintrag sind befugt"
 " den Besitzer zu ändern."
 
-#. Label for printtemplates field in form config
-#: ringo/views/forms/print.xml:1
-msgid "Printtemplate"
-msgstr "Druckvorlagen"
-
 #. Label for first_name field in form config
 #. Label for first_name column in overview table config
 #. Label for profile[0].first_name column in overview table config
-#: ringo/views/forms/profiles.xml:1 ringo/views/tables/profiles.json:2
-#: ringo/views/tables/users.json:2
+#: ringo/views/forms/profiles.xml:1 ringo/views/forms/users.xml:12
+#: ringo/views/tables/profiles.json:2 ringo/views/tables/users.json:2
 msgid "Firstname"
 msgstr "Vorname"
 
 #. Label for last_name field in form config
 #. Label for last_name column in overview table config
 #. Label for profile[0].last_name column in overview table config
-#: ringo/views/forms/profiles.xml:2 ringo/views/tables/profiles.json:3
-#: ringo/views/tables/users.json:3
+#: ringo/views/forms/profiles.xml:2 ringo/views/forms/users.xml:13
+#: ringo/views/tables/profiles.json:3 ringo/views/tables/users.json:3
 msgid "Lastname"
 msgstr "Nachname"
 
@@ -1250,148 +1202,29 @@ msgid "Female"
 msgstr "weiblich"
 
 #. Label for permissions field in form config
-#: ringo/views/forms/roles.xml:2
+#: ringo/views/forms/roles.xml:3
 msgid "Permissions"
 msgstr "Befugnisse"
 
 #. Label for admin field in form config
-#. Label for admin column in overview table config
-#: ringo/views/forms/roles.xml:3 ringo/views/tables/roles.json:4
+#: ringo/views/forms/roles.xml:4
 msgid "Administrational role"
 msgstr "Adminrolle"
 
-#: ringo/views/forms/tags.xml:5
-msgid "The type of the tag will determine how the tag is displayed (colored)"
-msgstr "Die Art des Schlüsselworts wirkt sich auf die Farbe der Darstellung aus"
+#. Label for users field in form config
+#: ringo/views/forms/roles.xml:6
+msgid "Users"
+msgstr "Benutzer"
 
-#: ringo/views/forms/tags.xml:6
-msgid ""
-"Optional. Choose a modul this keyword belongs to. If not selected the "
-"keyword is considrered as global keyword which is available in all "
-"moduls. Otherwise the keyword is only available in the selected modul."
-msgstr ""
-"Optional. Wählen Sie ein Modul zu dem dieses Schlüsselword gehört. Wenn "
-"keins ausgewählt ist, dann gilt das Schlüsselwort als global und steht in"
-" allen Modulen zur Verfügung. Andererseits ist das Schlüsselwort nur in "
-"dem ausgewählten Modul verfügbar."
-
-#: ringo/views/forms/tags.xml:8
-msgid "Primary"
-msgstr "Priomär"
-
-#: ringo/views/forms/tags.xml:9
-msgid "Success"
-msgstr "erfolg"
-
-#: ringo/views/forms/tags.xml:10
-msgid "Info"
-msgstr "Info"
-
-#: ringo/views/forms/tags.xml:11
-msgid "Warning"
-msgstr "Warnung"
-
-#: ringo/views/forms/tags.xml:12
-msgid "Danger"
-msgstr "Gefahr"
-
-#. Label for deadline field in form config
-#. Label for deadline column in overview table config
-#: ringo/views/forms/todos.xml:2 ringo/views/tables/todos.json:4
-msgid "Deadline"
-msgstr "Frist"
-
-#. Label for reminder field in form config
-#: ringo/views/forms/todos.xml:3
-msgid "Do you want a reminder?"
-msgstr "Wollen Sie eine Erinnerung?"
-
-#. Label for reminddate field in form config
-#: ringo/views/forms/todos.xml:4
-msgid "Remind me from this date on"
-msgstr "Erinnere mich von diesem Datum an"
-
-#. Label for priority field in form config
-#. Label for priority column in overview table config
-#: ringo/views/forms/todos.xml:5 ringo/views/tables/todos.json:3
-msgid "Priority"
-msgstr "Priorität"
-
-#. Label for todo_state_id field in form config
-#: ringo/views/forms/todos.xml:7
-msgid "Status"
-msgstr "Status"
-
-#. Label for assigned field in form config
-#: ringo/views/forms/todos.xml:8
-msgid "Assigned"
-msgstr "Zugewiesen"
-
-#: ringo/views/forms/todos.xml:9
-msgid "Please give the date and time until this task must be finished."
-msgstr ""
-"Bitte geben Sie Datum und Uhrzeit an, zu dem diese Aufgabe erledigt sein "
-"muss."
-
-#: ringo/views/forms/todos.xml:10
-msgid ""
-"Please give the date from which you will be reminded (e.g on the "
-"dashboad) for this task."
-msgstr ""
-"Bitte geben Sie das Datum an, von dem an Sie an die Aufgabe erinnert "
-"werden."
-
-#: ringo/views/forms/todos.xml:11
-msgid ""
-"Please select the users which are responsibly for this task.\n"
-"      The task will be listed for this users in their Todo\n"
-"      overview."
-msgstr ""
-"Bitte wählen Sie den Benutzer, der verantwortlich für diese Aufgaben ist."
-"\n"
-"Die Aufgabe wird in dessen Aufgabenübersicht gelistet werden."
-
-#: ringo/views/forms/todos.xml:12 ringo/views/forms/users.xml:16
-msgid "No"
-msgstr "Nein"
-
-#: ringo/views/forms/todos.xml:13
-msgid "Yes, show it immediately"
-msgstr "Ja, zeige unverzüglich"
-
-#: ringo/views/forms/todos.xml:14
-msgid "Yes, I will define a remind date"
-msgstr "Ja, Ich werde eine Datum angeben"
-
-#: ringo/views/forms/todos.xml:15
-msgid "Yes, after the deadline exeeds (if present or immediately)"
-msgstr ""
-"Ja, nachdem die Frist verstrichen ist (sofern vorhanden sonst "
-"unverzüglich)"
-
-#: ringo/views/forms/todos.xml:16
-msgid "Very low"
-msgstr "Sehr niedrig"
-
-#: ringo/views/forms/todos.xml:17
-msgid "Low"
-msgstr "Niedrig"
-
-#: ringo/views/forms/todos.xml:18
-msgid "Normal"
-msgstr "Normal"
-
-#: ringo/views/forms/todos.xml:19
-msgid "High"
-msgstr "Hoch"
-
-#: ringo/views/forms/todos.xml:20
-msgid "Very high"
-msgstr "Sehr hoch"
+#: ringo/views/forms/roles.xml:7
+msgid "Internal name for the roles. Do not change this without caution!"
+msgstr "Interner Name für die Rollen. Nur mit Vorsicht ändern!"
 
 #. Label for members field in form config
 #. Label for members column in overview table config
+#. Label for members column in selection table config
 #: ringo/views/forms/usergroups.xml:2 ringo/views/tables/usergroups.json:3
+#: ringo/views/tables/usergroups.json:7
 msgid "Members"
 msgstr "Mitglieder"
 
@@ -1438,7 +1271,15 @@ msgstr "Aktiviert"
 msgid "Activation Token"
 msgstr "Aktivierungs-Token"
 
-#: ringo/views/forms/users.xml:12
+#: ringo/views/forms/users.xml:15
+msgid ""
+"The default group determines which group will be used for new entries of "
+"this user."
+msgstr ""
+"Die Vorgabegruppe legt fest mit welcher Benutzergruppe neue Einträge "
+"dieses Nutzers angelegt werden."
+
+#: ringo/views/forms/users.xml:16
 msgid ""
 "The activation token can be used to (re)activate a deactivated or new "
 "registered user. Please call /auth/activate_user/$token to active the "
@@ -1448,17 +1289,29 @@ msgstr ""
 "neuen Nutzer zu (re)aktivieren. Bitte rufen Sie hierfür "
 "/auth/activate_user/$token auf."
 
-#: ringo/views/forms/users.xml:13
+#: ringo/views/forms/users.xml:17
 msgid "Login must have a length of greater or equal than 2"
 msgstr "Die Anmeldekennung muss größer oder gleich 2 Zeichen lang sein."
 
-#: ringo/views/forms/users.xml:14
+#: ringo/views/forms/users.xml:18
 msgid "Passwords must be equal"
 msgstr "Passwörter müssen gleich sein"
 
-#: ringo/views/forms/users.xml:15
+#: ringo/views/forms/users.xml:19
+msgid "User data"
+msgstr "Nutzerdaten"
+
+#: ringo/views/forms/users.xml:20
+msgid "Profile data"
+msgstr "Profildaten"
+
+#: ringo/views/forms/users.xml:21
 msgid "Yes"
 msgstr "Ja"
+
+#: ringo/views/forms/users.xml:22
+msgid "No"
+msgstr "Nein"
 
 #. Label for name column in overview table config
 #: ringo/views/tables/actions.json:3
@@ -1470,15 +1323,11 @@ msgstr "Aktion"
 msgid "URL"
 msgstr "URL"
 
-#. Label for id column in overview table config
-#: ringo/views/tables/comments.json:2
-msgid "ID"
-msgstr "ID"
-
-#. Label for name column in overview table config
-#: ringo/views/tables/tags.json:2
-msgid "name"
-msgstr "Name"
+#. Label for admin column in overview table config
+#. Label for admin column in selection table config
+#: ringo/views/tables/roles.json:4 ringo/views/tables/roles.json:7
+msgid "Adminrole"
+msgstr "Adminrolle"
 
 #. Label for groups column in overview table config
 #: ringo/views/tables/users.json:6
@@ -1489,3 +1338,7 @@ msgstr "Gruppen"
 #: ringo/views/tables/users.json:8
 msgid "Last login"
 msgstr "Letze Anmeldung"
+
+#~ msgid ""
+#~ msgstr ""
+

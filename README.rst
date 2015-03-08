@@ -33,15 +33,7 @@ web application based on Ringo:
  * Authentication with email registration and password reminders
  * Powerfull statemachine to model workflows in moduls.
  * Layout and validation of forms using the `Formbar <https://pypi.python.org/pypi/formbar>`_ library
- * Internal messenging system
- * Logging of useractions
  * Versioning of forms (see what changed to the last version)
- * Ready to use modules:
-        - User Profiles
-        - Comments
-        - Tags
-        - Files
-        - Basic Appointments
  * Widely configurable from the web UI.
  * Nice console client for various administration tasks.
  * ...
@@ -69,6 +61,8 @@ start the standalone application of ringo with the following steps:
 - $ python setup.py develop
 
 - $ ringo-admin db init
+
+- $ ringo-admin fixtures load
 
 - $ invoke docs
 

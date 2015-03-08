@@ -13,6 +13,14 @@ from ringo.views.response import JSONResponse
 log = logging.getLogger(__name__)
 
 
+@view_config(route_name='get-language',
+             renderer='json',
+             request_method="GET")
+def get_language(request):
+    """Method return the preferred language of the user"""
+    return JSONResponse(True, request._LOCALE_, {})
+
+
 @view_config(route_name='rules-evaluate',
              renderer='json',
              request_method="GET")
@@ -24,11 +32,13 @@ def evaluate(request):
         ruleexpr = request.GET.get('rule').strip()
         rule = Rule(ruleexpr)
         result = rule.evaluate({})
-        return JSONResponse(True, result, {"msg": rule.msg})
+        return JSONResponse(True, result, {"msg": rule.msg,
+                                           "locale": request._LOCALE_})
     except:
         msg = "Can not evaluate rule '%s'" % ruleexpr
         log.error(msg)
-        return JSONResponse(False, False, {"msg": msg})
+        return JSONResponse(False, False, {"msg": msg,
+                                           "headers": request._LOCALE_})
 
 
 @view_config(route_name='form-render',

@@ -9,9 +9,8 @@ class History:
         oldes entry will be removed."""
         if not self.history or url != self.history[-1]:
             self.history.append(url)
-        if len(self.history) > 10:
+        if len(self.history) > 5:
             del self.history[0]
-        #print self.history
 
     def pop(self, num=1):
         """Returns a url form the history and deletes the item and all
@@ -23,3 +22,10 @@ class History:
             if len(self.history) > 0:
                 url = self.history.pop()
         return url
+
+    def last(self):
+        """Returns the last element from the history stack without
+        removing it"""
+        if len(self.history) > 0:
+            return self.history[-1]
+        return None

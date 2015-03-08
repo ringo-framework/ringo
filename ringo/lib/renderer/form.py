@@ -1,6 +1,5 @@
 import logging
 import cgi
-import json
 import os
 import pkg_resources
 from mako.lookup import TemplateLookup
@@ -10,10 +9,7 @@ from formbar.renderer import (
     SelectionFieldRenderer as FormbarSelectionField
 )
 import ringo.lib.helpers as helpers
-from ringo.lib.helpers import (
-    get_action_routename,
-    get_item_modul
-)
+from ringo.lib.helpers import get_action_routename
 from ringo.model.base import BaseItem, BaseList, get_item_list
 from ringo.lib.table import get_table_config
 import ringo.lib.security as security
@@ -28,18 +24,12 @@ log = logging.getLogger(__name__)
 #                         Renderers for form elements                     #
 ###########################################################################
 
-
-def add_renderers(renderers):
+def add_renderers(custom_renderers):
     """Helper function to add ringo ringo specific renderers for form
     rendering."""
-    if not "dropdown" in renderers:
-        renderers["dropdown"] = DropdownFieldRenderer
-    if not "listing" in renderers:
-        renderers["listing"] = ListingFieldRenderer
-    if not "state" in renderers:
-        renderers["state"] = StateFieldRenderer
-    if not "link" in renderers:
-        renderers["link"] = LinkFieldRenderer
+    for key in custom_renderers:
+        if not key in renderers:
+            renderers[key] = custom_renderers[key]
     return renderers
 
 
@@ -131,8 +121,8 @@ class DropdownFieldRenderer(FormbarDropdown):
         try:
             item = getattr(self._field._form._item, self._field.name)
         except AttributeError:
-            log.warning("Missing %s attribute in %s" % (self._field.name,
-                                                        self._field._form._item))
+            log.warning("Missing %s attribute in %s"
+                        % (self._field.name, self._field._form._item))
             return "".join(html)
 
         if not isinstance(item, list):
@@ -142,7 +132,8 @@ class DropdownFieldRenderer(FormbarDropdown):
         for item in items:
             url = get_link_url(item, self._field._form._request)
             if url:
-                html.append('<a href="%s">%s</a>' % (url, cgi.escape(unicode(item))))
+                html.append('<a href="%s">%s</a>'
+                            % (url, cgi.escape(unicode(item))))
         return "".join(html)
 
     def _render_label(self):
@@ -175,7 +166,8 @@ class StateFieldRenderer(FormbarDropdown):
     def __init__(self, field, translate):
         """@todo: to be defined"""
         FormbarDropdown.__init__(self, field, translate)
-        self.template = template_lookup.get_template("internal/statefield.mako")
+        self.template = template_lookup.get_template("internal/"
+                                                     "statefield.mako")
 
     def _render_label(self):
         return ""
@@ -189,13 +181,17 @@ class StateFieldRenderer(FormbarDropdown):
         sm = item.get_statemachine(self._field.name,
                                    request=self._field._form._request)
         state = sm.get_state()
+        has_errors = len(self._field.get_errors())
+        has_warnings = len(self._field.get_warnings())
 
+        html.append('<div class="form-group %s %s">' % ((has_errors and 'has-error'), (has_warnings and 'has-warning')))
         html.append(self._render_label())
         values = {'field': self._field,
                   'request': self._field._form._request,
                   'state': state,
                   '_': self._field._form._translate}
         html.append(self.template.render(**values))
+        html.append('</div>')
         return "".join(html)
 
 
@@ -209,13 +205,20 @@ class ListingFieldRenderer(FormbarSelectionField):
       linking.
     * showsearch: Flag "true" or "false" to configure rendering a search
       field.
+    * showall: "true" or "false". If true all items (linked and
+      unlinked) regardless if the current user is allowed to read
+      or update the item will be listed. However clicking on items the
+      user has no permission to read will have no effect as no links are
+      rendered for those items. Defaults to false.
     * onlylinked: "true" or "false". If true only linked items will be
-      rendered
+      rendered. Checkboxes will be hidden.
     * multiple: "true" or "false". If false only one option can be
       selected. Defaults to true. Note that this restriction is only
       implemented on client side.
     * openmodal: "true" or "false". If true the item will be opened in a
       modal popup.
+    * backlink: "true" or "false". If true the user will be redirected
+      back to the listing after creating a new item. Defaults to true.
     """
 
     def __init__(self, field, translate):
@@ -264,14 +267,17 @@ class ListingFieldRenderer(FormbarSelectionField):
         except AttributeError:
             # Can happen when designing forms an the model of the item
             # is not yet configured.
-            log.warning("Missing %s attribute in %s" % (self._field.name,
-                                                        repr(self._field._form._item)))
+            log.warning("Missing %s attribute in %s"
+                        % (self._field.name, repr(self._field._form._item)))
         return []
 
     def render(self):
         """Initialize renderer"""
         html = []
         config = self._field._config.renderer
+        has_errors = len(self._field.get_errors())
+        has_warnings = len(self._field.get_warnings())
+        html.append('<div class="form-group %s %s">' % ((has_errors and 'has-error'), (has_warnings and 'has-warning')))
         html.append(self._render_label())
         if self._field.is_readonly() or self.onlylinked == "true":
             items = self._get_selected_items(self.itemlist.items)
@@ -282,7 +288,8 @@ class ListingFieldRenderer(FormbarSelectionField):
         # in the origin items list and has passed filtering.
         items = self._field.filter_options(items)
         # Now filter the items based on the user permissions
-        items = filter_options_on_permissions(self._field._form._request, items)
+        items = filter_options_on_permissions(self._field._form._request,
+                                              items)
 
         values = {'items': items,
                   'field': self._field,
@@ -295,4 +302,14 @@ class ListingFieldRenderer(FormbarSelectionField):
                   'tableconfig': get_table_config(self.itemlist.clazz,
                                                   config.table)}
         html.append(self.template.render(**values))
+        html.append(self._render_errors())
+        html.append(self._render_help())
+        html.append('</div>')
         return "".join(html)
+
+renderers = {
+    "dropdown": DropdownFieldRenderer,
+    "listing": ListingFieldRenderer,
+    "state": StateFieldRenderer,
+    "link": LinkFieldRenderer
+}

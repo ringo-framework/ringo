@@ -1,7 +1,8 @@
 import logging
+import sqlalchemy as sa
 from pyramid.httpexceptions import HTTPFound
 from ringo.lib.sql.cache import invalidate_cache
-from ringo.lib.renderer import ConfirmDialogRenderer
+from ringo.lib.renderer import ConfirmDialogRenderer, InfoDialogRenderer
 from ringo.lib.helpers import (
     get_action_routename,
     get_item_modul
@@ -43,10 +44,28 @@ def _handle_delete_request(request, items):
     clazz = request.context.__model__
     _ = request.translate
     if request.method == 'POST' and is_confirmed(request):
-        for item in items:
-            request.db.delete(item)
         item_label = get_item_modul(request, clazz).get_label(plural=True)
         mapping = {'item_type': item_label, 'num': len(items)}
+        for item in items:
+            try:
+                request.db.delete(item)
+                request.db.flush()
+            except sa.exc.IntegrityError as e:
+                mapping["error"] = e.message
+                title = _("Can not delete ${item_type} items.",
+                          mapping=mapping)
+                body = _("There has been an integrity error which prevents "
+                         "the request to be fulfilled. There are still "
+                         "depended items on the item to be deleted. Please "
+                         "remove all depended relations to this item before "
+                         "deleting it and try again. Hint: ${error}",
+                         mapping=mapping)
+                request.db.rollback()
+                renderer = InfoDialogRenderer(request, title, body)
+                rvalue = {}
+                ok_url = request.session['history'].pop(2)
+                rvalue['dialog'] = renderer.render(ok_url)
+                return rvalue
         msg = _('Deleted ${num} ${item_type} successfull.', mapping=mapping)
         log.info(msg)
         request.session.flash(msg, 'success')

@@ -30,7 +30,8 @@
         <li class="divider-vertical"></li>
         % if request.user:
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">${request.user.login}<b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown"><i class="fa fa-user"></i> ${request.user.profile[0]} (${request.user.login})<b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li role="presentation" class="dropdown-header">${_('Settings')}</li>
               ##<li role="presentation" class="dropdown-header">${_('Roles')}: ${", ".join([r.name for r in request.user.get_roles()])}</li>

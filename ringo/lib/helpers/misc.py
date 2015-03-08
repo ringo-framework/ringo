@@ -17,6 +17,14 @@ def serialize(value):
         # use 1 and 0 here to be able to set this values on import,
         # "True" and "False" will fail.
         return value and "1" or "0"
+    # Now handle relations, 3 cases: empty, 1 item and 2+ items.
+    if isinstance(value, list) and not value:
+        return []
+    # cannot import BaseItem here, so check for BaseItem with hasattr.
+    if isinstance(value, list) and hasattr(value[0], 'id'):
+        return sorted([v.id for v in value])
+    if hasattr(value, 'id'):
+        return [value.id]
     return unicode(value)
 
 
@@ -115,7 +123,14 @@ def _get_item_modul(request, item):
     if not request or not request.cache_item_modul.get(item._modul_id):
         from ringo.model.modul import ModulItem
         factory = ModulItem.get_item_factory()
-        modul = factory.load(item._modul_id)
+        if item._modul_id is None:
+            # FIXME: Special case when loading fixtures for extensions.
+            # As the id of an extension is set dynamically on
+            # application startup the id is not yet present at time of
+            # fixture loading. (ti) <2015-02-17 23:00>
+            modul = factory.load(item.__tablename__, field="name")
+        else:
+            modul = factory.load(item._modul_id)
         if request:
             if not request.cache_item_modul.get(item._modul_id):
                 request.cache_item_modul.set(item._modul_id, modul)

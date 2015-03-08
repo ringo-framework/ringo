@@ -1,0 +1,86 @@
+[
+    {
+        "clazzpath": "ringo.model.modul.ModulItem",
+        "description": "",
+        "display": "admin-menu",
+        "gid": null,
+        "id": 1,
+        "label": "Modul",
+        "label_plural": "Modules",
+        "name": "modules",
+        "str_repr": "%s|name",
+        "uuid": "d1763c385bd64d7185ca7fba9b3de845"
+    },
+    {
+        "clazzpath": "ringo.model.modul.ActionItem",
+        "description": "",
+        "display": "hidden",
+        "gid": null,
+        "id": 2,
+        "label": "Action",
+        "label_plural": "Actions",
+        "name": "actions",
+        "str_repr": "%s (%s/%s)|name,modul,url",
+        "uuid": "fcb3f8f87cc340358e18c4017bf93f34"
+    },
+    {
+        "clazzpath": "ringo.model.user.User",
+        "description": "",
+        "display": "admin-menu",
+        "gid": null,
+        "id": 3,
+        "label": "User",
+        "label_plural": "Users",
+        "name": "users",
+        "str_repr": "%s|login",
+        "uuid": "70f24f2a8b63420e9afde6af43be45d2"
+    },
+    {
+        "clazzpath": "ringo.model.user.Usergroup",
+        "description": "",
+        "display": "admin-menu",
+        "gid": null,
+        "id": 4,
+        "label": "Usergroup",
+        "label_plural": "Usergroups",
+        "name": "usergroups",
+        "str_repr": "%s|name",
+        "uuid": "74af1cfbf3de4bceb5f2cb483381229e"
+    },
+    {
+        "clazzpath": "ringo.model.user.Role",
+        "description": "",
+        "display": "admin-menu",
+        "gid": null,
+        "id": 5,
+        "label": "Role",
+        "label_plural": "Roles",
+        "name": "roles",
+        "str_repr": "%s|name",
+        "uuid": "c0138448b3964a5682411f57409e67f1"
+    },
+    {
+        "clazzpath": "ringo.model.user.Profile",
+        "description": "",
+        "display": "admin-menu",
+        "gid": null,
+        "id": 6,
+        "label": "Profile",
+        "label_plural": "Profiles",
+        "name": "profiles",
+        "str_repr": "%s %s|first_name,last_name",
+        "uuid": "7d99e6702cdc4a9c928c1eaa470e11b6"
+    },
+    {
+        "clazzpath": "ringo.model.form.Form",
+        "description": "",
+        "display": "admin-menu",
+        "gid": null,
+        "id": 14,
+        "label": "Form",
+        "label_plural": "Forms",
+        "name": "forms",
+        "str_repr": "%s|title",
+        "uuid": "f5108e1ce27b4f229655d0ad35e843cb"
+    }
+]

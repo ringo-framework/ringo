@@ -251,10 +251,10 @@ def add_table_file(package, modul):
 
 
 def handle_modul_fields_command(args):
-    """@todo: Docstring for add_modul_add_command.
+    """Will print generated SA fields ready to be pasted in the model
+    based on the given form configuration.
 
-    :args: @todo
-    :returns: @todo
+    :args: command args
     """
     path = []
     path.append(get_app_location(args.app))
@@ -267,14 +267,15 @@ def handle_modul_fields_command(args):
     formbar_path.append(get_app_location("formbar"))
     formbar_path.append("contrib")
     formbar_path.append("generate.py")
-    print os.path.join(*formbar_path)
 
-    print subprocess.check_output([
+    print "\nGenerating fields for the %s model..." % args.name
+    out = subprocess.check_output([
         "python",
         os.path.join(*formbar_path),
         "model",
         os.path.join(*path)
     ])
+    print "\n", out
 
 
 def handle_modul_delete_command(args):

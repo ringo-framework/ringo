@@ -1,11 +1,12 @@
-function getLanguage() {
-    var lang = getLanguageFromBrowser();
-    if ( lang == "german" ) {
-        return lang
+var language = getLanguageFromBrowser();
+
+function getDTLanguage() {
+    if (language.indexOf("de") >= 0) {
+        return "german"
     } else {
-        return "default"
+        return "default";
     }
-};
+}
 var opts = {
   lines: 9, // The number of lines to draw
   length: 21, // The length of each line
@@ -26,17 +27,21 @@ var opts = {
 };
 var spinner = new Spinner(opts).spin();
 $( document ).ready(function() {
-    $('.dialog').modal();
+    $('.dialog').modal({
+        backdrop: "static"
+    });
     $('.fade.out').delay(3 * 1000).fadeOut();
     $('#savequerydialog').modal({
-        show: false
+        show: false,
+        backdrop: "static"
     });
     $('#logoutWarning').modal({
-        show: false
+        show: false,
+        backdrop: "static"
     });
     $('.datatable-paginated').dataTable( {
            "oLanguage": {
-                "sUrl": "/static/js/datatables/i18n/"+getLanguage()+".json"
+                "sUrl": "/static/js/datatables/i18n/"+getDTLanguage()+".json"
            },
            "bPaginate": true,
            "sPaginationType": "full_numbers",
@@ -50,7 +55,7 @@ $( document ).ready(function() {
      });
     $('.datatable-simple').dataTable( {
            "oLanguage": {
-                "sUrl": "/static/js/datatables/i18n/"+getLanguage()+".json"
+                "sUrl": "/static/js/datatables/i18n/"+getDTLanguage()+".json"
            },
            "bPaginate": false,
            "bLengthChange": false,
@@ -63,7 +68,7 @@ $( document ).ready(function() {
     });
     $('.datatable-blank').dataTable({
           "oLanguage": {
-               "sUrl": "/static/js/datatables/i18n/"+getLanguage()+".json"
+               "sUrl": "/static/js/datatables/i18n/"+getDTLanguage()+".json"
           },
           "bPaginate": false,
           "bLengthChange": false,
@@ -103,7 +108,11 @@ $( document ).ready(function() {
         var url = $(this).attr('url') + "?pagination_size=" + value;
         window.open(url,"_self");
     });
-
+    $("a.modalform").click(openModalForm);
+        $("a.modalform").click(function(event) {
+            event.preventDefault();
+            return false;
+    });
 
 });
 
@@ -116,4 +125,27 @@ function logoutCountdown(time, url) {
         location.href=url;
     });
     logout.set({ time : time*1000-500, autostart : true });
+}
+
+function openModalForm(event) {
+  var element = event.target;
+  console.log(element);
+  var url = $(element).attr("href");
+  console.log(url);
+  // Load page
+  var page = $.ajax({
+      url: url,
+      async: false
+  });
+  // now strip the content
+  var title = $("h1", page.responseText).text();
+  var content = $("#form", page.responseText);
+  // Better leave url and attach some kind of javascript action to load the
+  // result of the POST into the popup.
+  $("form", content).attr("action", url);
+  // Set title and body of the popup
+  $("#modalform .modal-title").text(title);
+  $("#modalform .modal-body").html(content);
+  // Show the popup
+  $("#modalform").modal("toggle");
 }

@@ -1,7 +1,11 @@
+/* Method to get the preferred user language. As there is no reliable
+ * way to get this information accross all browsers the ask the server
+ * for the language with gets this from the accepted header field */
 function getLanguageFromBrowser() {
-    var lang = navigator.language || navigator.userLanguage;
-    if (lang.indexOf("de") >= 0) {
-        return "german"
-    }
-    return "english"
+    $.ajax({
+      url: "/rest/client/language",
+    })
+    .success(function( data ) {
+        return data.data;
+    });
 }

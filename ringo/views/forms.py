@@ -22,7 +22,7 @@ def load_config(path):
 def create_(request):
     clazz = request.context.__model__
     factory = clazz.get_item_factory()
-    form = factory.create(request.user)
+    form = factory.create(request.user, values={})
     definition = load_config(get_path_to_form_config("blobform_template.xml",
                                                      "ringo"))
     form.definition = definition

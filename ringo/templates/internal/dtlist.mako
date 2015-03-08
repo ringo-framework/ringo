@@ -5,7 +5,7 @@ from ringo.lib.helpers import prettify
   <thead>
     <tr>
       % for field in tableconfig.get_columns():
-      <th width="${field.get('width')}">${field.get('label')}</th>
+      <th width="${field.get('width')}">${_(field.get('label'))}</th>
       % endfor
     </tr>
   </thead>
@@ -34,9 +34,9 @@ from ringo.lib.helpers import prettify
           %>
           ## Escape value here
           % if isinstance(value, list):
-            ${", ".join(unicode(v) for v in value) | h}
+            ${", ".join(_(v) for v in value) | h}
           % else:
-            ${value}
+            ${_(value)}
           % endif
       </td>
       % endfor

@@ -67,9 +67,9 @@ class ListRenderer(object):
 
 class DTListRenderer(object):
     """Docstring for a ListRenderer using the DataTables Jquery Plugin"""
-    def __init__(self, listing):
+    def __init__(self, listing, tablename=None):
         self.listing = listing
-        self.config = get_table_config(self.listing.clazz)
+        self.config = get_table_config(self.listing.clazz, tablename)
         self.template = template_lookup.get_template("internal/dtlist.mako")
 
     def render(self, request):
