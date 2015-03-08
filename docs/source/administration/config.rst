@@ -1,6 +1,6 @@
-#############
-Configuration
-#############
+*************************
+Application Configuration
+*************************
 
 Authentification
 ================

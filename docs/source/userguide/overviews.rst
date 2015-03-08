@@ -1,86 +1,8 @@
-******************
-Elements of the UI
-******************
-This chapter will give an overview of user elements in the basic ringo user
-interface (UI) and how to use them.
+********************
+Overviews and Search
+********************
 
-.. warning::
-        The screenshots are outdated!
-
-Below you can see an example of a view in the Ringo application.
-
-
-.. image:: screenshots/home.png
-   :width: 800
-   :alt: Ringo after login 
-
-The Ringo UI is divided into three areas. In the top there is a header. At the
-bottom the footer and in the middle there is the content.
-
-Main Menu
-=========
-The Main Menu will list the link to the :ref:`ui-home` page of your
-application and a entry for all available and enabled non administrational
-:ref:`modules`. The links will usually link the :ref:`ui-overview` page of the
-selected modul.
-
-.. image:: screenshots/ui/mainmenu.png
-
-The currently active modul is highlighted.
-
-.. _ui-user-menu:
-
-User Menu
-=========
-
-The User Menu is only visible for logged in users. The Menu will give access
-to user specific functions.
-
-.. image:: screenshots/ui/usermenu.png
-
-The label of the menu shows the login name of the currently logged in user.
-These are:
-
- * Profil: Will open the Profil of the user.
- * Change Password: Will open a dialog to change the users password.
- * Logout: Will logout the user
-
-Context Menu
-============
-The context menu will provide available actions for the currently selected
-item, or more generally speaking for the currently displayed page.
-
-The available actions can be configured in the :ref:`modul-modul` administration.
-
-.. image:: screenshots/ui/contextmenu.png
-
-The following actions are currently availabe in Ringo. Listed from left to right:
-
- 1. Overview: Go back to the overview of the modul.
- 2. Add new item: Will open the page to create a new item of the modul.
- 3. Read item: Will open the currently selected item in read only mode.
- 4. Edit item: Will open the currently selected item in edit mode.
- 5. Delete item: Will delete the currently selected item.
-
-Administraion Menu
-==================
-
-.. image:: screenshots/ui/administrationmenu.png
-
-The Administraion Menu is only visible for users with the "admin" role after
-login. It gives access to the administration of the modules.
-
-.. _ui-footermenu:
-
-Footer Menu
-===========
-
-.. image:: screenshots/ui/footermenu.png
-
-The Footer menu gives general information on your application like how to
-contact you or version information.
-
-.. _modules:
+.. _userguide_overviews:
 
 Overviews
 =========
@@ -89,13 +11,14 @@ overview provides the following functionality:
 
  1. Sorting
  2. Searching
- 3. more will to be implemented...
+ 3. Bundled Actions
 
-.. image:: screenshots/ui/search.png
+.. image:: ../screenshots/ui/search.png
 
 To open one of the shown items in the overview you can click simple somewhere
 in the row. The item will be opened in read mode. Note that you need to click
 on the row and not on the value as this triggers a search. See more details below.
+
 
 Sorting
 -------
@@ -103,8 +26,11 @@ The header of the overview table is clickable to sort the listing on the
 selected header. Clicking on the header toggles between ascending and
 descending sorting. A small icon shown on which column the sorting was done.
 
-Searching
----------
+Bundled actions
+---------------
+
+Search
+======
 The search is based on the visible values in the overview. That means you can
 search for anything which is displayed in one of the columns. If the search
 string matches at least one value in the column the item will be found and
@@ -140,7 +66,7 @@ The saved searches are then listed in the options dropdown. You can delete a
 saved search by clicking on the cross symbol next to each filter.
 
 Using operators
-^^^^^^^^^^^^^^^
+---------------
 Operators can be put as first word of the search term. The operator changes
 the search mode in the way that the search will evaluate the search term with the values in the list using the given operator. This can become handy to find items which to not match a certain criteria or for searches on dates.
 
@@ -162,11 +88,10 @@ Examples:
  * "< 2015-04-01" will match all values lower than 2015-04-01. This is usefull for search on dates. Please limit the search on the datefield to get reasonable result.
 
 Using regular expressions
-^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------
 You can change the behavior of the search by enabling regular expressions as
 search term. To enabled regular expressions select "Enable regexpr in search"
 from the search options menu. The search button will now have an additional
 "+" sign to indicate that the regular expression is enabled.
 
 For more details on regular expressions see `Regular Expression HOWTO <https://docs.python.org/2/howto/regex.html>`_
-
