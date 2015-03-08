@@ -1,5 +1,5 @@
-1.0
-===
+1.0.0
+=====
 WARNING! This update is a major upgrade of Ringo which may break your application!
 It removes many of the core modules in the application! This will break your
 application if you use one of the removed modules. In this case stay with the
