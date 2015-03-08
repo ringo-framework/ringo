@@ -18,8 +18,12 @@
     <entity id="e3" name="retype_password" label="Retype Password">
       <renderer type="password"/>
     </entity>
-    <entity id="e4" name="roles" label="Roles"/>
-    <entity id="e5" name="groups" label="Usergroups"/>
+    <entity id="e4" name="roles" label="Roles">
+      <renderer type="listing" hideadd="true"/>
+    </entity>
+    <entity id="e5" name="groups" label="Usergroups">
+      <renderer type="listing" hideadd="true"/>
+    </entity>
     <entity id="e6" name="usergroup" label="Default group">
       <help>The default group determines which group will be used for new entries of this user.</help>
     </entity>
@@ -77,6 +81,7 @@
   <snippet id="update_snippet">
     <snippet ref="s1e"/>
     <snippet ref="s3"/>
+    <snippet ref="s4"/>
   </snippet>
 
   <!-- Login -->
@@ -118,6 +123,9 @@
       <col><field ref="e5"/></col>
       <col><field ref="e6"/></col>
     </row>
+  </snippet>
+  <!-- Activation -->
+  <snippet id="s4">
     <row>
       <col><field ref="e7"/></col>
       <col><field ref="e8"/></col>
