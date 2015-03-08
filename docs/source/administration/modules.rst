@@ -1,3 +1,5 @@
+.. _modul_configuration:
+
 *******************
 Modul Configuration
 *******************
@@ -17,5 +19,15 @@ The screenshot shows the Edit-Dialog for a role.
  * Description: A textual description of the modul.
  * String representation: The string representation defines how items of the modul are displayed as a single string like in selection lists.
  * Actions: A list of actions which are available for the Modul. This way you can disable an action complete. Not enabled action will not be listed anywhere.
- * Display: Select the menu where the modul will be listed. Select hide to hide the modul completely
 
+.. _modul_configuration_display:
+Display of the module
+=====================
+You can choose there to disply the modul in your UI. You can display the modul
+in one of the following places:
+
+ * :ref:`ui_mainmenu`
+ * :ref:`ui_usermenu`
+ * :ref:`ui_adminmenu`
+
+Select hide to hide the modul completely

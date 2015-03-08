@@ -2,33 +2,32 @@
 Elements of the UI
 ******************
 This chapter will give an overview of user elements in the basic ringo user
-interface (UI) and how to use them.
-
-.. warning::
-        The screenshots are outdated!
+interface (UI).
 
 Below you can see an example of a view in the Ringo application.
 
 
-.. image:: ../screenshots/home.png
+.. image:: ../screenshots/ui/ui.png
    :width: 800
-   :alt: Ringo after login 
+   :alt: Default UI of Ringo
 
-The Ringo UI is divided into three areas. In the top there is a header. At the
-bottom the footer and in the middle there is the content.
+1. :ref:`ui_mainmenu`
+2. :ref:`ui_usermenu`
+3. :ref:`ui_contextmenu`
+4. :ref:`ui_adminmenu`
+5. :ref:`ui_footer`
+
+.. _ui_mainmenu:
 
 Main Menu
 =========
-The Main Menu will list the link to the :ref:`ui-home` page of your
-application and a entry for all available and enabled non administrational
-:ref:`modules`. The links will usually link the :ref:`ui-overview` page of the
-selected modul.
+The Main Menu lists the primary modules of the application. Usally clicking on
+on the the module entries will take you the the :ref:`userguide_overviews` of
+the module.
 
 .. image:: ../screenshots/ui/mainmenu.png
 
-The currently active modul is highlighted.
-
-.. _ui-user-menu:
+.. _ui_usermenu:
 
 User Menu
 =========
@@ -41,36 +40,33 @@ to user specific functions.
 The label of the menu shows the login name of the currently logged in user.
 These are:
 
- * Profil: Will open the Profil of the user.
- * Change Password: Will open a dialog to change the users password.
+ * Profil: Will open the :ref:`usage_profile` of the user.
+ * Change Password: Will open a dialog to :ref:`usage_changepassword` of the
+   user.
  * Logout: Will logout the user
+
+.. _ui_contextmenu:
 
 Context Menu
 ============
 The context menu will provide available actions for the currently selected
-item, or more generally speaking for the currently displayed page.
-
-The available actions can be configured in the :ref:`modul-modul` administration.
+item, or more generally speaking for the currently displayed page. The
+displayed actions may vary depending on your permissions and the modul
+configuration.
 
 .. image:: ../screenshots/ui/contextmenu.png
 
-The following actions are currently availabe in Ringo. Listed from left to right:
+.. _ui_adminmenu:
 
- 1. Overview: Go back to the overview of the modul.
- 2. Add new item: Will open the page to create a new item of the modul.
- 3. Read item: Will open the currently selected item in read only mode.
- 4. Edit item: Will open the currently selected item in edit mode.
- 5. Delete item: Will delete the currently selected item.
-
-Administraion Menu
-==================
+Administration Menu
+===================
 
 .. image:: ../screenshots/ui/administrationmenu.png
 
 The Administraion Menu is only visible for users with the "admin" role after
 login. It gives access to the administration of the modules.
 
-.. _ui-footermenu:
+.. _ui_footer:
 
 Footer Menu
 ===========

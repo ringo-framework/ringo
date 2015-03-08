@@ -1,13 +1,17 @@
-*********
-Overviews
-*********
+********************
+Overviews and Search
+********************
 
+.. _userguide_overviews:
+
+Overviews
+=========
 Each modul has an overview page which lists all items of the modul. Each
 overview provides the following functionality:
 
  1. Sorting
  2. Searching
- 3. more will to be implemented...
+ 3. Bundled Actions
 
 .. image:: ../screenshots/ui/search.png
 
@@ -15,14 +19,15 @@ To open one of the shown items in the overview you can click simple somewhere
 in the row. The item will be opened in read mode. Note that you need to click
 on the row and not on the value as this triggers a search. See more details below.
 
+
 Sorting
 -------
 The header of the overview table is clickable to sort the listing on the
 selected header. Clicking on the header toggles between ascending and
 descending sorting. A small icon shown on which column the sorting was done.
 
-Searching
----------
+Search
+======
 The search is based on the visible values in the overview. That means you can
 search for anything which is displayed in one of the columns. If the search
 string matches at least one value in the column the item will be found and
@@ -58,7 +63,7 @@ The saved searches are then listed in the options dropdown. You can delete a
 saved search by clicking on the cross symbol next to each filter.
 
 Using operators
-^^^^^^^^^^^^^^^
+---------------
 Operators can be put as first word of the search term. The operator changes
 the search mode in the way that the search will evaluate the search term with the values in the list using the given operator. This can become handy to find items which to not match a certain criteria or for searches on dates.
 
@@ -80,7 +85,7 @@ Examples:
  * "< 2015-04-01" will match all values lower than 2015-04-01. This is usefull for search on dates. Please limit the search on the datefield to get reasonable result.
 
 Using regular expressions
-^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------
 You can change the behavior of the search by enabling regular expressions as
 search term. To enabled regular expressions select "Enable regexpr in search"
 from the search options menu. The search button will now have an additional

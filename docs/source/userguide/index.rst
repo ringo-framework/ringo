@@ -8,4 +8,5 @@ Userguide
    ui
    overviews
    usage
+   usersettings
    imexport
