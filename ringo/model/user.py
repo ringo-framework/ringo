@@ -77,15 +77,27 @@ class UserSetting(Base):
 
 class UserFactory(BaseFactory):
 
-    def create(self, user=None):
-        new_user = BaseFactory.create(self, user)
+    def create(self, user, values):
+        new_user = BaseFactory.create(self, user, values)
+
         # Now create a a new Profile
         profile_factory = BaseFactory(Profile)
-        settings_factory = BaseFactory(UserSetting)
-        settings = settings_factory.create(user)
-        profile = profile_factory.create(user)
+        profile = profile_factory.create(user, {})
         new_user.profile.append(profile)
+
+        # Create settings
+        settings_factory = BaseFactory(UserSetting)
+        settings = settings_factory.create(user, {})
         new_user.settings = settings
+
+        # A usergroup
+        usergroup_factory = BaseFactory(Usergroup)
+        usergroup = usergroup_factory.create(None, {})
+        usergroup.name = new_user.login
+        usergroup.members.append(new_user)
+        # The no default group is set set the users group as default
+        # group
+        new_user.usergroup = usergroup
         return new_user
 
 
@@ -109,7 +121,8 @@ class User(BaseItem, Base):
     groups = sa.orm.relationship("Usergroup",
                                  secondary=nm_user_usergroups,
                                  backref='members')
-    default_group = sa.orm.relationship("Usergroup", uselist=False)
+    usergroup = sa.orm.relationship("Usergroup", uselist=False,
+                                    cascade="delete, all")
     settings = sa.orm.relationship("UserSetting", uselist=False,
                                    cascade="all,delete")
 

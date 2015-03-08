@@ -11,14 +11,36 @@ for item in items:
     visible_items.append(item)
   else:
     hidden_items.append(item)
+
+
+def render_item_link(request, clazz, permission, item, value, modal=False, backlink=True):
+  out = []
+  css_class = ["link"]
+  # Only take the path of the url and ignore any previous search filters.
+  url = request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)
+  if backlink:
+    out.append('<a href="%s?backurl=%s" ' % (url, request.current_route_path()))
+  else:
+    out.append('<a href="%s" ' % (url))
+  if modal:
+    css_class.append("modalform")
+  out.append('class="%s"' % " ".join(css_class))
+  out.append('>')
+  if hasattr(value, "render"):
+    out.append('%s' % _(value.render()))
+  else:
+    out.append('%s' % _(value))
+  out.append('</a>')
+  return " ".join(out)
 %>
+
 % if field.renderer.showsearch == "true" and not field.is_readonly():
 <table class="table table-condensed table-striped datatable-simple">
 % else:
 <table class="table table-condensed table-striped datatable-blank">
 % endif
   <thead>
-    % if not field.is_readonly() and not field.renderer.hideadd == "true" and s.has_permission("create", clazz, request):
+    % if not field.is_readonly() and not field.renderer.hideadd == "true" and s.has_permission("create", clazz, request) and h.get_item_modul(request, clazz).has_action("create"):
     <tr class="table-toolbar">
       <th colspan="${len(tableconfig.get_columns())+1}">
       <a href="#"
@@ -31,7 +53,7 @@ for item in items:
     </tr>
     % endif
     <tr>
-    % if not field.is_readonly():
+    % if not field.is_readonly() and field.renderer.onlylinked != "true":
       <th width="20px">
         % if not field.renderer.multiple == "false":
           <input type="checkbox" name="check_all" onclick="checkAll('${field.name}');">
@@ -44,16 +66,18 @@ for item in items:
     </tr>
   </thead>
   <tbody>
-    % for item in visible_items:
+    % for item in items:
       <%
       permission = None
       if s.has_permission("update", item[0], request):
         permission = "update"
       elif s.has_permission("read", item[0], request):
         permission = "read"
+      elif not field.renderer.showall == "true":
+        continue
       %>
       <tr>
-      % if not field.is_readonly():
+      % if not field.is_readonly() and field.renderer.onlylinked != "true":
         <td>
           % if not field.renderer.multiple == "false":
             % if str(item[0].id) in selected:
@@ -71,28 +95,26 @@ for item in items:
         </td>
       % endif
       % for num, col in enumerate(tableconfig.get_columns()):
-        % if permission and not field.renderer.nolinks == "true":
-          % if field.renderer.openmodal == "true":
-            <td href="${request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)}" class="${num > 0 and 'hidden-xs'} link modalform">
-          % else:
-          <td onclick="openItem('${request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)}')" class="${num > 0 and 'hidden-xs'} link">
-          % endif
-        % else:
-          <td class="${num > 0 and 'hidden-xs'}">
-        % endif
         <%
           try:
-            value = prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand')))
+            rvalue = prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand')))
+            if isinstance(rvalue, list):
+              value = ", ".join(unicode(_(v)) for v in rvalue)
+            else:
+              value = rvalue
           except AttributeError:
             value = "NaF"
         %>
-        ## Escape value here
-        % if isinstance(value, list):
-          ${", ".join(unicode(_(v)) for v in value) | h}
+        <td class="${num > 0 and 'hidden-xs'}">
+        % if permission and not field.renderer.nolinks == "true":
+            ${render_item_link(request, clazz, permission, item, value,
+                              (field.renderer.openmodal == "true"),
+                              (field.renderer.backlink != "false"))}
+          </a>
         % else:
           ${_(value)}
         % endif
-      </td>
+        </td>
       % endfor
     </tr>
     % endfor
@@ -105,11 +127,6 @@ for item in items:
 % endfor
 
 <script type="text/javascript">
-function openItem(url) {
-  //var activetab = $('.tab-pane.active');
-  location.href = url + '?backurl=' + document.URL;
-};
-
 function addItem(url, foreignkey, form, id, clazz, backlink) {
   //var activetab = $('.tab-pane.active');
   if (form == "None") {

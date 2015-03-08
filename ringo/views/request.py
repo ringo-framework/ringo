@@ -45,6 +45,42 @@ def handle_callback(request, callback, item=None):
     return item
 
 
+def handle_add_relation(request, item):
+    """Handle linking of the new item to antoher relation. The relation
+    was provided as GET parameter in the current request and is now
+    saved in the session.
+
+    :request: Current request
+    :item: new item with should be linked
+
+    """
+    clazz = request.context.__model__
+    addrelation = request.session.get('%s.addrelation' % clazz)
+    if not addrelation:
+        return item
+    rrel, rclazz, rid = addrelation.split(':')
+    parent = import_model(rclazz)
+    pfactory = parent.get_item_factory()
+    pitem = pfactory.load(rid)
+    log.debug('Linking %s to %s in %s' % (item, pitem, rrel))
+    tmpattr = getattr(pitem, rrel)
+    tmpattr.append(item)
+
+
+def handle_caching(request):
+    """Will handle invalidation of the cache
+
+    :request: TODO
+
+    """
+    # Invalidate cache
+    invalidate_cache()
+    clazz = request.context.__model__
+    if request.session.get('%s.form' % clazz):
+        del request.session['%s.form' % clazz]
+    request.session.save()
+
+
 def handle_POST_request(form, request, callback, event, renderers=None):
     """@todo: Docstring for handle_POST_request.
 
@@ -63,33 +99,25 @@ def handle_POST_request(form, request, callback, event, renderers=None):
     mapping = {'item_type': item_label, 'item': item}
 
     if form.validate(request.params) and "blobforms" not in request.params:
-        # Handle linking of the new item to antoher relation. The
-        # relation was provided as GET parameter in the current
-        # request and is now saved in the session.
-        addrelation = request.session.get('%s.addrelation' % clazz)
         try:
-            item.save(form.data, request)
+            if event == "create":
+                factory = clazz.get_item_factory()
+                item = factory.create(request.user, form.data)
+                mapping['item'] = item
+                item.save({}, request)
+                request.context.item = item
+            else:
+                item.save(form.data, request)
+            handle_event(request, item, form._config.id)
+            handle_callback(request, callback)
+            handle_add_relation(request, item)
+            handle_caching(request)
+
             msg = _('Edited ${item_type} "${item}" successfull.',
                     mapping=mapping)
             log.info(msg)
             request.session.flash(msg, 'success')
-            handle_event(request, item, form._config.id)
-            handle_callback(request, callback)
 
-            if addrelation:
-                rrel, rclazz, rid = addrelation.split(':')
-                parent = import_model(rclazz)
-                pfactory = parent.get_item_factory()
-                pitem = pfactory.load(rid)
-                log.debug('Linking %s to %s in %s' % (item, pitem, rrel))
-                tmpattr = getattr(pitem, rrel)
-                tmpattr.append(item)
-
-            # Invalidate cache
-            invalidate_cache()
-            if request.session.get('%s.form' % clazz):
-                del request.session['%s.form' % clazz]
-            request.session.save()
             return True
         except Exception as error:
             mapping['error'] = unicode(error.message)

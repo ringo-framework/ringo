@@ -43,7 +43,7 @@ def create(request, callback=None, renderers={}):
     # create where the item gets created before to set some feault
     # values e.g (See create function of forms)
     if not request.context.item:
-        request.context.item = factory.create(request.user)
+        request.context.item = factory.create(request.user, {})
     form = get_item_form('create', request, renderers)
     if request.POST and 'blobforms' not in request.params:
         if handle_POST_request(form, request, callback, 'create', renderers):

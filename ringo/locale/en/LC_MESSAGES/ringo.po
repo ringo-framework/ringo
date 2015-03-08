@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-02-15 20:28+0100\n"
+"POT-Creation-Date: 2015-03-05 11:45+0100\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: ringo/lib/imexport.py:445
+#: ringo/lib/imexport.py:451
 msgid "UPDATE"
 msgstr ""
 
-#: ringo/lib/imexport.py:448
+#: ringo/lib/imexport.py:454
 msgid "CREATE"
 msgstr ""
 
@@ -29,41 +29,41 @@ msgstr ""
 msgid "Confirm ${Action}"
 msgstr ""
 
-#: ringo/lib/renderer/dialogs.py:89
+#: ringo/lib/renderer/dialogs.py:91
 msgid "Do you really want to ${action} the following ${item} items?"
 msgstr ""
 
-#: ringo/lib/renderer/dialogs.py:99
+#: ringo/lib/renderer/dialogs.py:101
 msgid ""
 "Please press \"${Action}\" to ${action} the item. Press \"Cancel\" to "
 "cancel the action."
 msgstr ""
 
-#: ringo/model/modul.py:202
+#: ringo/model/modul.py:203
 msgid "List"
 msgstr ""
 
-#: ringo/model/modul.py:205 ringo/templates/default/list.mako:36
+#: ringo/model/modul.py:206 ringo/templates/default/list.mako:36
 msgid "Create"
 msgstr ""
 
-#: ringo/model/modul.py:208
+#: ringo/model/modul.py:209
 msgid "Read"
 msgstr ""
 
-#: ringo/model/modul.py:211
+#: ringo/model/modul.py:212
 msgid "Update"
 msgstr ""
 
-#: ringo/model/modul.py:214
+#: ringo/model/modul.py:215
 msgid "Delete"
 msgstr ""
 
-#: ringo/model/modul.py:218 ringo/templates/default/list.mako:41
+#: ringo/model/modul.py:219 ringo/templates/default/list.mako:41
 msgid "Import"
 msgstr ""
 
-#: ringo/model/modul.py:221
+#: ringo/model/modul.py:222
 msgid "Export"
 msgstr ""
 
@@ -100,23 +100,23 @@ msgstr ""
 msgid "Ok"
 msgstr ""
 
-#: ringo/templates/base.mako:144
+#: ringo/templates/base.mako:146
 msgid "Advanced"
 msgstr ""
 
-#: ringo/templates/base.mako:146
+#: ringo/templates/base.mako:148
 msgid "Back to"
 msgstr ""
 
-#: ringo/templates/base.mako:149 ringo/templates/footer.mako:7
+#: ringo/templates/base.mako:151 ringo/templates/footer.mako:7
 msgid "Administration"
 msgstr ""
 
-#: ringo/templates/base.mako:150
+#: ringo/templates/base.mako:152
 msgid "Change ownership"
 msgstr ""
 
-#: ringo/templates/base.mako:154
+#: ringo/templates/base.mako:156
 msgid "Advanced actions"
 msgstr ""
 
@@ -134,6 +134,7 @@ msgstr ""
 
 #. Label for email field in form config
 #: ringo/templates/contact.mako:10 ringo/views/forms/profiles.xml:5
+#: ringo/views/forms/users.xml:14
 msgid "E-Mail"
 msgstr ""
 
@@ -594,7 +595,7 @@ msgstr ""
 msgid "Change Password for"
 msgstr ""
 
-#: ringo/views/api.py:51
+#: ringo/views/api.py:61
 #, python-format
 msgid "ERROR: %s"
 msgstr ""
@@ -671,27 +672,27 @@ msgid ""
 "ressource!"
 msgstr ""
 
-#: ringo/views/request.py:72
+#: ringo/views/request.py:115
 msgid "Edited ${item_type} \"${item}\" successfull."
 msgstr ""
 
-#: ringo/views/request.py:96
+#: ringo/views/request.py:125
 msgid "Error while saving ${item_type} \"${item}\": ${error}."
 msgstr ""
 
-#: ringo/views/request.py:103
+#: ringo/views/request.py:132
 msgid "Error on validation the data for ${item_type} \"${item}\"."
 msgstr ""
 
-#: ringo/views/users.py:87
+#: ringo/views/users.py:94
 msgid "The given password is not correct"
 msgstr ""
 
-#: ringo/views/users.py:95
+#: ringo/views/users.py:102
 msgid "Changed password for \"${item}\" successfull."
 msgstr ""
 
-#: ringo/views/users.py:105
+#: ringo/views/users.py:112
 msgid "Error on changing the password for \"${item}\"."
 msgstr ""
 
@@ -1045,16 +1046,16 @@ msgstr ""
 #. Label for first_name field in form config
 #. Label for first_name column in overview table config
 #. Label for profile[0].first_name column in overview table config
-#: ringo/views/forms/profiles.xml:1 ringo/views/tables/profiles.json:2
-#: ringo/views/tables/users.json:2
+#: ringo/views/forms/profiles.xml:1 ringo/views/forms/users.xml:12
+#: ringo/views/tables/profiles.json:2 ringo/views/tables/users.json:2
 msgid "Firstname"
 msgstr ""
 
 #. Label for last_name field in form config
 #. Label for last_name column in overview table config
 #. Label for profile[0].last_name column in overview table config
-#: ringo/views/forms/profiles.xml:2 ringo/views/tables/profiles.json:3
-#: ringo/views/tables/users.json:3
+#: ringo/views/forms/profiles.xml:2 ringo/views/forms/users.xml:13
+#: ringo/views/tables/profiles.json:3 ringo/views/tables/users.json:3
 msgid "Lastname"
 msgstr ""
 
@@ -1163,26 +1164,40 @@ msgstr ""
 msgid "Activation Token"
 msgstr ""
 
-#: ringo/views/forms/users.xml:12
+#: ringo/views/forms/users.xml:15
+msgid ""
+"The default group determines which group will be used for new entries of "
+"this user."
+msgstr ""
+
+#: ringo/views/forms/users.xml:16
 msgid ""
 "The activation token can be used to (re)activate a deactivated or new "
 "registered user. Please call /auth/activate_user/$token to active the "
 "user."
 msgstr ""
 
-#: ringo/views/forms/users.xml:13
+#: ringo/views/forms/users.xml:17
 msgid "Login must have a length of greater or equal than 2"
 msgstr ""
 
-#: ringo/views/forms/users.xml:14
+#: ringo/views/forms/users.xml:18
 msgid "Passwords must be equal"
 msgstr ""
 
-#: ringo/views/forms/users.xml:15
+#: ringo/views/forms/users.xml:19
+msgid "User data"
+msgstr ""
+
+#: ringo/views/forms/users.xml:20
+msgid "Profile data"
+msgstr ""
+
+#: ringo/views/forms/users.xml:21
 msgid "Yes"
 msgstr ""
 
-#: ringo/views/forms/users.xml:16
+#: ringo/views/forms/users.xml:22
 msgid "No"
 msgstr ""
 

@@ -344,21 +344,25 @@ class Importer(object):
                 type_mapping[prop.key] = str(prop.columns[0].type)
         return type_mapping
 
-    def _deserialize_dates(self, obj):
-        """This function can be called after the basic deserialisation has
-        finished. It is used to convert integer, date and datetime objects which
-        are either not supported by the defaults decoders or not decoded
-        correct (NULL values)
+    def _deserialize_values(self, obj):
+        """This function can be called after the basic deserialisation
+        has finished. It is used to convert integer, date and datetime
+        objects which are either not supported by the defaults decoders
+        or not decoded correct (NULL values)
 
         :obj: Deserialized dictionary from basic deserialisation
         :returns: Deserialized dictionary with additional integer, date
         and datetime deserialisation
         """
         for field in obj:
-            if (not field in self._clazz_type or
-                not self._clazz_type[field] in ['DATE', 'DATETIME', 'INTEGER']):
+            if (not field in self._clazz_type
+               or not self._clazz_type[field] in ['DATE',
+                                                  'DATETIME',
+                                                  'INTEGER']
+               or obj[field] is None):
                 continue
-            elif obj[field] is None:
+            elif obj[field] == "":
+                obj[field] = None
                 continue
             elif self._clazz_type[field] == "INTEGER":
                 obj[field] = int(obj[field])
@@ -385,8 +389,8 @@ class Importer(object):
         for field in obj.keys():
             ftype = self._clazz_type[field]
             # Handle all types of relations...
-            if  ftype in ["MANYTOMANY", "MANYTOONE",
-                          "ONETOONE", "ONETOMANY"]:
+            if ftype in ["MANYTOMANY", "MANYTOONE",
+                         "ONETOONE", "ONETOMANY"]:
                 # Remove the items from the list if there is no db
                 # connection or of there are not MANYTOMANY.
                 if not self._db or (ftype != "MANYTOMANY"):
@@ -404,7 +408,6 @@ class Importer(object):
                                      % (clazz, item_id, field, self._clazz)))
                 obj[field] = tmp
         return obj
-
 
     def deserialize(self, data):
         """Will convert the string data into a dictionary like data.
@@ -435,6 +438,8 @@ class Importer(object):
         for values in import_data:
             if use_uuid:
                 id = values.get('uuid')
+                if "id" in values:
+                    del values["id"]
             else:
                 id = values.get('id')
             try:
@@ -442,16 +447,11 @@ class Importer(object):
                 # error on loading.
                 item = factory.load(id or "thisiddoesnotexist",
                                     uuid=use_uuid)
+                item.set_values(values)
                 operation = _("UPDATE")
             except:
-                item = factory.create(user=user)
+                item = factory.create(user=user, values=values)
                 operation = _("CREATE")
-            # Ignore id, uuid field in import.
-            if use_uuid and "id" in values:
-                del values["id"]
-            #if "uuid" in values:
-            #    del values["uuid"]
-            item.set_values(values)
             imported_items.append((item, operation))
         return imported_items
 
@@ -460,7 +460,7 @@ class JSONImporter(Importer):
     """Docstring for JSONImporter."""
 
     def _deserialize_hook(self, obj):
-        obj = self._deserialize_dates(obj)
+        obj = self._deserialize_values(obj)
         return self._deserialize_relations(obj)
 
     def deserialize(self, data):
@@ -482,7 +482,7 @@ class CSVImporter(Importer):
         conv = {}
         for k, v in obj.iteritems():
             conv[k] = unicode(v, "utf-8")
-        conv = self._deserialize_dates(conv)
+        conv = self._deserialize_values(conv)
         return conv
 
     def deserialize(self, data):

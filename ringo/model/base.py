@@ -551,15 +551,18 @@ class BaseFactory(object):
         """
         self._clazz = clazz
 
-    def create(self, user):
+    def create(self, user, values):
         """Will create a new instance of clazz. The instance is it is not saved
         persistent at this moment. The method will also take care of
         setting the correct ownership.
 
         :user: User instance will own the new created item
+        :values: Optional provide a dictionary with values for the new item
         :returns: Instance of clazz
 
         """
+        if not isinstance(values, dict):
+            raise ValueError("Values must be a dictionary")
         item = self._clazz()
         # Try to set the ownership of the entry if the item provides the
         # fields.
@@ -573,6 +576,8 @@ class BaseFactory(object):
                 modul = get_item_modul(None, item)
                 default_gid = modul.gid
                 item.gid = default_gid
+        if values:
+            item.set_values(values)
         return item
 
     def load(self, id, db=None, cache="", uuid=False, field=None):

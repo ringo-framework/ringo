@@ -1,7 +1,7 @@
 % if field.renderer.layout == "simple":
-<label for="${field.id}">${_('State')}: ${state._label}</label>
+<label for="${field.id}">${_('State')}</label>
 <select id="${field.id}" name="${field.name}" class="form-control">
-  <option value="${state._id}">${_('No Transition')}</option>
+  <option value="${state._id}">${state._label}</option>
   % for trans in state.get_transitions():
       <option value="${trans._end_state._id}">${trans._label}</option>
   % endfor
