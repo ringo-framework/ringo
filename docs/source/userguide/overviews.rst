@@ -26,6 +26,9 @@ The header of the overview table is clickable to sort the listing on the
 selected header. Clicking on the header toggles between ascending and
 descending sorting. A small icon shown on which column the sorting was done.
 
+Bundled actions
+---------------
+
 Search
 ======
 The search is based on the visible values in the overview. That means you can

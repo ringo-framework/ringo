@@ -49,12 +49,13 @@ These are:
 
 Context Menu
 ============
-The context menu will provide available actions for the currently selected
-item, or more generally speaking for the currently displayed page. The
-displayed actions may vary depending on your permissions and the modul
-configuration.
 
 .. image:: ../screenshots/ui/contextmenu.png
+
+The context menu is devided into two parts. The left part list the primary
+CRUD actions of a module. The right part (*Advanced*) is a dropdown menu which gives access
+to secondary actions like Import and Export. Depending on your permissions and
+the modul configuration there might be other actions available.
 
 .. _ui_adminmenu:
 
