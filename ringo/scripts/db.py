@@ -161,7 +161,9 @@ def handle_db_savedata_command(args):
     modul = dynamic_import(modul_clazzpath)
     exporter = JSONExporter(modul, serialized=False,
                             relations=args.include_relations)
-    print exporter.perform(session.query(modul).all())
+    print exporter.perform(session.query(modul)
+                          .order_by(modul.id)
+                          .all())
 
 def handle_db_loaddata_command(args):
     path = []
