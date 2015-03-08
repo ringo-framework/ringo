@@ -1295,11 +1295,11 @@ msgstr "Passwörter müssen gleich sein"
 
 #: ringo/views/forms/users.xml:19
 msgid "User data"
-msgstr ""
+msgstr "Nutzerdaten"
 
 #: ringo/views/forms/users.xml:20
 msgid "Profile data"
-msgstr ""
+msgstr "Profildaten"
 
 #: ringo/views/forms/users.xml:21
 msgid "Yes"

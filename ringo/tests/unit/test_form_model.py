@@ -7,6 +7,6 @@ class FormTests(BaseUnitTest):
         """Testfunction to trigger execution of Statemachine code"""
         from ringo.model.form import Form
         factory = Form.get_item_factory()
-        item = factory.create(user=None)
+        item = factory.create(user=None, values={})
         result = item.review_state
         self.assertEqual(result._id, 1)
