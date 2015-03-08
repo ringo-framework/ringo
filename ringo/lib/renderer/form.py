@@ -24,18 +24,12 @@ log = logging.getLogger(__name__)
 #                         Renderers for form elements                     #
 ###########################################################################
 
-
-def add_renderers(renderers):
+def add_renderers(custom_renderers):
     """Helper function to add ringo ringo specific renderers for form
     rendering."""
-    if not "dropdown" in renderers:
-        renderers["dropdown"] = DropdownFieldRenderer
-    if not "listing" in renderers:
-        renderers["listing"] = ListingFieldRenderer
-    if not "state" in renderers:
-        renderers["state"] = StateFieldRenderer
-    if not "link" in renderers:
-        renderers["link"] = LinkFieldRenderer
+    for key in custom_renderers:
+        if not key in renderers:
+            renderers[key] = custom_renderers[key]
     return renderers
 
 
@@ -308,3 +302,10 @@ class ListingFieldRenderer(FormbarSelectionField):
         html.append(self._render_help())
         html.append('</div>')
         return "".join(html)
+
+renderers = {
+    "dropdown": DropdownFieldRenderer,
+    "listing": ListingFieldRenderer,
+    "state": StateFieldRenderer,
+    "link": LinkFieldRenderer
+}
