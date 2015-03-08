@@ -7,14 +7,13 @@ Ringo documentation
 ===================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
    overview
-   usage
-   config
-   cli
-   development
-   recipes
+   userguide/index
+   architecture/index
+   development/index
+   administration/index
 
 
 Indices and tables

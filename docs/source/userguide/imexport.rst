@@ -1,36 +1,8 @@
-#########
-Userguide
-#########
-
-*****************
-The Userinterface
-*****************
-
-*******
-General
-*******
-
-Required and desired fields
-===========================
-
-Read and Update Mode
-====================
-Items can be opened in read and update mode. I read mode all fields are
-rendererd as readonly fields and no editing is possible regardless of your
-current permissions. In updated mode the fields are usual editable but further
-constraint in the form of the items can turn single fields into readonly mode.
-
-Overviews
-=========
-Searching
----------
-Bundled actions
----------------
-
 .. _usage_iexport:
 
+*****************
 Import and Export
-=================
+*****************
 
 Export configuration
 --------------------
@@ -52,21 +24,3 @@ key in the dictionary must be named as the name of the relation in the model.
 In this case it is named 'profile'. The following list define the fields of
 the profile model which should be included in the export. This recursive
 structure can be expanded to include further relations.
-
-*******************
-User Administration
-*******************
-Users
-=====
-Usergroups
-==========
-Roles
-=====
-
-*******************
-Modul configuration
-*******************
-
-**********
-Formeditor
-**********
