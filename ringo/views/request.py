@@ -14,6 +14,17 @@ from ringo.views.helpers import (
 
 log = logging.getLogger(__name__)
 
+def encode_values(values):
+    """Returns a string with encode the values in the given dictionary.
+
+    :values: dictionary with key values pairs
+    :returns: String key1:value1,key2:value2...
+
+    """
+    encoded = []
+    for key in values:
+        encoded.append("%s:%s" % (key, values[key]))
+    return ",".join(encoded)
 
 def is_confirmed(request):
     """Returns True id the request is confirmed"""
