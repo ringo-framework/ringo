@@ -3,6 +3,9 @@
 New:
 - Added "openmodal" option to LinkfieldRenderer
 
+Changed:
+- Only show "Homepage" on index page if the user is actually logged in.
+
 1.0.0
 =====
 WARNING! This update is a major upgrade of Ringo which may break your application!
