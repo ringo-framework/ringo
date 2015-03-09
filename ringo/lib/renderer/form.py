@@ -66,6 +66,12 @@ def filter_options_on_permissions(request, options):
 
 
 class LinkFieldRenderer(FieldRenderer):
+    """ Will rendere a Link to the item. The following option in
+    addition to the base Linkfield Renderer are supported:
+
+    * openmodal: If true the item will be opened in a modal form.
+      Defaults to false.
+    """
     def __init__(self, field, translate):
         """@todo: to be defined"""
         FieldRenderer.__init__(self, field, translate)

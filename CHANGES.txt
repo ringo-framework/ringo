@@ -1,3 +1,8 @@
+1.1.0
+=====
+New:
+- Added "openmodal" option to LinkfieldRenderer
+
 1.0.0
 =====
 WARNING! This update is a major upgrade of Ringo which may break your application!
