@@ -2,6 +2,9 @@
 =====
 New:
 - Added "openmodal" option to LinkfieldRenderer
+- Added _get_permission classmethod in the Baseitem class. This class can be
+  overwritten to implement a custom way to build the ACL for this class and
+  instances.
 
 Changed:
 - Only show "Homepage" on index page if the user is actually logged in.
