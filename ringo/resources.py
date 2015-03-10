@@ -27,6 +27,8 @@ class RessourceFactory(object):
         item_id = request.matchdict.get('id')
         if item_id and not self.item:
             self.item = self._load_item(item_id)
+        if not self.__modul__:
+            self.__modul__ = get_item_modul(request, self.__model__)
         self.__acl__ = self._get_item_permissions(request)
 
     def _load_item(self, id):
@@ -55,7 +57,5 @@ class RessourceFactory(object):
             return None
 
     def _get_item_permissions(self, request):
-        if not self.__modul__:
-            self.__modul__ = get_item_modul(request, self.__model__)
         return self.__model__._get_permissions(self.__modul__,
                                               self.item, request)
