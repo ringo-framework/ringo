@@ -142,6 +142,36 @@ class BaseItem(object):
     def get_item_factory(cls):
         return BaseFactory(cls)
 
+    @classmethod
+    def _get_permissions(cls, modul, item, request):
+        """Internal method to implement getting specific build of an ACL
+        for this class (and instances). By default this function just
+        calls the get_permission function from lib.security. See
+        this function for more details.
+
+        If you need to implement an alternative permission check this
+        function can be overwritten.  The `modul` and `item` attribute
+        needed for the default get_permission method. `request` is used
+        to get the current db session in case you need to reload other
+        informations.
+
+        #  FIXME: Try to get rid of the request element here. There
+        #  should not be any request needed in the model. This is needed
+        #  in the efa application for Participants to load additional
+        #  modules. (ti).
+        #  <2015-03-10 22:46> 
+
+        :modul: Instance of the modul
+        :item: Instance of the class
+        :returns: List of permissions.
+
+        """
+        #  FIXME: Circular import :((( Yes I know. We really need some
+        #  clean up here. (ti) <2015-03-10 21:08> 
+        from ringo.lib.security import get_permissions
+        return get_permissions(modul, item)
+
+
     def reset_uuid(self):
         self.uuid = '%.32x' % uuid.uuid4()
 

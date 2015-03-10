@@ -204,7 +204,7 @@ def has_permission(permission, context, request):
     """
     if isinstance(context, BaseItem) or hasattr(context, "_modul_id"):
         modul = get_item_modul(request, context)
-        context.__acl__ = get_permissions(modul, context)
+        context.__acl__ = context._get_permissions(modul, context, request)
     # TODO: Call of has_permission will trigger 4 additional SQL-Queries
     # per call. So we might think about caching the result.
     return has_permission_(permission, context, request)
