@@ -83,6 +83,11 @@ def load_modul(item):
 class BaseItem(object):
 
     _modul_id = None
+    #  TODO: Check if its possible to set the modul of the class
+    #  dynamically on application initialisation. This might help to get
+    #  rid of the annoying loading of the modul for a class (ti)
+    #  <2015-03-10 22:53> 
+    #__modul__ = None
     _sql_eager_loads = []
     """Configure a list of relations which are configured to be
     eager loaded."""
