@@ -8,6 +8,9 @@ New:
 
 Changed:
 - Only show "Homepage" on index page if the user is actually logged in.
+- Fixed DTListRenderer which was only rarly used and seems to be broken for
+  some time. The fix onyl gets it working again. There is still work to do to
+  make it work as the default ListRenderer (Display of Link e.g).
 
 1.0.0
 =====

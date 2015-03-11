@@ -75,6 +75,7 @@ class DTListRenderer(object):
     def render(self, request):
         """Initialize renderer"""
         values = {'items': self.listing.items,
+                  'clazz': self.listing.clazz,
                   'listing': self.listing,
                   'request': request,
                   '_': request.translate,
