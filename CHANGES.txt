@@ -11,6 +11,10 @@ Changed:
 - Fixed DTListRenderer which was only rarly used and seems to be broken for
   some time. The fix onyl gets it working again. There is still work to do to
   make it work as the default ListRenderer (Display of Link e.g).
+- Allow custom title and body in confirmation dialog.
+- Use form parameter when getting the create form. Usefull when you want to
+  use an alternative form to create an item.
+
 
 1.0.0
 =====
