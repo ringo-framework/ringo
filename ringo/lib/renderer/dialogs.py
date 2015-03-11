@@ -71,8 +71,14 @@ class ConfirmDialogRenderer(DialogRenderer):
         values = {}
         values['request'] = self._request
         values['icon'] = self.icon
-        values['header'] = _("Confirm ${Action}", mapping=mapping)
-        values['body'] = self._render_body(items)
+        if self._title:
+            values['header'] = self._title
+        else:
+            values['header'] = _("Confirm ${Action}", mapping=mapping)
+        if self._body:
+            values['body'] = self._body
+        else:
+            values['body'] = self._render_body(items)
         values['action'] = _(self._action.capitalize())
         values['ok_url'] = self._request.current_route_path()
         values['_'] = self._request.translate
