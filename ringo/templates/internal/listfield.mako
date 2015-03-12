@@ -12,10 +12,6 @@ for item in items:
   else:
     hidden_items.append(item)
 
-print len(selected)
-print len(visible_items)
-print len(hidden_items)
-
 def render_item_link(request, clazz, permission, item, value, modal=False, backlink=True):
   out = []
   css_class = ["link"]
