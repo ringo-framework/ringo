@@ -1,4 +1,5 @@
 import os
+import pprint
 import subprocess
 import uuid
 import transaction
@@ -27,13 +28,14 @@ mixinmap = {
 }
 
 
-def _get_default_actions_sql(session, mid, action_id, ignore=[]):
+def get_default_actions_fixtures(session, mid, action_id, ignore=[]):
     # TODO: Translate the name of the Action (torsten) <2013-07-10 09:32>
     sql = []
     for action in ['list', 'create', 'read', 'update',
                    'delete', 'import', 'export']:
         if action in ignore:
             continue
+        fixture = {}
         myuuid = uuid.uuid4().hex
         if action == "list":
             name = "List"
@@ -71,10 +73,20 @@ def _get_default_actions_sql(session, mid, action_id, ignore=[]):
             icon = "icon-export"
             bundle = 1
 
-        sql.append("""INSERT INTO "actions" """
-                   """(id, mid, name, url, icon, uuid, bundle) """
-                   """VALUES (%s, %s, '%s', '%s', '%s', '%s', '%s')""" %
-                   (action_id, mid, name, url, icon, myuuid, bundle))
+        fixture["id"] = action_id
+        fixture["mid"] = mid
+        fixture["name"] = name 
+        fixture["url"] = url 
+        fixture["icon"] = icon
+        fixture["uuid"] = myuuid 
+        fixture["bundle"] = bundle 
+
+        sql.append(fixture)
+
+        #sql.append("""INSERT INTO "actions" """
+        #           """(id, mid, name, url, icon, uuid, bundle) """
+        #           """VALUES (%s, %s, '%s', '%s', '%s', '%s', '%s')""" %
+        #           (action_id, mid, name, url, icon, myuuid, bundle))
         action_id += 1
     return sql
 
@@ -101,7 +113,6 @@ def get_next_modulid(package, session):
     else:
         id = session.query(
             func.max(ModulItem.id)).filter(ModulItem.id > 999).one()[0]
-    print id
     if id:
         return id + 1
     else:
@@ -112,9 +123,8 @@ def get_next_actionid(session):
     return id + 1
 
 
-def get_insert_statements(package, name, session):
-    """Will retunr the INSERT statements for the new modul. They can be
-    used in the migration scripts.
+def get_fixtures(package, name, session):
+    """Will retunr the Fixtures for the new modul.
 
     :package: @todo
     :name: @todo
@@ -122,24 +132,33 @@ def get_insert_statements(package, name, session):
     :returns: @todo
 
     """
-    modul_name = name + "s"
-    label = name.capitalize()
-    label_plural = label + "s"
-    clazzpath = ".".join([package, 'model', name, label])
-    location = "header-menu"
-    str_repr = "%s|id"
-    myuuid = uuid.uuid4().hex
+    out = []
+    pp = pprint.PrettyPrinter()
+    modul_fixture = {}
     id = get_next_modulid(package, session)
-    action_id = get_next_actionid(session)
+    modul_fixture["id"] = id
+    modul_fixture["name"] = name + "s"
+    modul_fixture["label"] = name.capitalize()
+    modul_fixture["label_plural"] = modul_fixture["label"] + "s"
+    modul_fixture["clazzpath"] = ".".join([package, 'model',
+                                           name, modul_fixture["label"]])
+    modul_fixture["location"] = "header-menu"
+    modul_fixture["str_repr"] = "%s|id"
+    modul_fixture["myuuid"] = uuid.uuid4().hex
 
-    sql = []
-    sql.append("""INSERT INTO "modules" """
-               """VALUES (%s,'%s','%s','%s','%s', """
-               """NULL, '%s','%s','%s', NULL)"""
-               % (id, modul_name, clazzpath, label,
-                  label_plural, str_repr, location, myuuid))
-    sql.extend(_get_default_actions_sql(session, id, action_id))
-    return sql
+    out.append("###############")
+    out.append("#Modul fixture#")
+    out.append("###############")
+    out.append(pp.pformat(modul_fixture))
+
+    out.append("")
+    out.append("################")
+    out.append("#Action fixture#")
+    out.append("################")
+    action_id = get_next_actionid(session)
+    out.append(pp.pformat(get_default_actions_fixtures(session,
+                                                       id, action_id)))
+    return out
 
 
 def del_model_file(package, modul):
@@ -312,13 +331,10 @@ def handle_modul_add_command(args):
     name = args.name
     clazz = name.capitalize()
     modul_id = get_next_modulid(package, session)
-    sql = get_insert_statements(package, name, session)
+    fixtures = get_fixtures(package, name, session)
     add_model_file(package, name, modul_id, clazz, args.mixin)
     add_form_file(package, name)
     add_table_file(package, name)
     msg = "Added %s modul" % name
     path = create_new_revision(args, msg)
-    replace_insert_stmt(path, sql)
-    #print "Touching"
-    #subprocess.call(["touch", path])
-    #print "Finished Touching"
+    print "\n".join(fixtures)

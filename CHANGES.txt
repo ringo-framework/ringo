@@ -15,6 +15,8 @@ Changed:
 - Use form parameter when getting the create form. Usefull when you want to
   use an alternative form to create an item.
 - Hide attribute of ActionItems also affects overview lists.
+- "ringo-admin modul add" command does not generate SQL code anymore. Instead
+  of this it will print out code for the fixtures.
 
 
 1.0.0

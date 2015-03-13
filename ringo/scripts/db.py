@@ -110,16 +110,6 @@ def create_new_revision(args, msg=None):
     return revision_file
 
 
-def replace_insert_stmt(revision_file, sql):
-    """Will replace the empty INSERT statement in the given revison file
-    with the given sql statements."""
-    with open(revision_file, "r") as f:
-        data = f.read()
-    time.sleep(2)
-    with open(revision_file, "w") as f:
-        f.write(data.replace('INSERTS = """"""',
-                              'INSERTS = """%s"""' % "\n".join(sql)))
-
 def get_alembic_config(args, app=None):
     """Return a alembic configuration
 

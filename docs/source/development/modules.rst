@@ -10,6 +10,14 @@ ringo base then you should use the ringo-admin command::
         ringo-admin modul add name
         ringo-admin db upgrade
 
+..note::
+        Please use the singular form of a modulname. Ringos convention here is
+        to add a "s" to the modul name in some places. This may results in
+        ugly modulnames anyway so to not make things even worser. 
+
+The output of the command "ringo-admin modul add name" will print code for
+your fixtures. You need to insert this code manually into your fixtures.
+
 The the help page of the command for more informations.
 
 The generated modul only has some default fields like the `uuid` or `id`
