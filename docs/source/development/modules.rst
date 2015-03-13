@@ -5,7 +5,10 @@ Modules
 Create a new modul to your application
 ======================================
 If you want to add a new modul to your ringo based application or the the
-ringo base then you should use the ringo-admin command::
+ringo base then you should use the ringo-admin command.
+
+If you use this command in your application named `foo` then you need 
+to change to command into `foo-admin` instead of `ringo-admin`::
 
         ringo-admin modul add name
         ringo-admin db upgrade
