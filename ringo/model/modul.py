@@ -189,6 +189,20 @@ class ModulItem(BaseItem, Base):
                 return True
         return False
 
+
+    def get_action(self, url):
+        """Will return action item if the modul has a ActionItem configured
+        with given url. Else None.
+
+        :url: String of the url
+        :returns: ActionItem or None
+        """
+        for action in self.actions:
+            if action.url == url:
+                return action
+	return None
+
+
     def get_str_repr(self):
         """Return a tupel with format str and a list of fields."""
         # "%s - %s"|field1, field2 -> ("%s - %s", ["field1", "field2"])

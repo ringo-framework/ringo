@@ -9,7 +9,9 @@
         <div class="btn-toolbar">
           <div class="btn-group btn-group-justified">
             % if h.get_item_modul(request, clazz).has_action('create'):
-            <a href="${request.route_path(h.get_action_routename(clazz, 'create'))}" class="btn btn-primary btn-block">${_('New')}</a>
+              % if h.get_item_modul(request, clazz).get_action('create').display != 'hide':
+                <a href="${request.route_path(h.get_action_routename(clazz, 'create'))}" class="btn btn-primary btn-block">${_('New')}</a>
+              % endif
             % endif
           </div>
         </div>
@@ -20,8 +22,8 @@
         <div class="btn-toolbar">
           <div class="btn-group">
             <%
-              show_create =  h.get_item_modul(request, clazz).has_action('create') and s.has_permission('create', request.context, request)
-              show_import =  h.get_item_modul(request, clazz).has_action('import') and s.has_permission('import', request.context, request)
+              show_create =  h.get_item_modul(request, clazz).has_action('create') and h.get_item_modul(request, clazz).get_action('create').display != 'hide' and s.has_permission('create', request.context, request)
+              show_import =  h.get_item_modul(request, clazz).has_action('import') and h.get_item_modul(request, clazz).get_action('import').display != 'hide' and s.has_permission('import', request.context, request)
             %>
             % if show_create:
               <a href="${request.route_path(h.get_action_routename(clazz, 'create'))}" class="btn btn-primary"><i class="glyphicon glyphicon-plus">&nbsp;</i>${_('New')}</a>

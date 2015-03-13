@@ -14,6 +14,7 @@ Changed:
 - Allow custom title and body in confirmation dialog.
 - Use form parameter when getting the create form. Usefull when you want to
   use an alternative form to create an item.
+- Hide attribute of ActionItems also affects overview lists.
 
 
 1.0.0
