@@ -1,5 +1,5 @@
 import os
-import pprint
+import json
 import subprocess
 import uuid
 import transaction
@@ -40,54 +40,49 @@ def get_default_actions_fixtures(session, mid, action_id, ignore=[]):
             name = "List"
             url = "list"
             icon = "icon-list-alt"
-            bundle = 0
+            bundle = False
         if action == "create":
             name = "Create"
             url = "create"
             icon = "icon-plus"
-            bundle = 0
+            bundle = False
         if action == "read":
             name = "Read"
             url = "read/{id}"
             icon = "icon-eye-open"
-            bundle = 0
+            bundle = False
         if action == "update":
             name = "Update"
             url = "update/{id}"
             icon = "icon-edit"
-            bundle = 0
+            bundle = False
         if action == "delete":
             name = "Delete"
             url = "delete/{id}"
             icon = "icon-eye-delete"
-            bundle = 1
+            bundle = False
         if action == "import":
             name = "Import"
             url = "import"
             icon = "icon-import"
-            bundle = 0
+            bundle = False
         if action == "export":
             name = "Export"
             url = "export/{id}"
             icon = "icon-export"
-            bundle = 1
+            bundle = True
 
         fixture["id"] = action_id
         fixture["mid"] = mid
-        fixture["name"] = name 
-        fixture["url"] = url 
+        fixture["name"] = name
+        fixture["url"] = url
         fixture["icon"] = icon
-        fixture["uuid"] = myuuid 
-        fixture["bundle"] = bundle 
+        fixture["uuid"] = myuuid
+        fixture["bundle"] = bundle
 
         sql.append(fixture)
-
-        #sql.append("""INSERT INTO "actions" """
-        #           """(id, mid, name, url, icon, uuid, bundle) """
-        #           """VALUES (%s, %s, '%s', '%s', '%s', '%s', '%s')""" %
-        #           (action_id, mid, name, url, icon, myuuid, bundle))
         action_id += 1
-    return sql
+    return json.dumps(sql)
 
 
 def remove_db_entry(name, session):
@@ -132,7 +127,6 @@ def get_fixtures(package, name, session):
 
     """
     out = []
-    pp = pprint.PrettyPrinter()
     modul_fixture = {}
     id = get_next_modulid(package, session)
     modul_fixture["id"] = id
@@ -141,22 +135,21 @@ def get_fixtures(package, name, session):
     modul_fixture["label_plural"] = modul_fixture["label"] + "s"
     modul_fixture["clazzpath"] = ".".join([package, 'model',
                                            name, modul_fixture["label"]])
-    modul_fixture["location"] = "header-menu"
+    modul_fixture["display"] = "header-menu"
     modul_fixture["str_repr"] = "%s|id"
-    modul_fixture["myuuid"] = uuid.uuid4().hex
+    modul_fixture["uuid"] = uuid.uuid4().hex
 
     out.append("###############")
     out.append("#Modul fixture#")
     out.append("###############")
-    out.append(pp.pformat(modul_fixture))
+    out.append(json.dumps(modul_fixture))
 
     out.append("")
     out.append("################")
     out.append("#Action fixture#")
     out.append("################")
     action_id = get_next_actionid(session)
-    out.append(pp.pformat(get_default_actions_fixtures(session,
-                                                       id, action_id)))
+    out.append(get_default_actions_fixtures(session, id, action_id))
     return out
 
 
