@@ -8,8 +8,7 @@ from sqlalchemy import func
 from mako.lookup import TemplateLookup
 from ringo.lib.helpers import get_app_location, dynamic_import
 from ringo.scripts.db import (
-    get_session, create_new_revision,
-    handle_db_upgrade_command, replace_insert_stmt
+    get_session, create_new_revision
 )
 from ringo.model.modul import ModulItem, ActionItem
 
