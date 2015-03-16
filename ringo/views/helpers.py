@@ -14,6 +14,7 @@ from ringo.lib.form import (
 from ringo.lib.i18n import locale_negotiator
 from ringo.lib.security import has_role
 from ringo.lib.renderer import add_renderers
+from ringo.model.user import Usergroup
 from ringo.model.form import Form as BlobformForm
 from ringo.model.mixins import (
     Owned,
@@ -74,7 +75,7 @@ def get_rendered_ownership_form(request, readonly=None):
 
     def _has_administrational_role(modul):
         for action in modul.actions:
-            if action.name == "update":
+            if action.name == "Update":
                 for role in action.roles:
                     if role.admin:
                         return True
@@ -83,9 +84,11 @@ def get_rendered_ownership_form(request, readonly=None):
     item = get_item_from_request(request)
     form = get_ownership_form(request, readonly)
     modul = get_item_modul(request, item)
+    usergroup_modul = get_item_modul(request, Usergroup)
     _groups = [str(g.name) for g in request.user.groups]
     _admin = (_has_administrational_role(modul)
-              or has_role(request.user, "admin"))
+              or has_role(request.user, "admin")
+              or _has_administrational_role(usergroup_modul))
     values = {"_admin": _admin,
               "_groups": _groups}
     if isinstance(item, Owned):
