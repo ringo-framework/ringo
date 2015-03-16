@@ -51,7 +51,7 @@ def _handle_delete_request(request, items):
                 request.db.delete(item)
                 request.db.flush()
             except sa.exc.IntegrityError as e:
-                mapping["error"] = e.message
+                mapping["error"] = e.message.decode("utf-8")
                 title = _("Can not delete ${item_type} items.",
                           mapping=mapping)
                 body = _("There has been an integrity error which prevents "
