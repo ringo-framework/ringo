@@ -17,6 +17,7 @@ from ringo.lib.helpers.format import (
 
 from ringo.lib.helpers.misc import (
     serialize,
+    safestring,
     age,
     get_raw_value,
     dynamic_import,

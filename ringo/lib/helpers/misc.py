@@ -1,4 +1,5 @@
 import logging
+import string
 from datetime import datetime
 from pyramid.threadlocal import get_current_request
 from ringo.lib.sql import DBSession
@@ -26,6 +27,12 @@ def serialize(value):
     if hasattr(value, 'id'):
         return [value.id]
     return unicode(value)
+
+def safestring(unsafe):
+    """Returns a 'safe' version of the given string. All non ascii chars
+    and other chars are removed """
+    valid_chars = "_%s%s" % (string.ascii_letters, string.digits)
+    return ''.join(c for c in unsafe if c in valid_chars)
 
 
 def age(when, on=None):
