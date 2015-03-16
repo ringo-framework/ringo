@@ -76,6 +76,9 @@ def handle_add_relation(request, item):
     log.debug('Linking %s to %s in %s' % (item, pitem, rrel))
     tmpattr = getattr(pitem, rrel)
     tmpattr.append(item)
+    # Delete value from session after the relation has been added
+    del request.session['%s.addrelation' % clazz]
+    request.session.save()
 
 
 def handle_caching(request):
