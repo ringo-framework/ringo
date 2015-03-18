@@ -74,7 +74,7 @@ def get_raw_value(element, name):
                 element = element_list[index]
             else:
                 log.error("IndexError in %s on %s for %s"
-                          % (name, attr, self))
+                          % (name, attr, element))
                 element = None
                 break
         else:
