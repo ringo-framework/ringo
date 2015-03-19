@@ -23,6 +23,14 @@ def get_app_location(name=None):
     return pkg_resources.get_distribution(name).location
 
 
+def get_app_url(request):
+    settings = request.registry.settings
+    if "app.url" in settings:
+        return settings["app.url"]
+    else:
+        return request.application_url
+
+
 def get_app_title():
     registry = get_current_registry()
     settings = registry.settings
