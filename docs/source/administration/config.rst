@@ -1,6 +1,12 @@
 *************************
 Application Configuration
 *************************
+Application
+===========
+
+* app.title: Name of the application.
+* app.url: Baseurl of the application.
+
 
 Authentification
 ================

@@ -5,6 +5,11 @@
 
 [app:main]
 app.title = {{package}}
+# Baseurl of the application. Defaults to automatic generation using the
+# request.application_url attribute of ringo. In some cases (e.g Serving
+# behind a reverse proxy you might set this variable to a static value.
+#app.url =
+
 
 use = egg:{{package}}
 
