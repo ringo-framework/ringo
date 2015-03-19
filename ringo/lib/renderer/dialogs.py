@@ -10,7 +10,8 @@ from formbar.form import Form
 import ringo.lib.helpers
 from ringo.lib.helpers import (
     get_action_routename,
-    get_item_modul
+    get_item_modul,
+    get_app_url
 )
 from ringo.lib.form import (
     eval_url,
@@ -173,7 +174,7 @@ class ExportDialogRenderer(DialogRenderer):
                          csrf_token=self._request.session.get_csrf_token(),
                          dbsession=request.db,
                          eval_url=eval_url,
-                         url_prefix=request.application_url)
+                         url_prefix=get_app_url(request))
 
     def render(self, items):
         _ = self._request.translate
@@ -208,7 +209,7 @@ class ImportDialogRenderer(DialogRenderer):
                          csrf_token=self._request.session.get_csrf_token(),
                          dbsession=request.db,
                          eval_url=eval_url,
-                         url_prefix=request.application_url)
+                         url_prefix=get_app_url(request))
 
     def render(self, items):
         values = {}

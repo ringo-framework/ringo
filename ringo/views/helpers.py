@@ -5,7 +5,10 @@ from formbar.config import (
     parse
 )
 from formbar.form import Form
-from ringo.lib.helpers import get_item_modul
+from ringo.lib.helpers import (
+        get_item_modul,
+        get_app_url
+)
 from ringo.lib.form import (
     eval_url,
     get_form_config,
@@ -101,7 +104,7 @@ def get_ownership_form(request, readonly=None):
     item = get_item_from_request(request)
     db = request.db
     csrf_token = request.session.get_csrf_token()
-    url_prefix = request.application_url
+    url_prefix = get_app_url(request)
     if (readonly is None and isinstance(item, Owned)):
         readonly = not (item.is_owner(request.user)
                         or has_role(request.user, "admin"))
@@ -164,7 +167,7 @@ def get_item_form(name, request, renderers=None):
                 request=request,
                 csrf_token=request.session.get_csrf_token(),
                 eval_url=eval_url,
-                url_prefix=request.application_url,
+                url_prefix=get_app_url(request),
                 locale=locale_negotiator(request))
     return form
 
