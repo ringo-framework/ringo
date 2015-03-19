@@ -20,5 +20,5 @@ def get_fixtures(appname):
     result = run("ls %s/fixtures/*.json" % apppath, hide="out").stdout.strip()
     fixtures = []
     for fixture in sorted(result.split("\n")):
-        fixtures.append((fixture, fixture.split("_")[1].split(".")[0]))
+        fixtures.append((fixture, "_".join(fixture.split("_")[1:]).split(".")[0]))
     return fixtures
