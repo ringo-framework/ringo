@@ -24,11 +24,21 @@ def get_app_location(name=None):
 
 
 def get_app_url(request):
+    """Returns the base url of the application if configured. The base
+    url can be configured using the `app.url` config variable in the ini
+    file. The configuration defaults to having no explizit base url. If
+    the `app.url` variable is emtpy we will determine the base url from
+    request.application_url variable. Else the value of `app.url` is
+    used"""
     settings = request.registry.settings
-    if "app.url" in settings:
-        return settings["app.url"]
-    else:
+    app_url = settings.get("app.url")
+    if app_url is None:
+        # Default! No url.
+        return ""
+    elif app_url == "":
         return request.application_url
+    else:
+        return app_url
 
 
 def get_app_title():
