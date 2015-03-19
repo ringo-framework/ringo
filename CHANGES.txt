@@ -17,6 +17,8 @@ Changed:
 - Hide attribute of ActionItems also affects overview lists.
 - "ringo-admin modul add" command does not generate SQL code anymore. Instead
   of this it will print out code for the fixtures.
+- Make the application base url configurable using the app.url config
+  parameter.
 
 
 1.0.0
