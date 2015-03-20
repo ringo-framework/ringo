@@ -19,6 +19,7 @@ Changed:
   of this it will print out code for the fixtures.
 - Make the application base url configurable using the app.url config
   parameter.
+- Added title tooltips in context menu
 
 
 1.0.0

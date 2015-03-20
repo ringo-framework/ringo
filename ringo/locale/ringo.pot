@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 1.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-03-09 00:37+0100\n"
+"POT-Creation-Date: 2015-03-20 08:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,45 +25,45 @@ msgstr ""
 msgid "CREATE"
 msgstr ""
 
-#: ringo/lib/renderer/dialogs.py:74
+#: ringo/lib/renderer/dialogs.py:78
 msgid "Confirm ${Action}"
 msgstr ""
 
-#: ringo/lib/renderer/dialogs.py:91
+#: ringo/lib/renderer/dialogs.py:98
 msgid "Do you really want to ${action} the following ${item} items?"
 msgstr ""
 
-#: ringo/lib/renderer/dialogs.py:101
+#: ringo/lib/renderer/dialogs.py:108
 msgid ""
 "Please press \"${Action}\" to ${action} the item. Press \"Cancel\" to cancel "
 "the action."
 msgstr ""
 
-#: ringo/model/modul.py:203
+#: ringo/model/modul.py:217
 msgid "List"
 msgstr ""
 
-#: ringo/model/modul.py:206 ringo/templates/default/list.mako:36
+#: ringo/model/modul.py:220 ringo/templates/default/list.mako:38
 msgid "Create"
 msgstr ""
 
-#: ringo/model/modul.py:209
+#: ringo/model/modul.py:223
 msgid "Read"
 msgstr ""
 
-#: ringo/model/modul.py:212
+#: ringo/model/modul.py:226
 msgid "Update"
 msgstr ""
 
-#: ringo/model/modul.py:215
+#: ringo/model/modul.py:229
 msgid "Delete"
 msgstr ""
 
-#: ringo/model/modul.py:219 ringo/templates/default/list.mako:41
+#: ringo/model/modul.py:233 ringo/templates/default/list.mako:43
 msgid "Import"
 msgstr ""
 
-#: ringo/model/modul.py:222
+#: ringo/model/modul.py:236
 msgid "Export"
 msgstr ""
 
@@ -99,23 +99,43 @@ msgstr ""
 msgid "Ok"
 msgstr ""
 
-#: ringo/templates/base.mako:146
+#: ringo/templates/base.mako:134
+msgid "Create new item"
+msgstr ""
+
+#: ringo/templates/base.mako:136
+msgid "Open overview"
+msgstr ""
+
+#: ringo/templates/base.mako:138
+msgid "Option in \"Edit\" mode"
+msgstr ""
+
+#: ringo/templates/base.mako:140
+msgid "Open in \"Read\" mode"
+msgstr ""
+
+#: ringo/templates/base.mako:142
+msgid "Delete item"
+msgstr ""
+
+#: ringo/templates/base.mako:158
 msgid "Advanced"
 msgstr ""
 
-#: ringo/templates/base.mako:148
+#: ringo/templates/base.mako:160
 msgid "Back to"
 msgstr ""
 
-#: ringo/templates/base.mako:151 ringo/templates/footer.mako:7
+#: ringo/templates/base.mako:163 ringo/templates/footer.mako:7
 msgid "Administration"
 msgstr ""
 
-#: ringo/templates/base.mako:152
+#: ringo/templates/base.mako:164
 msgid "Change ownership"
 msgstr ""
 
-#: ringo/templates/base.mako:156
+#: ringo/templates/base.mako:168
 msgid "Advanced actions"
 msgstr ""
 
@@ -159,28 +179,28 @@ msgstr ""
 msgid "Show version information"
 msgstr ""
 
-#: ringo/templates/header.mako:24
+#: ringo/templates/header.mako:25
 msgid "Home"
 msgstr ""
 
-#: ringo/templates/header.mako:36
+#: ringo/templates/header.mako:38
 msgid "Settings"
 msgstr ""
 
 #. Label for profile field in form config
-#: ringo/templates/header.mako:38 ringo/views/forms/users.xml:11
+#: ringo/templates/header.mako:40 ringo/views/forms/users.xml:11
 msgid "Profile"
 msgstr ""
 
-#: ringo/templates/header.mako:39
+#: ringo/templates/header.mako:41
 msgid "Change Password"
 msgstr ""
 
-#: ringo/templates/header.mako:43
+#: ringo/templates/header.mako:45
 msgid "Service"
 msgstr ""
 
-#: ringo/templates/header.mako:50
+#: ringo/templates/header.mako:52
 msgid "Logout"
 msgstr ""
 
@@ -188,7 +208,7 @@ msgstr ""
 #. Label for login field in form config
 #. Label for user.login column in overview table config
 #. Label for login column in overview table config
-#: ringo/templates/header.mako:54 ringo/templates/index.mako:18
+#: ringo/templates/header.mako:56 ringo/templates/index.mako:18
 #: ringo/templates/auth/autologout.mako:6 ringo/templates/auth/confirm_user.mako:19
 #: ringo/templates/auth/confirm_user.mako:24 ringo/templates/auth/login.mako:5
 #: ringo/templates/auth/reset_password.mako:19
@@ -357,8 +377,8 @@ msgstr ""
 msgid "Password not resetted"
 msgstr ""
 
-#: ringo/templates/default/create.mako:5 ringo/templates/default/list.mako:12
-#: ringo/templates/default/list.mako:27 ringo/templates/default/list.mako:29
+#: ringo/templates/default/create.mako:5 ringo/templates/default/list.mako:13
+#: ringo/templates/default/list.mako:29 ringo/templates/default/list.mako:31
 msgid "New"
 msgstr ""
 
@@ -666,15 +686,15 @@ msgid ""
 "ressource!"
 msgstr ""
 
-#: ringo/views/request.py:116
+#: ringo/views/request.py:130
 msgid "Edited ${item_type} \"${item}\" successfull."
 msgstr ""
 
-#: ringo/views/request.py:124
+#: ringo/views/request.py:138
 msgid "Error while saving ${item_type} \"${item}\": ${error}."
 msgstr ""
 
-#: ringo/views/request.py:131
+#: ringo/views/request.py:145
 msgid "Error on validation the data for ${item_type} \"${item}\"."
 msgstr ""
 
