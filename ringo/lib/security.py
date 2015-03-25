@@ -486,6 +486,7 @@ def login(username, password):
             else:
                 log.info("Login failed for user '%s'. "
                          "Reason: Not activated" % username)
+                return user
         else:
             log.info("Login failed for user '%s'. "
                      "Reason: Wrong password" % username)

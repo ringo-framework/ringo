@@ -56,6 +56,11 @@ def login(request):
         if user is None:
             msg = _("Login failed!")
             request.session.flash(msg, 'error')
+        elif not user.activated:
+            msg = _("Login failed!")
+            request.session.flash(msg, 'error')
+            target_url = request.route_path('accountdisabled')
+            return HTTPFound(location=target_url)
         else:
             msg = _("Login was successfull :)")
             request.session.flash(msg, 'success')
@@ -78,7 +83,13 @@ def logout(request):
     request.session.flash(msg, 'success')
     return HTTPFound(location=target_url, headers=headers)
 
+
 @view_config(route_name='autologout', renderer='/auth/autologout.mako')
+def autologout(request):
+    _ = request.translate
+    return {"_": _}
+
+@view_config(route_name='accountdisabled', renderer='/auth/disabled.mako')
 def autologout(request):
     _ = request.translate
     return {"_": _}

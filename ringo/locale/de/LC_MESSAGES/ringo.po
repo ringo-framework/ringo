@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-03-20 08:23+0100\n"
+"POT-Creation-Date: 2015-03-25 11:18+0100\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language-Team: German "
@@ -395,6 +395,18 @@ msgstr "Benutzer nicht bestätigt"
 msgid "Try again"
 msgstr "Versuche es erneut"
 
+#: ringo/templates/auth/disabled.mako:3
+msgid "User account disabled"
+msgstr "Benutzerkonto deaktiviert"
+
+#: ringo/templates/auth/disabled.mako:5
+msgid ""
+"Your user account has been disabled. Please contact your administration "
+"for more information"
+msgstr ""
+"Ihr Benutzerkonto wurde gesperrt. Bitte wenden Sie sich für mehr "
+"Informationen and die Administration."
+
 #: ringo/templates/auth/forgot_password.mako:5
 #: ringo/templates/auth/login.mako:16
 msgid "Reset Password"
@@ -688,23 +700,23 @@ msgstr "Ändere Passwort für"
 msgid "ERROR: %s"
 msgstr "FEHLER: %s"
 
-#: ringo/views/auth.py:57
+#: ringo/views/auth.py:57 ringo/views/auth.py:60
 msgid "Login failed!"
 msgstr "Anmeldung fehlgeschlagen"
 
-#: ringo/views/auth.py:60
+#: ringo/views/auth.py:65
 msgid "Login was successfull :)"
 msgstr "Anmeldung war erfolgreich :)"
 
-#: ringo/views/auth.py:77
+#: ringo/views/auth.py:82
 msgid "Logout was successfull :)"
 msgstr "Abmeldung war erfolgreich :)"
 
-#: ringo/views/auth.py:138
+#: ringo/views/auth.py:149
 msgid "Confirm user registration"
 msgstr "Bestätigung Nutzerregistrierung"
 
-#: ringo/views/auth.py:148
+#: ringo/views/auth.py:159
 msgid ""
 "User has been created and a confirmation mail was sent to the users email"
 " adress. Please check your email :)"
@@ -712,21 +724,21 @@ msgstr ""
 "Der Zugang wurde eingerichtet und eine Bestätigungsmail wurde an die "
 "angegebene Email-Adresse versendet. Bitte prüfen Sie Ihre Email"
 
-#: ringo/views/auth.py:168
+#: ringo/views/auth.py:179
 msgid "The user has beed successfull confirmed."
 msgstr "Der Zugang wurde erfolgreich bestätigt."
 
-#: ringo/views/auth.py:170
+#: ringo/views/auth.py:181
 msgid "The user was not confirmed. Maybe the confirmation token was not valid?"
 msgstr ""
 "Der Zugang konnte nicht bestätigt werden. Vielleicht ist das Best"
 "ätigungs-Token nicht gülitg?"
 
-#: ringo/views/auth.py:194
+#: ringo/views/auth.py:205
 msgid "Password reset request"
 msgstr "Anfrage Passwort zurücksetzen"
 
-#: ringo/views/auth.py:203
+#: ringo/views/auth.py:214
 msgid ""
 "Password reset token has been sent to the users email address. Please "
 "check your email :)"
@@ -734,11 +746,11 @@ msgstr ""
 "Eine Token zum Zurücksetzen des Passworts wurde an die Email des Nutzers "
 "geschickt. Bitte prüfen Sie Ihre Email :)"
 
-#: ringo/views/auth.py:224
+#: ringo/views/auth.py:235
 msgid "Password has been reseted"
 msgstr "Passwort wurde zurückgesetzt"
 
-#: ringo/views/auth.py:231
+#: ringo/views/auth.py:242
 msgid ""
 "Password was resetted and sent to the users email address. Please check "
 "your email :)"
@@ -746,7 +758,7 @@ msgstr ""
 "Eine Token zum Zurücksetzen des Passworts wurde an die Email des Nutzers "
 "geschickt. Bitte prüfen Sie Ihre Email :)"
 
-#: ringo/views/auth.py:235
+#: ringo/views/auth.py:246
 msgid "Password was not resetted. Maybe the request token was not valid?"
 msgstr ""
 "Das Passwort wurde nicht zurückgesetzt. Vielleicht ist das Token nicht "
@@ -1194,7 +1206,7 @@ msgstr "Geburtstag"
 msgid "Address"
 msgstr "Adresse"
 
-#. Label for url field in form config
+#. Label for web field in form config
 #: ringo/views/forms/profiles.xml:6
 msgid "Web"
 msgstr "Web"
