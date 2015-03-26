@@ -63,16 +63,22 @@ def setup_fixture_parser(subparsers, parent):
     sp = p.add_subparsers(help='Fixture command help')
 
     # Load
-    passwd_parser = sp.add_parser('load',
+    fixture_parser = sp.add_parser('load',
                                 help=('Loads all fixture files.'),
                                 parents=[parent])
-    passwd_parser.set_defaults(func=handle_fixture_load_command)
+    fixture_parser.set_defaults(func=handle_fixture_load_command)
+    fixture_parser.add_argument('--path',
+                              metavar='path',
+                              help='Path to the fixture files')
 
     # Save
-    passwd_parser = sp.add_parser('save',
+    fixture_parser = sp.add_parser('save',
                                 help=('Saves all fixture files.'),
                                 parents=[parent])
-    passwd_parser.set_defaults(func=handle_fixture_save_command)
+    fixture_parser.set_defaults(func=handle_fixture_save_command)
+    fixture_parser.add_argument('--path',
+                              metavar='path',
+                              help='Path to the fixture files')
 
 
 def setup_user_parser(subparsers, parent):

@@ -6,6 +6,8 @@ New:
   overwritten to implement a custom way to build the ACL for this class and
   instances.
 - Added info page after login if the account has been disabled.
+- Added --path option to load and save fixtures to be able to load alternative
+  fixtures.
 
 Changed:
 - Only show "Homepage" on index page if the user is actually logged in.
