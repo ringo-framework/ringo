@@ -51,19 +51,28 @@ def age(when, on=None):
     return on.year - when.year - (was_earlier)
 
 
-def get_raw_value(element, name):
-    """This function tries to get the given attribute of the item if
-    it can not be found using the usual way to get attributes. In
-    this case we will split the attribute name by "." and try to get
-    the attribute along the "." separated attribute name. The
-    function also offers basic support for accessing individual
-    elements in lists in case one attribute is a list while
-    iterating over all attributes. Currently only flat lists are
-    supported.
+def _get_penulitmate_element(element, name):
+    """Helper method for the set_raw_value and get_raw_value method.
+    Will return a tuple of the penultimate and ultimate element in a dot
+    separated attribute.  E.g. for a attribute called 'foo.bar.baz' the
+    function will return a tuple of ('bar', 'baz') element.
 
-    Example: x.y[1].z"""
+    The function also offers basic support for accessing individual
+    elements in lists in case one attribute is a list while iterating
+    over all attributes. Currently only flat lists are supported.
+
+    Example: x.y[1].z
+
+    :element: BaseItem instance
+    :name: dot separated attribute name
+    :returns: Tuple of penultimate and ultimate element of the dot
+              separated element.
+
+    """
     attributes = name.split('.')
-    for attr in attributes:
+    if len(attributes) == 1:
+        return element, name
+    for attr in attributes[0:-1]:
         splitmark_s = attr.find("[")
         splitmark_e = attr.find("]")
         if splitmark_s > 0:
@@ -79,7 +88,38 @@ def get_raw_value(element, name):
                 break
         else:
             element = object.__getattribute__(element, attr)
-    return element
+    return element, attributes[-1]
+
+
+def set_raw_value(element, name, value):
+    """Support setting the `value` for a dot separated attribute of
+    `element` provided by the `name` attribute. If the attribute name is
+    a dot separated attribute the function will first resolve the
+    attribute to the penultimate element and call the setattr method for
+    the ultimate element and the given value.
+
+    E.g. If the value '123' should be set for the attribute
+    'foo.bar.baz' the function first gets the 'bar' element.  For this
+    element the setattr method will be called with the attribute 'baz'
+    and the value '123'."""
+
+    penulti, ulti = _get_penulitmate_element(element, name)
+    object.__setattr__(penulti, ulti, value)
+
+
+def get_raw_value(element, name):
+    """Support getting the value for a dot separated attribute of
+    `element` provided by the `name` attribute. If the attribute name is
+    a dot separated attribute the function will first resolve the
+    attribute to the penultimate element and call the getattr method for
+    the ultimate element and the given value.
+
+    E.g. If the function should get the attribute 'foo.bar.baz' the
+    function first gets the 'bar' element.  For this element the getattr
+    method will be called with the attribute 'baz'."""
+
+    penulti, ulti = _get_penulitmate_element(element, name)
+    return object.__getattribute__(penulti, ulti)
 
 
 def dynamic_import(cl):
