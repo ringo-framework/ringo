@@ -47,16 +47,6 @@ def nonecmp(a, b):
     return cmp(a, b)
 
 
-def attrgetter(field, expand):
-    def g(obj):
-        return resolve_attr(obj, field, expand)
-    return g
-
-
-def resolve_attr(obj, attr, expand):
-    return obj.get_value(attr, expand=expand)
-
-
 def load_modul(item):
     """Will load the related modul for the given item. First we try to
     get the bound session from the object and reuse this session to load
@@ -457,6 +447,11 @@ class BaseList(object):
         :returns: Sorted item list
 
         """
+        def attrgetter(field, expand):
+            def g(obj):
+                return obj.get_value(field, expand=expand)
+            return g
+
         sorted_items = sorted(self.items,
                               cmp=nonecmp,
                               key=attrgetter(field, expand))
