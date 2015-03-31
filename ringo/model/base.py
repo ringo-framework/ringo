@@ -15,7 +15,10 @@ import re
 import uuid
 from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload, Session
-from ringo.lib.helpers import serialize, get_item_modul, get_raw_value
+from ringo.lib.helpers import (
+    serialize, get_item_modul,
+    get_raw_value, set_raw_value
+)
 from ringo.lib.cache import CACHE_MODULES
 from ringo.lib.form import get_form_config
 from ringo.lib.table import get_table_config
@@ -116,6 +119,9 @@ class BaseItem(object):
 
     def __getattr__(self, name):
         return get_raw_value(self, name)
+
+    def __setattr__(self, name, value):
+        return set_raw_value(self, name, value)
 
     def __unicode__(self):
         """Will return the string representation for the item based on a
