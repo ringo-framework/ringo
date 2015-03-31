@@ -76,7 +76,7 @@ class BaseItem(object):
     #  TODO: Check if its possible to set the modul of the class
     #  dynamically on application initialisation. This might help to get
     #  rid of the annoying loading of the modul for a class (ti)
-    #  <2015-03-10 22:53> 
+    #  <2015-03-10 22:53>
     #__modul__ = None
     _sql_eager_loads = []
     """Configure a list of relations which are configured to be
@@ -154,7 +154,7 @@ class BaseItem(object):
         #  should not be any request needed in the model. This is needed
         #  in the efa application for Participants to load additional
         #  modules. (ti).
-        #  <2015-03-10 22:46> 
+        #  <2015-03-10 22:46>
 
         :modul: Instance of the modul
         :item: Instance of the class
@@ -162,10 +162,9 @@ class BaseItem(object):
 
         """
         #  FIXME: Circular import :((( Yes I know. We really need some
-        #  clean up here. (ti) <2015-03-10 21:08> 
+        #  clean up here. (ti) <2015-03-10 21:08>
         from ringo.lib.security import get_permissions
         return get_permissions(modul, item)
-
 
     def reset_uuid(self):
         self.uuid = '%.32x' % uuid.uuid4()
