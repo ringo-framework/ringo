@@ -21,6 +21,7 @@ from ringo.lib.helpers.misc import (
     safestring,
     age,
     get_raw_value,
+    set_raw_value,
     dynamic_import,
     import_model,
     get_item_modul,
