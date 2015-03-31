@@ -91,7 +91,10 @@ class LinkFieldRenderer(FieldRenderer):
             if not item:
                 name = self._field.name
                 item = self._field._form._item
-                log.warning("Missing value for %s in %s" % (name, item))
+                # Only print warning if the fieldname is not a helper
+                # field beginning with "_"
+                if not name.startswith("_"):
+                    log.warning("Missing value for %s in %s" % (name, item))
         values['url'] = get_link_url(item, self._field._form._request) or "#"
         return values
 
