@@ -59,9 +59,11 @@ class DialogRenderer(object):
 class ConfirmDialogRenderer(DialogRenderer):
     """Docstring for ConfirmDialogRenderer """
 
-    def __init__(self, request, clazz, action, title=None, body=None):
+    def __init__(self, request, clazz, action,
+                 title=None, body=None, ok_label=None):
         """@todo: to be defined """
         DialogRenderer.__init__(self, request, clazz, action, title, body)
+        self.ok_label = ok_label
         self.template = template_lookup.get_template("internal/confirm.mako")
         self.icon = self._request.static_path(
             'ringo:static/images/icons/32x32/dialog-warning.png')
@@ -80,7 +82,7 @@ class ConfirmDialogRenderer(DialogRenderer):
             values['body'] = self._body
         else:
             values['body'] = self._render_body(items)
-        values['action'] = _(self._action.capitalize())
+        values['action'] = self.ok_label or _(self._action.capitalize())
         values['ok_url'] = self._request.current_route_path()
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
