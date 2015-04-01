@@ -51,11 +51,16 @@ def age(when, on=None):
     return on.year - when.year - (was_earlier)
 
 
-def _get_penulitmate_element(element, name):
+def _resolve_attribute(element, name, idx=None):
     """Helper method for the set_raw_value and get_raw_value method.
-    Will return a tuple of the penultimate and ultimate element in a dot
-    separated attribute.  E.g. for a attribute called 'foo.bar.baz' the
-    function will return a tuple of ('bar', 'baz') element.
+    Will return on default the last element in a dot
+    separated attribute. E.g. for a attribute called 'foo.bar.baz' the
+    function will return a the 'baz' element.
+
+    The default element to return can can be changed by providing the
+    idx attribute. The idx will be used to iterate over the splitted
+    attribute name. ([0:idx]). This is usually only used when trying to
+    set a value. See set_raw_value for more details.
 
     The function also offers basic support for accessing individual
     elements in lists in case one attribute is a list while iterating
@@ -65,14 +70,13 @@ def _get_penulitmate_element(element, name):
 
     :element: BaseItem instance
     :name: dot separated attribute name
-    :returns: Tuple of penultimate and ultimate element of the dot
-              separated element.
+    :returns: last element of the dot separated element.
 
     """
     attributes = name.split('.')
-    if len(attributes) == 1:
-        return element, name
-    for attr in attributes[0:-1]:
+    if idx is None:
+        idx = len(attributes)
+    for attr in attributes[0:idx]:
         splitmark_s = attr.find("[")
         splitmark_e = attr.find("]")
         if splitmark_s > 0:
@@ -88,7 +92,7 @@ def _get_penulitmate_element(element, name):
                 break
         else:
             element = object.__getattribute__(element, attr)
-    return element, attributes[-1]
+    return element
 
 
 def set_raw_value(element, name, value):
@@ -103,8 +107,8 @@ def set_raw_value(element, name, value):
     element the setattr method will be called with the attribute 'baz'
     and the value '123'."""
 
-    penulti, ulti = _get_penulitmate_element(element, name)
-    object.__setattr__(penulti, ulti, value)
+    penulti = _resolve_attribute(element, name, -1)
+    object.__setattr__(penulti, name, value)
 
 
 def get_raw_value(element, name):
@@ -118,8 +122,7 @@ def get_raw_value(element, name):
     function first gets the 'bar' element.  For this element the getattr
     method will be called with the attribute 'baz'."""
 
-    penulti, ulti = _get_penulitmate_element(element, name)
-    return object.__getattribute__(penulti, ulti)
+    return _resolve_attribute(element, name)
 
 
 def dynamic_import(cl):
