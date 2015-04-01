@@ -13,7 +13,6 @@ from ringo.lib.helpers import get_action_routename
 from ringo.model.base import BaseItem, BaseList, get_item_list
 from ringo.lib.table import get_table_config
 import ringo.lib.security as security
-from ringo.views.helpers import get_item_modul
 
 base_dir = pkg_resources.get_distribution("ringo").location
 template_dir = os.path.join(base_dir, 'ringo', 'templates')
@@ -43,6 +42,7 @@ def get_link_url(item, request, actionname=None):
     has enough permissions."""
     if isinstance(item, BaseItem):
         if actionname:
+            from ringo.views.helpers import get_item_modul
             modul = get_item_modul(request, item)
             action = modul.get_action(actionname)
             permission = action.permission or action.name.lower()
