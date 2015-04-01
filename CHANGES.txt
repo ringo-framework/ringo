@@ -2,12 +2,15 @@
 =====
 New:
 - Added "openmodal" option to LinkfieldRenderer
+- Added "action" option to LinkfieldRenderer to be able to render other
+  actions then read and update links.
 - Added _get_permission classmethod in the Baseitem class. This class can be
   overwritten to implement a custom way to build the ACL for this class and
   instances.
 - Added info page after login if the account has been disabled.
 - Added --path option to load and save fixtures to be able to load alternative
   fixtures.
+- Implement setting dot-separated values in items.
 
 Changed:
 - Only show "Homepage" on index page if the user is actually logged in.
