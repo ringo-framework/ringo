@@ -583,6 +583,16 @@ class BaseList(object):
         to match the value of either all, or from the configued search
         field with the regular expression or configured operator. If the
         value matches, then the item is kept in the list.
+
+        The filter function provides several operators for specifying the
+        search. By applying e.g. '~' in front of a string (~ Max),
+        possible matches are searched. For obtaining potential matches,  
+        both strings are checked for equality. Otherwise the Double Metaphone
+        is firstly used for determining equal phonetics. If the phonetics do
+        not match the Levenshtein distance will be calculated. It is a string
+        metric for measuring the difference between two words, the minimum
+        number of single-character edits. A threshold can be applied for
+        depending the maximum allowed single-character edits. 
         """
         self.search_filter = filter_stack
         log.debug('Length filterstack: %s' % len(filter_stack))
