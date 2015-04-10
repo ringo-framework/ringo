@@ -11,6 +11,10 @@ New:
 - Added --path option to load and save fixtures to be able to load alternative
   fixtures.
 - Implement setting dot-separated values in items.
+- Implemented fuzzy search. The search now supports the "~" operator to
+  trigger a fuzzy search which uses the doublemetaphon as primary algorithm
+  and falls back to the levenshtein algorithm as secondary it the primary
+  fails.
 
 Changed:
 - Only show "Homepage" on index page if the user is actually logged in.
