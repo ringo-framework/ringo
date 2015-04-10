@@ -13,6 +13,8 @@ import operator
 import math
 import re
 import uuid
+import fuzzy
+import Levenshtein
 from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload, Session
 from ringo.lib.helpers import (
@@ -30,16 +32,69 @@ from ringo.model.mixins import StateMixin, Owned
 
 log = logging.getLogger(__name__)
 
+
+def levenshteinmatch(value, search, t):
+    """Compares two strings with Levenshtein Algorithm and given threshold for similarity
+    """
+    lenV = len(value)
+    lenS = len(search)
+   
+    if lenS >= lenV:
+        l =  math.floor(lenS * t)
+    else:
+        l = math.floor(lenV * t)
+    ld = Levenshtein.distance(value, search)
+    return ld <= l
+
+
+def doublemetaphone(value, search):
+    """Compares two strings by applying the Double Metaphone phonetic encoding algorithm 
+    of the Fuzzy library using primary and secondary code of a string for matching.
+    """
+    dmeta = fuzzy.DMetaphone()
+    dmeta_value = dmeta(value.encode("utf-8"))
+    dmeta_search = dmeta(search)
+   
+    if value == search:
+        return True
+    
+    if dmeta_value[1] != None and dmeta_search[1] != None:
+        for v in dmeta_value:
+            for s in dmeta_search:
+                if v == s:
+                    return True 
+    else:
+	return dmeta_value == dmeta_search
+    
+
+def smatch(value, search):
+    """Compares two strings by applying the Double Metaphone phonetic encoding algorithm 
+    and levenshteinmatch as second indicator in doubts.     
+    """
+    value = value.lower()
+    search = search.lower()
+   
+    if value == search:
+        return True
+
+    if doublemetaphone(value, search):
+        return True 
+    else:      
+        return levenshteinmatch(search, value, 0.3) 
+ 
+
 opmapping = {
     "<": operator.lt,
     "<=": operator.le,
     ">": operator.gt,
     ">=": operator.ge,
     "!=": operator.ne,
-    "==": operator.eq
+    "==": operator.eq,
+    "~": smatch
 }
 
 
+ 
 def nonecmp(a, b):
     if a is None and b is None:
         return 0
@@ -542,7 +597,7 @@ class BaseList(object):
             search_op = None
             # Get soperator
             x = search.split(" ")
-            if x[0] in ["<", "<=", ">", ">=", "!="]:
+            if x[0] in opmapping:
                 search_op = x[0]
                 search = " ".join(x[1:])
             # Build a regular expression
