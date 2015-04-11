@@ -1,4 +1,4 @@
-"""Items are instances of a certain type of data which is defined in a
+"""Items are instances of a certain type of data which is defined in
 of a :mod:`.modul`.
 
 All items in ringo are derived at least from :class:`.BaseItem` and one ore
@@ -34,11 +34,11 @@ log = logging.getLogger(__name__)
 
 
 def levenshteinmatch(value, search, t):
-    """Compares two strings with Levenshtein Algorithm and given threshold for similarity
-    """
+    """Compares two strings with Levenshtein Algorithm and given
+    threshold for similarity """
     lenV = len(value)
     lenS = len(search)
-   
+
     if lenS >= lenV:
         l =  math.floor(lenS * t)
     else:
@@ -48,40 +48,39 @@ def levenshteinmatch(value, search, t):
 
 
 def doublemetaphone(value, search):
-    """Compares two strings by applying the Double Metaphone phonetic encoding algorithm 
-    of the Fuzzy library using primary and secondary code of a string for matching.
-    """
+    """Compares two strings by applying the Double Metaphone phonetic
+    encoding algorithm of the Fuzzy library using primary and secondary
+    code of a string for matching.  """
     dmeta = fuzzy.DMetaphone()
     dmeta_value = dmeta(value.encode("utf-8"))
     dmeta_search = dmeta(search)
-   
+
     if value == search:
         return True
-    
+
     if dmeta_value[1] != None and dmeta_search[1] != None:
         for v in dmeta_value:
             for s in dmeta_search:
                 if v == s:
                     return True 
-    else:
-	return dmeta_value == dmeta_search
-    
+    return dmeta_value == dmeta_search
+
 
 def smatch(value, search):
-    """Compares two strings by applying the Double Metaphone phonetic encoding algorithm 
-    and levenshteinmatch as second indicator in doubts.     
-    """
+    """Compares two strings by applying the Double Metaphone phonetic
+    encoding algorithm and levenshteinmatch as second indicator in
+    doubts.     """
     value = value.lower()
     search = search.lower()
-   
+
     if value == search:
         return True
 
     if doublemetaphone(value, search):
         return True 
-    else:      
+    else:
         return levenshteinmatch(search, value, 0.3) 
- 
+
 
 opmapping = {
     "<": operator.lt,
