@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 1.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-03-25 11:18+0100\n"
+"POT-Creation-Date: 2015-04-12 21:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,15 +25,15 @@ msgstr ""
 msgid "CREATE"
 msgstr ""
 
-#: ringo/lib/renderer/dialogs.py:78
+#: ringo/lib/renderer/dialogs.py:80
 msgid "Confirm ${Action}"
 msgstr ""
 
-#: ringo/lib/renderer/dialogs.py:98
+#: ringo/lib/renderer/dialogs.py:100
 msgid "Do you really want to ${action} the following ${item} items?"
 msgstr ""
 
-#: ringo/lib/renderer/dialogs.py:108
+#: ringo/lib/renderer/dialogs.py:110
 msgid ""
 "Please press \"${Action}\" to ${action} the item. Press \"Cancel\" to cancel "
 "the action."
@@ -326,8 +326,8 @@ msgstr ""
 
 #: ringo/templates/auth/autologout.mako:5
 msgid ""
-"You have been automatically looged out beacause your session has expired. "
-"Please choose the link below to login into the application again."
+"You have been automatically logged out because your session has expired. "
+"Please click on the link below to login into the application again."
 msgstr ""
 
 #: ringo/templates/auth/confirm_user.mako:7

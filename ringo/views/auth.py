@@ -90,7 +90,7 @@ def autologout(request):
     return {"_": _}
 
 @view_config(route_name='accountdisabled', renderer='/auth/disabled.mako')
-def autologout(request):
+def accountdisabled(request):
     _ = request.translate
     return {"_": _}
 
