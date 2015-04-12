@@ -1,11 +1,11 @@
-"""Items are instances of a certain type of data which is defined in
-of a :mod:`.modul`.
+"""The term `Item` refers to an instance of a certain type of data which
+is defined in of a :mod:`.modul`.  All items in Ringo are derived at
+least from :class:`.BaseItem` and one ore more mixins from the
+:mod:`.mixins` modul.
 
-All items in ringo are derived at least from :class:`.BaseItem` and one ore
-more mixins from the :mod:`.mixins` modul.
-
-Further ringo provides a :class:`.BaseFactory` to create new items and a
-:class:`.BaseList` to handle lists of items for all modules.
+Ringo provides three classes to work with items in general.
+:class:`.BaseList` is a class for handling listings of items. New items
+are created by using a :class:`.BaseFactory`.
 """
 import logging
 import warnings
@@ -35,7 +35,10 @@ log = logging.getLogger(__name__)
 
 def levenshteinmatch(value, search, t):
     """Compares two strings with Levenshtein Algorithm and given
-    threshold for similarity """
+    threshold for similarity. It is a string metric for measuring the
+    difference between two words, the minimum number of single-character
+    edits. A threshold can be applied for depending the maximum allowed
+    single-character edits."""
     lenV = len(value)
     lenS = len(search)
 
@@ -128,6 +131,13 @@ def load_modul(item):
 
 
 class BaseItem(object):
+    """Base class for all items in Ringo. The class provides
+    methods to get and set values of the instances.
+
+    The class overwrites the `__getattr__` and `__setattr__` methods to
+    support getting and setting dot separatedattributes like
+    'getattr(foo.bar.baz)' 
+    """
 
     _modul_id = None
     #  TODO: Check if its possible to set the modul of the class
@@ -139,8 +149,6 @@ class BaseItem(object):
     """Configure a list of relations which are configured to be
     eager loaded."""
 
-    # Added UUID column for every BaseItem. This is needed to identify
-    # item on imports and exports.
     uuid = Column('uuid', CHAR(32),
                   unique=True,
                   nullable=False,
@@ -195,14 +203,17 @@ class BaseItem(object):
 
     @classmethod
     def get_item_factory(cls):
+        """Will return the :class:`.BaseFactory` for this class. Use
+        this function to create and return specific factories for the
+        class."""
         return BaseFactory(cls)
 
     @classmethod
     def _get_permissions(cls, modul, item, request):
         """Internal method to implement getting specific build of an ACL
         for this class (and instances). By default this function just
-        calls the get_permission function from lib.security. See
-        this function for more details.
+        calls the :func:`ringo.lib.security.get_permission` function.
+        See this function for more details.
 
         If you need to implement an alternative permission check this
         function can be overwritten.  The `modul` and `item` attribute
@@ -210,19 +221,19 @@ class BaseItem(object):
         to get the current db session in case you need to reload other
         informations.
 
-        #  FIXME: Try to get rid of the request element here. There
-        #  should not be any request needed in the model. This is needed
-        #  in the efa application for Participants to load additional
-        #  modules. (ti).
-        #  <2015-03-10 22:46>
-
         :modul: Instance of the modul
         :item: Instance of the class
         :returns: List of permissions.
 
         """
-        #  FIXME: Circular import :((( Yes I know. We really need some
-        #  clean up here. (ti) <2015-03-10 21:08>
+        # FIXME: Try to get rid of the request element here. There
+        # should not be any request needed in the model. This is needed
+        # in the efa application for Participants to load additional
+        # modules. (ti).
+        # <2015-03-10 22:46>
+
+        # FIXME: Circular import :((( Yes I know. We really need some
+        # clean up here. (ti) <2015-03-10 21:08>
         from ringo.lib.security import get_permissions
         return get_permissions(modul, item)
 
@@ -230,10 +241,25 @@ class BaseItem(object):
         self.uuid = '%.32x' % uuid.uuid4()
 
     def get_value(self, name, form_id="read", expand=False):
-        """Return the value of the given attribe of the item. Unlike
-        accessing the raw value through the attribite directly this
-        function will apply all configured transformations to the value
-        before returing it."""
+        """Return the value of the given attribute of the item. Unlike
+        accessing the value directly this function this function
+        optionally supports the expansion of the value before
+        returning it. On default no expansion is done.
+
+        Expansion is relevant for values which are saved as integer
+        values in the database but have another literal meaning. This is
+        typically true for values in selection lists. E.g the literal
+        values for 'Yes' and 'No' are saves as value '1' and '0' in the
+        database. To expand the value the method will try to get the
+        literal value from the value in the database by looking in the
+        form identified by the `form_id` attribute.
+
+        :name: Name of the attribute with the value
+        :form_id: ID of the form which will be used for expansion
+        :expand: Expand the value before returning it
+        :returns: Value of the named attribute
+        """
+
         try:
             raw_value = getattr(self, name)
         except:
@@ -271,9 +297,19 @@ class BaseItem(object):
         return raw_value
 
     def get_values(self, include_relations=False, serialized=False):
-        """Will return a dictionary with the values of the item. If
-        include_relations is true, than the realtion values are
-        included. Else only scalar values are included"""
+        """Will return a dictionary with the values of the item. On
+        default the function will return the pythonic values and
+        excludes all related items. This behaviour can be changed by
+        setting the `include_relations` and `serialized` option.
+
+        In case the relations are included and the values are serialized
+        then the serialized value of a related item is its id.
+
+        :include_relations: Flag if relations should be included in the
+                            returned dictionary.
+        :serialized: Flag if the values should be serialized.
+        :returns: Dictionary with key value pairs.
+        """
         values = {}
         for field in get_columns_from_instance(self, include_relations):
             # Ignore private form fields
@@ -287,23 +323,25 @@ class BaseItem(object):
         return values
 
     def set_values(self, values):
-        """Will set the values of the items attributes to the given
-        values in the dictionary. Attributes beginning with "_" are
-        considred private and are ignored.
+        """Will set the values of the item. The values to be set are
+        provided by a dictionary with key value pairs given with the
+        `values` option. Keys in the dictionary beginning with "_" are
+        considered private and are ignored.
 
-        This function will not handle saving the changed data. This can
-        be by either calling the save method of the item, or
-        automatically at the transactions end if autocommit is enabled.
+        This function does not explicit handle saving the changed data!
+        Saving data (E.g making a new instance of an item persistent in
+        the DB) is handled by the :func:`.BaseItkkem.save` method.
 
-        Please note that setting the values for foreign key attributes
-        might not work as expected. This is especially true for foreign
-        keys to already existing items. You are not able to change a
-        existing relation in the items by changing the foreign key value
-        (You must do this by setting the related item). In this case the
-        value for the foreign key seems to be ignored and replaced by
-        the one of the actual related item.
-        In contrast you can set a new relation by setting the foreign
-        key if this is a new relation.
+        .. note::
+            Setting the values for foreign key attributes might not work
+            as expected. This is especially true for foreign keys to
+            already existing items. You are not able to change a
+            existing relation in the items by changing the foreign key
+            value (You must do this by setting the related item). In
+            this case the value for the foreign key seems to be ignored
+            and replaced by the one of the actual related item.  In
+            contrast you can set a new relation by setting the foreign
+            key if this is a new relation.
 
         :values: Dictionary with values to be set
         """
@@ -319,11 +357,25 @@ class BaseItem(object):
                 log.warning('Not saving "%s". Attribute not found' % key)
 
     def save(self, data, request=None):
-        """Will save the given data into the item. If the current item
-        has no value for the id attribute it is assumed that this item
-        must be added to the database as a new item. In this case you
-        need to provide a dbsession as the new item is not linked to any
-        dbsession yet.
+        """Method to set new values and 'saving' changes to the item. In
+        contrast to just setting the values saving means triggering
+        additional actions like handling state changes.
+
+        The function will call the :func:`.BaseItem.set_values` function
+        to set the values so setting the values in a separate call of
+        this method is not needed. Actually doing this can cause
+        problems as this function can not determine changes between old
+        and new values properly anymore.
+
+        If the current item has no value for the id attribute it is
+        assumed that this item must be added to the database as a new
+        item. In this case you need to provide a dbsession (as part of
+        the request) as the new item is not linked to any dbsession yet.
+
+        .. note::
+            Making the changes persistent to the database is finally
+            done on the end of the request when the transaction of the
+            current session is commited. 
 
         Please note, that you must ensure that the submitted values are
         validated. This function does no validation on the submitted
@@ -405,11 +457,11 @@ class BaseItem(object):
 
 
 def get_item_list(request, clazz, user=None, cache="", items=None):
-    """Returns a BaseLists instance with items of the given clazz. You
-    can optionally provide a user object. If provided the list will only
-    contain items which are readable by user in the current request.
-    Further you can define a caching region to cache the results of the
-    sqlquery. If not provided no caching is done.
+    """Returns a :class:`.BaseList` instance with items of the given
+    clazz. You can optionally provide a user object. If provided the
+    list will only contain items which are readable by user in the
+    current request.  Further you can define a caching region to cache
+    the results of the sqlquery. If not provided no caching is done.
 
     :request: Current request
     :clazz: Clazz for with the items in the baselist will be loaded.
@@ -463,6 +515,19 @@ def filter_itemlist_for_user(request, baselist):
 
 
 class BaseList(object):
+    """Base class for listing of items in Ringo. The class provides
+    methods for sorting and filtering the items of the list.
+
+    The BaseList is usually created by calling the
+    :func:`.get_item_list` method. Using this method the BaseList will
+    include all items of a given class which are readable by the current
+    user. 
+
+    Alternatively the BaseList can be initiated directly in two ways. On
+    default all items of a given class will be loaded from the database.
+    The other way is to initiate the list with a list of preloaded
+    items.
+    """
     def __init__(self, clazz, db, cache="", items=None):
         """A List object of. A list can be filterd, and sorted.
 
@@ -567,31 +632,44 @@ class BaseList(object):
         self.pagination_last = end
 
     def filter(self, filter_stack):
-        """This function will filter the list of items by only leaving
-        those items in the list which match all search criterias in the
-        filter stack. The list will get reduced with every iteration on
-        the filter stack.
+        """This function will filter the items by only leaving
+        those items in the list which match all search criteria in the
+        filter stack. The number of items will get reduced with every
+        iteration on the filter stack. The search is case sensitive.
 
-        For each filter in the stack the function will first look for an
-        optional operator which must be the first word of the search
-        expression. If a operator can be found the search will be done
-        with the given operator. Otherwise the search word will be
-        compiled to the regular expression.
+        The filter stack is a list of tuples which describe the filter
+        expression. Each tuple consists of three values:
 
-        Then all items are iterated. For each item the function will try
-        to match the value of either all, or from the configued search
-        field with the regular expression or configured operator. If the
-        value matches, then the item is kept in the list.
+        1. The search expression
+        2. Optionally the name of the column on which the search will be
+           applied.
+        3. Boolean flag to indicate that the given search expression
+           should be handled as a regular expression.
 
-        The filter function provides several operators for specifying the
-        search. By applying e.g. '~' in front of a string (~ Max),
-        possible matches are searched. For obtaining potential matches,  
-        both strings are checked for equality. Otherwise the Double Metaphone
-        is firstly used for determining equal phonetics. If the phonetics do
-        not match the Levenshtein distance will be calculated. It is a string
-        metric for measuring the difference between two words, the minimum
-        number of single-character edits. A threshold can be applied for
-        depending the maximum allowed single-character edits. 
+        The search support three modes. On default the search will look
+        for the presence of the given search string within the values of
+        the item. It will also match on parts of the string. So
+        searching for 'Foo' will also match 'Foobar'. Another mode is
+        using the search expression as a regular expression. The last
+        mode makes use of special operators. The search supports the
+        following operators: "<", "<=", "!=", ">" ">=" and "~" The
+        operator can be provided with the search string.  It mus be the
+        first word of the search expression. If a operator is present it
+        will be used.
+
+        The "~" operator will trigger a fuzzy search using the Double
+        Metaphone algorithm for determining equal phonetics. If the
+        phonetics do not match the Levenshtein distance will be
+        calculated. 
+
+        The search will iterate over all items in the list. For each
+        item the function will try to match the value of either all, or
+        from the configured search field with the regular expression or
+        configured operator. If the value matches, then the item is kept
+        in the list.
+
+        :filter_stack: Filter stack
+        :returns: Filtered list of items
         """
         self.search_filter = filter_stack
         log.debug('Length filterstack: %s' % len(filter_stack))
@@ -641,9 +719,13 @@ class BaseList(object):
 
 
 class BaseFactory(object):
+    """Factory class to create new instances of :class:`.BaseItem` or
+    derived classes. Usually the factory for items of a certain module
+    can be initiated by calling the :func:`.BaseItem.get_item_factory`
+    class method."""
 
     def __init__(self, clazz):
-        """Factory to create of load instances of the clazz.
+        """Inits the factory.
 
         :clazz: The clazz of which new items will be created
 
@@ -651,12 +733,12 @@ class BaseFactory(object):
         self._clazz = clazz
 
     def create(self, user, values):
-        """Will create a new instance of clazz. The instance is it is not saved
-        persistent at this moment. The method will also take care of
-        setting the correct ownership.
+        """Will create a new instance of clazz. The instance is it is
+        not saved persistent at this moment. The method will also take
+        care of setting the correct ownership.
 
         :user: User instance will own the new created item
-        :values: Optional provide a dictionary with values for the new item
+        :values: Dictionary with values for the new item
         :returns: Instance of clazz
 
         """
