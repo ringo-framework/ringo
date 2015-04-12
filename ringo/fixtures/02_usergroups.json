@@ -1,6 +1,6 @@
 [
     {
-        "description": null,
+        "description": "",
         "id": 1,
         "members": [
             1
@@ -10,7 +10,7 @@
         "uuid": "a81fc589dbb14afaaf731e25f78a560e"
     },
     {
-        "description": null,
+        "description": "",
         "id": 2,
         "members": [],
         "name": "users",
