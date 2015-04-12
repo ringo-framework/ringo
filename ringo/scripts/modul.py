@@ -27,9 +27,24 @@ mixinmap = {
 }
 
 
-def get_default_actions_fixtures(session, mid, action_id, ignore=[]):
+def get_modul_fixture(name, package, session):
+    id = get_next_modulid(package, session)
+    fixture = {}
+    fixture["id"] = id
+    fixture["name"] = name + "s"
+    fixture["label"] = name.capitalize()
+    fixture["label_plural"] = fixture["label"] + "s"
+    fixture["clazzpath"] = ".".join([package, 'model',
+                                     name, fixture["label"]])
+    fixture["display"] = "header-menu"
+    fixture["str_repr"] = "%s|id"
+    fixture["uuid"] = uuid.uuid4().hex
+    return fixture
+
+def get_action_fixtures(session, mid, ignore=[]):
     # TODO: Translate the name of the Action (torsten) <2013-07-10 09:32>
-    sql = []
+    action_id = get_next_actionid(session)
+    fixtures = []
     for action in ['list', 'create', 'read', 'update',
                    'delete', 'import', 'export']:
         if action in ignore:
@@ -75,14 +90,16 @@ def get_default_actions_fixtures(session, mid, action_id, ignore=[]):
         fixture["id"] = action_id
         fixture["mid"] = mid
         fixture["name"] = name
+        fixture["description"] = ""
+        fixture["permission"] = ""
         fixture["url"] = url
         fixture["icon"] = icon
         fixture["uuid"] = myuuid
         fixture["bundle"] = bundle
 
-        sql.append(fixture)
+        fixtures.append(fixture)
         action_id += 1
-    return json.dumps(sql)
+    return fixtures 
 
 
 def remove_db_entry(name, session):
@@ -117,8 +134,8 @@ def get_next_actionid(session):
     return id + 1
 
 
-def get_fixtures(package, name, session):
-    """Will retunr the Fixtures for the new modul.
+def add_fixtures(package, name, session):
+    """Will add the fixtures for the new modul to the fixture files.
 
     :package: @todo
     :name: @todo
@@ -126,31 +143,26 @@ def get_fixtures(package, name, session):
     :returns: @todo
 
     """
-    out = []
-    modul_fixture = {}
-    id = get_next_modulid(package, session)
-    modul_fixture["id"] = id
-    modul_fixture["name"] = name + "s"
-    modul_fixture["label"] = name.capitalize()
-    modul_fixture["label_plural"] = modul_fixture["label"] + "s"
-    modul_fixture["clazzpath"] = ".".join([package, 'model',
-                                           name, modul_fixture["label"]])
-    modul_fixture["display"] = "header-menu"
-    modul_fixture["str_repr"] = "%s|id"
-    modul_fixture["uuid"] = uuid.uuid4().hex
+    modul_fixture = get_modul_fixture(name, package, session)
+    modul_file = os.path.join(get_app_location(package),
+                               package, 'fixtures', '00_modules.json')
 
-    out.append("###############")
-    out.append("#Modul fixture#")
-    out.append("###############")
-    out.append(json.dumps(modul_fixture))
+    with open(modul_file, "r+") as mf:
+        modul_json = json.load(mf)
+        modul_json.append(modul_fixture)
+        mf.seek(0)
+        mf.write(json.dumps(modul_json, indent=4))
 
-    out.append("")
-    out.append("################")
-    out.append("#Action fixture#")
-    out.append("################")
-    action_id = get_next_actionid(session)
-    out.append(get_default_actions_fixtures(session, id, action_id))
-    return out
+    modul_id = modul_fixture["id"]
+    action_fixtures = get_action_fixtures(session, modul_id)
+    action_file = os.path.join(get_app_location(package),
+                               package, 'fixtures', '01_actions.json')
+
+    with open(action_file, "r+") as af:
+        action_json = json.load(af)
+        action_json.extend(action_fixtures)
+        af.seek(0)
+        af.write(json.dumps(action_json, indent=4))
 
 
 def del_model_file(package, modul):
@@ -323,10 +335,12 @@ def handle_modul_add_command(args):
     name = args.name
     clazz = name.capitalize()
     modul_id = get_next_modulid(package, session)
-    fixtures = get_fixtures(package, name, session)
     add_model_file(package, name, modul_id, clazz, args.mixin)
     add_form_file(package, name)
     add_table_file(package, name)
     msg = "Added %s modul" % name
     path = create_new_revision(args, msg)
-    print "\n".join(fixtures)
+    add_fixtures(package, name, session)
+    print "Ready. Next steps:"
+    print "%s-admin db upgrade" % args.app
+    print "%s-admin fixtures load" % args.app
