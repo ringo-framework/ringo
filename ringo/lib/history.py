@@ -1,3 +1,6 @@
+import urlparse
+
+
 class History:
 
     def __init__(self, history):
@@ -5,10 +8,20 @@ class History:
 
     def push(self, url):
         """Adds an url to the history if the url is not already the most
-        recent entry. If there are more than 10 entries in the list the
-        oldes entry will be removed."""
-        if not self.history or url != self.history[-1]:
-            self.history.append(url)
+        recent entry. The scheme and network location (host, port,
+        username, password), if present, are removed from the URL before
+        storing it. If there are more than 5 entries in the list the
+        oldes entry will be removed.
+        """
+
+        # normalize the URL by removing scheme and netloc. This avoids
+        # problems with the URLs when running ringo behind reverse
+        # proxies.
+        split = urlparse.urlsplit(url)
+        normalized_url = urlparse.urlunsplit(("", "") + split[2:])
+
+        if not self.history or normalized_url != self.history[-1]:
+            self.history.append(normalized_url)
         if len(self.history) > 5:
             del self.history[0]
 
