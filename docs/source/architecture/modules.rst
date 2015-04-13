@@ -81,6 +81,27 @@ Extensions
 ==========
 .. automodule:: ringo.lib.extension
 
+Base Items and Listings
+=======================
+
+.. automodule:: ringo.model.base
+   :members: get_item_list
+
+BaseItem
+--------
+.. autoclass:: ringo.model.base.BaseItem
+   :members: get_value, get_values, set_values, save, _get_permissions, get_item_factory
+
+BaseFactory
+-----------
+.. autoclass:: ringo.model.base.BaseFactory
+   :members: create, load
+
+BaseList
+--------
+.. autoclass:: ringo.model.base.BaseList
+   :members: filter, sort, pageinate
+
 Mixins
 ======
 .. automodule:: ringo.model.mixins

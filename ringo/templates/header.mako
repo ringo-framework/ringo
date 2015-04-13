@@ -21,7 +21,9 @@
           else:
             modul_name = None
         %>
+        % if request.user:
         <li class="${(modul_name == None) and 'active'}"><a href="${request.route_path('home')}">${_('Home')}</a></li>
+        % endif
         % for modul in h.get_modules(request, 'header-menu'):
           <li class="${(modul_name == modul.name) and 'active'}"><a href="${request.route_path(modul.name+'-list')}">${modul.get_label(plural=True)}</a></li>
         % endfor

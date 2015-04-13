@@ -88,6 +88,15 @@ for more information how things work in general under the hood.
 See :ref:`api-security` for documentation on helper functions used to build
 the ACL.
 
+Custom authorisation
+^^^^^^^^^^^^^^^^^^^^
+If you need to change the way Ringo builds the ACL on default you can change this behavior by 
+overwriting the ``_get_permissions`` class method of the BaseItem in your model.
+
+Authorisation inheritance
+^^^^^^^^^^^^^^^^^^^^^^^^^
+Write me
+
 Security measurements
 =====================
 Ringo has protection against common threads of webapplication included.

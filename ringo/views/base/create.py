@@ -44,7 +44,7 @@ def create(request, callback=None, renderers={}):
     # values e.g (See create function of forms)
     if not request.context.item:
         request.context.item = factory.create(request.user, {})
-    form = get_item_form('create', request, renderers)
+    form = get_item_form(params.get("form", "create"), request, renderers)
     if request.POST and 'blobforms' not in request.params:
         if handle_POST_request(form, request, callback, 'create', renderers):
             return handle_redirect_on_success(request)

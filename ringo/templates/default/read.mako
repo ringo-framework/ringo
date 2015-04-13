@@ -18,8 +18,6 @@
       <div class="context-menu">
         <div class="btn-toolbar">
           <div class="btn-group">
-            <!-- Item specific actions -->
-            ${main.render_item_specific_actions(item)}
             <!-- Base ringo actions -->
             ${main.render_item_base_actions(item)}
           </div>
@@ -30,8 +28,6 @@
       <div class="context-menu pull-right">
         <div class="btn-toolbar">
           <div class="btn-group">
-            <!-- Item specific actions -->
-            ${main.render_item_specific_actions(item)}
             <!-- Base ringo actions -->
             ${main.render_item_base_actions(item)}
           </div>

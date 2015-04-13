@@ -1,7 +1,7 @@
 [
     {
         "admin": true,
-        "description": null,
+        "description": "",
         "id": 1,
         "label": "Administration",
         "name": "admin",
@@ -13,7 +13,7 @@
     },
     {
         "admin": false,
-        "description": null,
+        "description": "",
         "id": 2,
         "label": "Users",
         "name": "user",

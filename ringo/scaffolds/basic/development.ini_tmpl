@@ -5,6 +5,9 @@
 
 [app:main]
 app.title = {{package}}
+# Baseurl of the application.
+# app.url =
+
 
 use = egg:{{package}}
 

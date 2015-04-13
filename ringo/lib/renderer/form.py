@@ -33,9 +33,24 @@ def add_renderers(custom_renderers):
     return renderers
 
 
-def get_link_url(item, request):
+def get_link_url(item, request, actionname=None):
+    """Return a url to the given item. On default the link will be a
+    link to the update or read view of the item depending on the
+    permission. If the user does not have enough permissions than None
+    is returned. Optionally you can provide the name of a action. In
+    this case the url will be build for the given actionname if the user
+    has enough permissions."""
     if isinstance(item, BaseItem):
-        if security.has_permission("update", item, request):
+        if actionname:
+            from ringo.views.helpers import get_item_modul
+            modul = get_item_modul(request, item)
+            action = modul.get_action(actionname)
+            permission = action.permission or action.name.lower()
+            if security.has_permission(permission, item, request):
+                route_name = get_action_routename(item, action.name.lower())
+            else:
+                return None
+        elif security.has_permission("update", item, request):
             route_name = get_action_routename(item, 'update')
         elif security.has_permission("read", item, request):
             route_name = get_action_routename(item, 'read')
@@ -66,6 +81,24 @@ def filter_options_on_permissions(request, options):
 
 
 class LinkFieldRenderer(FieldRenderer):
+    """ Will rendere a Link to the item. The item which will be linked
+    can be set by
+
+    * the name attribute of the entity
+    * the value attribute of the entity
+
+    If the item can not be determined by one of the options above the
+    item will be the item linked to the form.
+
+    The following option in
+    addition to the base Linkfield Renderer are supported:
+
+    * openmodal: If true the item will be opened in a modal form.
+      Defaults to false.
+    * action: Name of the action for which the link will be rendered.
+      Defaults to None with means the link will be either to the read or
+      update view.
+    """
     def __init__(self, field, translate):
         """@todo: to be defined"""
         FieldRenderer.__init__(self, field, translate)
@@ -85,8 +118,13 @@ class LinkFieldRenderer(FieldRenderer):
             if not item:
                 name = self._field.name
                 item = self._field._form._item
-                log.warning("Missing value for %s in %s" % (name, item))
-        values['url'] = get_link_url(item, self._field._form._request) or "#"
+                # Only print warning if the fieldname is not a helper
+                # field beginning with "_"
+                if not name.startswith("_"):
+                    log.warning("Missing value for %s in %s" % (name, item))
+        values['url'] = get_link_url(item,
+                                     self._field._form._request,
+                                     self._field.renderer.action) or "#"
         return values
 
     def _render_label(self):

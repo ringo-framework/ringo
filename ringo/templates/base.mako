@@ -130,6 +130,18 @@
   % for action in h.get_item_actions(request, item):
     % if (request.url.find(action.name.lower()) < 0) and s.has_permission((action.permission or action.name.lower()), request.context.item, request):
       <%
+      if action.name == "Create":
+        title = _('Create new item')
+      elif action.name == "List":
+        title = _('Open overview')
+      elif action.name == "Update":
+        title = _('Open in "Edit" mode')
+      elif action.name == "Read":
+        title = _('Open in "Read" mode')
+      elif action.name == "Delete":
+        title = _('Delete item')
+      else:
+        title = action.description
       icon = get_icon(action)
       if action.display == "hide":
         continue
@@ -138,7 +150,7 @@
         continue
       %>
       <a href="${h.get_action_url(request, item, action.name.lower())}"
-      class="btn btn-default"><i class="${icon}"></i></a>
+        class="btn btn-default" title="${title}"><i class="${icon}"></i></a>
     % endif
   % endfor
   <div class="btn-group">
@@ -182,10 +194,4 @@
       ${message}
     </div>
   % endfor
-</%def>
-
-<%def name="render_item_specific_actions(item)">
-  ##<a href="${h.get_action_url(request, item, 'list')}" class="btn"><i class="icon-list-alt"></i></a>
-  ##<a href="${h.get_action_url(request, item, 'update')}" class="btn"><i class="icon-edit"></i></a>
-  ##<a href="${h.get_action_url(request, item, 'delete')}" class="btn"><i class="icon-trash"></i></a>
 </%def>

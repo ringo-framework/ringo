@@ -15,10 +15,17 @@ def get_db(config_file):
     return result.stdout.strip()
 
 
-def get_fixtures(appname):
-    apppath = os.path.join(get_package_location(appname), appname)
-    result = run("ls %s/fixtures/*.json" % apppath, hide="out").stdout.strip()
+def get_fixtures(appname, path=None):
+    if path:
+        try:
+            result = run("ls %s/*.json" % path, hide="out").stdout.strip()
+        except Exception as e:
+            return []
+    else:
+        apppath = os.path.join(get_package_location(appname), appname)
+        result = run("ls %s/fixtures/*.json"
+                     % apppath, hide="out").stdout.strip()
     fixtures = []
     for fixture in sorted(result.split("\n")):
-        fixtures.append((fixture, fixture.split("_")[1].split(".")[0]))
+        fixtures.append((fixture, "_".join(fixture.split("_")[1:]).split(".")[0]))
     return fixtures

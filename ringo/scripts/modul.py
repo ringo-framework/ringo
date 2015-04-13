@@ -1,4 +1,5 @@
 import os
+import json
 import subprocess
 import uuid
 import transaction
@@ -7,8 +8,7 @@ from sqlalchemy import func
 from mako.lookup import TemplateLookup
 from ringo.lib.helpers import get_app_location, dynamic_import
 from ringo.scripts.db import (
-    get_session, create_new_revision,
-    handle_db_upgrade_command, replace_insert_stmt
+    get_session, create_new_revision
 )
 from ringo.model.modul import ModulItem, ActionItem
 
@@ -27,56 +27,79 @@ mixinmap = {
 }
 
 
-def _get_default_actions_sql(session, mid, action_id, ignore=[]):
+def get_modul_fixture(name, package, session):
+    id = get_next_modulid(package, session)
+    fixture = {}
+    fixture["id"] = id
+    fixture["name"] = name + "s"
+    fixture["label"] = name.capitalize()
+    fixture["label_plural"] = fixture["label"] + "s"
+    fixture["clazzpath"] = ".".join([package, 'model',
+                                     name, fixture["label"]])
+    fixture["display"] = "header-menu"
+    fixture["str_repr"] = "%s|id"
+    fixture["uuid"] = uuid.uuid4().hex
+    return fixture
+
+def get_action_fixtures(session, mid, ignore=[]):
     # TODO: Translate the name of the Action (torsten) <2013-07-10 09:32>
-    sql = []
+    action_id = get_next_actionid(session)
+    fixtures = []
     for action in ['list', 'create', 'read', 'update',
                    'delete', 'import', 'export']:
         if action in ignore:
             continue
+        fixture = {}
         myuuid = uuid.uuid4().hex
         if action == "list":
             name = "List"
             url = "list"
             icon = "icon-list-alt"
-            bundle = 0
+            bundle = False
         if action == "create":
             name = "Create"
             url = "create"
             icon = "icon-plus"
-            bundle = 0
+            bundle = False
         if action == "read":
             name = "Read"
             url = "read/{id}"
             icon = "icon-eye-open"
-            bundle = 0
+            bundle = False
         if action == "update":
             name = "Update"
             url = "update/{id}"
             icon = "icon-edit"
-            bundle = 0
+            bundle = False
         if action == "delete":
             name = "Delete"
             url = "delete/{id}"
             icon = "icon-eye-delete"
-            bundle = 1
+            bundle = False
         if action == "import":
             name = "Import"
             url = "import"
             icon = "icon-import"
-            bundle = 0
+            bundle = False
         if action == "export":
             name = "Export"
             url = "export/{id}"
             icon = "icon-export"
-            bundle = 1
+            bundle = True
 
-        sql.append("""INSERT INTO "actions" """
-                   """(id, mid, name, url, icon, uuid, bundle) """
-                   """VALUES (%s, %s, '%s', '%s', '%s', '%s', '%s')""" %
-                   (action_id, mid, name, url, icon, myuuid, bundle))
+        fixture["id"] = action_id
+        fixture["mid"] = mid
+        fixture["name"] = name
+        fixture["description"] = ""
+        fixture["permission"] = ""
+        fixture["url"] = url
+        fixture["icon"] = icon
+        fixture["uuid"] = myuuid
+        fixture["bundle"] = bundle
+
+        fixtures.append(fixture)
         action_id += 1
-    return sql
+    return fixtures 
 
 
 def remove_db_entry(name, session):
@@ -101,7 +124,6 @@ def get_next_modulid(package, session):
     else:
         id = session.query(
             func.max(ModulItem.id)).filter(ModulItem.id > 999).one()[0]
-    print id
     if id:
         return id + 1
     else:
@@ -112,9 +134,8 @@ def get_next_actionid(session):
     return id + 1
 
 
-def get_insert_statements(package, name, session):
-    """Will retunr the INSERT statements for the new modul. They can be
-    used in the migration scripts.
+def add_fixtures(package, name, session):
+    """Will add the fixtures for the new modul to the fixture files.
 
     :package: @todo
     :name: @todo
@@ -122,24 +143,26 @@ def get_insert_statements(package, name, session):
     :returns: @todo
 
     """
-    modul_name = name + "s"
-    label = name.capitalize()
-    label_plural = label + "s"
-    clazzpath = ".".join([package, 'model', name, label])
-    location = "header-menu"
-    str_repr = "%s|id"
-    myuuid = uuid.uuid4().hex
-    id = get_next_modulid(package, session)
-    action_id = get_next_actionid(session)
+    modul_fixture = get_modul_fixture(name, package, session)
+    modul_file = os.path.join(get_app_location(package),
+                               package, 'fixtures', '00_modules.json')
 
-    sql = []
-    sql.append("""INSERT INTO "modules" """
-               """VALUES (%s,'%s','%s','%s','%s', """
-               """NULL, '%s','%s','%s', NULL)"""
-               % (id, modul_name, clazzpath, label,
-                  label_plural, str_repr, location, myuuid))
-    sql.extend(_get_default_actions_sql(session, id, action_id))
-    return sql
+    with open(modul_file, "r+") as mf:
+        modul_json = json.load(mf)
+        modul_json.append(modul_fixture)
+        mf.seek(0)
+        mf.write(json.dumps(modul_json, indent=4))
+
+    modul_id = modul_fixture["id"]
+    action_fixtures = get_action_fixtures(session, modul_id)
+    action_file = os.path.join(get_app_location(package),
+                               package, 'fixtures', '01_actions.json')
+
+    with open(action_file, "r+") as af:
+        action_json = json.load(af)
+        action_json.extend(action_fixtures)
+        af.seek(0)
+        af.write(json.dumps(action_json, indent=4))
 
 
 def del_model_file(package, modul):
@@ -312,13 +335,12 @@ def handle_modul_add_command(args):
     name = args.name
     clazz = name.capitalize()
     modul_id = get_next_modulid(package, session)
-    sql = get_insert_statements(package, name, session)
     add_model_file(package, name, modul_id, clazz, args.mixin)
     add_form_file(package, name)
     add_table_file(package, name)
     msg = "Added %s modul" % name
     path = create_new_revision(args, msg)
-    replace_insert_stmt(path, sql)
-    #print "Touching"
-    #subprocess.call(["touch", path])
-    #print "Finished Touching"
+    add_fixtures(package, name, session)
+    print "Ready. Next steps:"
+    print "%s-admin db upgrade" % args.app
+    print "%s-admin fixtures load" % args.app

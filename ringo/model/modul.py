@@ -177,17 +177,31 @@ class ModulItem(BaseItem, Base):
             return self.label_plural
         return self.label
 
-    def has_action(self, url):
+    def has_action(self, name):
         """Will return True if the modul has a ActionItem configured
-        with given url. Else false.
+        with given name. Else false.
 
-        :url: String of the url
+        :name: Name of the action 
         :returns: True or False
         """
         for action in self.actions:
-            if action.url == url:
+            if action.name.lower() == name.lower():
                 return True
         return False
+
+
+    def get_action(self, name):
+        """Will return action item if the modul has a ActionItem configured
+        with given name. Else None.
+
+        :name: Name of the action
+        :returns: ActionItem or None
+        """
+        for action in self.actions:
+            if action.name.lower() == name.lower():
+                return action
+        return None
+
 
     def get_str_repr(self):
         """Return a tupel with format str and a list of fields."""

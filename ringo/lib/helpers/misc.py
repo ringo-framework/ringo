@@ -1,4 +1,5 @@
 import logging
+import string
 from datetime import datetime
 from pyramid.threadlocal import get_current_request
 from ringo.lib.sql import DBSession
@@ -27,6 +28,12 @@ def serialize(value):
         return [value.id]
     return unicode(value)
 
+def safestring(unsafe):
+    """Returns a 'safe' version of the given string. All non ascii chars
+    and other chars are removed """
+    valid_chars = "_%s%s" % (string.ascii_letters, string.digits)
+    return ''.join(c for c in unsafe if c in valid_chars)
+
 
 def age(when, on=None):
     """Returns the age in years from the given date "when" since today. If
@@ -44,19 +51,32 @@ def age(when, on=None):
     return on.year - when.year - (was_earlier)
 
 
-def get_raw_value(element, name):
-    """This function tries to get the given attribute of the item if
-    it can not be found using the usual way to get attributes. In
-    this case we will split the attribute name by "." and try to get
-    the attribute along the "." separated attribute name. The
-    function also offers basic support for accessing individual
-    elements in lists in case one attribute is a list while
-    iterating over all attributes. Currently only flat lists are
-    supported.
+def _resolve_attribute(element, name, idx=None):
+    """Helper method for the set_raw_value and get_raw_value method.
+    Will return on default the last element in a dot
+    separated attribute. E.g. for a attribute called 'foo.bar.baz' the
+    function will return a the 'baz' element.
 
-    Example: x.y[1].z"""
+    The default element to return can can be changed by providing the
+    idx attribute. The idx will be used to iterate over the splitted
+    attribute name. ([0:idx]). This is usually only used when trying to
+    set a value. See set_raw_value for more details.
+
+    The function also offers basic support for accessing individual
+    elements in lists in case one attribute is a list while iterating
+    over all attributes. Currently only flat lists are supported.
+
+    Example: x.y[1].z
+
+    :element: BaseItem instance
+    :name: dot separated attribute name
+    :returns: last element of the dot separated element.
+
+    """
     attributes = name.split('.')
-    for attr in attributes:
+    if idx is None:
+        idx = len(attributes)
+    for attr in attributes[0:idx]:
         splitmark_s = attr.find("[")
         splitmark_e = attr.find("]")
         if splitmark_s > 0:
@@ -67,12 +87,42 @@ def get_raw_value(element, name):
                 element = element_list[index]
             else:
                 log.error("IndexError in %s on %s for %s"
-                          % (name, attr, self))
+                          % (name, attr, element))
                 element = None
                 break
         else:
             element = object.__getattribute__(element, attr)
     return element
+
+
+def set_raw_value(element, name, value):
+    """Support setting the `value` for a dot separated attribute of
+    `element` provided by the `name` attribute. If the attribute name is
+    a dot separated attribute the function will first resolve the
+    attribute to the penultimate element and call the setattr method for
+    the ultimate element and the given value.
+
+    E.g. If the value '123' should be set for the attribute
+    'foo.bar.baz' the function first gets the 'bar' element.  For this
+    element the setattr method will be called with the attribute 'baz'
+    and the value '123'."""
+
+    penulti = _resolve_attribute(element, name, -1)
+    object.__setattr__(penulti, name, value)
+
+
+def get_raw_value(element, name):
+    """Support getting the value for a dot separated attribute of
+    `element` provided by the `name` attribute. If the attribute name is
+    a dot separated attribute the function will first resolve the
+    attribute to the penultimate element and call the getattr method for
+    the ultimate element and the given value.
+
+    E.g. If the function should get the attribute 'foo.bar.baz' the
+    function first gets the 'bar' element.  For this element the getattr
+    method will be called with the attribute 'baz'."""
+
+    return _resolve_attribute(element, name)
 
 
 def dynamic_import(cl):
@@ -216,7 +266,7 @@ def get_modules(request, display):
             # permissions against it.
             clazz = dynamic_import(modul.clazzpath)
             factory = get_resource_factory(clazz, modul)
-            resource = factory(request, modul)
+            resource = factory(request)
             if has_permission('list', resource, request):
                 user_moduls.append(modul)
     return user_moduls

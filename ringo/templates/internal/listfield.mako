@@ -12,7 +12,6 @@ for item in items:
   else:
     hidden_items.append(item)
 
-
 def render_item_link(request, clazz, permission, item, value, modal=False, backlink=True):
   out = []
   css_class = ["link"]
@@ -77,22 +76,28 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
         continue
       %>
       <tr>
-      % if not field.is_readonly() and field.renderer.onlylinked != "true":
-        <td>
-          % if not field.renderer.multiple == "false":
-            % if str(item[0].id) in selected:
-              <input type="checkbox" value="${item[0].id}" name="${field.name}" checked="checked" onclick="check('${field.name}', this);"/>
+      ## Readonly -> Do nothing
+      % if not field.is_readonly():
+        % if field.renderer.onlylinked != "true":
+          <td>
+            % if not field.renderer.multiple == "false":
+              % if str(item[0].id) in selected:
+                <input type="checkbox" value="${item[0].id}" name="${field.name}" checked="checked" onclick="check('${field.name}', this);"/>
+              % else:
+                <input type="checkbox" value="${item[0].id}" name="${field.name}" onclick="check('${field.name}', this);"/>
+              % endif
             % else:
-              <input type="checkbox" value="${item[0].id}" name="${field.name}" onclick="check('${field.name}', this);"/>
+              % if str(item[0].id) in selected:
+                <input type="checkbox" value="${item[0].id}" name="${field.name}" onclick="checkOne('${field.name}', this);" checked="checked"/>
+              % else:
+                <input type="checkbox" value="${item[0].id}" name="${field.name}" onclick="checkOne('${field.name}', this);"/>
+              % endif
             % endif
-          % else:
-            % if str(item[0].id) in selected:
-              <input type="checkbox" value="${item[0].id}" name="${field.name}" onclick="checkOne('${field.name}', this);" checked="checked"/>
-            % else:
-              <input type="checkbox" value="${item[0].id}" name="${field.name}" onclick="checkOne('${field.name}', this);"/>
-            % endif
-          % endif
-        </td>
+          </td>
+        % else:
+          ## Hidden Checkbox for all linked items
+          <input style="display:none" type="checkbox" value="${item[0].id}" name="${field.name}" checked="checked"/>
+        % endif
       % endif
       % for num, col in enumerate(tableconfig.get_columns()):
         <%
@@ -120,11 +125,18 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
     % endfor
   </tbody>
 </table>
-% for item in hidden_items:
-  % if str(item[0].id) in selected:
-    <input style="display:none" type="checkbox" value="${item[0].id}" name="${field.name}" checked="checked"/>
-  % endif
-% endfor
+## Only render hidden items if "showall" is not set! If it is set for the
+## renderer all items has been rendererd with either a checkbox or a hidden
+## checkboc before. So the fields in the hidden_items must only be rendererd
+## if showall is not set. Otherwise values for a selected item will be sent
+## twice which can cause problem on the server side.
+% if not field.renderer.showall == "true":
+  % for item in hidden_items:
+    % if str(item[0].id) in selected:
+      <input style="display:none" type="checkbox" value="${item[0].id}" name="${field.name}" checked="checked"/>
+    % endif
+  % endfor
+% endif
 
 <script type="text/javascript">
 function addItem(url, foreignkey, form, id, clazz, backlink) {

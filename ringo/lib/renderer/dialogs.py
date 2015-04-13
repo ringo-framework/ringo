@@ -10,7 +10,8 @@ from formbar.form import Form
 import ringo.lib.helpers
 from ringo.lib.helpers import (
     get_action_routename,
-    get_item_modul
+    get_item_modul,
+    get_app_url
 )
 from ringo.lib.form import (
     eval_url,
@@ -58,9 +59,11 @@ class DialogRenderer(object):
 class ConfirmDialogRenderer(DialogRenderer):
     """Docstring for ConfirmDialogRenderer """
 
-    def __init__(self, request, clazz, action, title=None, body=None):
+    def __init__(self, request, clazz, action,
+                 title=None, body=None, ok_label=None):
         """@todo: to be defined """
         DialogRenderer.__init__(self, request, clazz, action, title, body)
+        self.ok_label = ok_label
         self.template = template_lookup.get_template("internal/confirm.mako")
         self.icon = self._request.static_path(
             'ringo:static/images/icons/32x32/dialog-warning.png')
@@ -71,9 +74,15 @@ class ConfirmDialogRenderer(DialogRenderer):
         values = {}
         values['request'] = self._request
         values['icon'] = self.icon
-        values['header'] = _("Confirm ${Action}", mapping=mapping)
-        values['body'] = self._render_body(items)
-        values['action'] = _(self._action.capitalize())
+        if self._title:
+            values['header'] = self._title
+        else:
+            values['header'] = _("Confirm ${Action}", mapping=mapping)
+        if self._body:
+            values['body'] = self._body
+        else:
+            values['body'] = self._render_body(items)
+        values['action'] = self.ok_label or _(self._action.capitalize())
         values['ok_url'] = self._request.current_route_path()
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
@@ -167,7 +176,7 @@ class ExportDialogRenderer(DialogRenderer):
                          csrf_token=self._request.session.get_csrf_token(),
                          dbsession=request.db,
                          eval_url=eval_url,
-                         url_prefix=request.application_url)
+                         url_prefix=get_app_url(request))
 
     def render(self, items):
         _ = self._request.translate
@@ -202,7 +211,7 @@ class ImportDialogRenderer(DialogRenderer):
                          csrf_token=self._request.session.get_csrf_token(),
                          dbsession=request.db,
                          eval_url=eval_url,
-                         url_prefix=request.application_url)
+                         url_prefix=get_app_url(request))
 
     def render(self, items):
         values = {}

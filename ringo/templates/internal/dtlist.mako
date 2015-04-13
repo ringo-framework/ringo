@@ -21,12 +21,11 @@ from ringo.lib.helpers import prettify
     <tr>
       % for field in tableconfig.get_columns():
       % if permission:
-      <td onclick="openItem('${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}')" class="link">
+        <td onclick="openItem('${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}')" class="link">
       % else:
-      <td>
+        <td>
       % endif
           <%
-            form_config = tableconfig.get_form_config()
             try:
               value = prettify(request, item.get_value(field.get('name'), expand=field.get('expand')))
             except AttributeError:

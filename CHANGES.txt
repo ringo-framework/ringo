@@ -1,3 +1,38 @@
+1.1.0
+=====
+New:
+- Added "openmodal" option to LinkfieldRenderer
+- Added "action" option to LinkfieldRenderer to be able to render other
+  actions then read and update links.
+- Added _get_permission classmethod in the Baseitem class. This class can be
+  overwritten to implement a custom way to build the ACL for this class and
+  instances.
+- Added info page after login if the account has been disabled.
+- Added --path option to load and save fixtures to be able to load alternative
+  fixtures.
+- Implement setting dot-separated values in items.
+- Implemented fuzzy search. The search now supports the "~" operator to
+  trigger a fuzzy search which uses the doublemetaphon as primary algorithm
+  and falls back to the levenshtein algorithm as secondary it the primary
+  fails.
+
+Changed:
+- Only show "Homepage" on index page if the user is actually logged in.
+- Fixed DTListRenderer which was only rarly used and seems to be broken for
+  some time. The fix onyl gets it working again. There is still work to do to
+  make it work as the default ListRenderer (Display of Link e.g).
+- Allow custom title and body in confirmation dialog.
+- Use form parameter when getting the create form. Usefull when you want to
+  use an alternative form to create an item.
+- Hide attribute of ActionItems also affects overview lists.
+- "ringo-admin modul add" command does not generate SQL code anymore. Instead
+  of this it will print out code for the fixtures.
+- Make the application base url configurable using the app.url config
+  parameter.
+- Added title tooltips in context menu
+- Only save paths in the history and not full qualified URLs.
+
+
 1.0.0
 =====
 WARNING! This update is a major upgrade of Ringo which may break your application!

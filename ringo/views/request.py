@@ -14,6 +14,17 @@ from ringo.views.helpers import (
 
 log = logging.getLogger(__name__)
 
+def encode_values(values):
+    """Returns a string with encode the values in the given dictionary.
+
+    :values: dictionary with key values pairs
+    :returns: String key1:value1,key2:value2...
+
+    """
+    encoded = []
+    for key in values:
+        encoded.append("%s:%s" % (key, values[key]))
+    return ",".join(encoded)
 
 def is_confirmed(request):
     """Returns True id the request is confirmed"""
@@ -65,6 +76,9 @@ def handle_add_relation(request, item):
     log.debug('Linking %s to %s in %s' % (item, pitem, rrel))
     tmpattr = getattr(pitem, rrel)
     tmpattr.append(item)
+    # Delete value from session after the relation has been added
+    del request.session['%s.addrelation' % clazz]
+    request.session.save()
 
 
 def handle_caching(request):

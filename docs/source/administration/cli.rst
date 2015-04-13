@@ -46,13 +46,17 @@ loading and saving data is implemented by using the importer and exporter.
 The folder for the fixtures should be named *fixtures* and located in the
 application folder.
 
-Fixtures are located in the fixtures directory of your application. There are
-some naming conventions. Fixtures should be namen 'NN_modulname.json'. NN
-means is used to order the fixtures and determines in which order the fixtures
-will be loaded. The modulname configures for which module the fixtures
-contains data. The name of the module name is identical with the name of the
-database table which has a appended "s". E.g the *user* modul becomes to
-*users*. This is even true if the appended "s" is written wrong.
+The default location of the fixtures is the fixtures directory of your
+application.  You can define an alternative path the the fixtures when
+invoking the load or save command by providing the `--path` option.
+
+There are some naming conventions. Fixtures should be namen
+'NN_modulname.json'. NN means is used to order the fixtures and determines in
+which order the fixtures will be loaded. The modulname configures for which
+module the fixtures contains data. The name of the module name is identical
+with the name of the database table which has a appended "s". E.g the *user*
+modul becomes to *users*. This is even true if the appended "s" is written
+wrong.
 
 Load data
 ---------
@@ -63,6 +67,8 @@ By invoking the following command::
 all fixtures in the fixtures directory will be loaded and inserted in the
 database.
 
+Using the `--path` allows to define a alternative path to the fixture files.
+
 Save data
 ---------
 By invoking the following command::
@@ -72,6 +78,7 @@ By invoking the following command::
 all fixtures in the fixtures directory will be loaded and the data for each
 modul will be written into the fixture.
 
+Using the `--path` allows to define a alternative path to the fixture files.
 
 Modules
 =======
