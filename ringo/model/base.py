@@ -37,15 +37,16 @@ def levenshteinmatch(value, search, t):
     """Compares two strings with Levenshtein Algorithm and given
     threshold for similarity. It is a string metric for measuring the
     difference between two words, the minimum number of single-character
-    edits. A threshold can be applied for depending the maximum allowed
-    single-character edits."""
+    edits. A threshold (between 0 and 1) can be applied for determining
+    the maximum allowed single-character edits based on the word length
+    of the longer word, potential floats are rounded up at this point."""
     lenV = len(value)
     lenS = len(search)
 
     if lenS >= lenV:
-        l =  math.floor(lenS * t)
+        l =  math.ceil(lenS * t)
     else:
-        l = math.floor(lenV * t)
+        l = math.ceil(lenV * t)
     ld = Levenshtein.distance(value, search)
     return ld <= l
 
