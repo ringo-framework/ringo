@@ -90,8 +90,10 @@ def copy_initial_migration_scripts(args):
     dst = os.path.join(*dst_path)
     dst_files = os.listdir(dst)
     src_files = os.listdir(src)
-    # Only copy the initial files if the directory is empty.
-    if len(dst_files) > 1:
+    # Only copy the initial files if the directory is empty and src and
+    # dst isn't the same directory (Happens when installing ringo
+    # itself).
+    if (src == dst) or (len(dst_files) > 1):
         return
     for file_name in src_files:
         full_file_name = os.path.join(src, file_name)
