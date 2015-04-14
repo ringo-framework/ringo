@@ -1,3 +1,10 @@
+1.1.1
+=====
+Changed:
+- Fixed Implementation of setting dot-separated values in items. Final call of
+  the object.__setattr__ method was done with the full attribute name instead
+  of the last part.
+
 1.1.0
 =====
 New:

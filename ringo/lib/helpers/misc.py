@@ -108,7 +108,7 @@ def set_raw_value(element, name, value):
     and the value '123'."""
 
     penulti = _resolve_attribute(element, name, -1)
-    object.__setattr__(penulti, name, value)
+    object.__setattr__(penulti, name.split(".")[-1], value)
 
 
 def get_raw_value(element, name):
