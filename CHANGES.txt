@@ -1,3 +1,9 @@
+1.2.0
+=====
+New:
+- Add option to provide external validators to the update and create view.
+  They will be used for additional validation of the form.
+
 1.1.0
 =====
 New:
