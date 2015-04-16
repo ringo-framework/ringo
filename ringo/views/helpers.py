@@ -176,7 +176,7 @@ def get_item_form(name, request, renderers=None, validators=None):
                 locale=locale_negotiator(request))
     # Add validators
     for validator in validators:
-        form.add_validator(form)
+        form.add_validator(validator)
     return form
 
 
