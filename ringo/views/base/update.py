@@ -18,7 +18,7 @@ from ringo.views.request import (
 log = logging.getLogger(__name__)
 
 
-def update(request, callback=None, renderers={}):
+def update(request, callback=None, renderers=None, validators=None):
     """Base method to handle update requests. This view will render a
     update form to update items on (GET) requests.
 
@@ -30,6 +30,10 @@ def update(request, callback=None, renderers={}):
     If the validation fails, the form will be rendered again.
     :request: Current request
     :callback: Current function which is called after the item has been read.
+    :renderers: Dictionary of external renderers which should be used
+                for renderering some form elements.
+    :validators: List of external formbar validators which should be
+                 added to the form for validation
     :returns: Dictionary or Redirect.
     """
     handle_history(request)
@@ -37,7 +41,7 @@ def update(request, callback=None, renderers={}):
     if '_isownershipform' in request.params:
         form = get_ownership_form(request)
     else:
-        form = get_item_form('update', request, renderers)
+        form = get_item_form('update', request, renderers, validators)
 
     if request.POST:
         if handle_POST_request(form, request, callback, 'update', renderers):

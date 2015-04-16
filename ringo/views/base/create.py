@@ -17,7 +17,7 @@ from ringo.views.request import (
 log = logging.getLogger(__name__)
 
 
-def create(request, callback=None, renderers={}):
+def create(request, callback=None, renderers=None, validators=None):
     """Base method to handle create requests. This view will render a
     create form to update items on (GET) requests.
 
@@ -30,6 +30,10 @@ def create(request, callback=None, renderers={}):
 
     :request: Current request
     :callback: Current function which is called after the item has been read.
+    :renderers: Dictionary of external renderers which should be used
+                for renderering some form elements.
+    :validators: List of external formbar validators which should be
+                 added to the form for validation
     :returns: Dictionary or Redirect.
     """
     handle_history(request)
@@ -44,7 +48,8 @@ def create(request, callback=None, renderers={}):
     # values e.g (See create function of forms)
     if not request.context.item:
         request.context.item = factory.create(request.user, {})
-    form = get_item_form(params.get("form", "create"), request, renderers)
+    form = get_item_form(params.get("form", "create"),
+                         request, renderers, validators)
     if request.POST and 'blobforms' not in request.params:
         if handle_POST_request(form, request, callback, 'create', renderers):
             return handle_redirect_on_success(request)
