@@ -134,16 +134,21 @@ def render_item_form(request, form, values=None, validate=True):
                        previous_values=previous_values)
 
 
-def get_item_form(name, request, renderers=None):
+def get_item_form(name, request, renderers=None, validators=None):
     """Will return a form for the given item
 
     :name: Name of the form
     :request: Current request
-    :renderers: Dictionary with custom renderers
+    :renderers: Dictionary of external renderers which should be used
+                for renderering some form elements.
+    :validators: List of external formbar validators which should be
+                 added to the form for validation
     :returns: Form
     """
-    if not renderers:
+    if renderers is None:
         renderers = {}
+    if validators is None:
+        validators = []
     item = get_item_from_request(request)
     renderers = add_renderers(renderers)
     clazz = request.context.__model__
@@ -169,6 +174,9 @@ def get_item_form(name, request, renderers=None):
                 eval_url=eval_url,
                 url_prefix=get_app_url(request),
                 locale=locale_negotiator(request))
+    # Add validators
+    for validator in validators:
+        form.add_validator(form)
     return form
 
 
