@@ -1,4 +1,5 @@
 import os
+import fnmatch
 import json
 import subprocess
 import uuid
@@ -40,6 +41,7 @@ def get_modul_fixture(name, package, session):
     fixture["str_repr"] = "%s|id"
     fixture["uuid"] = uuid.uuid4().hex
     return fixture
+
 
 def get_action_fixtures(session, mid, ignore=[]):
     # TODO: Translate the name of the Action (torsten) <2013-07-10 09:32>
@@ -99,7 +101,7 @@ def get_action_fixtures(session, mid, ignore=[]):
 
         fixtures.append(fixture)
         action_id += 1
-    return fixtures 
+    return fixtures
 
 
 def remove_db_entry(name, session):
@@ -129,9 +131,17 @@ def get_next_modulid(package, session):
     else:
         return 1000
 
+
 def get_next_actionid(session):
     id = session.query(func.max(ActionItem.id)).one()[0]
     return id + 1
+
+
+def _get_fixture_file(path, pattern):
+    for root, dirs, files in os.walk(path):
+        for name in files:
+            if fnmatch.fnmatch(name, pattern):
+                return os.path.join(root, name)
 
 
 def add_fixtures(package, name, session):
@@ -143,26 +153,29 @@ def add_fixtures(package, name, session):
     :returns: @todo
 
     """
+    path = os.path.join(get_app_location(package), package, 'fixtures')
     modul_fixture = get_modul_fixture(name, package, session)
-    modul_file = os.path.join(get_app_location(package),
-                               package, 'fixtures', '00_modules.json')
+    modul_file = _get_fixture_file(path, "*_modules.json")
 
     with open(modul_file, "r+") as mf:
+        print 'Adding data to fixture "%s"... ' % modul_file,
         modul_json = json.load(mf)
         modul_json.append(modul_fixture)
         mf.seek(0)
         mf.write(json.dumps(modul_json, indent=4))
+        print 'Ok'
 
     modul_id = modul_fixture["id"]
     action_fixtures = get_action_fixtures(session, modul_id)
-    action_file = os.path.join(get_app_location(package),
-                               package, 'fixtures', '01_actions.json')
+    action_file = _get_fixture_file(path, "*_actions.json")
 
     with open(action_file, "r+") as af:
+        print 'Adding data to fixture "%s"... ' % action_file,
         action_json = json.load(af)
         action_json.extend(action_fixtures)
         af.seek(0)
         af.write(json.dumps(action_json, indent=4))
+        print 'Ok'
 
 
 def del_model_file(package, modul):
