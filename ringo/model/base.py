@@ -47,17 +47,17 @@ def levenshteinmatch(value, search, t):
         l =  math.ceil(lenS * t)
     else:
         l = math.ceil(lenV * t)
-    ld = Levenshtein.distance(value, search)
+    ld = Levenshtein.distance(value.encode("utf-8"), search.encode("utf-8"))
     return ld <= l
 
 
 def doublemetaphone(value, search):
     """Compares two strings by applying the Double Metaphone phonetic
     encoding algorithm of the Fuzzy library using primary and secondary
-    code of a string for matching.  """
+    code of a string for matching."""
     dmeta = fuzzy.DMetaphone()
     dmeta_value = dmeta(value.encode("utf-8"))
-    dmeta_search = dmeta(search)
+    dmeta_search = dmeta(search.encode("utf-8"))
 
     if value == search:
         return True
