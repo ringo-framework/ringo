@@ -1,4 +1,19 @@
 *************************
 Internationalisation I18n
 *************************
-Translation of ringo is managed using `the Transifex webservice <https://www.transifex.com/projects/p/ringo/>`_
+ Ringo uses the `Babel <http://babel.pocoo.org/docs/>`_ package for handling the message catalogs. Translation of Ringo and Ringo based applications can be done with the following steps.
+First move into your application root folder and invoke the following command to extract all messages which should be translated::
+    
+	python setup.py extract_messages
+	
+This will generate a new pot-File. Now update the catalogs of the different languages. Please note the '-N' flag to tell babel to be not to smart about fuzzy strings in the translation::
+	
+	python setup.py update_catalog -N
+	
+It is now time to edit the generated message catalaog and to put in the missing translations. Finally call the following command to actually compile the translations and to make them available in your application::
+	
+	python setup.py compile_catalog
+	
+Further information of the process of internationalisation in a Pyramid application can be found on `i18n in Pyramid <http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/i18n.html>`_
+	
+.. Ringo translation is managed using `the Transifex webservice <https://www.transifex.com/projects/p/ringo/>`_
