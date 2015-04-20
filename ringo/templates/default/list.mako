@@ -28,21 +28,21 @@
               show_import =  h.get_item_modul(request, clazz).has_action('import') and h.get_item_modul(request, clazz).get_action('import').display != 'hide' and s.has_permission('import', request.context, request)
             %>
             % if show_create:
-              <a href="${request.route_path(h.get_action_routename(clazz, 'create'))}" title="${_('Add a new %s entry' % h.get_item_modul(request, clazz).get_label())}" class="btn btn-primary"><i class="glyphicon glyphicon-plus">&nbsp;</i>${_('New')}</a>
+              <a href="${request.route_path(h.get_action_routename(clazz, 'create'))}" title="${_('Add a new %s entry') % h.get_item_modul(request, clazz).get_label()}" class="btn btn-primary"><i class="glyphicon glyphicon-plus">&nbsp;</i>${_('New')}</a>
             % elif show_import:
-              <a href="${request.route_path(h.get_action_routename(clazz, 'import'))}" title="${_('Import new %s entries' % h.get_item_modul(request, clazz).get_label())}" class="btn btn-primary"><i class="glyphicon glyphicon-import">&nbsp;</i>${_('New')}</a>
+              <a href="${request.route_path(h.get_action_routename(clazz, 'import'))}" title="${_('Import new %s entries') % h.get_item_modul(request, clazz).get_label()}" class="btn btn-primary"><i class="glyphicon glyphicon-import">&nbsp;</i>${_('New')}</a>
             % endif
             % if show_create and show_import:
               <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
               <ul class="dropdown-menu">
                 % if show_create:
                 <li>
-                  <a href="${request.route_path(h.get_action_routename(clazz, 'create'))}" title="${_('Add a new %s entry' % h.get_item_modul(request, clazz).get_label())}"><i class="glyphicon glyphicon-plus">&nbsp;</i>${_('Create')}</a>
+                  <a href="${request.route_path(h.get_action_routename(clazz, 'create'))}" title="${_('Add a new %s entry') % h.get_item_modul(request, clazz).get_label()}"><i class="glyphicon glyphicon-plus">&nbsp;</i>${_('Create')}</a>
                 </li>
                 % endif
                 % if show_import:
                 <li>
-                  <a href="${request.route_path(h.get_action_routename(clazz, 'import'))}" title="${_('Import new %s entries' % h.get_item_modul(request, clazz).get_label())}"><i class="glyphicon glyphicon-import">&nbsp;</i>${_('Import')}</a>
+                  <a href="${request.route_path(h.get_action_routename(clazz, 'import'))}" title="${_('Import new %s entries') % h.get_item_modul(request, clazz).get_label()}"><i class="glyphicon glyphicon-import">&nbsp;</i>${_('Import')}</a>
                 </li>
                 % endif
               </ul>
