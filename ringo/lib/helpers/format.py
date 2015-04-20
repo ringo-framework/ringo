@@ -11,6 +11,7 @@ from babel.dates import (
     format_date as babel_format_date
 )
 from pyramid.i18n import get_locale_name
+from formbar.converters import from_timedelta
 
 ########################################################################
 #                          Formating content                           #
@@ -36,6 +37,8 @@ def prettify(request, value):
     if isinstance(value, date):
         return format_date(value,
                            locale_name=locale_name, format="short")
+    if isinstance(value, timedelta):
+        return from_timedelta(value)
     if value is None:
         return ""
     return value
