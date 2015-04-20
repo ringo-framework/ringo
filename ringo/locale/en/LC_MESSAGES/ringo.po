@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-04-12 21:41+0200\n"
+"POT-Creation-Date: 2015-04-20 16:42+0200\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -43,7 +43,7 @@ msgstr ""
 msgid "List"
 msgstr ""
 
-#: ringo/model/modul.py:220 ringo/templates/default/list.mako:38
+#: ringo/model/modul.py:220 ringo/templates/default/list.mako:40
 msgid "Create"
 msgstr ""
 
@@ -59,7 +59,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: ringo/model/modul.py:233 ringo/templates/default/list.mako:43
+#: ringo/model/modul.py:233 ringo/templates/default/list.mako:45
 msgid "Import"
 msgstr ""
 
@@ -392,9 +392,22 @@ msgstr ""
 msgid "Password not resetted"
 msgstr ""
 
-#: ringo/templates/default/create.mako:5 ringo/templates/default/list.mako:13
-#: ringo/templates/default/list.mako:29 ringo/templates/default/list.mako:31
+#: ringo/templates/default/create.mako:5 ringo/templates/default/list.mako:14
+#: ringo/templates/default/list.mako:31 ringo/templates/default/list.mako:33
+#: ringo/templates/internal/listfield.mako:50
 msgid "New"
+msgstr ""
+
+#: ringo/templates/default/list.mako:14 ringo/templates/default/list.mako:31
+#: ringo/templates/default/list.mako:40
+#: ringo/templates/internal/listfield.mako:45
+#, python-format
+msgid "Add a new %s entry"
+msgstr ""
+
+#: ringo/templates/default/list.mako:33 ringo/templates/default/list.mako:45
+#, python-format
+msgid "Import new %s entries"
 msgstr ""
 
 #: ringo/templates/internal/confirm.mako:13
