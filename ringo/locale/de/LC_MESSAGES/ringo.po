@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-04-20 16:42+0200\n"
+"POT-Creation-Date: 2015-04-21 14:25+0200\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language-Team: German "
@@ -800,16 +800,28 @@ msgstr ""
 "erforderlichen Rechte, um auf die Ressource zuzugreifen."
 
 #: ringo/views/request.py:130
-msgid "Edited ${item_type} \"${item}\" successfull."
-msgstr "${item_type} \"${item}\" wurde erfolgreich gespeichert."
+msgid "Created new ${item_type} successfull."
+msgstr "${item_type} erfolgreich angelegt."
 
-#: ringo/views/request.py:138
-msgid "Error while saving ${item_type} \"${item}\": ${error}."
-msgstr "Fehler beim Speicher von ${item_type} \"${item}\": ${error}."
+#: ringo/views/request.py:133
+msgid "Edited ${item_type} \"${item}\" successfull."
+msgstr "${item_type} \"${item}\" wurde erfolgreich bearbeitet."
+
+#: ringo/views/request.py:142
+msgid "Error while saving new ${item_type}: ${error}."
+msgstr "Fehler beim Anlegen von ${item_type}: ${error}."
 
 #: ringo/views/request.py:145
-msgid "Error on validation the data for ${item_type} \"${item}\"."
-msgstr "Fehler bei der Überprüfung der Daten für ${item_type} \"${item}\""
+msgid "Error while saving ${item_type} \"${item}\": ${error}."
+msgstr "Fehler beim Bearbeiten von ${item_type} \"${item}\": ${error}."
+
+#: ringo/views/request.py:153
+msgid "Error on validation new ${item_type}."
+msgstr "Fehler beim Validieren von ${item_type}."
+
+#: ringo/views/request.py:156
+msgid "Error on validation ${item_type} \"${item}\"."
+msgstr "Fehler beim Validieren von ${item_type} \"${item}\"."
 
 #: ringo/views/users.py:94
 msgid "The given password is not correct"
@@ -1383,7 +1395,3 @@ msgstr "Gruppen"
 #: ringo/views/tables/users.json:8
 msgid "Last login"
 msgstr "Letze Anmeldung"
-
-#~ msgid ""
-#~ msgstr ""
-

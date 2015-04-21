@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-04-20 16:42+0200\n"
+"POT-Creation-Date: 2015-04-21 14:25+0200\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -717,15 +717,27 @@ msgid ""
 msgstr ""
 
 #: ringo/views/request.py:130
+msgid "Created new ${item_type} successfull."
+msgstr ""
+
+#: ringo/views/request.py:133
 msgid "Edited ${item_type} \"${item}\" successfull."
 msgstr ""
 
-#: ringo/views/request.py:138
-msgid "Error while saving ${item_type} \"${item}\": ${error}."
+#: ringo/views/request.py:142
+msgid "Error while saving new ${item_type}: ${error}."
 msgstr ""
 
 #: ringo/views/request.py:145
-msgid "Error on validation the data for ${item_type} \"${item}\"."
+msgid "Error while saving ${item_type} \"${item}\": ${error}."
+msgstr ""
+
+#: ringo/views/request.py:153
+msgid "Error on validation new ${item_type}."
+msgstr ""
+
+#: ringo/views/request.py:156
+msgid "Error on validation ${item_type} \"${item}\"."
 msgstr ""
 
 #: ringo/views/users.py:94
@@ -1446,5 +1458,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Option in \"Edit\" mode"
+#~ msgstr ""
+
+#~ msgid "Error on validation the data for ${item_type} \"${item}\"."
 #~ msgstr ""
 

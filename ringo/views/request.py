@@ -117,7 +117,6 @@ def handle_POST_request(form, request, callback, event, renderers=None):
             if event == "create":
                 factory = clazz.get_item_factory()
                 item = factory.create(request.user, form.data)
-                mapping['item'] = item
                 item.save({}, request)
                 request.context.item = item
             else:
@@ -127,23 +126,35 @@ def handle_POST_request(form, request, callback, event, renderers=None):
             handle_add_relation(request, item)
             handle_caching(request)
 
-            msg = _('Edited ${item_type} "${item}" successfull.',
-                    mapping=mapping)
+            if event == "create":
+                msg = _('Created new ${item_type} successfull.',
+                        mapping=mapping)
+            else:
+                msg = _('Edited ${item_type} "${item}" successfull.',
+                        mapping=mapping)
             log.info(msg)
             request.session.flash(msg, 'success')
 
             return True
         except Exception as error:
             mapping['error'] = unicode(error.message)
-            msg = _('Error while saving '
-                    '${item_type} "${item}": ${error}.', mapping=mapping)
+            if event == "create":
+                msg = _('Error while saving new '
+                        '${item_type}: ${error}.', mapping=mapping)
+            else:
+                msg = _('Error while saving '
+                        '${item_type} "${item}": ${error}.', mapping=mapping)
             log.exception(msg)
             request.session.flash(msg, 'error')
     elif "blobforms" in request.params:
         pass
     else:
-        msg = _('Error on validation the data for '
-                '${item_type} "${item}".', mapping=mapping)
+        if event == "create":
+            msg = _('Error on validation new '
+                    '${item_type}.', mapping=mapping)
+        else:
+            msg = _('Error on validation '
+                    '${item_type} "${item}".', mapping=mapping)
         log.info(msg)
         request.session.flash(msg, 'error')
     return False
