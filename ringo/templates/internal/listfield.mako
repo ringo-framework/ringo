@@ -102,9 +102,14 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
       % for num, col in enumerate(tableconfig.get_columns()):
         <%
           try:
+            expand = col.get('expand')
             rvalue = prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand')))
             if isinstance(rvalue, list):
-              value = ", ".join(unicode(_(v)) for v in rvalue)
+              value = ", ".join(unicode(v) for v in rvalue)
+            elif expand == "true":
+              ## Translate values here if it is an expanded value as it will
+              ## contain very likely a untranslated list option.
+              value = _(rvalue)
             else:
               value = rvalue
           except AttributeError:
