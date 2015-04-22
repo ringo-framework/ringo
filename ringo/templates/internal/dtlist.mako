@@ -35,7 +35,7 @@ from ringo.lib.helpers import prettify
           % if isinstance(value, list):
             ${", ".join(_(v) for v in value) | h}
           % else:
-            ${_(value)}
+            ${_(value) | h}
           % endif
       </td>
       % endfor
