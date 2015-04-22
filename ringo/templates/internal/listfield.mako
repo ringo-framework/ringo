@@ -1,5 +1,6 @@
 <%
 from ringo.lib.helpers import prettify
+import cgi
 value = field.get_value() or []
 if not isinstance(value, list):
   value = [value]
@@ -26,9 +27,9 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
   out.append('class="%s"' % " ".join(css_class))
   out.append('>')
   if hasattr(value, "render"):
-    out.append('%s' % _(value.render()))
+    out.append('%s' % cgi.escape(value.render()))
   else:
-    out.append('%s' % _(value))
+    out.append('%s' % cgi.escape(value))
   out.append('</a>')
   return " ".join(out)
 %>
