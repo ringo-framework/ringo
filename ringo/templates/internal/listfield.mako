@@ -120,7 +120,7 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
         % if permission and not field.renderer.nolinks == "true":
             ${render_item_link(request, clazz, permission, item, value,
                               (field.renderer.openmodal == "true"),
-                              (field.renderer.backlink != "false")) | h}
+                              (field.renderer.backlink != "false")) | n}
           </a>
         % else:
           ${_(value) | h}
