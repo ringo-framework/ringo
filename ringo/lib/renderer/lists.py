@@ -11,7 +11,8 @@ import ringo.lib.security as security
 
 base_dir = pkg_resources.get_distribution("ringo").location
 template_dir = os.path.join(base_dir, 'ringo', 'templates')
-template_lookup = TemplateLookup(directories=[template_dir])
+template_lookup = TemplateLookup(directories=[template_dir],
+                                 default_filters=['h'])
 
 log = logging.getLogger(__name__)
 
