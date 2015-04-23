@@ -31,6 +31,7 @@ sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
 mako.directories =
     {{package}}:templates
     ringo:templates
+mako.default_filters = h
 
 # beaker session settings
 session.type = file
