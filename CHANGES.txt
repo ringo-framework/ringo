@@ -4,6 +4,12 @@ New:
 - Add option to provide external validators to the update and create view.
   They will be used for additional validation of the form.
 
+Changed:
+- Enabled Mako default HTML escaping for Template rendering globally in ini
+  file and explicit for form rendering, dialog rendering and listing
+  rendering. Excluded html escaping for messages and the admin scripts as the
+  rendered result is not aimed to be displayed in a browser.
+
 1.1.0
 =====
 New:
