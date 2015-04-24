@@ -27,9 +27,9 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
   out.append('class="%s"' % " ".join(css_class))
   out.append('>')
   if hasattr(value, "render"):
-    out.append('%s' % cgi.escape(value.render()))
+    out.append(cgi.escape('%s' % value.render()))
   else:
-    out.append('%s' % cgi.escape(value))
+    out.append(cgi.escape('%s' % value))
   out.append('</a>')
   return " ".join(out)
 %>
