@@ -11,7 +11,9 @@
     <entity id="e3" name="label_plural" label="Label">
       <help>Label of the modul in plural form. Used in the UI</help>
     </entity>
-    <entity id="e4" name="description" label="Description" type="textarea"/>
+    <entity id="e4" name="description" label="Description">
+      <renderer type="textarea"/>
+    </entity>
     <entity id="e5" name="str_repr" label="String represention">
       <help>Whenever an item of the modul is displayed as simple string it will be displayed in the following form.</help>
     </entity>
