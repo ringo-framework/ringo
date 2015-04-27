@@ -1,4 +1,5 @@
 """Modul with various methods to format and transform values"""
+import locale
 from datetime import (
     datetime,
     date,
@@ -24,12 +25,18 @@ def prettify(request, value):
     datatype the function will call a specialised formatting function
     which takes care of localisation etc.
 
+    The locale is determined from the given request. If no request is
+    present, that get the locale from the system.
+
     :request: Current request
     :value: Pythonic value
     :returns: Prettified (localized) value
 
     """
-    locale_name = get_locale_name(request)
+    if request:
+        locale_name = get_locale_name(request)
+    else:
+        locale_name = locale.getdefaultlocale()[0]
 
     if isinstance(value, datetime):
         return format_datetime(get_local_datetime(value),
