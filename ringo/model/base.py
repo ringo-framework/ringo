@@ -19,7 +19,8 @@ from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload, Session
 from ringo.lib.helpers import (
     serialize, get_item_modul,
-    get_raw_value, set_raw_value
+    get_raw_value, set_raw_value,
+    prettify
 )
 from ringo.lib.cache import CACHE_MODULES
 from ringo.lib.form import get_form_config
@@ -198,7 +199,7 @@ class BaseItem(object):
         modul = load_modul(self)
         format_str, fields = modul.get_str_repr()
         if format_str:
-            return format_str % tuple([self.get_value(f) for f in fields])
+            return format_str % tuple([prettify(None, self.get_value(f)) for f in fields])
         else:
             return "%s" % str(self.id or self.__class__)
 
