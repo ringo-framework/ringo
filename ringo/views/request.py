@@ -122,8 +122,8 @@ def handle_POST_request(form, request, callback, event, renderers=None):
             else:
                 item.save(form.data, request)
             handle_event(request, item, form._config.id)
-            handle_callback(request, callback)
             handle_add_relation(request, item)
+            handle_callback(request, callback)
             handle_caching(request)
 
             if event == "create":
