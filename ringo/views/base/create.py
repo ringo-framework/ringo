@@ -42,9 +42,9 @@ def create(request, callback=None, renderers=None, validators=None):
     # Create a new item
     clazz = request.context.__model__
     factory = clazz.get_item_factory()
-    # Only create a new item if ther isn't already an item in the
+    # Only create a new item if there isn't already an item in the
     # request.context. This can happen if we define a custom view for
-    # create where the item gets created before to set some feault
+    # create where the item gets created before to set some default
     # values e.g (See create function of forms)
     if not request.context.item:
         request.context.item = factory.create(request.user, {})
@@ -65,7 +65,7 @@ def rest_create(request, callback=None):
     initialised with the data provided in the submitted POST request.
     The submitted data will be validated before the item is actually
     saved. If the submission fails the item is not saved in the
-    database. In all cases the item is return as JSON object with the
+    database. In all cases the item is returned as JSON object with the
     item and updated values back to the client. The JSON Response will
     include further details on the reason why the validation failed.
 
