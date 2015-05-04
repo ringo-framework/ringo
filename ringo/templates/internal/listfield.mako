@@ -107,12 +107,8 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
             rvalue = prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand')))
             if isinstance(rvalue, list):
               value = ", ".join(unicode(v) for v in rvalue)
-            elif expand == "true":
-              ## Translate values here if it is an expanded value as it will
-              ## contain very likely a untranslated list option.
-              value = _(rvalue)
             else:
-              value = rvalue
+              value = _(rvalue)
           except AttributeError:
             value = "NaF"
         %>
@@ -123,7 +119,7 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
                               (field.renderer.backlink != "false")) | n}
           </a>
         % else:
-          ${_(value) | h}
+          ${value | h}
         % endif
         </td>
       % endfor
