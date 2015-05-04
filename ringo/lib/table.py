@@ -105,6 +105,7 @@ class TableConfig:
     * *default-sort-field*: Name of the column which should be used as
       default sorting on the table. Defaults to the first column in the table.
     * *default-sort-order*: Sort order (desc, asc) Defaults to asc.
+    * *default-search*: Default search filter for the table
     * *auto-responsive*: If True than only the first column of a table
       will be displayed on small devices. Else you need to configure the
       "screen" attribute for the fields.
@@ -173,6 +174,15 @@ class TableConfig:
             if def_order:
                 return def_order
         return "asc"
+
+    def get_default_search(self):
+        """Returns the seaech filter of the items in the table """
+        settings = self.get_settings()
+        if settings:
+            def_search = settings.get('default-search')
+            if def_search:
+                return def_search
+        return []
 
 
 def _load_overview_config(clazz):
