@@ -144,8 +144,12 @@ def get_search(clazz, request):
     if the search was successfull.
     """
     name = clazz.__tablename__
-    # Check if there is already a saved search in the session
-    saved_search = request.session.get('%s.list.search' % name, [])
+    # Default search fielter
+    default_search = get_table_config(clazz).get_default_search()
+    # Check if there is already a saved search in the session, If not
+    # use the default search.
+    saved_search = (request.session.get('%s.list.search' % name, [])
+                    or default_search)
 
     regexpr = request.session.get('%s.list.search.regexpr' % name, False)
     if "enableregexpr" in request.params:
@@ -156,7 +160,7 @@ def get_search(clazz, request):
         return saved_search
 
     if 'reset' in request.params:
-        return []
+        default_search
 
     # If the request is not a equest from the search form then
     # abort here and return the saved search params if there are any.
