@@ -188,21 +188,20 @@ autoresponsive = tableconfig.is_autoresponsive()
             ${render_filter_link(request, field, value, clazz)}
           % endif
         % else:
+          <a class="link" title="${_('Open item in %s mode') % _(permission.capitalize())}"
+            href="${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}">
           % if isinstance(value, list):
-            <%
-              x = []
-              for v in value:
-                if hasattr(v, "render"):
-                  x.append(v.render())
-                else:
-                  x.append(_(v))
-                endif
-              endfor
-              value = ", ".join(x)
-             %>
-        % endif
-        ## Render a usual Link which will open the item.
-        <a class="link" title="${_('Open item in %s mode') % _(permission.capitalize())}" href="${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}">${_(value)}</a>
+            % for v in value:
+              % if hasattr(v, 'render'):
+                ${v.render()}
+              % else:
+                ${_(v)}
+              % endif
+            % endfor
+          % else:
+            ${_(value)}
+          % endif
+          </a>
         % endif
     </td>
     % endfor

@@ -8,6 +8,7 @@ from ringo.lib.helpers.appinfo import (
     get_path_to
 )
 
+from webhelpers.html import literal
 from ringo.lib.helpers.format import (
     prettify,
     get_local_datetime,
