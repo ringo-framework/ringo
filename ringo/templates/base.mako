@@ -35,6 +35,7 @@
     % for filename in formbar_js_filenames: 
       <script src="${request.static_path('ringo:static/formbar/%s' % filename)}"></script>
     % endfor
+    <script src="${request.static_path('ringo:static/js/listfield.js')}"></script>
     <script src="${request.static_path('ringo:static/js/helpers.js')}"></script>
     <%include file="/custom-header.mako" />
   </head>
