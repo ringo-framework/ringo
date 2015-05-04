@@ -274,7 +274,7 @@ def bundle_(request):
     handler = get_bundle_action_handler(_bundle_request_handlers,
                                         bundle_action.lower(),
                                         module.name)
-    return handler(request, items)
+    return handler(request, items, None)
 
 
 def list_(request):
