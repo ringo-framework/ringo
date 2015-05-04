@@ -288,6 +288,15 @@ class ListingFieldRenderer(FormbarSelectionField):
         sort_field = config.get_default_sort_column()
         sort_order = config.get_default_sort_order()
         itemlist.sort(sort_field, sort_order)
+
+        # Warning filtering items here can cause loosing relations to
+        # the filtered items. This is esspecially true if the item which
+        # was related to the item before now gets filtered because of a
+        # changes value in an attribute e.g. In this case the filtered
+        # item is not in the list at all and will not be sent on a POST
+        # request. This will result in removing the relation!
+        search  = config.get_default_search()
+        itemlist.filter(search)
         return itemlist
 
     def _get_selected_items(self, items):
