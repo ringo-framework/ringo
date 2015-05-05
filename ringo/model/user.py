@@ -196,12 +196,7 @@ class Usergroup(BaseItem, Base):
 
         :returns: List of `Role` instances
         """
-        tmp_roles = {}
-        # Add roles directly attached to the group.
-        for role in self.roles:
-            if role.name not in tmp_roles:
-                tmp_roles[role.name] = role
-        return list(tmp_roles.values())
+        return self.roles
 
 
 class Role(BaseItem, Base):
