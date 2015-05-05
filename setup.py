@@ -35,7 +35,8 @@ requires = [
     'passlib',
     'dateutils',
     'fuzzy',
-    'python-Levenshtein' 
+    'python-Levenshtein',
+    'webhelpers'
 ]
 
 tests_requires = [
