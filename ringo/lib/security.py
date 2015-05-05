@@ -205,8 +205,8 @@ def has_permission(permission, context, request):
     if isinstance(context, BaseItem) or hasattr(context, "_modul_id"):
         modul = get_item_modul(request, context)
         context.__acl__ = context._get_permissions(modul, context, request)
-    # TODO: Call of has_permission will trigger 4 additional SQL-Queries
-    # per call. So we might think about caching the result.
+    # Call of has_permission will trigger 4 additional SQL-Queries. The
+    # query will only be trigger once per request.
     return has_permission_(permission, context, request)
 
 
@@ -327,6 +327,10 @@ def get_principals(userid, request):
                 principal = 'role:%s;group:%s' % (urole.name, group.id)
                 __add_principal(principals, principal)
                 # Additionally add group specifiy roles
+                # TODO: Do we really need group specific roles? This is
+                # currently a very rare used feature but triggers
+                # additional SQL querys as the roles for each group must
+                # be loaded from the DB.(ti) <2015-05-05 18:37>
                 for grole in group.get_roles():
                     principal = 'role:%s' % grole.name
                     __add_principal(principals, principal)
