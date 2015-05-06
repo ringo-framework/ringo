@@ -3,6 +3,7 @@ from string import Template
 import json
 from pyramid.events import NewRequest
 from pyramid.i18n import get_localizer, TranslationStringFactory
+from ringo.lib.helpers import literal
 
 
 log = logging.getLogger(__name__)
@@ -56,7 +57,12 @@ def add_localizer(event):
                                        default=default))
             if ts != string:
                 break
-        return Template(ts).safe_substitute(mapping)
+        translated = Template(ts).safe_substitute(mapping)
+        # If the origin string is a "literal" object (has __html__
+        # attribute, then return a literal again.
+        if hasattr(string, '__html__'):
+            return literal(translated)
+        return translated
 
     request.localizer = localizer
     request.translate = auto_translate
