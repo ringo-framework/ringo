@@ -542,12 +542,6 @@ class BaseList(object):
         """
         self.clazz = clazz
         self.db = db
-        # TODO: Check which is the best loading strategy here for large
-        # collections. Tests with 100k datasets rendering only 100 shows
-        # that the usual lazyload method seems to be the fastest which is
-        # not what if have been expected.
-        #self.items = db.query(clazz).options(joinedload('*')).all()
-
         if items is None:
             q = self.db.query(self.clazz)
             if cache in regions.keys():
