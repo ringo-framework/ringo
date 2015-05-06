@@ -62,7 +62,7 @@ def login(request):
             target_url = request.route_path('accountdisabled')
             return HTTPFound(location=target_url)
         else:
-            msg = _("Login was successfull :)")
+            msg = _("Login was successfull")
             request.session.flash(msg, 'success')
             headers = remember(request, user.id)
             target_url = request.route_path('home')
@@ -79,7 +79,7 @@ def logout(request):
     _ = request.translate
     target_url = request.route_path('home')
     headers = forget(request)
-    msg = _("Logout was successfull :)")
+    msg = _("Logout was successfull")
     request.session.flash(msg, 'success')
     return HTTPFound(location=target_url, headers=headers)
 
@@ -157,7 +157,7 @@ def register_user(request):
             target_url = request.route_path('login')
             headers = forget(request)
             msg = _("User has been created and a confirmation mail was sent"
-                    " to the users email adress. Please check your email :)")
+                    " to the users email adress. Please check your email.")
             request.session.flash(msg, 'success')
             return HTTPFound(location=target_url, headers=headers)
     return {'form': form.render()}
@@ -212,7 +212,7 @@ def forgot_password(request):
             target_url = request.route_path('login')
             headers = forget(request)
             msg = _("Password reset token has been sent to the users "
-                    "email address. Please check your email :)")
+                    "email address. Please check your email.")
             request.session.flash(msg, 'success')
             return HTTPFound(location=target_url, headers=headers)
     return {'form': form.render()}
@@ -240,7 +240,7 @@ def reset_password(request):
         mail = Mail([recipient], subject, template="password_reminder", values=values)
         mailer.send(mail)
         msg = _("Password was resetted and sent to the users email address."
-                " Please check your email :)")
+                " Please check your email.")
         success = True
     else:
         msg = _("Password was not resetted. Maybe the request"
