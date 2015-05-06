@@ -65,7 +65,8 @@ class TableConfig:
                         "width": "width",
                         "screen": "xlarge",
                         "expand": true,
-                        "filter": false
+                        "filter": false,
+                        "title": "Tooltip title"
                     }
                 ]
                 "settings": {
@@ -99,6 +100,8 @@ class TableConfig:
       link. A filter link is a shortcut to trigger a search with the
       current value of the field in the current column over all items.
       Defaults to No.
+    * *title* A tooltip will be rendered for the table header of the
+      column.
 
     Further the table has some table wide configuration options:
 

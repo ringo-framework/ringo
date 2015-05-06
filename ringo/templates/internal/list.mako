@@ -130,10 +130,26 @@ autoresponsive = tableconfig.is_autoresponsive()
     % endif
       % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
         <a
-        href="${request.current_route_path().split('?')[0]}?sort_field=${field.get('name')}&sort_order=desc">${_(field.get('label'))}</a>
+        href="${request.current_route_path().split('?')[0]}?sort_field=${field.get('name')}&sort_order=desc">
+        % if field.get('title'):
+        <span data-toggle="tooltip" data-original-title="${field.get('title')}">
+        % endif
+        ${_(field.get('label'))}
+        % if field.get('title'):
+        </span>
+        % endif
+        </a>
       % else:
         <a
-        href="${request.current_route_path().split('?')[0]}?sort_field=${field.get('name')}&sort_order=asc">${_(field.get('label'))}</a>
+        href="${request.current_route_path().split('?')[0]}?sort_field=${field.get('name')}&sort_order=asc">
+        % if field.get('title'):
+        <span data-toggle="tooltip" data-original-title="${field.get('title')}">
+        % endif
+        ${_(field.get('label'))}
+        </a>
+        % if field.get('title'):
+        </span>
+        % endif
       % endif
       % if request.session['%s.list.sort_field' % clazz.__tablename__] == field.get('name'):
         % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":

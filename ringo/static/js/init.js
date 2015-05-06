@@ -27,6 +27,7 @@ var opts = {
 };
 var spinner = new Spinner(opts).spin();
 $( document ).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip();
     $('.dialog').modal({
         backdrop: "static"
     });
