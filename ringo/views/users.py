@@ -4,14 +4,13 @@ from pyramid.httpexceptions import HTTPBadRequest, HTTPForbidden, HTTPFound
 from pyramid.view import view_config
 from formbar.form import Form, Validator
 
-from ringo.views.base import create, rest_create
-from ringo.views.helpers import get_current_form_page
+from ringo.views.base import create, rest_create, update
+from ringo.views.helpers import get_item_from_request, get_current_form_page
 
 from ringo.views.request import (
     handle_history,
     handle_params
 )
-from ringo.model.mixins import Owned
 
 from ringo.lib.form import get_form_config
 from ringo.lib.helpers import import_model, get_action_routename
@@ -21,6 +20,7 @@ User = import_model('ringo.model.user.User')
 
 log = logging.getLogger(__name__)
 
+
 def user_create_callback(request, user):
     user = encrypt_password_callback(request, user)
     # Set profile data
@@ -28,6 +28,7 @@ def user_create_callback(request, user):
     user.profile[0].last_name = request.params.get("last_name")
     user.profile[0].email = request.params.get("email")
     return user
+
 
 def encrypt_password_callback(request, user):
     """Callback helper function. This function is called within the base
@@ -37,22 +38,58 @@ def encrypt_password_callback(request, user):
     user.password = encrypt_password(unencryped_pw)
     return user
 
+
 def check_password(field, data):
     """Validator function as helper for formbar validators"""
     password = data[field]
     username = data["login"]
     return bool(login(username, password))
 
+
 ###########################################################################
 #                               HTML VIEWS                                #
 ###########################################################################
+def user_name_create_validator(field, data, db):
+    """Validator to ensure username uniqueness when creating users"""
+    return db.query(User)\
+        .filter(User.login == data[field]).count() == 0
+
+
+def user_name_update_validator(field, data, params):
+    """Validator to ensure username uniqueness when updating users"""
+    db = params['db']
+
+    # Only consider names for the other users
+    return db.query(User)\
+        .filter(User.login == data[field],
+                ~(User.id == params['pk'])).count() == 0
 
 
 @view_config(route_name=get_action_routename(User, 'create'),
              renderer='/default/create.mako',
              permission='create')
 def create_(request):
-    return create(request, user_create_callback)
+    _ = request.translate
+    validator = Validator('login',
+                          _('This name is already in use, '
+                            'please use something unique.'),
+                          user_name_create_validator,
+                          request.db)
+    return create(request, user_create_callback, validators=[validator])
+
+
+@view_config(route_name=get_action_routename(User, 'update'),
+             renderer='/default/update.mako',
+             permission='update')
+def update_(request):
+    user = get_item_from_request(request)
+    _ = request.translate
+    validator = Validator('login',
+                          _('This name is already in use, '
+                            'please use something unique.'),
+                          user_name_update_validator,
+                          {'pk': user.id, 'db': request.db})
+    return update(request, validators=[validator])
 
 
 @view_config(route_name=get_action_routename(User, 'changepassword'),
@@ -122,6 +159,7 @@ def changepassword(request):
 ###########################################################################
 #                               REST SERVICE                              #
 ###########################################################################
+
 
 @view_config(route_name=get_action_routename(User, 'create', prefix="rest"),
              renderer='json',
