@@ -24,7 +24,7 @@ def export(request):
     return _handle_export_request(request, [item])
 
 
-def _handle_export_request(request, items):
+def _handle_export_request(request, items, callback=None):
     """Helper function to handle the export request. This function
     provides the required logic to show the export configuration dialog
     and returning the exported items. It is called when exporting a
