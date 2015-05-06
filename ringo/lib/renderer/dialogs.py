@@ -11,7 +11,8 @@ import ringo.lib.helpers
 from ringo.lib.helpers import (
     get_action_routename,
     get_item_modul,
-    get_app_url
+    get_app_url,
+    literal
 )
 from ringo.lib.form import (
     eval_url,
@@ -184,7 +185,7 @@ class ExportDialogRenderer(DialogRenderer):
         values = {}
         values['request'] = self._request
         values['items'] = items
-        values['body'] = self._render_body()
+        values['body'] = literal(self._render_body())
         values['modul'] = get_item_modul(self._request, self._item).get_label(plural=True)
         values['action'] = _(self._action.capitalize())
         values['ok_url'] = self._request.current_route_path()
@@ -217,7 +218,7 @@ class ImportDialogRenderer(DialogRenderer):
     def render(self, items):
         values = {}
         values['request'] = self._request
-        values['body'] = self._render_body()
+        values['body'] = literal(self._render_body())
         values['modul'] = get_item_modul(self._request, self._item).get_label(plural=True)
         values['action'] = self._action.capitalize()
         values['ok_url'] = self._request.current_route_path()
