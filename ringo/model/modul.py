@@ -160,6 +160,9 @@ class ModulItem(BaseItem, Base):
     """List of :class:`.ActionItem` which are available for the modul."""
 
     _sql_eager_loads = ['actions.roles']
+    """Preload the actions and associated roles to the action of the
+    modul.  Are needed for permission checks. This will reduce the
+    number of SQL-queries very much!"""
 
     def get_clazz(self):
         """Returns the class defined in the clazzpath attribute.
