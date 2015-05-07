@@ -217,6 +217,9 @@ def get_permissions(modul, item=None):
     function will at least return class based permissions. If a item is
     provided then additional item level permissions are returned.
 
+    Note that item can also be a class and not an instance. In this case
+    the class level permissions are returned
+
     The function will iterate over all available actions of the given
     modul and tries to adds a permission entry to the for every role
     which has granted access to the action.
@@ -277,16 +280,25 @@ def get_permissions(modul, item=None):
             if role.admin is True and add_perm:
                 perms.append((Allow, default_principal, permission))
 
-            # class level permissions
-            elif permission in ['create', 'list'] and add_perm:
+            # Modul level (class level) permissions. 
+            # Always add the default principals for the create and list
+            # actions as those actions can not be checked on item level
+            # anyway.
+            elif permission in ['create', 'list']:
                 perms.append((Allow, default_principal, permission))
-            # item level permissions. Only allow the owner or members of
-            # the items group.
+            # If the item has a uuid the we want get the permission on
+            # Item level. Only allow the owner or members of the items
+            # group.
             elif item and hasattr(item, 'uid') and add_perm:
                 principal = default_principal + ';uid:%s' % item.uid
                 perms.append((Allow, principal, permission))
                 principal = default_principal + ';group:%s' % item.gid
                 perms.append((Allow, principal, permission))
+            # Finally the item is not an instance of a BaseItem then add
+            # remaining action we want to get the permission on modul
+            # level too. So again add the default principal
+            elif not isinstance(item, BaseItem) and add_perm:
+                perms.append((Allow, default_principal, permission))
     return perms
 
 def __add_principal(principals, new):
