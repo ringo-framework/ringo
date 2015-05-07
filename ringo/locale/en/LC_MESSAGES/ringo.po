@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-05-06 09:44+0200\n"
+"POT-Creation-Date: 2015-05-06 16:26+0200\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -25,45 +25,45 @@ msgstr ""
 msgid "CREATE"
 msgstr ""
 
-#: ringo/lib/renderer/dialogs.py:81
+#: ringo/lib/renderer/dialogs.py:82
 msgid "Confirm ${Action}"
 msgstr ""
 
-#: ringo/lib/renderer/dialogs.py:101
+#: ringo/lib/renderer/dialogs.py:102
 msgid "Do you really want to ${action} the following ${item} items?"
 msgstr ""
 
-#: ringo/lib/renderer/dialogs.py:111
+#: ringo/lib/renderer/dialogs.py:112
 msgid ""
 "Please press \"${Action}\" to ${action} the item. Press \"Cancel\" to "
 "cancel the action."
 msgstr ""
 
-#: ringo/model/modul.py:217
+#: ringo/model/modul.py:220
 msgid "List"
 msgstr ""
 
-#: ringo/model/modul.py:220 ringo/templates/default/list.mako:40
+#: ringo/model/modul.py:223 ringo/templates/default/list.mako:40
 msgid "Create"
 msgstr ""
 
-#: ringo/model/modul.py:223
+#: ringo/model/modul.py:226
 msgid "Read"
 msgstr ""
 
-#: ringo/model/modul.py:226
+#: ringo/model/modul.py:229
 msgid "Update"
 msgstr ""
 
-#: ringo/model/modul.py:229
+#: ringo/model/modul.py:232
 msgid "Delete"
 msgstr ""
 
-#: ringo/model/modul.py:233 ringo/templates/default/list.mako:45
+#: ringo/model/modul.py:236 ringo/templates/default/list.mako:45
 msgid "Import"
 msgstr ""
 
-#: ringo/model/modul.py:236
+#: ringo/model/modul.py:239
 msgid "Export"
 msgstr ""
 
@@ -425,7 +425,7 @@ msgid "You have selected %s %s for export:"
 msgstr ""
 
 #: ringo/templates/internal/export.mako:17
-#: ringo/templates/internal/list.mako:289
+#: ringo/templates/internal/list.mako:305
 #: ringo/templates/internal/print.mako:11
 msgid "Close"
 msgstr ""
@@ -488,7 +488,7 @@ msgstr ""
 msgid "Options "
 msgstr ""
 
-#: ringo/templates/internal/list.mako:85 ringo/templates/internal/list.mako:280
+#: ringo/templates/internal/list.mako:85 ringo/templates/internal/list.mako:296
 msgid "Save current search filter"
 msgstr ""
 
@@ -516,30 +516,30 @@ msgstr ""
 msgid "items"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:191
+#: ringo/templates/internal/list.mako:207
 #, python-format
 msgid "Open item in %s mode"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:217
+#: ringo/templates/internal/list.mako:233
 msgid "No items found"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:236
+#: ringo/templates/internal/list.mako:252
 msgid "Perform"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:282
+#: ringo/templates/internal/list.mako:298
 msgid "Queryname"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:285
+#: ringo/templates/internal/list.mako:301
 msgid ""
 "Please insert a name for your query. It it will be selectable under this "
 "name in the options menu of the search after saving."
 msgstr ""
 
-#: ringo/templates/internal/list.mako:288
+#: ringo/templates/internal/list.mako:304
 msgid "Save Query"
 msgstr ""
 
@@ -740,15 +740,19 @@ msgstr ""
 msgid "Error on validation ${item_type} \"${item}\"."
 msgstr ""
 
-#: ringo/views/users.py:94
+#: ringo/views/users.py:71 ringo/views/users.py:85
+msgid "This name is already in use, please use something unique."
+msgstr ""
+
+#: ringo/views/users.py:128
 msgid "The given password is not correct"
 msgstr ""
 
-#: ringo/views/users.py:102
+#: ringo/views/users.py:136
 msgid "Changed password for \"${item}\" successfull."
 msgstr ""
 
-#: ringo/views/users.py:112
+#: ringo/views/users.py:146
 msgid "Error on changing the password for \"${item}\"."
 msgstr ""
 
@@ -1467,24 +1471,5 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Logout was successfull :)"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "User has been created and a "
-#~ "confirmation mail was sent to the "
-#~ "users email adress. Please check your"
-#~ " email :)"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Password reset token has been sent "
-#~ "to the users email address. Please "
-#~ "check your email :)"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Password was resetted and sent to "
-#~ "the users email address. Please check"
-#~ " your email :)"
 #~ msgstr ""
 

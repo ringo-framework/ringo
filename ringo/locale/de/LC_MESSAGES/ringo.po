@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-05-06 09:44+0200\n"
+"POT-Creation-Date: 2015-05-06 16:26+0200\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language-Team: German "
@@ -28,15 +28,15 @@ msgstr "AKTUALISIERUNG"
 msgid "CREATE"
 msgstr "ANLEGEN"
 
-#: ringo/lib/renderer/dialogs.py:81
+#: ringo/lib/renderer/dialogs.py:82
 msgid "Confirm ${Action}"
 msgstr "Bestätigen ${Action}"
 
-#: ringo/lib/renderer/dialogs.py:101
+#: ringo/lib/renderer/dialogs.py:102
 msgid "Do you really want to ${action} the following ${item} items?"
 msgstr "Wollen Sie wirklich die folgenden ${item} Einträge ${action}?"
 
-#: ringo/lib/renderer/dialogs.py:111
+#: ringo/lib/renderer/dialogs.py:112
 msgid ""
 "Please press \"${Action}\" to ${action} the item. Press \"Cancel\" to "
 "cancel the action."
@@ -44,31 +44,31 @@ msgstr ""
 "Bitte klicken Sie auf \"${Action}\", um den Eintrag zu ${action}. Klicken"
 " sie auf \"Abbrechen\", um den Vorgang abzubrechen."
 
-#: ringo/model/modul.py:217
+#: ringo/model/modul.py:220
 msgid "List"
 msgstr "Auflisten"
 
-#: ringo/model/modul.py:220 ringo/templates/default/list.mako:40
+#: ringo/model/modul.py:223 ringo/templates/default/list.mako:40
 msgid "Create"
 msgstr "Anlegen"
 
-#: ringo/model/modul.py:223
+#: ringo/model/modul.py:226
 msgid "Read"
 msgstr "Lesen"
 
-#: ringo/model/modul.py:226
+#: ringo/model/modul.py:229
 msgid "Update"
 msgstr "Bearbeiten"
 
-#: ringo/model/modul.py:229
+#: ringo/model/modul.py:232
 msgid "Delete"
 msgstr "Löschen"
 
-#: ringo/model/modul.py:233 ringo/templates/default/list.mako:45
+#: ringo/model/modul.py:236 ringo/templates/default/list.mako:45
 msgid "Import"
 msgstr "Importieren"
 
-#: ringo/model/modul.py:236
+#: ringo/model/modul.py:239
 msgid "Export"
 msgstr "Exportieren"
 
@@ -480,7 +480,7 @@ msgid "You have selected %s %s for export:"
 msgstr "Sie haben %s %s für den Export selektiert:"
 
 #: ringo/templates/internal/export.mako:17
-#: ringo/templates/internal/list.mako:289
+#: ringo/templates/internal/list.mako:305
 #: ringo/templates/internal/print.mako:11
 msgid "Close"
 msgstr "Schließen"
@@ -543,7 +543,7 @@ msgstr "Suche+"
 msgid "Options "
 msgstr "Optionen "
 
-#: ringo/templates/internal/list.mako:85 ringo/templates/internal/list.mako:280
+#: ringo/templates/internal/list.mako:85 ringo/templates/internal/list.mako:296
 msgid "Save current search filter"
 msgstr "Speichere aktuellen Suchfilter"
 
@@ -571,24 +571,24 @@ msgstr "Zeige"
 msgid "items"
 msgstr "Einträge"
 
-#: ringo/templates/internal/list.mako:191
+#: ringo/templates/internal/list.mako:207
 #, python-format
 msgid "Open item in %s mode"
 msgstr "Öffne Eintrag im %s Modus"
 
-#: ringo/templates/internal/list.mako:217
+#: ringo/templates/internal/list.mako:233
 msgid "No items found"
 msgstr "Keine Einträge gefunden"
 
-#: ringo/templates/internal/list.mako:236
+#: ringo/templates/internal/list.mako:252
 msgid "Perform"
 msgstr "Ausführen"
 
-#: ringo/templates/internal/list.mako:282
+#: ringo/templates/internal/list.mako:298
 msgid "Queryname"
 msgstr "Abfragename"
 
-#: ringo/templates/internal/list.mako:285
+#: ringo/templates/internal/list.mako:301
 msgid ""
 "Please insert a name for your query. It it will be selectable under this "
 "name in the options menu of the search after saving."
@@ -596,7 +596,7 @@ msgstr ""
 "Bitte geben Sie einen Namen für ihre Abfrage an. Die Abfrag wird nach dem"
 " Speichern unter diesem Namen im Optionsmenü auswählbar sein."
 
-#: ringo/templates/internal/list.mako:288
+#: ringo/templates/internal/list.mako:304
 msgid "Save Query"
 msgstr "Abfrage speichern"
 
@@ -817,15 +817,19 @@ msgstr "Fehler beim Validieren von ${item_type}."
 msgid "Error on validation ${item_type} \"${item}\"."
 msgstr "Fehler beim Validieren von ${item_type} \"${item}\"."
 
-#: ringo/views/users.py:94
+#: ringo/views/users.py:71 ringo/views/users.py:85
+msgid "This name is already in use, please use something unique."
+msgstr "Dieser Name wird bereits benutzt, bitte nehmen Sie einen eindeutigen Namen."
+
+#: ringo/views/users.py:128
 msgid "The given password is not correct"
 msgstr "Das angegebene Passwort ist nicht korrekt"
 
-#: ringo/views/users.py:102
+#: ringo/views/users.py:136
 msgid "Changed password for \"${item}\" successfull."
 msgstr "Password für \"${item}\" erfolgreich geändert."
 
-#: ringo/views/users.py:112
+#: ringo/views/users.py:146
 msgid "Error on changing the password for \"${item}\"."
 msgstr "Fehler bei der Änderung des Passworts für \"${item}\"."
 
