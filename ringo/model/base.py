@@ -99,16 +99,6 @@ opmapping = {
 
 
  
-def nonecmp(a, b):
-    if a is None and b is None:
-        return 0
-    if a is None:
-        return -1
-    if b is None:
-        return 1
-    return cmp(a, b)
-
-
 def load_modul(item):
     """Will load the related modul for the given item. First we try to
     get the bound session from the object and reuse this session to load
@@ -571,6 +561,15 @@ class BaseList(object):
             def g(obj):
                 return obj.get_value(field, expand=expand)
             return g
+
+        def nonecmp(a, b):
+            if a is None and b is None:
+                return 0
+            if a is None:
+                return -1
+            if b is None:
+                return 1
+            return cmp(a, b)
 
         sorted_items = sorted(self.items,
                               cmp=nonecmp,
