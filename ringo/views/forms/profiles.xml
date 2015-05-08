@@ -19,7 +19,7 @@
         <option value="0">Female</option>
       </options>
     </entity>
-    <entity id="e9" name="user" label="Login" readonly="true">
+    <entity id="e9" name="user" label="Loginname" readonly="true">
       <renderer type="dropdown"/>
     </entity>
   </source>
