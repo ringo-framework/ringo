@@ -31,13 +31,8 @@ system answers the second question: What is allowed. The permission system
 will now check which :ref:`roles` the users have and which actions are allowed for
 these roles.
 
-There are currently two ways a user can be equiped with permissions:
-
-1. If the user is the owner of the item, or is member of the items group, then
+If the user is the owner of the item, or is member of the items group, then
 all permissions of the users roles will be applied.
-
-2. If the user is member of the items group, then the permissins of the group
-will additionally be applied.
 
 .. note::
         Currently there is no anonymous access to the item. See Issue61 in the

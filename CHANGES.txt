@@ -10,6 +10,9 @@ Changed:
   rendering. Excluded html escaping for messages and the admin scripts as the
   rendered result is not aimed to be displayed in a browser.
 
+Removed:
+- Removed group role feature. This feature was only rarly used.
+
 1.1.0
 =====
 New:
