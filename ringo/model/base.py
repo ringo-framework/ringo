@@ -466,7 +466,11 @@ def get_item_list(request, clazz, user=None, cache="", items=None):
     :returns: BaseList instance
 
     """
-    key = "%s-%s" % (clazz._modul_id, user)
+    if user:
+        user_key = user.id
+    else:
+        user_key = None
+    key = "%s-%s" % (clazz._modul_id, user_key)
     if not request.cache_item_list.get(key):
         listing = BaseList(clazz, request.db, cache, items)
         if user:
