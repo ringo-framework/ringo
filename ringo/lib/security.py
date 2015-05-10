@@ -328,7 +328,7 @@ def get_principals(userid, request):
         # connection with the uid and groups as the roles should only be
         # applicable if the user is the owner or member of the group of
         # the item.
-        for urole in user.get_roles():
+        for urole in user.roles:
             principal = 'role:%s' % urole.name
             __add_principal(principals, principal)
             principal = 'role:%s;uid:%s' % (urole.name, user.id)
@@ -367,7 +367,7 @@ def get_roles(user):
     :returns: List of `Role` instances
 
     """
-    return user.get_roles()
+    return user.roles
 
 # GROUPS
 ########

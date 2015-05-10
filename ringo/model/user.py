@@ -129,21 +129,8 @@ class User(BaseItem, Base):
         :user: User instance
         :returns: True or False
         """
-        roles = [r.name for r in self.get_roles()]
+        roles = [r.name for r in self.roles]
         return role in roles
-
-    def get_roles(self):
-        """Returns a list of `Role` objects the user has.
-
-        :returns: List of `Role` instances
-        """
-        tmp_roles = {}
-
-        # Add roles directly attached to the user.
-        for urole in self.roles:
-            if urole.name not in tmp_roles:
-                tmp_roles[urole.name] = urole
-        return list(tmp_roles.values())
 
 ADMIN_GROUP_ID = 1
 """Role ID your the system administration group"""

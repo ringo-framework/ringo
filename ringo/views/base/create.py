@@ -54,7 +54,7 @@ def create(request, callback=None, renderers=None, validators=None):
         if handle_POST_request(form, request, callback, 'create', renderers):
             return handle_redirect_on_success(request)
     rvalues = get_return_value(request)
-    values = {'_roles': [str(r.name) for r in request.user.get_roles()]}
+    values = {'_roles': [str(r.name) for r in request.user.roles]}
     values.update(params.get('values', {}))
     rvalues['form'] = render_item_form(request, form, values, False)
     return rvalues
