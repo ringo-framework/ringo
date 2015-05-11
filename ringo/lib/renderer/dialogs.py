@@ -130,7 +130,7 @@ class ErrorDialogRenderer(DialogRenderer):
         values = {}
         values['icon'] = self.icon
         values['header'] = self._title
-        values['body'] = self._render_body()
+        values['body'] = self._body
         history = self._request.session.get('history')
         if url:
             values['ok_url'] = url
@@ -140,11 +140,6 @@ class ErrorDialogRenderer(DialogRenderer):
             values['ok_url'] = self._request.route_path('home')
         values['eval_url'] = self._request.application_url+eval_url
         return self.template.render(**values)
-
-    def _render_body(self):
-        out = []
-        out.append(self._body)
-        return "".join(out)
 
 
 class WarningDialogRenderer(ErrorDialogRenderer):
