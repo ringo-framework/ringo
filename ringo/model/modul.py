@@ -113,6 +113,7 @@ class ModulItem(BaseItem, Base):
 
     __tablename__ = 'modules'
     _modul_id = 1
+    _sql_eager_loads = ['actions']
     id = sa.Column(sa.Integer, primary_key=True)
     """Internal ID of the modul."""
     name = sa.Column(sa.String, unique=True, nullable=False)
