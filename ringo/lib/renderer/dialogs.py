@@ -113,7 +113,7 @@ class ConfirmDialogRenderer(DialogRenderer):
                      ' Press "Cancel" to cancel the action.',
                      mapping=mapping))
 
-        return "".join(out)
+        return literal("".join(out))
 
 
 class ErrorDialogRenderer(DialogRenderer):
