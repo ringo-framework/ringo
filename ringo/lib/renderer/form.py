@@ -172,7 +172,7 @@ class DropdownFieldRenderer(FormbarDropdown):
             url = get_link_url(item, self._field._form._request)
             if url:
                 html.append('<a href="%s">%s</a>'
-                            % (url, cgi.escape(unicode(item))))
+                            % (cgi.escape(url), cgi.escape(unicode(item))))
         return literal("".join(html))
 
     def _render_label(self):
