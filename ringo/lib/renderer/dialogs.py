@@ -180,7 +180,7 @@ class ExportDialogRenderer(DialogRenderer):
         values = {}
         values['request'] = self._request
         values['items'] = items
-        values['body'] = literal(self._render_body())
+        values['body'] = self._render_body()
         values['modul'] = get_item_modul(self._request, self._item).get_label(plural=True)
         values['action'] = _(self._action.capitalize())
         values['ok_url'] = self._request.current_route_path()
@@ -190,9 +190,10 @@ class ExportDialogRenderer(DialogRenderer):
         return self.template.render(**values)
 
     def _render_body(self):
-        out = []
-        out.append(self.form.render(buttons=False))
-        return "".join(out)
+        # The output of the form render function of formbar is
+        # considered safe here as formbar already handles the escapeing.
+        # So we put it into the literal function to mark it save.
+        return literal(self.form.render(buttons=False))
 
 
 class ImportDialogRenderer(DialogRenderer):
@@ -226,6 +227,7 @@ class ImportDialogRenderer(DialogRenderer):
         return self.template.render(**values)
 
     def _render_body(self):
-        out = []
-        out.append(self.form.render(buttons=False))
-        return "".join(out)
+        # The output of the form render function of formbar is
+        # considered safe here as formbar already handles the escapeing.
+        # So we put it into the literal function to mark it save.
+        return literal(self.form.render(buttons=False))
