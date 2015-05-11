@@ -2,6 +2,7 @@ import os
 import logging
 import pkg_resources
 import transaction
+from pyramid.events import NewRequest
 from ringo.lib import helpers
 from ringo.lib.extension import unregister_modul
 from ringo.lib.sql.db import DBSession, NTDBSession
@@ -10,6 +11,7 @@ from ringo.lib.form import get_formbar_css, get_formbar_js
 from ringo.model.modul import ModulItem
 from ringo.model import extensions
 from ringo.model.mixins import Mixin
+from ringo.model.base import get_item_list
 from ringo.resources import get_resource_factory
 from ringo.views.base import (
     web_action_view_mapping,
@@ -19,6 +21,12 @@ from ringo.views.base import (
 
 log = logging.getLogger(__name__)
 
+def preload_modules(event):
+    """Preload all modules on each request and put them into the request
+    cache for the modules to save additional SQL queries as the modules
+    are needed anyway."""
+    for modul in get_item_list(event.request, ModulItem):
+        event.request.cache_item_modul.set(modul.id, modul)
 
 def setup(config):
     """Setup method which is called on application initialition and
@@ -30,6 +38,7 @@ def setup(config):
     config.include('ringo.lib.renderer.setup_render_globals')
     config.include('ringo.lib.security.setup_ringo_security')
     config.include('ringo.lib.cache.setup_cache')
+    config.add_subscriber(preload_modules, NewRequest)
     write_formbar_static_files()
 
 
