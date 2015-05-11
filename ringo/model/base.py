@@ -479,6 +479,7 @@ def get_item_list(request, clazz, user=None, cache="", items=None):
         # list.
         if items is None:
             request.cache_item_list.set(key, listing)
+            return listing
         else:
             return listing
     return request.cache_item_list.get(key)
