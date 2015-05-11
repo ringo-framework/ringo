@@ -58,4 +58,4 @@ class RessourceFactory(object):
 
     def _get_item_permissions(self, request):
         return self.__model__._get_permissions(self.__modul__,
-                                              self.item, request)
+                                               self.item, request)
