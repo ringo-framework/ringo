@@ -258,6 +258,11 @@ def get_modules(request, display):
     modules = get_item_list(request, ModulItem)
     user_moduls = []
     for modul in modules.items:
+        # Put each modul into the request cache. So the modules are
+        # already present if the get_item_modul method tries to load the
+        # modul it can take it from the cache instead of triggering an
+        # additional SQL query.
+        request.cache_item_modul.set(modul.id, modul)
         # Only show the modul if it matches the desired display location
         # and if the modul has an "list" action which usually is used as
         # entry point into a modul.
