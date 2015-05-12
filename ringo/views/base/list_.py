@@ -160,7 +160,7 @@ def get_search(clazz, request):
         return saved_search
 
     if 'reset' in request.params:
-        default_search
+        return default_search
 
     # If the request is not a equest from the search form then
     # abort here and return the saved search params if there are any.

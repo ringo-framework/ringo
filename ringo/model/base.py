@@ -99,16 +99,6 @@ opmapping = {
 
 
  
-def nonecmp(a, b):
-    if a is None and b is None:
-        return 0
-    if a is None:
-        return -1
-    if b is None:
-        return 1
-    return cmp(a, b)
-
-
 def load_modul(item):
     """Will load the related modul for the given item. First we try to
     get the bound session from the object and reuse this session to load
@@ -476,7 +466,11 @@ def get_item_list(request, clazz, user=None, cache="", items=None):
     :returns: BaseList instance
 
     """
-    key = "%s-%s" % (clazz._modul_id, user)
+    if user:
+        user_key = user.id
+    else:
+        user_key = None
+    key = "%s-%s" % (clazz._modul_id, user_key)
     if not request.cache_item_list.get(key):
         listing = BaseList(clazz, request.db, cache, items)
         if user:
@@ -485,6 +479,7 @@ def get_item_list(request, clazz, user=None, cache="", items=None):
         # list.
         if items is None:
             request.cache_item_list.set(key, listing)
+            return listing
         else:
             return listing
     return request.cache_item_list.get(key)
@@ -571,6 +566,15 @@ class BaseList(object):
             def g(obj):
                 return obj.get_value(field, expand=expand)
             return g
+
+        def nonecmp(a, b):
+            if a is None and b is None:
+                return 0
+            if a is None:
+                return -1
+            if b is None:
+                return 1
+            return cmp(a, b)
 
         sorted_items = sorted(self.items,
                               cmp=nonecmp,

@@ -328,7 +328,7 @@ def get_principals(userid, request):
         # connection with the uid and groups as the roles should only be
         # applicable if the user is the owner or member of the group of
         # the item.
-        for urole in user.get_roles(include_group_roles=False):
+        for urole in user.roles:
             principal = 'role:%s' % urole.name
             __add_principal(principals, principal)
             principal = 'role:%s;uid:%s' % (urole.name, user.id)
@@ -338,16 +338,6 @@ def get_principals(userid, request):
                 # of
                 principal = 'role:%s;group:%s' % (urole.name, group.id)
                 __add_principal(principals, principal)
-                # Additionally add group specifiy roles
-                # TODO: Do we really need group specific roles? This is
-                # currently a very rare used feature but triggers
-                # additional SQL querys as the roles for each group must
-                # be loaded from the DB.(ti) <2015-05-05 18:37>
-                for grole in group.get_roles():
-                    principal = 'role:%s' % grole.name
-                    __add_principal(principals, principal)
-                    principal = 'role:%s;group:%s' % (grole.name, group.id)
-                    __add_principal(principals, principal)
         # Finally add the user itself
         principal = 'uid:%s' % user.id
         __add_principal(principals, principal)
@@ -377,7 +367,7 @@ def get_roles(user):
     :returns: List of `Role` instances
 
     """
-    return user.get_roles()
+    return user.roles
 
 # GROUPS
 ########

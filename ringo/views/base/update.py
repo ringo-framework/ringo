@@ -49,7 +49,7 @@ def update(request, callback=None, renderers=None, validators=None):
 
     rvalues = get_return_value(request)
     rvalues['owner'] = get_rendered_ownership_form(request)
-    values = {'_roles': [str(r.name) for r in request.user.get_roles()]}
+    values = {'_roles': [str(r.name) for r in request.user.roles]}
     rvalues['form'] = render_item_form(request, form, values)
     return rvalues
 

@@ -172,7 +172,7 @@ class DropdownFieldRenderer(FormbarDropdown):
             url = get_link_url(item, self._field._form._request)
             if url:
                 html.append('<a href="%s">%s</a>'
-                            % (url, cgi.escape(unicode(item))))
+                            % (cgi.escape(url), cgi.escape(unicode(item))))
         return literal("".join(html))
 
     def _render_label(self):
@@ -262,7 +262,6 @@ class ListingFieldRenderer(FormbarSelectionField):
 
     def __init__(self, field, translate):
         FormbarSelectionField.__init__(self, field, translate)
-        self.itemlist = self._get_all_items()
         self.template = template_lookup.get_template("internal/listfield.mako")
 
     def get_class(self):
@@ -280,7 +279,8 @@ class ListingFieldRenderer(FormbarSelectionField):
                 return clazz.clazz
             return clazz
 
-    def _get_all_items(self):
+    @property
+    def itemlist(self):
         clazz = self.get_class()
         itemlist = get_item_list(self._field._form._request, clazz)
         config = get_table_config(itemlist.clazz,

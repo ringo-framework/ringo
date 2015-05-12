@@ -113,7 +113,7 @@ class ConfirmDialogRenderer(DialogRenderer):
                      ' Press "Cancel" to cancel the action.',
                      mapping=mapping))
 
-        return "".join(out)
+        return literal("".join(out))
 
 
 class ErrorDialogRenderer(DialogRenderer):
@@ -130,7 +130,7 @@ class ErrorDialogRenderer(DialogRenderer):
         values = {}
         values['icon'] = self.icon
         values['header'] = self._title
-        values['body'] = self._render_body()
+        values['body'] = self._body
         history = self._request.session.get('history')
         if url:
             values['ok_url'] = url
@@ -140,11 +140,6 @@ class ErrorDialogRenderer(DialogRenderer):
             values['ok_url'] = self._request.route_path('home')
         values['eval_url'] = self._request.application_url+eval_url
         return self.template.render(**values)
-
-    def _render_body(self):
-        out = []
-        out.append(self._body)
-        return "".join(out)
 
 
 class WarningDialogRenderer(ErrorDialogRenderer):
@@ -185,7 +180,7 @@ class ExportDialogRenderer(DialogRenderer):
         values = {}
         values['request'] = self._request
         values['items'] = items
-        values['body'] = literal(self._render_body())
+        values['body'] = self._render_body()
         values['modul'] = get_item_modul(self._request, self._item).get_label(plural=True)
         values['action'] = _(self._action.capitalize())
         values['ok_url'] = self._request.current_route_path()
@@ -195,9 +190,10 @@ class ExportDialogRenderer(DialogRenderer):
         return self.template.render(**values)
 
     def _render_body(self):
-        out = []
-        out.append(self.form.render(buttons=False))
-        return "".join(out)
+        # The output of the form render function of formbar is
+        # considered safe here as formbar already handles the escapeing.
+        # So we put it into the literal function to mark it save.
+        return literal(self.form.render(buttons=False))
 
 
 class ImportDialogRenderer(DialogRenderer):
@@ -231,6 +227,7 @@ class ImportDialogRenderer(DialogRenderer):
         return self.template.render(**values)
 
     def _render_body(self):
-        out = []
-        out.append(self.form.render(buttons=False))
-        return "".join(out)
+        # The output of the form render function of formbar is
+        # considered safe here as formbar already handles the escapeing.
+        # So we put it into the literal function to mark it save.
+        return literal(self.form.render(buttons=False))

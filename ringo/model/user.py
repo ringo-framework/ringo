@@ -25,12 +25,6 @@ nm_user_roles = sa.Table(
     sa.Column('rid', sa.Integer, sa.ForeignKey('roles.id'))
 )
 
-nm_usergroup_roles = sa.Table(
-    'nm_usergroup_roles', Base.metadata,
-    sa.Column('gid', sa.Integer, sa.ForeignKey('usergroups.id')),
-    sa.Column('rid', sa.Integer, sa.ForeignKey('roles.id'))
-)
-
 nm_user_usergroups = sa.Table(
     'nm_user_usergroups', Base.metadata,
     sa.Column('uid', sa.Integer, sa.ForeignKey('users.id')),
@@ -130,43 +124,13 @@ class User(BaseItem, Base):
     def get_item_factory(cls):
         return UserFactory(cls)
 
-    def has_role(self, role, include_group_roles=True):
+    def has_role(self, role):
         """Return True if the user has the given role. Else False"
         :user: User instance
-        :include_group_roles: Boolean flag to configure if the roles of
-        the groups the user is member of should be checked too.
-        Defaults to True.
         :returns: True or False
         """
-        roles = [r.name for r in self.get_roles(include_group_roles)]
+        roles = [r.name for r in self.roles]
         return role in roles
-
-    def get_roles(self, include_group_roles=True):
-        """Returns a list of roles the user has. The list contains
-        `Role` object and are collected by loading roles directly
-        attached to the user plus optionally roles attached to the
-        groups the user is member of
-
-        :include_group_roles: Booloan flag to configure if the roles of
-        the groups the user is member of should be included in the list.
-        Defaults to True.
-        :returns: List of `Role` instances
-        """
-        tmp_roles = {}
-
-        # Add roles directly attached to the user.
-        for urole in self.roles:
-            if urole.name not in tmp_roles:
-                tmp_roles[urole.name] = urole
-
-        # Add roles attached to the users groups.
-        if include_group_roles:
-            for group in self.groups:
-                for grole in group.get_roles():
-                    if grole.name not in tmp_roles:
-                        tmp_roles[grole.name] = grole
-
-        return list(tmp_roles.values())
 
 ADMIN_GROUP_ID = 1
 """Role ID your the system administration group"""
@@ -183,20 +147,8 @@ class Usergroup(BaseItem, Base):
     name = sa.Column(sa.String, unique=True, nullable=False)
     description = sa.Column(sa.String, nullable=False, default='')
 
-    # Relations
-    roles = sa.orm.relationship("Role", secondary=nm_usergroup_roles)
-
     def __unicode__(self):
         return self.name
-
-    def get_roles(self):
-        """Returns a list of roles the group has. The list contains
-        `Role` object and are collected by loading roles directly
-        attached to the group.
-
-        :returns: List of `Role` instances
-        """
-        return self.roles
 
 
 class Role(BaseItem, Base):
