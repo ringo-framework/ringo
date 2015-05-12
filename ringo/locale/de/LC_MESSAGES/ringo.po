@@ -1316,7 +1316,7 @@ msgstr "Passwort wiederholen"
 #. Label for groups field in form config
 #: ringo/views/forms/users.xml:7
 msgid "Usergroups"
-msgstr "Gruppen"
+msgstr "Benutzergruppen"
 
 #. Label for activated field in form config
 #. Label for activated column in overview table config
