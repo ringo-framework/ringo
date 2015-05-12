@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-05-08 14:30+0200\n"
+"POT-Creation-Date: 2015-05-12 11:20+0200\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language-Team: German "
@@ -44,31 +44,31 @@ msgstr ""
 "Bitte klicken Sie auf \"${Action}\", um den Eintrag zu ${action}. Klicken"
 " sie auf \"Abbrechen\", um den Vorgang abzubrechen."
 
-#: ringo/model/modul.py:220
+#: ringo/model/modul.py:221
 msgid "List"
 msgstr "Auflisten"
 
-#: ringo/model/modul.py:223 ringo/templates/default/list.mako:40
+#: ringo/model/modul.py:224 ringo/templates/default/list.mako:40
 msgid "Create"
 msgstr "Anlegen"
 
-#: ringo/model/modul.py:226
+#: ringo/model/modul.py:227
 msgid "Read"
 msgstr "Lesen"
 
-#: ringo/model/modul.py:229
+#: ringo/model/modul.py:230
 msgid "Update"
 msgstr "Bearbeiten"
 
-#: ringo/model/modul.py:232
+#: ringo/model/modul.py:233
 msgid "Delete"
 msgstr "Löschen"
 
-#: ringo/model/modul.py:236 ringo/templates/default/list.mako:45
+#: ringo/model/modul.py:237 ringo/templates/default/list.mako:45
 msgid "Import"
 msgstr "Importieren"
 
-#: ringo/model/modul.py:239
+#: ringo/model/modul.py:240
 msgid "Export"
 msgstr "Exportieren"
 
@@ -110,43 +110,64 @@ msgstr ""
 msgid "Ok"
 msgstr "Ok"
 
-#: ringo/templates/base.mako:135
+#: ringo/templates/base.mako:83
+msgid "Form contains unsaved changes!"
+msgstr "Formular enthält ungespeicherte Änderungen!"
+
+#: ringo/templates/base.mako:85
+msgid ""
+"Do you want to leave the current form without saving the changes? The "
+"changes will be lost if you do not save the data first!"
+msgstr ""
+"Wollen Sie das aktuelle Formular verlassen ohne die Änderungen zu "
+"speichern? Die Änderungen werden verloren gehen, wenn Sie das Formular "
+"nicht vorher speichern!"
+
+#: ringo/templates/base.mako:88
+msgid "Stay in Form"
+msgstr "Im Formular bleiben"
+
+#: ringo/templates/base.mako:89
+msgid "Leave the Form"
+msgstr "Das Formular verlassen"
+
+#: ringo/templates/base.mako:150
 msgid "Create new item"
 msgstr "Erstelle neuen Eintrag"
 
-#: ringo/templates/base.mako:137
+#: ringo/templates/base.mako:152
 msgid "Open overview"
 msgstr "Öffne Übersicht"
 
-#: ringo/templates/base.mako:139
+#: ringo/templates/base.mako:154
 msgid "Open in \"Edit\" mode"
 msgstr "Öffne im \"Bearbeiten\" Modus"
 
-#: ringo/templates/base.mako:141
+#: ringo/templates/base.mako:156
 msgid "Open in \"Read\" mode"
 msgstr "Öffne im \"Lesen\" Modus"
 
-#: ringo/templates/base.mako:143
+#: ringo/templates/base.mako:158
 msgid "Delete item"
 msgstr "Lösche Eintrag"
 
-#: ringo/templates/base.mako:159
+#: ringo/templates/base.mako:174
 msgid "Advanced"
 msgstr "Erweitert"
 
-#: ringo/templates/base.mako:161
+#: ringo/templates/base.mako:176
 msgid "Back to"
 msgstr "Zurück zu"
 
-#: ringo/templates/base.mako:164 ringo/templates/footer.mako:7
+#: ringo/templates/base.mako:179 ringo/templates/footer.mako:7
 msgid "Administration"
 msgstr "Administration"
 
-#: ringo/templates/base.mako:165
+#: ringo/templates/base.mako:180
 msgid "Change ownership"
 msgstr "Ändere Eigentumsrechte"
 
-#: ringo/templates/base.mako:169
+#: ringo/templates/base.mako:184
 msgid "Advanced actions"
 msgstr "Erweiterte Aktionen"
 
@@ -201,26 +222,26 @@ msgid "Settings"
 msgstr "Einstellungen"
 
 #. Label for profile field in form config
-#: ringo/templates/header.mako:39 ringo/views/forms/users.xml:11
+#: ringo/templates/header.mako:38 ringo/views/forms/users.xml:11
 msgid "Profile"
 msgstr "Profil"
 
-#: ringo/templates/header.mako:40
+#: ringo/templates/header.mako:39
 msgid "Change Password"
 msgstr "Ändere Passwort"
 
-#: ringo/templates/header.mako:44
+#: ringo/templates/header.mako:43
 msgid "Service"
 msgstr "Dienste"
 
-#: ringo/templates/header.mako:51
+#: ringo/templates/header.mako:50
 msgid "Logout"
 msgstr "Abmelden"
 
 #. Label for login field in form config
 #. Label for user.login column in overview table config
 #. Label for login column in overview table config
-#: ringo/templates/header.mako:55 ringo/templates/index.mako:18
+#: ringo/templates/header.mako:54 ringo/templates/index.mako:18
 #: ringo/templates/auth/autologout.mako:6
 #: ringo/templates/auth/confirm_user.mako:19
 #: ringo/templates/auth/confirm_user.mako:24 ringo/templates/auth/login.mako:5
@@ -1396,13 +1417,4 @@ msgstr "Gruppen"
 #: ringo/views/tables/users.json:8
 msgid "Last login"
 msgstr "Letze Anmeldung"
-
-#~ msgid "Login was successfull"
-#~ msgstr "Anmeldung war erfolgreich"
-
-#~ msgid "Logout was successfull :)"
-#~ msgstr "Abmeldung war erfolgreich"
-
-#~ msgid ""
-#~ msgstr ""
 

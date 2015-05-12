@@ -77,6 +77,21 @@
       </div>
     </div>
   </div>
+  <div class="modal fade" id="DirtyFormWarning">
+    <div class="modal-dialog">
+      <div class="panel panel-warning">
+        <div class="panel-heading"><strong>${_('Form contains unsaved changes!')}</strong></div>
+        <div class="panel-body">
+          <p>${_('Do you want to leave the current form without saving the changes? The changes will be lost if you do not save the data first!')}</p>
+        </div>
+        <div class="panel-footer">
+          <a id="DirtyFormWarningCancelButton" class="btn btn-default" href="">${_('Stay in Form')}</a>
+          <a id="DirtyFormWarningProceedButton" class="btn btn-warning" href="">${_('Leave the Form')}</a>
+
+        </div>
+      </div>
+    </div>
+  </div>
   % endif
   <div class="modal fade" id="modalform">
     <div class="modal-dialog">

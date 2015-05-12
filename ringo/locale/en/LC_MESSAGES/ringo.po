@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-05-08 14:30+0200\n"
+"POT-Creation-Date: 2015-05-12 11:20+0200\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -39,31 +39,31 @@ msgid ""
 "cancel the action."
 msgstr ""
 
-#: ringo/model/modul.py:220
+#: ringo/model/modul.py:221
 msgid "List"
 msgstr ""
 
-#: ringo/model/modul.py:223 ringo/templates/default/list.mako:40
+#: ringo/model/modul.py:224 ringo/templates/default/list.mako:40
 msgid "Create"
 msgstr ""
 
-#: ringo/model/modul.py:226
+#: ringo/model/modul.py:227
 msgid "Read"
 msgstr ""
 
-#: ringo/model/modul.py:229
+#: ringo/model/modul.py:230
 msgid "Update"
 msgstr ""
 
-#: ringo/model/modul.py:232
+#: ringo/model/modul.py:233
 msgid "Delete"
 msgstr ""
 
-#: ringo/model/modul.py:236 ringo/templates/default/list.mako:45
+#: ringo/model/modul.py:237 ringo/templates/default/list.mako:45
 msgid "Import"
 msgstr ""
 
-#: ringo/model/modul.py:239
+#: ringo/model/modul.py:240
 msgid "Export"
 msgstr ""
 
@@ -100,43 +100,61 @@ msgstr ""
 msgid "Ok"
 msgstr ""
 
-#: ringo/templates/base.mako:135
+#: ringo/templates/base.mako:83
+msgid "Form contains unsaved changes!"
+msgstr ""
+
+#: ringo/templates/base.mako:85
+msgid ""
+"Do you want to leave the current form without saving the changes? The "
+"changes will be lost if you do not save the data first!"
+msgstr ""
+
+#: ringo/templates/base.mako:88
+msgid "Stay in Form"
+msgstr ""
+
+#: ringo/templates/base.mako:89
+msgid "Leave the Form"
+msgstr ""
+
+#: ringo/templates/base.mako:150
 msgid "Create new item"
 msgstr ""
 
-#: ringo/templates/base.mako:137
+#: ringo/templates/base.mako:152
 msgid "Open overview"
 msgstr ""
 
-#: ringo/templates/base.mako:139
+#: ringo/templates/base.mako:154
 msgid "Open in \"Edit\" mode"
 msgstr ""
 
-#: ringo/templates/base.mako:141
+#: ringo/templates/base.mako:156
 msgid "Open in \"Read\" mode"
 msgstr ""
 
-#: ringo/templates/base.mako:143
+#: ringo/templates/base.mako:158
 msgid "Delete item"
 msgstr ""
 
-#: ringo/templates/base.mako:159
+#: ringo/templates/base.mako:174
 msgid "Advanced"
 msgstr ""
 
-#: ringo/templates/base.mako:161
+#: ringo/templates/base.mako:176
 msgid "Back to"
 msgstr ""
 
-#: ringo/templates/base.mako:164 ringo/templates/footer.mako:7
+#: ringo/templates/base.mako:179 ringo/templates/footer.mako:7
 msgid "Administration"
 msgstr ""
 
-#: ringo/templates/base.mako:165
+#: ringo/templates/base.mako:180
 msgid "Change ownership"
 msgstr ""
 
-#: ringo/templates/base.mako:169
+#: ringo/templates/base.mako:184
 msgid "Advanced actions"
 msgstr ""
 
@@ -189,26 +207,26 @@ msgid "Settings"
 msgstr ""
 
 #. Label for profile field in form config
-#: ringo/templates/header.mako:39 ringo/views/forms/users.xml:11
+#: ringo/templates/header.mako:38 ringo/views/forms/users.xml:11
 msgid "Profile"
 msgstr ""
 
-#: ringo/templates/header.mako:40
+#: ringo/templates/header.mako:39
 msgid "Change Password"
 msgstr ""
 
-#: ringo/templates/header.mako:44
+#: ringo/templates/header.mako:43
 msgid "Service"
 msgstr ""
 
-#: ringo/templates/header.mako:51
+#: ringo/templates/header.mako:50
 msgid "Logout"
 msgstr ""
 
 #. Label for login field in form config
 #. Label for user.login column in overview table config
 #. Label for login column in overview table config
-#: ringo/templates/header.mako:55 ringo/templates/index.mako:18
+#: ringo/templates/header.mako:54 ringo/templates/index.mako:18
 #: ringo/templates/auth/autologout.mako:6
 #: ringo/templates/auth/confirm_user.mako:19
 #: ringo/templates/auth/confirm_user.mako:24 ringo/templates/auth/login.mako:5
@@ -1472,5 +1490,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Logout was successfull :)"
+#~ msgstr ""
+
+#~ msgid "Unsaved changes in the form"
 #~ msgstr ""
 

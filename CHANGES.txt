@@ -3,6 +3,8 @@
 New:
 - Add option to provide external validators to the update and create view.
   They will be used for additional validation of the form.
+- Implemented a simple Warning Dialog if the user leaves of form without
+  saving the changed data first.
 
 Changed:
 - Enabled Mako default HTML escaping for Template rendering globally in ini

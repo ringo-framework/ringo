@@ -115,6 +115,41 @@ $( document ).ready(function() {
             return false;
     });
 
+    // Check the initial values of the form and warn the user if the leaves
+    // the page without saving the form.
+    var DirtyFormWarningOpen = false;
+    $('form').each(function() {
+        $(this).data('initialValue', $(this).serialize());
+    });
+    $('a').click(function(event) {
+        var isDirty = false;
+        $('form').each(function () {
+            if($(this).data('initialValue') != $(this).serialize()){
+                isDirty = true;
+            }
+        });
+        if((isDirty == true) && (DirtyFormWarningOpen == false)) {
+            DirtyFormWarningOpen = true;
+            var element = event.target;
+            var url = $(element).attr("href");
+            var dialog = $("#DirtyFormWarning");
+            $('#DirtyFormWarningProceedButton').attr("href", url);
+            // If the URL does not begin with "#" than show the dialog.
+            if (url.indexOf("#") != 0) {
+                $(dialog).modal("show");
+                event.preventDefault();
+                return false;
+            }
+            return true;
+        }
+    });
+    $('#DirtyFormWarningCancelButton').click(function(event) {
+            var dialog = $("#DirtyFormWarning");
+            $(dialog).modal("hide");
+            DirtyFormWarningOpen = false;
+            event.preventDefault();
+            return false;
+    });
 });
 
 function logoutCountdown(time, url) {
