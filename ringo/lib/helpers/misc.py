@@ -107,8 +107,13 @@ def set_raw_value(element, name, value):
     element the setattr method will be called with the attribute 'baz'
     and the value '123'."""
 
-    penulti = _resolve_attribute(element, name, -1)
-    object.__setattr__(penulti, name, value)
+    if name.find(".") > -1:
+        penulti = _resolve_attribute(element, name, -1)
+        attr = name.split(".")[-1]
+    else:
+        penulti = element
+        attr = name
+    object.__setattr__(penulti, attr, value)
 
 
 def get_raw_value(element, name):
@@ -122,7 +127,10 @@ def get_raw_value(element, name):
     function first gets the 'bar' element.  For this element the getattr
     method will be called with the attribute 'baz'."""
 
-    return _resolve_attribute(element, name)
+    if name.find(".") > -1:
+        return _resolve_attribute(element, name)
+    else:
+        return object.__getattribute__(element, name)
 
 
 def dynamic_import(cl):
