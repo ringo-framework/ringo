@@ -32,7 +32,8 @@ from ringo.scripts.db import (
     handle_db_loaddata_command,
     handle_db_uuid_command,
     handle_db_restrict_command,
-    handle_db_unrestrict_command
+    handle_db_unrestrict_command,
+    handle_db_fixsequence_command
 )
 
 from ringo.scripts.fixture import (
@@ -223,6 +224,12 @@ def setup_db_parser(subparsers, parent):
     uuid_parser.add_argument('--missing-only',
                         action="store_true",
                         help="Reset the UUID only where it is not already set.")
+
+    # Fix sequence command
+    upgrade_parser = sp.add_parser('fixsequence',
+                                help='Fixes sequences in postgres databases',
+                                parents=[parent])
+    upgrade_parser.set_defaults(func=handle_db_fixsequence_command)
 
 
 def setup_global_argument_parser():
