@@ -74,10 +74,12 @@
 }
 
 table.content-shorten {
-  table-layout:fixed;
+  display: table;  
+  border-collapse: collapse;
 }
 
 table.content-shorten td {
+  max-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
