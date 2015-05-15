@@ -72,6 +72,21 @@ class UserSetting(Base):
 class UserFactory(BaseFactory):
 
     def create(self, user, values):
+
+        # Delete the gid which sets the default group when creating a
+        # new user. The default group when creating a new user is always
+        # the usergroup which gets automatically created on user
+        # creation. So this value can (and must) be ignored.
+        # Not removing the "gid" will otherwise cause an
+        # IntegrityError while flushing the new user to the DB as the
+        # usergroup with the given id is not persistent in the DB.
+        if "gid" in values:
+            del values["gid"]
+        # Delete the sid which sets the default settings for the same
+        # reasons than deleting the "gid" attribute.
+        if "sid" in values:
+            del values["sid"]
+
         new_user = BaseFactory.create(self, user, values)
 
         # Now create a a new Profile
