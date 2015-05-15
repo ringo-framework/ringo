@@ -10,6 +10,6 @@
   <div class="col-md-12">
     <p>${_('Please fillout the form the register a new account. You will recieve an email with a confirmation link to complete the registration.')}</p>
     <br>
-    ${form | n}
+    ${form}
   </div>
 </div>

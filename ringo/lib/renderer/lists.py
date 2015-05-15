@@ -5,7 +5,8 @@ from mako.lookup import TemplateLookup
 import ringo.lib.helpers
 from ringo.lib.helpers import (
     get_saved_searches,
-    get_item_actions
+    get_item_actions,
+    literal
 )
 from ringo.lib.table import get_table_config
 import ringo.lib.security as security
@@ -72,7 +73,7 @@ class ListRenderer(object):
                   'search_field': search_field,
                   'saved_searches': ssearch,
                   'tableconfig': self.config}
-        return self.template.render(**values)
+        return literal(self.template.render(**values))
 
 
 class DTListRenderer(object):

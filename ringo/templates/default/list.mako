@@ -55,6 +55,6 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-    ${listing | n}
+    ${listing}
   </div>
 </div>

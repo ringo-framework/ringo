@@ -89,7 +89,7 @@ class ConfirmDialogRenderer(DialogRenderer):
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
         values['eval_url'] = self._request.application_url+eval_url
-        return self.template.render(**values)
+        return literal(self.template.render(**values))
 
     def _render_body(self, items):
         out = []
@@ -139,7 +139,7 @@ class ErrorDialogRenderer(DialogRenderer):
         else:
             values['ok_url'] = self._request.route_path('home')
         values['eval_url'] = self._request.application_url+eval_url
-        return self.template.render(**values)
+        return literal(self.template.render(**values))
 
 
 class WarningDialogRenderer(ErrorDialogRenderer):
@@ -187,7 +187,7 @@ class ExportDialogRenderer(DialogRenderer):
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
         values['eval_url'] = self._request.application_url+eval_url
-        return self.template.render(**values)
+        return literal(self.template.render(**values))
 
     def _render_body(self):
         # The output of the form render function of formbar is
@@ -214,7 +214,7 @@ class ImportDialogRenderer(DialogRenderer):
     def render(self, items):
         values = {}
         values['request'] = self._request
-        values['body'] = literal(self._render_body())
+        values['body'] = self._render_body()
         values['modul'] = get_item_modul(self._request, self._item).get_label(plural=True)
         values['action'] = self._action.capitalize()
         values['ok_url'] = self._request.current_route_path()
@@ -224,7 +224,7 @@ class ImportDialogRenderer(DialogRenderer):
         values['eval_url'] = self._request.application_url+eval_url
         values['items'] = items
         values['h'] = ringo.lib.helpers
-        return self.template.render(**values)
+        return literal(self.template.render(**values))
 
     def _render_body(self):
         # The output of the form render function of formbar is

@@ -6,7 +6,7 @@
       <div class="panel panel-warning">
         <div class="panel-heading"><img src="${icon}"> <strong>${header}</strong></div>
         <div class="panel-body">
-          <p>${body | n}</p>
+          <p>${body}</p>
         </div>
         <div class="panel-footer">
           <button type="submit" class="btn btn-warning">${action}</button>

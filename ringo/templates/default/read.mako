@@ -39,11 +39,11 @@
 <div class="row">
   <div class="col-md-12">
     <div class="main-pane active" id="form">
-      ${form | n}
+      ${form}
     </div>
     % if owner:
       <div class="main-pane" id="ownership">
-        ${owner| n}
+        ${owner}
       </div>
     % endif
   </div>
