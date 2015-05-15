@@ -16,7 +16,8 @@ from ringo.model.modul import ModulItem, ActionItem
 # Directory with templates to generate views and models
 base_dir = pkg_resources.get_distribution("ringo").location
 modul_template_dir = os.path.join(base_dir, 'ringo', 'scripts', 'templates')
-template_lookup = TemplateLookup(directories=[modul_template_dir])
+template_lookup = TemplateLookup(directories=[modul_template_dir],
+                                 default_filters=['h'])
 
 mixinmap = {
     'owned': 'Owned',

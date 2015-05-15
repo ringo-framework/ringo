@@ -10,6 +10,6 @@
   <div class="col-md-12">
     <p>${_('Enter your Loginname and a password reset email will be sent out')}</p>
     <br>
-    ${form | n}
+    ${form}
   </div>
 </div>

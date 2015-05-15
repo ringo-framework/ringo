@@ -33,9 +33,9 @@ from ringo.lib.helpers import prettify
           %>
           ## Escape value here
           % if isinstance(value, list):
-            ${", ".join(_(v) for v in value) | h}
+            ${", ".join(_(v) for v in value)}
           % else:
-            ${_(value) | h}
+            ${_(value)}
           % endif
       </td>
       % endfor
