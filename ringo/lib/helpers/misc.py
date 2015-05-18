@@ -127,10 +127,7 @@ def get_raw_value(element, name):
     function first gets the 'bar' element.  For this element the getattr
     method will be called with the attribute 'baz'."""
 
-    if name.find(".") > -1:
-        return _resolve_attribute(element, name)
-    else:
-        return object.__getattribute__(element, name)
+    return _resolve_attribute(element, name)
 
 
 def dynamic_import(cl):
