@@ -9,7 +9,7 @@ mapping={'app_title': h.get_app_title()}
 <p>${_('What you see here is the default dashboard and layout based on the Ringo application framework. This is your home. Your dashboard. Usually this page is used to give and overview on the most important things like appointments, news and more in this application.')}</p>
 % if not request.user:
 <h2>${_('Next stop: Login!')}</h2>
-<p>${literal(_('This is the dashboard as seen by anonymous users. To get a better impression of the functionality provided by Ringo then you can login now.<br></br>Please login withe the following credentials:'))}</p>
+<p>${h.literal(_('This is the dashboard as seen by anonymous users. To get a better impression of the functionality provided by Ringo then you can login now.<br></br>Please login withe the following credentials:'))}</p>
 <ul>
   <li>${_('Loginname')}: admin</li>
   <li>${_('Password')}: secret</li>
