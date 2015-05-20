@@ -105,9 +105,15 @@ def get_ownership_form(request):
     db = request.db
     csrf_token = request.session.get_csrf_token()
     url_prefix = get_app_url(request)
-    if (readonly is None and isinstance(item, Owned)):
-        readonly = not (item.is_owner(request.user)
-                        or has_role(request.user, "admin"))
+
+    # Check if the form is rendered as readonly form.
+    if has_role(request.user, "admin"):
+        readonly = False
+    elif isinstance(item, Owned) and item.is_owner(request.user):
+        readonly = False
+    else:
+        readonly = True
+
     return _get_ownership_form(item, db, csrf_token, eval_url,
                                readonly, url_prefix,
                                locale=locale_negotiator(request))
