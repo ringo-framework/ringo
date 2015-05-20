@@ -25,6 +25,9 @@ from ringo.views.base.export import (
 from ringo.views.base.import_ import (
     import_,
 )
+from ringo.views.base.ownership import (
+    ownership,
+)
 
 web_action_view_mapping = {
     "default": {
@@ -36,6 +39,7 @@ web_action_view_mapping = {
         "import": import_,
         "export": export,
         "bundle": bundle_,
+        "ownership": ownership
     }
 }
 
