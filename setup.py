@@ -33,7 +33,7 @@ requires = [
     'py3o.template',
     'py3o.renderers.pyuno',
     'passlib',
-    'dateutils',
+    'python-dateutil',
     'fuzzy',
     'python-Levenshtein',
     'webhelpers'
