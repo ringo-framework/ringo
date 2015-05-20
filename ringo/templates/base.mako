@@ -173,9 +173,7 @@
     <button type="button" class="btn btn-default dropdown-toggle"
     data-toggle="dropdown"> ${_('Advanced')} <span class="caret"></span></button>
     <ul id="context-menu-options" class="dropdown-menu  pull-right" role="menu">
-      <li><a href="#form">${_('Back to')} ${h.get_item_modul(request, item).get_label()}: ${item}</a></li>
-      % if owner:
-        <li class="divider"></li>
+      % if owner or s.has_role(request.user, 'admin'):
         <li role="presentation" class="dropdown-header">${_('Administration')}</li>
         <li><a href="#ownership">${_('Change ownership')}</a></li>
       % endif
