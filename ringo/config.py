@@ -119,6 +119,20 @@ def _setup_web_action(config, action, clazz, view_mapping):
        config.add_view(view_func, route_name=route_name,
                        renderer='/default/bundle.mako',
                        permission='list')
+    ## Add permission action.
+    if action_name == "read":
+        action_name = "ownership"
+        route_name = "%s-%s" % (name, action_name)
+        route_url = "%s/%s/{id}" % (name, action_name)
+        view_func = get_action_view(view_mapping,
+                                    action_name,
+                                    name)
+        log.debug("Adding route: %s, %s" % (route_name, route_url))
+        config.add_route(route_name, route_url,
+                         factory=get_resource_factory(clazz))
+        config.add_view(view_func, route_name=route_name,
+                        renderer='/default/update.mako',
+                        permission='read')
 
 
 def _setup_rest_action(config, action, clazz, view_mapping):
