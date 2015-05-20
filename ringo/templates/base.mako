@@ -173,10 +173,8 @@
     <button type="button" class="btn btn-default dropdown-toggle"
     data-toggle="dropdown"> ${_('Advanced')} <span class="caret"></span></button>
     <ul id="context-menu-options" class="dropdown-menu  pull-right" role="menu">
-      % if owner or s.has_role(request.user, 'admin'):
-        <li role="presentation" class="dropdown-header">${_('Administration')}</li>
-        <li><a href="${h.get_action_url(request, item, 'ownership')}">${_('Change ownership')}</a></li>
-      % endif
+      <li role="presentation" class="dropdown-header">${_('Administration')}</li>
+      <li><a href="${h.get_action_url(request, item, 'ownership')}">${_('Change ownership')}</a></li>
       % if len(context_actions) > 0:
         <li class="divider"></li>
         <li role="presentation" class="dropdown-header">${_('Advanced actions')}</li>
