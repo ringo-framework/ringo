@@ -28,13 +28,6 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-    <div class="main-pane active" id="form">
-      ${form}
-    </div>
-    % if owner:
-      <div class="main-pane" id="ownership">
-        ${owner}
-      </div>
-    % endif
+    ${form}
   </div>
 </div>
