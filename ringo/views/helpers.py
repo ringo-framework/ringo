@@ -65,7 +65,7 @@ def get_blobform_config(request, item, formname):
         return modul, formconfig
 
 
-def get_rendered_ownership_form(request, readonly=None):
+def get_rendered_ownership_form(request):
     """Returns the rendered logbook form for the item in the current
     request. If the item is not an instance of Owned, than an empty
     string is returned.
@@ -85,7 +85,7 @@ def get_rendered_ownership_form(request, readonly=None):
         return False
 
     item = get_item_from_request(request)
-    form = get_ownership_form(request, readonly)
+    form = get_ownership_form(request)
     modul = get_item_modul(request, item)
     usergroup_modul = get_item_modul(request, Usergroup)
     _groups = [str(g.name) for g in request.user.groups]
@@ -100,7 +100,7 @@ def get_rendered_ownership_form(request, readonly=None):
         return ""
 
 
-def get_ownership_form(request, readonly=None):
+def get_ownership_form(request):
     item = get_item_from_request(request)
     db = request.db
     csrf_token = request.session.get_csrf_token()
