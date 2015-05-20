@@ -76,11 +76,11 @@ def get_rendered_ownership_form(request, readonly=None):
     the user has not an administrative role.
     """
 
-    def _has_administrational_role(modul):
+    def _has_administrational_role(modul, user):
         for action in modul.actions:
             if action.name == "Update":
                 for role in action.roles:
-                    if role.admin:
+                    if role.admin and has_role(user, role.name):
                         return True
         return False
 
@@ -89,9 +89,9 @@ def get_rendered_ownership_form(request, readonly=None):
     modul = get_item_modul(request, item)
     usergroup_modul = get_item_modul(request, Usergroup)
     _groups = [str(g.name) for g in request.user.groups]
-    _admin = (_has_administrational_role(modul)
+    _admin = (_has_administrational_role(modul, request.user)
               or has_role(request.user, "admin")
-              or _has_administrational_role(usergroup_modul))
+              or _has_administrational_role(usergroup_modul, request.user))
     values = {"_admin": _admin,
               "_groups": _groups}
     if isinstance(item, Owned):
