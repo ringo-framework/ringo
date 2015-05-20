@@ -38,17 +38,12 @@ def update(request, callback=None, renderers=None, validators=None):
     """
     handle_history(request)
     handle_params(request)
-    if '_isownershipform' in request.params:
-        form = get_ownership_form(request)
-    else:
-        form = get_item_form('update', request, renderers, validators)
-
+    form = get_item_form('update', request, renderers, validators)
     if request.POST:
         if handle_POST_request(form, request, callback, 'update', renderers):
             return handle_redirect_on_success(request)
 
     rvalues = get_return_value(request)
-    rvalues['owner'] = get_rendered_ownership_form(request)
     values = {'_roles': [str(r.name) for r in request.user.roles]}
     rvalues['form'] = render_item_form(request, form, values)
     return rvalues
