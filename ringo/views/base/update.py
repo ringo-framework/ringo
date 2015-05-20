@@ -2,9 +2,7 @@ import logging
 from ringo.views.response import JSONResponse
 from ringo.views.helpers import (
     get_item_form,
-    render_item_form,
-    get_ownership_form,
-    get_rendered_ownership_form
+    render_item_form
 )
 from ringo.views.request import (
     handle_params,

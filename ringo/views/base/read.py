@@ -1,6 +1,5 @@
 import logging
 from ringo.views.helpers import (
-    get_rendered_ownership_form,
     get_item_form,
     render_item_form
 )
