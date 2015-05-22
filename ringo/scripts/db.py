@@ -126,12 +126,17 @@ def get_alembic_config(args, app=None):
 
     config_path = []
     config_path.append(get_app_location(args.app))
+    config_path.append(args.app)
+    config_path.append("alembic")
+    alembic_dir = os.path.join(*config_path)
     config_path.append("alembic.ini")
     cfg = Config(os.path.join(*config_path))
     if args.config:
         app_config = get_appsettings(args.config)
         cfg.set_main_option("sqlalchemy.url",
                             app_config.get('sqlalchemy.url'))
+        cfg.set_main_option("script_location",
+                            alembic_dir)
     return cfg
 
 
