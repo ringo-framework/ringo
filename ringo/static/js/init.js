@@ -7,6 +7,7 @@ function getDTLanguage() {
         return "default";
     }
 }
+
 var opts = {
   lines: 9, // The number of lines to draw
   length: 21, // The length of each line
@@ -25,8 +26,14 @@ var opts = {
   top: '50%', // Top position relative to parent
   left: '50%' // Left position relative to parent
 };
-var spinner = new Spinner(opts).spin();
+
+var spinner = new Spinner(opts);
+var isSpinning = false;
+
 $( document ).ready(function() {
+    $(':button').click(function () {
+        startSpinner(400);
+    });
     $('[data-toggle="tooltip"]').tooltip();
     $('.dialog').modal({
         backdrop: "static"
@@ -123,6 +130,14 @@ $( document ).ready(function() {
     });
     $('a').click(function(event) {
         var isDirty = false;
+        var element = event.target;
+        var url = $(element).attr("href");
+        hash_i = url.indexOf("#");
+        has_hash = (hash_i  == -1) == false;
+        if (has_hash == false){
+            console.log("start");
+            startSpinner(400);
+        }    
         $('form').each(function () {
             if($(this).data('initialValue') != $(this).serialize()){
                 isDirty = true;
@@ -152,6 +167,7 @@ $( document ).ready(function() {
     });
 });
 
+
 function logoutCountdown(time, url) {
     var warning = $.timer(function() {
       $("#logoutWarning").modal("show");
@@ -162,6 +178,22 @@ function logoutCountdown(time, url) {
     });
     logout.set({ time : time*1000-500, autostart : true });
 }
+
+var timer;
+function startSpinner(x){
+    if ($('#spinner').data('spinner') != undefined){
+    $('#spinner').data('spinner').stop();
+    }
+    clearTimeout(timer);
+    console.log("before timer");
+    timer = setTimeout(function(){
+            console.log("to");
+            $('#spinner').spin(spinner.el);
+            setTimeout(function(){
+                $('#spinner').data('spinner').stop();
+            }, 600); //every page loads under 1s
+    }, x);
+}    
 
 function openModalForm(event) {
   var element = event.target;

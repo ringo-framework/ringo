@@ -1,5 +1,6 @@
 function addItem(url, foreignkey, form, id, clazz, backlink) {
   //var activetab = $('.tab-pane.active');
+  startSpinner(200);
   if (form == "None") {
     if (backlink == 'False') {
       location.href = url + '?addrelation=' + foreignkey + ':' + clazz + ':' + id;
