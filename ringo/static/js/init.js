@@ -135,7 +135,6 @@ $( document ).ready(function() {
         hash_i = url.indexOf("#");
         has_hash = (hash_i  == -1) == false;
         if (has_hash == false){
-            console.log("start");
             startSpinner(400);
         }    
         $('form').each(function () {
@@ -185,9 +184,7 @@ function startSpinner(x){
     $('#spinner').data('spinner').stop();
     }
     clearTimeout(timer);
-    console.log("before timer");
     timer = setTimeout(function(){
-            console.log("to");
             $('#spinner').spin(spinner.el);
             setTimeout(function(){
                 $('#spinner').data('spinner').stop();
