@@ -1,6 +1,8 @@
 #spinner {
   width: 200px;
-  top: 30%;
+  position: fixed;
+  top: 50%;
+  left: 42%;
   z-index: 200000000000000000;
 }    
 
