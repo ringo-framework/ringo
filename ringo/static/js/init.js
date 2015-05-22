@@ -28,7 +28,6 @@ var opts = {
 };
 
 var spinner = new Spinner(opts);
-var isSpinning = false;
 
 $( document ).ready(function() {
     $(':button').click(function () {
