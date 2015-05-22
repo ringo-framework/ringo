@@ -65,7 +65,7 @@ def get_blobform_config(request, item, formname):
         return modul, formconfig
 
 
-def get_rendered_ownership_form(request, readonly=None):
+def get_rendered_ownership_form(request):
     """Returns the rendered logbook form for the item in the current
     request. If the item is not an instance of Owned, than an empty
     string is returned.
@@ -76,22 +76,22 @@ def get_rendered_ownership_form(request, readonly=None):
     the user has not an administrative role.
     """
 
-    def _has_administrational_role(modul):
+    def _has_administrational_role(modul, user):
         for action in modul.actions:
             if action.name == "Update":
                 for role in action.roles:
-                    if role.admin:
+                    if role.admin and has_role(user, role.name):
                         return True
         return False
 
     item = get_item_from_request(request)
-    form = get_ownership_form(request, readonly)
+    form = get_ownership_form(request)
     modul = get_item_modul(request, item)
     usergroup_modul = get_item_modul(request, Usergroup)
     _groups = [str(g.name) for g in request.user.groups]
-    _admin = (_has_administrational_role(modul)
+    _admin = (_has_administrational_role(modul, request.user)
               or has_role(request.user, "admin")
-              or _has_administrational_role(usergroup_modul))
+              or _has_administrational_role(usergroup_modul, request.user))
     values = {"_admin": _admin,
               "_groups": _groups}
     if isinstance(item, Owned):
@@ -100,14 +100,20 @@ def get_rendered_ownership_form(request, readonly=None):
         return ""
 
 
-def get_ownership_form(request, readonly=None):
+def get_ownership_form(request):
     item = get_item_from_request(request)
     db = request.db
     csrf_token = request.session.get_csrf_token()
     url_prefix = get_app_url(request)
-    if (readonly is None and isinstance(item, Owned)):
-        readonly = not (item.is_owner(request.user)
-                        or has_role(request.user, "admin"))
+
+    # Check if the form is rendered as readonly form.
+    if has_role(request.user, "admin"):
+        readonly = False
+    elif isinstance(item, Owned) and item.is_owner(request.user):
+        readonly = False
+    else:
+        readonly = True
+
     return _get_ownership_form(item, db, csrf_token, eval_url,
                                readonly, url_prefix,
                                locale=locale_negotiator(request))

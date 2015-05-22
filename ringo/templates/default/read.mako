@@ -14,17 +14,7 @@
           % endif
         </span> 
     </div>
-    <div class="col-sm-5 visible-xs">
-      <div class="context-menu">
-        <div class="btn-toolbar">
-          <div class="btn-group">
-            <!-- Base ringo actions -->
-            ${main.render_item_base_actions(item)}
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-5 hidden-xs">
+    <div class="col-sm-5">
       <div class="context-menu pull-right">
         <div class="btn-toolbar">
           <div class="btn-group">
@@ -38,13 +28,6 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-    <div class="main-pane active" id="form">
-      ${form}
-    </div>
-    % if owner:
-      <div class="main-pane" id="ownership">
-        ${owner}
-      </div>
-    % endif
+    ${form}
   </div>
 </div>
