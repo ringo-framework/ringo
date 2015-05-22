@@ -5,6 +5,8 @@ New:
   They will be used for additional validation of the form.
 - Implemented a simple Warning Dialog if the user leaves of form without
   saving the changed data first.
+- Added simple spinner which pops up if the loading of the page takes longer
+  than 400ms.
 
 Changed:
 - Enabled Mako default HTML escaping for Template rendering globally in ini
