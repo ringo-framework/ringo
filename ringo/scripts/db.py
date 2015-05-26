@@ -155,7 +155,6 @@ def handle_db_revision_command(args):
 
 def handle_db_savedata_command(args):
     path = []
-    path.append(get_app_location(args.app))
     path.append(args.config)
     session = get_session(os.path.join(*path))
     modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == args.modul).all()[0].clazzpath
@@ -168,7 +167,6 @@ def handle_db_savedata_command(args):
 
 def handle_db_loaddata_command(args):
     path = []
-    path.append(get_app_location(args.app))
     path.append(args.config)
     session = get_session(os.path.join(*path))
     modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == args.modul).all()[0].clazzpath
@@ -195,7 +193,6 @@ def handle_db_loaddata_command(args):
 
 def handle_db_uuid_command(args):
     path = []
-    path.append(get_app_location(args.app))
     path.append(args.config)
     session = get_session(os.path.join(*path))
     modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == args.modul).all()[0].clazzpath
@@ -281,7 +278,6 @@ def handle_db_fixsequence_command(args):
 
     # Get DB connection and apply loaded SQL statements.
     path = []
-    path.append(get_app_location(args.app))
     path.append(args.config)
     engine = get_engine(os.path.join(*path))
     conn = engine.connect()
