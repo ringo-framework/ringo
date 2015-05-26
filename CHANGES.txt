@@ -7,6 +7,8 @@ New:
   saving the changed data first.
 - Added simple spinner which pops up if the loading of the page takes longer
   than 400ms.
+- Added new "ringo-admin app init" command to initalise a folder containing
+  a initial config file.
 
 Changed:
 - Enabled Mako default HTML escaping for Template rendering globally in ini
