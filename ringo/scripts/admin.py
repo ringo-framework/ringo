@@ -51,6 +51,10 @@ from ringo.scripts.user import (
     handle_user_passwd_command
 )
 
+from ringo.scripts.application import (
+    handle_app_init_command
+)
+
 def get_config_path(config="development.ini"):
     return os.path.join(os.getcwd(), config)
 
@@ -80,6 +84,24 @@ def setup_fixture_parser(subparsers, parent):
     fixture_parser.add_argument('--path',
                               metavar='path',
                               help='Path to the fixture files')
+
+
+def setup_application_parser(subparsers, parent):
+    p = subparsers.add_parser('app',
+                              help='Application administration',
+                              parents=[parent])
+    sp = p.add_subparsers(help='Application command help')
+
+    # Init command
+    app_parser = sp.add_parser('init',
+                                help=('Initialises an empty application '
+                                      'folder and creates a default '
+                                      'configuration file in it'),
+                                parents=[parent])
+    app_parser.add_argument('name',
+                              metavar='name',
+                              help='Name of the application')
+    app_parser.set_defaults(func=handle_app_init_command)
 
 
 def setup_user_parser(subparsers, parent):
@@ -257,6 +279,7 @@ def setup_parser():
     setup_db_parser(subparsers, global_arguments)
     setup_modul_parser(subparsers, global_arguments)
     setup_user_parser(subparsers, global_arguments)
+    setup_application_parser(subparsers, global_arguments)
     setup_fixture_parser(subparsers, global_arguments)
     return parser
 
