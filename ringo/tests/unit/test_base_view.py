@@ -54,6 +54,6 @@ class ViewHelpersTests(BaseUnitTest):
             get_item_from_request
         )
         item = get_item_from_request(self.request)
-        result = get_ownership_form(self.request, True)
-        self.assertEqual(len(result.fields.keys()), 2)
+        result = get_ownership_form(self.request)
+        self.assertEqual(len(result.fields.keys()), 5)
         self.assertEqual(result._item, item)
