@@ -24,7 +24,7 @@ from ringo.model.user import User, PasswordResetRequest
 log = logging.getLogger(__name__)
 
 
-def password_generator(size=8, chars=string.ascii_uppercase + string.digits):
+def password_generator(size=12, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
 
