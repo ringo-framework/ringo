@@ -28,10 +28,11 @@ var opts = {
 };
 
 var spinner = new Spinner(opts);
+var spinner_timer = 800; //threshold in ms after spinner starts
 
 $( document ).ready(function() {
     $(':button').click(function () {
-        startSpinner(400);
+        startSpinner(spinner_timer);
     });
     $('[data-toggle="tooltip"]').tooltip();
     $('.dialog').modal({
@@ -134,7 +135,7 @@ $( document ).ready(function() {
         hash_i = url.indexOf("#");
         has_hash = (hash_i  == -1) == false;
         if (has_hash == false){
-            startSpinner(400);
+            startSpinner(spinner_timer);
         }    
         $('form').each(function () {
             if($(this).data('initialValue') != $(this).serialize()){
@@ -165,6 +166,9 @@ $( document ).ready(function() {
     });
 });
 
+$( window ).unload(function() {
+    stopSpinner();
+});
 
 function logoutCountdown(time, url) {
     var warning = $.timer(function() {
@@ -178,16 +182,18 @@ function logoutCountdown(time, url) {
 }
 
 var timer;
-function startSpinner(x){
+
+function stopSpinner() {
     if ($('#spinner').data('spinner') != undefined){
-    $('#spinner').data('spinner').stop();
+        $('#spinner').data('spinner').stop();
     }
     clearTimeout(timer);
+}
+
+function startSpinner(x) {
+    stopSpinner();
     timer = setTimeout(function(){
             $('#spinner').spin(spinner.el);
-            setTimeout(function(){
-                $('#spinner').data('spinner').stop();
-            }, 600); //every page loads under 1s
     }, x);
 }    
 

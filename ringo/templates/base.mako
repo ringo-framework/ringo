@@ -27,12 +27,12 @@
     <link href="${request.static_path('ringo:static/images/icons/favicons/apple-touch-icon-128.png')}" sizes="128x128" rel="apple-touch-icon-precomposed">
     <link href="${request.static_path('ringo:static/images/icons/favicons/favicon.png')}" rel="shortcut icon">
     <script src="${request.static_path('ringo:static/js/jquery.js')}"></script>
+    <script src="${request.static_path('ringo:static/js/spin.min.js')}"></script>
+    <script src="${request.static_path('ringo:static/js/jquery.spin.js')}"></script>
     <script src="${request.static_path('ringo:static/bootstrap/js/bootstrap.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/datatables/dataTables.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.jcountdown.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.timer.js')}"></script>
-    <script src="${request.static_path('ringo:static/js/spin.min.js')}"></script>
-    <script src="${request.static_path('ringo:static/js/jquery.spin.js')}"></script>
     % for filename in formbar_js_filenames: 
       <script src="${request.static_path('ringo:static/formbar/%s' % filename)}"></script>
     % endfor
