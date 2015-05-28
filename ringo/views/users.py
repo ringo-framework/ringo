@@ -111,10 +111,17 @@ def update_(request):
                                        'please use something unique.'),
                                      user_name_update_validator,
                                      {'pk': user.id, 'db': request.db})
-    pw_validator = Validator('password',
-                             _('Password has wrong format.'),
-                             password_format_validator)
-    return update(request, validators=[uniqueness_validator, pw_validator])
+    pw_len_validator = Validator('password',
+                                 _('Password must be at least 12 characters '
+                                   'long.'),
+                                 password_minlength_validator)
+    pw_nonchar_validator = Validator('password',
+                                     _('Password must contain at least 2 '
+                                       'non-letters.'),
+                                     password_nonletter_validator)
+    return update(request, validators=[uniqueness_validator,
+                                       pw_len_validator,
+                                       pw_nonchar_validator])
 
 
 @view_config(route_name=get_action_routename(User, 'changepassword'),
