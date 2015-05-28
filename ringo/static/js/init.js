@@ -27,6 +27,7 @@ var opts = {
   left: '50%' // Left position relative to parent
 };
 
+var timer;
 var spinner = new Spinner(opts);
 var spinner_timer = 800; //threshold in ms after spinner starts
 
@@ -34,6 +35,9 @@ $( document ).ready(function() {
     $(':button').click(function () {
         startSpinner(spinner_timer);
     });
+    $('.dropdown-toggle').click(function () {
+        clearTimeout(timer);
+    });    
     $('[data-toggle="tooltip"]').tooltip();
     $('.dialog').modal({
         backdrop: "static"
@@ -181,7 +185,6 @@ function logoutCountdown(time, url) {
     logout.set({ time : time*1000-500, autostart : true });
 }
 
-var timer;
 
 function stopSpinner() {
     if ($('#spinner').data('spinner') != undefined){
