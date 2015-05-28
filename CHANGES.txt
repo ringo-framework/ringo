@@ -9,6 +9,7 @@ New:
   than 400ms.
 - Added new "ringo-admin app init" command to initalise a folder containing
   a initial config file.
+- Password must be at least 12 chars long and include 2 non-letters.
 
 Changed:
 - Enabled Mako default HTML escaping for Template rendering globally in ini

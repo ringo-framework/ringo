@@ -66,14 +66,14 @@ def user_name_update_validator(field, data, params):
                 ~(User.id == params['pk'])).count() == 0
 
 
-def password_format_validator(field, data):
-    """Validator to ensure that passwords are longer than 12 characters
-    and contain two non-letters"""
-    pw = data[field]
-    if len(pw) >= 12:
-        return len(re.findall('[^a-zA-Z]', pw)) >= 2
-    else:
-        return False
+def password_nonletter_validator(field, data):
+    """Validator to ensure that passwords contain two non-letters"""
+    return len(re.findall('[^a-zA-Z]', data[field])) >= 2
+
+
+def password_minlength_validator(field, data):
+    """Validator to ensure that passwords are at least 12 characters long."""
+    return len(data[field]) >= 12
 
 
 @view_config(route_name=get_action_routename(User, 'create'),
@@ -86,11 +86,18 @@ def create_(request):
                                        'please use something unique.'),
                                      user_name_create_validator,
                                      request.db)
-    pw_validator = Validator('password',
-                             _('Password has wrong format.'),
-                             password_format_validator)
+    pw_len_validator = Validator('password',
+                                 _('Password must be at least 12 characters '
+                                   'long.'),
+                                 password_minlength_validator)
+    pw_nonchar_validator = Validator('password',
+                                     _('Password must contain at least 2 '
+                                       'non-letters.'),
+                                     password_nonletter_validator)
     return create(request, user_create_callback,
-                  validators=[uniqueness_validator, pw_validator])
+                  validators=[uniqueness_validator,
+                              pw_len_validator,
+                              pw_nonchar_validator])
 
 
 @view_config(route_name=get_action_routename(User, 'update'),
@@ -147,11 +154,18 @@ def changepassword(request):
         validator = Validator('oldpassword',
                               _('The given password is not correct'),
                               check_password)
-        pw_validator = Validator('password',
-                                 _('Password has wrong format.'),
-                                 password_format_validator)
+        pw_len_validator = Validator('password',
+                                     _('Password must be at least 12 '
+                                       'characters long.'),
+                                     password_minlength_validator)
+        pw_nonchar_validator = Validator('password',
+                                         _('Password must contain at least 2 '
+                                           'non-letters.'),
+                                         password_nonletter_validator)
+
         form.add_validator(validator)
-        form.add_validator(pw_validator)
+        form.add_validator(pw_len_validator)
+        form.add_validator(pw_nonchar_validator)
         if form.validate(request.params):
             form.save()
             # Actually save the password. This is not done in the form

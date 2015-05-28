@@ -62,9 +62,12 @@
     </row>
     <row>
       <col><field ref="e2"></field></col>
+      <col><field ref="e3"></field></col>
     </row>
     <row>
-      <col><field ref="e3"></field></col>
+      <col>
+        <text>The password must be at least 12 characters long, and include two non-letters</text>
+      </col>
     </row>
   </form>
 
@@ -112,6 +115,11 @@
     <row>
       <col><field ref="e2"/></col>
       <col><field ref="e3"/></col>
+    </row>
+    <row>
+      <col>
+        <text>The password must be at least 12 characters long, and include two non-letters</text>
+      </col>
     </row>
   </snippet>
   <!-- Roles and Groups etc. -->
