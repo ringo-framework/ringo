@@ -65,7 +65,10 @@ model of the base appliction to the model of the inherited application::
 This will ensure that all the model will be available to alembic. Otherwise
 many tables would be scheduled for a drop.
 
-4. The initialisation of the database is a little bit different as we want to
+4. Set the configuration variable `app.base` to ''foo''.
+See :ref:`config_app_base` for more details.
+
+5. The initialisation of the database is a little bit different as we want to
 initialize the database with the migration scripts of ''Foo''::
         
         bar-admin db init --base foo

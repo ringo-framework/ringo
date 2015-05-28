@@ -4,7 +4,11 @@ from formbar.form import Form
 from formbar.config import Config, load, parse
 from formbar.helpers import get_css_files, get_js_files
 from ringo.lib.cache import CACHE_FORM_CONFIG
-from ringo.lib.helpers import get_path_to, get_app_name
+from ringo.lib.helpers import (
+    get_path_to,
+    get_app_name,
+    get_app_inheritance_path
+)
 
 eval_url = '/rest/rule/evaluate'
 formbar_css_filenames = []
@@ -83,32 +87,22 @@ def get_form_config_from_file(name, filename, formname):
     configuration tried to be loaded from the current application first.
     If this fails it tries to load it from the extension or orign
     application and finally from the ringo application."""
-    # FIXME: Add support loading configurations in case of derived
-    # models. In this case we should try to look for a
-    # configuration in the application which inherits from a model.
-    # If there is no configuration. Try to figure out from which
-    # model it is derived and load the configuration of the base
-    # class () <2015-02-17 15:57>
-    try:
-        # Always first try to load from the current application. No
-        # matter what the current name is as name can be different from
-        # the appname in case of loading forms for an extension. In this
-        # case first try to load the form configuration from the
-        # application to be able to overwrite the forms.
-        loaded_config = load(get_path_to_form_config(filename, get_app_name()))
-    except IOError:
+    for appname in get_app_inheritance_path():
         try:
-            # This path is working for extensions.
-            if name.startswith("ringo_"):
-                loaded_config = load(get_path_to_form_config(filename, name,
-                                                             location="."))
-            # This path is working for base config of the application.
-            else:
-                loaded_config = load(get_path_to_form_config(filename,
-                                                             name))
+            # Always first try to load from the current application. No
+            # matter what the current name is as name can be different from
+            # the appname in case of loading forms for an extension. In this
+            # case first try to load the form configuration from the
+            # application to be able to overwrite the forms.
+            loaded_config = load(get_path_to_form_config(filename,
+                                                         appname))
+            break
         except IOError:
-            # Final fallback try to load from ringo.
-            loaded_config = load(get_path_to_form_config(filename, "ringo"))
+            pass
+    else:
+        if name.startswith("ringo_"):
+            loaded_config = load(get_path_to_form_config(filename, name,
+                                                         location="."))
     return Config(loaded_config).get_form(formname)
 
 

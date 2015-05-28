@@ -5,7 +5,8 @@ from ringo.lib.helpers.appinfo import (
     get_app_location,
     get_app_title,
     get_app_url,
-    get_path_to
+    get_path_to,
+    get_app_inheritance_path
 )
 
 from webhelpers.html import literal

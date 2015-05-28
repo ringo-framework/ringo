@@ -23,6 +23,29 @@ Leave the variable empty to set the base url to tha value of
 request.application.url. Otherwise the value of this config variable is
 used.
 
+.. _config_app_base:
+
+Application Base
+----------------
+Optional. Usually a ringo based application is directly based on ringo.
+So the default inheritance path of your application is foo->ringo (in
+case your application package is called "foo").
+
+* app.base = Default is not set
+
+If your application is based on another ringo based application you can
+configure the name of the application here. Setting this configuration
+will modify the inheritance path of the application.
+
+Example:
+The current application package is named "foo". "foo" is based on "bar". And
+"bar" is based on "ringo". The inheritinace path is foo->bar->ringo.
+
+This has consequences for the loading of form and table configurations.
+When trying to load form or table configuration ringo will iterate over
+the inhertance path and try to load the configuration from each
+application within the inhertance path.
+
 Authentification
 ================
 Autologout

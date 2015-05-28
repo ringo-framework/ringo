@@ -8,6 +8,25 @@ def get_ringo_version():
     return pkg_resources.get_distribution('ringo').version
 
 
+def get_app_inheritance_path():
+    """Returns a list of application names. The names describe the path
+    to the root of the application inheritance. e.g if the current
+    application is 'foo' which is based and 'bar' which is based on
+    'ringo' the function will return the follwing result: ['foo', 'bar',
+    'ringo'].
+
+    The default path is [<nameofcurrentapp>, "ringo"]. The path can be
+    extended by setting the app.base config variable."""
+    path = ['ringo']
+    registry = get_current_registry()
+    settings = registry.settings
+    base = settings.get("app.base")
+    if base:
+        path.append(base)
+    path.append(get_app_name())
+    return reversed(path)
+
+
 def get_app_name():
     registry = get_current_registry()
     return registry.__name__

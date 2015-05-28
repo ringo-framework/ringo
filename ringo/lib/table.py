@@ -2,7 +2,7 @@
 import logging
 import os
 import json
-from ringo.lib.helpers import get_path_to, get_app_name
+from ringo.lib.helpers import get_path_to, get_app_inheritance_path
 from ringo.lib.cache import CACHE_TABLE_CONFIG
 
 log = logging.getLogger(__name__)
@@ -199,30 +199,20 @@ def _load_overview_config(clazz):
     cfile = "%s.json" % clazz.__tablename__
     config = None
     name = clazz.__module__.split(".")[0]
-    # FIXME: Add support loading configurations in case of derived
-    # models. In this case we should try to look for a
-    # configuration in the application which inherits from a model.
-    # If there is no configuration. Try to figure out from which
-    # model it is derived and load the configuration of the base
-    # class () <2015-02-17 15:57>
-    try:
-        # Always first try to load from the current application. No
-        # matter what the current name is as name can be different from
-        # the appname in case of loading forms for an extension. In this
-        # case first try to load the form configuration from the
-        # application to be able to overwrite the forms.
-        config = open(get_path_to_overview_config(cfile, get_app_name()), "r")
-    except IOError:
+    for appname in get_app_inheritance_path():
         try:
-            # This path is working for extensions.
-            if name.startswith("ringo_"):
-                config = open(get_path_to_overview_config(cfile,
-                                                          name,
-                                                          location="."), "r")
-            # This path is working for base config of the application.
-            else:
-                config = open(get_path_to_overview_config(cfile, name), "r")
+            # Always first try to load from the current application. No
+            # matter what the current name is as name can be different from
+            # the appname in case of loading forms for an extension. In this
+            # case first try to load the form configuration from the
+            # application to be able to overwrite the forms.
+            config = open(get_path_to_overview_config(cfile, appname), "r")
+            break
         except IOError:
-            # Final fallback try to load from ringo.
-            config = open(get_path_to_overview_config(cfile, "ringo"), "r")
+            pass
+    else:
+        if name.startswith("ringo_"):
+            config = open(get_path_to_overview_config(cfile,
+                                                      name,
+                                                      location="."), "r")
     return json.load(config)
