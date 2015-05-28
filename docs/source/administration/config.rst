@@ -88,6 +88,7 @@ options:
  * security.csp.font_src
  * security.csp.connect_src
  * security.csp.sandbox
+ * security.csp.frame_ancestors
 
 Caching
 -------
