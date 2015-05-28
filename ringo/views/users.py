@@ -1,5 +1,6 @@
 import logging
 import sqlalchemy as sa
+import re
 from pyramid.httpexceptions import HTTPBadRequest, HTTPForbidden, HTTPFound
 from pyramid.view import view_config
 from formbar.form import Form, Validator
@@ -65,17 +66,31 @@ def user_name_update_validator(field, data, params):
                 ~(User.id == params['pk'])).count() == 0
 
 
+def password_format_validator(field, data):
+    """Validator to ensure that passwords are longer than 12 characters
+    and contain two non-letters"""
+    pw = data[field]
+    if len(pw) >= 12:
+        return len(re.findall('[^a-zA-Z]', pw)) >= 2
+    else:
+        return False
+
+
 @view_config(route_name=get_action_routename(User, 'create'),
              renderer='/default/create.mako',
              permission='create')
 def create_(request):
     _ = request.translate
-    validator = Validator('login',
-                          _('This name is already in use, '
-                            'please use something unique.'),
-                          user_name_create_validator,
-                          request.db)
-    return create(request, user_create_callback, validators=[validator])
+    uniqueness_validator = Validator('login',
+                                     _('This name is already in use, '
+                                       'please use something unique.'),
+                                     user_name_create_validator,
+                                     request.db)
+    pw_validator = Validator('password',
+                             _('Password has wrong format.'),
+                             password_format_validator)
+    return create(request, user_create_callback,
+                  validators=[uniqueness_validator, pw_validator])
 
 
 @view_config(route_name=get_action_routename(User, 'update'),
@@ -84,12 +99,15 @@ def create_(request):
 def update_(request):
     user = get_item_from_request(request)
     _ = request.translate
-    validator = Validator('login',
-                          _('This name is already in use, '
-                            'please use something unique.'),
-                          user_name_update_validator,
-                          {'pk': user.id, 'db': request.db})
-    return update(request, validators=[validator])
+    uniqueness_validator = Validator('login',
+                                     _('This name is already in use, '
+                                       'please use something unique.'),
+                                     user_name_update_validator,
+                                     {'pk': user.id, 'db': request.db})
+    pw_validator = Validator('password',
+                             _('Password has wrong format.'),
+                             password_format_validator)
+    return update(request, validators=[uniqueness_validator, pw_validator])
 
 
 @view_config(route_name=get_action_routename(User, 'changepassword'),
@@ -103,7 +121,6 @@ def changepassword(request):
     handle_params(request)
     _ = request.translate
     rvalue = {}
-
     # Load the item return 400 if the item can not be found.
     id = request.matchdict.get('id')
     factory = clazz.get_item_factory()
@@ -130,7 +147,11 @@ def changepassword(request):
         validator = Validator('oldpassword',
                               _('The given password is not correct'),
                               check_password)
+        pw_validator = Validator('password',
+                                 _('Password has wrong format.'),
+                                 password_format_validator)
         form.add_validator(validator)
+        form.add_validator(pw_validator)
         if form.validate(request.params):
             form.save()
             # Actually save the password. This is not done in the form

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 1.1.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-05-12 11:20+0200\n"
+"POT-Creation-Date: 2015-05-28 16:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -85,64 +85,60 @@ msgstr ""
 msgid "This application is based on the Ringo web application framework."
 msgstr ""
 
-#: ringo/templates/base.mako:70
+#: ringo/templates/base.mako:71
 msgid "Logout will happen soon"
 msgstr ""
 
-#: ringo/templates/base.mako:72
+#: ringo/templates/base.mako:73
 msgid ""
 "You will be logged out automatically in a short time because of inactivity. "
 "Please close this dialog and init a new request to renew your session timer."
 msgstr ""
 
-#: ringo/templates/base.mako:75 ringo/templates/internal/import.mako:41
+#: ringo/templates/base.mako:76 ringo/templates/internal/import.mako:41
 msgid "Ok"
 msgstr ""
 
-#: ringo/templates/base.mako:83
+#: ringo/templates/base.mako:84
 msgid "Form contains unsaved changes!"
 msgstr ""
 
-#: ringo/templates/base.mako:85
+#: ringo/templates/base.mako:86
 msgid ""
 "Do you want to leave the current form without saving the changes? The changes"
 " will be lost if you do not save the data first!"
 msgstr ""
 
-#: ringo/templates/base.mako:88
+#: ringo/templates/base.mako:89
 msgid "Stay in Form"
 msgstr ""
 
-#: ringo/templates/base.mako:89
+#: ringo/templates/base.mako:90
 msgid "Leave the Form"
 msgstr ""
 
-#: ringo/templates/base.mako:150
+#: ringo/templates/base.mako:153
 msgid "Create new item"
 msgstr ""
 
-#: ringo/templates/base.mako:152
+#: ringo/templates/base.mako:155
 msgid "Open overview"
 msgstr ""
 
-#: ringo/templates/base.mako:154
+#: ringo/templates/base.mako:157
 msgid "Open in \"Edit\" mode"
 msgstr ""
 
-#: ringo/templates/base.mako:156
+#: ringo/templates/base.mako:159
 msgid "Open in \"Read\" mode"
 msgstr ""
 
-#: ringo/templates/base.mako:158
+#: ringo/templates/base.mako:161
 msgid "Delete item"
 msgstr ""
 
-#: ringo/templates/base.mako:174
+#: ringo/templates/base.mako:177
 msgid "Advanced"
-msgstr ""
-
-#: ringo/templates/base.mako:176
-msgid "Back to"
 msgstr ""
 
 #: ringo/templates/base.mako:179 ringo/templates/footer.mako:7
@@ -153,7 +149,7 @@ msgstr ""
 msgid "Change ownership"
 msgstr ""
 
-#: ringo/templates/base.mako:184
+#: ringo/templates/base.mako:183
 msgid "Advanced actions"
 msgstr ""
 
@@ -455,7 +451,7 @@ msgstr ""
 #: ringo/templates/internal/import.mako:31 ringo/views/forms/modules.xml:1
 #: ringo/views/forms/roles.xml:2 ringo/views/forms/usergroups.xml:1
 #: ringo/views/tables/modules.json:3 ringo/views/tables/usergroups.json:2
-#: ringo/views/tables/usergroups.json:6
+#: ringo/views/tables/usergroups.json:5
 msgid "Name"
 msgstr ""
 
@@ -751,19 +747,23 @@ msgstr ""
 msgid "Error on validation ${item_type} \"${item}\"."
 msgstr ""
 
-#: ringo/views/users.py:74 ringo/views/users.py:88
+#: ringo/views/users.py:86 ringo/views/users.py:104
 msgid "This name is already in use, please use something unique."
 msgstr ""
 
-#: ringo/views/users.py:131
-msgid "The given password is not correct"
-msgstr ""
-
-#: ringo/views/users.py:139
-msgid "Changed password for \"${item}\" successfull."
+#: ringo/views/users.py:91 ringo/views/users.py:109 ringo/views/users.py:152
+msgid "Password has wrong format."
 msgstr ""
 
 #: ringo/views/users.py:149
+msgid "The given password is not correct"
+msgstr ""
+
+#: ringo/views/users.py:161
+msgid "Changed password for \"${item}\" successfull."
+msgstr ""
+
+#: ringo/views/users.py:171
 msgid "Error on changing the password for \"${item}\"."
 msgstr ""
 
@@ -795,21 +795,21 @@ msgid ""
 "updated. The last message we heard from the importer was: %s"
 msgstr ""
 
-#: ringo/views/base/list_.py:232
+#: ringo/views/base/list_.py:233
 msgid "Empty selection"
 msgstr ""
 
-#: ringo/views/base/list_.py:233
+#: ringo/views/base/list_.py:234
 msgid ""
 "You have not selected any item in the list. Click 'OK' to return to the "
 "overview."
 msgstr ""
 
-#: ringo/views/base/list_.py:262
+#: ringo/views/base/list_.py:263
 msgid "${action} not applicable"
 msgstr ""
 
-#: ringo/views/base/list_.py:268
+#: ringo/views/base/list_.py:269
 msgid ""
 "After checking the permissions no items remain for which an '${action}' can "
 "be performed. (${num} items were filtered out.)"
@@ -860,7 +860,7 @@ msgstr ""
 #. Label for description column in overview table config
 #: ringo/views/forms/appointments.xml:7 ringo/views/forms/forms.xml:2
 #: ringo/views/forms/modules.xml:4 ringo/views/forms/roles.xml:5
-#: ringo/views/forms/usergroups.xml:4 ringo/views/tables/forms.json:3
+#: ringo/views/forms/usergroups.xml:3 ringo/views/tables/forms.json:3
 msgid "Description"
 msgstr ""
 
@@ -1193,23 +1193,8 @@ msgstr ""
 #. Label for members column in overview table config
 #. Label for members column in selection table config
 #: ringo/views/forms/usergroups.xml:2 ringo/views/tables/usergroups.json:3
-#: ringo/views/tables/usergroups.json:7
+#: ringo/views/tables/usergroups.json:6
 msgid "Members"
-msgstr ""
-
-#. Label for roles field in form config
-#. Label for permissions column in overview table config
-#. Label for roles column in overview table config
-#: ringo/views/forms/usergroups.xml:3 ringo/views/forms/users.xml:6
-#: ringo/views/tables/roles.json:3 ringo/views/tables/usergroups.json:4
-#: ringo/views/tables/users.json:5
-msgid "Roles"
-msgstr ""
-
-#: ringo/views/forms/usergroups.xml:5
-msgid ""
-"The roles of this group will be added to the user roles if he is\n"
-"      member of the items group on permission check."
 msgstr ""
 
 #. Label for oldpassword field in form config
@@ -1220,6 +1205,14 @@ msgstr ""
 #. Label for retype_password field in form config
 #: ringo/views/forms/users.xml:5
 msgid "Retype Password"
+msgstr ""
+
+#. Label for roles field in form config
+#. Label for permissions column in overview table config
+#. Label for roles column in overview table config
+#: ringo/views/forms/users.xml:6 ringo/views/tables/roles.json:3
+#: ringo/views/tables/users.json:5
+msgid "Roles"
 msgstr ""
 
 #. Label for groups field in form config
