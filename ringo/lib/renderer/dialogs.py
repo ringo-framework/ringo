@@ -12,7 +12,8 @@ from ringo.lib.helpers import (
     get_action_routename,
     get_item_modul,
     get_app_url,
-    literal
+    literal,
+    escape
 )
 from ringo.lib.form import (
     eval_url,
@@ -94,11 +95,11 @@ class ConfirmDialogRenderer(DialogRenderer):
     def _render_body(self, items):
         out = []
         _ = self._request.translate
-        item_label = cgi.escape(get_item_modul(self._request,
-                                               self._item).get_label())
-        mapping = {'action': cgi.escape(_(self._action.capitalize()).lower()),
+        item_label = escape(get_item_modul(self._request,
+                                           self._item).get_label())
+        mapping = {'action': escape(_(self._action.capitalize()).lower()),
                    'item': item_label,
-                   'Action': cgi.escape(_(self._action.capitalize()))}
+                   'Action': escape(_(self._action.capitalize()))}
         out.append(_("Do you really want to ${action}"
                      " the following ${item} items?",
                      mapping=mapping))
@@ -106,7 +107,7 @@ class ConfirmDialogRenderer(DialogRenderer):
         out.append("<ol>")
         for item in items:
             out.append("<li>")
-            out.append(cgi.escape(unicode(item)))
+            out.append(escape(unicode(item)))
             out.append("</li>")
         out.append("</ol>")
         out.append(_('Please press "${Action}" to ${action} the item.'

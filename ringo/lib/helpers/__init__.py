@@ -9,7 +9,7 @@ from ringo.lib.helpers.appinfo import (
     get_app_inheritance_path
 )
 
-from webhelpers.html import literal
+from webhelpers.html import literal, escape
 from ringo.lib.helpers.format import (
     prettify,
     get_local_datetime,

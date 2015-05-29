@@ -9,7 +9,7 @@ from formbar.renderer import (
     SelectionFieldRenderer as FormbarSelectionField
 )
 import ringo.lib.helpers as helpers
-from ringo.lib.helpers import get_action_routename, literal
+from ringo.lib.helpers import get_action_routename, literal, escape
 from ringo.model.base import BaseItem, BaseList, get_item_list
 from ringo.lib.table import get_table_config
 import ringo.lib.security as security
@@ -172,7 +172,7 @@ class DropdownFieldRenderer(FormbarDropdown):
             url = get_link_url(item, self._field._form._request)
             if url:
                 html.append('<a href="%s">%s</a>'
-                            % (cgi.escape(url), cgi.escape(unicode(item))))
+                            % (escape(url), escape(unicode(item))))
         return literal("".join(html))
 
     def _render_label(self):
