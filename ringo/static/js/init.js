@@ -118,6 +118,7 @@ $( document ).ready(function() {
     $('#pagination-size-selector').change(function() {
         var value = $(this).val();
         var url = $(this).attr('url') + "?pagination_size=" + value;
+        startSpinner(spinner_timer);
         window.open(url,"_self");
     });
     $("a.modalform").click(openModalForm);
