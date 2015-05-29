@@ -3,6 +3,8 @@ recursive-include docs *
 recursive-include test *.xml
 recursive-include ringo/locale *.po *.mo *.pot
 recursive-include ringo/static *
+recursive-include ringo/alembic *
+recursive-include ringo/fixtures *
 recursive-include ringo/scripts *.sql
 recursive-include ringo/templates *.mako
 global-exclude *.orig
