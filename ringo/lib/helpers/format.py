@@ -1,5 +1,4 @@
 """Modul with various methods to format and transform values"""
-import locale
 from datetime import (
     datetime,
     date,
@@ -11,6 +10,7 @@ from babel.dates import (
     format_datetime as babel_format_datetime,
     format_date as babel_format_date
 )
+from pyramid.threadlocal import get_current_request
 from pyramid.i18n import get_locale_name
 from formbar.converters import from_timedelta
 
@@ -25,18 +25,16 @@ def prettify(request, value):
     datatype the function will call a specialised formatting function
     which takes care of localisation etc.
 
-    The locale is determined from the given request. If no request is
-    present, that get the locale from the system.
+    The locale is determined from the given request.
 
     :request: Current request
     :value: Pythonic value
     :returns: Prettified (localized) value
 
     """
-    if request:
-        locale_name = get_locale_name(request)
-    else:
-        locale_name = locale.getdefaultlocale()[0]
+    if not request:
+        request = get_current_request()
+    locale_name = get_locale_name(request)
 
     if isinstance(value, datetime):
         return format_datetime(get_local_datetime(value),
