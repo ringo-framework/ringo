@@ -143,5 +143,9 @@ Mail
 
 Converter
 =========
+.. note::
+   To be able to use the converter you need to install the "converter" extra
+   requirements. See ``setup.py`` file for more details.
+
  * converter.start = false
  * converter.pythonpath =

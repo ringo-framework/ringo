@@ -18,6 +18,7 @@ Changed:
   file and explicit for form rendering, dialog rendering and listing
   rendering. Excluded html escaping for messages and the admin scripts as the
   rendered result is not aimed to be displayed in a browser.
+- Seperated requirements for testing, installation etc.
 
 Removed:
 - Removed group role feature. This feature was only rarly used.

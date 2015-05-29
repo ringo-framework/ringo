@@ -29,7 +29,6 @@ def main(global_config, **settings):
 def includeme(config):
     log.info('Setup of Ringo...')
     # Configure pyramid modules
-    config.include('pyramid_handlers')
     config.include('pyramid_beaker')
     config.include('pyramid_mako')
     config.include('ringo.config.setup')

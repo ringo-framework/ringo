@@ -15,23 +15,14 @@ requires = [
     'transaction',
     'pyramid_tm',
     'pyramid_mako',
-    'pyramid_debugtoolbar',
     'pyramid_beaker',
-    'pyramid_handlers',
     'pyramid_mailer',
     'zope.sqlalchemy',
     'waitress',
     'babel',
-    'Sphinx',
     'formbar>=0.9.4',
     'invoke',
     'dogpile.cache',
-    'behave',
-    'coverage',
-    'webtest',
-    'mock',
-    'py3o.template',
-    'py3o.renderers.pyuno',
     'passlib',
     'python-dateutil',
     'fuzzy',
@@ -40,6 +31,11 @@ requires = [
 ]
 
 tests_requires = [
+    'nose ',
+    'behave',
+    'coverage',
+    'webtest',
+    'mock'
 ]
 
 setup(name='ringo',
@@ -62,6 +58,11 @@ setup(name='ringo',
       test_suite='nose.collector',
       install_requires=requires,
       tests_require=tests_requires,
+      extras_require={
+          "tests": tests_requires,
+          "converter": ["py3o.template", "py3o.renderers.pyuno"],
+          "develop": ["Sphinx", "pyramid_debugtoolbar"]
+      },
       entry_points="""\
       [paste.app_factory]
       main = ringo:main

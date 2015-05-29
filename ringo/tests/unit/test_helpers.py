@@ -1,5 +1,4 @@
 from datetime import datetime
-from mock import Mock
 import pkg_resources
 from ringo.tests import BaseUnitTest
 
@@ -56,6 +55,7 @@ class HelpersAuthTests(BaseUnitTest):
 
     def test_get_action_url_read(self):
         from ringo.lib.helpers import get_action_url
+        from mock import Mock
         self.config.add_route('supertable-read', '/supertables/read/{id}')
         item = Mock()
         item.id = 1
