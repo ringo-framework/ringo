@@ -1,2 +1,8 @@
-include *.txt *.ini *.cfg *.rst
-recursive-include ringo *.ico *.png *.css *.gif *.jpg *.pt *.txt *.mak *.mako *.js *.html *.xml
+include README.rst *.txt COPYING development.ini
+recursive-include docs *
+recursive-include test *.xml
+recursive-include ringo/locale *.po *.mo *.pot
+recursive-include ringo/static *
+recursive-include ringo/scripts *.sql
+recursive-include ringo/templates *.mako
+global-exclude *.orig
