@@ -134,6 +134,7 @@ def setup_ringo_security(config):
     secure = settings.get("security.cookie_secure", "false") == "true"
     include_ip = settings.get("security.cookie_ip", "false") == "true"
     path = settings.get("security.cookie_path", "/")
+    domain = settings.get("security.cookie_domain")
     httponly = settings.get("security.cookie_httponly", "false") == "true"
     authn_policy = AuthTktAuthenticationPolicy(secret,
                                                secure=secure,
@@ -143,6 +144,7 @@ def setup_ringo_security(config):
                                                callback=get_principals,
                                                include_ip=include_ip,
                                                path=path,
+                                               domain=domain,
                                                http_only=httponly)
     authz_policy = ACLAuthorizationPolicy()
     config.set_authorization_policy(authz_policy)
