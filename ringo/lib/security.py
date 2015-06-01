@@ -141,7 +141,7 @@ def setup_ringo_security(config):
                                                timeout=timeout,
                                                reissue_time=timeout/10,
                                                callback=get_principals,
-                                               include_ip = include_ip,
+                                               include_ip=include_ip,
                                                path=path,
                                                http_only=httponly)
     authz_policy = ACLAuthorizationPolicy()
