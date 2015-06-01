@@ -35,10 +35,10 @@ $( document ).ready(function() {
     $(':submit').click(function () {
         startSpinner(spinner_timer);
     });
-    $('a[href^="mailto:"]') {
+    $('a[href^="mailto:"]').click(function () {
         clearTimeout(timer);
     });    
-    $("a[target='_blank']") {
+    $("a[target='_blank']").click(function () {
         clearTimeout(timer);
     });    
     $('.dropdown-toggle').click(function () {
