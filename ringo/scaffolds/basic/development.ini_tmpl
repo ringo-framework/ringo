@@ -7,6 +7,7 @@
 app.title = {{package}}
 # Baseurl of the application.
 # app.url =
+# app.base =
 
 
 use = egg:{{package}}
@@ -38,10 +39,13 @@ session.type = file
 session.data_dir = %(here)s/data/sessions/data
 session.lock_dir = %(here)s/data/sessions/lock
 session.key = customerskey
+session.timeout = 1800
 session.secret = %(security.cookie_secret)s
 session.secure = %(security.cookie_secure)s
-session.cookie_path = %(security.cookie_path)s
 session.httponly = %(security.cookie_httponly)s
+session.cookie_expires = %(security.cookie_expires)s
+session.cookie_path = %(security.cookie_path)s
+#session.cookie_domain = %(security.cookie_domain)s
 
 ###
 # Settings for the auth system
@@ -64,8 +68,10 @@ security.static_http_cache = 3600
 security.cookie_secret = secret
 security.cookie_secure = false
 security.cookie_ip = true
-security.cookie_path = /
 security.cookie_httponly = true
+security.cookie_expires = true
+security.cookie_path = /
+#security.cookie_domain =
 # Set header options.
 security.header_secure = true
 security.header_clickjacking = true
