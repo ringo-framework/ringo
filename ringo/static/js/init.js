@@ -35,6 +35,12 @@ $( document ).ready(function() {
     $(':submit').click(function () {
         startSpinner(spinner_timer);
     });
+    $('a[href^="mailto:"]') {
+        clearTimeout(timer);
+    });    
+    $("a[target='_blank']") {
+        clearTimeout(timer);
+    });    
     $('.dropdown-toggle').click(function () {
         clearTimeout(timer);
     });    
