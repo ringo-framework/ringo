@@ -46,8 +46,44 @@ When trying to load form or table configuration ringo will iterate over
 the inhertance path and try to load the configuration from each
 application within the inhertance path.
 
+Sessions
+========
+
+Beaker is used for session handling. Please refer to its documentation to get
+more information on the available configuraton options.
+
+ * session.type = file
+ * session.data_dir = %(here)s/data/sessions/data
+ * session.lock_dir = %(here)s/data/sessions/lock
+ * session.key = customerskey
+ * session.timeout = 1800
+
+The following options regard to the cookie identifying the session in the
+client. The configuration option are taken from the global cookie security
+settings:
+
+ * session.secret = %(security.cookie_secret)s
+ * session.secure = %(security.cookie_secure)s
+ * session.cookie_expires = %(security.cookie_expires)s
+ * session.httponly = %(security.cookie_httponly)s
+ * session.path = %(security.cookie_path)s
+ * session.domain = %(security.cookie_domain)s
+
 Authentification
 ================
+Authetification is stored with in a auth_tkt cookie.  See `Cookie options on
+<http://docs.pylonsproject.org/projects/pyramid/en/latest/api/authentication.html>`_
+for more details.
+
+The following setting as taken from the global cookie security settings:
+
+ * ``cookie_secret`` to sign the cookie data.
+ * ``cookie_secure`` to only send the cookie over a save (SSL) connection.
+ * ``cookie_ip`` to bind the cookie to a specific IP.
+ * ``cookie_httponly`` to disallow clientside access to the cookie
+ * ``cookie_path`` to set the scope of the cookie to a specific path.
+ * ``cookie_domain`` to set the scope of the cookie to a specific domain.
+
 Autologout
 -----------
 The authentification only stay valud for the given time. After that time a
@@ -77,13 +113,14 @@ However, for testing issues it might be usefull to disable this feature.
 
 Cookies
 -------
-See `Cookie options on <http://docs.pylonsproject.org/projects/pyramid/en/latest/api/authentication.html>`_ for more details.
 
  * security.cookie_secret = 'secret'
  * security.cookie_secure = false
  * security.cookie_ip = false
- * security.cookie_path = '/'
  * security.cookie_httponly = false
+ * security.cookie_expires = true
+ * security.cookie_path = '/'
+ * security.cookie_domain =
 
 The `cookie_ip` setting will only apply to the `auth_tkt` cookie for the
 authorisation. Other option apply for all cookies set.
