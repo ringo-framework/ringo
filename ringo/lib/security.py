@@ -136,6 +136,7 @@ def setup_ringo_security(config):
     path = settings.get("security.cookie_path", "/")
     httponly = settings.get("security.cookie_httponly", "false") == "true"
     authn_policy = AuthTktAuthenticationPolicy(secret,
+                                               secure=secure,
                                                hashalg='sha512',
                                                timeout=timeout,
                                                reissue_time=timeout/10,
