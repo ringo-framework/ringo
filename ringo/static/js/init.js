@@ -32,7 +32,7 @@ var spinner = new Spinner(opts);
 var spinner_timer = 800; //threshold in ms after spinner starts
 
 $( document ).ready(function() {
-    $(':button').click(function () {
+    $(':submit').click(function () {
         startSpinner(spinner_timer);
     });
     $('.dropdown-toggle').click(function () {
