@@ -39,12 +39,12 @@ will modify the inheritance path of the application.
 
 Example:
 The current application package is named "foo". "foo" is based on "bar". And
-"bar" is based on "ringo". The inheritinace path is foo->bar->ringo.
+"bar" is based on "ringo". The inheritance path is foo->bar->ringo.
 
 This has consequences for the loading of form and table configurations.
 When trying to load form or table configuration ringo will iterate over
-the inhertance path and try to load the configuration from each
-application within the inhertance path.
+the inheritance path and try to load the configuration from each
+application within the inheritance path.
 
 Sessions
 ========
@@ -59,37 +59,41 @@ more information on the available configuraton options.
  * session.timeout = 1800
 
 The following options regard to the cookie identifying the session in the
-client. The configuration option are taken from the global cookie security
-settings:
+client. The configuration option are taken from the global :ref:`conf_cookies`
+security settings:
 
- * session.secret = %(security.cookie_secret)s
- * session.secure = %(security.cookie_secure)s
- * session.cookie_expires = %(security.cookie_expires)s
- * session.httponly = %(security.cookie_httponly)s
- * session.path = %(security.cookie_path)s
- * session.domain = %(security.cookie_domain)s
+session.secret 
+        Defaults to *security.cookie_secret*
+
+session.secure
+        Defaults to *security.cookie_secure*
+
+session.cookie_expires
+        Defaults to *security.cookie_expires*
+
+session.httponly
+        Defaults to *security.cookie_httponly*
+
+session.path 
+        Defaults to *security.cookie_path*
+
+session.domain
+        Defaults to *security.cookie_domain*
 
 Authentification
 ================
 Authetification is stored with in a auth_tkt cookie.  See `Cookie options on
 <http://docs.pylonsproject.org/projects/pyramid/en/latest/api/authentication.html>`_
-for more details.
-
-The following setting as taken from the global cookie security settings:
-
- * ``cookie_secret`` to sign the cookie data.
- * ``cookie_secure`` to only send the cookie over a save (SSL) connection.
- * ``cookie_ip`` to bind the cookie to a specific IP.
- * ``cookie_httponly`` to disallow clientside access to the cookie
- * ``cookie_path`` to set the scope of the cookie to a specific path.
- * ``cookie_domain`` to set the scope of the cookie to a specific domain.
+for more details. The settings as taken from the global :ref:`conf_cookies`
+security settings.
 
 Autologout
 -----------
-The authentification only stay valud for the given time. After that time a
+The authentification only stay valid for the given time. After that time a
 automatic logout from the application will happen.
 
- * auth.timeout = 1800
+auth.timeout
+        Defaults to 1800 seconds.
 
 Passwort reminder and user registration
 ---------------------------------------
@@ -97,8 +101,13 @@ Ringo provides methods to allow users to register a new account or send
 requests to reset their passwords. Botch subsystems can be enabled by changing
 the following values.
 
- * auth.register_user = false
- * auth.password_reminder = false
+auth.register_user
+        Defaults to `false`. Enable the option to let users register a new
+        account. However the account must be *finished* by the administrator.
+
+auth.password_reminder
+        Defaults to `false`. Enable the option to let the user reset their
+        password.
 
 Security
 ========
@@ -107,23 +116,64 @@ CSRF Protection
 To enable CSRF protection you can configure ringo to include a CSRF
 synchronizer token to each form to protect POST request against CSRF attacks.
 
- * security.enable_csrf_check = true
+security.enable_csrf_check = true
+        Defaults to `true`
 
-However, for testing issues it might be usefull to disable this feature.
+However, for testing issues it might be useful to disable this feature.
+
+.. _conf_cookies:
 
 Cookies
 -------
+security.cookie_secret
+        Defaults to a randomly generated 50 char long string. Value used to
+        sign the cookie to prevent manipulation of the content of the cookie.
+        If not set the value will be regenerated on every application start.
 
- * security.cookie_secret = 'secret'
- * security.cookie_secure = false
- * security.cookie_ip = false
- * security.cookie_httponly = false
- * security.cookie_expires = true
- * security.cookie_path = '/'
- * security.cookie_domain =
+        .. tip::
+           During development it is usefull to set the value to a static
+           string to prevent invalidating the cookie on every application
+           restart.
 
-The `cookie_ip` setting will only apply to the `auth_tkt` cookie for the
-authorisation. Other option apply for all cookies set.
+        .. important::
+           In productive operation: Please ensure that this value is set to a randomly generated
+           string. Either by not setting the value at all or setting a static
+           generated string.
+
+security.cookie_secure
+        Default to `false`. If set to `true` the cookie is only accessible
+        over a secure connection (SSL).
+
+        .. important::
+           In productive operation: Please ensure that this value is set to
+           true if you use a SSL enabled connection.
+
+security.cookie_ip
+        Defaults to `true`. If set to `true` the cookie is bound to the IP
+        address.
+
+        .. caution::
+           Although this settings **can** increase the security it may cause
+           problems in if the IP address is not stable which is true for most
+           dialup connections.
+
+security.cookie_httponly
+        Defaults to `true`. If set to `true` the cookie is not accessible
+        directly by the client but can only be changed through a http
+        connection.
+
+security.cookie_expires
+        Defaults to `true`. If set to `true` the cookie will expires after the
+        browser is closed.
+
+security.cookie_path
+        Defaults to `/`. The scope of the cookie will bound to the given path
+        in the application.
+
+security.cookie_domain
+        Defaults to the current domain and all subdomains (is automatically determined by the
+        server). The scope of the cookie will bound to a specific domain.
+
 
 .. _conf_headers:
 
