@@ -98,11 +98,19 @@ def get_form_config_from_file(name, filename, formname):
                                                          appname))
             break
         except IOError:
+	    # Silently ignore IOErrors here as is Ok when trying to load the
+	    # configurations files while iterating over the possible config
+	    # file locations. If the file can finally not be loaded an IOError
+	    # is raised at the end.
             pass
     else:
         if name.startswith("ringo_"):
             loaded_config = load(get_path_to_form_config(filename, name,
                                                          location="."))
+    # If we can't load the config file after searching in all locations, raise
+    # an IOError. Hint: Maybe you missed to set the app.base config variable?
+    if not loaded_config:
+        raise IOError("Could not load form configuration for %s" % filename)
     return Config(loaded_config).get_form(formname)
 
 

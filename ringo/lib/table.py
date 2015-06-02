@@ -21,10 +21,11 @@ def get_table_config(clazz, tablename=None):
     """
     # As this is a class method of the BaseItem we need to build a
     # unique cachename for tableconfigs among all inherited classes.
-    cachename = "%s.%s" % (clazz.__name__, tablename)
-    if not CACHE_TABLE_CONFIG.get(cachename):
-        CACHE_TABLE_CONFIG.set(cachename, TableConfig(clazz, tablename))
-    return CACHE_TABLE_CONFIG.get(cachename)
+    return TableConfig(clazz, tablename)
+    #cachename = "%s.%s" % (clazz.__name__, tablename)
+    #if not CACHE_TABLE_CONFIG.get(cachename):
+    #    CACHE_TABLE_CONFIG.set(cachename, TableConfig(clazz, tablename))
+    #return CACHE_TABLE_CONFIG.get(cachename)
 
 
 def get_path_to_overview_config(filename, app=None, location=None):
@@ -209,10 +210,18 @@ def _load_overview_config(clazz):
             config = open(get_path_to_overview_config(cfile, appname), "r")
             break
         except IOError:
+	    # Silently ignore IOErrors here as is Ok when trying to load the
+	    # configurations files while iterating over the possible config
+	    # file locations. If the file can finally not be loaded an IOError
+	    # is raised at the end.
             pass
     else:
         if name.startswith("ringo_"):
             config = open(get_path_to_overview_config(cfile,
                                                       name,
                                                       location="."), "r")
+    # If we can't load the config file after searching in all locations, raise
+    # an IOError. Hint: Maybe you missed to set the app.base config variable?
+    if not config:
+        raise IOError("Could not load table configuration for %s" % cfile)
     return json.load(config)
