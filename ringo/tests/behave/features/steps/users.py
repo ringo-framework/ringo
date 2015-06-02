@@ -11,8 +11,8 @@ def step_impl(context, error):
         "first_name": "xxx",
         "last_name": "yyy",
         "email": "test@test.de",
-        "password": "test",
-        "retype_password": "test",
+        "password": "0123456789abc",
+        "retype_password": "0123456789abc",
         "csrf_token": csrf
     }
     if error == "password-missmatch":
@@ -33,8 +33,8 @@ def step_impl(context, error, id):
         "first_name": "xxx",
         "last_name": "yyy",
         "email": "test@test.de",
-        "password": "test",
-        "retype_password": "test",
+        "password": "0123456789abc",
+        "retype_password": "0123456789abc",
         "csrf_token": csrf
     }
     if error == "missing-login":
