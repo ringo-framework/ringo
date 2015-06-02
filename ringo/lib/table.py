@@ -21,11 +21,10 @@ def get_table_config(clazz, tablename=None):
     """
     # As this is a class method of the BaseItem we need to build a
     # unique cachename for tableconfigs among all inherited classes.
-    return TableConfig(clazz, tablename)
-    #cachename = "%s.%s" % (clazz.__name__, tablename)
-    #if not CACHE_TABLE_CONFIG.get(cachename):
-    #    CACHE_TABLE_CONFIG.set(cachename, TableConfig(clazz, tablename))
-    #return CACHE_TABLE_CONFIG.get(cachename)
+    cachename = "%s.%s" % (clazz.__name__, tablename)
+    if not CACHE_TABLE_CONFIG.get(cachename):
+        CACHE_TABLE_CONFIG.set(cachename, TableConfig(clazz, tablename))
+    return CACHE_TABLE_CONFIG.get(cachename)
 
 
 def get_path_to_overview_config(filename, app=None, location=None):
