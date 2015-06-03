@@ -32,18 +32,9 @@ var spinner = new Spinner(opts);
 var spinner_timer = 800; //threshold in ms after spinner starts
 
 $( document ).ready(function() {
-    $(':submit').click(function () {
+    $(':button').not('[data-toggle="dropdown"], [type="reset"]').click(function () {
         startSpinner(spinner_timer);
     });
-    $('a[href^="mailto:"]').click(function () {
-        clearTimeout(timer);
-    });    
-    $("a[target='_blank']").click(function () {
-        clearTimeout(timer);
-    });    
-    $('.dropdown-toggle').click(function () {
-        clearTimeout(timer);
-    });    
     $('[data-toggle="tooltip"]').tooltip();
     $('.dialog').modal({
         backdrop: "static"
@@ -139,33 +130,31 @@ $( document ).ready(function() {
     $('form').each(function() {
         $(this).data('initialValue', $(this).serialize());
     });
-    $('a').click(function(event) {
+    $('a').not('[href^="mailto:"], [target="_blank"]').click(function(event) {
         var isDirty = false;
         var element = event.target;
         var url = $(element).attr("href");
-        hash_i = url.indexOf("#");
-        has_hash = (hash_i  == -1) == false;
-        if (has_hash == false){
-            startSpinner(spinner_timer);
-        }    
         $('form').each(function () {
             if($(this).data('initialValue') != $(this).serialize()){
                 isDirty = true;
             }
         });
         if((isDirty == true) && (DirtyFormWarningOpen == false)) {
-            DirtyFormWarningOpen = true;
-            var element = event.target;
-            var url = $(element).attr("href");
             var dialog = $("#DirtyFormWarning");
             $('#DirtyFormWarningProceedButton').attr("href", url);
             // If the URL does not begin with "#" than show the dialog.
-            if (url.indexOf("#") != 0) {
+            if (url && url.indexOf("#") != 0) {
                 $(dialog).modal("show");
+                DirtyFormWarningOpen = true;
                 event.preventDefault();
                 return false;
             }
             return true;
+        }
+        hash_i = url.indexOf("#");
+        has_hash = (hash_i  == -1) == false;
+        if (((location.pathname != url) && url != "") && (has_hash == false)) {
+            startSpinner(spinner_timer);
         }
     });
     $('#DirtyFormWarningCancelButton').click(function(event) {
@@ -205,13 +194,11 @@ function startSpinner(x) {
     timer = setTimeout(function(){
             $('#spinner').spin(spinner.el);
     }, x);
-}    
+}
 
 function openModalForm(event) {
   var element = event.target;
-  console.log(element);
   var url = $(element).attr("href");
-  console.log(url);
   // Load page
   var page = $.ajax({
       url: url,
