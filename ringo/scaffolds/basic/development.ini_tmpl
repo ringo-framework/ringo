@@ -75,7 +75,7 @@ security.cookie_path = /
 # Set header options.
 security.header_secure = true
 security.header_clickjacking = true
-security.header_csp = false
+security.header_csp = true
 
 ###
 # Settings for the Converter
