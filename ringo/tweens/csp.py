@@ -1,8 +1,17 @@
 def parse_setting(name, settings, default=None):
-    return settings.get(name) if settings.get(name, None) else default
+    value = settings.get(name) if settings.get(name, None) else default
+    if value and not isinstance(value, list):
+        values = []
+        for v in value.split(" "):
+            values.append("'%s'" % v)
+        return values
+    else:
+        return value
 
 
 def build_csp_policy(settings):
+    # TODO: Remove "unsafe-inline" default here. Change Ringo in the way
+    # that it does not contain inline javascript! (ti) <2015-06-03 17:10>
     config = {
         'default-src': parse_setting('security.csp.default_src', settings,
                                      ["'self'"]),
