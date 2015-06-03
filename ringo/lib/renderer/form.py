@@ -9,7 +9,7 @@ from formbar.renderer import (
     SelectionFieldRenderer as FormbarSelectionField
 )
 import ringo.lib.helpers as helpers
-from ringo.lib.helpers import get_action_routename, literal, escape
+from ringo.lib.helpers import get_action_routename, literal, escape, HTML
 from ringo.model.base import BaseItem, BaseList, get_item_list
 from ringo.lib.table import get_table_config
 import ringo.lib.security as security
@@ -171,9 +171,10 @@ class DropdownFieldRenderer(FormbarDropdown):
         for item in items:
             url = get_link_url(item, self._field._form._request)
             if url:
-                html.append('<a href="%s">%s</a>'
-                            % (escape(url), escape(unicode(item))))
-        return literal("".join(html))
+                html.append(HTML.tag("a", href=("%s" % url), _closed=False))
+                html.append(escape(unicode(item)))
+                html.append(HTML.tag("/a", _closed=False))
+        return literal("").join(html)
 
     def _render_label(self):
         html = []
@@ -181,8 +182,10 @@ class DropdownFieldRenderer(FormbarDropdown):
         if not self._field.is_readonly() and not self.nolink == "true":
             link = self.render_link()
             if link:
-                html.append(" [%s]" % link)
-        return "".join(html)
+                html.append(" [")
+                html.append(link)
+                html.append("]")
+        return literal("").join(html)
 
 
 class StateFieldRenderer(FormbarDropdown):
