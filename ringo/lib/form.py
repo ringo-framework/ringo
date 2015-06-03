@@ -6,7 +6,6 @@ from formbar.helpers import get_css_files, get_js_files
 from ringo.lib.cache import CACHE_FORM_CONFIG
 from ringo.lib.helpers import (
     get_path_to,
-    get_app_name,
     get_app_inheritance_path
 )
 
@@ -19,10 +18,10 @@ def get_ownership_form(item, db, csrf_token, eval_url,
                        readonly=None, url_prefix=None, locale=None):
     if readonly:
         config = get_form_config_from_file('ringo', 'ownership.xml',
-                                  'ownership-form-read')
+                                           'ownership-form-read')
     else:
         config = get_form_config_from_file('ringo', 'ownership.xml',
-                                  'ownership-form-update')
+                                           'ownership-form-update')
     return Form(config, item, db,
                 csrf_token=csrf_token,
                 eval_url=eval_url,
@@ -99,10 +98,10 @@ def get_form_config_from_file(name, filename, formname):
                                                          appname))
             break
         except IOError:
-	    # Silently ignore IOErrors here as is Ok when trying to load the
-	    # configurations files while iterating over the possible config
-	    # file locations. If the file can finally not be loaded an IOError
-	    # is raised at the end.
+        # Silently ignore IOErrors here as is Ok when trying to load the
+        # configurations files while iterating over the possible config
+        # file locations. If the file can finally not be loaded an IOError
+        # is raised at the end.
             pass
     else:
         if name.startswith("ringo_"):
