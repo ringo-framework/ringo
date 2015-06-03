@@ -87,6 +87,7 @@ def get_form_config_from_file(name, filename, formname):
     configuration tried to be loaded from the current application first.
     If this fails it tries to load it from the extension or orign
     application and finally from the ringo application."""
+    loaded_config = None
     for appname in get_app_inheritance_path():
         try:
             # Always first try to load from the current application. No
