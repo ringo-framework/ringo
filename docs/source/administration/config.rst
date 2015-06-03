@@ -137,8 +137,7 @@ security.cookie_secret
 
         .. important::
            In productive operation: Please ensure that this value is set to a randomly generated
-           string. Either by not setting the value at all or setting a static
-           generated string.
+           string. Either by not setting the value at all (and let the application generate a random string) or setting it to a static random generated string.
 
 security.cookie_secure
         Default to `false`. If set to `true` the cookie is only accessible
