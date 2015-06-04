@@ -13,7 +13,8 @@ from ringo.lib.helpers import (
     get_item_modul,
     get_app_url,
     literal,
-    escape
+    escape,
+    HTML
 )
 from ringo.lib.form import (
     eval_url,
@@ -103,18 +104,18 @@ class ConfirmDialogRenderer(DialogRenderer):
         out.append(_("Do you really want to ${action}"
                      " the following ${item} items?",
                      mapping=mapping))
-        out.append("<br>")
-        out.append("<ol>")
+        out.append(HTML.tag("br", _closed=False))
+        out.append(HTML.tag("ol", _closed=False))
         for item in items:
-            out.append("<li>")
+            out.append(HTML.tag("li", _closed=False))
             out.append(escape(unicode(item)))
-            out.append("</li>")
-        out.append("</ol>")
+            out.append(HTML.tag("/li", _closed=False))
+        out.append(HTML.tag("/ol", _closed=False))
         out.append(_('Please press "${Action}" to ${action} the item.'
                      ' Press "Cancel" to cancel the action.',
                      mapping=mapping))
 
-        return literal("".join(out))
+        return literal("").join(out)
 
 
 class ErrorDialogRenderer(DialogRenderer):
