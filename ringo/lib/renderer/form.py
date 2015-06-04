@@ -162,7 +162,7 @@ class DropdownFieldRenderer(FormbarDropdown):
         except AttributeError:
             log.warning("Missing %s attribute in %s"
                         % (self._field.name, self._field._form._item))
-            return "".join(html)
+            return literal("").join(html)
 
         if not isinstance(item, list):
             items.append(item)
@@ -212,7 +212,7 @@ class StateFieldRenderer(FormbarDropdown):
                                                      "statefield.mako")
 
     def _render_label(self):
-        return ""
+        return literal("")
 
     def render(self):
         """Initialize renderer"""
@@ -226,15 +226,18 @@ class StateFieldRenderer(FormbarDropdown):
         has_errors = len(self._field.get_errors())
         has_warnings = len(self._field.get_warnings())
 
-        html.append('<div class="form-group %s %s">' % ((has_errors and 'has-error'), (has_warnings and 'has-warning')))
+        class_options = "form-group %s %s" % ((has_errors and 'has-error'),
+                                              (has_warnings and 'has-warning'))
+        html.append(HTML.tag("div", _closed=False,
+                             class_=class_options))
         html.append(self._render_label())
         values = {'field': self._field,
                   'request': self._field._form._request,
                   'state': state,
                   '_': self._field._form._translate}
-        html.append(self.template.render(**values))
-        html.append('</div>')
-        return "".join(html)
+        html.append(literal(self.template.render(**values)))
+        html.append(HTML.tag("\div", _closed=False))
+        return literal("").join(html)
 
 
 class ListingFieldRenderer(FormbarSelectionField):
@@ -328,7 +331,10 @@ class ListingFieldRenderer(FormbarSelectionField):
         config = self._field._config.renderer
         has_errors = len(self._field.get_errors())
         has_warnings = len(self._field.get_warnings())
-        html.append('<div class="form-group %s %s">' % ((has_errors and 'has-error'), (has_warnings and 'has-warning')))
+        class_options = "form-group %s %s" % ((has_errors and 'has-error'),
+                                              (has_warnings and 'has-warning'))
+        html.append(HTML.tag("div", _closed=False,
+                             class_=class_options))
         html.append(self._render_label())
         if self._field.is_readonly() or self.onlylinked == "true":
             items = self._get_selected_items(self.itemlist.items)
@@ -352,11 +358,11 @@ class ListingFieldRenderer(FormbarSelectionField):
                   'h': helpers,
                   'tableconfig': get_table_config(self.itemlist.clazz,
                                                   config.table)}
-        html.append(self.template.render(**values))
+        html.append(literal(self.template.render(**values)))
         html.append(self._render_errors())
         html.append(self._render_help())
-        html.append('</div>')
-        return "".join(html)
+        html.append(HTML.tag("/div", _closed=False))
+        return literal("").join(html)
 
 renderers = {
     "dropdown": DropdownFieldRenderer,
