@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 import sqlalchemy as sa
 import re
@@ -68,7 +69,7 @@ def user_name_update_validator(field, data, params):
 
 def password_nonletter_validator(field, data):
     """Validator to ensure that passwords contain two non-letters"""
-    return len(re.findall('[^a-zA-Z]', data[field])) >= 2
+    return len(re.findall('[^a-zA-ZäöüÄÖÜß]', data[field])) >= 2
 
 
 def password_minlength_validator(field, data):
