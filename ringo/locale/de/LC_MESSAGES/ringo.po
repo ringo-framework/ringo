@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-05-28 20:26+0200\n"
+"POT-Creation-Date: 2015-06-08 10:24+0200\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language-Team: German "
@@ -28,15 +28,15 @@ msgstr "AKTUALISIERUNG"
 msgid "CREATE"
 msgstr "ANLEGEN"
 
-#: ringo/lib/renderer/dialogs.py:82
+#: ringo/lib/renderer/dialogs.py:84
 msgid "Confirm ${Action}"
 msgstr "Bestätigen ${Action}"
 
-#: ringo/lib/renderer/dialogs.py:102
+#: ringo/lib/renderer/dialogs.py:104
 msgid "Do you really want to ${action} the following ${item} items?"
 msgstr "Wollen Sie wirklich die folgenden ${item} Einträge ${action}?"
 
-#: ringo/lib/renderer/dialogs.py:112
+#: ringo/lib/renderer/dialogs.py:114
 msgid ""
 "Please press \"${Action}\" to ${action} the item. Press \"Cancel\" to "
 "cancel the action."
@@ -835,33 +835,29 @@ msgstr "Fehler beim Validieren von ${item_type}."
 msgid "Error on validation ${item_type} \"${item}\"."
 msgstr "Fehler beim Validieren von ${item_type} \"${item}\"."
 
-#: ringo/views/users.py:85 ringo/views/users.py:110
+#: ringo/views/users.py:86 ringo/views/users.py:111
 msgid "This name is already in use, please use something unique."
 msgstr ""
 "Dieser Name wird bereits benutzt, bitte nehmen Sie einen eindeutigen "
 "Namen."
 
-#: ringo/views/users.py:90 ringo/views/users.py:158
+#: ringo/views/users.py:91 ringo/views/users.py:116 ringo/views/users.py:166
 msgid "Password must be at least 12 characters long."
 msgstr "Passwort muss mindestens 12 Zeichen lang sein."
 
-#: ringo/views/users.py:94 ringo/views/users.py:162
+#: ringo/views/users.py:95 ringo/views/users.py:120 ringo/views/users.py:170
 msgid "Password must contain at least 2 non-letters."
 msgstr "Passwort muss mindestens 2 Nicht-Buchstaben enthalten."
 
-#: ringo/views/users.py:115
-msgid "Password has wrong format."
-msgstr "Passwort hat falsches Format."
-
-#: ringo/views/users.py:155
+#: ringo/views/users.py:163
 msgid "The given password is not correct"
 msgstr "Das angegebene Passwort ist nicht korrekt"
 
-#: ringo/views/users.py:174
+#: ringo/views/users.py:182
 msgid "Changed password for \"${item}\" successfull."
 msgstr "Password für \"${item}\" erfolgreich geändert."
 
-#: ringo/views/users.py:184
+#: ringo/views/users.py:192
 msgid "Error on changing the password for \"${item}\"."
 msgstr "Fehler bei der Änderung des Passworts für \"${item}\"."
 
@@ -1383,13 +1379,19 @@ msgstr "Nutzerdaten"
 msgid "Profile data"
 msgstr "Profildaten"
 
-#: ringo/views/forms/users.xml:21 ringo/views/forms/users.xml:22
+#: ringo/views/forms/users.xml:21
+msgid ""
+"The password must be at least 12 characters long, and include two non-"
+"letters. Leading and tailing whitespaces are stripped."
+msgstr "Das Passwort muss mindestens 12 Zeichen lang sein und 2 Nicht-Buchstaben "
+"enthalten. Führende und abschließende Leerzeichen werden nicht berücksichtigt."
+
+#: ringo/views/forms/users.xml:22
 msgid ""
 "The password must be at least 12 characters long, and include two non-"
 "letters"
-msgstr ""
-"Das Passwort muss mindestens 12 Zeichen lang sein und 2 Nicht-Buchstaben "
-"enthalten."
+msgstr "Das Passwort muss mindestens 12 Zeichen lang sein und 2 Nicht-Buchstaben "
+"enthalten. Führende und abschließende Leerzeichen werden nicht berücksichtigt."
 
 #: ringo/views/forms/users.xml:23
 msgid "Yes"
@@ -1424,4 +1426,7 @@ msgstr "Gruppen"
 #: ringo/views/tables/users.json:8
 msgid "Last login"
 msgstr "Letze Anmeldung"
+
+#~ msgid "Password has wrong format."
+#~ msgstr "Passwort hat falsches Format."
 
