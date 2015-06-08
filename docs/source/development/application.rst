@@ -60,7 +60,7 @@ templates of the ''Foo'' application in our application too::
 3. In order to have a working migration setup you will need to import the
 model of the base appliction to the model of the inherited application::
 
-       import bar.Model
+       import bar.model
 
 This will ensure that all the model will be available to alembic. Otherwise
 many tables would be scheduled for a drop.
@@ -69,10 +69,19 @@ many tables would be scheduled for a drop.
 See :ref:`config_app_base` for more details.
 
 5. The initialisation of the database is a little bit different as we want to
-initialize the database with the migration scripts of ''Foo''::
-        
+initialize the database with the migration scripts and fixtures of ''Foo''::
+
         bar-admin db init --base foo
         bar-admin fixtures load --app foo
+
+While the migration scripts are copied from foo to bar when initialising the
+database for the first time, the fixtures are not! The bar application only
+includes the fixtures from the base ringo application. If you want to use the
+fixtures from foo on default, then you need to copy the files yourself::
+
+        rm </path/to/bar/>/bar/fixtures/*
+        cp -r <path/to/foo/>/foo/fixtures/* </path/to/bar/>/bar/fixtures
+
 
 Voilà! That is it.
 
