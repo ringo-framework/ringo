@@ -7,4 +7,5 @@ recursive-include ringo/alembic *
 recursive-include ringo/fixtures *
 recursive-include ringo/scripts *.sql
 recursive-include ringo/templates *.mako
+recursive-include ringo/views/forms *.xml
 global-exclude *.orig
