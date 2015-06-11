@@ -34,7 +34,10 @@ def prettify(request, value):
     """
     if not request:
         request = get_current_request()
-    locale_name = get_locale_name(request)
+
+    # Under some circumstances, get_current_request will return None as the 
+    # current request. This makes it impossible to retrieve the current locale
+    locale_name = 'en_EN' if not request else get_locale_name(request)
 
     if isinstance(value, datetime):
         return format_datetime(get_local_datetime(value),
