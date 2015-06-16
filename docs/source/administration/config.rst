@@ -173,6 +173,9 @@ security.cookie_domain
         Defaults to the current domain and all subdomains (is automatically determined by the
         server). The scope of the cookie will bound to a specific domain.
 
+security.cookie_name
+        Defaults to 'auth_tkt'. Needs to be set in case you have multiple
+        ringo applications on the same server.
 
 .. _conf_headers:
 

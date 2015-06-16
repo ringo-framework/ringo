@@ -14,6 +14,8 @@ New:
   applications. Added new app.base configuration variable.
 - Added new helper command to copie the static files of formbar into to
   correct location in ringo.
+- Added option to name the authentification cookie. Needed if there are more
+  than one ringo application on a server.
 
 Changed:
 - Enabled Mako default HTML escaping for Template rendering globally in ini
