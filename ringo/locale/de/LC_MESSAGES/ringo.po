@@ -77,7 +77,7 @@ msgid ""
 "Can not find any available state transition based on the current or "
 "submitted item values"
 msgstr ""
-"Es kann kein Zustandswechsel auf Basis der aktuelle oder übersendeten "
+"Es kann kein Zustandswechsel auf Basis der aktuellen oder übersendeten "
 "Daten gefunden werden"
 
 #: ringo/templates/about.mako:4 ringo/templates/footer.mako:20
@@ -103,7 +103,7 @@ msgid ""
 " session timer."
 msgstr ""
 "Sie werden aufgrund von Inaktivität in kurzer Zeit automatisch abgemedet."
-" Bitte schließen Sie diesen Dialog und lösen eine neue Anfrage aus um die"
+" Bitte schließen Sie diesen Dialog und lösen eine neue Anfrage aus, um die"
 " Sitzungszeituhr zurückzusetzen."
 
 #: ringo/templates/base.mako:76 ringo/templates/internal/import.mako:41
@@ -119,7 +119,7 @@ msgid ""
 "Do you want to leave the current form without saving the changes? The "
 "changes will be lost if you do not save the data first!"
 msgstr ""
-"Wollen Sie das aktuelle Formular verlassen ohne die Änderungen zu "
+"Wollen Sie das aktuelle Formular verlassen, ohne die Änderungen zu "
 "speichern? Die Änderungen werden verloren gehen, wenn Sie das Formular "
 "nicht vorher speichern!"
 
@@ -298,7 +298,7 @@ msgid ""
 "Please do not forget to change the password after your first login! What "
 "are you waiting for?"
 msgstr ""
-"Bitte vergessen Sie nicht das Passwort nach der ersten Anmeldung zu "
+"Bitte vergessen Sie nicht, das Passwort nach der ersten Anmeldung zu "
 "ändern! Worauf warten Sie?"
 
 #: ringo/templates/index.mako:18
@@ -423,7 +423,7 @@ msgid ""
 "for more information"
 msgstr ""
 "Ihr Benutzerkonto wurde gesperrt. Bitte wenden Sie sich für mehr "
-"Informationen and die Administration."
+"Informationen an die Administration."
 
 #: ringo/templates/auth/forgot_password.mako:5
 #: ringo/templates/auth/login.mako:16
@@ -453,9 +453,9 @@ msgid ""
 "Please fillout the form the register a new account. You will recieve an "
 "email with a confirmation link to complete the registration."
 msgstr ""
-"Bitte füllen Sie das Formular aus, um einen neuen Zugang zur "
+"Bitte füllen Sie das Formular aus, um einen neuen Zugang zu "
 "registrieren. Sie erhalten im Anschluss eine Email mit einem "
-"Bestätigungslink um die Registrierung abzuschließen."
+"Bestätigungslink, um die Registrierung abzuschließen."
 
 #: ringo/templates/auth/reset_password.mako:7
 msgid "Password resetted"
@@ -571,11 +571,11 @@ msgstr "Aktuellen Suchfilter zurücksetzen"
 
 #: ringo/templates/internal/list.mako:88
 msgid "Disable regexpr in search"
-msgstr "Deaktiviere regexpr in der Suche"
+msgstr "Deaktiviere Regexpr in der Suche"
 
 #: ringo/templates/internal/list.mako:90
 msgid "Enable regexpr in search"
-msgstr "Aktiviere regexpr in der Suche"
+msgstr "Aktiviere Regexpr in der Suche"
 
 #: ringo/templates/internal/list.mako:95
 msgid "${num_filter} filter applied"
@@ -611,7 +611,7 @@ msgid ""
 "Please insert a name for your query. It it will be selectable under this "
 "name in the options menu of the search after saving."
 msgstr ""
-"Bitte geben Sie einen Namen für ihre Abfrage an. Die Abfrag wird nach dem"
+"Bitte geben Sie einen Namen für ihre Abfrage an. Die Abfrage wird nach dem"
 " Speichern unter diesem Namen im Optionsmenü auswählbar sein."
 
 #: ringo/templates/internal/list.mako:304
@@ -660,7 +660,7 @@ msgstr "Ihr neues Passwort lautet:"
 
 #: ringo/templates/mails/password_reminder.mako:8
 msgid "Please do not forget to change your password as soon as possible."
-msgstr "Bitte vergessen Sie nicht das Password alsbald möglich zu ändern."
+msgstr "Bitte vergessen Sie nicht das Passwort alsbald möglich zu ändern."
 
 #: ringo/templates/mails/password_reminder.mako:10
 #: ringo/templates/mails/password_reset_request.mako:11
@@ -682,7 +682,7 @@ msgid ""
 "case of questions please send an email to ${email}."
 msgstr ""
 "Diese E-Mail wurde automatisch versendet. Bitte antworten Sie nicht auf "
-"diese E-Mail. Im Falle von Fragen schicken Sie einen E-Mail an ${email}"
+"diese E-Mail. Im Falle von Fragen, schicken Sie einen E-Mail an ${email}"
 
 #: ringo/templates/mails/password_reset_request.mako:3
 msgid ""
@@ -697,7 +697,7 @@ msgid ""
 "To complete the reset of your password you need to confirm reset by "
 "clicking the following link:"
 msgstr ""
-"Um das Zurücksetzen des Passworts zu bestätigen klicken Sie bitte auf den"
+"Um das Zurücksetzen des Passworts zu bestätigen, klicken Sie bitte auf den"
 " folgenden Link:"
 
 #: ringo/templates/mails/password_reset_request.mako:9
@@ -719,7 +719,7 @@ msgid ""
 "To complete the registration you need to confirm the registration by "
 "clicking the following link:"
 msgstr ""
-"Bitte bestätigen Sie die Registration indem Sie den folgenden Link "
+"Bitte bestätigen Sie die Registration, indem Sie dem folgenden Link "
 "folgen: %s"
 
 #: ringo/templates/users/changepassword.mako:6
@@ -1206,11 +1206,11 @@ msgstr "Kopf-Menü"
 
 #: ringo/views/forms/modules.xml:20
 msgid "Administration menu"
-msgstr "Administration-Menü"
+msgstr "Administrations-Menü"
 
 #: ringo/views/forms/modules.xml:21
 msgid "User menu"
-msgstr "Benuter-Menü"
+msgstr "Benutzer-Menü"
 
 #. Label for owner field in form config
 #: ringo/views/forms/ownership.xml:4
@@ -1227,7 +1227,7 @@ msgid ""
 "Only users with a administrative role for this item is allowed to\n"
 "      change the owner."
 msgstr ""
-"Nur Nutzer mit einer administrativen Rolle für diesen Eintrag sind befugt"
+"Nur Nutzer mit einer administrativen Rolle für diesen Eintrag sind befugt,"
 " den Besitzer zu ändern."
 
 #. Label for first_name field in form config
@@ -1350,7 +1350,7 @@ msgid ""
 "The default group determines which group will be used for new entries of "
 "this user."
 msgstr ""
-"Die Vorgabegruppe legt fest mit welcher Benutzergruppe neue Einträge "
+"Die Vorgabegruppe legt fest, mit welcher Benutzergruppe neue Einträge "
 "dieses Nutzers angelegt werden."
 
 #: ringo/views/forms/users.xml:16
@@ -1359,7 +1359,7 @@ msgid ""
 "registered user. Please call /auth/activate_user/$token to active the "
 "user."
 msgstr ""
-"Das Aktivierungs-Token kann genutzt werden um einen deaktivierten oder "
+"Das Aktivierungs-Token kann genutzt werden, um einen deaktivierten oder "
 "neuen Nutzer zu (re)aktivieren. Bitte rufen Sie hierfür "
 "/auth/activate_user/$token auf."
 

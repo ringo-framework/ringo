@@ -26,6 +26,7 @@ Changed:
 - Static files from formbar are only copied on application start if there are
   not already the formbar files located in ringo. (Need some work). See
   "formbar_static" command.
+- Fixed typos in german translation.
 
 Removed:
 - Removed group role feature. This feature was only rarly used.
