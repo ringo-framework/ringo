@@ -116,7 +116,6 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
             ${h.literal(render_item_link(request, clazz, permission, item, value,
                               (field.renderer.openmodal == "true"),
                               (field.renderer.backlink != "false")))}
-          </a>
         % else:
           ${value}
         % endif
