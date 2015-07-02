@@ -117,7 +117,7 @@ def import_(request, callback=None):
                         "No data has been modified in this operation and no "
                         "items has been imported or updated. "
                         "The last message we heard from the importer was: %s"
-                        % e)
+                        ) % e
             renderer = ErrorDialogRenderer(request, err_title, err_msg)
             rvalue = {}
             ok_url = request.session['history'].pop(2)
