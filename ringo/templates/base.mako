@@ -184,7 +184,7 @@
         % for action, icon in context_actions:
           <li>
             <a href="${h.get_action_url(request, item,
-            action.name.lower())}"><i class="${icon}">&nbsp;</i>${action.name}</a>
+            action.name.lower())}"><i class="${icon}">&nbsp;</i>${_(action.name)}</a>
           </li>
         % endfor
       % endif
