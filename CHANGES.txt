@@ -12,6 +12,8 @@ New:
 - Password must be at least 12 chars long and include 2 non-letters.
 - Added support for loading configurations in case of multi-derived
   applications. Added new app.base configuration variable.
+- Added new helper command to copie the static files of formbar into to
+  correct location in ringo.
 
 Changed:
 - Enabled Mako default HTML escaping for Template rendering globally in ini
@@ -19,6 +21,9 @@ Changed:
   rendering. Excluded html escaping for messages and the admin scripts as the
   rendered result is not aimed to be displayed in a browser.
 - Seperated requirements for testing, installation etc.
+- Static files from formbar are only copied on application start if there are
+  not already the formbar files located in ringo. (Need some work). See
+  "formbar_static" command.
 
 Removed:
 - Removed group role feature. This feature was only rarly used.
