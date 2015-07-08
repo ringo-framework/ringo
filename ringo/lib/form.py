@@ -109,7 +109,7 @@ def get_form_config_from_file(name, filename, formname):
                                                          location="."))
     # If we can't load the config file after searching in all locations, raise
     # an IOError. Hint: Maybe you missed to set the app.base config variable?
-    if not loaded_config:
+    if loaded_config is None:
         raise IOError("Could not load form configuration for %s" % filename)
     return Config(loaded_config).get_form(formname)
 
