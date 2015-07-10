@@ -52,13 +52,14 @@ pwd_context = CryptContext(
     default="pbkdf2_sha256",
 
     # vary rounds parameter randomly when creating new hashes...
-    all__vary_rounds = 0.1,
+    all__vary_rounds=0.1,
 
     # set the number of rounds that should be used...
     # (appropriate values may vary for different schemes,
     # and the amount of time you wish it to take)
-    pbkdf2_sha256__default_rounds = 8000,
+    pbkdf2_sha256__default_rounds=8000,
 )
+
 
 def encrypt_password(password, scheme=None):
     """Will return a string with encrypted password using the passlib
@@ -126,6 +127,7 @@ def csrf_token_validation(event):
         if (csrf != unicode(request.session.get_csrf_token())):
             raise HTTPUnauthorized
 
+
 def refresh_auth_cookie(event):
     """This fuction will refresh the the timeout of the authentification
     cookie. See
@@ -185,6 +187,7 @@ def setup_ringo_security(config):
         config.add_tween('ringo.tweens.clickjacking.clickjacking_factory')
     if settings.get("security.header_csp", "false") == "true":
         config.add_tween('ringo.tweens.csp.csp_factory')
+
 
 def get_user(request):
     userid = unauthenticated_userid(request)
@@ -298,7 +301,7 @@ def get_permissions(modul, item=None):
             if role.admin is True and add_perm:
                 perms.append((Allow, default_principal, permission))
 
-            # Modul level (class level) permissions. 
+            # Modul level (class level) permissions.
             # Always add the default principals for the create and list
             # actions as those actions can not be checked on item level
             # anyway.
@@ -319,10 +322,12 @@ def get_permissions(modul, item=None):
                 perms.append((Allow, default_principal, permission))
     return perms
 
+
 def __add_principal(principals, new):
     if new not in principals:
         principals.append(new)
     return principals
+
 
 def get_principals(userid, request):
     """Returns a list of pricipals for the user with userid for the
