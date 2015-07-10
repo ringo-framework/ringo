@@ -59,6 +59,7 @@
       }
     };
   </script>
+  <script src="${request.static_path('ringo:static/js/ringo/autologout.js')}"></script>
   <script src="${request.static_path('ringo:static/js/init.js')}"></script>
   % if request.user:
   <script>

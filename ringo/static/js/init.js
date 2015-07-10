@@ -30,7 +30,6 @@ var opts = {
 var timer;
 var spinner = new Spinner(opts);
 var spinner_timer = 800; //threshold in ms after spinner starts
-var logout_warning = false;
 
 $( document ).ready(function() {
     $(':button').not('[data-toggle="dropdown"], [type="reset"]').click(function () {
@@ -170,20 +169,6 @@ $( document ).ready(function() {
 $( window ).unload(function() {
     stopSpinner();
 });
-
-function logoutCountdown(time, url) {
-    logout_warning = false;
-    var warning = $.timer(function() {
-      logout_warning = true;
-      $("#logoutWarning").modal("show");
-    });
-    warning.set({ time : time/100*95*1000, autostart : true });
-    var logout = $.timer(function() {
-        location.href=url;
-        logout_warning = false;
-    });
-    logout.set({ time : time*1000-500, autostart : true });
-}
 
 
 function stopSpinner() {
