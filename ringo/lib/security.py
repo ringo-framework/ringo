@@ -6,7 +6,7 @@ import random
 from passlib.context import CryptContext
 from datetime import datetime
 
-from pyramid.events import ContextFound
+from pyramid.events import ContextFound, NewRequest
 from pyramid.security import unauthenticated_userid,\
     has_permission as has_permission_,\
     Allow, ALL_PERMISSIONS
@@ -126,6 +126,14 @@ def csrf_token_validation(event):
         if (csrf != unicode(request.session.get_csrf_token())):
             raise HTTPUnauthorized
 
+def refresh_auth_cookie(event):
+    """This fuction will refresh the the timeout of the authentification
+    cookie. See
+    https://groups.google.com/forum/#!topic/pylons-discuss/HczvAEd5xY8
+    for more details.
+    """
+    event.request.unauthenticated_userid
+
 
 def setup_ringo_security(config):
     settings = config.registry.settings
@@ -162,6 +170,12 @@ def setup_ringo_security(config):
     # "security.enable_csrf_check" config variable to "false".
     if settings.get('security.enable_csrf_check', 'true') != "false":
         config.add_subscriber(csrf_token_validation, ContextFound)
+    # Refresh the auth cookie timeout on every request. On default this
+    # would only happen on requests which needs
+    # authentification/authorisation. As the authentification should be
+    # valid as long the user shows some activity by triggering requests
+    # this tween will refresh the timeout on every request.
+    config.add_subscriber(refresh_auth_cookie, NewRequest)
 
     # Add tweens to add custom security headers.
     # http://ghaandeeonit.tumblr.com/post/65698553805/securing-your-pyramid-application
@@ -171,7 +185,6 @@ def setup_ringo_security(config):
         config.add_tween('ringo.tweens.clickjacking.clickjacking_factory')
     if settings.get("security.header_csp", "false") == "true":
         config.add_tween('ringo.tweens.csp.csp_factory')
-
 
 def get_user(request):
     userid = unauthenticated_userid(request)
