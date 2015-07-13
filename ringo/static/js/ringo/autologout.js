@@ -2,30 +2,36 @@
 // other scripts.
 var logout_warning = false;
 var logout_warning_timer = null;
-var logout_call_timer = null;
 
-function logoutCountdown(time, url) {
-    logout_warning = false;
-    if (logout_warning_timer == null) {
-        // Warning
-        logout_warning_timer = $.timer(function() {
-            showLogoutWarning();
-        });
-        logout_warning_timer.set({ time : time/100*95*1000, autostart : true });
-        // Call of logout page
-        logout_call_timer = $.timer(function() {
-            callLogoutPage(url)
-        });
-        logout_call_timer.set({ time : time*1000-500, autostart : true });
-    } else {
-        logout_warning_timer.reset(); 
-        logout_call_timer.reset(); 
-    }
-}
+var LogoutTimer = function (time, url) {
+    // The logout timer will call the logout url after the given amount of
+    // seconds. 10 seconds before the logout will happen, a warning will be
+    // show the the autologout will happen soon.
+    this.time = time;
+    this.url = url;
+    this.timer1 = null;
+    this.timer2 = null;
+};
+
+LogoutTimer.prototype.start = function() {
+    this.timer1 = setTimeout(showLogoutWarning, this.time*1000-10000);
+    // FIXME: Check why we need a local variable logout_url here. I expected
+    // the code to work using this.url in callLogoutPage call direktly but
+    // this.url is undefined for some reason at time of calling... (ti)
+    // <2015-07-13 09:31>
+    var logout_url = this.url;
+    this.timer2 = setTimeout(function() {callLogoutPage(logout_url)}, this.time*1000);
+};
+
+LogoutTimer.prototype.reset = function() {
+    clearTimeout(this.timer1);
+    clearTimeout(this.timer2);
+    this.start();
+};
 
 function showLogoutWarning() {
-    logout_warning = true;
     $("#logoutWarning").modal("show");
+    logout_warning = true;
 }
 
 function callLogoutPage(url) {
@@ -33,9 +39,16 @@ function callLogoutPage(url) {
     location.href=url;
 }
 
+function logoutCountdown(time, url) {
+    logout_warning = false;
+    logout_warning_timer = new LogoutTimer(time, url);
+    logout_warning_timer.start();
+}
+
+// Listener to AJAX Requests. On each AJAX Request we will reset the logout
+// timer.
 $(document).ajaxComplete(function(event,request, settings){
     if (logout_warning_timer != null) {
         logout_warning_timer.reset();
-        logout_call_timer.reset();
     }
 });
