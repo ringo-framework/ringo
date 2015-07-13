@@ -68,7 +68,7 @@ def _handle_delete_request(request, items, callback):
                 ok_url = request.session['history'].pop(2)
                 rvalue['dialog'] = renderer.render(ok_url)
                 return rvalue
-        msg = _('Deleted ${num} ${item_type} successfull.', mapping=mapping)
+        msg = _('Deleted ${num} ${item_type} successfully.', mapping=mapping)
         log.info(msg)
         request.session.flash(msg, 'success')
         # Invalidate cache
