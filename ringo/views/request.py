@@ -127,10 +127,10 @@ def handle_POST_request(form, request, callback, event, renderers=None):
             handle_caching(request)
 
             if event == "create":
-                msg = _('Created new ${item_type} successfull.',
+                msg = _('Created new ${item_type} successfully.',
                         mapping=mapping)
             else:
-                msg = _('Edited ${item_type} "${item}" successfull.',
+                msg = _('Edited ${item_type} "${item}" successfully.',
                         mapping=mapping)
             log.info(msg)
             request.session.flash(msg, 'success')
