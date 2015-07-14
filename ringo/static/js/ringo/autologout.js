@@ -45,6 +45,15 @@ function logoutCountdown(time, url) {
     logout_warning_timer.start();
 }
 
+function hideLogoutWarning(eventObject) {
+  // to reset server timer
+  $.get('/');
+  logout_warning = false;
+  $("#logoutWarning").modal("hide");
+  event.preventDefault();
+  return false;
+}
+
 // Listener to AJAX Requests. On each AJAX Request we will reset the logout
 // timer.
 $(document).ajaxComplete(function(event,request, settings){
