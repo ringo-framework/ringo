@@ -68,7 +68,7 @@ def get_app_url_prefix():
     if url_prefix is None:
         return '/'
     else:
-        return '/' + url_prefix + '/'
+        return '/' + url_prefix.strip('/') + '/'
 
 
 def get_app_title():
