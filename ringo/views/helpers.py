@@ -10,7 +10,7 @@ from ringo.lib.helpers import (
         get_app_url
 )
 from ringo.lib.form import (
-    eval_url,
+    get_eval_url,
     get_form_config,
     get_ownership_form as _get_ownership_form
 )
@@ -114,7 +114,7 @@ def get_ownership_form(request):
     else:
         readonly = True
 
-    return _get_ownership_form(item, db, csrf_token, eval_url,
+    return _get_ownership_form(item, db, csrf_token, get_eval_url(),
                                readonly, url_prefix,
                                locale=locale_negotiator(request))
 
@@ -177,7 +177,7 @@ def get_item_form(name, request, renderers=None, validators=None):
                                       'itemid': item.id},
                 request=request,
                 csrf_token=request.session.get_csrf_token(),
-                eval_url=eval_url,
+                eval_url=get_eval_url(),
                 url_prefix=get_app_url(request),
                 locale=locale_negotiator(request))
     # Add validators

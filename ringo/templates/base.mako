@@ -37,7 +37,19 @@
       <script src="${request.static_path('ringo:static/formbar/%s' % filename)}"></script>
     % endfor
     <script src="${request.static_path('ringo:static/js/listfield.js')}"></script>
-    <script src="${request.static_path('ringo:static/js/helpers.js')}"></script>
+    <script>
+    /* Method to get the preferred user language. As there is no reliable
+     * way to get this information accross all browsers the ask the server
+     * for the language with gets this from the accepted header field */
+    function getLanguageFromBrowser() {
+        $.ajax({
+          url: "${url_prefix}rest/client/language",
+        })
+        .success(function( data ) {
+            return data.data;
+        });
+    }
+    </script>
     <%include file="/custom-header.mako" />
   </head>
   <body>

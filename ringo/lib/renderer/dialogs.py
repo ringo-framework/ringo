@@ -17,7 +17,7 @@ from ringo.lib.helpers import (
     HTML
 )
 from ringo.lib.form import (
-    eval_url,
+    get_eval_url,
     get_path_to_form_config,
 )
 
@@ -90,7 +90,7 @@ class ConfirmDialogRenderer(DialogRenderer):
         values['ok_url'] = self._request.current_route_path()
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
-        values['eval_url'] = self._request.application_url+eval_url
+        values['eval_url'] = self._request.application_url+get_eval_url()
         return literal(self.template.render(**values))
 
     def _render_body(self, items):
@@ -140,7 +140,7 @@ class ErrorDialogRenderer(DialogRenderer):
             values['ok_url'] = self._request.session['history'].pop()
         else:
             values['ok_url'] = self._request.route_path('home')
-        values['eval_url'] = self._request.application_url+eval_url
+        values['eval_url'] = self._request.application_url+get_eval_url()
         return literal(self.template.render(**values))
 
 
@@ -174,7 +174,7 @@ class ExportDialogRenderer(DialogRenderer):
         self.form = Form(form_config,
                          csrf_token=self._request.session.get_csrf_token(),
                          dbsession=request.db,
-                         eval_url=eval_url,
+                         eval_url=get_eval_url(),
                          url_prefix=get_app_url(request))
 
     def render(self, items):
@@ -188,7 +188,7 @@ class ExportDialogRenderer(DialogRenderer):
         values['ok_url'] = self._request.current_route_path()
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
-        values['eval_url'] = self._request.application_url+eval_url
+        values['eval_url'] = self._request.application_url+get_eval_url()
         return literal(self.template.render(**values))
 
     def _render_body(self):
@@ -210,7 +210,7 @@ class ImportDialogRenderer(DialogRenderer):
         self.form = Form(form_config,
                          csrf_token=self._request.session.get_csrf_token(),
                          dbsession=request.db,
-                         eval_url=eval_url,
+                         eval_url=get_eval_url(),
                          url_prefix=get_app_url(request))
 
     def render(self, items):
@@ -223,7 +223,7 @@ class ImportDialogRenderer(DialogRenderer):
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
         values['overview_url'] = self._request.route_path(get_action_routename(self._item, 'list'))
-        values['eval_url'] = self._request.application_url+eval_url
+        values['eval_url'] = self._request.application_url+get_eval_url()
         values['items'] = items
         values['h'] = ringo.lib.helpers
         return literal(self.template.render(**values))

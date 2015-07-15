@@ -6,12 +6,17 @@ from formbar.helpers import get_css_files, get_js_files
 from ringo.lib.cache import CACHE_FORM_CONFIG
 from ringo.lib.helpers import (
     get_path_to,
-    get_app_inheritance_path
+    get_app_inheritance_path,
+    get_app_url_prefix
 )
 
-eval_url = '/rest/rule/evaluate'
 formbar_css_filenames = []
 formbar_js_filenames = []
+
+
+def get_eval_url():
+    """Returns the REST API endpoint for form evaluation"""
+    return get_app_url_prefix() + 'rest/rule/evaluate'
 
 
 def get_ownership_form(item, db, csrf_token, eval_url,
@@ -42,7 +47,7 @@ def get_item_form(item, name, db, translate, renderers,
                                       'item': item.__tablename__,
                                       'itemid': item.id},
                 csrf_token=csrf_token,
-                eval_url='/rest/rule/evaluate')
+                eval_url=eval_url)
 
 
 def get_path_to_form_config(filename, app=None, location=None):
