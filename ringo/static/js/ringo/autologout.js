@@ -45,6 +45,18 @@ function logoutCountdown(time, url) {
     logout_warning_timer.start();
 }
 
+function hideLogoutWarning() {
+  // Call the index page to reset the serverside logout counter. This will
+  // also reset the client side counter as it is a AJAX request which gets
+  // listened to.
+  // FIXME: The URL of the "keepalive" page should not be hard coded. (ti)
+  // <2015-07-15 12:33> 
+  $.get('/rest/keepalive');
+  $("#logoutWarning").modal("hide");
+  logout_warning = false;
+  return false;
+}
+
 // Listener to AJAX Requests. On each AJAX Request we will reset the logout
 // timer.
 $(document).ajaxComplete(function(event,request, settings){

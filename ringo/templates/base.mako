@@ -86,7 +86,7 @@
           <p>${_('You will be logged out automatically in a short time because of inactivity. Please close this dialog and init a new request to renew your session timer.')}</p>
         </div>
         <div class="panel-footer">
-          <a class="btn btn-default" href="${request.session['history'].last()}">${_('Ok')}</a>
+          <a class="btn btn-default" id="logoutWarningOK">${_('Ok')}</a>
         </div>
       </div>
     </div>

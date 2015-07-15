@@ -116,7 +116,8 @@ def get_ownership_form(request):
 
     return _get_ownership_form(item, db, csrf_token, get_eval_url(),
                                readonly, url_prefix,
-                               locale=locale_negotiator(request))
+                               locale=locale_negotiator(request),
+                               translate=request.translate)
 
 
 def render_item_form(request, form, values=None, validate=True):

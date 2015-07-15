@@ -20,7 +20,8 @@ def get_eval_url():
 
 
 def get_ownership_form(item, db, csrf_token, eval_url,
-                       readonly=None, url_prefix=None, locale=None):
+                       readonly=None, url_prefix=None, locale=None,
+                       translate=None):
     if readonly:
         config = get_form_config_from_file('ringo', 'ownership.xml',
                                            'ownership-form-read')
@@ -31,7 +32,8 @@ def get_ownership_form(item, db, csrf_token, eval_url,
                 csrf_token=csrf_token,
                 eval_url=eval_url,
                 url_prefix=url_prefix,
-                locale=locale)
+                locale=locale,
+                translate=translate)
 
 
 def get_item_form(item, name, db, translate, renderers,
