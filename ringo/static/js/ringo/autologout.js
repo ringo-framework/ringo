@@ -51,7 +51,7 @@ function hideLogoutWarning() {
   // listened to.
   // FIXME: The URL of the "keepalive" page should not be hard coded. (ti)
   // <2015-07-15 12:33> 
-  $.get('/');
+  $.get('/rest/keepalive');
   $("#logoutWarning").modal("hide");
   logout_warning = false;
   return false;
