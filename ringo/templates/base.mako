@@ -79,9 +79,6 @@
       </div>
     </div>
   </div>
-  <script>
-    $("#logoutWarningOK").click(hideLogoutWarning);
-  </script>
   <div class="modal fade" id="DirtyFormWarning">
     <div class="modal-dialog">
       <div class="panel panel-warning">
