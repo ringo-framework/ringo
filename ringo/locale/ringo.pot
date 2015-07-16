@@ -724,11 +724,11 @@ msgid ""
 msgstr ""
 
 #: ringo/views/request.py:130
-msgid "Created new ${item_type} successfull."
+msgid "Created new ${item_type} successfully."
 msgstr ""
 
 #: ringo/views/request.py:133
-msgid "Edited ${item_type} \"${item}\" successfull."
+msgid "Edited ${item_type} \"${item}\" successfully."
 msgstr ""
 
 #: ringo/views/request.py:142

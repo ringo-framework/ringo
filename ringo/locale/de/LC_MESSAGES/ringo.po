@@ -813,11 +813,11 @@ msgstr ""
 "erforderlichen Rechte, um auf die Ressource zuzugreifen."
 
 #: ringo/views/request.py:130
-msgid "Created new ${item_type} successfull."
+msgid "Created new ${item_type} successfully."
 msgstr "${item_type} erfolgreich angelegt."
 
 #: ringo/views/request.py:133
-msgid "Edited ${item_type} \"${item}\" successfull."
+msgid "Edited ${item_type} \"${item}\" successfully."
 msgstr "${item_type} \"${item}\" wurde erfolgreich bearbeitet."
 
 #: ringo/views/request.py:142
