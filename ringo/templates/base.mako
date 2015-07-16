@@ -26,6 +26,9 @@
     <!-- Fav and touch icons -->
     <link href="${request.static_path('ringo:static/images/icons/favicons/apple-touch-icon-128.png')}" sizes="128x128" rel="apple-touch-icon-precomposed">
     <link href="${request.static_path('ringo:static/images/icons/favicons/favicon.png')}" rel="shortcut icon">
+    <script>
+       var url_prefix = "${url_prefix}";
+    </script>
     <script src="${request.static_path('ringo:static/js/jquery.js')}"></script>
     <script src="${request.static_path('ringo:static/js/spin.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.spin.js')}"></script>
@@ -37,19 +40,7 @@
       <script src="${request.static_path('ringo:static/formbar/%s' % filename)}"></script>
     % endfor
     <script src="${request.static_path('ringo:static/js/listfield.js')}"></script>
-    <script>
-    /* Method to get the preferred user language. As there is no reliable
-     * way to get this information accross all browsers the ask the server
-     * for the language with gets this from the accepted header field */
-    function getLanguageFromBrowser() {
-        $.ajax({
-          url: "${url_prefix}rest/client/language",
-        })
-        .success(function( data ) {
-            return data.data;
-        });
-    }
-    </script>
+    <script src="${request.static_path('ringo:static/js/helpers.js')}"></script>
     <%include file="/custom-header.mako" />
   </head>
   <body>

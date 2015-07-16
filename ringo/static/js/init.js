@@ -1,5 +1,4 @@
 var language = getLanguageFromBrowser();
-
 function getDTLanguage() {
     if (language.indexOf("de") >= 0) {
         return "german"
@@ -51,7 +50,7 @@ $( document ).ready(function() {
     });
     $('.datatable-paginated').dataTable( {
            "oLanguage": {
-                "sUrl": "/static/js/datatables/i18n/"+getDTLanguage()+".json"
+                "sUrl": url_prefix + "static/js/datatables/i18n/"+getDTLanguage()+".json"
            },
            "bPaginate": true,
            "sPaginationType": "full_numbers",
@@ -65,7 +64,7 @@ $( document ).ready(function() {
      });
     $('.datatable-simple').dataTable( {
            "oLanguage": {
-                "sUrl": "/static/js/datatables/i18n/"+getDTLanguage()+".json"
+                "sUrl": url_prefix + "static/js/datatables/i18n/"+getDTLanguage()+".json"
            },
            "bPaginate": false,
            "bLengthChange": false,
@@ -78,7 +77,7 @@ $( document ).ready(function() {
     });
     $('.datatable-blank').dataTable({
           "oLanguage": {
-               "sUrl": "/static/js/datatables/i18n/"+getDTLanguage()+".json"
+               "sUrl": url_prefix + "static/js/datatables/i18n/"+getDTLanguage()+".json"
           },
           "bPaginate": false,
           "bLengthChange": false,
