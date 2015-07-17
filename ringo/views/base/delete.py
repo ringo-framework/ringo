@@ -45,6 +45,7 @@ def _handle_delete_request(request, items, callback):
     _ = request.translate
     if request.method == 'POST' and is_confirmed(request):
         item_label = get_item_modul(request, clazz).get_label(plural=True)
+        item_label_log = get_item_modul(request, clazz).get_label()
         mapping = {'item_type': item_label, 'num': len(items)}
         for item in items:
             try:
@@ -69,7 +70,9 @@ def _handle_delete_request(request, items, callback):
                 rvalue['dialog'] = renderer.render(ok_url)
                 return rvalue
         msg = _('Deleted ${num} ${item_type} successfully.', mapping=mapping)
-        log.info(msg)
+        log_msg = u'User {item.owner.login} deleted {item_label} {item.id}' \
+            .format(item_label=item_label_log, item=item)
+        log.info(log_msg)
         request.session.flash(msg, 'success')
         # Invalidate cache
         invalidate_cache()
