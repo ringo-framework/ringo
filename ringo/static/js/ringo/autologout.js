@@ -7,20 +7,15 @@ var LogoutTimer = function (time, url) {
     // The logout timer will call the logout url after the given amount of
     // seconds. 10 seconds before the logout will happen, a warning will be
     // show the the autologout will happen soon.
-    this.time = time;
+    this.time_offset = 30;
+    this.time = time - this.time_offset;
     this.url = url;
     this.timer1 = null;
     this.timer2 = null;
 };
 
 LogoutTimer.prototype.start = function() {
-    this.timer1 = setTimeout(showLogoutWarning, this.time*1000-10000);
-    // FIXME: Check why we need a local variable logout_url here. I expected
-    // the code to work using this.url in callLogoutPage call direktly but
-    // this.url is undefined for some reason at time of calling... (ti)
-    // <2015-07-13 09:31>
-    var logout_url = this.url;
-    this.timer2 = setTimeout(function() {callLogoutPage(logout_url)}, this.time*1000);
+    this.timer1 = setTimeout(showLogoutWarning, this.time*1000);
 };
 
 LogoutTimer.prototype.reset = function() {
@@ -32,6 +27,13 @@ LogoutTimer.prototype.reset = function() {
 function showLogoutWarning() {
     $("#logoutWarning").modal("show");
     logout_warning = true;
+    // Start seconds timer to actually log out the user 30 seconds after the
+    // warning has been displayed.
+    logout_warning_timer.timer2 = setTimeout(
+            function() {
+                callLogoutPage(logout_warning_timer.url)
+            },
+            logout_warning_timer.time_offset*1000);
 }
 
 function callLogoutPage(url) {
