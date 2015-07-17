@@ -66,7 +66,7 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
     </tr>
   </thead>
   <tbody>
-    % for item in items:
+    % for item in visible_items:
       <%
       permission = None
       if s.has_permission("update", item[0], request):
@@ -125,15 +125,8 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
     % endfor
   </tbody>
 </table>
-## Only render hidden items if "showall" is not set! If it is set for the
-## renderer all items has been rendererd with either a checkbox or a hidden
-## checkboc before. So the fields in the hidden_items must only be rendererd
-## if showall is not set. Otherwise values for a selected item will be sent
-## twice which can cause problem on the server side.
-% if not field.renderer.showall == "true":
-  % for item in hidden_items:
-    % if str(item[0].id) in selected:
-      <input style="display:none" type="checkbox" value="${item[0].id}" name="${field.name}" checked="checked"/>
-    % endif
-  % endfor
-% endif
+% for item in hidden_items:
+  % if str(item[0].id) in selected:
+    <input style="display:none" type="checkbox" value="${item[0].id}" name="${field.name}" checked="checked"/>
+  % endif
+% endfor
