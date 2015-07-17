@@ -48,7 +48,7 @@ function check(checkId) {
   var inputs = $("input[type='checkbox'][name="+checkId+"]");
   var selected = inputs.filter(":checked");
   if (selected.length == 0 && inputs.length > 0) {
-    $(inputs[0]).before('<input id="'+checkId+'-empty" style="display:none" type="checkbox" value="" name="'+checkId+'" checked="checked"/>');
+    $(inputs[0]).after('<input id="'+checkId+'-empty" style="display:none" type="checkbox" value="" name="'+checkId+'" checked="checked"/>');
   } else {
     $("#"+checkId+"-empty").remove();
   }
