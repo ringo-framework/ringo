@@ -70,8 +70,8 @@ def _handle_delete_request(request, items, callback):
                 rvalue['dialog'] = renderer.render(ok_url)
                 return rvalue
         msg = _('Deleted ${num} ${item_type} successfully.', mapping=mapping)
-        log_msg = u'User {item.owner.login} deleted {item_label} {item.id}' \
-            .format(item_label=item_label_log, item=item)
+        log_msg = u'User {user.login} deleted {item_label} {item.id}' \
+            .format(item_label=item_label, item=item, user=request.user)
         log.info(log_msg)
         request.session.flash(msg, 'success')
         # Invalidate cache
