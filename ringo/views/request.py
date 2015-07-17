@@ -129,12 +129,12 @@ def handle_POST_request(form, request, callback, event, renderers=None):
             if event == "create":
                 msg = _('Created new ${item_type} successfully.',
                         mapping=mapping)
-                log_msg = 'User {item.owner.login} created {item_label} {item.id}'\
+                log_msg = u'User {item.owner.login} created {item_label} {item.id}'\
                     .format(item_label=item_label, item=item)
             else:
                 msg = _('Edited ${item_type} "${item}" successfully.',
                         mapping=mapping)
-                log_msg = 'User {item.owner.login} edited {item_label} {item}'\
+                log_msg = u'User {item.owner.login} edited {item_label} {item.id}'\
                     .format(item_label=item_label, item=item)
             log.info(log_msg)
             request.session.flash(msg, 'success')
