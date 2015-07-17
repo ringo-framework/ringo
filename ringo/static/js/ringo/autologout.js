@@ -7,7 +7,7 @@ var LogoutTimer = function (time, url) {
     // The logout timer will call the logout url after the given amount of
     // seconds. 10 seconds before the logout will happen, a warning will be
     // show the the autologout will happen soon.
-    this.time_offset = 30;
+    this.time_offset = 180;
     this.time = time - this.time_offset;
     this.url = url;
     this.timer1 = null;
