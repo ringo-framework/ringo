@@ -345,8 +345,9 @@ class ListingFieldRenderer(FormbarSelectionField):
         # in the origin items list and has passed filtering.
         items = self._field.filter_options(items)
         # Now filter the items based on the user permissions
-        items = filter_options_on_permissions(self._field._form._request,
-                                              items)
+        if self.showall != "true": 
+            items = filter_options_on_permissions(self._field._form._request,
+                                                  items)
 
         values = {'items': items,
                   'field': self._field,
