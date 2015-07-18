@@ -21,14 +21,6 @@ def keepalive(request):
     return JSONResponse(True, "I'm alive!", {})
 
 
-@view_config(route_name='get-language',
-             renderer='json',
-             request_method="GET")
-def get_language(request):
-    """Method return the preferred language of the user"""
-    return JSONResponse(True, request._LOCALE_, {})
-
-
 @view_config(route_name='rules-evaluate',
              renderer='json',
              request_method="GET")

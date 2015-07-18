@@ -35,3 +35,4 @@ def add_renderer_globals(event):
     event['formbar_css_filenames'] = formbar_css_filenames
     event['formbar_js_filenames'] = formbar_js_filenames
     event['localizer'] = request.localizer
+    event['client_language'] = request._LOCALE_
