@@ -55,11 +55,11 @@ def get_app_url(request):
 
     If the application is hosted on "http://localhost:6543/foo" the
     function will return "/foo". If it is hosted under the root
-    directory "/" is returned."""
+    directory "" is returned."""
     path = request.application_url.strip(request.host_url)
     if path:
         return "/"+path
-    return "/"
+    return ""
 
 
 def get_app_title():
