@@ -59,17 +59,6 @@ def get_app_url(request):
     else:
         return app_url
 
-def get_app_url_prefix():
-    """Returns the app URL prefix, if any"""
-    registry = get_current_registry()
-    settings = registry.settings
-
-    url_prefix = settings.get("url_prefix")
-    if url_prefix is None:
-        return '/'
-    else:
-        return '/' + url_prefix.strip('/') + '/'
-
 
 def get_app_title():
     registry = get_current_registry()

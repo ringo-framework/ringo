@@ -3,7 +3,7 @@
  * for the language with gets this from the accepted header field */
 function getLanguageFromBrowser() {
     $.ajax({
-      url: url_prefix + "rest/client/language",
+      url: "/rest/client/language",
     })
     .success(function( data ) {
         return data.data;

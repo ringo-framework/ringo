@@ -50,7 +50,7 @@ $( document ).ready(function() {
     });
     $('.datatable-paginated').dataTable( {
            "oLanguage": {
-                "sUrl": url_prefix + "static/js/datatables/i18n/"+getDTLanguage()+".json"
+                "sUrl": "/static/js/datatables/i18n/"+getDTLanguage()+".json"
            },
            "bPaginate": true,
            "sPaginationType": "full_numbers",
@@ -64,7 +64,7 @@ $( document ).ready(function() {
      });
     $('.datatable-simple').dataTable( {
            "oLanguage": {
-                "sUrl": url_prefix + "static/js/datatables/i18n/"+getDTLanguage()+".json"
+                "sUrl": "/static/js/datatables/i18n/"+getDTLanguage()+".json"
            },
            "bPaginate": false,
            "bLengthChange": false,
@@ -77,7 +77,7 @@ $( document ).ready(function() {
     });
     $('.datatable-blank').dataTable({
           "oLanguage": {
-               "sUrl": url_prefix + "static/js/datatables/i18n/"+getDTLanguage()+".json"
+               "sUrl": "/static/js/datatables/i18n/"+getDTLanguage()+".json"
           },
           "bPaginate": false,
           "bLengthChange": false,

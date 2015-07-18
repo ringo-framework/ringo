@@ -21,7 +21,6 @@ from ringo.lib.renderer.lists import (
     DTListRenderer
 )
 
-from ringo.lib.helpers.appinfo import get_app_url_prefix
 
 def setup_render_globals(config):
     config.add_subscriber(add_renderer_globals, BeforeRender)
@@ -36,4 +35,3 @@ def add_renderer_globals(event):
     event['formbar_css_filenames'] = formbar_css_filenames
     event['formbar_js_filenames'] = formbar_js_filenames
     event['localizer'] = request.localizer
-    event['url_prefix'] = get_app_url_prefix()
