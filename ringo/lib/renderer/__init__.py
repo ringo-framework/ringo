@@ -36,3 +36,4 @@ def add_renderer_globals(event):
     event['formbar_js_filenames'] = formbar_js_filenames
     event['localizer'] = request.localizer
     event['client_language'] = request._LOCALE_
+    event['application_path'] = helpers.get_app_url(request)

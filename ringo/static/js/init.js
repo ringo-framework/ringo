@@ -31,6 +31,7 @@ var spinner = new Spinner(opts);
 var spinner_timer = 800; //threshold in ms after spinner starts
 
 $( document ).ready(function() {
+    var application_path = getApplicationPath();
     $("#logoutWarningOK").click(hideLogoutWarning);
     $(':button').not('[data-toggle="dropdown"], [type="reset"]').click(function () {
         startSpinner(spinner_timer);
@@ -50,7 +51,7 @@ $( document ).ready(function() {
     });
     $('.datatable-paginated').dataTable( {
            "oLanguage": {
-                "sUrl": "/static/js/datatables/i18n/"+getDTLanguage()+".json"
+                "sUrl":  application_path + "/static/js/datatables/i18n/"+getDTLanguage()+".json"
            },
            "bPaginate": true,
            "sPaginationType": "full_numbers",
@@ -64,7 +65,7 @@ $( document ).ready(function() {
      });
     $('.datatable-simple').dataTable( {
            "oLanguage": {
-                "sUrl": "/static/js/datatables/i18n/"+getDTLanguage()+".json"
+                "sUrl": application_path + "/static/js/datatables/i18n/"+getDTLanguage()+".json"
            },
            "bPaginate": false,
            "bLengthChange": false,
@@ -77,7 +78,7 @@ $( document ).ready(function() {
     });
     $('.datatable-blank').dataTable({
           "oLanguage": {
-               "sUrl": "/static/js/datatables/i18n/"+getDTLanguage()+".json"
+               "sUrl": application_path + "/static/js/datatables/i18n/"+getDTLanguage()+".json"
           },
           "bPaginate": false,
           "bLengthChange": false,

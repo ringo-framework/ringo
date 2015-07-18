@@ -4,3 +4,7 @@
 function getLanguageFromBrowser() {
     return $("meta[name='client_language']").attr("content");
 }
+
+function getApplicationPath() {
+    return $("meta[name='application_path']").attr("content");
+}
