@@ -1,12 +1,3 @@
-var language = getLanguageFromBrowser();
-function getDTLanguage() {
-    if (language.indexOf("de") >= 0) {
-        return "german"
-    } else {
-        return "default";
-    }
-}
-
 var opts = {
   lines: 9, // The number of lines to draw
   length: 21, // The length of each line
@@ -31,7 +22,6 @@ var spinner = new Spinner(opts);
 var spinner_timer = 800; //threshold in ms after spinner starts
 
 $( document ).ready(function() {
-    var application_path = getApplicationPath();
     $("#logoutWarningOK").click(hideLogoutWarning);
     $(':button').not('[data-toggle="dropdown"], [type="reset"]').click(function () {
         startSpinner(spinner_timer);
@@ -49,9 +39,13 @@ $( document ).ready(function() {
         show: false,
         backdrop: "static"
     });
+
+    /* Datatable initialisation */
+    var application_path = getApplicationPath();
+    var language = getDTLanguage(getLanguageFromBrowser());
     $('.datatable-paginated').dataTable( {
            "oLanguage": {
-                "sUrl":  application_path + "/static/js/datatables/i18n/"+getDTLanguage()+".json"
+                "sUrl":  application_path + "/static/js/datatables/i18n/"+language+".json"
            },
            "bPaginate": true,
            "sPaginationType": "full_numbers",
@@ -65,7 +59,7 @@ $( document ).ready(function() {
      });
     $('.datatable-simple').dataTable( {
            "oLanguage": {
-                "sUrl": application_path + "/static/js/datatables/i18n/"+getDTLanguage()+".json"
+                "sUrl": application_path + "/static/js/datatables/i18n/"+language+".json"
            },
            "bPaginate": false,
            "bLengthChange": false,
@@ -78,7 +72,7 @@ $( document ).ready(function() {
     });
     $('.datatable-blank').dataTable({
           "oLanguage": {
-               "sUrl": application_path + "/static/js/datatables/i18n/"+getDTLanguage()+".json"
+               "sUrl": application_path + "/static/js/datatables/i18n/"+language+".json"
           },
           "bPaginate": false,
           "bLengthChange": false,
