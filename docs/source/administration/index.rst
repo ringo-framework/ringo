@@ -9,3 +9,5 @@ Administration
    modules
    user
    cli
+   deployment
+

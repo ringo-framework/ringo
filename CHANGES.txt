@@ -1,5 +1,8 @@
 1.2.0
 =====
+Beside the major changes which are listed below this version include many
+small bugfixes and improvements in the code, usability and performance.
+
 New:
 - Add option to provide external validators to the update and create view.
   They will be used for additional validation of the form.
@@ -16,6 +19,8 @@ New:
   correct location in ringo.
 - Added option to name the authentification cookie. Needed if there are more
   than one ringo application on a server.
+- Added a warning dialog which shows if the user leaves a form without saving
+  it before.
 
 Changed:
 - Enabled Mako default HTML escaping for Template rendering globally in ini
@@ -27,6 +32,9 @@ Changed:
   not already the formbar files located in ringo. (Need some work). See
   "formbar_static" command.
 - Fixed typos in german translation.
+- Changed behavior of the warning for a nearing auto logout. Instead of
+  showing after 95% of the logout time is up it will now be shown 3 Minutes
+  before the actual logout happens.
 
 Removed:
 - Removed group role feature. This feature was only rarly used.
@@ -126,6 +134,7 @@ Changed:
   determined by calling a remote function in the Rest API.
 - The create method of factories now require a values attribute! It is not
   optional but can be empty to get the old behaviour.
+- Show
 
 Removed:
 - Pre 1.0 Migration scripts removed. The older migrations scripts are now
