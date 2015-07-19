@@ -35,7 +35,7 @@ tests_requires = [
     'behave',
     'coverage',
     'webtest',
-    'mock==1.1.4'
+    'mock'
 ]
 
 setup(name='ringo',
