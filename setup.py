@@ -31,11 +31,11 @@ requires = [
 ]
 
 tests_requires = [
-    'nose ',
+    'nose',
     'behave',
     'coverage',
     'webtest',
-    'mock'
+    'mock==1.1.4'
 ]
 
 setup(name='ringo',
