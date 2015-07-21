@@ -225,4 +225,5 @@ ul.dropdown-menu li table td {
 /* Custom formbar forms */
 .formbar-linkfield {
   margin-top: 1.45em;
+  white-space: normal;
 }
