@@ -1,7 +1,11 @@
 """Modul to handle requests."""
 import logging
-from pyramid.httpexceptions import HTTPFound
-from ringo.lib.security import has_permission
+from pyramid.httpexceptions import HTTPFound, HTTPUnauthorized
+from ringo.lib.security import (
+    has_permission,
+    check_permission_for_values,
+    AuthorisationException
+)
 from ringo.lib.helpers import import_model, get_action_routename
 from ringo.lib.history import History
 from ringo.lib.sql.cache import invalidate_cache
@@ -117,9 +121,11 @@ def handle_POST_request(form, request, callback, event, renderers=None):
             if event == "create":
                 factory = clazz.get_item_factory()
                 item = factory.create(request.user, form.data)
+                check_permission_for_values(item, form.data, request)
                 item.save({}, request)
                 request.context.item = item
             else:
+                check_permission_for_values(item, form.data, request)
                 item.save(form.data, request)
             handle_event(request, item, form._config.id)
             handle_add_relation(request, item)
@@ -138,8 +144,11 @@ def handle_POST_request(form, request, callback, event, renderers=None):
                     .format(item_label=item_label, item=item, user=request.user)
             log.info(log_msg)
             request.session.flash(msg, 'success')
-
             return True
+
+        except AuthorisationException as error:
+            raise HTTPUnauthorized()
+
         except Exception as error:
             mapping['error'] = unicode(error.message)
             if event == "create":
