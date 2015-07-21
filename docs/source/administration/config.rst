@@ -11,18 +11,6 @@ can be configured with the following varible.
 
 * app.title = Application name 
 
-Application Url
----------------
-Optional. Not defined on default. The application URL can be defined to
-set a specific prefix for URL. This currently only used on client side
-for AJAX requests. In most cases this does not need to be set.
-
-* app.url: Baseurl of the application. Defaults to not set.
-
-Leave the variable empty to set the base url to tha value of
-request.application.url. Otherwise the value of this config variable is
-used.
-
 .. _config_app_base:
 
 Application Base

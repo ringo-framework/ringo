@@ -6,6 +6,8 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="description">
     <meta content="" name="author">
+    <meta content="${client_language}" name="client_language">
+    <meta content="${application_path}" name="application_path">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="${request.static_path('ringo:static/bootstrap/css/bootstrap.min.css')}" rel="stylesheet" media="screen">
@@ -26,9 +28,6 @@
     <!-- Fav and touch icons -->
     <link href="${request.static_path('ringo:static/images/icons/favicons/apple-touch-icon-128.png')}" sizes="128x128" rel="apple-touch-icon-precomposed">
     <link href="${request.static_path('ringo:static/images/icons/favicons/favicon.png')}" rel="shortcut icon">
-    <script>
-       var url_prefix = "${url_prefix}";
-    </script>
     <script src="${request.static_path('ringo:static/js/jquery.js')}"></script>
     <script src="${request.static_path('ringo:static/js/spin.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.spin.js')}"></script>

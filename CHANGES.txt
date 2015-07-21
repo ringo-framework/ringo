@@ -38,6 +38,10 @@ Changed:
 
 Removed:
 - Removed group role feature. This feature was only rarly used.
+- app.url configuration variable which was intended to use in scenarios where
+  the application is not hosted under the root of the server. See
+  documentation for deployment for more information on how to setup the
+  application now.
 
 1.1.0
 =====

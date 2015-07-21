@@ -1,12 +1,3 @@
-var language = getLanguageFromBrowser();
-function getDTLanguage() {
-    if (language.indexOf("de") >= 0) {
-        return "german"
-    } else {
-        return "default";
-    }
-}
-
 var opts = {
   lines: 9, // The number of lines to draw
   length: 21, // The length of each line
@@ -48,9 +39,13 @@ $( document ).ready(function() {
         show: false,
         backdrop: "static"
     });
+
+    /* Datatable initialisation */
+    var application_path = getApplicationPath();
+    var language = getDTLanguage(getLanguageFromBrowser());
     $('.datatable-paginated').dataTable( {
            "oLanguage": {
-                "sUrl": url_prefix + "static/js/datatables/i18n/"+getDTLanguage()+".json"
+                "sUrl":  application_path + "/static/js/datatables/i18n/"+language+".json"
            },
            "bPaginate": true,
            "sPaginationType": "full_numbers",
@@ -64,7 +59,7 @@ $( document ).ready(function() {
      });
     $('.datatable-simple').dataTable( {
            "oLanguage": {
-                "sUrl": url_prefix + "static/js/datatables/i18n/"+getDTLanguage()+".json"
+                "sUrl": application_path + "/static/js/datatables/i18n/"+language+".json"
            },
            "bPaginate": false,
            "bLengthChange": false,
@@ -77,7 +72,7 @@ $( document ).ready(function() {
     });
     $('.datatable-blank').dataTable({
           "oLanguage": {
-               "sUrl": url_prefix + "static/js/datatables/i18n/"+getDTLanguage()+".json"
+               "sUrl": application_path + "/static/js/datatables/i18n/"+language+".json"
           },
           "bPaginate": false,
           "bLengthChange": false,

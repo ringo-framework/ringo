@@ -74,6 +74,5 @@ def setup_routes(config):
                      factory=get_resource_factory(User))
     config.add_route('rules-evaluate', 'rest/rule/evaluate')
     config.add_route('form-render', 'rest/form/render')
-    config.add_route('get-language', 'rest/client/language')
     config.add_route('keepalive', 'rest/keepalive')
     return config
