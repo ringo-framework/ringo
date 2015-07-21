@@ -18,10 +18,55 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from ringo.lib.helpers import get_item_modul
 from ringo.lib.sql import DBSession
+from ringo.lib.alchemy import get_relations_from_instance
 from ringo.model.base import BaseItem
 from ringo.model.user import User, PasswordResetRequest
 
 log = logging.getLogger(__name__)
+
+
+class AuthorisationException(BaseException):
+    pass
+
+
+def check_permission_for_values(item, values, request):
+    """Checks if the current user is allowed to set the values in the
+    item. Currently this is only done for relations.
+
+    .. important::
+        This function implements a very important security check and
+        should be used always when a value is changed in the item.
+
+    For each relation of the item the function will iterate over the
+    values in the submitted dictionary and check if the user is at least
+    allowed to read the value. If the user is not allowed to read, than
+    a AuthorisationException is raised and a warning is logged to the
+    logfile.
+
+    This function restricts users to be able to set only values which
+    they are allowed to read and prevents the possible security thread
+    of gaining higher privileges by setting forbidden values with a
+    manipulated requests.
+
+    :item: The item which will be changed
+    :values: Dictionary with deserialised and validated form values.
+    :request: Current request
+    """
+
+    def _check(value, request):
+        if isinstance(value, list):
+            for item in value:
+                _check(item, request)
+        elif not has_permission("read", value, request):
+            msg = ("User %s is not allowed to read %s with id %s"
+                   % (request.user.login, type(value), value.id))
+            log.warning(msg)
+            raise AuthorisationException(msg)
+
+    relations = get_relations_from_instance(item)
+    for field in values:
+        if field in relations:
+            _check(values[field], request)
 
 
 def password_generator(size=12, chars=string.ascii_uppercase + string.digits):
