@@ -56,8 +56,8 @@ def get_app_url(request):
     If the application is hosted on "http://localhost:6543/foo" the
     function will return "foo". If it is hosted under the root
     directory '' is returned."""
-    path = request.environ.get("SCRIPT_NAME", "")
-
+    return request.environ.get("SCRIPT_NAME", "")
+    
 
 def get_app_title():
     registry = get_current_registry()
