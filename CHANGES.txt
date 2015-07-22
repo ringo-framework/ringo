@@ -21,6 +21,8 @@ New:
   than one ringo application on a server.
 - Added a warning dialog which shows if the user leaves a form without saving
   it before.
+- The modules for Roles, Users and Usergroups are now inherited from the
+  "Owned" mixin class.
 
 Changed:
 - Enabled Mako default HTML escaping for Template rendering globally in ini
