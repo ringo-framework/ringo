@@ -22,7 +22,8 @@ New:
 - Added a warning dialog which shows if the user leaves a form without saving
   it before.
 - The modules for Roles, Users and Usergroups are now inherited from the
-  "Owned" mixin class.
+  "Owned" mixin class. This enables to set permissions on item level for these
+  elements.
 
 Changed:
 - Enabled Mako default HTML escaping for Template rendering globally in ini
