@@ -34,7 +34,7 @@ class BaseItemTests(BaseUnitTest):
         item = self._load_item()
         exporter = JSONExporter(item.__class__)
         result = exporter.perform([item])
-        self.assertEqual(len(result), len('[{"str_repr": "%s|name", "description": "", "name": "modules", "label": "Modul", "default_gid": "", "id": "1", "label_plural": "Modules", "display": "admin-menu", "clazzpath": "ringo.model.modul.ModulItem", "uuid": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}]'))
+        self.assertEqual(len(result), len('[{"str_repr": "%s|name", "description": "", "name": "modules", "label": "Modul", "gid": "", "id": "1", "label_plural": "Modules", "display": "admin-menu", "clazzpath": "ringo.model.modul.ModulItem", "uuid": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}]'))
 
     def test_get_form_config(self):
         from ringo.model.modul import ModulItem
