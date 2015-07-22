@@ -149,11 +149,12 @@ class ModulItem(BaseItem, Base):
      * admin-menu
      * hidden
     """
-    gid = sa.Column(sa.Integer, sa.ForeignKey('usergroups.id'))
+    default_gid = sa.Column(sa.Integer, sa.ForeignKey('usergroups.id'))
     """Link to a usergroup which will be set as default useroup for new
     items of the modul if nothing other is defined."""
 
-    default_group = sa.orm.relationship("Usergroup", uselist=False)
+    default_group = sa.orm.relationship("Usergroup", uselist=False,
+                                        foreign_keys=[default_gid])
     actions = sa.orm.relationship("ActionItem",
                                   backref="modul",
                                   lazy="joined",
