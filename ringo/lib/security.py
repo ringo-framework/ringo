@@ -18,6 +18,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from ringo.lib.helpers import get_item_modul
 from ringo.lib.sql import DBSession
+from ringo.lib.alchemy import get_relations_from_clazz
 from ringo.model.base import BaseItem
 from ringo.model.user import User, PasswordResetRequest
 
@@ -523,3 +524,129 @@ def login(username, password):
         log.info("Login failed for user '%s'. "
                  "Reason: Username not known" % username)
     return None
+
+
+class AuthorizationException(Exception):
+    """Exception to be raise if a authorization error is detected."""
+    pass
+
+
+class ValueChecker(object):
+    """Checks the permission of a user to set values, provided by an
+    dictionary, in an item.
+
+    This checker restricts users to only set the values which they may
+    also read. This prevents the possible security thread
+    of gaining higher privileges by setting forbidden values with a
+    manipulated requests.
+
+    This espacially important for values which will change relations in
+    the item. For each relation of the item the function will iterate
+    over the values in the dictionary and check if the user is at least
+    allowed to read the value.
+
+    If the user is not allowed to read a value the checker will either
+
+     * Raise an AuthorizationException if strict mode is enabled, or
+     * Filter the set of values based on the permissions.
+
+    In all cases a warning is logged if the Checker detects a permission
+    violation. This class implements a very important security check and
+    should be always used before values are about to be changed in an
+    item.
+
+    Limitations:
+    The function currently only checks permissions on values which are
+    about to be set in a sqlalchemy.orm.relation. This means setting the
+    values directly in a FK is still possible.
+    """
+
+    def __init__(self, strict=True):
+        self.strict = strict
+        """Mode of the checker. If strict is true a
+        AuthorizationException will be raised if a permission violation
+        is detected. Otherwise the values get filtered."""
+
+    def check(self, clazz, values, request, item=None):
+        """Will do permission checks on the values. If strict mode is
+        disabled the function will do the following:
+
+         * For new added relations the fuction will remove every
+           relation from to the values for which the user is not granted
+           read access.
+         * For removed relations the function will re-add every relation
+           to the values for which the user is not granted read access.
+
+        The function will return the values after checking and
+        filtering. If strict mode is enabled an AuthorizationException
+        is raised.
+
+        :clazz: The clazz of the item which is about to be changed
+        :values: Dictionary with deserialised and validated form values.
+        :request: Current request
+        :item: Defaults to None. If provided than the checker will only
+        check differences between the values to be set and already
+        present in the item. Else all values are checked.
+        """
+        for relation in get_relations_from_clazz(clazz):
+            # If the relation is not set in the values then continue
+            if relation not in values:
+                continue
+            # Get items from the relation which has been added or
+            # removed. Only these values need to be checked.
+            new_values = values[relation]
+
+            if item is None:
+                to_check = [(v, 0) for v in new_values]
+            else:
+                old_values = item.get_value(relation)
+                to_check = self._diff(old_values, new_values)
+
+            for value, modifier in to_check:
+                if has_permission("read", value, request):
+                    continue
+                else:
+                    if modifier > 0:
+                        action = "add"
+                    elif modifier < 0:
+                        action = "remove"
+                    else:
+                        action = "set"
+                    msg = ("User '%s' is not allowed to %s %s %s from %s %s"
+                           % (request.user.login, action, type(value),
+                              value.id, clazz, getattr(item, "id", '')))
+                    log.warning(msg)
+                    if self.strict:
+                        raise AuthorizationException(msg)
+                    else:
+                        raise NotImplementedError()
+        return values
+
+    def _diff(self, old, new):
+        """Will diff the values of old and new. It returns a list of
+        tuples with values
+
+          * Which are exclusive in new (value has been added)
+          * Which are exclusive in old (value has been removed)
+
+        The tuple will contain the value and 1 for added values and -1
+        for removed items.
+        """
+        diff = []
+        if isinstance(old, list):
+            old = set(old)
+            new = set(new)
+            # Get added
+            for added in new.difference(old):
+                diff.append((added, 1))
+            # Get removed
+            for removed in old.difference(new):
+                diff.append((removed, -1))
+            return diff
+        else:
+            if old != new:
+                if old is not None:
+                    diff.append((old, -1))
+                if new is not None:
+                    diff.append((new, 1))
+            return diff
