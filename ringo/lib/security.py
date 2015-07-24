@@ -589,19 +589,30 @@ class ValueChecker(object):
         present in the item. Else all values are checked.
         """
         for relation in get_relations_from_clazz(clazz):
-            # If the relation is not set in the values then continue
+            # If the relation is not set in the values then continue, as
+            # we do not need to check anything.
             if relation not in values:
                 continue
-            # Get items from the relation which has been added or
-            # removed. Only these values need to be checked.
-            new_values = values[relation]
 
+            # For the purpose to unify the test logic of the permissions
+            # checks the values will be converted into a list in all
+            # cases. In case of N:1 realtions new_values will be a
+            # single item and not a list.  In all other cases (1:N, N:N)
+            # new_values is a list.
+            new_values = values[relation]
+            if not isinstance(new_values, list):
+                new_values = [new_values]
+
+            # Determine the values which actually need to be checked.
+            # If no item is provided, all values are checked. Otherwise
+            # only changed values are checked.
             if item is None:
                 to_check = [(v, 0) for v in new_values]
             else:
                 old_values = item.get_value(relation)
                 to_check = self._diff(old_values, new_values)
 
+            # Now iterate over all value which need to be checked.
             for value, modifier in to_check:
                 if has_permission("read", value, request):
                     continue
