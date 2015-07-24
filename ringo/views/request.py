@@ -120,7 +120,10 @@ def handle_POST_request(form, request, callback, event, renderers=None):
         try:
             if event == "create":
                 factory = clazz.get_item_factory()
-                checker.check(clazz, form.data, request)
+                # FIXME: Do check on create. Currently this will lead
+                # into 100% cpu load when creating new items in some
+                # cases.  Unclear why. (ti) <2015-07-24 15:30>
+                # checker.check(clazz, form.data, request)
                 item = factory.create(request.user, form.data)
                 item.save({}, request)
                 request.context.item = item
