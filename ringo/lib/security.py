@@ -594,6 +594,7 @@ class ValueChecker(object):
             if relation not in values:
                 continue
 
+            # Get old and new values.
             # For the purpose to unify the test logic of the permissions
             # checks the values will be converted into a list in all
             # cases. In case of N:1 realtions new_values will be a
@@ -603,13 +604,19 @@ class ValueChecker(object):
             if not isinstance(new_values, list):
                 new_values = [new_values]
 
+            if item is not None:
+                old_values = item.get_value(relation)
+                if not isinstance(old_values, list):
+                    old_values = [old_values]
+            else:
+                old_values = []
+
             # Determine the values which actually need to be checked.
             # If no item is provided, all values are checked. Otherwise
             # only changed values are checked.
             if item is None:
                 to_check = [(v, 0) for v in new_values]
             else:
-                old_values = item.get_value(relation)
                 to_check = self._diff(old_values, new_values)
 
             # Now iterate over all value which need to be checked.
