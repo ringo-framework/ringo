@@ -755,8 +755,7 @@ class BaseFactory(object):
                 item.gid = user.gid
             else:
                 modul = get_item_modul(None, item)
-                default_gid = modul.gid
-                item.gid = default_gid
+                item.gid = modul.default_gid
         if values:
             item.set_values(values)
         return item

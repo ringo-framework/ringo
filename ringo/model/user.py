@@ -119,7 +119,7 @@ class User(BaseItem, Base):
     password = sa.Column(sa.String, nullable=False)
     activated = sa.Column(sa.Boolean, default=True)
     activation_token = sa.Column(sa.String, nullable=False, default='')
-    gid = sa.Column(sa.Integer, sa.ForeignKey('usergroups.id'))
+    default_gid = sa.Column(sa.Integer, sa.ForeignKey('usergroups.id'))
     sid = sa.Column(sa.Integer, sa.ForeignKey('user_settings.id'))
     last_login = sa.Column(sa.DateTime)
 
@@ -131,7 +131,8 @@ class User(BaseItem, Base):
                                  secondary=nm_user_usergroups,
                                  backref='members')
     usergroup = sa.orm.relationship("Usergroup", uselist=False,
-                                    cascade="delete, all")
+                                    cascade="delete, all",
+                                    foreign_keys=[default_gid])
     settings = sa.orm.relationship("UserSetting", uselist=False,
                                    cascade="all,delete")
 
