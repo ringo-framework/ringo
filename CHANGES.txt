@@ -38,6 +38,8 @@ Changed:
 - Changed behavior of the warning for a nearing auto logout. Instead of
   showing after 95% of the logout time is up it will now be shown 3 Minutes
   before the actual logout happens.
+- The modules for Roles, Users and Usergroups are now inherited from the
+  "Owned" mixin class.
 
 Removed:
 - Removed group role feature. This feature was only rarly used.
