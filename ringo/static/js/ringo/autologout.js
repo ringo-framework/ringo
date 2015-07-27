@@ -7,8 +7,7 @@ var LogoutTimer = function (time, url) {
     // The logout timer will call the logout url after the given amount of
     // seconds. 10 seconds before the logout will happen, a warning will be
     // show the the autologout will happen soon.
-    this.time_offset = 180;
-    this.time = time - this.time_offset;
+    this.time = time;
     this.url = url;
     this.timer1 = null;
     this.timer2 = null;
@@ -16,7 +15,7 @@ var LogoutTimer = function (time, url) {
 
 LogoutTimer.prototype.start = function() {
     this.timer1 = setTimeout(showLogoutWarning, this.time*1000);
-};
+}
 
 LogoutTimer.prototype.reset = function() {
     clearTimeout(this.timer1);
@@ -27,13 +26,12 @@ LogoutTimer.prototype.reset = function() {
 function showLogoutWarning() {
     $("#logoutWarning").modal("show");
     logout_warning = true;
-    // Start seconds timer to actually log out the user 30 seconds after the
-    // warning has been displayed.
+    // Automatically logout the user 30 seconds after the warning is shown.
     logout_warning_timer.timer2 = setTimeout(
             function() {
                 callLogoutPage(logout_warning_timer.url)
             },
-            logout_warning_timer.time_offset*1000);
+            30000);
 }
 
 function callLogoutPage(url) {
@@ -47,13 +45,12 @@ function logoutCountdown(time, url) {
     logout_warning_timer.start();
 }
 
-function hideLogoutWarning() {
+function hideLogoutWarning(event) {
   // Call the index page to reset the serverside logout counter. This will
   // also reset the client side counter as it is a AJAX request which gets
   // listened to.
-  // FIXME: The URL of the "keepalive" page should not be hard coded. (ti)
-  // <2015-07-15 12:33> 
-  $.get('/rest/keepalive');
+  event.preventDefault();
+  $.get(this.attributes["href"]);
   $("#logoutWarning").modal("hide");
   logout_warning = false;
   return false;

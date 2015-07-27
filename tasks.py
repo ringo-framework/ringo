@@ -49,9 +49,3 @@ def test(exclude="None"):
         run("rm -r test-data")
     else:
         print "Ignoring Functional-Tests (Behave)"
-
-@task
-def formbar_static():
-    """Manually install static files from formbar"""
-    from ringo.config import write_formbar_static_files
-    write_formbar_static_files()

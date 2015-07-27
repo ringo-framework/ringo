@@ -42,7 +42,10 @@ def includeme(config):
 def setup_static_views(config):
     settings = config.registry.settings
     http_cache = settings.get('security.static_http_cache', '3600')
-    config.add_static_view('static',
+    config.add_static_view('formbar-static',
+                           path='formbar:static',
+                           cache_max_age=int(http_cache))
+    config.add_static_view('ringo-static',
                            path='ringo:static',
                            cache_max_age=int(http_cache))
     return config
