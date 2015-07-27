@@ -17,7 +17,7 @@
     <link href="${request.static_path('ringo:static/css/style.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/font-awesome/css/font-awesome.min.css')}" rel="stylesheet">
     % for filename in formbar_css_filenames: 
-      <link href="${request.static_path('ringo:static/formbar/%s' % filename)}" rel="stylesheet" media="screen">
+      <link href="${request.static_path('formbar:static/%s' % filename)}" rel="stylesheet" media="screen">
     % endfor
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -36,7 +36,7 @@
     <script src="${request.static_path('ringo:static/js/jquery.jcountdown.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.timer.js')}"></script>
     % for filename in formbar_js_filenames: 
-      <script src="${request.static_path('ringo:static/formbar/%s' % filename)}"></script>
+      <script src="${request.static_path('formbar:static/%s' % filename)}"></script>
     % endfor
     <script src="${request.static_path('ringo:static/js/listfield.js')}"></script>
     <script src="${request.static_path('ringo:static/js/helpers.js')}"></script>

@@ -42,6 +42,9 @@ Removed:
   the application is not hosted under the root of the server. See
   documentation for deployment for more information on how to setup the
   application now.
+- Static files of formbar are no longer copied into the static files of ringo
+  on application start. These files are now dynamically loaded from formbar.
+- Invoke command "formbar_static"
 
 1.1.0
 =====

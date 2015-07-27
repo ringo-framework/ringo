@@ -39,7 +39,6 @@ def setup(config):
     config.include('ringo.lib.security.setup_ringo_security')
     config.include('ringo.lib.cache.setup_cache')
     config.add_subscriber(preload_modules, NewRequest)
-    write_formbar_static_files()
 
 
 def setup_extensions(config):
@@ -215,27 +214,3 @@ def setup_modul(config, modul):
     for action in modul.actions:
         _setup_web_action(config, action, clazz, web_action_view_mapping)
         _setup_rest_action(config, action, clazz, rest_action_view_mapping)
-
-def write_formbar_static_files():
-    """Will write the formbar specific css and js files into the formbar
-    directory in the static file location"""
-    base_dir = pkg_resources.get_distribution("ringo").location
-    static_dir = os.path.join(base_dir, 'ringo', 'static')
-    formbar_css = os.path.join(static_dir, 'formbar')
-    for filename, content in get_formbar_css():
-        filename = os.path.join(formbar_css, filename)
-        if not os.path.isfile(filename):
-            head, tail = os.path.split(filename)
-            if not os.path.exists(head):
-                os.makedirs(head)
-            with open(filename, 'wb') as f:
-                f.write(content)
-    formbar_js = os.path.join(static_dir, 'formbar')
-    for filename, content in get_formbar_js():
-        filename = os.path.join(formbar_js, filename)
-        if not os.path.isfile(filename):
-            head, tail = os.path.split(filename)
-            if not os.path.exists(head):
-                os.makedirs(head)
-            with open(filename, 'wb') as f:
-                f.write(content)
