@@ -45,7 +45,7 @@ $( document ).ready(function() {
     var language = getDTLanguage(getLanguageFromBrowser());
     $('.datatable-paginated').dataTable( {
            "oLanguage": {
-                "sUrl":  application_path + "/static/js/datatables/i18n/"+language+".json"
+                "sUrl":  application_path + "/ringo-static/js/datatables/i18n/"+language+".json"
            },
            "bPaginate": true,
            "sPaginationType": "full_numbers",
@@ -59,7 +59,7 @@ $( document ).ready(function() {
      });
     $('.datatable-simple').dataTable( {
            "oLanguage": {
-                "sUrl": application_path + "/static/js/datatables/i18n/"+language+".json"
+                "sUrl": application_path + "/ringo-static/js/datatables/i18n/"+language+".json"
            },
            "bPaginate": false,
            "bLengthChange": false,
@@ -72,7 +72,7 @@ $( document ).ready(function() {
     });
     $('.datatable-blank').dataTable({
           "oLanguage": {
-               "sUrl": application_path + "/static/js/datatables/i18n/"+language+".json"
+               "sUrl": application_path + "/ringo-static/js/datatables/i18n/"+language+".json"
           },
           "bPaginate": false,
           "bLengthChange": false,
