@@ -31,6 +31,13 @@ def preload_modules(event):
 def setup(config):
     """Setup method which is called on application initialition and
     takes care that many ringo specific things are setup correctly."""
+
+    # Trigger loading the static files of formbar and make them
+    # available in global vars.
+    # TODO: Move this call into a better place. (ti) <2015-07-28 13:19> 
+    get_formbar_css() # -> formbar_css_filenames
+    get_formbar_js() # -> formbar_js_filenames
+
     setup_extensions(config)
     setup_modules(config)
     config.include('ringo.lib.i18n.setup_translation')
