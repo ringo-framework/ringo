@@ -544,7 +544,7 @@ msgstr "Suche"
 
 #: ringo/templates/internal/list.mako:44
 msgid "Search for in ..."
-msgstr "Suche nach in ..."
+msgstr "Suche nach …"
 
 #: ringo/templates/internal/list.mako:47
 msgid "Fields"
