@@ -40,6 +40,10 @@ Changed:
   before the actual logout happens.
 - The modules for Roles, Users and Usergroups are now inherited from the
   "Owned" mixin class.
+- Changed setting the GID for new items. Changed order of determining
+  the GID (inverse order). First try to get the default_gid from the
+  modul. If not present use the default_gid from the user. Of no
+  default_gid is set at all leave the GID of the new item blank.
 
 Removed:
 - Removed group role feature. This feature was only rarly used.
