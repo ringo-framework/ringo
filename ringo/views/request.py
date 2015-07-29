@@ -1,7 +1,10 @@
 """Modul to handle requests."""
 import logging
 from pyramid.httpexceptions import HTTPFound
-from ringo.lib.security import has_permission
+from ringo.lib.security import (
+    has_permission,
+    ValueChecker
+)
 from ringo.lib.helpers import import_model, get_action_routename
 from ringo.lib.history import History
 from ringo.lib.sql.cache import invalidate_cache
@@ -113,14 +116,17 @@ def handle_POST_request(form, request, callback, event, renderers=None):
     mapping = {'item_type': item_label, 'item': item}
 
     if form.validate(request.params) and "blobforms" not in request.params:
+        checker = ValueChecker()
         try:
             if event == "create":
                 factory = clazz.get_item_factory()
+                checker.check(clazz, form.data, request)
                 item = factory.create(request.user, form.data)
                 item.save({}, request)
                 request.context.item = item
             else:
-                item.save(form.data, request)
+                values = checker.check(clazz, form.data, request, item)
+                item.save(values, request)
             handle_event(request, item, form._config.id)
             handle_add_relation(request, item)
             handle_callback(request, callback)

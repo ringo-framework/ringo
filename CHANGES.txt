@@ -21,6 +21,9 @@ New:
   than one ringo application on a server.
 - Added a warning dialog which shows if the user leaves a form without saving
   it before.
+- Do permission checks on submitted values for relations on POST requests.
+  Users are not allowed to set items in relations for which they do not have
+  read permissions.
 
 Changed:
 - Enabled Mako default HTML escaping for Template rendering globally in ini
@@ -35,6 +38,12 @@ Changed:
 - Changed behavior of the warning for a nearing auto logout. Instead of
   showing after 95% of the logout time is up it will now be shown 3 Minutes
   before the actual logout happens.
+- The modules for Roles, Users and Usergroups are now inherited from the
+  "Owned" mixin class.
+- Changed setting the GID for new items. Changed order of determining
+  the GID (inverse order). First try to get the default_gid from the
+  modul. If not present use the default_gid from the user. Of no
+  default_gid is set at all leave the GID of the new item blank.
 
 Removed:
 - Removed group role feature. This feature was only rarly used.

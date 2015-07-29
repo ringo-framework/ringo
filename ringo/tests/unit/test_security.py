@@ -38,5 +38,53 @@ class PasswordTests(BaseUnitTest):
         password = "worngpassword"
         self.assertEqual(login(username, password), None)
 
+class ValueErrorTests(BaseUnitTest):
+
+    def setUp(self):
+        super(ValueErrorTests, self).setUp()
+        from ringo.model.modul import ModulItem
+        item = self.request.db.query(ModulItem).filter(ModulItem.id == 1).one()
+        self.request.context.item = item
+        self.request.matchdict = {'id': 1}
+        self.request.session['modules.1.form.page'] = 2
+
+    def test_diff_equal(self):
+        from ringo.lib.security import ValueChecker
+        checker = ValueChecker()
+        values = self.request.context.item.get_values(include_relations=True)
+        self.assertTrue(len(checker._diff(values, values)) == 0)
+
+    def test_diff_removed_one(self):
+        from ringo.lib.security import ValueChecker
+        checker = ValueChecker()
+        values = self.request.context.item.get_values(include_relations=True)['actions']
+        values2 = values[0:-1]
+        self.assertTrue(len(checker._diff(values, values2)) == 1)
+        self.assertTrue(checker._diff(values, values2)[0][1] == -1)
+
+    def test_diff_removed_one(self):
+        from ringo.model.modul import ActionItem
+        from ringo.lib.security import ValueChecker
+        action = self.request.db.query(ActionItem).filter(ActionItem.id == 20).one()
+        checker = ValueChecker()
+        values = self.request.context.item.get_values(include_relations=True)['actions']
+        values2 = values[::]
+        values2.append(action)
+        self.assertTrue(len(checker._diff(values, values2)) == 1)
+        self.assertTrue(checker._diff(values, values2)[0][1] == 1)
+
+    def test_empty_values(self):
+        """No values provided. So no checks are actually done."""
+        from ringo.lib.security import ValueChecker
+        checker = ValueChecker()
+        checker.check(self.request.context.item.__class__, {}, self.request, self.request.context.item)
+
+    def test_equal_values(self):
+        from ringo.lib.security import ValueChecker
+        checker = ValueChecker()
+        values = self.request.context.item.get_values(include_relations=True)
+        checker.check(self.request.context.item.__class__, values, self.request, self.request.context.item)
+
+
 if __name__ == '__main__':
     unittest.main()

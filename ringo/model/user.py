@@ -110,7 +110,7 @@ class UserFactory(BaseFactory):
         return new_user
 
 
-class User(BaseItem, Base):
+class User(BaseItem, Owned, Base):
     __tablename__ = 'users'
     _modul_id = 3
     _sql_eager_loads = ['roles', 'groups', 'profile', 'settings']
@@ -119,7 +119,7 @@ class User(BaseItem, Base):
     password = sa.Column(sa.String, nullable=False)
     activated = sa.Column(sa.Boolean, default=True)
     activation_token = sa.Column(sa.String, nullable=False, default='')
-    gid = sa.Column(sa.Integer, sa.ForeignKey('usergroups.id'))
+    default_gid = sa.Column(sa.Integer, sa.ForeignKey('usergroups.id'))
     sid = sa.Column(sa.Integer, sa.ForeignKey('user_settings.id'))
     last_login = sa.Column(sa.DateTime)
 
@@ -131,7 +131,8 @@ class User(BaseItem, Base):
                                  secondary=nm_user_usergroups,
                                  backref='members')
     usergroup = sa.orm.relationship("Usergroup", uselist=False,
-                                    cascade="delete, all")
+                                    cascade="delete, all",
+                                    foreign_keys=[default_gid])
     settings = sa.orm.relationship("UserSetting", uselist=False,
                                    cascade="all,delete")
 
@@ -155,7 +156,7 @@ USER_ROLE_ID = 2
 """Role ID your the system user role"""
 
 
-class Usergroup(BaseItem, Base):
+class Usergroup(BaseItem, Owned, Base):
     __tablename__ = 'usergroups'
     _modul_id = 4
     id = sa.Column(sa.Integer, primary_key=True)
@@ -166,7 +167,7 @@ class Usergroup(BaseItem, Base):
         return self.name
 
 
-class Role(BaseItem, Base):
+class Role(BaseItem, Owned, Base):
     """A Role is used to configure which actions are permitted to users.
     Therefor each role will have an internal list of modul actions. A
     user will be allowed to call all actions assigned to the role he is

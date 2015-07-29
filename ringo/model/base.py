@@ -751,12 +751,11 @@ class BaseFactory(object):
            and user is not None):
             item.uid = user.id
         if (hasattr(item, 'gid')):
-            if (user is not None and user.gid):
-                item.gid = user.gid
-            else:
-                modul = get_item_modul(None, item)
-                default_gid = modul.gid
-                item.gid = default_gid
+            modul = get_item_modul(None, item)
+            if modul.default_gid:
+                item.gid = modul.default_gid
+            elif (user is not None and user.default_gid):
+                item.gid = user.default_gid
         if values:
             item.set_values(values)
         return item
