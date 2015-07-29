@@ -66,7 +66,7 @@ def get_blobform_config(request, item, formname):
 
 
 def get_rendered_ownership_form(request):
-    """Returns the rendered logbook form for the item in the current
+    """Returns the rendered ownership form for the item in the current
     request. If the item is not an instance of Owned, than an empty
     string is returned.
 
