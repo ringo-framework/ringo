@@ -24,6 +24,7 @@ New:
 - Do permission checks on submitted values for relations on POST requests.
   Users are not allowed to set items in relations for which they do not have
   read permissions.
+- Log changes of uid and gid.
 
 Changed:
 - Enabled Mako default HTML escaping for Template rendering globally in ini
