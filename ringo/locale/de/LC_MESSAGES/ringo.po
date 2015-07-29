@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-06-08 10:24+0200\n"
+"POT-Creation-Date: 2015-07-29 09:58+0200\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language-Team: German "
@@ -92,30 +92,30 @@ msgstr "Bitte geben Sie hier sinnvolle Informationen über Anwendung an."
 msgid "This application is based on the Ringo web application framework."
 msgstr "Diese Anwendung basiert auf dem Ringo Webanwendungs-Rahmen."
 
-#: ringo/templates/base.mako:71
+#: ringo/templates/base.mako:74
 msgid "Logout will happen soon"
 msgstr "Abmeldung steht kurz bevor"
 
-#: ringo/templates/base.mako:73
+#: ringo/templates/base.mako:76
 msgid ""
 "You will be logged out automatically in a short time because of "
 "inactivity. Please close this dialog and init a new request to renew your"
 " session timer."
 msgstr ""
-"Sie werden aufgrund von Inaktivität in kurzer Zeit automatisch abgemeldet."
-" Gemachte Änderungen gehen dann verloren."
-" Bitte schließen Sie diesen Dialog und lösen eine neue Anfrage aus, um "
-"die Sitzungszeituhr zurückzusetzen."
+"Sie werden aufgrund von Inaktivität in kurzer Zeit automatisch "
+"abgemeldet. Gemachte Änderungen gehen dann verloren. Bitte schließen Sie "
+"diesen Dialog und lösen eine neue Anfrage aus, um die Sitzungszeituhr "
+"zurückzusetzen."
 
-#: ringo/templates/base.mako:76 ringo/templates/internal/import.mako:41
+#: ringo/templates/base.mako:79 ringo/templates/internal/import.mako:41
 msgid "Ok"
 msgstr "Ok"
 
-#: ringo/templates/base.mako:84
+#: ringo/templates/base.mako:87
 msgid "Form contains unsaved changes!"
 msgstr "Formular enthält ungespeicherte Änderungen!"
 
-#: ringo/templates/base.mako:86
+#: ringo/templates/base.mako:89
 msgid ""
 "Do you want to leave the current form without saving the changes? The "
 "changes will be lost if you do not save the data first!"
@@ -124,47 +124,47 @@ msgstr ""
 "speichern? Die Änderungen werden verloren gehen, wenn Sie das Formular "
 "nicht vorher speichern!"
 
-#: ringo/templates/base.mako:89
+#: ringo/templates/base.mako:92
 msgid "Stay in Form"
 msgstr "Im Formular bleiben"
 
-#: ringo/templates/base.mako:90
+#: ringo/templates/base.mako:93
 msgid "Leave the Form"
 msgstr "Das Formular verlassen"
 
-#: ringo/templates/base.mako:153
+#: ringo/templates/base.mako:156
 msgid "Create new item"
 msgstr "Erstelle neuen Eintrag"
 
-#: ringo/templates/base.mako:155
+#: ringo/templates/base.mako:158
 msgid "Open overview"
 msgstr "Öffne Übersicht"
 
-#: ringo/templates/base.mako:157
+#: ringo/templates/base.mako:160
 msgid "Open in \"Edit\" mode"
 msgstr "Öffne im \"Bearbeiten\" Modus"
 
-#: ringo/templates/base.mako:159
+#: ringo/templates/base.mako:162
 msgid "Open in \"Read\" mode"
 msgstr "Öffne im \"Lesen\" Modus"
 
-#: ringo/templates/base.mako:161
+#: ringo/templates/base.mako:164
 msgid "Delete item"
 msgstr "Lösche Eintrag"
 
-#: ringo/templates/base.mako:177
+#: ringo/templates/base.mako:180
 msgid "Advanced"
 msgstr "Erweitert"
 
-#: ringo/templates/base.mako:179 ringo/templates/footer.mako:7
+#: ringo/templates/base.mako:182 ringo/templates/footer.mako:7
 msgid "Administration"
 msgstr "Administration"
 
-#: ringo/templates/base.mako:180
+#: ringo/templates/base.mako:183
 msgid "Change ownership"
 msgstr "Ändere Eigentumsrechte"
 
-#: ringo/templates/base.mako:183
+#: ringo/templates/base.mako:186
 msgid "Advanced actions"
 msgstr "Erweiterte Aktionen"
 
@@ -499,7 +499,7 @@ msgid "You have selected %s %s for export:"
 msgstr "Sie haben %s %s für den Export selektiert:"
 
 #: ringo/templates/internal/export.mako:17
-#: ringo/templates/internal/list.mako:305
+#: ringo/templates/internal/list.mako:308
 #: ringo/templates/internal/print.mako:11
 msgid "Close"
 msgstr "Schließen"
@@ -538,76 +538,76 @@ msgstr "Fehler"
 msgid "Overview"
 msgstr "Übersicht"
 
-#: ringo/templates/internal/list.mako:43 ringo/templates/internal/list.mako:63
+#: ringo/templates/internal/list.mako:43 ringo/templates/internal/list.mako:66
 msgid "Search"
 msgstr "Suche"
 
 #: ringo/templates/internal/list.mako:44
-msgid "Search for in ..."
-msgstr "Suche nach in ..."
+msgid "Search for ..."
+msgstr "Suche nach ..."
 
-#: ringo/templates/internal/list.mako:47
+#: ringo/templates/internal/list.mako:50
 msgid "Fields"
 msgstr "Felder"
 
-#: ringo/templates/internal/list.mako:49
+#: ringo/templates/internal/list.mako:52
 msgid "All columns"
-msgstr "Alle Spalten"
+msgstr "Allen Spalten"
 
-#: ringo/templates/internal/list.mako:61
+#: ringo/templates/internal/list.mako:64
 msgid "Search+"
 msgstr "Suche+"
 
-#: ringo/templates/internal/list.mako:67
+#: ringo/templates/internal/list.mako:70
 msgid "Options "
 msgstr "Optionen "
 
-#: ringo/templates/internal/list.mako:85 ringo/templates/internal/list.mako:296
+#: ringo/templates/internal/list.mako:88 ringo/templates/internal/list.mako:299
 msgid "Save current search filter"
 msgstr "Speichere aktuellen Suchfilter"
 
-#: ringo/templates/internal/list.mako:86
+#: ringo/templates/internal/list.mako:89
 msgid "Reset current search filter"
 msgstr "Aktuellen Suchfilter zurücksetzen"
 
-#: ringo/templates/internal/list.mako:88
+#: ringo/templates/internal/list.mako:91
 msgid "Disable regexpr in search"
 msgstr "Deaktiviere Regexpr in der Suche"
 
-#: ringo/templates/internal/list.mako:90
+#: ringo/templates/internal/list.mako:93
 msgid "Enable regexpr in search"
 msgstr "Aktiviere Regexpr in der Suche"
 
-#: ringo/templates/internal/list.mako:95
+#: ringo/templates/internal/list.mako:98
 msgid "${num_filter} filter applied"
 msgstr "${num_filters} Filter angewendet"
 
-#: ringo/templates/internal/list.mako:102
+#: ringo/templates/internal/list.mako:105
 msgid "Show"
 msgstr "Zeige"
 
-#: ringo/templates/internal/list.mako:111
+#: ringo/templates/internal/list.mako:114
 msgid "items"
 msgstr "Einträge"
 
-#: ringo/templates/internal/list.mako:207
+#: ringo/templates/internal/list.mako:210
 #, python-format
 msgid "Open item in %s mode"
 msgstr "Öffne Eintrag im %s Modus"
 
-#: ringo/templates/internal/list.mako:233
+#: ringo/templates/internal/list.mako:236
 msgid "No items found"
 msgstr "Keine Einträge gefunden"
 
-#: ringo/templates/internal/list.mako:252
+#: ringo/templates/internal/list.mako:255
 msgid "Perform"
 msgstr "Ausführen"
 
-#: ringo/templates/internal/list.mako:298
+#: ringo/templates/internal/list.mako:301
 msgid "Queryname"
 msgstr "Abfragename"
 
-#: ringo/templates/internal/list.mako:301
+#: ringo/templates/internal/list.mako:304
 msgid ""
 "Please insert a name for your query. It it will be selectable under this "
 "name in the options menu of the search after saving."
@@ -615,7 +615,7 @@ msgstr ""
 "Bitte geben Sie einen Namen für ihre Abfrage an. Die Abfrage wird nach "
 "dem Speichern unter diesem Namen im Optionsmenü auswählbar sein."
 
-#: ringo/templates/internal/list.mako:304
+#: ringo/templates/internal/list.mako:307
 msgid "Save Query"
 msgstr "Abfrage speichern"
 
@@ -816,23 +816,23 @@ msgstr ""
 msgid "Created new ${item_type} successfully."
 msgstr "${item_type} erfolgreich angelegt."
 
-#: ringo/views/request.py:133
+#: ringo/views/request.py:135
 msgid "Edited ${item_type} \"${item}\" successfully."
 msgstr "${item_type} \"${item}\" wurde erfolgreich bearbeitet."
 
-#: ringo/views/request.py:142
+#: ringo/views/request.py:146
 msgid "Error while saving new ${item_type}: ${error}."
 msgstr "Fehler beim Anlegen von ${item_type}: ${error}."
 
-#: ringo/views/request.py:145
+#: ringo/views/request.py:149
 msgid "Error while saving ${item_type} \"${item}\": ${error}."
 msgstr "Fehler beim Bearbeiten von ${item_type} \"${item}\": ${error}."
 
-#: ringo/views/request.py:153
+#: ringo/views/request.py:157
 msgid "Error on validation new ${item_type}."
 msgstr "Fehler beim Validieren von ${item_type}."
 
-#: ringo/views/request.py:156
+#: ringo/views/request.py:160
 msgid "Error on validation ${item_type} \"${item}\"."
 msgstr "Fehler beim Validieren von ${item_type} \"${item}\"."
 
@@ -862,11 +862,11 @@ msgstr "Password für \"${item}\" erfolgreich geändert."
 msgid "Error on changing the password for \"${item}\"."
 msgstr "Fehler bei der Änderung des Passworts für \"${item}\"."
 
-#: ringo/views/base/delete.py:57
+#: ringo/views/base/delete.py:58
 msgid "Can not delete ${item_type} items."
 msgstr "Kann ${item_type} Einträge nicht löschen."
 
-#: ringo/views/base/delete.py:59
+#: ringo/views/base/delete.py:60
 msgid ""
 "There has been an integrity error which prevents the request to be "
 "fulfilled. There are still depended items on the item to be deleted. "
@@ -878,15 +878,15 @@ msgstr ""
 "Eintrag. Bitte entfernen Sie alle abhängigen Beziehungen zu diesem "
 "Eintrag und versuchen Sie es noch einmal. Hinweis: ${error}"
 
-#: ringo/views/base/delete.py:71
-msgid "Deleted ${num} ${item_type} successfull."
-msgstr "${item_type} wurde erfolgreich gelöscht."
+#: ringo/views/base/delete.py:72
+msgid "Deleted ${num} ${item_type} successfully."
+msgstr ""
 
-#: ringo/views/base/import_.py:110
+#: ringo/views/base/import_.py:114
 msgid "Import failed"
 msgstr "Import gescheitert"
 
-#: ringo/views/base/import_.py:111
+#: ringo/views/base/import_.py:115
 #, python-format
 msgid ""
 "Bad news! The import could not be finished and returns with an error.No "
@@ -1304,6 +1304,14 @@ msgstr "Benutzer"
 msgid "Internal name for the roles. Do not change this without caution!"
 msgstr "Interner Name für die Rollen. Nur mit Vorsicht ändern!"
 
+#: ringo/views/forms/roles.xml:8 ringo/views/forms/users.xml:23
+msgid "Yes"
+msgstr "Ja"
+
+#: ringo/views/forms/roles.xml:9 ringo/views/forms/users.xml:24
+msgid "No"
+msgstr "Nein"
+
 #. Label for members field in form config
 #. Label for members column in overview table config
 #. Label for members column in selection table config
@@ -1398,14 +1406,6 @@ msgstr ""
 "enthalten. Führende und abschließende Leerzeichen werden nicht "
 "berücksichtigt."
 
-#: ringo/views/forms/users.xml:23
-msgid "Yes"
-msgstr "Ja"
-
-#: ringo/views/forms/users.xml:24
-msgid "No"
-msgstr "Nein"
-
 #. Label for name column in overview table config
 #: ringo/views/tables/actions.json:3
 msgid "Action"
@@ -1434,4 +1434,10 @@ msgstr "Letze Anmeldung"
 
 #~ msgid "Password has wrong format."
 #~ msgstr "Passwort hat falsches Format."
+
+#~ msgid "Search for in ..."
+#~ msgstr "Suche nach in ..."
+
+#~ msgid "Deleted ${num} ${item_type} successfull."
+#~ msgstr "${item_type} wurde erfolgreich gelöscht."
 

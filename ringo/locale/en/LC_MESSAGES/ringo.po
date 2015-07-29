@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-06-08 10:24+0200\n"
+"POT-Creation-Date: 2015-07-29 09:58+0200\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -85,72 +85,72 @@ msgstr ""
 msgid "This application is based on the Ringo web application framework."
 msgstr ""
 
-#: ringo/templates/base.mako:71
+#: ringo/templates/base.mako:74
 msgid "Logout will happen soon"
 msgstr ""
 
-#: ringo/templates/base.mako:73
+#: ringo/templates/base.mako:76
 msgid ""
 "You will be logged out automatically in a short time because of "
 "inactivity. Please close this dialog and init a new request to renew your"
 " session timer."
 msgstr ""
 
-#: ringo/templates/base.mako:76 ringo/templates/internal/import.mako:41
+#: ringo/templates/base.mako:79 ringo/templates/internal/import.mako:41
 msgid "Ok"
 msgstr ""
 
-#: ringo/templates/base.mako:84
+#: ringo/templates/base.mako:87
 msgid "Form contains unsaved changes!"
 msgstr ""
 
-#: ringo/templates/base.mako:86
+#: ringo/templates/base.mako:89
 msgid ""
 "Do you want to leave the current form without saving the changes? The "
 "changes will be lost if you do not save the data first!"
 msgstr ""
 
-#: ringo/templates/base.mako:89
+#: ringo/templates/base.mako:92
 msgid "Stay in Form"
 msgstr ""
 
-#: ringo/templates/base.mako:90
+#: ringo/templates/base.mako:93
 msgid "Leave the Form"
 msgstr ""
 
-#: ringo/templates/base.mako:153
+#: ringo/templates/base.mako:156
 msgid "Create new item"
 msgstr ""
 
-#: ringo/templates/base.mako:155
+#: ringo/templates/base.mako:158
 msgid "Open overview"
 msgstr ""
 
-#: ringo/templates/base.mako:157
+#: ringo/templates/base.mako:160
 msgid "Open in \"Edit\" mode"
 msgstr ""
 
-#: ringo/templates/base.mako:159
+#: ringo/templates/base.mako:162
 msgid "Open in \"Read\" mode"
 msgstr ""
 
-#: ringo/templates/base.mako:161
+#: ringo/templates/base.mako:164
 msgid "Delete item"
 msgstr ""
 
-#: ringo/templates/base.mako:177
+#: ringo/templates/base.mako:180
 msgid "Advanced"
 msgstr ""
 
-#: ringo/templates/base.mako:179 ringo/templates/footer.mako:7
+#: ringo/templates/base.mako:182 ringo/templates/footer.mako:7
 msgid "Administration"
 msgstr ""
 
-#: ringo/templates/base.mako:180
+#: ringo/templates/base.mako:183
 msgid "Change ownership"
 msgstr ""
 
-#: ringo/templates/base.mako:183
+#: ringo/templates/base.mako:186
 msgid "Advanced actions"
 msgstr ""
 
@@ -440,7 +440,7 @@ msgid "You have selected %s %s for export:"
 msgstr ""
 
 #: ringo/templates/internal/export.mako:17
-#: ringo/templates/internal/list.mako:305
+#: ringo/templates/internal/list.mako:308
 #: ringo/templates/internal/print.mako:11
 msgid "Close"
 msgstr ""
@@ -479,82 +479,82 @@ msgstr ""
 msgid "Overview"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:43 ringo/templates/internal/list.mako:63
+#: ringo/templates/internal/list.mako:43 ringo/templates/internal/list.mako:66
 msgid "Search"
 msgstr ""
 
 #: ringo/templates/internal/list.mako:44
-msgid "Search for in ..."
+msgid "Search for ..."
 msgstr ""
 
-#: ringo/templates/internal/list.mako:47
+#: ringo/templates/internal/list.mako:50
 msgid "Fields"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:49
+#: ringo/templates/internal/list.mako:52
 msgid "All columns"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:61
+#: ringo/templates/internal/list.mako:64
 msgid "Search+"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:67
+#: ringo/templates/internal/list.mako:70
 msgid "Options "
 msgstr ""
 
-#: ringo/templates/internal/list.mako:85 ringo/templates/internal/list.mako:296
+#: ringo/templates/internal/list.mako:88 ringo/templates/internal/list.mako:299
 msgid "Save current search filter"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:86
+#: ringo/templates/internal/list.mako:89
 msgid "Reset current search filter"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:88
+#: ringo/templates/internal/list.mako:91
 msgid "Disable regexpr in search"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:90
+#: ringo/templates/internal/list.mako:93
 msgid "Enable regexpr in search"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:95
+#: ringo/templates/internal/list.mako:98
 msgid "${num_filter} filter applied"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:102
+#: ringo/templates/internal/list.mako:105
 msgid "Show"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:111
+#: ringo/templates/internal/list.mako:114
 msgid "items"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:207
+#: ringo/templates/internal/list.mako:210
 #, python-format
 msgid "Open item in %s mode"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:233
+#: ringo/templates/internal/list.mako:236
 msgid "No items found"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:252
+#: ringo/templates/internal/list.mako:255
 msgid "Perform"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:298
+#: ringo/templates/internal/list.mako:301
 msgid "Queryname"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:301
+#: ringo/templates/internal/list.mako:304
 msgid ""
 "Please insert a name for your query. It it will be selectable under this "
 "name in the options menu of the search after saving."
 msgstr ""
 
-#: ringo/templates/internal/list.mako:304
+#: ringo/templates/internal/list.mako:307
 msgid "Save Query"
 msgstr ""
 
@@ -732,26 +732,26 @@ msgid ""
 msgstr ""
 
 #: ringo/views/request.py:130
-msgid "Created new ${item_type} successfull."
+msgid "Created new ${item_type} successfully."
 msgstr ""
 
-#: ringo/views/request.py:133
-msgid "Edited ${item_type} \"${item}\" successfull."
+#: ringo/views/request.py:135
+msgid "Edited ${item_type} \"${item}\" successfully."
 msgstr ""
 
-#: ringo/views/request.py:142
+#: ringo/views/request.py:146
 msgid "Error while saving new ${item_type}: ${error}."
 msgstr ""
 
-#: ringo/views/request.py:145
+#: ringo/views/request.py:149
 msgid "Error while saving ${item_type} \"${item}\": ${error}."
 msgstr ""
 
-#: ringo/views/request.py:153
+#: ringo/views/request.py:157
 msgid "Error on validation new ${item_type}."
 msgstr ""
 
-#: ringo/views/request.py:156
+#: ringo/views/request.py:160
 msgid "Error on validation ${item_type} \"${item}\"."
 msgstr ""
 
@@ -779,11 +779,11 @@ msgstr ""
 msgid "Error on changing the password for \"${item}\"."
 msgstr ""
 
-#: ringo/views/base/delete.py:57
+#: ringo/views/base/delete.py:58
 msgid "Can not delete ${item_type} items."
 msgstr ""
 
-#: ringo/views/base/delete.py:59
+#: ringo/views/base/delete.py:60
 msgid ""
 "There has been an integrity error which prevents the request to be "
 "fulfilled. There are still depended items on the item to be deleted. "
@@ -791,15 +791,15 @@ msgid ""
 "try again. Hint: ${error}"
 msgstr ""
 
-#: ringo/views/base/delete.py:71
-msgid "Deleted ${num} ${item_type} successfull."
+#: ringo/views/base/delete.py:72
+msgid "Deleted ${num} ${item_type} successfully."
 msgstr ""
 
-#: ringo/views/base/import_.py:110
+#: ringo/views/base/import_.py:114
 msgid "Import failed"
 msgstr ""
 
-#: ringo/views/base/import_.py:111
+#: ringo/views/base/import_.py:115
 #, python-format
 msgid ""
 "Bad news! The import could not be finished and returns with an error.No "
@@ -1201,6 +1201,14 @@ msgstr ""
 msgid "Internal name for the roles. Do not change this without caution!"
 msgstr ""
 
+#: ringo/views/forms/roles.xml:8 ringo/views/forms/users.xml:23
+msgid "Yes"
+msgstr ""
+
+#: ringo/views/forms/roles.xml:9 ringo/views/forms/users.xml:24
+msgid "No"
+msgstr ""
+
 #. Label for members field in form config
 #. Label for members column in overview table config
 #. Label for members column in selection table config
@@ -1282,14 +1290,6 @@ msgstr ""
 msgid ""
 "The password must be at least 12 characters long, and include two non-"
 "letters"
-msgstr ""
-
-#: ringo/views/forms/users.xml:23
-msgid "Yes"
-msgstr ""
-
-#: ringo/views/forms/users.xml:24
-msgid "No"
 msgstr ""
 
 #. Label for name column in overview table config
@@ -1514,5 +1514,14 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Password has wrong format."
+#~ msgstr ""
+
+#~ msgid "Search for in ..."
+#~ msgstr ""
+
+#~ msgid "Edited ${item_type} \"${item}\" successfull."
+#~ msgstr ""
+
+#~ msgid "Deleted ${num} ${item_type} successfull."
 #~ msgstr ""
 
