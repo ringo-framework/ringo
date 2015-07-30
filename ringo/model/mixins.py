@@ -317,7 +317,10 @@ class Owned(object):
 
     @declared_attr
     def uid(cls):
-        return Column(Integer, ForeignKey('users.id'))
+        fk_name = "fk_%s_%s_%s" % (cls.__tablename__, 'uid', 'users')
+        return Column(Integer, ForeignKey('users.id',
+                                          use_alter=True,
+                                          name=fk_name))
 
     @declared_attr
     def owner(cls):
@@ -326,7 +329,10 @@ class Owned(object):
 
     @declared_attr
     def gid(cls):
-        return Column(Integer, ForeignKey('usergroups.id'))
+        fk_name = "fk_%s_%s_%s" % (cls.__tablename__, 'gid', 'usergroups')
+        return Column(Integer, ForeignKey('usergroups.id',
+                                          use_alter=True,
+                                          name=fk_name))
 
     @declared_attr
     def group(cls):
