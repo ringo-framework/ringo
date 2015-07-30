@@ -32,18 +32,18 @@ def ownership(request, callback=None, renderers=None):
         item = get_item_from_request(request)
         old_gid = str(item.gid)
         old_uid = str(item.uid)
-        new_gid = str(request.params['group'])
-        new_uid = str(request.params['owner'])
+        new_gid = str(request.params.get('group'))
+        new_uid = str(request.params.get('owner'))
         if handle_POST_request(form, request, callback, 'update', renderers):
             if old_uid != new_uid:
                 log_msg = u'User {user.login} changed uid of {item_label} '\
-                          '{item.id} form {old} -> {new}'\
+                          '{item.id} from {old} -> {new}'\
                           .format(item_label=item_label, item=item, 
                                   user=request.user, old=old_uid, new=new_uid)
                 log.info(log_msg)
             if old_gid != new_gid:
                 log_msg = u'User {user.login} changed gid of {item_label} '\
-                          '{item.id} form {old} -> {new}'\
+                          '{item.id} from {old} -> {new}'\
                           .format(item_label=item_label, item=item, 
                                   user=request.user, old=old_gid, new=new_gid)
                 log.info(log_msg)
