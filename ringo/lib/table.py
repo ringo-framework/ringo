@@ -2,7 +2,7 @@
 import logging
 import os
 import json
-from ringo.lib.helpers import get_path_to, get_app_name
+from ringo.lib.helpers import get_path_to, get_app_inheritance_path
 from ringo.lib.cache import CACHE_TABLE_CONFIG
 
 log = logging.getLogger(__name__)
@@ -65,7 +65,8 @@ class TableConfig:
                         "width": "width",
                         "screen": "xlarge",
                         "expand": true,
-                        "filter": false
+                        "filter": false,
+                        "title": "Tooltip title"
                     }
                 ]
                 "settings": {
@@ -99,12 +100,15 @@ class TableConfig:
       link. A filter link is a shortcut to trigger a search with the
       current value of the field in the current column over all items.
       Defaults to No.
+    * *title* A tooltip will be rendered for the table header of the
+      column.
 
     Further the table has some table wide configuration options:
 
     * *default-sort-field*: Name of the column which should be used as
       default sorting on the table. Defaults to the first column in the table.
     * *default-sort-order*: Sort order (desc, asc) Defaults to asc.
+    * *default-search*: Default search filter for the table
     * *auto-responsive*: If True than only the first column of a table
       will be displayed on small devices. Else you need to configure the
       "screen" attribute for the fields.
@@ -174,6 +178,15 @@ class TableConfig:
                 return def_order
         return "asc"
 
+    def get_default_search(self):
+        """Returns the seaech filter of the items in the table """
+        settings = self.get_settings()
+        if settings:
+            def_search = settings.get('default-search')
+            if def_search:
+                return def_search
+        return []
+
 
 def _load_overview_config(clazz):
     """Return a datastructure representing the overview
@@ -186,30 +199,28 @@ def _load_overview_config(clazz):
     cfile = "%s.json" % clazz.__tablename__
     config = None
     name = clazz.__module__.split(".")[0]
-    # FIXME: Add support loading configurations in case of derived
-    # models. In this case we should try to look for a
-    # configuration in the application which inherits from a model.
-    # If there is no configuration. Try to figure out from which
-    # model it is derived and load the configuration of the base
-    # class () <2015-02-17 15:57>
-    try:
-        # Always first try to load from the current application. No
-        # matter what the current name is as name can be different from
-        # the appname in case of loading forms for an extension. In this
-        # case first try to load the form configuration from the
-        # application to be able to overwrite the forms.
-        config = open(get_path_to_overview_config(cfile, get_app_name()), "r")
-    except IOError:
+    for appname in get_app_inheritance_path():
         try:
-            # This path is working for extensions.
-            if name.startswith("ringo_"):
-                config = open(get_path_to_overview_config(cfile,
-                                                          name,
-                                                          location="."), "r")
-            # This path is working for base config of the application.
-            else:
-                config = open(get_path_to_overview_config(cfile, name), "r")
+            # Always first try to load from the current application. No
+            # matter what the current name is as name can be different from
+            # the appname in case of loading forms for an extension. In this
+            # case first try to load the form configuration from the
+            # application to be able to overwrite the forms.
+            config = open(get_path_to_overview_config(cfile, appname), "r")
+            break
         except IOError:
-            # Final fallback try to load from ringo.
-            config = open(get_path_to_overview_config(cfile, "ringo"), "r")
+	    # Silently ignore IOErrors here as is Ok when trying to load the
+	    # configurations files while iterating over the possible config
+	    # file locations. If the file can finally not be loaded an IOError
+	    # is raised at the end.
+            pass
+    else:
+        if name.startswith("ringo_"):
+            config = open(get_path_to_overview_config(cfile,
+                                                      name,
+                                                      location="."), "r")
+    # If we can't load the config file after searching in all locations, raise
+    # an IOError. Hint: Maybe you missed to set the app.base config variable?
+    if not config:
+        raise IOError("Could not load table configuration for %s" % cfile)
     return json.load(config)

@@ -1,20 +1,14 @@
 [
     {
-        "description": null,
+        "description": "",
         "id": 1,
-        "members": [
-            1
-        ],
         "name": "admins",
-        "roles": [],
         "uuid": "a81fc589dbb14afaaf731e25f78a560e"
     },
     {
-        "description": null,
+        "description": "",
         "id": 2,
-        "members": [],
         "name": "users",
-        "roles": [],
         "uuid": "25311fc258524725b34da917094a0292"
     }
 ]

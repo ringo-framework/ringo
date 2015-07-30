@@ -41,7 +41,10 @@ autoresponsive = tableconfig.is_autoresponsive()
         <input name="form" type="hidden" value="search">
         <div class="form-group">
           <label class="sr-only" for="search">${_('Search')}</label>
-          <input name="search" class="form-control input-large" type="text" value="${search}" placeholder="${_('Search for in ...')}"/>
+          <input name="search" class="form-control input-large" type="text" value="${search}" placeholder="${_('Search for ...')}"/>
+        </div>
+        <div class="form-group">
+          in
         </div>
         <div class="form-group">
           <label class="sr-only" for="field">${_('Fields')}</label>
@@ -117,7 +120,7 @@ autoresponsive = tableconfig.is_autoresponsive()
 <form id="data-table" name="data-table" role="form" action="${request.route_path(h.get_action_routename(clazz, 'bundle'))}" method="POST">
 <table id="data" class="table table-striped table-hover table-condensed">
   <tr>
-  % if enable_bundled_actions:
+  % if bundled_actions:
     <th width="2em">
       <input type="checkbox" name="check_all" onclick="checkAll('id');">
     </th>
@@ -130,10 +133,26 @@ autoresponsive = tableconfig.is_autoresponsive()
     % endif
       % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
         <a
-        href="${request.current_route_path().split('?')[0]}?sort_field=${field.get('name')}&sort_order=desc">${_(field.get('label'))}</a>
+        href="${request.current_route_path().split('?')[0]}?sort_field=${field.get('name')}&sort_order=desc">
+        % if field.get('title'):
+        <span data-toggle="tooltip" data-original-title="${field.get('title')}">
+        % endif
+        ${_(field.get('label'))}
+        % if field.get('title'):
+        </span>
+        % endif
+        </a>
       % else:
         <a
-        href="${request.current_route_path().split('?')[0]}?sort_field=${field.get('name')}&sort_order=asc">${_(field.get('label'))}</a>
+        href="${request.current_route_path().split('?')[0]}?sort_field=${field.get('name')}&sort_order=asc">
+        % if field.get('title'):
+        <span data-toggle="tooltip" data-original-title="${field.get('title')}">
+        % endif
+        ${_(field.get('label'))}
+        </a>
+        % if field.get('title'):
+        </span>
+        % endif
       % endif
       % if request.session['%s.list.sort_field' % clazz.__tablename__] == field.get('name'):
         % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
@@ -154,7 +173,7 @@ autoresponsive = tableconfig.is_autoresponsive()
       permission = "read"
     %>
     <tr>
-    % if enable_bundled_actions:
+    % if bundled_actions:
     <td>
       <input type="checkbox" name="id" value="${item.id}">
     </td>
@@ -188,21 +207,20 @@ autoresponsive = tableconfig.is_autoresponsive()
             ${render_filter_link(request, field, value, clazz)}
           % endif
         % else:
+          <a class="link" title="${_('Open item in %s mode') % _(permission.capitalize())}"
+            href="${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}">
           % if isinstance(value, list):
-            <%
-              x = []
-              for v in value:
-                if hasattr(v, "render"):
-                  x.append(v.render())
-                else:
-                  x.append(_(v))
-                endif
-              endfor
-              value = ", ".join(x)
-             %>
-        % endif
-        ## Render a usual Link which will open the item.
-        <a class="link" title="${_('Open item in %s mode') % _(permission.capitalize())}" href="${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}">${_(value)}</a>
+            % for v in value:
+              % if hasattr(v, 'render'):
+                ${v.render()}
+              % else:
+                ${_(v)}
+              % endif
+            % endfor
+          % else:
+            ${_(value)}
+          % endif
+          </a>
         % endif
     </td>
     % endfor
@@ -210,7 +228,7 @@ autoresponsive = tableconfig.is_autoresponsive()
   % endfor
   % if len(items) == 0:
   <tr>
-    % if enable_bundled_actions:
+    % if bundled_actions:
       <td colspan="${len(tableconfig.get_columns())+1}">
     % else:
       <td colspan="${len(tableconfig.get_columns())}">
@@ -220,15 +238,15 @@ autoresponsive = tableconfig.is_autoresponsive()
   </tr>
   % endif
 </table>
-% if enable_bundled_actions or tableconfig.is_paginated():
+% if bundled_actions or tableconfig.is_paginated():
 <div class="search-widget">
   <div class="row">
     <div class="col-xs-6">
-      % if enable_bundled_actions: 
+      % if bundled_actions: 
       <input name="csrf_token" type="hidden" value="${request.session.get_csrf_token()}">
       <select class="form-control input-small" name="bundle_action" style="display:inline;width:auto;">
-        % for action in h.get_item_actions(request, clazz):
-          ${action.bundle}
+        % for action in bundled_actions:
+          ##${action.bundle}
           % if action.bundle:
             <option value="${action.name}">${_(action.name)}</option>
           % endif

@@ -11,7 +11,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">${h.get_app_title()}</a>
+      <a class="navbar-brand" href="${request.route_path('home')}">${h.get_app_title()}</a>
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -32,11 +32,9 @@
         <li class="divider-vertical"></li>
         % if request.user:
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle"
-              data-toggle="dropdown"><i class="fa fa-user"></i> ${request.user.profile[0]} (${request.user.login})<b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> ${request.user.profile[0].first_name} ${request.user.profile[0].last_name} (${request.user.login})<b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li role="presentation" class="dropdown-header">${_('Settings')}</li>
-              ##<li role="presentation" class="dropdown-header">${_('Roles')}: ${", ".join([r.name for r in request.user.get_roles()])}</li>
               <li><a href="${request.route_path('profiles-read', id=request.user.profile[0].id)}"><img class="icon" src="${request.static_path('ringo:static/images/icons/16x16/profile.png')}"/>${_('Profile')}</a></li>
               <li><a href="${request.route_path('users-changepassword', id=request.user.id)}"><img class="icon" src="${request.static_path('ringo:static/images/icons/16x16/application-certificate.png')}"/>${_('Change Password')}</a></li>
               <li class="divider"></li>

@@ -30,7 +30,7 @@
   </form>
   <form id="ownership-form-update" autocomplete="off" method="POST" enctype="multipart/form-data">
     <row>
-      <if expr="$_admin == 'True'" type="readonly">
+      <if expr="$_admin == True" type="readonly">
         <col><field ref="e1"/></col>
       </if>
     </row>

@@ -13,12 +13,12 @@ from ringo.views.response import JSONResponse
 log = logging.getLogger(__name__)
 
 
-@view_config(route_name='get-language',
+@view_config(route_name='keepalive',
              renderer='json',
              request_method="GET")
-def get_language(request):
-    """Method return the preferred language of the user"""
-    return JSONResponse(True, request._LOCALE_, {})
+def keepalive(request):
+    """Endpoint for simple requests to trigger refreshing the logouttimer"""
+    return JSONResponse(True, "I'm alive!", {})
 
 
 @view_config(route_name='rules-evaluate',

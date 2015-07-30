@@ -10,7 +10,9 @@ from babel.dates import (
     format_datetime as babel_format_datetime,
     format_date as babel_format_date
 )
+from pyramid.threadlocal import get_current_request
 from pyramid.i18n import get_locale_name
+from formbar.converters import from_timedelta
 
 ########################################################################
 #                          Formating content                           #
@@ -23,12 +25,19 @@ def prettify(request, value):
     datatype the function will call a specialised formatting function
     which takes care of localisation etc.
 
+    The locale is determined from the given request.
+
     :request: Current request
     :value: Pythonic value
     :returns: Prettified (localized) value
 
     """
-    locale_name = get_locale_name(request)
+    if not request:
+        request = get_current_request()
+
+    # Under some circumstances, get_current_request will return None as the 
+    # current request. This makes it impossible to retrieve the current locale
+    locale_name = 'en_EN' if not request else get_locale_name(request)
 
     if isinstance(value, datetime):
         return format_datetime(get_local_datetime(value),
@@ -36,6 +45,8 @@ def prettify(request, value):
     if isinstance(value, date):
         return format_date(value,
                            locale_name=locale_name, format="short")
+    if isinstance(value, timedelta):
+        return from_timedelta(value)
     if value is None:
         return ""
     return value

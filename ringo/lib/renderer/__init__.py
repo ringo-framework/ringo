@@ -21,12 +21,14 @@ from ringo.lib.renderer.lists import (
     DTListRenderer
 )
 
+
 def setup_render_globals(config):
     config.add_subscriber(add_renderer_globals, BeforeRender)
 
 
 def add_renderer_globals(event):
     request = event['request']
+    default_locale = request.registry.settings.get("pyramid.default_locale_name", "en")
     event['h'] = helpers
     event['s'] = security
     event['_'] = request.translate
@@ -34,3 +36,5 @@ def add_renderer_globals(event):
     event['formbar_css_filenames'] = formbar_css_filenames
     event['formbar_js_filenames'] = formbar_js_filenames
     event['localizer'] = request.localizer
+    event['client_language'] = getattr(request, "_LOCALE_", default_locale)
+    event['application_path'] = helpers.get_app_url(request)

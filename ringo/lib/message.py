@@ -62,7 +62,8 @@ class Mail:
                                           "ringo",
                                           'templates/mails')
         self.tl = TemplateLookup(directories=[template_dir,
-                                              ringo_template_dir])
+                                              ringo_template_dir],
+                                 default_filters=['h'])
 
         if template:
             self.template = self.tl.get_template("%s.mako" % template)

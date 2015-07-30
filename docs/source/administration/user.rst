@@ -16,7 +16,7 @@ The screenshot shows the Edit-Dialog for a user.
 
  * Login: This is the login name for the user. It is a required field and must be unique in the system.
  * Roles: Each user can have different roles assigned. You can select one or more roles for a listing of available items of the :ref:`modul-roles`.
- * Groups: Each user can be member of different groups. The user will inherit all roles assigned to the group. You can select one or more groups for a listing of available items of the :ref:`modul-groups`.
+ * Groups: Each user can be member of different groups. You can select one or more groups for a listing of available items of the :ref:`modul-groups`.
  * Activated: The user can be activated and deactivated which means that the the user can login to the application.
  * Activation Token: In case the the user is deactived you can define an activation token (usually a UUID) which can be used to activate the user.  This field is used while registering a new user. The user needs to confirm the registration by calling an URL with the defined activation token.
 

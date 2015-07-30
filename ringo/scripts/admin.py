@@ -32,7 +32,8 @@ from ringo.scripts.db import (
     handle_db_loaddata_command,
     handle_db_uuid_command,
     handle_db_restrict_command,
-    handle_db_unrestrict_command
+    handle_db_unrestrict_command,
+    handle_db_fixsequence_command
 )
 
 from ringo.scripts.fixture import (
@@ -48,6 +49,10 @@ from ringo.scripts.modul import (
 
 from ringo.scripts.user import (
     handle_user_passwd_command
+)
+
+from ringo.scripts.application import (
+    handle_app_init_command
 )
 
 def get_config_path(config="development.ini"):
@@ -79,6 +84,24 @@ def setup_fixture_parser(subparsers, parent):
     fixture_parser.add_argument('--path',
                               metavar='path',
                               help='Path to the fixture files')
+
+
+def setup_application_parser(subparsers, parent):
+    p = subparsers.add_parser('app',
+                              help='Application administration',
+                              parents=[parent])
+    sp = p.add_subparsers(help='Application command help')
+
+    # Init command
+    app_parser = sp.add_parser('init',
+                                help=('Initialises an empty application '
+                                      'folder and creates a default '
+                                      'configuration file in it'),
+                                parents=[parent])
+    app_parser.add_argument('name',
+                              metavar='name',
+                              help='Name of the application')
+    app_parser.set_defaults(func=handle_app_init_command)
 
 
 def setup_user_parser(subparsers, parent):
@@ -224,6 +247,12 @@ def setup_db_parser(subparsers, parent):
                         action="store_true",
                         help="Reset the UUID only where it is not already set.")
 
+    # Fix sequence command
+    upgrade_parser = sp.add_parser('fixsequence',
+                                help='Fixes sequences in postgres databases',
+                                parents=[parent])
+    upgrade_parser.set_defaults(func=handle_db_fixsequence_command)
+
 
 def setup_global_argument_parser():
     parser = argparse.ArgumentParser(add_help=False)
@@ -250,6 +279,7 @@ def setup_parser():
     setup_db_parser(subparsers, global_arguments)
     setup_modul_parser(subparsers, global_arguments)
     setup_user_parser(subparsers, global_arguments)
+    setup_application_parser(subparsers, global_arguments)
     setup_fixture_parser(subparsers, global_arguments)
     return parser
 

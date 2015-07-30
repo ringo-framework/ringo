@@ -2,6 +2,7 @@ import os
 import logging
 import pkg_resources
 import transaction
+from pyramid.events import NewRequest
 from ringo.lib import helpers
 from ringo.lib.extension import unregister_modul
 from ringo.lib.sql.db import DBSession, NTDBSession
@@ -10,6 +11,7 @@ from ringo.lib.form import get_formbar_css, get_formbar_js
 from ringo.model.modul import ModulItem
 from ringo.model import extensions
 from ringo.model.mixins import Mixin
+from ringo.model.base import get_item_list
 from ringo.resources import get_resource_factory
 from ringo.views.base import (
     web_action_view_mapping,
@@ -19,10 +21,23 @@ from ringo.views.base import (
 
 log = logging.getLogger(__name__)
 
+def preload_modules(event):
+    """Preload all modules on each request and put them into the request
+    cache for the modules to save additional SQL queries as the modules
+    are needed anyway."""
+    for modul in get_item_list(event.request, ModulItem):
+        event.request.cache_item_modul.set(modul.id, modul)
 
 def setup(config):
     """Setup method which is called on application initialition and
     takes care that many ringo specific things are setup correctly."""
+
+    # Trigger loading the static files of formbar and make them
+    # available in global vars.
+    # TODO: Move this call into a better place. (ti) <2015-07-28 13:19> 
+    get_formbar_css() # -> formbar_css_filenames
+    get_formbar_js() # -> formbar_js_filenames
+
     setup_extensions(config)
     setup_modules(config)
     config.include('ringo.lib.i18n.setup_translation')
@@ -30,7 +45,7 @@ def setup(config):
     config.include('ringo.lib.renderer.setup_render_globals')
     config.include('ringo.lib.security.setup_ringo_security')
     config.include('ringo.lib.cache.setup_cache')
-    write_formbar_static_files()
+    config.add_subscriber(preload_modules, NewRequest)
 
 
 def setup_extensions(config):
@@ -110,6 +125,20 @@ def _setup_web_action(config, action, clazz, view_mapping):
        config.add_view(view_func, route_name=route_name,
                        renderer='/default/bundle.mako',
                        permission='list')
+    ## Add permission action.
+    if action_name == "read":
+        action_name = "ownership"
+        route_name = "%s-%s" % (name, action_name)
+        route_url = "%s/%s/{id}" % (name, action_name)
+        view_func = get_action_view(view_mapping,
+                                    action_name,
+                                    name)
+        log.debug("Adding route: %s, %s" % (route_name, route_url))
+        config.add_route(route_name, route_url,
+                         factory=get_resource_factory(clazz))
+        config.add_view(view_func, route_name=route_name,
+                        renderer='/default/update.mako',
+                        permission='read')
 
 
 def _setup_rest_action(config, action, clazz, view_mapping):
@@ -192,25 +221,3 @@ def setup_modul(config, modul):
     for action in modul.actions:
         _setup_web_action(config, action, clazz, web_action_view_mapping)
         _setup_rest_action(config, action, clazz, rest_action_view_mapping)
-
-def write_formbar_static_files():
-    """Will write the formbar specific css and js files into the formbar
-    directory in the static file location"""
-    base_dir = pkg_resources.get_distribution("ringo").location
-    static_dir = os.path.join(base_dir, 'ringo', 'static')
-    formbar_css = os.path.join(static_dir, 'formbar')
-    for filename, content in get_formbar_css():
-        filename = os.path.join(formbar_css, filename)
-        head, tail = os.path.split(filename)
-        if not os.path.exists(head):
-            os.makedirs(head)
-        with open(filename, 'wb') as f:
-            f.write(content)
-    formbar_js = os.path.join(static_dir, 'formbar')
-    for filename, content in get_formbar_js():
-        filename = os.path.join(formbar_js, filename)
-        head, tail = os.path.split(filename)
-        if not os.path.exists(head):
-            os.makedirs(head)
-        with open(filename, 'wb') as f:
-            f.write(content)

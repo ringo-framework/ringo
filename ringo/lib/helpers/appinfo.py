@@ -8,6 +8,25 @@ def get_ringo_version():
     return pkg_resources.get_distribution('ringo').version
 
 
+def get_app_inheritance_path():
+    """Returns a list of application names. The names describe the path
+    to the root of the application inheritance. e.g if the current
+    application is 'foo' which is based and 'bar' which is based on
+    'ringo' the function will return the follwing result: ['foo', 'bar',
+    'ringo'].
+
+    The default path is [<nameofcurrentapp>, "ringo"]. The path can be
+    extended by setting the app.base config variable."""
+    path = ['ringo']
+    registry = get_current_registry()
+    settings = registry.settings
+    base = settings.get("app.base")
+    if base:
+        path.append(base)
+    path.append(get_app_name())
+    return reversed(path)
+
+
 def get_app_name():
     registry = get_current_registry()
     return registry.__name__
@@ -24,22 +43,21 @@ def get_app_location(name=None):
 
 
 def get_app_url(request):
-    """Returns the base url of the application if configured. The base
-    url can be configured using the `app.url` config variable in the ini
-    file. The configuration defaults to having no explizit base url. If
-    the `app.url` variable is emtpy we will determine the base url from
-    request.application_url variable. Else the value of `app.url` is
-    used"""
-    settings = request.registry.settings
-    app_url = settings.get("app.url")
-    if app_url is None:
-        # Default! No url.
-        return ""
-    elif app_url == "":
-        return request.application_url
-    else:
-        return app_url
+    """Returns the path of the application under which the application
+    is hosted on the server.
 
+    .. note::
+        This function is a helper function. It is only used to build
+        correct URLs for client sided AJAX requests in case the
+        application is hosted in a subpath.
+
+    Example:
+
+    If the application is hosted on "http://localhost:6543/foo" the
+    function will return "foo". If it is hosted under the root
+    directory '' is returned."""
+    return request.environ.get("SCRIPT_NAME", "")
+    
 
 def get_app_title():
     registry = get_current_registry()

@@ -1,8 +1,6 @@
 import os
 import unittest
-from mock import Mock
 from paste.deploy.loadwsgi import appconfig
-from webtest import TestApp
 
 from pyramid import testing
 from pyramid.registry import Registry
@@ -61,6 +59,7 @@ class BaseUnitTest(BaseTestCase):
         self.config = testing.setUp(self.registry, request=self.request)
 
     def _build_request(self):
+        from mock import Mock
         request = testing.DummyRequest()
         request.cache_item_modul = Cache()
         request.cache_item_list = Cache()
@@ -86,6 +85,7 @@ class BaseFunctionalTest(BaseTestCase):
         super(BaseFunctionalTest, cls).setUpClass()
 
     def setUp(self):
+        from webtest import TestApp
         self.app = TestApp(self.app)
         self.config = testing.setUp()
         super(BaseFunctionalTest, self).setUp()

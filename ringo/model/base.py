@@ -19,7 +19,8 @@ from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload, Session
 from ringo.lib.helpers import (
     serialize, get_item_modul,
-    get_raw_value, set_raw_value
+    get_raw_value, set_raw_value,
+    prettify
 )
 from ringo.lib.cache import CACHE_MODULES
 from ringo.lib.form import get_form_config
@@ -47,17 +48,17 @@ def levenshteinmatch(value, search, t):
         l =  math.ceil(lenS * t)
     else:
         l = math.ceil(lenV * t)
-    ld = Levenshtein.distance(value, search)
+    ld = Levenshtein.distance(value.encode("utf-8"), search.encode("utf-8"))
     return ld <= l
 
 
 def doublemetaphone(value, search):
     """Compares two strings by applying the Double Metaphone phonetic
     encoding algorithm of the Fuzzy library using primary and secondary
-    code of a string for matching.  """
+    code of a string for matching."""
     dmeta = fuzzy.DMetaphone()
     dmeta_value = dmeta(value.encode("utf-8"))
-    dmeta_search = dmeta(search)
+    dmeta_search = dmeta(search.encode("utf-8"))
 
     if value == search:
         return True
@@ -98,16 +99,6 @@ opmapping = {
 
 
  
-def nonecmp(a, b):
-    if a is None and b is None:
-        return 0
-    if a is None:
-        return -1
-    if b is None:
-        return 1
-    return cmp(a, b)
-
-
 def load_modul(item):
     """Will load the related modul for the given item. First we try to
     get the bound session from the object and reuse this session to load
@@ -198,7 +189,7 @@ class BaseItem(object):
         modul = load_modul(self)
         format_str, fields = modul.get_str_repr()
         if format_str:
-            return format_str % tuple([self.get_value(f) for f in fields])
+            return format_str % tuple([prettify(None, self.get_value(f)) for f in fields])
         else:
             return "%s" % str(self.id or self.__class__)
 
@@ -475,7 +466,11 @@ def get_item_list(request, clazz, user=None, cache="", items=None):
     :returns: BaseList instance
 
     """
-    key = "%s-%s" % (clazz._modul_id, user)
+    if user:
+        user_key = user.id
+    else:
+        user_key = None
+    key = "%s-%s" % (clazz._modul_id, user_key)
     if not request.cache_item_list.get(key):
         listing = BaseList(clazz, request.db, cache, items)
         if user:
@@ -484,6 +479,7 @@ def get_item_list(request, clazz, user=None, cache="", items=None):
         # list.
         if items is None:
             request.cache_item_list.set(key, listing)
+            return listing
         else:
             return listing
     return request.cache_item_list.get(key)
@@ -541,12 +537,6 @@ class BaseList(object):
         """
         self.clazz = clazz
         self.db = db
-        # TODO: Check which is the best loading strategy here for large
-        # collections. Tests with 100k datasets rendering only 100 shows
-        # that the usual lazyload method seems to be the fastest which is
-        # not what if have been expected.
-        #self.items = db.query(clazz).options(joinedload('*')).all()
-
         if items is None:
             q = self.db.query(self.clazz)
             if cache in regions.keys():
@@ -576,6 +566,15 @@ class BaseList(object):
             def g(obj):
                 return obj.get_value(field, expand=expand)
             return g
+
+        def nonecmp(a, b):
+            if a is None and b is None:
+                return 0
+            if a is None:
+                return -1
+            if b is None:
+                return 1
+            return cmp(a, b)
 
         sorted_items = sorted(self.items,
                               cmp=nonecmp,
@@ -752,12 +751,11 @@ class BaseFactory(object):
            and user is not None):
             item.uid = user.id
         if (hasattr(item, 'gid')):
-            if (user is not None and user.gid):
-                item.gid = user.gid
-            else:
-                modul = get_item_modul(None, item)
-                default_gid = modul.gid
-                item.gid = default_gid
+            modul = get_item_modul(None, item)
+            if modul.default_gid:
+                item.gid = modul.default_gid
+            elif (user is not None and user.default_gid):
+                item.gid = user.default_gid
         if values:
             item.set_values(values)
         return item

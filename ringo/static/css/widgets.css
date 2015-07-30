@@ -1,3 +1,11 @@
+#spinner {
+  width: 200px;
+  position: fixed;
+  top: 50%;
+  left: 42%;
+  z-index: 200000000000000000;
+}    
+
 #spinnerContainer .modal-dialog {
   width: 200px;
   top: 30%;
@@ -74,10 +82,12 @@
 }
 
 table.content-shorten {
-  table-layout:fixed;
+  display: table;  
+  border-collapse: collapse;
 }
 
 table.content-shorten td {
+  max-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -215,4 +225,5 @@ ul.dropdown-menu li table td {
 /* Custom formbar forms */
 .formbar-linkfield {
   margin-top: 1.45em;
+  white-space: normal;
 }

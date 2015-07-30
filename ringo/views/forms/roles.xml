@@ -9,7 +9,13 @@
     <entity id="e2" name="permissions" label="Permissions">
       <renderer type="listing" hideadd="true" nolinks="true" showsearch="true"/>
     </entity>
-    <entity id="e3" name="admin" label="Administrational role"/>
+    <entity id="e3" name="admin" label="Administrational role">
+      <renderer type="radio"/>
+      <options>
+        <option value="True">Yes</option>
+        <option value="False">No</option>
+      </options>
+    </entity>
     <entity id="e4" name="description" label="Description" type="string">
       <renderer type="textarea"/>
     </entity>

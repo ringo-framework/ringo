@@ -3,13 +3,14 @@
         "columns": [
             {"name": "label", "label": "Label", "width": "200"},
             {"name": "permissions", "label": "Roles"},
-            {"name": "admin", "label": "Adminrole", "width": "100"}
+            {"name": "admin", "label": "Adminrole", "width": "100",
+	     "expand": true}
         ]
     },
     "selection": {
         "columns": [
             {"name": "label", "label": "Label"},
-            {"name": "admin", "label": "Adminrole"}
+            {"name": "admin", "label": "Adminrole", "expand": true}
         ]
     }
 }

@@ -113,6 +113,7 @@ class ModulItem(BaseItem, Base):
 
     __tablename__ = 'modules'
     _modul_id = 1
+    _sql_eager_loads = ['actions']
     id = sa.Column(sa.Integer, primary_key=True)
     """Internal ID of the modul."""
     name = sa.Column(sa.String, unique=True, nullable=False)
@@ -148,11 +149,12 @@ class ModulItem(BaseItem, Base):
      * admin-menu
      * hidden
     """
-    gid = sa.Column(sa.Integer, sa.ForeignKey('usergroups.id'))
+    default_gid = sa.Column(sa.Integer, sa.ForeignKey('usergroups.id'))
     """Link to a usergroup which will be set as default useroup for new
     items of the modul if nothing other is defined."""
 
-    default_group = sa.orm.relationship("Usergroup", uselist=False)
+    default_group = sa.orm.relationship("Usergroup", uselist=False,
+                                        foreign_keys=[default_gid])
     actions = sa.orm.relationship("ActionItem",
                                   backref="modul",
                                   lazy="joined",
@@ -160,6 +162,9 @@ class ModulItem(BaseItem, Base):
     """List of :class:`.ActionItem` which are available for the modul."""
 
     _sql_eager_loads = ['actions.roles']
+    """Preload the actions and associated roles to the action of the
+    modul.  Are needed for permission checks. This will reduce the
+    number of SQL-queries very much!"""
 
     def get_clazz(self):
         """Returns the class defined in the clazzpath attribute.

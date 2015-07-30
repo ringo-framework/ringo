@@ -10,7 +10,7 @@ from ringo.lib.helpers import (
         get_app_url
 )
 from ringo.lib.form import (
-    eval_url,
+    get_eval_url,
     get_form_config,
     get_ownership_form as _get_ownership_form
 )
@@ -65,8 +65,8 @@ def get_blobform_config(request, item, formname):
         return modul, formconfig
 
 
-def get_rendered_ownership_form(request, readonly=None):
-    """Returns the rendered logbook form for the item in the current
+def get_rendered_ownership_form(request):
+    """Returns the rendered ownership form for the item in the current
     request. If the item is not an instance of Owned, than an empty
     string is returned.
 
@@ -76,22 +76,22 @@ def get_rendered_ownership_form(request, readonly=None):
     the user has not an administrative role.
     """
 
-    def _has_administrational_role(modul):
+    def _has_administrational_role(modul, user):
         for action in modul.actions:
             if action.name == "Update":
                 for role in action.roles:
-                    if role.admin:
+                    if role.admin and has_role(user, role.name):
                         return True
         return False
 
     item = get_item_from_request(request)
-    form = get_ownership_form(request, readonly)
+    form = get_ownership_form(request)
     modul = get_item_modul(request, item)
     usergroup_modul = get_item_modul(request, Usergroup)
     _groups = [str(g.name) for g in request.user.groups]
-    _admin = (_has_administrational_role(modul)
+    _admin = (_has_administrational_role(modul, request.user)
               or has_role(request.user, "admin")
-              or _has_administrational_role(usergroup_modul))
+              or _has_administrational_role(usergroup_modul, request.user))
     values = {"_admin": _admin,
               "_groups": _groups}
     if isinstance(item, Owned):
@@ -100,17 +100,24 @@ def get_rendered_ownership_form(request, readonly=None):
         return ""
 
 
-def get_ownership_form(request, readonly=None):
+def get_ownership_form(request):
     item = get_item_from_request(request)
     db = request.db
     csrf_token = request.session.get_csrf_token()
     url_prefix = get_app_url(request)
-    if (readonly is None and isinstance(item, Owned)):
-        readonly = not (item.is_owner(request.user)
-                        or has_role(request.user, "admin"))
-    return _get_ownership_form(item, db, csrf_token, eval_url,
+
+    # Check if the form is rendered as readonly form.
+    if has_role(request.user, "admin"):
+        readonly = False
+    elif isinstance(item, Owned) and item.is_owner(request.user):
+        readonly = False
+    else:
+        readonly = True
+
+    return _get_ownership_form(item, db, csrf_token, get_eval_url(),
                                readonly, url_prefix,
-                               locale=locale_negotiator(request))
+                               locale=locale_negotiator(request),
+                               translate=request.translate)
 
 
 def render_item_form(request, form, values=None, validate=True):
@@ -134,16 +141,21 @@ def render_item_form(request, form, values=None, validate=True):
                        previous_values=previous_values)
 
 
-def get_item_form(name, request, renderers=None):
+def get_item_form(name, request, renderers=None, validators=None):
     """Will return a form for the given item
 
     :name: Name of the form
     :request: Current request
-    :renderers: Dictionary with custom renderers
+    :renderers: Dictionary of external renderers which should be used
+                for renderering some form elements.
+    :validators: List of external formbar validators which should be
+                 added to the form for validation
     :returns: Form
     """
-    if not renderers:
+    if renderers is None:
         renderers = {}
+    if validators is None:
+        validators = []
     item = get_item_from_request(request)
     renderers = add_renderers(renderers)
     clazz = request.context.__model__
@@ -166,9 +178,12 @@ def get_item_form(name, request, renderers=None):
                                       'itemid': item.id},
                 request=request,
                 csrf_token=request.session.get_csrf_token(),
-                eval_url=eval_url,
+                eval_url=get_eval_url(),
                 url_prefix=get_app_url(request),
                 locale=locale_negotiator(request))
+    # Add validators
+    for validator in validators:
+        form.add_validator(validator)
     return form
 
 

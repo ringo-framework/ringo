@@ -17,7 +17,7 @@ from ringo.views.request import (
 log = logging.getLogger(__name__)
 
 
-def create(request, callback=None, renderers={}):
+def create(request, callback=None, renderers=None, validators=None):
     """Base method to handle create requests. This view will render a
     create form to update items on (GET) requests.
 
@@ -30,6 +30,10 @@ def create(request, callback=None, renderers={}):
 
     :request: Current request
     :callback: Current function which is called after the item has been read.
+    :renderers: Dictionary of external renderers which should be used
+                for renderering some form elements.
+    :validators: List of external formbar validators which should be
+                 added to the form for validation
     :returns: Dictionary or Redirect.
     """
     handle_history(request)
@@ -38,18 +42,19 @@ def create(request, callback=None, renderers={}):
     # Create a new item
     clazz = request.context.__model__
     factory = clazz.get_item_factory()
-    # Only create a new item if ther isn't already an item in the
+    # Only create a new item if there isn't already an item in the
     # request.context. This can happen if we define a custom view for
-    # create where the item gets created before to set some feault
+    # create where the item gets created before to set some default
     # values e.g (See create function of forms)
     if not request.context.item:
         request.context.item = factory.create(request.user, {})
-    form = get_item_form(params.get("form", "create"), request, renderers)
+    form = get_item_form(params.get("form", "create"),
+                         request, renderers, validators)
     if request.POST and 'blobforms' not in request.params:
         if handle_POST_request(form, request, callback, 'create', renderers):
             return handle_redirect_on_success(request)
     rvalues = get_return_value(request)
-    values = {'_roles': [str(r.name) for r in request.user.get_roles()]}
+    values = {'_roles': [str(r.name) for r in request.user.roles]}
     values.update(params.get('values', {}))
     rvalues['form'] = render_item_form(request, form, values, False)
     return rvalues
@@ -60,7 +65,7 @@ def rest_create(request, callback=None):
     initialised with the data provided in the submitted POST request.
     The submitted data will be validated before the item is actually
     saved. If the submission fails the item is not saved in the
-    database. In all cases the item is return as JSON object with the
+    database. In all cases the item is returned as JSON object with the
     item and updated values back to the client. The JSON Response will
     include further details on the reason why the validation failed.
 

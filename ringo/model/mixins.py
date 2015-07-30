@@ -365,7 +365,7 @@ class Nested(object):
 
         """
         parents = []
-        if not self.parent_id:
+        if not self.parent:
             return parents
         else:
             parents.append(self.parent)

@@ -9,14 +9,15 @@ from formbar.renderer import (
     SelectionFieldRenderer as FormbarSelectionField
 )
 import ringo.lib.helpers as helpers
-from ringo.lib.helpers import get_action_routename
+from ringo.lib.helpers import get_action_routename, literal, escape, HTML
 from ringo.model.base import BaseItem, BaseList, get_item_list
 from ringo.lib.table import get_table_config
 import ringo.lib.security as security
 
 base_dir = pkg_resources.get_distribution("ringo").location
 template_dir = os.path.join(base_dir, 'ringo', 'templates')
-template_lookup = TemplateLookup(directories=[template_dir])
+template_lookup = TemplateLookup(directories=[template_dir],
+                                 default_filters=['h'])
 
 log = logging.getLogger(__name__)
 
@@ -161,7 +162,7 @@ class DropdownFieldRenderer(FormbarDropdown):
         except AttributeError:
             log.warning("Missing %s attribute in %s"
                         % (self._field.name, self._field._form._item))
-            return "".join(html)
+            return literal("").join(html)
 
         if not isinstance(item, list):
             items.append(item)
@@ -170,9 +171,10 @@ class DropdownFieldRenderer(FormbarDropdown):
         for item in items:
             url = get_link_url(item, self._field._form._request)
             if url:
-                html.append('<a href="%s">%s</a>'
-                            % (url, cgi.escape(unicode(item))))
-        return "".join(html)
+                html.append(HTML.tag("a", href=("%s" % url), _closed=False))
+                html.append(escape(unicode(item)))
+                html.append(HTML.tag("/a", _closed=False))
+        return literal("").join(html)
 
     def _render_label(self):
         html = []
@@ -180,8 +182,10 @@ class DropdownFieldRenderer(FormbarDropdown):
         if not self._field.is_readonly() and not self.nolink == "true":
             link = self.render_link()
             if link:
-                html.append(" [%s]" % link)
-        return "".join(html)
+                html.append(" [")
+                html.append(link)
+                html.append("]")
+        return literal("").join(html)
 
 
 class StateFieldRenderer(FormbarDropdown):
@@ -208,7 +212,7 @@ class StateFieldRenderer(FormbarDropdown):
                                                      "statefield.mako")
 
     def _render_label(self):
-        return ""
+        return literal("")
 
     def render(self):
         """Initialize renderer"""
@@ -222,15 +226,18 @@ class StateFieldRenderer(FormbarDropdown):
         has_errors = len(self._field.get_errors())
         has_warnings = len(self._field.get_warnings())
 
-        html.append('<div class="form-group %s %s">' % ((has_errors and 'has-error'), (has_warnings and 'has-warning')))
+        class_options = "form-group %s %s" % ((has_errors and 'has-error'),
+                                              (has_warnings and 'has-warning'))
+        html.append(HTML.tag("div", _closed=False,
+                             class_=class_options))
         html.append(self._render_label())
         values = {'field': self._field,
                   'request': self._field._form._request,
                   'state': state,
                   '_': self._field._form._translate}
-        html.append(self.template.render(**values))
-        html.append('</div>')
-        return "".join(html)
+        html.append(literal(self.template.render(**values)))
+        html.append(HTML.tag("\div", _closed=False))
+        return literal("").join(html)
 
 
 class ListingFieldRenderer(FormbarSelectionField):
@@ -261,7 +268,6 @@ class ListingFieldRenderer(FormbarSelectionField):
 
     def __init__(self, field, translate):
         FormbarSelectionField.__init__(self, field, translate)
-        self.itemlist = self._get_all_items()
         self.template = template_lookup.get_template("internal/listfield.mako")
 
     def get_class(self):
@@ -279,7 +285,8 @@ class ListingFieldRenderer(FormbarSelectionField):
                 return clazz.clazz
             return clazz
 
-    def _get_all_items(self):
+    @property
+    def itemlist(self):
         clazz = self.get_class()
         itemlist = get_item_list(self._field._form._request, clazz)
         config = get_table_config(itemlist.clazz,
@@ -287,6 +294,15 @@ class ListingFieldRenderer(FormbarSelectionField):
         sort_field = config.get_default_sort_column()
         sort_order = config.get_default_sort_order()
         itemlist.sort(sort_field, sort_order)
+
+        # Warning filtering items here can cause loosing relations to
+        # the filtered items. This is esspecially true if the item which
+        # was related to the item before now gets filtered because of a
+        # changes value in an attribute e.g. In this case the filtered
+        # item is not in the list at all and will not be sent on a POST
+        # request. This will result in removing the relation!
+        search  = config.get_default_search()
+        itemlist.filter(search)
         return itemlist
 
     def _get_selected_items(self, items):
@@ -315,7 +331,10 @@ class ListingFieldRenderer(FormbarSelectionField):
         config = self._field._config.renderer
         has_errors = len(self._field.get_errors())
         has_warnings = len(self._field.get_warnings())
-        html.append('<div class="form-group %s %s">' % ((has_errors and 'has-error'), (has_warnings and 'has-warning')))
+        class_options = "form-group %s %s" % ((has_errors and 'has-error'),
+                                              (has_warnings and 'has-warning'))
+        html.append(HTML.tag("div", _closed=False,
+                             class_=class_options))
         html.append(self._render_label())
         if self._field.is_readonly() or self.onlylinked == "true":
             items = self._get_selected_items(self.itemlist.items)
@@ -326,8 +345,9 @@ class ListingFieldRenderer(FormbarSelectionField):
         # in the origin items list and has passed filtering.
         items = self._field.filter_options(items)
         # Now filter the items based on the user permissions
-        items = filter_options_on_permissions(self._field._form._request,
-                                              items)
+        if self.showall != "true": 
+            items = filter_options_on_permissions(self._field._form._request,
+                                                  items)
 
         values = {'items': items,
                   'field': self._field,
@@ -339,11 +359,11 @@ class ListingFieldRenderer(FormbarSelectionField):
                   'h': helpers,
                   'tableconfig': get_table_config(self.itemlist.clazz,
                                                   config.table)}
-        html.append(self.template.render(**values))
+        html.append(literal(self.template.render(**values)))
         html.append(self._render_errors())
         html.append(self._render_help())
-        html.append('</div>')
-        return "".join(html)
+        html.append(HTML.tag("/div", _closed=False))
+        return literal("").join(html)
 
 renderers = {
     "dropdown": DropdownFieldRenderer,

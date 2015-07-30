@@ -6,6 +6,8 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="description">
     <meta content="" name="author">
+    <meta content="${client_language}" name="client_language">
+    <meta content="${application_path}" name="application_path">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="${request.static_path('ringo:static/bootstrap/css/bootstrap.min.css')}" rel="stylesheet" media="screen">
@@ -15,7 +17,7 @@
     <link href="${request.static_path('ringo:static/css/style.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/font-awesome/css/font-awesome.min.css')}" rel="stylesheet">
     % for filename in formbar_css_filenames: 
-      <link href="${request.static_path('ringo:static/formbar/%s' % filename)}" rel="stylesheet" media="screen">
+      <link href="${request.static_path('formbar:static/%s' % filename)}" rel="stylesheet" media="screen">
     % endfor
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -27,14 +29,16 @@
     <link href="${request.static_path('ringo:static/images/icons/favicons/apple-touch-icon-128.png')}" sizes="128x128" rel="apple-touch-icon-precomposed">
     <link href="${request.static_path('ringo:static/images/icons/favicons/favicon.png')}" rel="shortcut icon">
     <script src="${request.static_path('ringo:static/js/jquery.js')}"></script>
+    <script src="${request.static_path('ringo:static/js/spin.min.js')}"></script>
+    <script src="${request.static_path('ringo:static/js/jquery.spin.js')}"></script>
     <script src="${request.static_path('ringo:static/bootstrap/js/bootstrap.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/datatables/dataTables.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.jcountdown.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.timer.js')}"></script>
-    <script src="${request.static_path('ringo:static/js/spin.min.js')}"></script>
     % for filename in formbar_js_filenames: 
-      <script src="${request.static_path('ringo:static/formbar/%s' % filename)}"></script>
+      <script src="${request.static_path('formbar:static/%s' % filename)}"></script>
     % endfor
+    <script src="${request.static_path('ringo:static/js/listfield.js')}"></script>
     <script src="${request.static_path('ringo:static/js/helpers.js')}"></script>
     <%include file="/custom-header.mako" />
   </head>
@@ -57,6 +61,7 @@
       }
     };
   </script>
+  <script src="${request.static_path('ringo:static/js/ringo/autologout.js')}"></script>
   <script src="${request.static_path('ringo:static/js/init.js')}"></script>
   % if request.user:
   <script>
@@ -71,7 +76,22 @@
           <p>${_('You will be logged out automatically in a short time because of inactivity. Please close this dialog and init a new request to renew your session timer.')}</p>
         </div>
         <div class="panel-footer">
-          <a class="btn btn-default" href="${request.session['history'].last()}">${_('Ok')}</a>
+          <a href="${request.route_path('keepalive')}" target="_blank" class="btn btn-default" id="logoutWarningOK">${_('Ok')}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="DirtyFormWarning">
+    <div class="modal-dialog">
+      <div class="panel panel-warning">
+        <div class="panel-heading"><strong>${_('Form contains unsaved changes!')}</strong></div>
+        <div class="panel-body">
+          <p>${_('Do you want to leave the current form without saving the changes? The changes will be lost if you do not save the data first!')}</p>
+        </div>
+        <div class="panel-footer">
+          <a id="DirtyFormWarningCancelButton" class="btn btn-default" href="">${_('Stay in Form')}</a>
+          <a id="DirtyFormWarningProceedButton" class="btn btn-warning" href="">${_('Leave the Form')}</a>
+
         </div>
       </div>
     </div>
@@ -90,6 +110,8 @@
       </div>
     </div>
   </div>
+  <div id="spinner" class="spinner">
+  </div>    
   <div id="spinnerContainer" class="modal fade">
     <div class="modal-dialog">
     <div class="modal-content">
@@ -157,19 +179,15 @@
     <button type="button" class="btn btn-default dropdown-toggle"
     data-toggle="dropdown"> ${_('Advanced')} <span class="caret"></span></button>
     <ul id="context-menu-options" class="dropdown-menu  pull-right" role="menu">
-      <li><a href="#form">${_('Back to')} ${h.get_item_modul(request, item).get_label()}: ${item}</a></li>
-      % if owner:
-        <li class="divider"></li>
-        <li role="presentation" class="dropdown-header">${_('Administration')}</li>
-        <li><a href="#ownership">${_('Change ownership')}</a></li>
-      % endif
+      <li role="presentation" class="dropdown-header">${_('Administration')}</li>
+      <li><a href="${h.get_action_url(request, item, 'ownership')}">${_('Change ownership')}</a></li>
       % if len(context_actions) > 0:
         <li class="divider"></li>
         <li role="presentation" class="dropdown-header">${_('Advanced actions')}</li>
         % for action, icon in context_actions:
           <li>
             <a href="${h.get_action_url(request, item,
-            action.name.lower())}"><i class="${icon}">&nbsp;</i>${action.name}</a>
+            action.name.lower())}"><i class="${icon}">&nbsp;</i>${_(action.name)}</a>
           </li>
         % endfor
       % endif

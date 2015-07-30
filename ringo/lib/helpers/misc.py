@@ -107,8 +107,13 @@ def set_raw_value(element, name, value):
     element the setattr method will be called with the attribute 'baz'
     and the value '123'."""
 
-    penulti = _resolve_attribute(element, name, -1)
-    object.__setattr__(penulti, name.split(".")[-1], value)
+    if name.find(".") > -1:
+        penulti = _resolve_attribute(element, name, -1)
+        attr = name.split(".")[-1]
+    else:
+        penulti = element
+        attr = name
+    object.__setattr__(penulti, attr, value)
 
 
 def get_raw_value(element, name):
@@ -250,23 +255,17 @@ def get_saved_searches(request, name):
 
 
 def get_modules(request, display):
-    # TODO: Fix imports here. Seems to be circular imports.
-    from ringo.model.modul import ModulItem
-    from ringo.resources import get_resource_factory
+    #  FIXME: Circular import (ti) <2015-05-11 21:52> 
     from ringo.lib.security import has_permission
-    from ringo.model.base import get_item_list
-    modules = get_item_list(request, ModulItem)
     user_moduls = []
-    for modul in modules.items:
+    # The modules has been load already and are cached. So get them from
+    # the cache
+    for modul in request.cache_item_modul.all().values():
         # Only show the modul if it matches the desired display location
         # and if the modul has an "list" action which usually is used as
         # entry point into a modul.
         if (modul.display == display and modul.has_action('list')):
-            # Build a ressource and to be able to check the current user
-            # permissions against it.
             clazz = dynamic_import(modul.clazzpath)
-            factory = get_resource_factory(clazz, modul)
-            resource = factory(request)
-            if has_permission('list', resource, request):
+            if has_permission('list', clazz, request):
                 user_moduls.append(modul)
     return user_moduls

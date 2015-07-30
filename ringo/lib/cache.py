@@ -61,6 +61,8 @@ class Cache(object):
         """
         return self._data.get(key)
 
+    def all(self):
+        return self._data
 
 def setup_cache(config):
     config.add_subscriber(init_cache, NewRequest)

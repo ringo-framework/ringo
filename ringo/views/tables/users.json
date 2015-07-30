@@ -3,10 +3,11 @@
         "columns": [
             {"name": "profile[0].first_name", "label": "Firstname", "width": "150"},
             {"name": "profile[0].last_name", "label": "Lastname", "width": "150"},
-            {"name": "login", "label": "Login", "width": "100"},
+            {"name": "login", "label": "Loginname", "width": "100"},
             {"name": "roles", "label": "Roles"},
             {"name": "groups", "label": "Groups"},
-            {"name": "activated", "label": "Activated", "width": "100"},
+            {"name": "activated", "label": "Activated", "width": "100",
+		      "expand": true},
             {"name": "last_login", "label": "Last login", "width": "150"}
         ]
     }

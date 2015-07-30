@@ -5,13 +5,16 @@ from mako.lookup import TemplateLookup
 import ringo.lib.helpers
 from ringo.lib.helpers import (
     get_saved_searches,
+    get_item_actions,
+    literal
 )
 from ringo.lib.table import get_table_config
 import ringo.lib.security as security
 
 base_dir = pkg_resources.get_distribution("ringo").location
 template_dir = os.path.join(base_dir, 'ringo', 'templates')
-template_lookup = TemplateLookup(directories=[template_dir])
+template_lookup = TemplateLookup(directories=[template_dir],
+                                 default_filters=['h'])
 
 log = logging.getLogger(__name__)
 
@@ -49,6 +52,14 @@ class ListRenderer(object):
             regexpr = False
         ssearch = get_saved_searches(request,
                                      self.listing.clazz.__tablename__)
+
+        bundled_actions = []
+        for action in get_item_actions(request, self.listing.clazz):
+            if action.bundle and security.has_permission(action.name.lower(),
+                                                         request.context,
+                                                         request):
+                bundled_actions.append(action)
+
         values = {'items': self.listing.items,
                   'clazz': self.listing.clazz,
                   'listing': self.listing,
@@ -56,13 +67,13 @@ class ListRenderer(object):
                   '_': request.translate,
                   'h': ringo.lib.helpers,
                   's': security,
-                  'enable_bundled_actions': True,
+                  'bundled_actions': bundled_actions,
                   'search': search,
                   'regexpr': regexpr,
                   'search_field': search_field,
                   'saved_searches': ssearch,
                   'tableconfig': self.config}
-        return self.template.render(**values)
+        return literal(self.template.render(**values))
 
 
 class DTListRenderer(object):

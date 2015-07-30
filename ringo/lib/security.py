@@ -6,7 +6,7 @@ import random
 from passlib.context import CryptContext
 from datetime import datetime
 
-from pyramid.events import ContextFound
+from pyramid.events import ContextFound, NewRequest
 from pyramid.security import unauthenticated_userid,\
     has_permission as has_permission_,\
     Allow, ALL_PERMISSIONS
@@ -18,13 +18,14 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from ringo.lib.helpers import get_item_modul
 from ringo.lib.sql import DBSession
+from ringo.lib.alchemy import get_relations_from_clazz
 from ringo.model.base import BaseItem
 from ringo.model.user import User, PasswordResetRequest
 
 log = logging.getLogger(__name__)
 
 
-def password_generator(size=8, chars=string.ascii_uppercase + string.digits):
+def password_generator(size=12, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
 
@@ -52,13 +53,14 @@ pwd_context = CryptContext(
     default="pbkdf2_sha256",
 
     # vary rounds parameter randomly when creating new hashes...
-    all__vary_rounds = 0.1,
+    all__vary_rounds=0.1,
 
     # set the number of rounds that should be used...
     # (appropriate values may vary for different schemes,
     # and the amount of time you wish it to take)
-    pbkdf2_sha256__default_rounds = 8000,
+    pbkdf2_sha256__default_rounds=8000,
 )
+
 
 def encrypt_password(password, scheme=None):
     """Will return a string with encrypted password using the passlib
@@ -127,6 +129,15 @@ def csrf_token_validation(event):
             raise HTTPUnauthorized
 
 
+def refresh_auth_cookie(event):
+    """This fuction will refresh the the timeout of the authentification
+    cookie. See
+    https://groups.google.com/forum/#!topic/pylons-discuss/HczvAEd5xY8
+    for more details.
+    """
+    event.request.unauthenticated_userid
+
+
 def setup_ringo_security(config):
     settings = config.registry.settings
     timeout = get_auth_timeout(settings)
@@ -134,15 +145,20 @@ def setup_ringo_security(config):
     secure = settings.get("security.cookie_secure", "false") == "true"
     include_ip = settings.get("security.cookie_ip", "false") == "true"
     path = settings.get("security.cookie_path", "/")
+    domain = settings.get("security.cookie_domain")
     httponly = settings.get("security.cookie_httponly", "false") == "true"
+    cookie_name = settings.get("security.cookie_name", "auth_tkt")
     authn_policy = AuthTktAuthenticationPolicy(secret,
+                                               secure=secure,
                                                hashalg='sha512',
                                                timeout=timeout,
                                                reissue_time=timeout/10,
                                                callback=get_principals,
-                                               include_ip = include_ip,
+                                               include_ip=include_ip,
                                                path=path,
-                                               http_only=httponly)
+                                               domain=domain,
+                                               http_only=httponly,
+                                               cookie_name=cookie_name)
     authz_policy = ACLAuthorizationPolicy()
     config.set_authorization_policy(authz_policy)
     config.set_authentication_policy(authn_policy)
@@ -157,6 +173,12 @@ def setup_ringo_security(config):
     # "security.enable_csrf_check" config variable to "false".
     if settings.get('security.enable_csrf_check', 'true') != "false":
         config.add_subscriber(csrf_token_validation, ContextFound)
+    # Refresh the auth cookie timeout on every request. On default this
+    # would only happen on requests which needs
+    # authentification/authorisation. As the authentification should be
+    # valid as long the user shows some activity by triggering requests
+    # this tween will refresh the timeout on every request.
+    config.add_subscriber(refresh_auth_cookie, NewRequest)
 
     # Add tweens to add custom security headers.
     # http://ghaandeeonit.tumblr.com/post/65698553805/securing-your-pyramid-application
@@ -205,8 +227,8 @@ def has_permission(permission, context, request):
     if isinstance(context, BaseItem) or hasattr(context, "_modul_id"):
         modul = get_item_modul(request, context)
         context.__acl__ = context._get_permissions(modul, context, request)
-    # TODO: Call of has_permission will trigger 4 additional SQL-Queries
-    # per call. So we might think about caching the result.
+    # Call of has_permission will trigger 4 additional SQL-Queries. The
+    # query will only be trigger once per request.
     return has_permission_(permission, context, request)
 
 
@@ -216,6 +238,9 @@ def get_permissions(modul, item=None):
     suitable for using it as ACL in pyramid's authorization system.  The
     function will at least return class based permissions. If a item is
     provided then additional item level permissions are returned.
+
+    Note that item can also be a class and not an instance. In this case
+    the class level permissions are returned
 
     The function will iterate over all available actions of the given
     modul and tries to adds a permission entry to the for every role
@@ -277,22 +302,33 @@ def get_permissions(modul, item=None):
             if role.admin is True and add_perm:
                 perms.append((Allow, default_principal, permission))
 
-            # class level permissions
-            elif permission in ['create', 'list'] and add_perm:
+            # Modul level (class level) permissions.
+            # Always add the default principals for the create and list
+            # actions as those actions can not be checked on item level
+            # anyway.
+            elif permission in ['create', 'list']:
                 perms.append((Allow, default_principal, permission))
-            # item level permissions. Only allow the owner or members of
-            # the items group.
+            # If the item has a uuid the we want get the permission on
+            # Item level. Only allow the owner or members of the items
+            # group.
             elif item and hasattr(item, 'uid') and add_perm:
                 principal = default_principal + ';uid:%s' % item.uid
                 perms.append((Allow, principal, permission))
                 principal = default_principal + ';group:%s' % item.gid
                 perms.append((Allow, principal, permission))
+            # Finally the item is not an instance of a BaseItem then add
+            # remaining action we want to get the permission on modul
+            # level too. So again add the default principal
+            elif not isinstance(item, BaseItem) and add_perm:
+                perms.append((Allow, default_principal, permission))
     return perms
+
 
 def __add_principal(principals, new):
     if new not in principals:
         principals.append(new)
     return principals
+
 
 def get_principals(userid, request):
     """Returns a list of pricipals for the user with userid for the
@@ -316,7 +352,7 @@ def get_principals(userid, request):
         # connection with the uid and groups as the roles should only be
         # applicable if the user is the owner or member of the group of
         # the item.
-        for urole in user.get_roles(include_group_roles=False):
+        for urole in user.roles:
             principal = 'role:%s' % urole.name
             __add_principal(principals, principal)
             principal = 'role:%s;uid:%s' % (urole.name, user.id)
@@ -326,12 +362,6 @@ def get_principals(userid, request):
                 # of
                 principal = 'role:%s;group:%s' % (urole.name, group.id)
                 __add_principal(principals, principal)
-                # Additionally add group specifiy roles
-                for grole in group.get_roles():
-                    principal = 'role:%s' % grole.name
-                    __add_principal(principals, principal)
-                    principal = 'role:%s;group:%s' % (grole.name, group.id)
-                    __add_principal(principals, principal)
         # Finally add the user itself
         principal = 'uid:%s' % user.id
         __add_principal(principals, principal)
@@ -361,7 +391,7 @@ def get_roles(user):
     :returns: List of `Role` instances
 
     """
-    return user.get_roles()
+    return user.roles
 
 # GROUPS
 ########
@@ -494,3 +524,147 @@ def login(username, password):
         log.info("Login failed for user '%s'. "
                  "Reason: Username not known" % username)
     return None
+
+
+class AuthorizationException(Exception):
+    """Exception to be raise if a authorization error is detected."""
+    pass
+
+
+class ValueChecker(object):
+    """Checks the permission of a user to set values, provided by an
+    dictionary, in an item.
+
+    This checker restricts users to only set the values which they may
+    also read. This prevents the possible security thread
+    of gaining higher privileges by setting forbidden values with a
+    manipulated requests.
+
+    This espacially important for values which will change relations in
+    the item. For each relation of the item the function will iterate
+    over the values in the dictionary and check if the user is at least
+    allowed to read the value.
+
+    If the user is not allowed to read a value the checker will either
+
+     * Raise an AuthorizationException if strict mode is enabled, or
+     * Filter the set of values based on the permissions.
+
+    In all cases a warning is logged if the Checker detects a permission
+    violation. This class implements a very important security check and
+    should be always used before values are about to be changed in an
+    item.
+
+    Limitations:
+    The function currently only checks permissions on values which are
+    about to be set in a sqlalchemy.orm.relation. This means setting the
+    values directly in a FK is still possible.
+    """
+
+    def __init__(self, strict=True):
+        self.strict = strict
+        """Mode of the checker. If strict is true a
+        AuthorizationException will be raised if a permission violation
+        is detected. Otherwise the values get filtered."""
+
+    def check(self, clazz, values, request, item=None):
+        """Will do permission checks on the values. If strict mode is
+        disabled the function will do the following:
+
+         * For new added relations the fuction will remove every
+           relation from to the values for which the user is not granted
+           read access.
+         * For removed relations the function will re-add every relation
+           to the values for which the user is not granted read access.
+
+        The function will return the values after checking and
+        filtering. If strict mode is enabled an AuthorizationException
+        is raised.
+
+        :clazz: The clazz of the item which is about to be changed
+        :values: Dictionary with deserialised and validated form values.
+        :request: Current request
+        :item: Defaults to None. If provided than the checker will only
+        check differences between the values to be set and already
+        present in the item. Else all values are checked.
+        """
+        for relation in get_relations_from_clazz(clazz):
+            # If the relation is not set in the values then continue, as
+            # we do not need to check anything.
+            if relation not in values:
+                continue
+
+            # Get old and new values.
+            # For the purpose to unify the test logic of the permissions
+            # checks the values will be converted into a list in all
+            # cases. In case of N:1 realtions new_values will be a
+            # single item and not a list.  In all other cases (1:N, N:N)
+            # new_values is a list.
+            new_values = values[relation]
+            if not isinstance(new_values, list):
+                new_values = [new_values]
+
+            if item is not None:
+                old_values = item.get_value(relation)
+                if not isinstance(old_values, list):
+                    old_values = [old_values]
+            else:
+                old_values = []
+
+            # Determine the values which actually need to be checked.
+            # If no item is provided, all values are checked. Otherwise
+            # only changed values are checked.
+            if item is None:
+                to_check = [(v, 0) for v in new_values]
+            else:
+                to_check = self._diff(old_values, new_values)
+
+            # Now iterate over all value which need to be checked.
+            for value, modifier in to_check:
+                if has_permission("read", value, request):
+                    continue
+                else:
+                    if modifier > 0:
+                        action = "add"
+                    elif modifier < 0:
+                        action = "remove"
+                    else:
+                        action = "set"
+                    msg = ("User '%s' is not allowed to %s %s %s from %s %s"
+                           % (request.user.login, action, type(value),
+                              value.id, clazz, getattr(item, "id", '')))
+                    log.warning(msg)
+                    if self.strict:
+                        raise AuthorizationException(msg)
+                    else:
+                        raise NotImplementedError()
+        return values
+
+    def _diff(self, old, new):
+        """Will diff the values of old and new. It returns a list of
+        tuples with values
+
+          * Which are exclusive in new (value has been added)
+          * Which are exclusive in old (value has been removed)
+
+        The tuple will contain the value and 1 for added values and -1
+        for removed items.
+        """
+        diff = []
+        if isinstance(old, list):
+            old = set(old)
+            new = set(new)
+            # Get added
+            for added in new.difference(old):
+                diff.append((added, 1))
+            # Get removed
+            for removed in old.difference(new):
+                diff.append((removed, -1))
+            return diff
+        else:
+            if old != new:
+                if old is not None:
+                    diff.append((old, -1))
+                if new is not None:
+                    diff.append((new, 1))
+            return diff

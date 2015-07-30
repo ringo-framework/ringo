@@ -11,16 +11,20 @@ import ringo.lib.helpers
 from ringo.lib.helpers import (
     get_action_routename,
     get_item_modul,
-    get_app_url
+    get_app_url,
+    literal,
+    escape,
+    HTML
 )
 from ringo.lib.form import (
-    eval_url,
+    get_eval_url,
     get_path_to_form_config,
 )
 
 base_dir = pkg_resources.get_distribution("ringo").location
 template_dir = os.path.join(base_dir, 'ringo', 'templates')
-template_lookup = TemplateLookup(directories=[template_dir])
+template_lookup = TemplateLookup(directories=[template_dir],
+                                 default_filters=['h'])
 
 log = logging.getLogger(__name__)
 
@@ -86,32 +90,32 @@ class ConfirmDialogRenderer(DialogRenderer):
         values['ok_url'] = self._request.current_route_path()
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
-        values['eval_url'] = self._request.application_url+eval_url
-        return self.template.render(**values)
+        values['eval_url'] = self._request.application_url+get_eval_url()
+        return literal(self.template.render(**values))
 
     def _render_body(self, items):
         out = []
         _ = self._request.translate
-        item_label = cgi.escape(get_item_modul(self._request,
-                                               self._item).get_label())
-        mapping = {'action': cgi.escape(_(self._action.capitalize()).lower()),
+        item_label = escape(get_item_modul(self._request,
+                                           self._item).get_label())
+        mapping = {'action': escape(_(self._action.capitalize()).lower()),
                    'item': item_label,
-                   'Action': cgi.escape(_(self._action.capitalize()))}
+                   'Action': escape(_(self._action.capitalize()))}
         out.append(_("Do you really want to ${action}"
                      " the following ${item} items?",
                      mapping=mapping))
-        out.append("<br>")
-        out.append("<ol>")
+        out.append(HTML.tag("br", _closed=False))
+        out.append(HTML.tag("ol", _closed=False))
         for item in items:
-            out.append("<li>")
-            out.append(cgi.escape(unicode(item)))
-            out.append("</li>")
-        out.append("</ol>")
+            out.append(HTML.tag("li", _closed=False))
+            out.append(escape(unicode(item)))
+            out.append(HTML.tag("/li", _closed=False))
+        out.append(HTML.tag("/ol", _closed=False))
         out.append(_('Please press "${Action}" to ${action} the item.'
                      ' Press "Cancel" to cancel the action.',
                      mapping=mapping))
 
-        return "".join(out)
+        return literal("").join(out)
 
 
 class ErrorDialogRenderer(DialogRenderer):
@@ -128,7 +132,7 @@ class ErrorDialogRenderer(DialogRenderer):
         values = {}
         values['icon'] = self.icon
         values['header'] = self._title
-        values['body'] = self._render_body()
+        values['body'] = self._body
         history = self._request.session.get('history')
         if url:
             values['ok_url'] = url
@@ -136,13 +140,8 @@ class ErrorDialogRenderer(DialogRenderer):
             values['ok_url'] = self._request.session['history'].pop()
         else:
             values['ok_url'] = self._request.route_path('home')
-        values['eval_url'] = self._request.application_url+eval_url
-        return self.template.render(**values)
-
-    def _render_body(self):
-        out = []
-        out.append(self._body)
-        return "".join(out)
+        values['eval_url'] = self._request.application_url+get_eval_url()
+        return literal(self.template.render(**values))
 
 
 class WarningDialogRenderer(ErrorDialogRenderer):
@@ -175,7 +174,7 @@ class ExportDialogRenderer(DialogRenderer):
         self.form = Form(form_config,
                          csrf_token=self._request.session.get_csrf_token(),
                          dbsession=request.db,
-                         eval_url=eval_url,
+                         eval_url=get_eval_url(),
                          url_prefix=get_app_url(request))
 
     def render(self, items):
@@ -189,13 +188,14 @@ class ExportDialogRenderer(DialogRenderer):
         values['ok_url'] = self._request.current_route_path()
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
-        values['eval_url'] = self._request.application_url+eval_url
-        return self.template.render(**values)
+        values['eval_url'] = self._request.application_url+get_eval_url()
+        return literal(self.template.render(**values))
 
     def _render_body(self):
-        out = []
-        out.append(self.form.render(buttons=False))
-        return "".join(out)
+        # The output of the form render function of formbar is
+        # considered safe here as formbar already handles the escapeing.
+        # So we put it into the literal function to mark it save.
+        return literal(self.form.render(buttons=False))
 
 
 class ImportDialogRenderer(DialogRenderer):
@@ -210,7 +210,7 @@ class ImportDialogRenderer(DialogRenderer):
         self.form = Form(form_config,
                          csrf_token=self._request.session.get_csrf_token(),
                          dbsession=request.db,
-                         eval_url=eval_url,
+                         eval_url=get_eval_url(),
                          url_prefix=get_app_url(request))
 
     def render(self, items):
@@ -223,12 +223,13 @@ class ImportDialogRenderer(DialogRenderer):
         values['_'] = self._request.translate
         values['cancel_url'] = self._request.referrer
         values['overview_url'] = self._request.route_path(get_action_routename(self._item, 'list'))
-        values['eval_url'] = self._request.application_url+eval_url
+        values['eval_url'] = self._request.application_url+get_eval_url()
         values['items'] = items
         values['h'] = ringo.lib.helpers
-        return self.template.render(**values)
+        return literal(self.template.render(**values))
 
     def _render_body(self):
-        out = []
-        out.append(self.form.render(buttons=False))
-        return "".join(out)
+        # The output of the form render function of formbar is
+        # considered safe here as formbar already handles the escapeing.
+        # So we put it into the literal function to mark it save.
+        return literal(self.form.render(buttons=False))

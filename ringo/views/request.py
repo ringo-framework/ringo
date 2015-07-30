@@ -1,7 +1,10 @@
 """Modul to handle requests."""
 import logging
 from pyramid.httpexceptions import HTTPFound
-from ringo.lib.security import has_permission
+from ringo.lib.security import (
+    has_permission,
+    ValueChecker
+)
 from ringo.lib.helpers import import_model, get_action_routename
 from ringo.lib.history import History
 from ringo.lib.sql.cache import invalidate_cache
@@ -113,37 +116,55 @@ def handle_POST_request(form, request, callback, event, renderers=None):
     mapping = {'item_type': item_label, 'item': item}
 
     if form.validate(request.params) and "blobforms" not in request.params:
+        checker = ValueChecker()
         try:
             if event == "create":
                 factory = clazz.get_item_factory()
+                checker.check(clazz, form.data, request)
                 item = factory.create(request.user, form.data)
-                mapping['item'] = item
                 item.save({}, request)
                 request.context.item = item
             else:
-                item.save(form.data, request)
+                values = checker.check(clazz, form.data, request, item)
+                item.save(values, request)
             handle_event(request, item, form._config.id)
-            handle_callback(request, callback)
             handle_add_relation(request, item)
+            handle_callback(request, callback)
             handle_caching(request)
 
-            msg = _('Edited ${item_type} "${item}" successfull.',
-                    mapping=mapping)
-            log.info(msg)
+            if event == "create":
+                msg = _('Created new ${item_type} successfully.',
+                        mapping=mapping)
+                log_msg = u'User {user.login} created {item_label} {item.id}'\
+                    .format(item_label=item_label, item=item, user=request.user)
+            else:
+                msg = _('Edited ${item_type} "${item}" successfully.',
+                        mapping=mapping)
+                log_msg = u'User {user.login} edited {item_label} {item.id}'\
+                    .format(item_label=item_label, item=item, user=request.user)
+            log.info(log_msg)
             request.session.flash(msg, 'success')
 
             return True
         except Exception as error:
             mapping['error'] = unicode(error.message)
-            msg = _('Error while saving '
-                    '${item_type} "${item}": ${error}.', mapping=mapping)
+            if event == "create":
+                msg = _('Error while saving new '
+                        '${item_type}: ${error}.', mapping=mapping)
+            else:
+                msg = _('Error while saving '
+                        '${item_type} "${item}": ${error}.', mapping=mapping)
             log.exception(msg)
             request.session.flash(msg, 'error')
     elif "blobforms" in request.params:
         pass
     else:
-        msg = _('Error on validation the data for '
-                '${item_type} "${item}".', mapping=mapping)
+        if event == "create":
+            msg = _('Error on validation new '
+                    '${item_type}.', mapping=mapping)
+        else:
+            msg = _('Error on validation '
+                    '${item_type} "${item}".', mapping=mapping)
         log.info(msg)
         request.session.flash(msg, 'error')
     return False

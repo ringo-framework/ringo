@@ -1,15 +1,15 @@
 % if field.renderer.layout == "simple":
 <label for="${field.id}">${_('State')}</label>
 <select id="${field.id}" name="${field.name}" class="form-control">
-  <option value="${state._id}">${state._label}</option>
+  <option value="${state._id}">${_(state._label)}</option>
   % for trans in state.get_transitions():
-      <option value="${trans._end_state._id}">${trans._label}</option>
+      <option value="${trans._end_state._id}">${_(trans._label)}</option>
   % endfor
 </select>
 % else:
 <div class="panel panel-info">
   <div class="panel-heading">
-    <label for="${field.id}">${field.label}</label>
+    <label for="${field.id}">${_(field.label)}</label>
   </div>
   <div class="panel-body">
     % if not field.is_readonly():
@@ -18,7 +18,7 @@
       <select id="${field.id}" name="${field.name}" class="form-control">
         <option value="${state._id}">${_('No Transition')}</option>
         % for trans in state.get_transitions():
-            <option value="${trans._end_state._id}">${trans._label}</option>
+            <option value="${trans._end_state._id}">${_(trans._label)}</option>
         % endfor
       </select>
     </p>

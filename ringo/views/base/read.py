@@ -1,6 +1,5 @@
 import logging
 from ringo.views.helpers import (
-    get_rendered_ownership_form,
     get_item_form,
     render_item_form
 )
@@ -29,8 +28,7 @@ def read(request, callback=None, renderers=None):
     handle_params(request)
     handle_callback(request, callback)
     rvalues = get_return_value(request)
-    rvalues['owner'] = get_rendered_ownership_form(request, readonly=True)
-    values = {'_roles': [str(r.name) for r in request.user.get_roles()]}
+    values = {'_roles': [str(r.name) for r in request.user.roles]}
     form = get_item_form('read', request, renderers)
     rvalues['form'] = render_item_form(request, form, values)
     return rvalues

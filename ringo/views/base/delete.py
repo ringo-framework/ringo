@@ -40,15 +40,18 @@ def _handle_redirect(request):
         return HTTPFound(location=url)
 
 
-def _handle_delete_request(request, items):
+def _handle_delete_request(request, items, callback):
     clazz = request.context.__model__
     _ = request.translate
     if request.method == 'POST' and is_confirmed(request):
         item_label = get_item_modul(request, clazz).get_label(plural=True)
+        item_label_log = get_item_modul(request, clazz).get_label()
         mapping = {'item_type': item_label, 'num': len(items)}
         for item in items:
             try:
                 request.db.delete(item)
+                if callback:
+                    callback(request, item)
                 request.db.flush()
             except sa.exc.IntegrityError as e:
                 mapping["error"] = e.message.decode("utf-8")
@@ -66,8 +69,10 @@ def _handle_delete_request(request, items):
                 ok_url = request.session['history'].pop(2)
                 rvalue['dialog'] = renderer.render(ok_url)
                 return rvalue
-        msg = _('Deleted ${num} ${item_type} successfull.', mapping=mapping)
-        log.info(msg)
+        msg = _('Deleted ${num} ${item_type} successfully.', mapping=mapping)
+        log_msg = u'User {user.login} deleted {item_label} {item.id}' \
+            .format(item_label=item_label, item=item, user=request.user)
+        log.info(log_msg)
         request.session.flash(msg, 'success')
         # Invalidate cache
         invalidate_cache()
@@ -82,14 +87,14 @@ def _handle_delete_request(request, items):
         return rvalue
 
 
-def delete(request):
+def delete(request, callback=None):
     item = get_item_from_request(request)
     handle_history(request)
     handle_params(request)
-    return _handle_delete_request(request, [item])
+    return _handle_delete_request(request, [item], callback)
 
 
-def rest_delete(request):
+def rest_delete(request, callback=None):
     """Deletes an item of type clazz. The item is deleted based on the
     unique id value provided in the matchtict object in the current
     DELETE request. The data will be deleted without any futher confirmation!

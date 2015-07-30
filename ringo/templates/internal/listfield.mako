@@ -1,5 +1,6 @@
 <%
 from ringo.lib.helpers import prettify
+import cgi
 value = field.get_value() or []
 if not isinstance(value, list):
   value = [value]
@@ -26,9 +27,9 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
   out.append('class="%s"' % " ".join(css_class))
   out.append('>')
   if hasattr(value, "render"):
-    out.append('%s' % _(value.render()))
+    out.append(cgi.escape('%s' % value.render()))
   else:
-    out.append('%s' % _(value))
+    out.append(cgi.escape('%s' % value))
   out.append('</a>')
   return " ".join(out)
 %>
@@ -36,18 +37,18 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
 % if field.renderer.showsearch == "true" and not field.is_readonly():
 <table class="table table-condensed table-striped datatable-simple">
 % else:
-<table class="table table-condensed table-striped datatable-blank">
+<table class="table table-condensed table-striped datatable-blank content-shorten">
 % endif
   <thead>
     % if not field.is_readonly() and not field.renderer.hideadd == "true" and s.has_permission("create", clazz, request) and h.get_item_modul(request, clazz).has_action("create"):
     <tr class="table-toolbar">
       <th colspan="${len(tableconfig.get_columns())+1}">
-      <a href="#"
-      onclick="addItem('${request.route_path(h.get_action_routename(clazz,
-      "create"))}', '${field.name}', '${field.renderer.form}',
-      '${field._form._item.id}', '${h.get_item_modul(request,
+        <a class="btn btn-primary btn-xs" href="#" title="${_('Add a new %s entry') % h.get_item_modul(request, clazz).get_label()}"
+          onclick="addItem('${request.route_path(h.get_action_routename(clazz,
+          "create"))}', '${field.name}', '${field.renderer.form}',
+          '${field._form._item.id}', '${h.get_item_modul(request,
       pclazz).clazzpath}', '${field.renderer.backlink != 'false'}')"
-      ><i class="glyphicon glyphicon-plus"></i></a>
+      ><i class="glyphicon glyphicon-plus"></i> ${_('New')}</a>
       </th>
     </tr>
     % endif
@@ -65,7 +66,7 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
     </tr>
   </thead>
   <tbody>
-    % for item in items:
+    % for item in visible_items:
       <%
       permission = None
       if s.has_permission("update", item[0], request):
@@ -104,20 +105,19 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
           try:
             rvalue = prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand')))
             if isinstance(rvalue, list):
-              value = ", ".join(unicode(_(v)) for v in rvalue)
+              value = ", ".join(unicode(v) for v in rvalue)
             else:
-              value = rvalue
+              value = _(rvalue)
           except AttributeError:
             value = "NaF"
         %>
         <td class="${num > 0 and 'hidden-xs'}">
         % if permission and not field.renderer.nolinks == "true":
-            ${render_item_link(request, clazz, permission, item, value,
+            ${h.literal(render_item_link(request, clazz, permission, item, value,
                               (field.renderer.openmodal == "true"),
-                              (field.renderer.backlink != "false"))}
-          </a>
+                              (field.renderer.backlink != "false")))}
         % else:
-          ${_(value)}
+          ${value}
         % endif
         </td>
       % endfor
@@ -125,72 +125,8 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
     % endfor
   </tbody>
 </table>
-## Only render hidden items if "showall" is not set! If it is set for the
-## renderer all items has been rendererd with either a checkbox or a hidden
-## checkboc before. So the fields in the hidden_items must only be rendererd
-## if showall is not set. Otherwise values for a selected item will be sent
-## twice which can cause problem on the server side.
-% if not field.renderer.showall == "true":
-  % for item in hidden_items:
-    % if str(item[0].id) in selected:
-      <input style="display:none" type="checkbox" value="${item[0].id}" name="${field.name}" checked="checked"/>
-    % endif
-  % endfor
-% endif
-
-<script type="text/javascript">
-function addItem(url, foreignkey, form, id, clazz, backlink) {
-  //var activetab = $('.tab-pane.active');
-  if (form == "None") {
-    if (backlink == 'False') {
-      location.href = url + '?addrelation=' + foreignkey + ':' + clazz + ':' + id;
-    } else {
-      location.href = url + '?addrelation=' + foreignkey + ':' + clazz + ':' + id + '&backurl=' + document.URL;
-    }
-  } else {
-    if (backlink == 'False') {
-      location.href = url + '?addrelation=' + foreignkey + ':' + clazz + ':' + id;
-    } else {
-      location.href = url + '?addrelation=' + foreignkey + ':' + clazz + ':' + id + '&form=' + form + '&backurl=' + document.URL;
-    }
-  }
-};
-
-function checkAll(checkId) {
-  var inputs = document.getElementsByTagName("input");
-  for (var i = 0; i < inputs.length; i++) {
-      if (inputs[i].type == "checkbox" && inputs[i].name == checkId) {
-          if(inputs[i].checked == true) {
-              inputs[i].checked = false ;
-          } else if (inputs[i].checked == false ) {
-              inputs[i].checked = true ;
-          }
-      }
-  }
-  check(checkId);
-}
-
-function checkOne(checkId, element) {
-  var inputs = document.getElementsByTagName("input");
-  for (var i = 0; i < inputs.length; i++) {
-      if (inputs[i].type == "checkbox" && inputs[i].name == checkId && inputs[i].value != element.value) {
-        inputs[i].checked = false;
-      }
-  }
-  check(checkId);
-}
-
-function check(checkId) {
-  /* Will add a hidden checkbox with no value in case no other checkbox is
-   * selected. This is needed to items with no selection, as in this case html
-   * does not submit the checkbox field at all. So this is a hack to simulate
-   * an empty selection */
-  var inputs = $("input[type='checkbox'][name="+checkId+"]");
-  var selected = inputs.filter(":checked");
-  if (selected.length == 0 && inputs.length > 0) {
-    $(inputs[0]).before('<input id="'+checkId+'-empty" style="display:none" type="checkbox" value="" name="'+checkId+'" checked="checked"/>');
-  } else {
-    $("#"+checkId+"-empty").remove();
-  }
-}
-</script>
+% for item in hidden_items:
+  % if str(item[0].id) in selected:
+    <input style="display:none" type="checkbox" value="${item[0].id}" name="${field.name}" checked="checked"/>
+  % endif
+% endfor

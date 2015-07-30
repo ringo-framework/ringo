@@ -75,7 +75,7 @@ too. No need to rewrite the default logic again in your custom view::
 
 Using callbacks in the views
 ============================
-Callback kann be used to implement custom application logic after the logic of
+Callbacks can be used to implement custom application logic after the logic of
 the default view has been processed. This is usefull e.g if you want to send
 notification mails, modifiy values after a new item has been created or clean
 up things after something has been deleted.
@@ -91,7 +91,7 @@ A callback has the following structure::
             # Do something with the item and finally return the item.
             return item
 
-The reqeust an item should give you all the context you should need to to the
+The request and the item should give you all the context you should need to to the
 desired modifications.
 
 The callback must be supplied in the call of the main view function like

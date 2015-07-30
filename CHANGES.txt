@@ -1,9 +1,60 @@
-1.1.1
+1.2.0
 =====
+Beside the major changes which are listed below this version include many
+small bugfixes and improvements in the code, usability and performance.
+
+New:
+- Add option to provide external validators to the update and create view.
+  They will be used for additional validation of the form.
+- Implemented a simple Warning Dialog if the user leaves of form without
+  saving the changed data first.
+- Added simple spinner which pops up if the loading of the page takes longer
+  than 400ms.
+- Added new "ringo-admin app init" command to initalise a folder containing
+  a initial config file.
+- Password must be at least 12 chars long and include 2 non-letters.
+- Added support for loading configurations in case of multi-derived
+  applications. Added new app.base configuration variable.
+- Added new helper command to copie the static files of formbar into to
+  correct location in ringo.
+- Added option to name the authentification cookie. Needed if there are more
+  than one ringo application on a server.
+- Added a warning dialog which shows if the user leaves a form without saving
+  it before.
+- Do permission checks on submitted values for relations on POST requests.
+  Users are not allowed to set items in relations for which they do not have
+  read permissions.
+- Log changes of uid and gid.
+
 Changed:
-- Fixed Implementation of setting dot-separated values in items. Final call of
-  the object.__setattr__ method was done with the full attribute name instead
-  of the last part.
+- Enabled Mako default HTML escaping for Template rendering globally in ini
+  file and explicit for form rendering, dialog rendering and listing
+  rendering. Excluded html escaping for messages and the admin scripts as the
+  rendered result is not aimed to be displayed in a browser.
+- Seperated requirements for testing, installation etc.
+- Static files from formbar are only copied on application start if there are
+  not already the formbar files located in ringo. (Need some work). See
+  "formbar_static" command.
+- Fixed typos in german translation.
+- Changed behavior of the warning for a nearing auto logout. Instead of
+  showing after 95% of the logout time is up it will now be shown 3 Minutes
+  before the actual logout happens.
+- The modules for Roles, Users and Usergroups are now inherited from the
+  "Owned" mixin class.
+- Changed setting the GID for new items. Changed order of determining
+  the GID (inverse order). First try to get the default_gid from the
+  modul. If not present use the default_gid from the user. Of no
+  default_gid is set at all leave the GID of the new item blank.
+
+Removed:
+- Removed group role feature. This feature was only rarly used.
+- app.url configuration variable which was intended to use in scenarios where
+  the application is not hosted under the root of the server. See
+  documentation for deployment for more information on how to setup the
+  application now.
+- Static files of formbar are no longer copied into the static files of ringo
+  on application start. These files are now dynamically loaded from formbar.
+- Invoke command "formbar_static"
 
 1.1.0
 =====

@@ -15,34 +15,31 @@ requires = [
     'transaction',
     'pyramid_tm',
     'pyramid_mako',
-    'pyramid_debugtoolbar',
     'pyramid_beaker',
-    'pyramid_handlers',
     'pyramid_mailer',
     'zope.sqlalchemy',
     'waitress',
     'babel',
-    'Sphinx',
     'formbar>=0.9.4',
     'invoke',
     'dogpile.cache',
-    'behave',
-    'coverage',
-    'webtest',
-    'mock',
-    'py3o.template',
-    'py3o.renderers.pyuno',
     'passlib',
-    'dateutils',
+    'python-dateutil',
     'fuzzy',
-    'python-Levenshtein' 
+    'python-Levenshtein',
+    'webhelpers'
 ]
 
 tests_requires = [
+    'nose',
+    'behave',
+    'coverage',
+    'webtest',
+    'mock'
 ]
 
 setup(name='ringo',
-      version = '1.1.0',
+      version = '1.2.0',
       description='A simple web framework with base functionality to build web applications.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
@@ -50,18 +47,24 @@ setup(name='ringo',
         "Framework :: Pyramid",
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+        "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
       ],
       author='Torsten Irländer',
       author_email='torsten@irlaender.de',
       url='https://bitbucket.org/ti/ringo',
       keywords='web wsgi bfg pylons pyramid',
+      license='GNU General Public License v2 or later (GPLv2+)',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
       test_suite='nose.collector',
       install_requires=requires,
       tests_require=tests_requires,
-      setup_requires=["hgtools", "nose"],
+      extras_require={
+          "tests": tests_requires,
+          "converter": ["py3o.template", "py3o.renderers.pyuno"],
+          "develop": ["Sphinx", "pyramid_debugtoolbar"]
+      },
       entry_points="""\
       [paste.app_factory]
       main = ringo:main

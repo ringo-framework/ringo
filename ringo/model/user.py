@@ -25,12 +25,6 @@ nm_user_roles = sa.Table(
     sa.Column('rid', sa.Integer, sa.ForeignKey('roles.id'))
 )
 
-nm_usergroup_roles = sa.Table(
-    'nm_usergroup_roles', Base.metadata,
-    sa.Column('gid', sa.Integer, sa.ForeignKey('usergroups.id')),
-    sa.Column('rid', sa.Integer, sa.ForeignKey('roles.id'))
-)
-
 nm_user_usergroups = sa.Table(
     'nm_user_usergroups', Base.metadata,
     sa.Column('uid', sa.Integer, sa.ForeignKey('users.id')),
@@ -78,6 +72,21 @@ class UserSetting(Base):
 class UserFactory(BaseFactory):
 
     def create(self, user, values):
+
+        # Delete the gid which sets the default group when creating a
+        # new user. The default group when creating a new user is always
+        # the usergroup which gets automatically created on user
+        # creation. So this value can (and must) be ignored.
+        # Not removing the "gid" will otherwise cause an
+        # IntegrityError while flushing the new user to the DB as the
+        # usergroup with the given id is not persistent in the DB.
+        if "gid" in values:
+            del values["gid"]
+        # Delete the sid which sets the default settings for the same
+        # reasons than deleting the "gid" attribute.
+        if "sid" in values:
+            del values["sid"]
+
         new_user = BaseFactory.create(self, user, values)
 
         # Now create a a new Profile
@@ -101,16 +110,16 @@ class UserFactory(BaseFactory):
         return new_user
 
 
-class User(BaseItem, Base):
+class User(BaseItem, Owned, Base):
     __tablename__ = 'users'
     _modul_id = 3
-    _sql_eager_loads = ['roles', 'groups']
+    _sql_eager_loads = ['roles', 'groups', 'profile', 'settings']
     id = sa.Column(sa.Integer, primary_key=True)
     login = sa.Column(sa.String, unique=True, nullable=False)
     password = sa.Column(sa.String, nullable=False)
     activated = sa.Column(sa.Boolean, default=True)
     activation_token = sa.Column(sa.String, nullable=False, default='')
-    gid = sa.Column(sa.Integer, sa.ForeignKey('usergroups.id'))
+    default_gid = sa.Column(sa.Integer, sa.ForeignKey('usergroups.id'))
     sid = sa.Column(sa.Integer, sa.ForeignKey('user_settings.id'))
     last_login = sa.Column(sa.DateTime)
 
@@ -122,7 +131,8 @@ class User(BaseItem, Base):
                                  secondary=nm_user_usergroups,
                                  backref='members')
     usergroup = sa.orm.relationship("Usergroup", uselist=False,
-                                    cascade="delete, all")
+                                    cascade="delete, all",
+                                    foreign_keys=[default_gid])
     settings = sa.orm.relationship("UserSetting", uselist=False,
                                    cascade="all,delete")
 
@@ -130,43 +140,13 @@ class User(BaseItem, Base):
     def get_item_factory(cls):
         return UserFactory(cls)
 
-    def has_role(self, role, include_group_roles=True):
+    def has_role(self, role):
         """Return True if the user has the given role. Else False"
         :user: User instance
-        :include_group_roles: Boolean flag to configure if the roles of
-        the groups the user is member of should be checked too.
-        Defaults to True.
         :returns: True or False
         """
-        roles = [r.name for r in self.get_roles(include_group_roles)]
+        roles = [r.name for r in self.roles]
         return role in roles
-
-    def get_roles(self, include_group_roles=True):
-        """Returns a list of roles the user has. The list contains
-        `Role` object and are collected by loading roles directly
-        attached to the user plus optionally roles attached to the
-        groups the user is member of
-
-        :include_group_roles: Booloan flag to configure if the roles of
-        the groups the user is member of should be included in the list.
-        Defaults to True.
-        :returns: List of `Role` instances
-        """
-        tmp_roles = {}
-
-        # Add roles directly attached to the user.
-        for urole in self.roles:
-            if urole.name not in tmp_roles:
-                tmp_roles[urole.name] = urole
-
-        # Add roles attached to the users groups.
-        if include_group_roles:
-            for group in self.groups:
-                for grole in group.get_roles():
-                    if grole.name not in tmp_roles:
-                        tmp_roles[grole.name] = grole
-
-        return list(tmp_roles.values())
 
 ADMIN_GROUP_ID = 1
 """Role ID your the system administration group"""
@@ -176,35 +156,18 @@ USER_ROLE_ID = 2
 """Role ID your the system user role"""
 
 
-class Usergroup(BaseItem, Base):
+class Usergroup(BaseItem, Owned, Base):
     __tablename__ = 'usergroups'
     _modul_id = 4
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.String, unique=True, nullable=False)
     description = sa.Column(sa.String, nullable=False, default='')
 
-    # Relations
-    roles = sa.orm.relationship("Role", secondary=nm_usergroup_roles)
-
     def __unicode__(self):
         return self.name
 
-    def get_roles(self):
-        """Returns a list of roles the group has. The list contains
-        `Role` object and are collected by loading roles directly
-        attached to the group.
 
-        :returns: List of `Role` instances
-        """
-        tmp_roles = {}
-        # Add roles directly attached to the group.
-        for role in self.roles:
-            if role.name not in tmp_roles:
-                tmp_roles[role.name] = role
-        return list(tmp_roles.values())
-
-
-class Role(BaseItem, Base):
+class Role(BaseItem, Owned, Base):
     """A Role is used to configure which actions are permitted to users.
     Therefor each role will have an internal list of modul actions. A
     user will be allowed to call all actions assigned to the role he is

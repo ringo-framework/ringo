@@ -29,7 +29,6 @@ def main(global_config, **settings):
 def includeme(config):
     log.info('Setup of Ringo...')
     # Configure pyramid modules
-    config.include('pyramid_handlers')
     config.include('pyramid_beaker')
     config.include('pyramid_mako')
     config.include('ringo.config.setup')
@@ -43,7 +42,10 @@ def includeme(config):
 def setup_static_views(config):
     settings = config.registry.settings
     http_cache = settings.get('security.static_http_cache', '3600')
-    config.add_static_view('static',
+    config.add_static_view('formbar-static',
+                           path='formbar:static',
+                           cache_max_age=int(http_cache))
+    config.add_static_view('ringo-static',
                            path='ringo:static',
                            cache_max_age=int(http_cache))
     return config
@@ -75,5 +77,5 @@ def setup_routes(config):
                      factory=get_resource_factory(User))
     config.add_route('rules-evaluate', 'rest/rule/evaluate')
     config.add_route('form-render', 'rest/form/render')
-    config.add_route('get-language', 'rest/client/language')
+    config.add_route('keepalive', 'rest/keepalive')
     return config

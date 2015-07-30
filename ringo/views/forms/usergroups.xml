@@ -4,10 +4,6 @@
     <!-- Define different entity types -->
     <entity id="e1" name="name" label="Name" type="string"/>
     <entity id="e2" name="members" label="Members"/>
-    <entity id="e3" name="roles" label="Roles">
-      <help>The roles of this group will be added to the user roles if he is
-      member of the items group on permission check.</help>
-    </entity>
     <entity id="e4" name="description" label="Description" type="string">
       <renderer type="textarea"/>
     </entity>
@@ -37,7 +33,6 @@
     </row>
     <row>
       <col><field ref="e2"/></col>
-      <col><field ref="e3"/></col>
     </row>
   </snippet>
 </configuration>

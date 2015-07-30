@@ -4,6 +4,7 @@ from ringo.model.base import BaseFactory, get_item_list
 from ringo.model.user import User
 from ringo.lib.table import get_table_config
 from ringo.lib.helpers.misc import get_item_modul
+from ringo.lib.helpers import literal
 from ringo.lib.security import has_permission
 from ringo.lib.renderer import (
     ListRenderer
@@ -144,8 +145,12 @@ def get_search(clazz, request):
     if the search was successfull.
     """
     name = clazz.__tablename__
-    # Check if there is already a saved search in the session
-    saved_search = request.session.get('%s.list.search' % name, [])
+    # Default search fielter
+    default_search = get_table_config(clazz).get_default_search()
+    # Check if there is already a saved search in the session, If not
+    # use the default search.
+    saved_search = (request.session.get('%s.list.search' % name, [])
+                    or default_search)
 
     regexpr = request.session.get('%s.list.search.regexpr' % name, False)
     if "enableregexpr" in request.params:
@@ -156,7 +161,7 @@ def get_search(clazz, request):
         return saved_search
 
     if 'reset' in request.params:
-        return []
+        return default_search
 
     # If the request is not a equest from the search form then
     # abort here and return the saved search params if there are any.
@@ -230,7 +235,7 @@ def bundle_(request):
                   "Click 'OK' to return to the overview.")
         renderer = WarningDialogRenderer(request, title, body)
         rvalue = {}
-        rvalue['dialog'] = renderer.render(url=request.referrer)
+        rvalue['dialog'] = literal(renderer.render(url=request.referrer))
         return rvalue
 
     # If the user only selects one single item it is not a list. So
@@ -264,13 +269,13 @@ def bundle_(request):
                           "num": len(ignored_items)})
         renderer = WarningDialogRenderer(request, title, body)
         rvalue = {}
-        rvalue['dialog'] = renderer.render(url=request.referrer)
+        rvalue['dialog'] = literal(renderer.render(url=request.referrer))
         return rvalue
 
     handler = get_bundle_action_handler(_bundle_request_handlers,
                                         bundle_action.lower(),
                                         module.name)
-    return handler(request, items)
+    return handler(request, items, None)
 
 
 def list_(request):

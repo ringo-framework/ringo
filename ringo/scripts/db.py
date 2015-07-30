@@ -5,6 +5,7 @@ import time
 from sqlalchemy import engine_from_config
 import transaction
 
+from invoke import run
 from alembic.config import Config
 from alembic import command
 from pyramid.paster import (
@@ -60,13 +61,16 @@ def get_last_revision_file(args):
     os.chdir(cwd)
     return os.path.join(*script_path)
 
+def get_engine(config_file):
+    setup_logging(config_file)
+    settings = get_appsettings(config_file)
+    engine = engine_from_config(settings, 'sqlalchemy.')
+    return engine
 
 def get_session(config_file):
     """Will return a database session based on the application
     configuration"""
-    setup_logging(config_file)
-    settings = get_appsettings(config_file)
-    engine = engine_from_config(settings, 'sqlalchemy.')
+    engine = get_engine(config_file)
     DBSession.configure(bind=engine)
     return DBSession
 
@@ -122,12 +126,17 @@ def get_alembic_config(args, app=None):
 
     config_path = []
     config_path.append(get_app_location(args.app))
+    config_path.append(args.app)
+    config_path.append("alembic")
+    alembic_dir = os.path.join(*config_path)
     config_path.append("alembic.ini")
     cfg = Config(os.path.join(*config_path))
     if args.config:
         app_config = get_appsettings(args.config)
         cfg.set_main_option("sqlalchemy.url",
                             app_config.get('sqlalchemy.url'))
+        cfg.set_main_option("script_location",
+                            alembic_dir)
     return cfg
 
 
@@ -146,7 +155,6 @@ def handle_db_revision_command(args):
 
 def handle_db_savedata_command(args):
     path = []
-    path.append(get_app_location(args.app))
     path.append(args.config)
     session = get_session(os.path.join(*path))
     modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == args.modul).all()[0].clazzpath
@@ -159,7 +167,6 @@ def handle_db_savedata_command(args):
 
 def handle_db_loaddata_command(args):
     path = []
-    path.append(get_app_location(args.app))
     path.append(args.config)
     session = get_session(os.path.join(*path))
     modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == args.modul).all()[0].clazzpath
@@ -186,7 +193,6 @@ def handle_db_loaddata_command(args):
 
 def handle_db_uuid_command(args):
     path = []
-    path.append(get_app_location(args.app))
     path.append(args.config)
     session = get_session(os.path.join(*path))
     modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == args.modul).all()[0].clazzpath
@@ -254,3 +260,30 @@ def handle_db_unrestrict_command(args):
     out.append("GRANT ALL ON TABLE public.%ss TO PUBLIC;" % args.modul)
     out.append("DROP VIEW IF EXISTS %ss;" % (args.modul))
     print "\n".join(out)
+
+def handle_db_fixsequence_command(args):
+    """Will fix the sequences of the primary keys in all tables of a
+    PostgresSQL Database. For each table in the database the function
+    will determine the highest value for the id and set the nextval to
+    the max+1. Background. When inserting items per fixtures the fixture
+    may contain an id for the new item. In this case the id will be set
+    in the database but the internal sequence counter is not updated."""
+
+    # Load the SQL Script to fix the sequence
+    sql_path = []
+    sql_path.append(get_app_location("ringo"))
+    sql_path.append("ringo/scripts/generate_fix_sequence_stmnts.sql")
+    with open(os.path.join(*sql_path)) as sqlfile:
+        sql = sqlfile.read()
+
+    # Get DB connection and apply loaded SQL statements.
+    path = []
+    path.append(args.config)
+    engine = get_engine(os.path.join(*path))
+    conn = engine.connect()
+    result = conn.execute(sql)
+    print "Fixing sequences ... ",
+    for r in result:
+        conn.execute(r[0])
+    conn.close()
+    print "OK"

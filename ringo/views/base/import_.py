@@ -32,7 +32,11 @@ def _import(request):
 
     """
     clazz = request.context.__model__
-    request.POST.get('file').file.seek(0)
+    try:
+        request.POST.get('file').file.seek(0)
+    except AttributeError:
+        # This is triggered when no file has been selected for import
+        raise AttributeError
     importfile = request.POST.get('file').file.read()
     if request.POST.get('format') == 'json':
         importer = JSONImporter(clazz, request.db)
@@ -106,14 +110,14 @@ def import_(request, callback=None):
        and form.validate(request.params)):
         try:
             items = _import(request)
-        except ValueError as e:
+        except (ValueError, AttributeError) as e:
             err_title = _("Import failed")
             err_msg = _("Bad news! The import could not be finished and "
                         "returns with an error."
                         "No data has been modified in this operation and no "
                         "items has been imported or updated. "
                         "The last message we heard from the importer was: %s"
-                        % e)
+                        ) % e
             renderer = ErrorDialogRenderer(request, err_title, err_msg)
             rvalue = {}
             ok_url = request.session['history'].pop(2)

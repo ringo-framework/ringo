@@ -1,12 +1,3 @@
-var language = getLanguageFromBrowser();
-
-function getDTLanguage() {
-    if (language.indexOf("de") >= 0) {
-        return "german"
-    } else {
-        return "default";
-    }
-}
 var opts = {
   lines: 9, // The number of lines to draw
   length: 21, // The length of each line
@@ -25,8 +16,17 @@ var opts = {
   top: '50%', // Top position relative to parent
   left: '50%' // Left position relative to parent
 };
-var spinner = new Spinner(opts).spin();
+
+var timer;
+var spinner = new Spinner(opts);
+var spinner_timer = 800; //threshold in ms after spinner starts
+
 $( document ).ready(function() {
+    $("#logoutWarningOK").click(hideLogoutWarning);
+    $(':button').not('[data-toggle="dropdown"], [type="reset"], [target="_blank"]').click(function () {
+        startSpinner(spinner_timer);
+    });
+    $('[data-toggle="tooltip"]').tooltip();
     $('.dialog').modal({
         backdrop: "static"
     });
@@ -39,9 +39,13 @@ $( document ).ready(function() {
         show: false,
         backdrop: "static"
     });
+
+    /* Datatable initialisation */
+    var application_path = getApplicationPath();
+    var language = getDTLanguage(getLanguageFromBrowser());
     $('.datatable-paginated').dataTable( {
            "oLanguage": {
-                "sUrl": "/static/js/datatables/i18n/"+getDTLanguage()+".json"
+                "sUrl":  application_path + "/ringo-static/js/datatables/i18n/"+language+".json"
            },
            "bPaginate": true,
            "sPaginationType": "full_numbers",
@@ -55,7 +59,7 @@ $( document ).ready(function() {
      });
     $('.datatable-simple').dataTable( {
            "oLanguage": {
-                "sUrl": "/static/js/datatables/i18n/"+getDTLanguage()+".json"
+                "sUrl": application_path + "/ringo-static/js/datatables/i18n/"+language+".json"
            },
            "bPaginate": false,
            "bLengthChange": false,
@@ -68,7 +72,7 @@ $( document ).ready(function() {
     });
     $('.datatable-blank').dataTable({
           "oLanguage": {
-               "sUrl": "/static/js/datatables/i18n/"+getDTLanguage()+".json"
+               "sUrl": application_path + "/ringo-static/js/datatables/i18n/"+language+".json"
           },
           "bPaginate": false,
           "bLengthChange": false,
@@ -106,6 +110,7 @@ $( document ).ready(function() {
     $('#pagination-size-selector').change(function() {
         var value = $(this).val();
         var url = $(this).attr('url') + "?pagination_size=" + value;
+        startSpinner(spinner_timer);
         window.open(url,"_self");
     });
     $("a.modalform").click(openModalForm);
@@ -114,24 +119,70 @@ $( document ).ready(function() {
             return false;
     });
 
+    // Check the initial values of the form and warn the user if the leaves
+    // the page without saving the form.
+    var DirtyFormWarningOpen = false;
+    $('form').each(function() {
+        $(this).data('initialValue', $(this).serialize());
+    });
+    $('a').not('[href^="mailto:"], [target="_blank"]').click(function(event) {
+        var isDirty = false;
+        var element = event.target;
+        var url = $(element).attr("href");
+        $('form').each(function () {
+            if($(this).data('initialValue') != $(this).serialize()){
+                isDirty = true;
+            }
+        });
+        if((isDirty == true) && (DirtyFormWarningOpen == false)) {
+            var dialog = $("#DirtyFormWarning");
+            $('#DirtyFormWarningProceedButton').attr("href", url);
+            // If the URL does not begin with "#" than show the dialog.
+            if (url && url.indexOf("#") != 0 && logout_warning == false) {
+                $(dialog).modal("show");
+                DirtyFormWarningOpen = true;
+                event.preventDefault();
+                return false;
+            }
+            return true;
+        }
+        hash_i = url.indexOf("#");
+        has_hash = (hash_i  == -1) == false;
+        if (((location.pathname != url) && url != "") && (has_hash == false)) {
+            startSpinner(spinner_timer);
+        }
+    });
+    $('#DirtyFormWarningCancelButton').click(function(event) {
+            var dialog = $("#DirtyFormWarning");
+            $(dialog).modal("hide");
+            DirtyFormWarningOpen = false;
+            event.preventDefault();
+            return false;
+    });
 });
 
-function logoutCountdown(time, url) {
-    var warning = $.timer(function() {
-      $("#logoutWarning").modal("show");
-    });
-    warning.set({ time : time/100*95*1000, autostart : true });
-    var logout = $.timer(function() {
-        location.href=url;
-    });
-    logout.set({ time : time*1000-500, autostart : true });
+$( window ).unload(function() {
+    stopSpinner();
+});
+
+
+function stopSpinner() {
+    if ($('#spinner').data('spinner') != undefined){
+        $('#spinner').data('spinner').stop();
+    }
+    clearTimeout(timer);
+}
+
+function startSpinner(x) {
+    stopSpinner();
+    timer = setTimeout(function(){
+            $('#spinner').spin(spinner.el);
+    }, x);
 }
 
 function openModalForm(event) {
   var element = event.target;
-  console.log(element);
   var url = $(element).attr("href");
-  console.log(url);
   // Load page
   var page = $.ajax({
       url: url,
