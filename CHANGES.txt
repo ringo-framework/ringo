@@ -1,3 +1,8 @@
+1.2.1
+=====
+- Fixed circular dependency error on migration using alembic after adding
+  uid and gid fields for users and usergroups which where self referencing.
+
 1.2.0
 =====
 Beside the major changes which are listed below this version include many
