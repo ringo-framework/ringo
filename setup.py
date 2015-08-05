@@ -32,7 +32,6 @@ requires = [
 
 tests_requires = [
     'nose',
-    'behave',
     'coverage',
     'webtest',
     'mock'
