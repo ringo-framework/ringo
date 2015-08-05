@@ -1,6 +1,6 @@
 from datetime import datetime
 import pkg_resources
-from ringo.tests import BaseUnitTest
+from ringo.tests.base import BaseUnitTest
 
 
 class HelpersTests(BaseUnitTest):

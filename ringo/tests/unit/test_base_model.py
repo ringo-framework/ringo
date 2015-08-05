@@ -1,4 +1,4 @@
-from ringo.tests import BaseUnitTest
+from ringo.tests.base import BaseUnitTest
 from ringo.lib.imexport import JSONExporter
 
 class GlobalTests(BaseUnitTest):
