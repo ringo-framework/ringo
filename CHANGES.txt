@@ -1,3 +1,8 @@
+Next version
+============
+Removed:
+- Behaviour driven testcases using behave.
+
 1.2.1
 =====
 - Fixed circular dependency error on migration using alembic after adding
