@@ -15,13 +15,10 @@ from ringo import main
 from ringo.lib.i18n import locale_negotiator
 
 
-here = os.path.dirname(__file__)
-try:
+def get_settings():
+    here = os.path.dirname(__file__)
     settings = appconfig('config:' + os.path.join(here, '../../', 'test.ini'))
-except IOError:
-    # Issue #22. Silently igonore this error if there is no test.ini
-    pass
-
+    return settings
 
 
 class BaseTestCase(unittest.TestCase):
@@ -29,8 +26,9 @@ class BaseTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.registry = Registry(name="ringo")
-        cls.registry.settings = settings
-        cls.engine = engine_from_config(settings, prefix='sqlalchemy.')
+        cls.registry.settings = get_settings()
+        cls.engine = engine_from_config(cls.registry.settings, 
+                                        prefix='sqlalchemy.')
         cls.Session = sessionmaker()
 
     def setUp(self):
