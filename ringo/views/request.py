@@ -119,7 +119,14 @@ def handle_POST_request(form, request, callback, event, renderers=None):
         checker = ValueChecker()
         try:
             if event == "create":
-                factory = clazz.get_item_factory()
+                try:
+                    factory = clazz.get_item_factory(request)
+                except TypeError:
+                    # Old version of get_item_factory method which does
+                    # not take an request parameter.
+                    factory = clazz.get_item_factory()
+                    factory._request = request
+
                 checker.check(clazz, form.data, request)
                 item = factory.create(request.user, form.data)
                 item.save({}, request)

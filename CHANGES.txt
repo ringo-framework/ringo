@@ -1,3 +1,9 @@
+Next version
+============
+New:
+
+- BaseFactory now take an optional argument for a request.
+
 1.2.1
 =====
 - Fixed circular dependency error on migration using alembic after adding
