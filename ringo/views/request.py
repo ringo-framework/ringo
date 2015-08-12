@@ -47,14 +47,17 @@ def handle_callback(request, callback, item=None):
     """Will call the given callback
 
     :request: Current request
-    :callback: Callable function
+    :callback: Callable function or list of callable functions
     :item: item for which the callback will be called.
     :returns: item
 
     """
     if not item:
         item = get_item_from_request(request)
-    if callback:
+    if isinstance(callback, list):
+        for cb in callback:
+            item = cb(request, item)
+    elif callback:
         item = callback(request, item)
     return item
 

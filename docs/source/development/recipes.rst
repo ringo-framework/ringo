@@ -103,6 +103,10 @@ this::
         def create(request):
                 return create_(Foo, request, callback=foo_callback)
 
+.. versionadded:: 1.2.2
+        The callback can now optionally be a list of callback functions. This
+        can be used to stack multiple callbacks.
+
 Change the name of the application
 ==================================
 The name of the application is defined in the "ini" file. Check the
