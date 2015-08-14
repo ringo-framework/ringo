@@ -137,6 +137,8 @@ def get_alembic_config(args, app=None):
                             app_config.get('sqlalchemy.url'))
         cfg.set_main_option("script_location",
                             alembic_dir)
+        cfg.set_main_option("app_config",
+                            args.config)
     return cfg
 
 

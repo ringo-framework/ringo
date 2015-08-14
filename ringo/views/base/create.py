@@ -41,7 +41,13 @@ def create(request, callback=None, renderers=None, validators=None):
 
     # Create a new item
     clazz = request.context.__model__
-    factory = clazz.get_item_factory()
+    try:
+        factory = clazz.get_item_factory(request)
+    except TypeError:
+        # Old version of get_item_factory method which does not take an
+        # request parameter.
+        factory = clazz.get_item_factory()
+        factory._request = request
     # Only create a new item if there isn't already an item in the
     # request.context. This can happen if we define a custom view for
     # create where the item gets created before to set some default

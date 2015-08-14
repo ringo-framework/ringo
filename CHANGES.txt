@@ -1,3 +1,13 @@
+1.2.2
+=====
+- BaseFactory now take an optional argument for a request.
+- The callback parameter in the views can now take a list of callbacks too.
+  The handle_callback method is able to handle this correct. Please note that
+  this mechanism needs some effort of the developer to build this list in the
+  view function.
+- Add additional callback parameter to the create view of users. This allows
+  other views to overwrite the user create view and add custom callbacks.
+
 1.2.1
 =====
 - Fixed circular dependency error on migration using alembic after adding

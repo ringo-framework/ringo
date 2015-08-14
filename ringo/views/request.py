@@ -47,14 +47,17 @@ def handle_callback(request, callback, item=None):
     """Will call the given callback
 
     :request: Current request
-    :callback: Callable function
+    :callback: Callable function or list of callable functions
     :item: item for which the callback will be called.
     :returns: item
 
     """
     if not item:
         item = get_item_from_request(request)
-    if callback:
+    if isinstance(callback, list):
+        for cb in callback:
+            item = cb(request, item)
+    elif callback:
         item = callback(request, item)
     return item
 
@@ -119,7 +122,14 @@ def handle_POST_request(form, request, callback, event, renderers=None):
         checker = ValueChecker()
         try:
             if event == "create":
-                factory = clazz.get_item_factory()
+                try:
+                    factory = clazz.get_item_factory(request)
+                except TypeError:
+                    # Old version of get_item_factory method which does
+                    # not take an request parameter.
+                    factory = clazz.get_item_factory()
+                    factory._request = request
+
                 checker.check(clazz, form.data, request)
                 item = factory.create(request.user, form.data)
                 item.save({}, request)
