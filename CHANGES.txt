@@ -1,7 +1,5 @@
-Next version
-============
-New:
-
+1.2.2
+=====
 - BaseFactory now take an optional argument for a request.
 - The callback parameter in the views can now take a list of callbacks too.
   The handle_callback method is able to handle this correct. Please note that
