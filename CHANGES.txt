@@ -1,3 +1,8 @@
+Next Version
+============
+- Added new configuration varibale (auth.timeout_warning) to configure how
+  many secods before the autologout happens a warning will be shown.
+
 1.2.2
 =====
 - BaseFactory now take an optional argument for a request.
