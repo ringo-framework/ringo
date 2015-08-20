@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-08-20 08:46+0200\n"
+"POT-Creation-Date: 2015-08-20 09:01+0200\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language-Team: German "
@@ -100,7 +100,7 @@ msgstr "Abmeldung steht kurz bevor"
 msgid ""
 "You session will expire soon because of inactivity. Click on \"Ok\" to "
 "continue work and renew you session. Otherwise you will be logged out "
-"automatically in a shortly."
+"automatically shortly."
 msgstr ""
 "Ihre Sitzung wird in Kürze wegen Inaktivität ablaufen. Klicken Sie auf "
 "\"OK\", um fortzufahren und die Sitzung zu verlängern. Andernfalls werden"
@@ -237,7 +237,6 @@ msgstr "Abmelden"
 #. Label for login field in form config
 #. Label for user.login column in overview table config
 #: ringo/templates/header.mako:54 ringo/templates/index.mako:18
-#: ringo/templates/auth/autologout.mako:6
 #: ringo/templates/auth/confirm_user.mako:19
 #: ringo/templates/auth/confirm_user.mako:24 ringo/templates/auth/login.mako:5
 #: ringo/templates/auth/reset_password.mako:19
@@ -391,13 +390,17 @@ msgstr ""
 "<a href=\"http://www.pylonsproject.org/\" target=\"_blank\">Pyramid</a> "
 "is ein Python basierter Webanwendungs-Rahmen."
 
+#: ringo/templates/auth/autologout.mako:3
+msgid "Session expired"
+msgstr "Sitzung abgelaufen"
+
 #: ringo/templates/auth/autologout.mako:5
-msgid ""
-"You have been automatically logged out because your session has expired. "
-"Please click on the link below to login into the application again."
-msgstr ""
-"Sie wurden automatisch abgemeldet, da ihre Sitzung abgelaufen ist. Bitte "
-"klicken Sie den Link, um sich erneut in der Anwendung anzumelden."
+msgid "You have been automatically logged out because your session has expired."
+msgstr "Sie wurden automatisch abgemeldet, da ihre Sitzung abgelaufen ist."
+
+#: ringo/templates/auth/autologout.mako:6
+msgid "Re-Login"
+msgstr "Erneut anmelden"
 
 #: ringo/templates/auth/confirm_user.mako:7
 msgid "User confirmed"
@@ -1429,4 +1432,7 @@ msgstr "Gruppen"
 #: ringo/views/tables/users.json:8
 msgid "Last login"
 msgstr "Letze Anmeldung"
+
+#~ msgid ""
+#~ msgstr ""
 
