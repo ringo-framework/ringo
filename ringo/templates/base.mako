@@ -72,7 +72,7 @@
       <div class="panel panel-warning">
         <div class="panel-heading"><strong>${_('Logout will happen soon')}</strong></div>
         <div class="panel-body">
-          <p>${_('You session will expire soon because of inactivity. Click on "Renew session" to continue work and renew you session. Otherwise you will be logged out automatically shortly.')}</p>
+          <p>${_('Your session will expire soon because of inactivity. Click on "Renew session" to continue work and renew your session. Otherwise you will be logged out automatically shortly.')}</p>
         </div>
         <div class="panel-footer">
           <a href="${request.route_path('keepalive')}" target="_blank" class="btn btn-default" id="logoutWarningOK">${_('Renew session')}</a>
