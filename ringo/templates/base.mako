@@ -72,7 +72,7 @@
       <div class="panel panel-warning">
         <div class="panel-heading"><strong>${_('Logout will happen soon')}</strong></div>
         <div class="panel-body">
-          <p>${_('You will be logged out automatically in a short time because of inactivity. Please close this dialog and init a new request to renew your session timer.')}</p>
+          <p>${_('You session will expire soon because of inactivity. Click on "Ok" to continue work and renew you session. Otherwise you will be logged out automatically in a shortly.')}</p>
         </div>
         <div class="panel-footer">
           <a href="${request.route_path('keepalive')}" target="_blank" class="btn btn-default" id="logoutWarningOK">${_('Ok')}</a>
