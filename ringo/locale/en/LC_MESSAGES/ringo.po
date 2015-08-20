@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-08-20 09:01+0200\n"
+"POT-Creation-Date: 2015-08-20 10:06+0200\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -91,13 +91,13 @@ msgstr ""
 
 #: ringo/templates/base.mako:75
 msgid ""
-"You session will expire soon because of inactivity. Click on \"Ok\" to "
-"continue work and renew you session. Otherwise you will be logged out "
-"automatically shortly."
+"You session will expire soon because of inactivity. Click on \"Renew "
+"session\" to continue work and renew you session. Otherwise you will be "
+"logged out automatically shortly."
 msgstr ""
 
-#: ringo/templates/base.mako:78 ringo/templates/internal/import.mako:41
-msgid "Ok"
+#: ringo/templates/base.mako:78
+msgid "Renew session"
 msgstr ""
 
 #: ringo/templates/base.mako:86
@@ -473,6 +473,10 @@ msgstr ""
 
 #: ringo/templates/internal/import.mako:33
 msgid "Result"
+msgstr ""
+
+#: ringo/templates/internal/import.mako:41
+msgid "Ok"
 msgstr ""
 
 #: ringo/templates/internal/import.mako:43

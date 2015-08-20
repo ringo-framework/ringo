@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-08-20 09:01+0200\n"
+"POT-Creation-Date: 2015-08-20 10:06+0200\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language-Team: German "
@@ -98,17 +98,17 @@ msgstr "Abmeldung steht kurz bevor"
 
 #: ringo/templates/base.mako:75
 msgid ""
-"You session will expire soon because of inactivity. Click on \"Ok\" to "
-"continue work and renew you session. Otherwise you will be logged out "
-"automatically shortly."
+"You session will expire soon because of inactivity. Click on \"Renew "
+"session\" to continue work and renew you session. Otherwise you will be "
+"logged out automatically shortly."
 msgstr ""
 "Ihre Sitzung wird in Kürze wegen Inaktivität ablaufen. Klicken Sie auf "
-"\"OK\", um fortzufahren und die Sitzung zu verlängern. Andernfalls werden"
-" Sie in Kürze automatisch abgemeldet."
+"\"Sitzung verlängern\", um fortzufahren und die Sitzung zu verlängern. "
+"Andernfalls werden Sie in Kürze automatisch abgemeldet."
 
-#: ringo/templates/base.mako:78 ringo/templates/internal/import.mako:41
-msgid "Ok"
-msgstr "Ok"
+#: ringo/templates/base.mako:78
+msgid "Renew session"
+msgstr "Sitzung verlängern"
 
 #: ringo/templates/base.mako:86
 msgid "Form contains unsaved changes!"
@@ -530,6 +530,10 @@ msgstr "Art"
 #: ringo/templates/internal/import.mako:33
 msgid "Result"
 msgstr "Ergebnis"
+
+#: ringo/templates/internal/import.mako:41
+msgid "Ok"
+msgstr "Ok"
 
 #: ringo/templates/internal/import.mako:43
 msgid "Failure"
@@ -1432,7 +1436,4 @@ msgstr "Gruppen"
 #: ringo/views/tables/users.json:8
 msgid "Last login"
 msgstr "Letze Anmeldung"
-
-#~ msgid ""
-#~ msgstr ""
 
