@@ -397,7 +397,7 @@ msgstr "Sitzung abgelaufen"
 
 #: ringo/templates/auth/autologout.mako:5
 msgid "You have been automatically logged out because your session has expired."
-msgstr "Sie wurden automatisch abgemeldet, da ihre Sitzung abgelaufen ist."
+msgstr "Sie wurden automatisch abgemeldet, da Ihre Sitzung abgelaufen ist."
 
 #: ringo/templates/auth/autologout.mako:6
 msgid "Re-Login"
