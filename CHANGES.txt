@@ -2,6 +2,8 @@
 ===
 - Added new configuration varibale (auth.timeout_warning) to configure how
   many secods before the autologout happens a warning will be shown.
+- Improved message in autologout warning dialog.
+- Improved wording in autologout page (User sees when autologout happend)
 
 1.2.2
 =====
