@@ -65,18 +65,17 @@
   <script src="${request.static_path('ringo:static/js/init.js')}"></script>
   % if request.user:
   <script>
-      logoutCountdown(${s.get_auth_timeout(request.registry.settings)},
-      '${request.route_path("autologout")}');
+      logoutCountdown(${s.get_auth_timeout(request.registry.settings)}, '${request.route_path("autologout")}', ${s.get_auth_timeout_warning(request.registry.settings)});
   </script>
   <div class="modal fade" id="logoutWarning">
     <div class="modal-dialog">
       <div class="panel panel-warning">
         <div class="panel-heading"><strong>${_('Logout will happen soon')}</strong></div>
         <div class="panel-body">
-          <p>${_('You will be logged out automatically in a short time because of inactivity. Please close this dialog and init a new request to renew your session timer.')}</p>
+          <p>${_('Your session will expire soon because of inactivity. Click on "Renew session" to continue work and renew your session. Otherwise you will be logged out automatically shortly and all unsaved data will get lost.')}</p>
         </div>
         <div class="panel-footer">
-          <a href="${request.route_path('keepalive')}" target="_blank" class="btn btn-default" id="logoutWarningOK">${_('Ok')}</a>
+          <a href="${request.route_path('keepalive')}" target="_blank" class="btn btn-default" id="logoutWarningOK">${_('Renew session')}</a>
         </div>
       </div>
     </div>

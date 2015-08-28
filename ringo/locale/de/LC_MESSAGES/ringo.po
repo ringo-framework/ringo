@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-07-29 09:58+0200\n"
+"POT-Creation-Date: 2015-08-21 11:28+0200\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language-Team: German "
@@ -44,31 +44,31 @@ msgstr ""
 "Bitte klicken Sie auf \"${Action}\", um den Eintrag zu ${action}. Klicken"
 " sie auf \"Abbrechen\", um den Vorgang abzubrechen."
 
-#: ringo/model/modul.py:221
+#: ringo/model/modul.py:222
 msgid "List"
 msgstr "Auflisten"
 
-#: ringo/model/modul.py:224 ringo/templates/default/list.mako:40
+#: ringo/model/modul.py:225 ringo/templates/default/list.mako:40
 msgid "Create"
 msgstr "Anlegen"
 
-#: ringo/model/modul.py:227
+#: ringo/model/modul.py:228
 msgid "Read"
 msgstr "Lesen"
 
-#: ringo/model/modul.py:230
+#: ringo/model/modul.py:231
 msgid "Update"
 msgstr "Bearbeiten"
 
-#: ringo/model/modul.py:233
+#: ringo/model/modul.py:234
 msgid "Delete"
 msgstr "Löschen"
 
-#: ringo/model/modul.py:237 ringo/templates/default/list.mako:45
+#: ringo/model/modul.py:238 ringo/templates/default/list.mako:45
 msgid "Import"
 msgstr "Importieren"
 
-#: ringo/model/modul.py:240
+#: ringo/model/modul.py:241
 msgid "Export"
 msgstr "Exportieren"
 
@@ -92,30 +92,30 @@ msgstr "Bitte geben Sie hier sinnvolle Informationen über Anwendung an."
 msgid "This application is based on the Ringo web application framework."
 msgstr "Diese Anwendung basiert auf dem Ringo Webanwendungs-Rahmen."
 
-#: ringo/templates/base.mako:74
+#: ringo/templates/base.mako:73
 msgid "Logout will happen soon"
 msgstr "Abmeldung steht kurz bevor"
 
-#: ringo/templates/base.mako:76
+#: ringo/templates/base.mako:75
 msgid ""
-"You will be logged out automatically in a short time because of "
-"inactivity. Please close this dialog and init a new request to renew your"
-" session timer."
+"Your session will expire soon because of inactivity. Click on \"Renew "
+"session\" to continue work and renew your session. Otherwise you will be "
+"logged out automatically shortly and all unsaved data will get lost."
 msgstr ""
-"Sie werden aufgrund von Inaktivität in kurzer Zeit automatisch "
-"abgemeldet. Gemachte Änderungen gehen dann verloren. Bitte schließen Sie "
-"diesen Dialog und lösen eine neue Anfrage aus, um die Sitzungszeituhr "
-"zurückzusetzen."
+"Ihre Sitzung wird in Kürze wegen Inaktivität ablaufen. Klicken Sie auf "
+"\"Sitzung verlängern\", um fortzufahren und die Sitzung zu verlängern. "
+"Andernfalls werden Sie in Kürze automatisch abgemeldet, und alle nicht "
+"gespeicherten Eingaben gehen verloren."
 
-#: ringo/templates/base.mako:79 ringo/templates/internal/import.mako:41
-msgid "Ok"
-msgstr "Ok"
+#: ringo/templates/base.mako:78
+msgid "Renew session"
+msgstr "Sitzung verlängern"
 
-#: ringo/templates/base.mako:87
+#: ringo/templates/base.mako:86
 msgid "Form contains unsaved changes!"
 msgstr "Formular enthält ungespeicherte Änderungen!"
 
-#: ringo/templates/base.mako:89
+#: ringo/templates/base.mako:88
 msgid ""
 "Do you want to leave the current form without saving the changes? The "
 "changes will be lost if you do not save the data first!"
@@ -124,47 +124,47 @@ msgstr ""
 "speichern? Die Änderungen werden verloren gehen, wenn Sie das Formular "
 "nicht vorher speichern!"
 
-#: ringo/templates/base.mako:92
+#: ringo/templates/base.mako:91
 msgid "Stay in Form"
 msgstr "Im Formular bleiben"
 
-#: ringo/templates/base.mako:93
+#: ringo/templates/base.mako:92
 msgid "Leave the Form"
 msgstr "Das Formular verlassen"
 
-#: ringo/templates/base.mako:156
+#: ringo/templates/base.mako:155
 msgid "Create new item"
 msgstr "Erstelle neuen Eintrag"
 
-#: ringo/templates/base.mako:158
+#: ringo/templates/base.mako:157
 msgid "Open overview"
 msgstr "Öffne Übersicht"
 
-#: ringo/templates/base.mako:160
+#: ringo/templates/base.mako:159
 msgid "Open in \"Edit\" mode"
 msgstr "Öffne im \"Bearbeiten\" Modus"
 
-#: ringo/templates/base.mako:162
+#: ringo/templates/base.mako:161
 msgid "Open in \"Read\" mode"
 msgstr "Öffne im \"Lesen\" Modus"
 
-#: ringo/templates/base.mako:164
+#: ringo/templates/base.mako:163
 msgid "Delete item"
 msgstr "Lösche Eintrag"
 
-#: ringo/templates/base.mako:180
+#: ringo/templates/base.mako:179
 msgid "Advanced"
 msgstr "Erweitert"
 
-#: ringo/templates/base.mako:182 ringo/templates/footer.mako:7
+#: ringo/templates/base.mako:181 ringo/templates/footer.mako:7
 msgid "Administration"
 msgstr "Administration"
 
-#: ringo/templates/base.mako:183
+#: ringo/templates/base.mako:182
 msgid "Change ownership"
 msgstr "Ändere Eigentumsrechte"
 
-#: ringo/templates/base.mako:186
+#: ringo/templates/base.mako:185
 msgid "Advanced actions"
 msgstr "Erweiterte Aktionen"
 
@@ -237,15 +237,12 @@ msgstr "Abmelden"
 
 #. Label for login field in form config
 #. Label for user.login column in overview table config
-#. Label for login column in overview table config
 #: ringo/templates/header.mako:54 ringo/templates/index.mako:18
-#: ringo/templates/auth/autologout.mako:6
 #: ringo/templates/auth/confirm_user.mako:19
 #: ringo/templates/auth/confirm_user.mako:24 ringo/templates/auth/login.mako:5
 #: ringo/templates/auth/reset_password.mako:19
 #: ringo/templates/auth/reset_password.mako:24 ringo/views/forms/users.xml:1
 #: ringo/views/forms/users.xml:2 ringo/views/tables/profiles.json:6
-#: ringo/views/tables/users.json:4
 msgid "Login"
 msgstr "Anmelden"
 
@@ -282,8 +279,9 @@ msgstr ""
 
 #. Label for login field in form config
 #. Label for user field in form config
+#. Label for login column in overview table config
 #: ringo/templates/index.mako:14 ringo/views/forms/auth.xml:1
-#: ringo/views/forms/profiles.xml:9
+#: ringo/views/forms/profiles.xml:9 ringo/views/tables/users.json:4
 msgid "Loginname"
 msgstr "Anmeldekennung"
 
@@ -393,13 +391,17 @@ msgstr ""
 "<a href=\"http://www.pylonsproject.org/\" target=\"_blank\">Pyramid</a> "
 "is ein Python basierter Webanwendungs-Rahmen."
 
+#: ringo/templates/auth/autologout.mako:3
+msgid "Session expired"
+msgstr "Sitzung abgelaufen"
+
 #: ringo/templates/auth/autologout.mako:5
-msgid ""
-"You have been automatically logged out because your session has expired. "
-"Please click on the link below to login into the application again."
-msgstr ""
-"Sie wurden automatisch abgemeldet, da ihre Sitzung abgelaufen ist. Bitte "
-"klicken Sie den Link, um sich erneut in der Anwendung anzumelden."
+msgid "You have been automatically logged out because your session has expired."
+msgstr "Sie wurden automatisch abgemeldet, da Ihre Sitzung abgelaufen ist."
+
+#: ringo/templates/auth/autologout.mako:6
+msgid "Re-Login"
+msgstr "Erneut anmelden"
 
 #: ringo/templates/auth/confirm_user.mako:7
 msgid "User confirmed"
@@ -529,6 +531,10 @@ msgstr "Art"
 #: ringo/templates/internal/import.mako:33
 msgid "Result"
 msgstr "Ergebnis"
+
+#: ringo/templates/internal/import.mako:41
+msgid "Ok"
+msgstr "Ok"
 
 #: ringo/templates/internal/import.mako:43
 msgid "Failure"
@@ -812,53 +818,53 @@ msgstr ""
 "Authorisierung fehlgeschlagen. Es tut mir leid, aber Sie haben nicht die "
 "erforderlichen Rechte, um auf die Ressource zuzugreifen."
 
-#: ringo/views/request.py:130
+#: ringo/views/request.py:146
 msgid "Created new ${item_type} successfully."
 msgstr "${item_type} erfolgreich angelegt."
 
-#: ringo/views/request.py:135
+#: ringo/views/request.py:151
 msgid "Edited ${item_type} \"${item}\" successfully."
 msgstr "${item_type} \"${item}\" wurde erfolgreich bearbeitet."
 
-#: ringo/views/request.py:146
+#: ringo/views/request.py:162
 msgid "Error while saving new ${item_type}: ${error}."
 msgstr "Fehler beim Anlegen von ${item_type}: ${error}."
 
-#: ringo/views/request.py:149
+#: ringo/views/request.py:165
 msgid "Error while saving ${item_type} \"${item}\": ${error}."
 msgstr "Fehler beim Bearbeiten von ${item_type} \"${item}\": ${error}."
 
-#: ringo/views/request.py:157
+#: ringo/views/request.py:173
 msgid "Error on validation new ${item_type}."
 msgstr "Fehler beim Validieren von ${item_type}."
 
-#: ringo/views/request.py:160
+#: ringo/views/request.py:176
 msgid "Error on validation ${item_type} \"${item}\"."
 msgstr "Fehler beim Validieren von ${item_type} \"${item}\"."
 
-#: ringo/views/users.py:86 ringo/views/users.py:111
+#: ringo/views/users.py:103 ringo/views/users.py:128
 msgid "This name is already in use, please use something unique."
 msgstr ""
 "Dieser Name wird bereits benutzt, bitte nehmen Sie einen eindeutigen "
 "Namen."
 
-#: ringo/views/users.py:91 ringo/views/users.py:116 ringo/views/users.py:166
+#: ringo/views/users.py:108 ringo/views/users.py:133 ringo/views/users.py:183
 msgid "Password must be at least 12 characters long."
 msgstr "Passwort muss mindestens 12 Zeichen lang sein."
 
-#: ringo/views/users.py:95 ringo/views/users.py:120 ringo/views/users.py:170
+#: ringo/views/users.py:112 ringo/views/users.py:137 ringo/views/users.py:187
 msgid "Password must contain at least 2 non-letters."
 msgstr "Passwort muss mindestens 2 Nicht-Buchstaben enthalten."
 
-#: ringo/views/users.py:163
+#: ringo/views/users.py:180
 msgid "The given password is not correct"
 msgstr "Das angegebene Passwort ist nicht korrekt"
 
-#: ringo/views/users.py:182
+#: ringo/views/users.py:199
 msgid "Changed password for \"${item}\" successfull."
 msgstr "Password für \"${item}\" erfolgreich geändert."
 
-#: ringo/views/users.py:192
+#: ringo/views/users.py:209
 msgid "Error on changing the password for \"${item}\"."
 msgstr "Fehler bei der Änderung des Passworts für \"${item}\"."
 
@@ -1431,13 +1437,4 @@ msgstr "Gruppen"
 #: ringo/views/tables/users.json:8
 msgid "Last login"
 msgstr "Letze Anmeldung"
-
-#~ msgid "Password has wrong format."
-#~ msgstr "Passwort hat falsches Format."
-
-#~ msgid "Search for in ..."
-#~ msgstr "Suche nach in ..."
-
-#~ msgid "Deleted ${num} ${item_type} successfull."
-#~ msgstr "${item_type} wurde erfolgreich gelöscht."
 

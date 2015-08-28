@@ -36,6 +36,14 @@ def get_auth_timeout(settings):
     return int(settings.get("auth.timeout") or 1800)
 
 
+def get_auth_timeout_warning(settings):
+    """Will return the amount of seconds before a warning dialog will be
+    raised before the session will time out. This can be configured in
+    the application ini file. If no configuration is found. it defaults
+    to 30 seconds"""
+    return int(settings.get("auth.timeout_warning") or 30)
+
+
 def get_cookie_secret(settings):
     """Will return the configured string in the config to sign the
     cookies. If no string is configured. Generate a random string for
