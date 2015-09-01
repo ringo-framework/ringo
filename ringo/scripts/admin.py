@@ -201,6 +201,10 @@ def setup_db_parser(subparsers, parent):
     savedata_parser.add_argument('--include-relations',
                         action="store_true",
                         help="Include relations in the export")
+    savedata_parser.add_argument('--format',
+                        choices=["json", "csv"],
+                        default="json",
+                        help="Format of the saved data")
 
     # restrict command
     savedata_parser = sp.add_parser('restrict',

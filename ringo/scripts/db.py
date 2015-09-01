@@ -14,7 +14,7 @@ from pyramid.paster import (
 )
 from ringo.lib.sql import DBSession
 from ringo.lib.helpers import get_app_location, dynamic_import
-from ringo.lib.imexport import JSONExporter, JSONImporter
+from ringo.lib.imexport import JSONExporter, JSONImporter, CSVExporter
 from ringo.model.modul import ModulItem
 
 log = logging.getLogger(__name__)
@@ -161,8 +161,12 @@ def handle_db_savedata_command(args):
     session = get_session(os.path.join(*path))
     modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == args.modul).all()[0].clazzpath
     modul = dynamic_import(modul_clazzpath)
-    exporter = JSONExporter(modul, serialized=False,
-                            relations=args.include_relations)
+    if args.format == "json":
+        exporter = JSONExporter(modul, serialized=False,
+                                relations=args.include_relations)
+    else:
+        exporter = CSVExporter(modul, serialized=False,
+                               relations=args.include_relations)
     print exporter.perform(session.query(modul)
                           .order_by(modul.id)
                           .all())
