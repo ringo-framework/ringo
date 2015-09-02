@@ -24,7 +24,10 @@ var spinner_timer = 800; //threshold in ms after spinner starts
 $( document ).ready(function() {
     $("#logoutWarningOK").click(hideLogoutWarning);
     $(':button').not('[data-toggle="dropdown"], [type="reset"], [target="_blank"]').click(function () {
-        startSpinner(spinner_timer);
+        var hide_spinner = $(this).hasClass("nospinner") == true;
+        if (hide_spinner == false) {
+            startSpinner(spinner_timer);
+        }
     });
     $('[data-toggle="tooltip"]').tooltip();
     $('.dialog').modal({
@@ -129,6 +132,7 @@ $( document ).ready(function() {
         var isDirty = false;
         var element = event.target;
         var url = $(element).attr("href");
+        var hide_spinner = $(element).hasClass("nospinner") == true;
         $('form').each(function () {
             if($(this).data('initialValue') != $(this).serialize()){
                 isDirty = true;
@@ -148,7 +152,7 @@ $( document ).ready(function() {
         }
         hash_i = url.indexOf("#");
         has_hash = (hash_i  == -1) == false;
-        if (((location.pathname != url) && url != "") && (has_hash == false)) {
+        if (((location.pathname != url) && url != "") && (has_hash == false) && (hide_spinner == false)) {
             startSpinner(spinner_timer);
         }
     });
