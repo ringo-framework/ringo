@@ -104,11 +104,15 @@ def _setup_web_action(config, action, clazz, view_mapping):
     if view_func:
         if action_name == "delete":
             template = "confirm"
+            renderer = '/default/%s.mako' % template
+        elif action_name == "download":
+            renderer = None
         else:
             template = action_name
+            renderer = '/default/%s.mako' % template
         config.add_view(view_func,
                         route_name=route_name,
-                        renderer='/default/%s.mako' % template,
+                        renderer=renderer,
                         permission=action.permission or action_name,
                         http_cache=int(http_cache))
     ## Add bundle action.
