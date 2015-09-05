@@ -1,5 +1,11 @@
 1.4
 ===
+- Dropped SQLite support because of missing support of data migrations using
+  alembic. Postgresql is the new default for the DMBS system.
+  Added psycopg2 as requirement. Actually Sqlite support was broken since
+  version 1.2.
+- Removed fixtures for initial data. Data is now added to the migration
+  scripts.
 - Added new "--format" flag for the "db savadata" command to determine the
   export format. Default is JSON.
 
