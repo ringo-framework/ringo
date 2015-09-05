@@ -15,12 +15,8 @@ import sqlalchemy as sa
 
 
 UPGRADE = """
-UPDATE users set default_gid = gid;
-UPDATE modules set default_gid = gid;
 """
 DOWNGRADE = """
-UPDATE users set gid = default_gid;
-UPDATE modules set gid = default_gid;
 """
 
 

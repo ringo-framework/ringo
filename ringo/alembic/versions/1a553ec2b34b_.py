@@ -13,14 +13,7 @@ down_revision = '3520cf26d8d8'
 from alembic import op
 import sqlalchemy as sa
 
-UPGRADE = """
-UPDATE roles set uid = 1;
-UPDATE roles set gid = 1;
-UPDATE usergroups set uid = 1;
-UPDATE usergroups set gid = 1;
-UPDATE users set uid = 1;
-UPDATE users set gid = 1;
-"""
+UPGRADE = """"""
 DOWNGRADE = """"""
 
 
