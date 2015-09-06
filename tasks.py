@@ -23,7 +23,5 @@ def docs(doctype="html", zip=False, show=False):
 
 @task
 def test():
-    run("rm -f test.sqlite")
     run("ringo-admin db init --config=test.ini")
-    run("ringo-admin fixtures load --config=test.ini")
     run("python setup.py test")

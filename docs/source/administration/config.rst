@@ -80,16 +80,15 @@ Autologout
 The authentication only stay valid for the given time. After that time a
 automatic logout from the application will happen.
 
-3 Minutes before the logout actually happens the application will raise a
-warning dialog.
-
-..note::
-        Because of the warning 3 minutes before the logout happens it does not
-        make much sense to set the value lower than 200 seconds. Otherwise
-        the warning will show up almost immeditately after the login.
 
 auth.timeout
         Defaults to 1800 seconds.
+
+auth.timeout_warning
+        Defaults to 30 seconds.
+
+The timeout_warning variable defines how many seconds before the actual logout a
+warning dialog will be raised.
 
 Passwort reminder and user registration
 ---------------------------------------

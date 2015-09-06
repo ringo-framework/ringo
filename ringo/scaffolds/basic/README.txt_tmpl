@@ -10,7 +10,5 @@ Getting Started
 
 - $venv/bin/{{package}}-admin db init
 
-- $venv/bin/{{package}}-admin fixtures load
-
 - $venv/bin/pserve development.ini
 

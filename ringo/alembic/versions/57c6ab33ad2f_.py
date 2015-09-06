@@ -15,13 +15,6 @@ import sqlalchemy as sa
 
 
 UPGRADE = """
-INSERT INTO "modules" VALUES('d1763c385bd64d7185ca7fba9b3de845',1,'modules','ringo.model.modul.ModulItem','Modul','Modules','','%s|name','admin-menu',NULL);
-INSERT INTO "modules" VALUES('fcb3f8f87cc340358e18c4017bf93f34',2,'actions','ringo.model.modul.ActionItem','Action','Actions','','%s (%s/%s)|name,modul,url','hidden',NULL);
-INSERT INTO "modules" VALUES('70f24f2a8b63420e9afde6af43be45d2',3,'users','ringo.model.user.User','User','Users','','%s|login','admin-menu',NULL);
-INSERT INTO "modules" VALUES('74af1cfbf3de4bceb5f2cb483381229e',4,'usergroups','ringo.model.user.Usergroup','Usergroup','Usergroups','','%s|name','admin-menu',NULL);
-INSERT INTO "modules" VALUES('c0138448b3964a5682411f57409e67f1',5,'roles','ringo.model.user.Role','Role','Roles','','%s|name','admin-menu',NULL);
-INSERT INTO "modules" VALUES('7d99e6702cdc4a9c928c1eaa470e11b6',6,'profiles','ringo.model.user.Profile','Profile','Profiles','','%s %s|first_name,last_name','admin-menu',NULL);
-INSERT INTO "modules" VALUES('f5108e1ce27b4f229655d0ad35e843cb',14,'forms','ringo.model.form.Form','Form','Forms','','%s|title','admin-menu',NULL);
 """
 DOWNGRADE = """"""
 

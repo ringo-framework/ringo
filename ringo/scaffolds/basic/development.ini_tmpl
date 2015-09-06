@@ -24,7 +24,7 @@ pyramid.includes =
 # '127.0.0.1' and '::1'.
 # debugtoolbar.hosts = 127.0.0.1 ::1
 
-sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
+sqlalchemy.url = postgresql://@/{{package}}
 
 # mako template settings
 mako.directories =

@@ -80,7 +80,24 @@ def password_minlength_validator(field, data):
 @view_config(route_name=get_action_routename(User, 'create'),
              renderer='/default/create.mako',
              permission='create')
-def create_(request):
+def create_(request, callback=None):
+    """View to create new users. This view also take a optional callback
+    parameter which can be used to inject additional callbacks in case
+    this view is owerwritten in another application.
+
+    :request: Current request
+    :callback: Optional paramter for callback(s)
+    """
+
+    callbacks = []
+    callbacks.append(user_create_callback)
+    if callback:
+        if isinstance(callback, list):
+            callbacks.extend(callback)
+        else:
+            callbacks.append(callback)
+
+
     _ = request.translate
     uniqueness_validator = Validator('login',
                                      _('This name is already in use, '
@@ -95,7 +112,7 @@ def create_(request):
                                      _('Password must contain at least 2 '
                                        'non-letters.'),
                                      password_nonletter_validator)
-    return create(request, user_create_callback,
+    return create(request, callbacks,
                   validators=[uniqueness_validator,
                               pw_len_validator,
                               pw_nonchar_validator])

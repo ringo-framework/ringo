@@ -143,7 +143,6 @@ class BaseItem(object):
 
     uuid = Column('uuid', CHAR(32),
                   unique=True,
-                  nullable=False,
                   default=lambda x: '%.32x' % uuid.uuid4())
 
     def render(self):
@@ -194,11 +193,11 @@ class BaseItem(object):
             return "%s" % str(self.id or self.__class__)
 
     @classmethod
-    def get_item_factory(cls):
+    def get_item_factory(cls, request=None):
         """Will return the :class:`.BaseFactory` for this class. Use
         this function to create and return specific factories for the
         class."""
-        return BaseFactory(cls)
+        return BaseFactory(cls, request)
 
     @classmethod
     def _get_permissions(cls, modul, item, request):
@@ -724,13 +723,14 @@ class BaseFactory(object):
     can be initiated by calling the :func:`.BaseItem.get_item_factory`
     class method."""
 
-    def __init__(self, clazz):
+    def __init__(self, clazz, request=None):
         """Inits the factory.
 
         :clazz: The clazz of which new items will be created
 
         """
         self._clazz = clazz
+        self._request = request
 
     def create(self, user, values):
         """Will create a new instance of clazz. The instance is it is

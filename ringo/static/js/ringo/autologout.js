@@ -3,11 +3,12 @@
 var logout_warning = false;
 var logout_warning_timer = null;
 
-var LogoutTimer = function (time, url) {
+var LogoutTimer = function (time, url, warning) {
     // The logout timer will call the logout url after the given amount of
-    // seconds. 10 seconds before the logout will happen, a warning will be
-    // show the the autologout will happen soon.
-    this.time = time;
+    // seconds. A warning dialog for the upcomming logout will be shown a
+    // configured time before the actual logout (warning_offset)
+    this.warning_offset = warning;
+    this.time = time-this.warning_offset;
     this.url = url;
     this.timer1 = null;
     this.timer2 = null;
@@ -31,17 +32,18 @@ function showLogoutWarning() {
             function() {
                 callLogoutPage(logout_warning_timer.url)
             },
-            30000);
+            logout_warning_timer.warning_offset*1000);
 }
 
 function callLogoutPage(url) {
     logout_warning = false;
+    logout_warning_timer = null;
     location.href=url;
 }
 
-function logoutCountdown(time, url) {
+function logoutCountdown(time, url, warning) {
     logout_warning = false;
-    logout_warning_timer = new LogoutTimer(time, url);
+    logout_warning_timer = new LogoutTimer(time, url, warning);
     logout_warning_timer.start();
 }
 
@@ -50,7 +52,8 @@ function hideLogoutWarning(event) {
   // also reset the client side counter as it is a AJAX request which gets
   // listened to.
   event.preventDefault();
-  $.get(this.attributes["href"]);
+  var keep_alive_url = this.attributes["href"].value;
+  $.get(keep_alive_url);
   $("#logoutWarning").modal("hide");
   logout_warning = false;
   return false;

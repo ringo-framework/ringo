@@ -3,6 +3,32 @@ Next version
 Removed:
 - Behaviour driven testcases using behave.
 
+1.4
+===
+- Dropped SQLite support because of missing support of data migrations using
+  alembic. Postgresql is the new default for the DMBS system.
+  Added psycopg2 as requirement. Actually Sqlite support was broken since
+  version 1.2.
+- Removed fixtures for initial data. Data is now added to the migration
+  scripts.
+- Added new "--format" flag for the "db savadata" command to determine the
+  export format. Default is JSON.
+
+1.3
+===
+- Added new configuration varibale (auth.timeout_warning) to configure how
+  many secods before the autologout happens a warning will be shown.
+
+1.2.2
+=====
+- BaseFactory now take an optional argument for a request.
+- The callback parameter in the views can now take a list of callbacks too.
+  The handle_callback method is able to handle this correct. Please note that
+  this mechanism needs some effort of the developer to build this list in the
+  view function.
+- Add additional callback parameter to the create view of users. This allows
+  other views to overwrite the user create view and add custom callbacks.
+
 1.2.1
 =====
 - Fixed circular dependency error on migration using alembic after adding
