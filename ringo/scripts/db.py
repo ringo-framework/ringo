@@ -150,6 +150,12 @@ def handle_db_init_command(args):
 def handle_db_upgrade_command(args):
     cfg = get_alembic_config(args)
     command.upgrade(cfg, "head")
+    handle_db_fixsequence_command(args)
+
+def handle_db_downgrade_command(args):
+    cfg = get_alembic_config(args)
+    command.downgrade(cfg, "-1")
+    handle_db_fixsequence_command(args)
 
 def handle_db_revision_command(args):
     path = create_new_revision(args)

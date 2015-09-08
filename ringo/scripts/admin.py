@@ -28,6 +28,7 @@ from ringo.scripts.db import (
     handle_db_init_command,
     handle_db_revision_command,
     handle_db_upgrade_command,
+    handle_db_downgrade_command,
     handle_db_savedata_command,
     handle_db_loaddata_command,
     handle_db_uuid_command,
@@ -183,6 +184,12 @@ def setup_db_parser(subparsers, parent):
                                 help='Upgrades a database',
                                 parents=[parent])
     upgrade_parser.set_defaults(func=handle_db_upgrade_command)
+
+    # Downgrade command
+    downgrade_parser = sp.add_parser('downgrade',
+                                help='Downgrades a database',
+                                parents=[parent])
+    downgrade_parser.set_defaults(func=handle_db_downgrade_command)
 
     # Revision command
     revision_parser = sp.add_parser('revision',
