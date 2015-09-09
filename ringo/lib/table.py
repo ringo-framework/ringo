@@ -115,6 +115,7 @@ class TableConfig:
     * *pagination*: If True pagination of the results will be enabled.
       The table will have gui element to configure pagination of the
       table. Defaults to false.
+    * *sortable*: If True, the table is sortable by dragging the rows.
     """
 
     def __init__(self, clazz, name):
@@ -141,6 +142,10 @@ class TableConfig:
     def is_autoresponsive(self):
         settings = self.get_settings()
         return settings.get("auto-responsive", True)
+
+    def is_sortable(self):
+        settings = self.get_settings()
+        return settings.get("sortable", False)
 
     def is_paginated(self):
         settings = self.get_settings()

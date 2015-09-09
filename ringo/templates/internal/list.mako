@@ -31,7 +31,11 @@ def render_responsive_class(visibleonsize):
   else:
     return ""
 
+css = []
 autoresponsive = tableconfig.is_autoresponsive()
+sortable = tableconfig.is_autoresponsive()
+if sortable:
+  css.append("sortable")
 %>
 <div class="search-widget">
   <div class="row">
@@ -118,7 +122,7 @@ autoresponsive = tableconfig.is_autoresponsive()
   </div>
 </div>
 <form id="data-table" name="data-table" role="form" action="${request.route_path(h.get_action_routename(clazz, 'bundle'))}" method="POST">
-<table id="data" class="table table-striped table-hover table-condensed">
+  <table id="data" class="table table-striped table-hover table-condensed ${' '.join(css)}">
   <tr>
   % if bundled_actions:
     <th width="2em">
@@ -172,7 +176,7 @@ autoresponsive = tableconfig.is_autoresponsive()
     elif s.has_permission("read", item, request):
       permission = "read"
     %>
-    <tr>
+    <tr item-id="${item.id}">
     % if bundled_actions:
     <td>
       <input type="checkbox" name="id" value="${item.id}">
