@@ -144,6 +144,35 @@ def _get_fixture_file(path, pattern):
             if fnmatch.fnmatch(name, pattern):
                 return os.path.join(root, name)
 
+def replace_sql_in_revision(path, package, name, session):
+    content = None
+    sql = []
+    modul_fixture = get_modul_fixture(name, package, session)
+    modul_sql = ("INSERT INTO modules (id, name, description, label, ",
+                 "label_plural, clazzpath, display, str_repr, uuid) ",
+                 "VALUES ({id}, '{name}', '', '{label}', '{label_plural}', ",
+                 "'{clazzpath}', '{display}', '{str_repr}', '{uuid}');")
+    sql.append("".join(modul_sql).format(**modul_fixture))
+    modul_id = modul_fixture["id"]
+    actions_sql = []
+    for fixture in get_action_fixtures(session, modul_id, ignore=[]):
+        action_sql = ("INSERT INTO actions (id, mid, uuid, name, url, ",
+                      "icon, bundle, description, display, permission) ",
+                      "VALUES ({id}, {mid}, '{uuid}', '{name}', ",
+                      "'{url}', '{icon}', '{bundle}', '', '', '');")
+        actions_sql.append("".join(action_sql).format(**fixture))
+    sql.append("\n".join(actions_sql))
+    with open(path, "r") as rf:
+        print 'Adding data to revision "%s"... ' % path,
+        content = rf.read()
+        content = content.replace('INSERTS = """"""',
+                                  'INSERTS = """\n%s\n"""' % "\n".join(sql))
+
+    with open(path, "r+") as rf:
+        rf.seek(0)
+        rf.write(content)
+
+    print 'Ok'
 
 def add_fixtures(package, name, session):
     """Will add the fixtures for the new modul to the fixture files.
@@ -354,7 +383,9 @@ def handle_modul_add_command(args):
     add_table_file(package, name)
     msg = "Added %s modul" % name
     path = create_new_revision(args, msg)
-    add_fixtures(package, name, session)
+    replace_sql_in_revision(path, package, name, session)
+    print ""
     print "Ready. Next steps:"
+    print ""
+    print "touch %s" % path
     print "%s-admin db upgrade" % args.app
-    print "%s-admin fixtures load" % args.app

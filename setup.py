@@ -27,7 +27,8 @@ requires = [
     'python-dateutil',
     'fuzzy',
     'python-Levenshtein',
-    'webhelpers'
+    'webhelpers',
+    'psycopg2'
 ]
 
 tests_requires = [

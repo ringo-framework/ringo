@@ -29,9 +29,9 @@ def test(exclude="None"):
     if exclude:
         exclude = exclude.split(",")
     if "init" not in exclude:
-        run("rm -f test.sqlite")
+        run("dropdb ringo-test")
+        run("createdb ringo-test")
         run("ringo-admin db init --config=test.ini")
-        run("ringo-admin fixtures load --config=test.ini")
     if "unit" not in exclude:
         run("python setup.py nosetests")
     if "behave" not in exclude:
