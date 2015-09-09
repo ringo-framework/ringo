@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-08-21 11:28+0200\n"
+"POT-Creation-Date: 2015-09-09 21:12+0200\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language-Team: German "
@@ -501,7 +501,7 @@ msgid "You have selected %s %s for export:"
 msgstr "Sie haben %s %s für den Export selektiert:"
 
 #: ringo/templates/internal/export.mako:17
-#: ringo/templates/internal/list.mako:308
+#: ringo/templates/internal/list.mako:312
 #: ringo/templates/internal/print.mako:11
 msgid "Close"
 msgstr "Schließen"
@@ -544,76 +544,76 @@ msgstr "Fehler"
 msgid "Overview"
 msgstr "Übersicht"
 
-#: ringo/templates/internal/list.mako:43 ringo/templates/internal/list.mako:66
+#: ringo/templates/internal/list.mako:47 ringo/templates/internal/list.mako:70
 msgid "Search"
 msgstr "Suche"
 
-#: ringo/templates/internal/list.mako:44
+#: ringo/templates/internal/list.mako:48
 msgid "Search for ..."
 msgstr "Suche nach ..."
 
-#: ringo/templates/internal/list.mako:50
+#: ringo/templates/internal/list.mako:54
 msgid "Fields"
 msgstr "Felder"
 
-#: ringo/templates/internal/list.mako:52
+#: ringo/templates/internal/list.mako:56
 msgid "All columns"
 msgstr "Allen Spalten"
 
-#: ringo/templates/internal/list.mako:64
+#: ringo/templates/internal/list.mako:68
 msgid "Search+"
 msgstr "Suche+"
 
-#: ringo/templates/internal/list.mako:70
+#: ringo/templates/internal/list.mako:74
 msgid "Options "
 msgstr "Optionen "
 
-#: ringo/templates/internal/list.mako:88 ringo/templates/internal/list.mako:299
+#: ringo/templates/internal/list.mako:92 ringo/templates/internal/list.mako:303
 msgid "Save current search filter"
 msgstr "Speichere aktuellen Suchfilter"
 
-#: ringo/templates/internal/list.mako:89
+#: ringo/templates/internal/list.mako:93
 msgid "Reset current search filter"
 msgstr "Aktuellen Suchfilter zurücksetzen"
 
-#: ringo/templates/internal/list.mako:91
+#: ringo/templates/internal/list.mako:95
 msgid "Disable regexpr in search"
 msgstr "Deaktiviere Regexpr in der Suche"
 
-#: ringo/templates/internal/list.mako:93
+#: ringo/templates/internal/list.mako:97
 msgid "Enable regexpr in search"
 msgstr "Aktiviere Regexpr in der Suche"
 
-#: ringo/templates/internal/list.mako:98
+#: ringo/templates/internal/list.mako:102
 msgid "${num_filter} filter applied"
 msgstr "${num_filters} Filter angewendet"
 
-#: ringo/templates/internal/list.mako:105
+#: ringo/templates/internal/list.mako:109
 msgid "Show"
 msgstr "Zeige"
 
-#: ringo/templates/internal/list.mako:114
+#: ringo/templates/internal/list.mako:118
 msgid "items"
 msgstr "Einträge"
 
-#: ringo/templates/internal/list.mako:210
+#: ringo/templates/internal/list.mako:214
 #, python-format
 msgid "Open item in %s mode"
 msgstr "Öffne Eintrag im %s Modus"
 
-#: ringo/templates/internal/list.mako:236
+#: ringo/templates/internal/list.mako:240
 msgid "No items found"
 msgstr "Keine Einträge gefunden"
 
-#: ringo/templates/internal/list.mako:255
+#: ringo/templates/internal/list.mako:259
 msgid "Perform"
 msgstr "Ausführen"
 
-#: ringo/templates/internal/list.mako:301
+#: ringo/templates/internal/list.mako:305
 msgid "Queryname"
 msgstr "Abfragename"
 
-#: ringo/templates/internal/list.mako:304
+#: ringo/templates/internal/list.mako:308
 msgid ""
 "Please insert a name for your query. It it will be selectable under this "
 "name in the options menu of the search after saving."
@@ -621,7 +621,7 @@ msgstr ""
 "Bitte geben Sie einen Namen für ihre Abfrage an. Die Abfrage wird nach "
 "dem Speichern unter diesem Namen im Optionsmenü auswählbar sein."
 
-#: ringo/templates/internal/list.mako:307
+#: ringo/templates/internal/list.mako:311
 msgid "Save Query"
 msgstr "Abfrage speichern"
 
