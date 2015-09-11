@@ -69,6 +69,7 @@ INSERT INTO nm_action_roles (aid, rid) VALUES (21, 1);
 INSERT INTO user_settings (id, settings) VALUES (1, '{}');
 INSERT INTO users (id, login, password, activated, activation_token, sid, last_login, default_gid, gid, uid) VALUES (1, 'admin', '5ebe2294ecd0e0f08eab7690d2a6ee69', true, '', 1, '2015-09-05 18:43:06.178858', NULL, NULL, NULL);
 INSERT INTO profiles (id, first_name, last_name, gender, birthday, address, phone, email, web, uid, gid) VALUES (1, '', '', NULL, NULL, '', '', '', '', 1, NULL);
+INSERT INTO nm_user_roles (uid, rid) VALUES (1, 2);
 UPDATE roles SET uid = 1;
 UPDATE roles SET gid = 1;
 UPDATE usergroups SET uid = 1;
