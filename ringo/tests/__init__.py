@@ -34,14 +34,14 @@ class BaseTestCase(unittest.TestCase):
         cls.Session = sessionmaker()
 
     def setUp(self):
-        connection = self.engine.connect()
+        self.connection = self.engine.connect()
 
         # begin a non-ORM transaction
-        self.trans = connection.begin()
+        self.trans = self.connection.begin()
 
         # bind an individual Session to the connection
-        DBSession.configure(bind=connection)
-        self.session = self.Session(bind=connection)
+        DBSession.configure(bind=self.connection)
+        self.session = self.Session(bind=self.connection)
 
     def tearDown(self):
         # rollback - everything that happened with the
@@ -49,6 +49,7 @@ class BaseTestCase(unittest.TestCase):
         # is rolled back.
         self.trans.rollback()
         self.session.close()
+        self.connection.invalidate()
         testing.tearDown()
 
 
