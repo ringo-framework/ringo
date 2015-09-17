@@ -9,6 +9,7 @@
 - Added new "--format" flag for the "db savadata" command to determine the
   export format. Default is JSON.
 - Added "downgrade" command to the "ringo-admin db" command.
+- Fixed affix of sidebar in forms.
 
 1.3
 ===

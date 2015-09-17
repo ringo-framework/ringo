@@ -12,13 +12,13 @@
     <!-- Bootstrap -->
     <link href="${request.static_path('ringo:static/bootstrap/css/bootstrap.min.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/bootstrap/css/bootstrap-theme.min.css')}" rel="stylesheet" media="screen">
+    % for filename in formbar_css_filenames: 
+      <link href="${request.static_path('formbar:static/%s' % filename)}" rel="stylesheet" media="screen">
+    % endfor
     <link href="${request.static_path('ringo:static/css/layout.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/css/widgets.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/css/style.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/font-awesome/css/font-awesome.min.css')}" rel="stylesheet">
-    % for filename in formbar_css_filenames: 
-      <link href="${request.static_path('formbar:static/%s' % filename)}" rel="stylesheet" media="screen">
-    % endfor
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>

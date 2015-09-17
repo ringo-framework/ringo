@@ -91,13 +91,15 @@ $( document ).ready(function() {
     $('.dataTables_length select').addClass("form-control");
     // Make the formbar navigation sticky when the user scrolls down.
     var width = $( document ).width();
-    if ( width > 768 ) {
-        $('.formbar-outline').affix({
-           offset: {
-           //top: $('header').height()
-           top: 140 }
-        });
-    }
+    if( width > 992) {
+      $('.formbar-outline').affix({
+        offset: {top: 208 }
+      });
+    } else if (width > 768 ){
+      $('.formbar-outline').affix({
+        offset: {top: 236 }
+      });
+    } else {} 
     // Enable tooltips on the text elements in datatables 
     //$('#data-table td a').tooltip(
     //   {
