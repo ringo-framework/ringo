@@ -154,9 +154,9 @@ class TableConfig:
         settings = self.get_settings()
         return settings.get("pagination", False)
 
-    def is_dtlistrenderer(self):
+    def is_dtlistrenderer(self, default=True):
         settings = self.get_settings()
-        return settings.get("dtlistrenderer", False)
+        return settings.get("dtlistrenderer", default)
 
     def get_columns(self):
         """Return a list of configured columns within the configuration.

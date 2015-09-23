@@ -34,6 +34,31 @@ When trying to load form or table configuration ringo will iterate over
 the inheritance path and try to load the configuration from each
 application within the inheritance path.
 
+Layout
+======
+
+Default Overview complexity
+---------------------------
+
+.. versionchanged:: 1.5
+   Prior version 1.5 the default overview was always the more complex
+   overview.
+
+You can define which complexity the the overview pages in
+ringo will have on default. There are two complexities available:
+
+1. A simple Overview. This overview provides a simple
+   search widget which may be enough for the most use cases.
+2. A advanced more complex overview. This overview provides a stackable
+   search, regular expressions and a feature to save a search.
+
+* layout.advanced_overviews = Default is false, which means without
+  further configuration the simple overviews are used.
+
+The complexity can be configured per overview table using the
+``table.json`` configuration which is available for all tables in the
+system.
+
 Sessions
 ========
 

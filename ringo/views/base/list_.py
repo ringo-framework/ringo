@@ -279,11 +279,13 @@ def bundle_(request):
     return handler(request, items, None)
 
 
-def get_list_renderer(listing):
+def get_list_renderer(listing, request):
     """Returns the renderer for an listing.
     Allow to use DTListRenderer if the renderer configuration is set."""
     tableconfig = get_table_config(listing.clazz)
-    if tableconfig.is_dtlistrenderer():
+    settings = request.registry.settings
+    default = settings.get("layout.advanced_overviews") != "true"
+    if tableconfig.is_dtlistrenderer(default):
         return DTListRenderer(listing)
     else:
         return ListRenderer(listing)
@@ -348,7 +350,7 @@ def list_(request):
                 request.db.flush()
         request.session.save()
 
-    renderer = get_list_renderer(listing)
+    renderer = get_list_renderer(listing, request)
     rendered_page = renderer.render(request)
     rvalue['clazz'] = clazz
     rvalue['listing'] = rendered_page

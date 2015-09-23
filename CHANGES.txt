@@ -1,3 +1,12 @@
+1.5
+===
+- Changed default rendering of overview pages. Instead of using a
+  complex overview with advanced search filters e.g Ringo now uses a
+  simplified overview on default. The behaviour can be chnaged be either
+  setting a global `layout.advanced_oveview` configuration varible in
+  the ini file or per table configuration in the json config of the
+  table.
+
 1.4
 ===
 - Dropped SQLite support because of missing support of data migrations using
