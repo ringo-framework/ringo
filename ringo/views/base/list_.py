@@ -283,12 +283,10 @@ def get_list_renderer(listing):
     """Returns the renderer for an listing.
     Allow to use DTListRenderer if the renderer configuration is set."""
     tableconfig = get_table_config(listing.clazz)
-    renderer = None
     if tableconfig.is_dtlistrenderer():
-        renderer = DTListRenderer(listing)
+        return DTListRenderer(listing)
     else:
-        renderer = ListRenderer(listing)
-    return renderer
+        return ListRenderer(listing)
 
 
 def list_(request):
