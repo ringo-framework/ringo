@@ -58,7 +58,8 @@ $( document ).ready(function() {
            /* Disable initial sort */
            "aaSorting": [],
            "bInfo": true,
-           "bAutoWidth": true
+           "bAutoWidth": true,
+           "fnInitComplete":addCSSToDatatable
      });
     $('.datatable-simple').dataTable( {
            "oLanguage": {
@@ -71,7 +72,8 @@ $( document ).ready(function() {
            /* Disable initial sort */
            "aaSorting": [],
            "bInfo": false,
-           "bAutoWidth": false
+           "bAutoWidth": false,
+           "fnInitComplete":addCSSToDatatable
     });
     $('.datatable-blank').dataTable({
           "oLanguage": {
@@ -84,11 +86,9 @@ $( document ).ready(function() {
           /* Disable initial sort */
           "aaSorting": [],
           "bInfo": false,
-          "bAutoWidth": false
+          "bAutoWidth": false,
+          "fnInitComplete":addCSSToDatatable
     });
-    // Add form-controll class to search fields, needed for BS3
-    $('.dataTables_filter input').addClass("form-control");
-    $('.dataTables_length select').addClass("form-control");
     // Make the formbar navigation sticky when the user scrolls down.
     var width = $( document ).width();
     if( width > 992) {
@@ -166,6 +166,12 @@ $( document ).ready(function() {
             return false;
     });
 });
+
+function addCSSToDatatable() {
+    // Add form-controll class to search fields, needed for BS3
+    $('.dataTables_filter input').addClass("form-control");
+    $('.dataTables_length select').addClass("form-control");
+}
 
 $( window ).unload(function() {
     stopSpinner();
