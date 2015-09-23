@@ -70,9 +70,10 @@ class TableConfig:
                     }
                 ]
                 "settings": {
-                    "default-sort-field": "name"
-                    "default-sort-order": "desc"
-                    "auto-responsive": true
+                    "default-sort-field": "name",
+                    "default-sort-order": "desc",
+                    "auto-responsive": true,
+                    "dtlistrenderer": false
                 }
             }
         }
@@ -116,6 +117,8 @@ class TableConfig:
       The table will have gui element to configure pagination of the
       table. Defaults to false.
     * *sortable*: If True, the table is sortable by dragging the rows.
+    * *dtlistrenderer*: If True, the DTListRenderer is used to render the 
+      table. Defaults to false.
     """
 
     def __init__(self, clazz, name):
@@ -150,6 +153,10 @@ class TableConfig:
     def is_paginated(self):
         settings = self.get_settings()
         return settings.get("pagination", False)
+
+    def is_dtlistrenderer(self):
+        settings = self.get_settings()
+        return settings.get("dtlistrenderer", False)
 
     def get_columns(self):
         """Return a list of configured columns within the configuration.

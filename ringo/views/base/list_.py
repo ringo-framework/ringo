@@ -7,7 +7,8 @@ from ringo.lib.helpers.misc import get_item_modul
 from ringo.lib.helpers import literal
 from ringo.lib.security import has_permission
 from ringo.lib.renderer import (
-    ListRenderer
+    ListRenderer,
+    DTListRenderer
 )
 from ringo.lib.renderer.dialogs import (
     WarningDialogRenderer
@@ -278,6 +279,18 @@ def bundle_(request):
     return handler(request, items, None)
 
 
+def get_list_renderer(listing):
+    """Returns the renderer for an listing.
+    Allow to use DTListRenderer if the renderer configuration is set."""
+    tableconfig = get_table_config(listing.clazz)
+    renderer = None
+    if tableconfig.is_dtlistrenderer():
+        renderer = DTListRenderer(listing)
+    else:
+        renderer = ListRenderer(listing)
+    return renderer
+
+
 def list_(request):
     clazz = request.context.__model__
     # Important! Prevent any write access on the database for this
@@ -337,7 +350,7 @@ def list_(request):
                 request.db.flush()
         request.session.save()
 
-    renderer = ListRenderer(listing)
+    renderer = get_list_renderer(listing)
     rendered_page = renderer.render(request)
     rvalue['clazz'] = clazz
     rvalue['listing'] = rendered_page
