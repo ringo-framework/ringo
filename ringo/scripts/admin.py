@@ -28,6 +28,7 @@ from ringo.scripts.db import (
     handle_db_init_command,
     handle_db_revision_command,
     handle_db_upgrade_command,
+    handle_db_downgrade_command,
     handle_db_savedata_command,
     handle_db_loaddata_command,
     handle_db_uuid_command,
@@ -184,6 +185,12 @@ def setup_db_parser(subparsers, parent):
                                 parents=[parent])
     upgrade_parser.set_defaults(func=handle_db_upgrade_command)
 
+    # Downgrade command
+    downgrade_parser = sp.add_parser('downgrade',
+                                help='Downgrades a database',
+                                parents=[parent])
+    downgrade_parser.set_defaults(func=handle_db_downgrade_command)
+
     # Revision command
     revision_parser = sp.add_parser('revision',
                                 help='Creates a new alembic revision command',
@@ -201,6 +208,10 @@ def setup_db_parser(subparsers, parent):
     savedata_parser.add_argument('--include-relations',
                         action="store_true",
                         help="Include relations in the export")
+    savedata_parser.add_argument('--format',
+                        choices=["json", "csv"],
+                        default="json",
+                        help="Format of the saved data")
 
     # restrict command
     savedata_parser = sp.add_parser('restrict',

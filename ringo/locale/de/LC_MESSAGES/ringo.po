@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-08-21 11:28+0200\n"
+"POT-Creation-Date: 2015-09-09 21:12+0200\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language-Team: German "
@@ -501,7 +501,7 @@ msgid "You have selected %s %s for export:"
 msgstr "Sie haben %s %s für den Export selektiert:"
 
 #: ringo/templates/internal/export.mako:17
-#: ringo/templates/internal/list.mako:308
+#: ringo/templates/internal/list.mako:312
 #: ringo/templates/internal/print.mako:11
 msgid "Close"
 msgstr "Schließen"
@@ -544,76 +544,76 @@ msgstr "Fehler"
 msgid "Overview"
 msgstr "Übersicht"
 
-#: ringo/templates/internal/list.mako:43 ringo/templates/internal/list.mako:66
+#: ringo/templates/internal/list.mako:47 ringo/templates/internal/list.mako:70
 msgid "Search"
 msgstr "Suche"
 
-#: ringo/templates/internal/list.mako:44
+#: ringo/templates/internal/list.mako:48
 msgid "Search for ..."
 msgstr "Suche nach ..."
 
-#: ringo/templates/internal/list.mako:50
+#: ringo/templates/internal/list.mako:54
 msgid "Fields"
 msgstr "Felder"
 
-#: ringo/templates/internal/list.mako:52
+#: ringo/templates/internal/list.mako:56
 msgid "All columns"
 msgstr "Allen Spalten"
 
-#: ringo/templates/internal/list.mako:64
+#: ringo/templates/internal/list.mako:68
 msgid "Search+"
 msgstr "Suche+"
 
-#: ringo/templates/internal/list.mako:70
+#: ringo/templates/internal/list.mako:74
 msgid "Options "
 msgstr "Optionen "
 
-#: ringo/templates/internal/list.mako:88 ringo/templates/internal/list.mako:299
+#: ringo/templates/internal/list.mako:92 ringo/templates/internal/list.mako:303
 msgid "Save current search filter"
 msgstr "Speichere aktuellen Suchfilter"
 
-#: ringo/templates/internal/list.mako:89
+#: ringo/templates/internal/list.mako:93
 msgid "Reset current search filter"
 msgstr "Aktuellen Suchfilter zurücksetzen"
 
-#: ringo/templates/internal/list.mako:91
+#: ringo/templates/internal/list.mako:95
 msgid "Disable regexpr in search"
 msgstr "Deaktiviere Regexpr in der Suche"
 
-#: ringo/templates/internal/list.mako:93
+#: ringo/templates/internal/list.mako:97
 msgid "Enable regexpr in search"
 msgstr "Aktiviere Regexpr in der Suche"
 
-#: ringo/templates/internal/list.mako:98
+#: ringo/templates/internal/list.mako:102
 msgid "${num_filter} filter applied"
 msgstr "${num_filters} Filter angewendet"
 
-#: ringo/templates/internal/list.mako:105
+#: ringo/templates/internal/list.mako:109
 msgid "Show"
 msgstr "Zeige"
 
-#: ringo/templates/internal/list.mako:114
+#: ringo/templates/internal/list.mako:118
 msgid "items"
 msgstr "Einträge"
 
-#: ringo/templates/internal/list.mako:210
+#: ringo/templates/internal/list.mako:214
 #, python-format
 msgid "Open item in %s mode"
 msgstr "Öffne Eintrag im %s Modus"
 
-#: ringo/templates/internal/list.mako:236
+#: ringo/templates/internal/list.mako:240
 msgid "No items found"
 msgstr "Keine Einträge gefunden"
 
-#: ringo/templates/internal/list.mako:255
+#: ringo/templates/internal/list.mako:259
 msgid "Perform"
 msgstr "Ausführen"
 
-#: ringo/templates/internal/list.mako:301
+#: ringo/templates/internal/list.mako:305
 msgid "Queryname"
 msgstr "Abfragename"
 
-#: ringo/templates/internal/list.mako:304
+#: ringo/templates/internal/list.mako:308
 msgid ""
 "Please insert a name for your query. It it will be selectable under this "
 "name in the options menu of the search after saving."
@@ -621,7 +621,7 @@ msgstr ""
 "Bitte geben Sie einen Namen für ihre Abfrage an. Die Abfrage wird nach "
 "dem Speichern unter diesem Namen im Optionsmenü auswählbar sein."
 
-#: ringo/templates/internal/list.mako:307
+#: ringo/templates/internal/list.mako:311
 msgid "Save Query"
 msgstr "Abfrage speichern"
 
@@ -928,104 +928,6 @@ msgstr ""
 "die die Aktion '${action}' angewendet werden kann. (${num} Einträge "
 "wurden ausgefiltert.)"
 
-#. Label for start field in form config
-#. Label for start column in overview table config
-#. Label for start column in fieldlist table config
-#: ringo/views/forms/appointments.xml:1 ringo/views/tables/appointments.json:3
-#: ringo/views/tables/appointments.json:8
-msgid "Begin"
-msgstr "Beginn"
-
-#. Label for end field in form config
-#. Label for end column in overview table config
-#. Label for end column in fieldlist table config
-#: ringo/views/forms/appointments.xml:2 ringo/views/tables/appointments.json:4
-#: ringo/views/tables/appointments.json:9
-msgid "End"
-msgstr "Ende"
-
-#. Label for day field in form config
-#: ringo/views/forms/appointments.xml:3
-msgid "Whole day"
-msgstr "Ganztag"
-
-#. Label for reminder field in form config
-#. Label for reminder column in overview table config
-#: ringo/views/forms/appointments.xml:4 ringo/views/tables/appointments.json:5
-msgid "Reminder"
-msgstr "Erinnerung"
-
-#. Label for email field in form config
-#: ringo/views/forms/appointments.xml:5
-msgid "Send a reminder email"
-msgstr "Sende Erinnerungsmail"
-
-#. Label for title field in form config
-#. Label for title column in overview table config
-#. Label for title column in fieldlist table config
-#: ringo/views/forms/appointments.xml:6 ringo/views/forms/forms.xml:1
-#: ringo/views/tables/appointments.json:2
-#: ringo/views/tables/appointments.json:7 ringo/views/tables/forms.json:2
-msgid "Title"
-msgstr "Titel"
-
-#. Label for description field in form config
-#. Label for description column in overview table config
-#: ringo/views/forms/appointments.xml:7 ringo/views/forms/forms.xml:2
-#: ringo/views/forms/modules.xml:4 ringo/views/forms/roles.xml:5
-#: ringo/views/forms/usergroups.xml:3 ringo/views/tables/forms.json:3
-msgid "Description"
-msgstr "Beschreibung"
-
-#: ringo/views/forms/appointments.xml:8 ringo/views/forms/appointments.xml:10
-#: ringo/views/forms/appointments.xml:21
-msgid "no"
-msgstr "Ja"
-
-#: ringo/views/forms/appointments.xml:9 ringo/views/forms/appointments.xml:22
-msgid "yes"
-msgstr "Nein"
-
-#: ringo/views/forms/appointments.xml:11
-msgid "5 Minutes"
-msgstr "5 Minuten"
-
-#: ringo/views/forms/appointments.xml:12
-msgid "15 Minutes"
-msgstr "15 Minuten"
-
-#: ringo/views/forms/appointments.xml:13
-msgid "30 Minutes"
-msgstr "30 Minuten"
-
-#: ringo/views/forms/appointments.xml:14
-msgid "1 Hour"
-msgstr "1 Stunde"
-
-#: ringo/views/forms/appointments.xml:15
-msgid "2 Hours"
-msgstr "2 Stunden"
-
-#: ringo/views/forms/appointments.xml:16
-msgid "6 Hours"
-msgstr "6 Stunden"
-
-#: ringo/views/forms/appointments.xml:17
-msgid "12 Hours"
-msgstr "12 Stunden"
-
-#: ringo/views/forms/appointments.xml:18
-msgid "1 Day"
-msgstr "1 Tag"
-
-#: ringo/views/forms/appointments.xml:19
-msgid "2 Days"
-msgstr "2 Tage"
-
-#: ringo/views/forms/appointments.xml:20
-msgid "1 Week"
-msgstr "1 Woche"
-
 #. Label for pass2 field in form config
 #: ringo/views/forms/auth.xml:3
 msgid "Retype password"
@@ -1072,6 +974,20 @@ msgstr "JSON"
 #: ringo/views/forms/export.xml:3 ringo/views/forms/import.xml:4
 msgid "CSV"
 msgstr "CSV"
+
+#. Label for title field in form config
+#. Label for title column in overview table config
+#: ringo/views/forms/forms.xml:1 ringo/views/tables/forms.json:2
+msgid "Title"
+msgstr "Titel"
+
+#. Label for description field in form config
+#. Label for description column in overview table config
+#: ringo/views/forms/forms.xml:2 ringo/views/forms/modules.xml:4
+#: ringo/views/forms/roles.xml:5 ringo/views/forms/usergroups.xml:3
+#: ringo/views/tables/forms.json:3
+msgid "Description"
+msgstr "Beschreibung"
 
 #. Label for category field in form config
 #: ringo/views/forms/forms.xml:3

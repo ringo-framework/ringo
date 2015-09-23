@@ -11,15 +11,22 @@ If you use this command in your application named `foo` then you need
 to change to command into `foo-admin` instead of `ringo-admin`::
 
         ringo-admin modul add name
+        touch /path/to/revision/file
         ringo-admin db upgrade
 
-..note::
+
+.. attention::
+       The generated migration script may miss Foreign-Key constraints in your 
+       model because of a currently unknown behaviour of the underlying alembic 
+       (I suppose it caused by alembic). So you should want to call 
+       ``foo-admin db revision`` again after to applied the first generated 
+       migration to see if there are any missing constraints left. 
+       If not than you can delete the generated migration file.
+       
+.. note::
         Please use the singular form of a modulname. Ringos convention here is
         to add a "s" to the modul name in some places. This may results in
-        ugly modulnames anyway so to not make things even worser. 
-
-The output of the command "ringo-admin modul add name" will print code for
-your fixtures. You need to insert this code manually into your fixtures.
+        ugly modulnames anyway so to not make things even worser.
 
 The the help page of the command for more informations.
 

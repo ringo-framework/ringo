@@ -24,7 +24,10 @@ var spinner_timer = 800; //threshold in ms after spinner starts
 $( document ).ready(function() {
     $("#logoutWarningOK").click(hideLogoutWarning);
     $(':button').not('[data-toggle="dropdown"], [type="reset"], [target="_blank"]').click(function () {
-        startSpinner(spinner_timer);
+        var hide_spinner = $(this).hasClass("nospinner") == true;
+        if (hide_spinner == false) {
+            startSpinner(spinner_timer);
+        }
     });
     $('[data-toggle="tooltip"]').tooltip();
     $('.dialog').modal({
@@ -88,13 +91,15 @@ $( document ).ready(function() {
     $('.dataTables_length select').addClass("form-control");
     // Make the formbar navigation sticky when the user scrolls down.
     var width = $( document ).width();
-    if ( width > 768 ) {
-        $('.formbar-outline').affix({
-           offset: {
-           //top: $('header').height()
-           top: 140 }
-        });
-    }
+    if( width > 992) {
+      $('.formbar-outline').affix({
+        offset: {top: 208 }
+      });
+    } else if (width > 768 ){
+      $('.formbar-outline').affix({
+        offset: {top: 236 }
+      });
+    } else {} 
     // Enable tooltips on the text elements in datatables 
     //$('#data-table td a').tooltip(
     //   {
@@ -129,6 +134,7 @@ $( document ).ready(function() {
         var isDirty = false;
         var element = event.target;
         var url = $(element).attr("href");
+        var hide_spinner = $(element).hasClass("nospinner") == true;
         $('form').each(function () {
             if($(this).data('initialValue') != $(this).serialize()){
                 isDirty = true;
@@ -148,7 +154,7 @@ $( document ).ready(function() {
         }
         hash_i = url.indexOf("#");
         has_hash = (hash_i  == -1) == false;
-        if (((location.pathname != url) && url != "") && (has_hash == false)) {
+        if (((location.pathname != url) && url != "") && (has_hash == false) && (hide_spinner == false)) {
             startSpinner(spinner_timer);
         }
     });
