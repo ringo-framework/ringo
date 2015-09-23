@@ -284,11 +284,11 @@ def get_list_renderer(listing, request):
     Allow to use DTListRenderer if the renderer configuration is set."""
     tableconfig = get_table_config(listing.clazz)
     settings = request.registry.settings
-    default = settings.get("layout.advanced_overviews") != "true"
-    if tableconfig.is_dtlistrenderer(default):
-        return DTListRenderer(listing)
-    else:
+    default = settings.get("layout.advanced_overviews") == "true"
+    if tableconfig.is_advancedsearch(default):
         return ListRenderer(listing)
+    else:
+        return DTListRenderer(listing)
 
 
 def list_(request):
