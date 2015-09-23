@@ -94,6 +94,10 @@ table.content-shorten td {
 }
 
 #pagination-size-selector {
+    margin-right: 20px;
+}
+
+#pagination-size-selector select {
   width: auto;
   display: inline;
 }

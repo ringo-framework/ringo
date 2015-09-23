@@ -16,21 +16,7 @@
       % endif
     </div>
     %if tableconfig.is_paginated(): 
-    <div class="col-xs-3">
-      <div class="pull-right">
-        ${_('Show')}
-        <select id="pagination-size-selector" class="form-control input-small" url="${request.current_route_path().split('?')[0]}">
-          <option value="25" ${listing.pagination_size == 25 and 'selected'}>25</option>
-          <option value="50" ${listing.pagination_size == 50 and 'selected'}>50</option>
-          <option value="100" ${listing.pagination_size == 100 and 'selected'}>100</option>
-          <option value="250" ${listing.pagination_size == 250 and 'selected'}>250</option>
-          <option value="500" ${listing.pagination_size == 500 and 'selected'}>500</option>
-          <option value="" ${listing.pagination_size == None and 'selected'}>All</option>
-        </select>
-        ${_('items')}
-      </div>
-    </div>
-    <div class="col-xs-3">
+    <div class="col-xs-6">
       <div class="pull-right text-right">
         <div>
           <nav>
@@ -57,6 +43,18 @@
             </ul>
           </nav>
         </div>
+      </div>
+      <div id="pagination-size-selector" class="pull-right">
+        ${_('Show')}
+        <select class="form-control input-small" url="${request.current_route_path().split('?')[0]}">
+          <option value="25" ${listing.pagination_size == 25 and 'selected'}>25</option>
+          <option value="50" ${listing.pagination_size == 50 and 'selected'}>50</option>
+          <option value="100" ${listing.pagination_size == 100 and 'selected'}>100</option>
+          <option value="250" ${listing.pagination_size == 250 and 'selected'}>250</option>
+          <option value="500" ${listing.pagination_size == 500 and 'selected'}>500</option>
+          <option value="" ${listing.pagination_size == None and 'selected'}>All</option>
+        </select>
+        ${_('items')}
       </div>
     </div>
     % endif
