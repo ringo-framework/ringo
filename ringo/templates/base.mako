@@ -8,6 +8,7 @@
     <meta content="" name="author">
     <meta content="${client_language}" name="client_language">
     <meta content="${application_path}" name="application_path">
+    <meta content="${h.get_app_mode(request)[0]}" name="application_mode">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="${request.static_path('ringo:static/bootstrap/css/bootstrap.min.css')}" rel="stylesheet" media="screen">
