@@ -1,8 +1,17 @@
 *************************
 Application Configuration
 *************************
+The application can be configured by setting values in the
+``ini`` file. Ringo provides some helper methods to give directly access to
+some of the configuration options.
+
 Application
 ===========
+Helper methods giving access to the configuration options are available in the `appinfo` module.
+
+.. automodule:: ringo.lib.helpers.appinfo
+   :members: get_app_mode, get_app_title, get_app_inheritance_path
+
 
 Title
 -----
@@ -10,6 +19,8 @@ The name of the application used at various places in the application
 can be configured with the following varible.
 
 * app.title = Application name 
+
+The title is available using the :func:`get_app_title` function.
 
 .. _config_app_base:
 
@@ -24,6 +35,9 @@ case your application package is called "foo").
 If your application is based on another ringo based application you can
 configure the name of the application here. Setting this configuration
 will modify the inheritance path of the application.
+
+The inhertance_path is available using the :func:`get_app_inheritance_path`
+function.
 
 Example:
 The current application package is named "foo". "foo" is based on "bar". And
