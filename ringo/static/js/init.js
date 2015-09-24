@@ -59,7 +59,7 @@ $( document ).ready(function() {
            "aaSorting": [],
            "bInfo": true,
            "bAutoWidth": true,
-           "fnInitComplete":addCSSToDatatable
+           "fnInitComplete":onDTTableRendered
      });
     $('.datatable-simple').dataTable( {
            "oLanguage": {
@@ -73,7 +73,7 @@ $( document ).ready(function() {
            "aaSorting": [],
            "bInfo": false,
            "bAutoWidth": false,
-           "fnInitComplete":addCSSToDatatable
+           "fnInitComplete":onDTTableRendered
     });
     $('.datatable-blank').dataTable({
           "oLanguage": {
@@ -87,7 +87,7 @@ $( document ).ready(function() {
           "aaSorting": [],
           "bInfo": false,
           "bAutoWidth": false,
-          "fnInitComplete":addCSSToDatatable
+          "fnInitComplete":onDTTableRendered
     });
     // Make the formbar navigation sticky when the user scrolls down.
     var width = $( document ).width();
@@ -167,10 +167,14 @@ $( document ).ready(function() {
     });
 });
 
-function addCSSToDatatable() {
+function onDTTableRendered() {
     // Add form-controll class to search fields, needed for BS3
     $('.dataTables_filter input').addClass("form-control");
     $('.dataTables_length select').addClass("form-control");
+    $('tbody').on("click", "tr", function(elem){
+        var link=$(elem.currentTarget).data("link");
+        if(link && elem.target.tagName!=="INPUT") location.href=link;
+    });
 }
 
 $( window ).unload(function() {

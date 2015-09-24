@@ -24,7 +24,7 @@ from ringo.lib.helpers import prettify
       elif s.has_permission("read", item, request):
         permission = "read"
       %>
-    <tr item-id="${item.id}">
+    <tr item-id="${item.id}" data-link="${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}">
       % if bundled_actions:
         <td>
           <input type="checkbox" name="id" value="${item.id}">
@@ -32,7 +32,7 @@ from ringo.lib.helpers import prettify
       % endif
       % for field in tableconfig.get_columns():
         % if permission:
-          <td onclick="openItem('${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}')" class="link">
+          <td class="link">
         % else:
           <td>
         % endif
