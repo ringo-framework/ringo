@@ -34,6 +34,30 @@ When trying to load form or table configuration ringo will iterate over
 the inheritance path and try to load the configuration from each
 application within the inheritance path.
 
+Application Mode
+----------------
+The application can be configured to be in a special "mode". Where mode can be
+a demo, development, education or any other flavour of your application.
+Setting the mode will result in some visual indication which is is different
+to the normal application mode.
+
+* app.mode =
+
+Short description of the mode. If this value is set a application will have
+some visual indication.
+
+* app.mode_desc =
+
+A longer description of the mode.
+
+* app.mode_color = info
+
+The color of the mode indicator. Defaults to info. Colors are taken from
+`Twitter Bootstrap
+<http://http://getbootstrap.com/css/#helper-classes-colors>`_
+
+The mode is available using the :func:`get_app_mode` function.
+
 Sessions
 ========
 

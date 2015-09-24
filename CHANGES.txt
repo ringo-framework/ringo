@@ -1,3 +1,9 @@
+1.5
+===
+- Added new configuration variable 'app.mode' to be able to run the
+  application in a different mode. If set the application will give some
+  visual indication the the application is in a different mode.
+
 1.4
 ===
 - Dropped SQLite support because of missing support of data migrations using

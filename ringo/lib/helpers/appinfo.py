@@ -59,6 +59,25 @@ def get_app_url(request):
     return request.environ.get("SCRIPT_NAME", "")
 
 
+def get_app_mode(request):
+    """Will return a tuple of the mode configuration (if configured)
+
+    Tuple: (mode, desc, color)
+
+    If no mode is configured return None.
+
+    :request: Current request
+    :return: Tuple of mode configruation
+    """
+    settings = request.registry.settings
+    mode = settings.get("app.mode")
+    desc = settings.get("app.mode_desc")
+    color = settings.get("app.mode_color", "info")
+    if mode:
+        return (mode, desc, color)
+    return None
+
+
 def get_app_title():
     registry = get_current_registry()
     settings = registry.settings
