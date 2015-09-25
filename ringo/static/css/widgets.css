@@ -115,6 +115,7 @@ div.dataTables_length select {
 }
 
 .dataTables_filter input {
+    margin-left: 5px;
     margin-bottom: 0px;
     width: 200px;
     display: inline;
