@@ -101,7 +101,3 @@ nav ul.pagination {
 .affix{
   position:static;
 }
-
-.datatable-simple > tbody tr{
-    cursor:pointer
-}

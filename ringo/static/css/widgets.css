@@ -104,6 +104,10 @@ table.content-shorten td {
 
  /* Datatables
  **********************************************************************/
+.datatable-simple > tbody tr{
+    cursor:pointer
+}
+
 div.dataTables_length {
     float: right;
     padding: 10px;
