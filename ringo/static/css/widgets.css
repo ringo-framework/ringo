@@ -94,6 +94,10 @@ table.content-shorten td {
 }
 
 #pagination-size-selector {
+    margin-right: 20px;
+}
+
+#pagination-size-selector select {
   width: auto;
   display: inline;
 }
@@ -111,13 +115,15 @@ div.dataTables_length select {
 }
 
 .dataTables_filter input {
+    margin-left: 5px;
     margin-bottom: 0px;
     width: 200px;
     display: inline;
 }
 .dataTables_filter {
-    background-color: #F5F5F5;
-    border: 1px solid #E3E3E3;
+    background-color: #F7F7F7;
+    border: 1px dashed #E3E3E3;
+    border-color: #ddd;
     border-radius: 3px 3px 3px 3px;
     padding: 9px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;

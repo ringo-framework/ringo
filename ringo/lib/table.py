@@ -70,9 +70,10 @@ class TableConfig:
                     }
                 ]
                 "settings": {
-                    "default-sort-field": "name"
-                    "default-sort-order": "desc"
-                    "auto-responsive": true
+                    "default-sort-field": "name",
+                    "default-sort-order": "desc",
+                    "auto-responsive": true,
+                    "advancedsearch": true
                 }
             }
         }
@@ -116,6 +117,9 @@ class TableConfig:
       The table will have gui element to configure pagination of the
       table. Defaults to false.
     * *sortable*: If True, the table is sortable by dragging the rows.
+    * *advancedsearch*: If False, a more complex overview with stacked
+      search regex and save features is used. Otherwise a more simple
+      overview. Default to use the simple overview.
     """
 
     def __init__(self, clazz, name):
@@ -150,6 +154,10 @@ class TableConfig:
     def is_paginated(self):
         settings = self.get_settings()
         return settings.get("pagination", False)
+
+    def is_advancedsearch(self, default=False):
+        settings = self.get_settings()
+        return settings.get("advancedsearch", default)
 
     def get_columns(self):
         """Return a list of configured columns within the configuration.

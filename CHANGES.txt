@@ -3,6 +3,14 @@
 - Added new configuration variable 'app.mode' to be able to run the
   application in a different mode. If set the application will give some
   visual indication the the application is in a different mode.
+- Changed default rendering of overview pages. Instead of using a
+  complex overview with advanced search filters e.g Ringo now uses a
+  simplified overview on default. The behaviour can be chnaged be either
+  setting a global `layout.advanced_oveview` configuration varible in
+  the ini file or per table configuration in the json config of the
+  table. In the simplified overview features like pagination are currently disabled
+  regardless what is configured in the table configuration. This may change in
+  future versions.
 
 1.4
 ===
