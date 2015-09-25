@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-sm-8">
       <h1>
-        ${N_(h.get_item_modul(request, clazz).get_label(plural=True))} (${len(itemlist.items)})</h1>
+        ${N_(h.get_item_modul(request, clazz).get_label(plural=True))}</h1>
     </div>
     <div class="col-sm-4 visible-xs">
       <div class="context-menu">
