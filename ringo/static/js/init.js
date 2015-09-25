@@ -61,6 +61,7 @@ $( document ).ready(function() {
            "bAutoWidth": true,
            "fnInitComplete":onDTTableRendered
      });
+    // This overview is used for the simple overview page!
     $('.datatable-simple').dataTable( {
            "oLanguage": {
                 "sUrl": application_path + "/ringo-static/js/datatables/i18n/"+language+".json"
@@ -71,9 +72,10 @@ $( document ).ready(function() {
            "bSort": true,
            /* Disable initial sort */
            "aaSorting": [],
-           "bInfo": false,
+           "bInfo": true,
            "bAutoWidth": false,
-           "fnInitComplete":onDTTableRendered
+           "fnInitComplete":onDTTableRendered,
+           "dom": '<"search-widget"<"row"<"col-md-6"f><"col-md-6"<"pull-right"i>>>>'
     });
     $('.datatable-blank').dataTable({
           "oLanguage": {

@@ -124,23 +124,13 @@ div.dataTables_length select {
     width: 200px;
     display: inline;
 }
-.dataTables_filter {
-    background-color: #F7F7F7;
-    border: 1px dashed #E3E3E3;
-    border-color: #ddd;
-    border-radius: 3px 3px 3px 3px;
-    padding: 9px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
-    margin-bottom: 10px;
-    min-height: 20px;
-}
 
 div.dataTables_info {
     position: relative;
-    top: -10px;
+    top: 8px;
     font-size: 0.9em;
-    float: left;
 }
+
 div.dataTables_paginate {
     position: relative;
     top: -10px;
