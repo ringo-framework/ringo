@@ -1,4 +1,7 @@
-% if bundled_actions or tableconfig.is_paginated():
+## TODO: Fix pagination in case that the simple overview is configured. In
+## this case the pagination does not work correct and is disabled as
+## workaround. (ti) <2015-09-25 09:07> 
+% if bundled_actions or (tableconfig.is_paginated() and (tableconfig.is_advancedsearch(request.registry.settings.get("layout.advanced_overviews") == "true"))): 
 <div class="search-widget">
   <div class="row">
     <div class="col-xs-6">
@@ -15,7 +18,7 @@
       <input class="btn btn-default input-small" type="submit" value="${_('Perform')}"/>
       % endif
     </div>
-    %if tableconfig.is_paginated(): 
+    %if tableconfig.is_paginated() and (tableconfig.is_advancedsearch(request.registry.settings.get("layout.advanced_overviews") == "true")):
     <div class="col-xs-6">
       <div class="pull-right text-right">
         <div>

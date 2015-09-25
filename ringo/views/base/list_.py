@@ -51,7 +51,12 @@ def handle_paginating(clazz, request):
 
     name = clazz.__tablename__
     # Default pagination options
-    if get_table_config(clazz).is_paginated():
+    table_config = get_table_config(clazz)
+    settings = request.registry.settings
+    default = settings.get("layout.advanced_overviews") == "true"
+    # Only set paginated if the table is the advancedsearch as the
+    # simple search provides its own client sided pagination.
+    if table_config.is_paginated() and table_config.is_advancedsearch(default):
         default_page = 0 # First page
         default_size = 50
     else:
