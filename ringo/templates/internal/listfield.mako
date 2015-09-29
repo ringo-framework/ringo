@@ -13,6 +13,21 @@ for item in items:
   else:
     hidden_items.append(item)
 
+def render_item_row(request, clazz, permission, item, value, modal=False, backlink=True):
+  out = []
+  out.append('<tr')
+  out.append('item-id="%s"' % item[0].id)
+  # Only take the path of the url and ignore any previous search filters.
+  if permission:
+    url = request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)
+    if backlink:
+      url += "?backurl=%s" % request.current_route_path()
+    out.append('data-link="%s"' % url)
+    if modal:
+      out.append('class="modalform"')
+  out.append('/>')
+  return " ".join(out)
+
 def render_item_link(request, clazz, permission, item, value, modal=False, backlink=True):
   out = []
   css_class = ["link"]
@@ -76,7 +91,9 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
       elif not field.renderer.showall == "true":
         continue
       %>
-      <tr>
+      ${h.literal(render_item_row(request, clazz, permission, item, value,
+                  (field.renderer.openmodal == "true"),
+                  (field.renderer.backlink != "false")))}
       ## Readonly -> Do nothing
       % if not field.is_readonly():
         % if field.renderer.onlylinked != "true":
@@ -111,14 +128,8 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
           except AttributeError:
             value = "NaF"
         %>
-        <td class="${num > 0 and 'hidden-xs'}">
-        % if permission and not field.renderer.nolinks == "true":
-            ${h.literal(render_item_link(request, clazz, permission, item, value,
-                              (field.renderer.openmodal == "true"),
-                              (field.renderer.backlink != "false")))}
-        % else:
+        <td class="${num > 0 and 'hidden-xs'} ${permission and 'link'}">
           ${value}
-        % endif
         </td>
       % endfor
     </tr>

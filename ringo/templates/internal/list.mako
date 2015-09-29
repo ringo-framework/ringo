@@ -160,7 +160,7 @@ if sortable:
     elif s.has_permission("read", item, request):
       permission = "read"
     %>
-    <tr item-id="${item.id}">
+    <tr item-id="${item.id}" data-link="${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}">
     % if bundled_actions:
     <td>
       <input type="checkbox" name="id" value="${item.id}">
@@ -168,9 +168,9 @@ if sortable:
     % endif
     % for num, field in enumerate(tableconfig.get_columns()):
       % if autoresponsive:
-        <td class="${num > 0 and 'hidden-xs'}">
+        <td class="${num > 0 and 'hidden-xs'} ${permission and 'link'}">
       % else:
-        <td class="${render_responsive_class(field.get('screen'))}">
+        <td class="${render_responsive_class(field.get('screen'))} ${permission and 'link'}">
       % endif
         <%
             try:
@@ -195,8 +195,6 @@ if sortable:
             ${render_filter_link(request, field, value, clazz)}
           % endif
         % else:
-          <a class="link" title="${_('Open item in %s mode') % _(permission.capitalize())}"
-            href="${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}">
           % if isinstance(value, list):
             % for v in value:
               % if hasattr(v, 'render'):
@@ -208,7 +206,6 @@ if sortable:
           % else:
             ${_(value)}
           % endif
-          </a>
         % endif
     </td>
     % endfor
