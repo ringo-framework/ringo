@@ -167,16 +167,16 @@ $( document ).ready(function() {
             event.preventDefault();
             return false;
     });
+    $('tbody').on("click", "tr", function(elem){
+        var link=$(elem.currentTarget).data("link");
+        if(link && elem.target.tagName!=="INPUT") location.href=link;
+    });
 });
 
 function onDTTableRendered() {
     // Add form-controll class to search fields, needed for BS3
     $('.dataTables_filter input').addClass("form-control");
     $('.dataTables_length select').addClass("form-control");
-    $('tbody').on("click", "tr", function(elem){
-        var link=$(elem.currentTarget).data("link");
-        if(link && elem.target.tagName!=="INPUT") location.href=link;
-    });
 }
 
 $( window ).unload(function() {
