@@ -162,7 +162,7 @@
       elif action.name == "Delete":
         title = _('Delete item')
       else:
-        title = action.description
+        title = _(action.description)
       icon = get_icon(action)
       if action.display == "hide":
         continue
