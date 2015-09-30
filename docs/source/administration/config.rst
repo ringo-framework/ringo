@@ -64,11 +64,12 @@ some visual indication.
 
 A longer description of the mode.
 
-* app.mode_color = info
+* app.mode_color_primary = #F2DEDE
+* app.mode_color_secondary = red
 
-The color of the mode indicator. Defaults to info. Colors are taken from
-`Twitter Bootstrap
-<http://http://getbootstrap.com/css/#helper-classes-colors>`_
+The color of the mode indicator header and the border around the application.
+Defaults to #F2DEDE (light red) and red. Allowed values are any usable in CSS,
+such as hexadecimal or RGB values, named colors, etc.
 
 The mode is available using the :func:`get_app_mode` function.
 

@@ -75,9 +75,10 @@ def get_app_mode(request):
     settings = request.registry.settings
     mode = settings.get("app.mode")
     desc = settings.get("app.mode_desc")
-    color = settings.get("app.mode_color", "info")
+    color_primary = settings.get("app.mode_color_primary", "#F2DEDE")
+    color_secondary = settings.get("app.mode_color_secondary", "red")
     if mode:
-        return (mode, desc, color)
+        return (mode, desc, color_primary, color_secondary)
     return None
 
 
