@@ -164,7 +164,7 @@
       else:
         title = _(action.description)
       icon = get_icon(action)
-      if action.display == "hide":
+      if not action.is_visible("context"):
         continue
       elif action.name.lower() in ['import', 'export'] or action.display == "secondary":
         context_actions.append((action, icon))
