@@ -162,11 +162,11 @@
       elif action.name == "Delete":
         title = _('Delete item')
       else:
-        title = action.description
+        title = _(action.description)
       icon = get_icon(action)
-      if action.display == "hide":
+      if not action.is_visible("context"):
         continue
-      elif action.name.lower() in ['import', 'export'] or action.display == "secondary":
+      elif action.name.lower() in ['import', 'export'] or "secondary" in action.display.split(","):
         context_actions.append((action, icon))
         continue
       %>

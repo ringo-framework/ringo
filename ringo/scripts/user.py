@@ -16,7 +16,12 @@ def handle_user_passwd_command(args):
     path.append(get_app_location(args.app))
     path.append(args.config)
     session = get_session(os.path.join(*path))
-    user = session.query(User).filter(User.login == args.user).all()[0]
-    user.password = encrypted_password
-    transaction.commit()
-    print "OK! Password for '%s' changed to '%s'" % (args.user, password)
+    try:
+        user = session.query(User).filter(User.login == args.user).all()[0]
+    except:
+        print "User %s not found in system. You could only alter existing user's passwords" % args.user
+    else:
+        user.password = encrypted_password
+        print "OK! Password for '%s' changed to '%s'" % (args.user, password)
+    finally:
+        transaction.commit()

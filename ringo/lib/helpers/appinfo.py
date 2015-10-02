@@ -16,7 +16,10 @@ def get_app_inheritance_path():
     'ringo'].
 
     The default path is [<nameofcurrentapp>, "ringo"]. The path can be
-    extended by setting the app.base config variable."""
+    extended by setting the app.base config variable.
+
+    :returns: List of application name which build the inheritance path.
+    """
     path = ['ringo']
     registry = get_current_registry()
     settings = registry.settings
@@ -59,7 +62,30 @@ def get_app_url(request):
     return request.environ.get("SCRIPT_NAME", "")
 
 
+def get_app_mode(request):
+    """Will return a tuple of the mode configuration (if configured)
+
+    Tuple: (mode, desc, color)
+
+    If no mode is configured return None.
+
+    :request: Current request
+    :return: Tuple of mode configruation
+    """
+    settings = request.registry.settings
+    mode = settings.get("app.mode")
+    desc = settings.get("app.mode_desc").decode('utf-8')
+    color_primary = settings.get("app.mode_color_primary", "#F2DEDE")
+    color_secondary = settings.get("app.mode_color_secondary", "red")
+    if mode:
+        return (mode, desc, color_primary, color_secondary)
+    return None
+
+
 def get_app_title():
+    """Will return the title of the application
+
+    :return: The title of the application"""
     registry = get_current_registry()
     settings = registry.settings
     return settings['app.title']

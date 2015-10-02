@@ -58,8 +58,10 @@ $( document ).ready(function() {
            /* Disable initial sort */
            "aaSorting": [],
            "bInfo": true,
-           "bAutoWidth": true
+           "bAutoWidth": true,
+           "fnInitComplete":onDTTableRendered
      });
+    // This overview is used for the simple overview page!
     $('.datatable-simple').dataTable( {
            "oLanguage": {
                 "sUrl": application_path + "/ringo-static/js/datatables/i18n/"+language+".json"
@@ -70,8 +72,10 @@ $( document ).ready(function() {
            "bSort": true,
            /* Disable initial sort */
            "aaSorting": [],
-           "bInfo": false,
-           "bAutoWidth": false
+           "bInfo": true,
+           "bAutoWidth": false,
+           "fnInitComplete":onDTTableRendered,
+           "dom": '<"search-widget"<"row"<"col-md-6"f><"col-md-6"<"pull-right"i>>>>'
     });
     $('.datatable-blank').dataTable({
           "oLanguage": {
@@ -84,11 +88,9 @@ $( document ).ready(function() {
           /* Disable initial sort */
           "aaSorting": [],
           "bInfo": false,
-          "bAutoWidth": false
+          "bAutoWidth": false,
+          "fnInitComplete":onDTTableRendered
     });
-    // Add form-controll class to search fields, needed for BS3
-    $('.dataTables_filter input').addClass("form-control");
-    $('.dataTables_length select').addClass("form-control");
     // Make the formbar navigation sticky when the user scrolls down.
     var width = $( document ).width();
     if( width > 992) {
@@ -165,7 +167,17 @@ $( document ).ready(function() {
             event.preventDefault();
             return false;
     });
+    $('tbody').on("click", "tr", function(elem){
+        var link=$(elem.currentTarget).data("link");
+        if(link && elem.target.tagName!=="INPUT") location.href=link;
+    });
 });
+
+function onDTTableRendered() {
+    // Add form-controll class to search fields, needed for BS3
+    $('.dataTables_filter input').addClass("form-control");
+    $('.dataTables_length select').addClass("form-control");
+}
 
 $( window ).unload(function() {
     stopSpinner();

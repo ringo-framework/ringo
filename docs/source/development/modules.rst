@@ -2,6 +2,8 @@
 Modules
 *******
 
+.. _dev_modules:
+
 Create a new modul to your application
 ======================================
 If you want to add a new modul to your ringo based application or the the

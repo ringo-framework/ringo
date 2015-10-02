@@ -1,8 +1,17 @@
 *************************
 Application Configuration
 *************************
+The application can be configured by setting values in the
+``ini`` file. Ringo provides some helper methods to give directly access to
+some of the configuration options.
+
 Application
 ===========
+Helper methods giving access to the configuration options are available in the `appinfo` module.
+
+.. automodule:: ringo.lib.helpers.appinfo
+   :members: get_app_mode, get_app_title, get_app_inheritance_path
+
 
 Title
 -----
@@ -10,6 +19,8 @@ The name of the application used at various places in the application
 can be configured with the following varible.
 
 * app.title = Application name 
+
+The title is available using the :func:`get_app_title` function.
 
 .. _config_app_base:
 
@@ -25,6 +36,9 @@ If your application is based on another ringo based application you can
 configure the name of the application here. Setting this configuration
 will modify the inheritance path of the application.
 
+The inhertance_path is available using the :func:`get_app_inheritance_path`
+function.
+
 Example:
 The current application package is named "foo". "foo" is based on "bar". And
 "bar" is based on "ringo". The inheritance path is foo->bar->ringo.
@@ -33,6 +47,56 @@ This has consequences for the loading of form and table configurations.
 When trying to load form or table configuration ringo will iterate over
 the inheritance path and try to load the configuration from each
 application within the inheritance path.
+
+Application Mode
+----------------
+The application can be configured to be in a special "mode". Where mode can be
+a demo, development, education or any other flavour of your application.
+Setting the mode will result in some visual indication which is is different
+to the normal application mode.
+
+* app.mode =
+
+Short description of the mode. If this value is set a application will have
+some visual indication.
+
+* app.mode_desc =
+
+A longer description of the mode.
+
+* app.mode_color_primary = #F2DEDE
+* app.mode_color_secondary = red
+
+The color of the mode indicator header and the border around the application.
+Defaults to #F2DEDE (light red) and red. Allowed values are any usable in CSS,
+such as hexadecimal or RGB values, named colors, etc.
+
+The mode is available using the :func:`get_app_mode` function.
+
+Layout
+======
+
+Default Overview complexity
+---------------------------
+
+.. versionchanged:: 1.5
+   Prior version 1.5 the default overview was always the more complex
+   overview.
+
+You can define which complexity the the overview pages in
+ringo will have on default. There are two complexities available:
+
+1. A simple Overview. This overview provides a simple
+   search widget which may be enough for the most use cases.
+2. A advanced more complex overview. This overview provides a stackable
+   search, regular expressions, pagination and a feature to save a search.
+
+* layout.advanced_overviews = Default is false, which means without
+  further configuration the simple overviews are used.
+
+The complexity can be configured per overview table using the
+``table.json`` configuration which is available for all tables in the
+system.
 
 Sessions
 ========

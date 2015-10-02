@@ -1,7 +1,35 @@
+<%
+mode = h.get_app_mode(request) 
+%>
 <%namespace name="base" file="base.mako"/>
 <div id="status-messages">
   ${base.flash_messages()}
 </div>
+% if mode:
+  <div style="background-color: ${mode[2]};">
+    <div class="container">
+      <div id="mode" class="row">
+        <div class="col-md-2">
+          <center>
+            <strong>[${mode[0]}]</strong>
+          </center>
+        </div>
+        <div class="col-md-8">
+          <center>
+            % if mode[1]:
+              ${mode[1]}
+            % endif
+          </center>
+        </div>
+        <div class="col-md-2">
+          <center>
+            <strong>[${mode[0]}]</strong>
+          </center>
+        </div>
+      </div>
+    </div>
+  </div>
+% endif
 <%include file="logo.mako" />
 <div class="navbar navbar-default navbar-static-top">
   <div class="container">
