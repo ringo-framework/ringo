@@ -166,7 +166,7 @@
       icon = get_icon(action)
       if not action.is_visible("context"):
         continue
-      elif action.name.lower() in ['import', 'export'] or action.display == "secondary":
+      elif action.name.lower() in ['import', 'export'] or "secondary" in action.display.split(","):
         context_actions.append((action, icon))
         continue
       %>
