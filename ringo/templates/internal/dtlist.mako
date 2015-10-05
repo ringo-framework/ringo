@@ -53,17 +53,6 @@ from ringo.lib.helpers import prettify
     </tr>
     % endfor
 
-    % if len(items) == 0:
-    <tr>
-      % if bundled_actions:
-        <td colspan="${len(tableconfig.get_columns())+1}">
-      % else:
-        <td colspan="${len(tableconfig.get_columns())}">
-      % endif
-      ${_('No items found')}
-      </td>
-    </tr>
-  % endif
   </tbody>
 </table>
 
