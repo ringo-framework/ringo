@@ -1,3 +1,7 @@
+1.6
+===
+- Hide contact extension
+
 1.5
 ===
 - Added new configuration variable 'app.mode' to be able to run the
