@@ -1,21 +1,3 @@
-function addItem(url, foreignkey, form, id, clazz, backlink) {
-  //var activetab = $('.tab-pane.active');
-  startSpinner(200);
-  if (form == "None") {
-    if (backlink == 'False') {
-      location.href = url + '?addrelation=' + foreignkey + ':' + clazz + ':' + id;
-    } else {
-      location.href = url + '?addrelation=' + foreignkey + ':' + clazz + ':' + id + '&backurl=' + document.URL;
-    }
-  } else {
-    if (backlink == 'False') {
-      location.href = url + '?addrelation=' + foreignkey + ':' + clazz + ':' + id;
-    } else {
-      location.href = url + '?addrelation=' + foreignkey + ':' + clazz + ':' + id + '&form=' + form + '&backurl=' + document.URL;
-    }
-  }
-};
-
 function checkAll(checkId) {
   var inputs = document.getElementsByTagName("input");
   for (var i = 0; i < inputs.length; i++) {
