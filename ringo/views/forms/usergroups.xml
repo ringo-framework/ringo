@@ -17,10 +17,14 @@
   <form id="read" readonly="true">
     <snippet ref="create_snippet"/>
   </form>
+  <form id="membersonly">
+    <snippet ref="s2"/>
+  </form>
 
   <!-- Create-->
   <snippet id="create_snippet">
     <snippet ref="s1"/>
+    <snippet ref="s2"/>
   </snippet>
 
   <!-- Usergroup -->
@@ -31,6 +35,8 @@
     <row>
       <col><field ref="e4"/></col>
     </row>
+  </snippet>
+  <snippet id="s2">
     <row>
       <col><field ref="e2"/></col>
     </row>

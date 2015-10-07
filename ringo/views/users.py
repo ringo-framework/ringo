@@ -11,14 +11,17 @@ from ringo.views.helpers import get_item_from_request, get_current_form_page
 
 from ringo.views.request import (
     handle_history,
-    handle_params
+    handle_params,
+    handle_caching
 )
 
 from ringo.lib.form import get_form_config
 from ringo.lib.helpers import import_model, get_action_routename
 from ringo.lib.security import login, encrypt_password
 from ringo.lib.sql.cache import invalidate_cache
+
 User = import_model('ringo.model.user.User')
+Usergroup = import_model('ringo.model.user.Usergroup')
 
 log = logging.getLogger(__name__)
 
@@ -53,8 +56,8 @@ def check_password(field, data):
 ###########################################################################
 def user_name_create_validator(field, data, db):
     """Validator to ensure username uniqueness when creating users"""
-    return db.query(User)\
-        .filter(User.login == data[field]).count() == 0
+    return db.query(User) \
+               .filter(User.login == data[field]).count() == 0
 
 
 def user_name_update_validator(field, data, params):
@@ -62,9 +65,9 @@ def user_name_update_validator(field, data, params):
     db = params['db']
 
     # Only consider names for the other users
-    return db.query(User)\
-        .filter(User.login == data[field],
-                ~(User.id == params['pk'])).count() == 0
+    return db.query(User) \
+               .filter(User.login == data[field],
+                       ~(User.id == params['pk'])).count() == 0
 
 
 def password_nonletter_validator(field, data):
@@ -96,7 +99,6 @@ def create_(request, callback=None):
             callbacks.extend(callback)
         else:
             callbacks.append(callback)
-
 
     _ = request.translate
     uniqueness_validator = Validator('login',
@@ -140,6 +142,27 @@ def update_(request):
     return update(request, validators=[uniqueness_validator,
                                        pw_len_validator,
                                        pw_nonchar_validator])
+
+
+@view_config(route_name=get_action_routename(Usergroup, 'setstandin'),
+             renderer='/usergroups/setstandin.mako')
+def setstandin(request):
+    """Setting members in the default usergroup of the current user.
+    Technically this is adding a standin for this user."""
+
+    # For normal users users shall only be allowed to set the standin
+    # for their own usergroup. So check this and otherwise raise an exception.
+    usergroup = get_item_from_request(request)
+    if usergroup.id != request.user.default_gid:
+        raise HTTPForbidden()
+    clazz = Usergroup
+    request.session['%s.form' % clazz] = "membersonly"
+    request.session['%s.backurl' % clazz] = request.current_route_path()
+    request.session.save()
+    result = update(request)
+    # Reset form value in session
+    handle_caching(request)
+    return result
 
 
 @view_config(route_name=get_action_routename(User, 'changepassword'),
@@ -215,6 +238,7 @@ def changepassword(request):
     rvalue['item'] = item
     rvalue['form'] = form.render(page=get_current_form_page(clazz, request))
     return rvalue
+
 
 ###########################################################################
 #                               REST SERVICE                              #
