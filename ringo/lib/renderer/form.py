@@ -6,7 +6,8 @@ from mako.lookup import TemplateLookup
 from formbar.renderer import (
     FieldRenderer,
     DropdownFieldRenderer as FormbarDropdown,
-    SelectionFieldRenderer as FormbarSelectionField
+    SelectionFieldRenderer as FormbarSelectionField,
+    CheckboxFieldRenderer as FormbarCheckboxField
 )
 import ringo.lib.helpers as helpers
 from ringo.lib.helpers import get_action_routename, literal, escape, HTML
@@ -130,6 +131,18 @@ class LinkFieldRenderer(FieldRenderer):
 
     def _render_label(self):
         return ""
+
+
+class CheckboxFieldRenderer(FormbarCheckboxField):
+    """Ringo specific DropdownFieldRenderer. Will additionally check
+    permission to read on the items in the option list"""
+
+    def _get_template_values(self):
+        values = FormbarCheckboxField._get_template_values(self)
+        values['options'] = filter_options_on_permissions(
+            self._field._form._request,
+            values['options'])
+        return values
 
 
 class DropdownFieldRenderer(FormbarDropdown):
@@ -367,6 +380,7 @@ class ListingFieldRenderer(FormbarSelectionField):
 
 renderers = {
     "dropdown": DropdownFieldRenderer,
+    "checkbox": CheckboxFieldRenderer,
     "listing": ListingFieldRenderer,
     "state": StateFieldRenderer,
     "link": LinkFieldRenderer
