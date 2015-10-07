@@ -13,12 +13,12 @@ for item in items:
   else:
     hidden_items.append(item)
 
-def render_item_row(request, clazz, permission, item, value, modal=False, backlink=True):
+def render_item_row(request, clazz, permission, item, value, modal=False, backlink=True, nolinks=False):
   out = []
   out.append('<tr')
   out.append('item-id="%s"' % item[0].id)
   # Only take the path of the url and ignore any previous search filters.
-  if permission:
+  if permission and (not nolinks):
     try:
       url = request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)
       if backlink:
@@ -29,7 +29,7 @@ def render_item_row(request, clazz, permission, item, value, modal=False, backli
       pass
     if modal:
       out.append('class="modalform"')
-  out.append('/>')
+  out.append('>')
   return " ".join(out)
 
 def render_item_link(request, clazz, permission, item, value, modal=False, backlink=True):
@@ -111,7 +111,8 @@ def render_item_add_link(request, clazz, foreignkey, clazzpath, id, backlink, fo
       %>
       ${h.literal(render_item_row(request, clazz, permission, item, value,
                   (field.renderer.openmodal == "true"),
-                  (field.renderer.backlink != "false")))}
+                  (field.renderer.backlink != "false"),
+                  (field.renderer.nolinks == "true")))}
       ## Readonly -> Do nothing
       % if not field.is_readonly():
         % if field.renderer.onlylinked != "true":
@@ -146,7 +147,7 @@ def render_item_add_link(request, clazz, foreignkey, clazzpath, id, backlink, fo
           except AttributeError:
             value = "NaF"
         %>
-        <td class="${num > 0 and 'hidden-xs'} ${permission and 'link'}">
+        <td class="${num > 0 and 'hidden-xs'} ${(field.renderer.nolinks != "true") and permission and  'link'}">
           ${value}
         </td>
       % endfor
