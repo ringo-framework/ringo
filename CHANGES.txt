@@ -1,6 +1,9 @@
 1.6
 ===
-- Hide contact extension
+- Add functionallity for users so set their standin. Basically this is adding
+  and removing other users to the default group of the user. To use this
+  feature the user needs at least read access to the users he wants to set as
+  standin.
 
 1.5
 ===
