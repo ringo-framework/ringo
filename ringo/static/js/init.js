@@ -132,11 +132,8 @@ $( document ).ready(function() {
     $('form').each(function() {
         $(this).data('initialValue', $(this).serialize());
     });
-    $('a').not('[href^="mailto:"], [target="_blank"]').click(function(event) {
-        var isDirty = false;
-        var element = event.target;
-        var url = $(element).attr("href");
-        var hide_spinner = $(element).hasClass("nospinner") == true;
+    function openDirtyDialog(url, hide_spinner, event) {
+        isDirty = false;
         $('form').each(function () {
             if($(this).data('initialValue') != $(this).serialize()){
                 isDirty = true;
@@ -145,11 +142,11 @@ $( document ).ready(function() {
         if((isDirty == true) && (DirtyFormWarningOpen == false)) {
             var dialog = $("#DirtyFormWarning");
             $('#DirtyFormWarningProceedButton').attr("href", url);
-            // If the URL does not begin with "#" than show the dialog.
+            // If the URL does not begin with "#" then show the dialog.
             if (url && url.indexOf("#") != 0 && logout_warning == false) {
                 $(dialog).modal("show");
                 DirtyFormWarningOpen = true;
-                event.preventDefault();
+		event.preventDefault();
                 return false;
             }
             return true;
@@ -159,6 +156,20 @@ $( document ).ready(function() {
         if (((location.pathname != url) && url != "") && (has_hash == false) && (hide_spinner == false)) {
             startSpinner(spinner_timer);
         }
+    }
+    $('a').not('[href^="mailto:"], [target="_blank"]').click(function(event) {
+        var element = event.target;
+        var url = $(element).attr("href");
+        var hide_spinner = $(element).hasClass("nospinner") == true;
+        openDirtyDialog(url, hide_spinner, event);
+        
+    });
+    $('.link').not('a').click(function(event) {
+        var element = event.target;
+        var parentWithUrl = $(element).parents('[data-link]');
+        var url = parentWithUrl.data('link');
+        var hide_spinner = $(element).hasClass("nospinner") == true;
+        openDirtyDialog(url, hide_spinner, event);
     });
     $('#DirtyFormWarningCancelButton').click(function(event) {
             var dialog = $("#DirtyFormWarning");
@@ -169,7 +180,9 @@ $( document ).ready(function() {
     });
     $('tbody').on("click", "tr", function(elem){
         var link=$(elem.currentTarget).data("link");
-        if(link && elem.target.tagName!=="INPUT") location.href=link;
+        if(link && elem.target.tagName!=="INPUT" && isDirty == false) {
+           location.href=link;
+        }
     });
 });
 
