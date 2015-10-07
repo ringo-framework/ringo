@@ -6,9 +6,15 @@
             {"name": "login", "label": "Loginname", "width": "100"},
             {"name": "roles", "label": "Roles"},
             {"name": "groups", "label": "Groups"},
-            {"name": "activated", "label": "Activated", "width": "100",
-		      "expand": true},
+            {"name": "activated", "label": "Activated", "width": "100", "expand": true},
             {"name": "last_login", "label": "Last login", "width": "150"}
+        ]
+    },
+    "members": {
+        "columns": [
+            {"name": "profile[0].first_name", "label": "Firstname"},
+            {"name": "profile[0].last_name", "label": "Lastname"},
+            {"name": "login", "label": "Loginname"}
         ]
     }
 }

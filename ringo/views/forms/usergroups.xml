@@ -3,8 +3,8 @@
   <source>
     <!-- Define different entity types -->
     <entity id="e1" name="name" label="Name" type="string"/>
-    <entity id="e2" name="members" label="Members">
-      <renderer type="checkbox" align="vertical"/>
+    <entity id="e2" name="members" label="Users">
+      <renderer type="listing" table="members" align="vertical" filter="@name ne %login"/>
     </entity>
     <entity id="e4" name="description" label="Description" type="string">
       <renderer type="textarea"/>
