@@ -19,10 +19,14 @@ def render_item_row(request, clazz, permission, item, value, modal=False, backli
   out.append('item-id="%s"' % item[0].id)
   # Only take the path of the url and ignore any previous search filters.
   if permission:
-    url = request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)
-    if backlink:
-      url += "?backurl=%s" % request.current_route_path()
-    out.append('data-link="%s"' % url)
+    try:
+      url = request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)
+      if backlink:
+        url += "?backurl=%s" % request.current_route_path()
+      out.append('data-link="%s"' % url)
+    except:
+      # This can happen if no routes are defined for the item. e.g actions
+      pass
     if modal:
       out.append('class="modalform"')
   out.append('/>')
