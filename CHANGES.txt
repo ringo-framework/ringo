@@ -4,6 +4,9 @@
   and removing other users to the default group of the user. To use this
   feature the user needs at least read access to the users he wants to set as
   standin.
+- Changes favicon format to "ico" to be more compatible with versions of IE.
+  Improved overwriting of the favicon. The code for favicons are now placed in
+  favicons.mako which can be overwritten by other applications.
 
 1.5
 ===
