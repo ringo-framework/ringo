@@ -43,20 +43,6 @@
   text-decoration: none;
 }
 
-#sessiontimer {
-  width: 100px;
-  position: relative;
-  top: 10px;
-}
-
-#sessiontimer input {
-  background-color: white;
-}
-
-#sessiontimer div.input-group-addon {
-  cursor: pointer;
-}
-
 
 /* Status message
  * *************************************************************************/
