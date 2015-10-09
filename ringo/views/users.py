@@ -153,6 +153,7 @@ def setstandin(request, allowed_users=None):
     # For normal users users shall only be allowed to set the standin
     # for their own usergroup. So check this and otherwise raise an exception.
     usergroup = get_item_from_request(request)
+    user = request.db.query(User).filter(User.login == usergroup.name).one()
     if (usergroup.id != request.user.default_gid
        and not has_permission("update", usergroup, request)):
         raise HTTPForbidden()
@@ -166,6 +167,7 @@ def setstandin(request, allowed_users=None):
     result = update(request, values=values)
     # Reset form value in session
     handle_caching(request)
+    result['user'] = user
     return result
 
 
