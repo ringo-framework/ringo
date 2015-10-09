@@ -3,6 +3,32 @@
 var logout_warning = false;
 var logout_warning_timer = null;
 
+function getAuthTimeout() {
+    return $("meta[name='auth_timeout']").attr("content");
+}
+
+
+function getAuthLogutURL() {
+    return $("meta[name='auth_logout']").attr("content");
+}
+
+function initSessionTimer() {
+
+    // Get session time
+    var auth_timeout = getAuthTimeout();
+    var auth_logouturl = getAuthLogutURL();
+
+    // Get timer widget
+    var widget = $("#sessiontimer input");
+    widget.val(auth_timeout);
+
+    // Handle event when user click on the refresh button in the timer
+    $("#sessiontimer div.input-group-addon").click(function () {console.log("Refreshing timer")});
+
+    console.log("Initialising the Session timer with " + auth_timeout + " seconds");
+
+};
+
 var LogoutTimer = function (time, url, warning) {
     // The logout timer will call the logout url after the given amount of
     // seconds. A warning dialog for the upcomming logout will be shown a
