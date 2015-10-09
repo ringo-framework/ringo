@@ -47,11 +47,18 @@ def get_link_url(item, request, actionname=None):
             from ringo.views.helpers import get_item_modul
             modul = get_item_modul(request, item)
             action = modul.get_action(actionname)
-            permission = action.permission or action.name.lower()
-            if security.has_permission(permission, item, request):
-                route_name = get_action_routename(item, action.name.lower())
+            if action is None:
+                # This can happen if the action is not part of the modul
+                # but a custum userdefined view. No permission checks
+                # are done here yet.
+                route_name = get_action_routename(item, actionname)
             else:
-                return None
+                permission = action.permission or action.name.lower()
+                if security.has_permission(permission, item, request):
+                    route_name = get_action_routename(item,
+                                                      action.name.lower())
+                else:
+                    return None
         elif security.has_permission("update", item, request):
             route_name = get_action_routename(item, 'update')
         elif security.has_permission("read", item, request):
