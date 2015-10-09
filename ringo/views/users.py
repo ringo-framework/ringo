@@ -164,10 +164,14 @@ def setstandin(request, allowed_users=None):
     values = {}
     if allowed_users:
         values['_allowedusers'] = [u.login for u in allowed_users]
+
+    # Result may be a HTTPFOUND object.
     result = update(request, values=values)
+    if isinstance(result, dict):
+        result['user'] = user
+
     # Reset form value in session
     handle_caching(request)
-    result['user'] = user
     return result
 
 
