@@ -57,6 +57,12 @@ mode = h.get_app_mode(request)
         % endfor
       </ul>
       <ul class="nav navbar-nav navbar-right">
+        <li>
+        <div class="input-group" id="sessiontimer">
+          <input type="text" class="form-control input-sm" placeholder="00:00" disabled="disabled">
+          <div class="input-group-addon"><i class="glyphicon glyphicon-refresh"></i></div>
+          </div>
+        </li>
         <li class="divider-vertical"></li>
         % if request.user:
           <li class="dropdown">
