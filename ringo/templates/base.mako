@@ -69,9 +69,6 @@
   <script src="${request.static_path('ringo:static/js/ringo/autologout.js')}"></script>
   <script src="${request.static_path('ringo:static/js/init.js')}"></script>
   % if request.user:
-  <script>
-      logoutCountdown(${s.get_auth_timeout(request.registry.settings)}, '${request.route_path("autologout")}', ${s.get_auth_timeout_warning(request.registry.settings)});
-  </script>
   <div class="modal fade" id="logoutWarning">
     <div class="modal-dialog">
       <div class="panel panel-warning">
