@@ -77,7 +77,7 @@
           <p>${_('Your session will expire soon because of inactivity. Click on "Renew session" to continue work and renew your session. Otherwise you will be logged out automatically shortly and all unsaved data will get lost.')}</p>
         </div>
         <div class="panel-footer">
-          <a href="${request.route_path('keepalive')}" target="_blank" class="btn btn-default" id="logoutWarningOK">${_('Renew session')}</a>
+          <a href="#" class="btn btn-default" id="logoutWarningOK">${_('Renew session')}</a>
         </div>
       </div>
     </div>

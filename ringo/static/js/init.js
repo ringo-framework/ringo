@@ -22,7 +22,6 @@ var spinner = new Spinner(opts);
 var spinner_timer = 800; //threshold in ms after spinner starts
 
 $( document ).ready(function() {
-    $("#logoutWarningOK").click(hideLogoutWarning);
     $(':button').not('[data-toggle="dropdown"], [type="reset"], [target="_blank"]').click(function () {
         var hide_spinner = $(this).hasClass("nospinner") == true;
         if (hide_spinner == false) {
