@@ -1,94 +1,81 @@
-// This global variable will be used to indicate if the logout warning is show in
-// other scripts.
-var logout_warning = false;
-var logout_warning_timer = null;
-
-function getAuthTimeout() {
-    return $("meta[name='auth_timeout']").attr("content");
+function formatTime(time) {
+    time = time / 10;
+    var min = parseInt(time / 6000),
+        sec = parseInt(time / 100) - (min * 60),
+        hundredths = pad(time - (sec * 100) - (min * 6000), 2);
+    return (min > 0 ? pad(min, 2) : "00") + ":" + pad(sec, 2);
 }
 
-
-function getAuthLogutURL() {
-    return $("meta[name='auth_logout']").attr("content");
+function pad(number, length) {
+    var str = '' + number;
+    while (str.length < length) {str = '0' + str;}
+    return str;
 }
 
-function initSessionTimer() {
+var Countdown = new (function() {
 
+    var $countdown;
+    var incrementTime = 70;
     // Get session time
-    var auth_timeout = getAuthTimeout();
-    var auth_logouturl = getAuthLogutURL();
+    var auth_timeout = $("meta[name='auth_timeout']").attr("content") * 1000;
+    var auth_warning = $("meta[name='auth_warning']").attr("content") * 1000;
+    var keep_alive_url = $("meta[name='auth_keepalive']").attr("content");
+    var logout_url = $("meta[name='auth_logout']").attr("content");
+    var currentTime = auth_timeout;
 
-    // Get timer widget
-    var widget = $("#sessiontimer input");
-    widget.val(auth_timeout);
+    $(function() {
+        // Setup the timer
+        $countdown = $("#sessiontimer input");
+        $reset = $("#sessiontimer div.input-group-addon")
+        $reset.click(function () {
+            Countdown.resetCountdown();
+        });
+        $("#logoutWarningOK").click(function () {
+            Countdown.resetCountdown();
+        });
 
-    // Handle event when user click on the refresh button in the timer
-    $("#sessiontimer div.input-group-addon").click(function () {console.log("Refreshing timer")});
+        if ($("meta[name='auth_user']").attr("content") != 'None') {
+            Countdown.Timer = $.timer(updateTimer, incrementTime, true);
+            // Listener to AJAX Requests. On each AJAX Request we will reset
+            // the logout timer.
+            //$(document).ajaxComplete(function(event,request, settings){
+            //    Countdown.resetCountdown();
+            //});
+            console.log("Initialising the Session timer with " + currentTime + " seconds");
+        };
+    });
 
-    console.log("Initialising the Session timer with " + auth_timeout + " seconds");
+    function updateTimer() {
+        // Output timer position
+        var timeString = formatTime(currentTime);
+        $countdown.val(timeString);
 
-};
+        if (currentTime < auth_warning) {
+            console.log('Session is going to expire in ' + auth_timeout/1000 + ' seconds. Show warning.');
+            $("#logoutWarning").modal("show");
+        }
 
-var LogoutTimer = function (time, url, warning) {
-    // The logout timer will call the logout url after the given amount of
-    // seconds. A warning dialog for the upcomming logout will be shown a
-    // configured time before the actual logout (warning_offset)
-    this.warning_offset = warning;
-    this.time = time-this.warning_offset;
-    this.url = url;
-    this.timer1 = null;
-    this.timer2 = null;
-};
+        // If timer is complete, trigger alert
+        if (currentTime == 0) {
+            Countdown.Timer.stop();
+            console.log('Session expired. Logging out.');
+            location.href=logout_url;
+        }
 
-LogoutTimer.prototype.start = function() {
-    this.timer1 = setTimeout(showLogoutWarning, this.time*1000);
-}
-
-LogoutTimer.prototype.reset = function() {
-    clearTimeout(this.timer1);
-    clearTimeout(this.timer2);
-    this.start();
-};
-
-function showLogoutWarning() {
-    $("#logoutWarning").modal("show");
-    logout_warning = true;
-    // Automatically logout the user 30 seconds after the warning is shown.
-    logout_warning_timer.timer2 = setTimeout(
-            function() {
-                callLogoutPage(logout_warning_timer.url)
-            },
-            logout_warning_timer.warning_offset*1000);
-}
-
-function callLogoutPage(url) {
-    logout_warning = false;
-    logout_warning_timer = null;
-    location.href=url;
-}
-
-function logoutCountdown(time, url, warning) {
-    logout_warning = false;
-    logout_warning_timer = new LogoutTimer(time, url, warning);
-    logout_warning_timer.start();
-}
-
-function hideLogoutWarning(event) {
-  // Call the index page to reset the serverside logout counter. This will
-  // also reset the client side counter as it is a AJAX request which gets
-  // listened to.
-  event.preventDefault();
-  var keep_alive_url = this.attributes["href"].value;
-  $.get(keep_alive_url);
-  $("#logoutWarning").modal("hide");
-  logout_warning = false;
-  return false;
-}
-
-// Listener to AJAX Requests. On each AJAX Request we will reset the logout
-// timer.
-$(document).ajaxComplete(function(event,request, settings){
-    if (logout_warning_timer != null) {
-        logout_warning_timer.reset();
+        // Increment timer position
+        currentTime -= incrementTime;
+        if (currentTime < 0) currentTime = 0;
     }
+
+    this.resetCountdown = function() {
+        // Stop and reset timer
+        Countdown.Timer.stop().once();
+        currentTime = auth_timeout;
+        Countdown.Timer.play(true);
+
+        $.get(keep_alive_url);
+        $("#logoutWarning").modal("hide");
+        console.log("Refreshing timer");
+    };
+
 });
