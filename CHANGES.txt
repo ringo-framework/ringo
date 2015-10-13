@@ -7,6 +7,12 @@
 - Changes favicon format to "ico" to be more compatible with versions of IE.
   Improved overwriting of the favicon. The code for favicons are now placed in
   favicons.mako which can be overwritten by other applications.
+- Fixed handling of bundled delete requests. Two things has been changed: 
+    1. Call the callback before actually deleting it to allow some cleanup. 
+    2. Put the flush of the db operations at the end of the method to
+       avoid "Closed connection" errors which happens for bundled delete
+       request after the session has been flushed for the first item.
+
 
 1.5
 ===
