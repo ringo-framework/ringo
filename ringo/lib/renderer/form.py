@@ -35,7 +35,7 @@ def add_renderers(custom_renderers):
     return renderers
 
 
-def get_link_url(item, request, actionname=None):
+def get_link_url(item, request, actionname=None, backurl=False):
     """Return a url to the given item. On default the link will be a
     link to the update or read view of the item depending on the
     permission. If the user does not have enough permissions than None
@@ -47,18 +47,29 @@ def get_link_url(item, request, actionname=None):
             from ringo.views.helpers import get_item_modul
             modul = get_item_modul(request, item)
             action = modul.get_action(actionname)
-            permission = action.permission or action.name.lower()
-            if security.has_permission(permission, item, request):
-                route_name = get_action_routename(item, action.name.lower())
+            if action is None:
+                # This can happen if the action is not part of the modul
+                # but a custum userdefined view. No permission checks
+                # are done here yet.
+                route_name = get_action_routename(item, actionname)
             else:
-                return None
+                permission = action.permission or action.name.lower()
+                if security.has_permission(permission, item, request):
+                    route_name = get_action_routename(item,
+                                                      action.name.lower())
+                else:
+                    return None
         elif security.has_permission("update", item, request):
             route_name = get_action_routename(item, 'update')
         elif security.has_permission("read", item, request):
             route_name = get_action_routename(item, 'read')
         else:
             return None
-        return request.route_path(route_name, id=item.id)
+
+        query = {}
+        if backurl:
+            query['backurl'] = request.current_route_path()
+        return request.route_path(route_name, id=item.id, _query=query)
     return None
 
 
@@ -96,10 +107,11 @@ class LinkFieldRenderer(FieldRenderer):
     addition to the base Linkfield Renderer are supported:
 
     * openmodal: If true the item will be opened in a modal form.
-      Defaults to false.
+      Defaults to false. If true a backlink will be generated too.
     * action: Name of the action for which the link will be rendered.
       Defaults to None with means the link will be either to the read or
       update view.
+    * backlink: If set to true a backlink will be generated.
     """
     def __init__(self, field, translate):
         """@todo: to be defined"""
@@ -124,9 +136,11 @@ class LinkFieldRenderer(FieldRenderer):
                 # field beginning with "_"
                 if not name.startswith("_"):
                     log.warning("Missing value for %s in %s" % (name, item))
+        backurl = self.openmodal == "true" or self.backlink == "true"
         values['url'] = get_link_url(item,
                                      self._field._form._request,
-                                     self._field.renderer.action) or "#"
+                                     self._field.renderer.action,
+                                     backurl) or "#"
         return values
 
     def _render_label(self):

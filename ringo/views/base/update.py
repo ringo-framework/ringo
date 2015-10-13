@@ -16,7 +16,8 @@ from ringo.views.request import (
 log = logging.getLogger(__name__)
 
 
-def update(request, callback=None, renderers=None, validators=None):
+def update(request, callback=None, renderers=None,
+           validators=None, values=None):
     """Base method to handle update requests. This view will render a
     update form to update items on (GET) requests.
 
@@ -32,6 +33,8 @@ def update(request, callback=None, renderers=None, validators=None):
                 for renderering some form elements.
     :validators: List of external formbar validators which should be
                  added to the form for validation
+    :values: Dictionary of additional values which will be available in
+             the form
     :returns: Dictionary or Redirect.
     """
     handle_history(request)
@@ -42,7 +45,9 @@ def update(request, callback=None, renderers=None, validators=None):
             return handle_redirect_on_success(request)
 
     rvalues = get_return_value(request)
-    values = {'_roles': [str(r.name) for r in request.user.roles]}
+    if values is None:
+        values = {}
+    values['_roles'] = [str(r.name) for r in request.user.roles]
     rvalues['form'] = render_item_form(request, form, values)
     return rvalues
 

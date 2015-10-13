@@ -3,7 +3,7 @@
 <div class="page-header">
   <div class="row">
     <div class="col-sm-12">
-      <h1>${_('Set standin for')}: ${request.user.profile[0]}</h1>
+      <h1>${_('Set standin for')}: ${user.profile[0]}</h1>
     </div>
   </div>
 </div>

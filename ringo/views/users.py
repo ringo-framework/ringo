@@ -17,7 +17,7 @@ from ringo.views.request import (
 
 from ringo.lib.form import get_form_config
 from ringo.lib.helpers import import_model, get_action_routename
-from ringo.lib.security import login, encrypt_password
+from ringo.lib.security import login, encrypt_password, has_permission
 from ringo.lib.sql.cache import invalidate_cache
 
 User = import_model('ringo.model.user.User')
@@ -146,20 +146,30 @@ def update_(request):
 
 @view_config(route_name=get_action_routename(Usergroup, 'setstandin'),
              renderer='/usergroups/setstandin.mako')
-def setstandin(request):
+def setstandin(request, allowed_users=None):
     """Setting members in the default usergroup of the current user.
     Technically this is adding a standin for this user."""
 
     # For normal users users shall only be allowed to set the standin
     # for their own usergroup. So check this and otherwise raise an exception.
     usergroup = get_item_from_request(request)
-    if usergroup.id != request.user.default_gid:
+    user = request.db.query(User).filter(User.login == usergroup.name).one()
+    if (usergroup.id != request.user.default_gid
+       and not has_permission("update", usergroup, request)):
         raise HTTPForbidden()
     clazz = Usergroup
     request.session['%s.form' % clazz] = "membersonly"
     request.session['%s.backurl' % clazz] = request.current_route_path()
     request.session.save()
-    result = update(request)
+    values = {}
+    if allowed_users:
+        values['_allowedusers'] = [u.login for u in allowed_users]
+
+    # Result may be a HTTPFOUND object.
+    result = update(request, values=values)
+    if isinstance(result, dict):
+        result['user'] = user
+
     # Reset form value in session
     handle_caching(request)
     return result
