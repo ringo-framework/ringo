@@ -48,34 +48,35 @@ def _handle_delete_request(request, items, callback):
         item_label_log = get_item_modul(request, clazz).get_label()
         mapping = {'item_type': item_label, 'num': len(items)}
         for item in items:
-            try:
-                request.db.delete(item)
-                if callback:
-                    callback(request, item)
-                request.db.flush()
-            except sa.exc.IntegrityError as e:
-                mapping["error"] = e.message.decode("utf-8")
-                title = _("Can not delete ${item_type} items.",
-                          mapping=mapping)
-                body = _("There has been an integrity error which prevents "
-                         "the request to be fulfilled. There are still "
-                         "depended items on the item to be deleted. Please "
-                         "remove all depended relations to this item before "
-                         "deleting it and try again. Hint: ${error}",
-                         mapping=mapping)
-                request.db.rollback()
-                renderer = InfoDialogRenderer(request, title, body)
-                rvalue = {}
-                ok_url = request.session['history'].pop(2)
-                rvalue['dialog'] = renderer.render(ok_url)
-                return rvalue
+            if callback:
+                item = callback(request, item)
+            request.db.delete(item)
+        # Invalidate cache
+        invalidate_cache()
+        try:
+            request.db.flush()
+        except sa.exc.IntegrityError as e:
+            mapping["error"] = e.message.decode("utf-8")
+            title = _("Can not delete ${item_type} items.",
+                      mapping=mapping)
+            body = _("There has been an integrity error which prevents "
+                     "the request to be fulfilled. There are still "
+                     "depended items on the item to be deleted. Please "
+                     "remove all depended relations to this item before "
+                     "deleting it and try again. Hint: ${error}",
+                     mapping=mapping)
+            request.db.rollback()
+            renderer = InfoDialogRenderer(request, title, body)
+            rvalue = {}
+            ok_url = request.session['history'].pop(2)
+            rvalue['dialog'] = renderer.render(ok_url)
+            return rvalue
+
         msg = _('Deleted ${num} ${item_type} successfully.', mapping=mapping)
         log_msg = u'User {user.login} deleted {item_label} {item.id}' \
             .format(item_label=item_label, item=item, user=request.user)
         log.info(log_msg)
         request.session.flash(msg, 'success')
-        # Invalidate cache
-        invalidate_cache()
         # Handle redirect after success.
         return _handle_redirect(request)
     else:
