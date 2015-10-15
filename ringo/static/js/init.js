@@ -221,7 +221,7 @@ function openModalForm(event) {
   });
   // now strip the content
   var title = $("h1", page.responseText).text();
-  var content = $("#form", page.responseText);
+  var content = $(".formbar-form", page.responseText);
   // Better leave url and attach some kind of javascript action to load the
   // result of the POST into the popup.
   $("form", content).attr("action", url);
