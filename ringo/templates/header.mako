@@ -65,6 +65,7 @@ mode = h.get_app_mode(request)
               <li role="presentation" class="dropdown-header">${_('Settings')}</li>
               <li><a href="${request.route_path('profiles-read', id=request.user.profile[0].id)}"><img class="icon" src="${request.static_path('ringo:static/images/icons/16x16/profile.png')}"/>${_('Profile')}</a></li>
               <li><a href="${request.route_path('users-changepassword', id=request.user.id)}"><img class="icon" src="${request.static_path('ringo:static/images/icons/16x16/application-certificate.png')}"/>${_('Change Password')}</a></li>
+              <li><a href="${request.route_path('usergroups-setstandin', id=request.user.default_gid)}"><img class="icon" src="${request.static_path('ringo:static/images/icons/16x16/system-users.png')}"/>${_('Set standin')}</a></li> 
               <li class="divider"></li>
               <% user_menu_modules = h.get_modules(request, 'user-menu') %>
                 % if len(user_menu_modules) > 0:

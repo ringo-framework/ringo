@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-09-09 21:12+0200\n"
+"POT-Creation-Date: 2015-10-07 10:10+0200\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -39,31 +39,31 @@ msgid ""
 "cancel the action."
 msgstr ""
 
-#: ringo/model/modul.py:222
+#: ringo/model/modul.py:270
 msgid "List"
 msgstr ""
 
-#: ringo/model/modul.py:225 ringo/templates/default/list.mako:40
+#: ringo/model/modul.py:273 ringo/templates/default/list.mako:41
 msgid "Create"
 msgstr ""
 
-#: ringo/model/modul.py:228
+#: ringo/model/modul.py:276
 msgid "Read"
 msgstr ""
 
-#: ringo/model/modul.py:231
+#: ringo/model/modul.py:279
 msgid "Update"
 msgstr ""
 
-#: ringo/model/modul.py:234
+#: ringo/model/modul.py:282
 msgid "Delete"
 msgstr ""
 
-#: ringo/model/modul.py:238 ringo/templates/default/list.mako:45
+#: ringo/model/modul.py:286 ringo/templates/default/list.mako:46
 msgid "Import"
 msgstr ""
 
-#: ringo/model/modul.py:241
+#: ringo/model/modul.py:289
 msgid "Export"
 msgstr ""
 
@@ -194,39 +194,44 @@ msgstr ""
 msgid "Show version information"
 msgstr ""
 
-#: ringo/templates/header.mako:25
+#: ringo/templates/header.mako:53
 msgid "Home"
 msgstr ""
 
-#: ringo/templates/header.mako:37
+#: ringo/templates/header.mako:65
 msgid "Settings"
 msgstr ""
 
 #. Label for profile field in form config
-#: ringo/templates/header.mako:38 ringo/views/forms/users.xml:11
+#: ringo/templates/header.mako:66 ringo/views/forms/users.xml:11
 msgid "Profile"
 msgstr ""
 
-#: ringo/templates/header.mako:39
+#: ringo/templates/header.mako:67
 msgid "Change Password"
 msgstr ""
 
-#: ringo/templates/header.mako:43
+#: ringo/templates/header.mako:68
+msgid "Set Standin"
+msgstr ""
+
+#: ringo/templates/header.mako:72
 msgid "Service"
 msgstr ""
 
-#: ringo/templates/header.mako:50
+#: ringo/templates/header.mako:79
 msgid "Logout"
 msgstr ""
 
 #. Label for login field in form config
 #. Label for user.login column in overview table config
-#: ringo/templates/header.mako:54 ringo/templates/index.mako:18
+#: ringo/templates/header.mako:83 ringo/templates/index.mako:18
 #: ringo/templates/auth/confirm_user.mako:19
 #: ringo/templates/auth/confirm_user.mako:24 ringo/templates/auth/login.mako:5
 #: ringo/templates/auth/reset_password.mako:19
-#: ringo/templates/auth/reset_password.mako:24 ringo/views/forms/users.xml:1
-#: ringo/views/forms/users.xml:2 ringo/views/tables/profiles.json:6
+#: ringo/templates/auth/reset_password.mako:24 ringo/views/forms/auth.xml:7
+#: ringo/views/forms/users.xml:1 ringo/views/forms/users.xml:2
+#: ringo/views/tables/profiles.json:6
 msgid "Login"
 msgstr ""
 
@@ -377,7 +382,7 @@ msgid ""
 msgstr ""
 
 #: ringo/templates/auth/forgot_password.mako:5
-#: ringo/templates/auth/login.mako:16
+#: ringo/templates/auth/login.mako:16 ringo/views/forms/auth.xml:8
 msgid "Reset Password"
 msgstr ""
 
@@ -390,6 +395,7 @@ msgid "New here? Register a new account!"
 msgstr ""
 
 #: ringo/templates/auth/login.mako:11 ringo/templates/auth/register_user.mako:5
+#: ringo/views/forms/auth.xml:9
 msgid "Register Account"
 msgstr ""
 
@@ -411,20 +417,20 @@ msgstr ""
 msgid "Password not resetted"
 msgstr ""
 
-#: ringo/templates/default/create.mako:5 ringo/templates/default/list.mako:14
-#: ringo/templates/default/list.mako:31 ringo/templates/default/list.mako:33
-#: ringo/templates/internal/listfield.mako:51
+#: ringo/templates/default/create.mako:5 ringo/templates/default/list.mako:15
+#: ringo/templates/default/list.mako:32 ringo/templates/default/list.mako:34
+#: ringo/templates/internal/listfield.mako:84
 msgid "New"
 msgstr ""
 
-#: ringo/templates/default/list.mako:14 ringo/templates/default/list.mako:31
-#: ringo/templates/default/list.mako:40
-#: ringo/templates/internal/listfield.mako:46
+#: ringo/templates/default/list.mako:15 ringo/templates/default/list.mako:32
+#: ringo/templates/default/list.mako:41
+#: ringo/templates/internal/listfield.mako:76
 #, python-format
 msgid "Add a new %s entry"
 msgstr ""
 
-#: ringo/templates/default/list.mako:33 ringo/templates/default/list.mako:45
+#: ringo/templates/default/list.mako:34 ringo/templates/default/list.mako:46
 #, python-format
 msgid "Import new %s entries"
 msgstr ""
@@ -444,7 +450,7 @@ msgid "You have selected %s %s for export:"
 msgstr ""
 
 #: ringo/templates/internal/export.mako:17
-#: ringo/templates/internal/list.mako:312
+#: ringo/templates/internal/list.mako:244
 #: ringo/templates/internal/print.mako:11
 msgid "Close"
 msgstr ""
@@ -511,7 +517,7 @@ msgstr ""
 msgid "Options "
 msgstr ""
 
-#: ringo/templates/internal/list.mako:92 ringo/templates/internal/list.mako:303
+#: ringo/templates/internal/list.mako:92 ringo/templates/internal/list.mako:235
 msgid "Save current search filter"
 msgstr ""
 
@@ -531,39 +537,34 @@ msgstr ""
 msgid "${num_filter} filter applied"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:109
-msgid "Show"
-msgstr ""
-
-#: ringo/templates/internal/list.mako:118
-msgid "items"
-msgstr ""
-
-#: ringo/templates/internal/list.mako:214
-#, python-format
-msgid "Open item in %s mode"
-msgstr ""
-
-#: ringo/templates/internal/list.mako:240
+#: ringo/templates/internal/list.mako:221
 msgid "No items found"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:259
-msgid "Perform"
-msgstr ""
-
-#: ringo/templates/internal/list.mako:305
+#: ringo/templates/internal/list.mako:237
 msgid "Queryname"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:308
+#: ringo/templates/internal/list.mako:240
 msgid ""
 "Please insert a name for your query. It it will be selectable under this "
 "name in the options menu of the search after saving."
 msgstr ""
 
-#: ringo/templates/internal/list.mako:311
+#: ringo/templates/internal/list.mako:243
 msgid "Save Query"
+msgstr ""
+
+#: ringo/templates/internal/list_footer.mako:18
+msgid "Perform"
+msgstr ""
+
+#: ringo/templates/internal/list_footer.mako:51
+msgid "Show"
+msgstr ""
+
+#: ringo/templates/internal/list_footer.mako:60
+msgid "items"
 msgstr ""
 
 #: ringo/templates/internal/print.mako:5
@@ -656,6 +657,10 @@ msgstr ""
 msgid ""
 "To complete the registration you need to confirm the registration by "
 "clicking the following link:"
+msgstr ""
+
+#: ringo/templates/usergroups/setstandin.mako:6
+msgid "Set standin for"
 msgstr ""
 
 #: ringo/templates/users/changepassword.mako:6
@@ -763,27 +768,27 @@ msgstr ""
 msgid "Error on validation ${item_type} \"${item}\"."
 msgstr ""
 
-#: ringo/views/users.py:103 ringo/views/users.py:128
+#: ringo/views/users.py:105 ringo/views/users.py:130
 msgid "This name is already in use, please use something unique."
 msgstr ""
 
-#: ringo/views/users.py:108 ringo/views/users.py:133 ringo/views/users.py:183
+#: ringo/views/users.py:110 ringo/views/users.py:135 ringo/views/users.py:206
 msgid "Password must be at least 12 characters long."
 msgstr ""
 
-#: ringo/views/users.py:112 ringo/views/users.py:137 ringo/views/users.py:187
+#: ringo/views/users.py:114 ringo/views/users.py:139 ringo/views/users.py:210
 msgid "Password must contain at least 2 non-letters."
 msgstr ""
 
-#: ringo/views/users.py:180
+#: ringo/views/users.py:203
 msgid "The given password is not correct"
 msgstr ""
 
-#: ringo/views/users.py:199
+#: ringo/views/users.py:222
 msgid "Changed password for \"${item}\" successfull."
 msgstr ""
 
-#: ringo/views/users.py:209
+#: ringo/views/users.py:232
 msgid "Error on changing the password for \"${item}\"."
 msgstr ""
 
@@ -815,21 +820,21 @@ msgid ""
 "or updated. The last message we heard from the importer was: %s"
 msgstr ""
 
-#: ringo/views/base/list_.py:233
+#: ringo/views/base/list_.py:239
 msgid "Empty selection"
 msgstr ""
 
-#: ringo/views/base/list_.py:234
+#: ringo/views/base/list_.py:240
 msgid ""
 "You have not selected any item in the list. Click 'OK' to return to the "
 "overview."
 msgstr ""
 
-#: ringo/views/base/list_.py:263
+#: ringo/views/base/list_.py:269
 msgid "${action} not applicable"
 msgstr ""
 
-#: ringo/views/base/list_.py:269
+#: ringo/views/base/list_.py:275
 msgid ""
 "After checking the permissions no items remain for which an '${action}' "
 "can be performed. (${num} items were filtered out.)"
@@ -852,6 +857,10 @@ msgstr ""
 
 #: ringo/views/forms/auth.xml:6
 msgid "Password are not equal"
+msgstr ""
+
+#: ringo/views/forms/auth.xml:10
+msgid "Reset"
 msgstr ""
 
 #. Label for created field in form config
@@ -1498,5 +1507,11 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "1 Week"
+#~ msgstr ""
+
+#~ msgid "Open item in %s mode"
+#~ msgstr ""
+
+#~ msgid "Set members of group"
 #~ msgstr ""
 

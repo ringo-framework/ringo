@@ -3,7 +3,9 @@
   <source>
     <!-- Define different entity types -->
     <entity id="e1" name="name" label="Name" type="string"/>
-    <entity id="e2" name="members" label="Members"/>
+    <entity id="e2" name="members" label="Users">
+      <renderer type="listing" table="members" align="vertical" filter="@name ne %login"/>
+    </entity>
     <entity id="e4" name="description" label="Description" type="string">
       <renderer type="textarea"/>
     </entity>
@@ -17,10 +19,14 @@
   <form id="read" readonly="true">
     <snippet ref="create_snippet"/>
   </form>
+  <form id="membersonly">
+    <snippet ref="s2"/>
+  </form>
 
   <!-- Create-->
   <snippet id="create_snippet">
     <snippet ref="s1"/>
+    <snippet ref="s2"/>
   </snippet>
 
   <!-- Usergroup -->
@@ -31,6 +37,8 @@
     <row>
       <col><field ref="e4"/></col>
     </row>
+  </snippet>
+  <snippet id="s2">
     <row>
       <col><field ref="e2"/></col>
     </row>

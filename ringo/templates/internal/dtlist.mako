@@ -5,7 +5,7 @@ from ringo.lib.helpers import prettify
 <table id="data" class="table table-condensed table-striped table-hover datatable-simple">
   <thead>
     <tr>
-      % if bundled_actions:
+      % if bundled_actions and len(items) > 0:
       <th width="2em">
         <input type="checkbox" name="check_all" onclick="checkAll('id');">
       </th>
@@ -53,17 +53,6 @@ from ringo.lib.helpers import prettify
     </tr>
     % endfor
 
-    % if len(items) == 0:
-    <tr>
-      % if bundled_actions:
-        <td colspan="${len(tableconfig.get_columns())+1}">
-      % else:
-        <td colspan="${len(tableconfig.get_columns())}">
-      % endif
-      ${_('No items found')}
-      </td>
-    </tr>
-  % endif
   </tbody>
 </table>
 
