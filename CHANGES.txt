@@ -1,5 +1,10 @@
 1.7
 ===
+- Ringo no longer does automatic extension registering on server
+  startup. Registering a new extension often will write changes to the
+  database. This is dangerous as this will potentially lead into
+  failing later migrations. So Ringo will now ask the user what to do on
+  server start. Default is to abort the registration.
 
 1.6
 ===
