@@ -219,7 +219,7 @@ class ModulItem(BaseItem, Base):
         """Property which returns the base classes of the model of the
         modul. This is usefull and currently used for filtering in
         forms. e.g filtering modules which are tagable"""
-        return [b.__name__ for b in self.get_clazz.__bases__]
+        return [b.__name__ for b in self.get_clazz().__bases__]
 
     def get_clazz(self):
         """Returns the class defined in the clazzpath attribute.
