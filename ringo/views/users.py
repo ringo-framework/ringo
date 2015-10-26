@@ -3,6 +3,7 @@ import logging
 import sqlalchemy as sa
 import re
 from pyramid.httpexceptions import HTTPBadRequest, HTTPForbidden, HTTPFound
+from pyramid.security import forget
 from pyramid.view import view_config
 from formbar.form import Form, Validator
 
@@ -154,6 +155,12 @@ def setstandin(request, allowed_users=None):
     # for their own usergroup. So check this and otherwise raise an exception.
     usergroup = get_item_from_request(request)
     user = request.db.query(User).filter(User.login == usergroup.name).one()
+    
+    # No login (request.user is missing) => redirect to login.
+    if not request.user:
+        raise HTTPFound(location=request.route_path('login'),
+                        headers=forget(request))
+
     if (usergroup.id != request.user.default_gid
        and not has_permission("update", usergroup, request)):
         raise HTTPForbidden()
