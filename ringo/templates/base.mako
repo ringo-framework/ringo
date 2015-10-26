@@ -18,6 +18,7 @@
     <link href="${request.static_path('ringo:static/css/layout.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/css/widgets.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/css/style.css')}" rel="stylesheet" media="screen">
+    <link href="${request.static_path('ringo:static/css/jquery-ui.min.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/font-awesome/css/font-awesome.min.css')}" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -27,6 +28,7 @@
 
     <!-- Fav and touch icons -->
     <script src="${request.static_path('ringo:static/js/jquery.js')}"></script>
+    <script src="${request.static_path('ringo:static/js/jquery-ui.js')}"></script>
     <script src="${request.static_path('ringo:static/js/spin.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.spin.js')}"></script>
     <script src="${request.static_path('ringo:static/bootstrap/js/bootstrap.min.js')}"></script>
