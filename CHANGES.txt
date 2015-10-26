@@ -5,6 +5,8 @@
   database. This is dangerous as this will potentially lead into
   failing later migrations. So Ringo will now ask the user what to do on
   server start. Default is to abort the registration.
+- Added JQuery UI library. This library is currently not used by ringo itself
+  but it provides basic functionality to other applications.
 
 1.6
 ===
