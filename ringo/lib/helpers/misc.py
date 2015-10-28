@@ -222,6 +222,18 @@ def get_action_routename(item, action, prefix=None):
     return routename
 
 
+def get_open_url(request, item):
+    """Convinience method to the a URL to 'open' the item."""
+    from ringo.lib.security import has_permission
+    if has_permission("update", item, request):
+        return request.route_path(get_action_routename(item, "update"),
+                                  id=item.id)
+    elif has_permission("read", item, request):
+        return request.route_path(get_action_routename(item, "read"),
+                                  id=item.id)
+    return None
+
+
 def get_action_url(request, item, action):
     """Return an URL object for the given item and action. If the item
     is an instance of object then we assume that we want to get the URL

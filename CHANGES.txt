@@ -5,6 +5,9 @@
   database. This is dangerous as this will potentially lead into
   failing later migrations. So Ringo will now ask the user what to do on
   server start. Default is to abort the registration.
+- Added breadcrumbs feature to Ringo. To be able to use the breadcrumbs you
+  need to define a sitetree (See lib/sitetree.py for more details.) The
+  default sitetree of ringo is empty which means no breadcrumbs are shown.
 
 1.6
 ===

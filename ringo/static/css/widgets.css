@@ -43,6 +43,24 @@
   text-decoration: none;
 }
 
+.navbar-static-top {
+  margin-bottom: 0px;
+}
+
+/****************************************************************************
+ *                                Breadcrumb                                *
+ ****************************************************************************/
+
+#breadcrumb {
+  margin-bottom: 20px;
+}
+
+#breadcrumb ol {
+  padding: 5px 15px;
+  font-size: smaller;
+  margin-bottom: 0px;
+}
+
 
 /* Status message
  * *************************************************************************/
