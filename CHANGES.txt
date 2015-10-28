@@ -10,6 +10,9 @@
 - Added breadcrumbs feature to Ringo. To be able to use the breadcrumbs you
   need to define a sitetree (See lib/sitetree.py for more details.) The
   default sitetree of ringo is empty which means no breadcrumbs are shown.
+- Added "--format" flag for the "ringo-admin db loaddata" command to define
+  the format of the inputfile. It is now possible to use the CSV importer
+  also.
 
 1.6
 ===
