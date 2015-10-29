@@ -28,7 +28,7 @@ mode = h.get_app_mode(request)
   <div id="header">
     <%include file="/header.mako" />
   </div>
-  ${render_breadcrumb(request)}
+  <%include file="/breadcrumbs.mako" />
   <!-- Begin page content -->
   <div id="main">
     ${next.body()}
