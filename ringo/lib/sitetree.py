@@ -121,7 +121,7 @@ def build_breadcrumbs(request, sitetree):
                 path = request.session["breadcrumbs"]
                 return list(reversed(path)) + [(modul.get_label(), None)]
             # Reset the breadcrumbs for any other url. This means the
-            # breadcrumbs are resets every time the user calls an
+            # breadcrumbs are reseted every time the user calls an
             # overview page e.g. As the overview pages are usually the
             # entry point for a new working proccess the previous
             # context is lost so the breadcrumbs are.
