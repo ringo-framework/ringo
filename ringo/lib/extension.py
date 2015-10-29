@@ -112,6 +112,8 @@ def register_modul(config, modul_config, actions=None):
     :actions: List of ActionItems
     """
     name = modul_config.get("name") + "s"
+    _ = lambda t: t
+    modulname = modul_config.get('name')
     # Load the modul
     try:
         modul = DBSession.query(ModulItem).filter(ModulItem.name == name).one()
@@ -120,8 +122,22 @@ def register_modul(config, modul_config, actions=None):
     if modul:
         log.info("Modul '%s' already registered" % modul_config.get('name'))
     else:
-        modul = _add_modul(modul_config, actions, DBSession)
-        log.info("Registered modul '%s'" % modul_config.get('name'))
+        modulname = modul_config.get('name')
+        msg = _("Warning! Ringo found a new extension named '%s' which needs "
+                "to be registred in your application. \n"
+                "Registering the extension should be done by using a DB "
+                "migration!\nHowever if this extension does not need any DB "
+                "migration or you are sure you do not want to do an explicit "
+                "registration, than Ringo can do the registration "
+                "automatically for you.\nCaution! Automatic registration may "
+                "write to your DB which can result in failing migrations")
+        log.info(msg)
+        choice = raw_input(_("Register '%s' Y/N (N)?") % modulname)
+        if choice == "Y":
+            modul = _add_modul(modul_config, actions, DBSession)
+            log.info("Registered modul '%s'" % modulname)
+        else:
+            log.info("Aborting Registering modul '%s'" % modulname)
     return modul
 
 

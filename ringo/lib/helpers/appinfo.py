@@ -2,6 +2,7 @@
 import os
 import pkg_resources
 from pyramid.threadlocal import get_current_registry
+from ringo.lib.sitetree import build_breadcrumbs, site_tree_branches
 
 
 def get_ringo_version():
@@ -102,3 +103,31 @@ def get_path_to(location, app=None):
         app_name = get_app_name()
     base_path = os.path.join(get_app_location(app_name), app_name)
     return os.path.join(base_path, location)
+
+
+def get_breadcrumbs(request, strategy=None):
+    """Will return a list of elements which are used to build the
+    breadcrumbs in the UI.
+
+    The function take a strategy attribute which is called to build this
+    list instead of the default mechanism of ringo. The strategy
+    function takes the current request as attribute
+
+    The returned list currently must have the follwing format::
+
+        [(label of element, url of element), (), ...]
+
+    The last element in the list shoul be the current element and has no
+    link. (URL is None)
+
+    :request: Current request
+    :strategy: Optional function which is called to build the site tree.
+    :returns: List of elements used for building a the breadcrumbs.
+
+    """
+    if strategy is None:
+        strategy = build_breadcrumbs
+    tree = {}
+    for branch in site_tree_branches:
+        tree.update(branch)
+    return strategy(request, tree)

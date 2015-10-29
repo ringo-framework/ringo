@@ -23,6 +23,7 @@
     <link href="${request.static_path('ringo:static/css/layout.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/css/widgets.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/css/style.css')}" rel="stylesheet" media="screen">
+    <link href="${request.static_path('ringo:static/css/jquery-ui.min.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/font-awesome/css/font-awesome.min.css')}" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -31,9 +32,8 @@
     <![endif]-->
 
     <!-- Fav and touch icons -->
-    <link href="${request.static_path('ringo:static/images/icons/favicons/apple-touch-icon-128.png')}" sizes="128x128" rel="apple-touch-icon-precomposed">
-    <link href="${request.static_path('ringo:static/images/icons/favicons/favicon.png')}" rel="shortcut icon">
     <script src="${request.static_path('ringo:static/js/jquery.js')}"></script>
+    <script src="${request.static_path('ringo:static/js/jquery-ui.js')}"></script>
     <script src="${request.static_path('ringo:static/js/spin.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.spin.js')}"></script>
     <script src="${request.static_path('ringo:static/bootstrap/js/bootstrap.min.js')}"></script>
@@ -45,6 +45,7 @@
     % endfor
     <script src="${request.static_path('ringo:static/js/listfield.js')}"></script>
     <script src="${request.static_path('ringo:static/js/helpers.js')}"></script>
+    <%include file="/favicons.mako" />
     <%include file="/custom-header.mako" />
   </head>
   <body>

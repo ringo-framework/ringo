@@ -277,6 +277,8 @@ class BaseItem(object):
             else:
                 obj = self
 
+            # Expanding the value means to get the "literal" value for the
+            # given value from the form.
             form_config = get_form_config(obj, form_id)
             try:
                 field_config = form_config.get_field(name)
@@ -284,7 +286,13 @@ class BaseItem(object):
                     if str(raw_value) == str(option[1]):
                         return option[0]
             except KeyError:
-                log.error("Field %s not found in form config" % name)
+                # If the field/value which should to be expanded is not
+                # included in the form the form library will raise a
+                # KeyError exception. However this is not a big deal as
+                # we still have the raw value and only the expandation
+                # fails. So silently ignore this one. The exception is
+                # already logged in the form library.
+                pass
         return raw_value
 
     def get_values(self, include_relations=False, serialized=False):

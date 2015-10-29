@@ -245,6 +245,10 @@ def setup_db_parser(subparsers, parent):
     loaddata_parser.add_argument('--loadbyid',
                         action="store_true",
                         help="Load data by id and not by uuid")
+    loaddata_parser.add_argument('--format',
+                        choices=["json", "csv"],
+                        default="json",
+                        help="Format of the loaded data")
 
     # UUID command
     uuid_parser = sp.add_parser('resetuuid',

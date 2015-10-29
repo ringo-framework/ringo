@@ -31,11 +31,13 @@ def is_login_unique(field, data):
 
 def is_registration_enabled(settings):
     return (bool(settings.get('mail.host'))
+            and bool(settings.get('mail.default_sender'))
             and settings.get('auth.register_user') == "true")
 
 
 def is_pwreminder_enabled(settings):
     return (bool(settings.get('mail.host'))
+            and bool(settings.get('mail.default_sender'))
             and settings.get('auth.password_reminder') == "true")
 
 

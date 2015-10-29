@@ -1,9 +1,34 @@
+1.7
+===
+- Ringo no longer does automatic extension registering on server
+  startup. Registering a new extension often will write changes to the
+  database. This is dangerous as this will potentially lead into
+  failing later migrations. So Ringo will now ask the user what to do on
+  server start. Default is to abort the registration.
+- Added JQuery UI library. This library is currently not used by ringo itself
+  but it provides basic functionality to other applications.
+- Added breadcrumbs feature to Ringo. To be able to use the breadcrumbs you
+  need to define a sitetree (See lib/sitetree.py for more details.) The
+  default sitetree of ringo is empty which means no breadcrumbs are shown.
+- Added "--format" flag for the "ringo-admin db loaddata" command to define
+  the format of the inputfile. It is now possible to use the CSV importer
+  also.
+
 1.6
 ===
 - Add functionallity for users so set their standin. Basically this is adding
   and removing other users to the default group of the user. To use this
   feature the user needs at least read access to the users he wants to set as
   standin.
+- Changes favicon format to "ico" to be more compatible with versions of IE.
+  Improved overwriting of the favicon. The code for favicons are now placed in
+  favicons.mako which can be overwritten by other applications.
+- Fixed handling of bundled delete requests. Two things has been changed: 
+    1. Call the callback before actually deleting it to allow some cleanup. 
+    2. Put the flush of the db operations at the end of the method to
+       avoid "Closed connection" errors which happens for bundled delete
+       request after the session has been flushed for the first item.
+
 
 1.5
 ===

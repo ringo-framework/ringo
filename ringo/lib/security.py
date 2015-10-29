@@ -20,6 +20,7 @@ from ringo.lib.helpers import get_item_modul
 from ringo.lib.sql import DBSession
 from ringo.lib.alchemy import get_relations_from_clazz
 from ringo.model.base import BaseItem
+from ringo.model.modul import ModulItem
 from ringo.model.user import User, PasswordResetRequest
 
 log = logging.getLogger(__name__)
@@ -598,7 +599,7 @@ class ValueChecker(object):
         """
         for relation in get_relations_from_clazz(clazz):
             # If the relation is not set in the values then continue, as
-            # we do not need to check anything.
+            # we do not need to check anything. 
             if relation not in values:
                 continue
 
@@ -629,7 +630,12 @@ class ValueChecker(object):
 
             # Now iterate over all value which need to be checked.
             for value, modifier in to_check:
-                if has_permission("read", value, request):
+                # If the relation is a ModulItem also do no checks.
+                # Modulitem do not have any uid or gid which will allow
+                # checking permissions. Allowing links to a modul item
+                # is currently not known to be a security thread.
+                if (isinstance(value, ModulItem)
+                   or has_permission("read", value, request)):
                     continue
                 else:
                     if modifier > 0:
