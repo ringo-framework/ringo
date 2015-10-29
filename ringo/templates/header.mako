@@ -60,10 +60,7 @@ mode = h.get_app_mode(request)
         % if request.user:
         <li>
         % if request.registry.settings.get("layout.show_sessiontimer") == "true":
-        <div class="input-group" id="sessiontimer">
-          <input type="text" title="${_('Remaining time in the current session before automatic logout is triggered')}" class="form-control input-sm" placeholder="00:00" disabled="disabled">
-          <div class="input-group-addon"><i class="glyphicon glyphicon-refresh"></i></div>
-        </div>
+          <%include file="/sessiontimer.mako" />
         % endif
         </li>
         <li class="divider-vertical"></li>
