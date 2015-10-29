@@ -1,3 +1,10 @@
+1.8
+===
+- Implemented session timer widget. The widget shows the remaining time in the
+  session before the autologout will be triggered.
+  The widget needs to be enabled in the .ini file. See documentation for more
+  details.
+
 1.7
 ===
 - Ringo no longer does automatic extension registering on server

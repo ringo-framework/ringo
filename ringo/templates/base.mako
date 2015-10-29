@@ -8,6 +8,11 @@
     <meta content="" name="author">
     <meta content="${client_language}" name="client_language">
     <meta content="${application_path}" name="application_path">
+    <meta content="${s.get_auth_timeout(request.registry.settings)}" name="auth_timeout">
+    <meta content="${s.get_auth_timeout_warning(request.registry.settings)}" name="auth_warning">
+    <meta content="${request.route_path("autologout")}" name="auth_logout">
+    <meta content="${request.route_path("keepalive")}" name="auth_keepalive">
+    <meta content="${request.user}" name="auth_user">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="${request.static_path('ringo:static/bootstrap/css/bootstrap.min.css')}" rel="stylesheet" media="screen">
@@ -65,9 +70,6 @@
   <script src="${request.static_path('ringo:static/js/ringo/autologout.js')}"></script>
   <script src="${request.static_path('ringo:static/js/init.js')}"></script>
   % if request.user:
-  <script>
-      logoutCountdown(${s.get_auth_timeout(request.registry.settings)}, '${request.route_path("autologout")}', ${s.get_auth_timeout_warning(request.registry.settings)});
-  </script>
   <div class="modal fade" id="logoutWarning">
     <div class="modal-dialog">
       <div class="panel panel-warning">
@@ -76,7 +78,7 @@
           <p>${_('Your session will expire soon because of inactivity. Click on "Renew session" to continue work and renew your session. Otherwise you will be logged out automatically shortly and all unsaved data will get lost.')}</p>
         </div>
         <div class="panel-footer">
-          <a href="${request.route_path('keepalive')}" target="_blank" class="btn btn-default" id="logoutWarningOK">${_('Renew session')}</a>
+          <a href="#" class="btn btn-default" id="logoutWarningOK">${_('Renew session')}</a>
         </div>
       </div>
     </div>

@@ -57,8 +57,16 @@ mode = h.get_app_mode(request)
         % endfor
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li class="divider-vertical"></li>
         % if request.user:
+        <li>
+        % if request.registry.settings.get("layout.show_sessiontimer") == "true":
+        <div class="input-group" id="sessiontimer">
+          <input type="text" title="${_('Remaining time in the current session before automatic logout is triggered')}" class="form-control input-sm" placeholder="00:00" disabled="disabled">
+          <div class="input-group-addon"><i class="glyphicon glyphicon-refresh"></i></div>
+        </div>
+        % endif
+        </li>
+        <li class="divider-vertical"></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> ${request.user.profile[0].first_name} ${request.user.profile[0].last_name} (${request.user.login})<b class="caret"></b></a>
             <ul class="dropdown-menu">
