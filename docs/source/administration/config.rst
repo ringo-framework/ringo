@@ -168,6 +168,10 @@ auth.password_reminder
         Defaults to `false`. Enable the option to let the user reset their
         password.
 
+.. note::
+    To enable this feature the mailsystem must be configured too. You
+    need to set the mail host and the default sender in your config.
+
 Security
 ========
 CSRF Protection

@@ -10,6 +10,7 @@ from babel.dates import (
     format_datetime as babel_format_datetime,
     format_date as babel_format_date
 )
+from webhelpers.html import literal
 from pyramid.threadlocal import get_current_request
 from pyramid.i18n import get_locale_name
 from formbar.converters import from_timedelta
@@ -35,21 +36,41 @@ def prettify(request, value):
     if not request:
         request = get_current_request()
 
-    # Under some circumstances, get_current_request will return None as the 
-    # current request. This makes it impossible to retrieve the current locale
-    locale_name = 'en_EN' if not request else get_locale_name(request)
+    # Under some circumstances, get_current_request will return None as
+    # the current request. This makes it impossible to retrieve the
+    # current locale or getting the translate method.
+    if not request:
+        locale_name = 'en_EN'
+        _ = lambda t: t
+    else:
+        locale_name = get_locale_name(request)
+        _ = request.translate
 
     if isinstance(value, datetime):
         return format_datetime(get_local_datetime(value),
                                locale_name=locale_name, format="short")
-    if isinstance(value, date):
+    elif isinstance(value, date):
         return format_date(value,
                            locale_name=locale_name, format="short")
-    if isinstance(value, timedelta):
+    elif isinstance(value, timedelta):
         return from_timedelta(value)
-    if value is None:
+    elif isinstance(value, list):
+        values = []
+        is_literal = False
+        for v in value:
+            r = prettify(request, v)
+            if isinstance(r, literal):
+                is_literal = True
+            values.append(r)
+        if is_literal:
+            return literal(", ").join(values)
+        else:
+            return ", ".join(values)
+    elif hasattr(value, "render"):
+        return value.render()
+    elif value is None:
         return ""
-    return value
+    return _(value)
 
 ###########################################################################
 #                               Times & Dates                             #

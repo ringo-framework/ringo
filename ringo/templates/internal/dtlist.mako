@@ -42,17 +42,11 @@ from ringo.lib.helpers import prettify
             except AttributeError:
               value = "NaF"
           %>
-          ## Escape value here
-          % if isinstance(value, list):
-            ${", ".join(_(v) for v in value)}
-          % else:
-            ${_(value)}
-          % endif
+          ${value}
         </td>
-      % endfor 
+      % endfor
     </tr>
     % endfor
-
   </tbody>
 </table>
 
