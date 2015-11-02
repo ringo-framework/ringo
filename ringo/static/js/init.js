@@ -74,7 +74,7 @@ $( document ).ready(function() {
            "bInfo": true,
            "bAutoWidth": false,
            "fnInitComplete":onDTTableRendered,
-           "dom": '<"search-widget"<"row"<"col-md-6"f><"col-md-6"<"pull-right"i>>>>'
+           "dom": '<"search-widget"<"row"<"col-md-6"f><"customsearch"><"col-md-6"<"pull-right"i>>>>'
     });
     $('.datatable-blank').dataTable({
           "oLanguage": {

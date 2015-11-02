@@ -57,7 +57,7 @@ def handle_paginating(clazz, request):
     # Only set paginated if the table is the advancedsearch as the
     # simple search provides its own client sided pagination.
     if table_config.is_paginated() and table_config.is_advancedsearch(default):
-        default_page = 0 # First page
+        default_page = 0  # First page
         default_size = 50
     else:
         return (0, None)
@@ -182,7 +182,7 @@ def get_search(clazz, request):
             searches_dic_search = searches_dic.get(name)
             if searches_dic_search:
                 return searches_dic_search.get(saved_search_id, [[],
-                                               [], None])[0]
+                                                                 [], None])[0]
     elif "save" in request.params:
         return saved_search
     elif "delete" in request.params:
@@ -236,9 +236,9 @@ def bundle_(request):
     # Check if the user selected at least one item. If not show an
     # dialog informing that the selection is empty.
     if not ids:
-        title =  _("Empty selection")
-        body =  _("You have not selected any item in the list. "
-                  "Click 'OK' to return to the overview.")
+        title = _("Empty selection")
+        body = _("You have not selected any item in the list. "
+                 "Click 'OK' to return to the overview.")
         renderer = WarningDialogRenderer(request, title, body)
         rvalue = {}
         rvalue['dialog'] = literal(renderer.render(url=request.referrer))
