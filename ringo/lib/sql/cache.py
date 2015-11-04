@@ -5,19 +5,25 @@ from dogpile.cache.region import make_region
 # Cache initialisation
 ########################
 
-# dogpile cache regions.  A home base for cache configurations.
-root = "/tmp/dogpile_data/"
+# dogpile cache regions.
 regions = {}
 
 
-def init_cache():
-    if not os.path.exists(root):
+def init_cache(cachedir, regions):
+
+    if regions is None:
+        regions = []
+
+    if not os.path.exists(cachedir):
         #raw_input("Will create datafiles in %r.\n"
         #            "To reset the cache + database, delete this
         #            directory.\n" "Press enter to continue.\n" % root)
-        os.makedirs(root)
-    # configure the "default" cache region.
-    create_region("default", 3600)
+        os.makedirs(cachedir)
+
+    for region in regions:
+        name = region[0]
+        time = int(region[1])
+        create_region(cachedir, name, time)
 
     # optional; call invalidate() on the region
     # once created so that all data is fresh when
@@ -34,7 +40,7 @@ def md5_key_mangler(key):
     return md5.md5(key).hexdigest()
 
 
-def create_region(name, time):
+def create_region(cachedir, name, time):
     regions[name] = make_region(
                 # the "dbm" backend needs
                 # string-encoded keys
@@ -47,7 +53,7 @@ def create_region(name, time):
             'dogpile.cache.dbm',
             expiration_time=time,
             arguments={
-                "filename": os.path.join(root, "cache.dbm")
+                "filename": os.path.join(cachedir, "cache.dbm")
             }
         )
 
