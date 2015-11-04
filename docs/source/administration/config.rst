@@ -308,6 +308,36 @@ The enhance the security follwing the recommodation of measurement M 4.401 of
    such as outdated items in overview lists. Therefor ther default disables
    caching here.
 
+DB Caching
+==========
+.. warning::
+        This feature is experimantal. It might change or removed completely in
+        the next versions of Ringo.
+
+Ringo supports file based caching of DB queries using a dogpile cache. Caching
+is disabled on default and must be enabled.
+
+.. note::
+        Ringo does not try to use the cache on default. You will need to
+        write code to tell Ringo to do so explicit! Unless you do not have any
+        code that tries to use the cache you will not need to enable it here
+        at all.
+
+To enable the cache you need to define where to save the cache:
+
+ * db.cachedir = path/to/the/cachebasedir
+
+The queries are cached in so called `regions` which will stay valid for a
+given time before the cache is invalidated. The regions can be configured in
+the following way:
+
+ * db.cacheregions = default:3600 short:50 ...
+
+The multiple regions are separated with spaces. A singe regions consists of the
+name and the time the regions should be valid. Name and time is colomn
+separated.
+
+
 Mail
 ====
  * mail.host =
