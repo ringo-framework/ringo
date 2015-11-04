@@ -179,7 +179,7 @@ $( document ).ready(function() {
     });
     $('tbody').on("click", "tr", function(elem){
         var link=$(elem.currentTarget).data("link");
-        if(link && elem.target.tagName!=="INPUT" && isDirty == false) {
+        if(link && elem.target.tagName!=="INPUT" && (typeof isDirty === "undefined" || isDirty == false)) {
            location.href=link;
         }
     });
