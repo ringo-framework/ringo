@@ -14,7 +14,8 @@ application. It should have the following structure::
         "key": {"parent_site": $parent_key,
                 "parent_item": $attritute_of_item_which_links_to_parent
                 "display_item": $alternative_item_to_display,
-                "display_format": "Prefix of {item}"}
+                "display_format": "Prefix of {item}"
+                "actions": {'foo': 'Foo description'}}
         ...
     }
 
@@ -48,6 +49,17 @@ application. It should have the following structure::
    Additionally to the alternative item to display you can define the *format*
    on how to display the item. This can include some addtional string to
    give some more context information.
+
+**actions**
+   You can optionally define some additional actions which should be
+   displayed in the breadcrumbs. On default only the create action will
+   be show as for all other actions the context is clearly defined by
+   the header of the current page. If you define some custom actions for
+   a modul it isn't handled by default. So if you call the custom action
+   the breadcrumbs will only show the default breadcrumbs. As the last
+   entry in the breadcrumbs does not provide a link you might be missing
+   a way back to where you come from. To prevent this behaviour you can
+   define addtional actions which will be shown.
 """
 
 site_tree_branches = []
@@ -76,12 +88,17 @@ def walk_site_tree(st, el, item, request):
     """
     path = []
     site = st[el]
+    action = site.get("actions", {}).get(request.path.split("/")[2])
     parent_site = site.get("parent_site")
     parent_item_attr = site.get("parent_item")
 
     # Check if an other item should be displayed as the item defined in the
     # item attribute. Other wise display the item.
     display_item_attr = site.get("display_item")
+
+    if action:
+        path.append((action, None))
+
     if display_item_attr:
         display_item = getattr(item, display_item_attr)
         display_str = site.get("display_format", "%{item}s")
