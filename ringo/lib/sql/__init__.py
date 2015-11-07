@@ -1,1 +1,1 @@
-from ringo.lib.sql.db import DBSession
+from ringo.lib.sql.db import DBSession, NTDBSession
