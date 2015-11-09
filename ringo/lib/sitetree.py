@@ -135,7 +135,7 @@ def build_breadcrumbs(request, sitetree):
             if request.path.find("create") > -1:
                 item = get_item_from_request(request)
                 modul = get_item_modul(request, item)
-                path = request.session["breadcrumbs"]
+                path = request.session.get("breadcrumbs", [])
                 return list(reversed(path)) + [(modul.get_label(), None)]
             # Reset the breadcrumbs for any other url. This means the
             # breadcrumbs are reseted every time the user calls an
