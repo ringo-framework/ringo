@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-10-07 10:10+0200\n"
+"POT-Creation-Date: 2015-11-09 14:48+0100\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -16,6 +16,24 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
+
+#: ringo/lib/extension.py:126
+#, python-format
+msgid ""
+"Warning! Ringo found a new extension named '%s' which needs to be "
+"registred in your application. \n"
+"Registering the extension should be done by using a DB migration!\n"
+"However if this extension does not need any DB migration or you are sure "
+"you do not want to do an explicit registration, than Ringo can do the "
+"registration automatically for you.\n"
+"Caution! Automatic registration may write to your DB which can result in "
+"failing migrations"
+msgstr ""
+
+#: ringo/lib/extension.py:135
+#, python-format
+msgid "Register '%s' Y/N (N)?"
+msgstr ""
 
 #: ringo/lib/imexport.py:451
 msgid "UPDATE"
@@ -39,31 +57,31 @@ msgid ""
 "cancel the action."
 msgstr ""
 
-#: ringo/model/modul.py:270
+#: ringo/model/modul.py:277
 msgid "List"
 msgstr ""
 
-#: ringo/model/modul.py:273 ringo/templates/default/list.mako:41
+#: ringo/model/modul.py:280 ringo/templates/default/list.mako:41
 msgid "Create"
 msgstr ""
 
-#: ringo/model/modul.py:276
+#: ringo/model/modul.py:283
 msgid "Read"
 msgstr ""
 
-#: ringo/model/modul.py:279
+#: ringo/model/modul.py:286
 msgid "Update"
 msgstr ""
 
-#: ringo/model/modul.py:282
+#: ringo/model/modul.py:289
 msgid "Delete"
 msgstr ""
 
-#: ringo/model/modul.py:286 ringo/templates/default/list.mako:46
+#: ringo/model/modul.py:293 ringo/templates/default/list.mako:46
 msgid "Import"
 msgstr ""
 
-#: ringo/model/modul.py:289
+#: ringo/model/modul.py:296
 msgid "Export"
 msgstr ""
 
@@ -85,72 +103,72 @@ msgstr ""
 msgid "This application is based on the Ringo web application framework."
 msgstr ""
 
-#: ringo/templates/base.mako:73
+#: ringo/templates/base.mako:76
 msgid "Logout will happen soon"
 msgstr ""
 
-#: ringo/templates/base.mako:75
+#: ringo/templates/base.mako:78
 msgid ""
 "Your session will expire soon because of inactivity. Click on \"Renew "
 "session\" to continue work and renew your session. Otherwise you will be "
 "logged out automatically shortly and all unsaved data will get lost."
 msgstr ""
 
-#: ringo/templates/base.mako:78
+#: ringo/templates/base.mako:81
 msgid "Renew session"
 msgstr ""
 
-#: ringo/templates/base.mako:86
+#: ringo/templates/base.mako:89
 msgid "Form contains unsaved changes!"
 msgstr ""
 
-#: ringo/templates/base.mako:88
+#: ringo/templates/base.mako:91
 msgid ""
 "Do you want to leave the current form without saving the changes? The "
 "changes will be lost if you do not save the data first!"
 msgstr ""
 
-#: ringo/templates/base.mako:91
+#: ringo/templates/base.mako:94
 msgid "Stay in Form"
 msgstr ""
 
-#: ringo/templates/base.mako:92
+#: ringo/templates/base.mako:95
 msgid "Leave the Form"
 msgstr ""
 
-#: ringo/templates/base.mako:155
+#: ringo/templates/base.mako:158
 msgid "Create new item"
 msgstr ""
 
-#: ringo/templates/base.mako:157
+#: ringo/templates/base.mako:160
 msgid "Open overview"
 msgstr ""
 
-#: ringo/templates/base.mako:159
+#: ringo/templates/base.mako:162
 msgid "Open in \"Edit\" mode"
 msgstr ""
 
-#: ringo/templates/base.mako:161
+#: ringo/templates/base.mako:164
 msgid "Open in \"Read\" mode"
 msgstr ""
 
-#: ringo/templates/base.mako:163
+#: ringo/templates/base.mako:166
 msgid "Delete item"
 msgstr ""
 
-#: ringo/templates/base.mako:179
+#: ringo/templates/base.mako:182
 msgid "Advanced"
 msgstr ""
 
-#: ringo/templates/base.mako:181 ringo/templates/footer.mako:7
+#: ringo/templates/base.mako:184 ringo/templates/footer.mako:7
 msgid "Administration"
 msgstr ""
 
-#: ringo/templates/base.mako:182
+#: ringo/templates/base.mako:185
 msgid "Change ownership"
 msgstr ""
 
-#: ringo/templates/base.mako:185
+#: ringo/templates/base.mako:188
 msgid "Advanced actions"
 msgstr ""
 
@@ -198,34 +216,34 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: ringo/templates/header.mako:65
+#: ringo/templates/header.mako:70
 msgid "Settings"
 msgstr ""
 
 #. Label for profile field in form config
-#: ringo/templates/header.mako:66 ringo/views/forms/users.xml:11
+#: ringo/templates/header.mako:71 ringo/views/forms/users.xml:11
 msgid "Profile"
 msgstr ""
 
-#: ringo/templates/header.mako:67
+#: ringo/templates/header.mako:72
 msgid "Change Password"
 msgstr ""
 
-#: ringo/templates/header.mako:68
-msgid "Set Standin"
+#: ringo/templates/header.mako:73
+msgid "Set standin"
 msgstr ""
 
-#: ringo/templates/header.mako:72
+#: ringo/templates/header.mako:77
 msgid "Service"
 msgstr ""
 
-#: ringo/templates/header.mako:79
+#: ringo/templates/header.mako:84
 msgid "Logout"
 msgstr ""
 
 #. Label for login field in form config
 #. Label for user.login column in overview table config
-#: ringo/templates/header.mako:83 ringo/templates/index.mako:18
+#: ringo/templates/header.mako:88 ringo/templates/index.mako:18
 #: ringo/templates/auth/confirm_user.mako:19
 #: ringo/templates/auth/confirm_user.mako:24 ringo/templates/auth/login.mako:5
 #: ringo/templates/auth/reset_password.mako:19
@@ -261,8 +279,10 @@ msgstr ""
 #. Label for login field in form config
 #. Label for user field in form config
 #. Label for login column in overview table config
+#. Label for login column in members table config
 #: ringo/templates/index.mako:14 ringo/views/forms/auth.xml:1
 #: ringo/views/forms/profiles.xml:9 ringo/views/tables/users.json:4
+#: ringo/views/tables/users.json:12
 msgid "Loginname"
 msgstr ""
 
@@ -301,6 +321,10 @@ msgid ""
 "good starting point is the documentation. Please consult the part on "
 "development and learn how to change and add things to this application. "
 "Happy coding! :)"
+msgstr ""
+
+#: ringo/templates/sessiontimer.mako:2
+msgid "Remaining time in the current session before automatic logout is triggered"
 msgstr ""
 
 #: ringo/templates/version.mako:5
@@ -572,24 +596,24 @@ msgid "Print configuration for"
 msgstr ""
 
 #. Label for review_state column in overview table config
-#: ringo/templates/internal/statefield.mako:2 ringo/views/forms/forms.xml:10
+#: ringo/templates/internal/statefield.mako:3 ringo/views/forms/forms.xml:10
 #: ringo/views/tables/forms.json:5
 msgid "State"
 msgstr ""
 
-#: ringo/templates/internal/statefield.mako:17
+#: ringo/templates/internal/statefield.mako:18
 msgid "State transition"
 msgstr ""
 
-#: ringo/templates/internal/statefield.mako:19
+#: ringo/templates/internal/statefield.mako:20
 msgid "No Transition"
 msgstr ""
 
-#: ringo/templates/internal/statefield.mako:29
+#: ringo/templates/internal/statefield.mako:30
 msgid "Current state"
 msgstr ""
 
-#: ringo/templates/internal/statefield.mako:36
+#: ringo/templates/internal/statefield.mako:37
 msgid "Resulting State"
 msgstr ""
 
@@ -672,57 +696,57 @@ msgstr ""
 msgid "ERROR: %s"
 msgstr ""
 
-#: ringo/views/auth.py:57 ringo/views/auth.py:60
+#: ringo/views/auth.py:59 ringo/views/auth.py:62
 msgid "Login failed!"
 msgstr ""
 
-#: ringo/views/auth.py:65
+#: ringo/views/auth.py:67
 msgid "Login was successfull"
 msgstr ""
 
-#: ringo/views/auth.py:82
+#: ringo/views/auth.py:84
 msgid "Logout was successfull"
 msgstr ""
 
-#: ringo/views/auth.py:149
+#: ringo/views/auth.py:151
 msgid "Confirm user registration"
 msgstr ""
 
-#: ringo/views/auth.py:159
+#: ringo/views/auth.py:161
 msgid ""
 "User has been created and a confirmation mail was sent to the users email"
 " adress. Please check your email."
 msgstr ""
 
-#: ringo/views/auth.py:179
+#: ringo/views/auth.py:181
 msgid "The user has beed successfull confirmed."
 msgstr ""
 
-#: ringo/views/auth.py:181
+#: ringo/views/auth.py:183
 msgid "The user was not confirmed. Maybe the confirmation token was not valid?"
 msgstr ""
 
-#: ringo/views/auth.py:205
+#: ringo/views/auth.py:207
 msgid "Password reset request"
 msgstr ""
 
-#: ringo/views/auth.py:214
+#: ringo/views/auth.py:216
 msgid ""
 "Password reset token has been sent to the users email address. Please "
 "check your email."
 msgstr ""
 
-#: ringo/views/auth.py:235
+#: ringo/views/auth.py:237
 msgid "Password has been reseted"
 msgstr ""
 
-#: ringo/views/auth.py:242
+#: ringo/views/auth.py:244
 msgid ""
 "Password was resetted and sent to the users email address. Please check "
 "your email."
 msgstr ""
 
-#: ringo/views/auth.py:246
+#: ringo/views/auth.py:248
 msgid "Password was not resetted. Maybe the request token was not valid?"
 msgstr ""
 
@@ -768,35 +792,35 @@ msgstr ""
 msgid "Error on validation ${item_type} \"${item}\"."
 msgstr ""
 
-#: ringo/views/users.py:105 ringo/views/users.py:130
+#: ringo/views/users.py:106 ringo/views/users.py:131
 msgid "This name is already in use, please use something unique."
 msgstr ""
 
-#: ringo/views/users.py:110 ringo/views/users.py:135 ringo/views/users.py:206
+#: ringo/views/users.py:111 ringo/views/users.py:136 ringo/views/users.py:223
 msgid "Password must be at least 12 characters long."
 msgstr ""
 
-#: ringo/views/users.py:114 ringo/views/users.py:139 ringo/views/users.py:210
+#: ringo/views/users.py:115 ringo/views/users.py:140 ringo/views/users.py:227
 msgid "Password must contain at least 2 non-letters."
 msgstr ""
 
-#: ringo/views/users.py:203
+#: ringo/views/users.py:220
 msgid "The given password is not correct"
 msgstr ""
 
-#: ringo/views/users.py:222
+#: ringo/views/users.py:239
 msgid "Changed password for \"${item}\" successfull."
 msgstr ""
 
-#: ringo/views/users.py:232
+#: ringo/views/users.py:249
 msgid "Error on changing the password for \"${item}\"."
 msgstr ""
 
-#: ringo/views/base/delete.py:58
+#: ringo/views/base/delete.py:60
 msgid "Can not delete ${item_type} items."
 msgstr ""
 
-#: ringo/views/base/delete.py:60
+#: ringo/views/base/delete.py:62
 msgid ""
 "There has been an integrity error which prevents the request to be "
 "fulfilled. There are still depended items on the item to be deleted. "
@@ -804,7 +828,7 @@ msgid ""
 "try again. Hint: ${error}"
 msgstr ""
 
-#: ringo/views/base/delete.py:72
+#: ringo/views/base/delete.py:75
 msgid "Deleted ${num} ${item_type} successfully."
 msgstr ""
 
@@ -1064,16 +1088,20 @@ msgstr ""
 #. Label for first_name field in form config
 #. Label for first_name column in overview table config
 #. Label for profile[0].first_name column in overview table config
+#. Label for profile[0].first_name column in members table config
 #: ringo/views/forms/profiles.xml:1 ringo/views/forms/users.xml:12
 #: ringo/views/tables/profiles.json:2 ringo/views/tables/users.json:2
+#: ringo/views/tables/users.json:10
 msgid "Firstname"
 msgstr ""
 
 #. Label for last_name field in form config
 #. Label for last_name column in overview table config
 #. Label for profile[0].last_name column in overview table config
+#. Label for profile[0].last_name column in members table config
 #: ringo/views/forms/profiles.xml:2 ringo/views/forms/users.xml:13
 #: ringo/views/tables/profiles.json:3 ringo/views/tables/users.json:3
+#: ringo/views/tables/users.json:11
 msgid "Lastname"
 msgstr ""
 
@@ -1126,7 +1154,8 @@ msgid "Administrational role"
 msgstr ""
 
 #. Label for users field in form config
-#: ringo/views/forms/roles.xml:6
+#. Label for members field in form config
+#: ringo/views/forms/roles.xml:6 ringo/views/forms/usergroups.xml:2
 msgid "Users"
 msgstr ""
 
@@ -1140,14 +1169,6 @@ msgstr ""
 
 #: ringo/views/forms/roles.xml:9 ringo/views/forms/users.xml:24
 msgid "No"
-msgstr ""
-
-#. Label for members field in form config
-#. Label for members column in overview table config
-#. Label for members column in selection table config
-#: ringo/views/forms/usergroups.xml:2 ringo/views/tables/usergroups.json:3
-#: ringo/views/tables/usergroups.json:6
-msgid "Members"
 msgstr ""
 
 #. Label for oldpassword field in form config
@@ -1239,6 +1260,12 @@ msgstr ""
 #. Label for admin column in selection table config
 #: ringo/views/tables/roles.json:4 ringo/views/tables/roles.json:7
 msgid "Adminrole"
+msgstr ""
+
+#. Label for members column in overview table config
+#. Label for members column in selection table config
+#: ringo/views/tables/usergroups.json:3 ringo/views/tables/usergroups.json:6
+msgid "Members"
 msgstr ""
 
 #. Label for groups column in overview table config
@@ -1513,5 +1540,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Set members of group"
+#~ msgstr ""
+
+#~ msgid "Set Standin"
 #~ msgstr ""
 
