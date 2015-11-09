@@ -12,70 +12,46 @@ function pad(number, length) {
     return str;
 }
 
-var Countdown = new (function() {
+$(function(){
+    LogoutTimer=function(){
+        var auth_timeout = $("meta[name='auth_timeout']").attr("content") * 1000;
+        var auth_warning = $("meta[name='auth_warning']").attr("content") * 1000;
+        var keep_alive_url = $("meta[name='auth_keepalive']").attr("content");
+        var logout_url = $("meta[name='auth_logout']").attr("content");
+        var currentTime = auth_timeout;
+        var display_warning = false
 
-    var $countdown;
-    var incrementTime = 70;
-    // Get session time
-    var auth_timeout = $("meta[name='auth_timeout']").attr("content") * 1000;
-    var auth_warning = $("meta[name='auth_warning']").attr("content") * 1000;
-    var keep_alive_url = $("meta[name='auth_keepalive']").attr("content");
-    var logout_url = $("meta[name='auth_logout']").attr("content");
-    var currentTime = auth_timeout;
-
-    $(function() {
-        // Setup the timer
-        $countdown = $("#sessiontimer input");
         $reset = $("#sessiontimer div.input-group-addon")
         $reset.click(function () {
-            Countdown.resetCountdown();
+           resetCountdown();
         });
         $("#logoutWarningOK").click(function () {
-            Countdown.resetCountdown();
+            resetCountdown();
         });
 
-        if ($("meta[name='auth_user']").attr("content") != 'None') {
-            Countdown.Timer = $.timer(updateTimer, incrementTime, true);
-            // Listener to AJAX Requests. On each AJAX Request we will reset
-            // the logout timer.
-            //$(document).ajaxComplete(function(event,request, settings){
-            //    Countdown.resetCountdown();
-            //});
-            console.log("Initialising the Session timer with " + currentTime + " seconds");
-        };
-    });
-
-    function updateTimer() {
-        // Output timer position
-        var timeString = formatTime(currentTime);
-        $countdown.val(timeString);
-
-        if (currentTime < auth_warning) {
-            console.log('Session is going to expire in ' + auth_timeout/1000 + ' seconds. Show warning.');
-            $("#logoutWarning").modal("show");
+        function resetCountdown(){
+            currentTime = auth_timeout;
+            display_warning = false;
+            $.get(keep_alive_url);
+            $("#logoutWarning").modal("hide");
         }
 
-        // If timer is complete, trigger alert
-        if (currentTime == 0) {
-            Countdown.Timer.stop();
-            console.log('Session expired. Logging out.');
-            location.href=logout_url;
+        function displayTime(){
+            if (currentTime > 0) {
+                if (currentTime < auth_warning && !display_warning){
+                    display_warning = true;
+                    $("#logoutWarning").modal("show");
+                }
+                $countdown = $("#sessiontimer input");
+                $countdown.val(formatTime(currentTime));
+                currentTime -=1000;
+                setTimeout(displayTime, 1000);
+            }
+
+            if (currentTime == 0 ) location.href=logout_url;
         }
 
-        // Increment timer position
-        currentTime -= incrementTime;
-        if (currentTime < 0) currentTime = 0;
-    }
+         if (currentTime > 0) displayTime();
 
-    this.resetCountdown = function() {
-        // Stop and reset timer
-        Countdown.Timer.stop().once();
-        currentTime = auth_timeout;
-        Countdown.Timer.play(true);
-
-        $.get(keep_alive_url);
-        $("#logoutWarning").modal("hide");
-        console.log("Refreshing timer");
-    };
-
-});
+    }();
+})
