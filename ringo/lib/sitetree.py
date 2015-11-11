@@ -88,7 +88,15 @@ def walk_site_tree(st, el, item, request):
     """
     path = []
     site = st[el]
-    action = site.get("actions", {}).get(request.path.split("/")[2])
+
+    # Get action. Currently using routes the action is always the
+    # penultimate element in the URL.
+    path_elements = request.path.split("/")
+    if len(path_elements) > 1:
+        action = site.get("actions", {}).get(path_elements[-2])
+    else:
+        action = None
+
     parent_site = site.get("parent_site")
     parent_item_attr = site.get("parent_item")
 
