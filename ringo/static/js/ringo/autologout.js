@@ -48,10 +48,10 @@ $(function(){
                 setTimeout(displayTime, 1000);
             }
 
-            if (currentTime == 0 ) location.href=logout_url;
+            if (currentTime == 0 ) location.href=logout_url+"?autologout=true";
         }
 
-         if (currentTime > 0 && location.pathname !== "/auth/autologout") displayTime();
+         if (currentTime > 0 && location.pathname) displayTime();
 
     }();
 })

@@ -80,6 +80,8 @@ def logout(request):
     handle_history(request)
     _ = request.translate
     target_url = request.route_path('home')
+    if request.params.get('autologout'):
+        target_url = request.route_path('autologout')
     headers = forget(request)
     msg = _("Logout was successfull")
     request.session.flash(msg, 'success')
@@ -89,9 +91,6 @@ def logout(request):
 @view_config(route_name='autologout', renderer='/auth/autologout.mako')
 def autologout(request):
     _ = request.translate
-    handle_history(request)
-    _ = request.translate
-    forget(request)
     return {"_": _}
 
 @view_config(route_name='accountdisabled', renderer='/auth/disabled.mako')
