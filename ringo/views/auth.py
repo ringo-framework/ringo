@@ -80,6 +80,8 @@ def logout(request):
     handle_history(request)
     _ = request.translate
     target_url = request.route_path('home')
+    if request.params.get('autologout'):
+        target_url = request.route_path('autologout')
     headers = forget(request)
     msg = _("Logout was successfull")
     request.session.flash(msg, 'success')
