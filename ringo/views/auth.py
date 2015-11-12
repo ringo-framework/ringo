@@ -89,6 +89,9 @@ def logout(request):
 @view_config(route_name='autologout', renderer='/auth/autologout.mako')
 def autologout(request):
     _ = request.translate
+    handle_history(request)
+    _ = request.translate
+    forget(request)
     return {"_": _}
 
 @view_config(route_name='accountdisabled', renderer='/auth/disabled.mako')
