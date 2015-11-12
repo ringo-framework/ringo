@@ -98,6 +98,20 @@ The complexity can be configured per overview table using the
 ``table.json`` configuration which is available for all tables in the
 system.
 
+.. _admin_sessiontimer:
+
+Session Timer
+-------------
+You can configure to show a session timer widget in the header of the
+application. The session timer will show the time left in the current session
+and provides a button to refresh the session.
+
+* layout.show_sessiontimer = true.
+  
+Default is false, no widget is shown.
+
+The time of the session timer is configured in :ref:`admin_autologout`.
+
 Sessions
 ========
 
@@ -139,6 +153,8 @@ Authentication is stored with in a auth_tkt cookie.  See `Cookie options on
 for more details. The settings as taken from the global :ref:`conf_cookies`
 security settings.
 
+.. _admin_autologout:
+
 Autologout
 -----------
 The authentication only stay valid for the given time. After that time a
@@ -154,6 +170,8 @@ auth.timeout_warning
 The timeout_warning variable defines how many seconds before the actual logout a
 warning dialog will be raised.
 
+If you want to display a nice sessiontimer than look also in :ref:`admin_sessiontimer`.
+
 Passwort reminder and user registration
 ---------------------------------------
 Ringo provides methods to allow users to register a new account or send
@@ -167,6 +185,10 @@ auth.register_user
 auth.password_reminder
         Defaults to `false`. Enable the option to let the user reset their
         password.
+
+.. note::
+    To enable this feature the mailsystem must be configured too. You
+    need to set the mail host and the default sender in your config.
 
 .. note::
     To enable this feature the mailsystem must be configured too. You
@@ -285,6 +307,36 @@ The enhance the security follwing the recommodation of measurement M 4.401 of
    Caching of dynmic generated pages might result in some unexpected behaviour
    such as outdated items in overview lists. Therefor ther default disables
    caching here.
+
+DB Caching
+==========
+.. warning::
+        This feature is experimantal. It might change or removed completely in
+        the next versions of Ringo.
+
+Ringo supports file based caching of DB queries using a dogpile cache. Caching
+is disabled on default and must be enabled.
+
+.. note::
+        Ringo does not try to use the cache on default. You will need to
+        write code to tell Ringo to do so explicit! Unless you do not have any
+        code that tries to use the cache you will not need to enable it here
+        at all.
+
+To enable the cache you need to define where to save the cache:
+
+ * db.cachedir = path/to/the/cachebasedir
+
+The queries are cached in so called `regions` which will stay valid for a
+given time before the cache is invalidated. The regions can be configured in
+the following way:
+
+ * db.cacheregions = default:3600 short:50 ...
+
+The multiple regions are separated with spaces. A singe regions consists of the
+name and the time the regions should be valid. Name and time is colomn
+separated.
+
 
 Mail
 ====

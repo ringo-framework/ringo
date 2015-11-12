@@ -104,9 +104,9 @@ class UserFactory(BaseFactory):
         usergroup = usergroup_factory.create(None, {})
         usergroup.name = new_user.login
         usergroup.members.append(new_user)
-        # The no default group is set set the users group as default
-        # group
-        new_user.usergroup = usergroup
+        # If no default group is set, then set the users group as
+        # default group
+        new_user.usergroup = values.get("usergroup") or usergroup
         return new_user
 
 

@@ -16,13 +16,11 @@ var opts = {
   top: '50%', // Top position relative to parent
   left: '50%' // Left position relative to parent
 };
-
 var timer;
 var spinner = new Spinner(opts);
 var spinner_timer = 800; //threshold in ms after spinner starts
 
 $( document ).ready(function() {
-    $("#logoutWarningOK").click(hideLogoutWarning);
     $(':button').not('[data-toggle="dropdown"], [type="reset"], [target="_blank"]').click(function () {
         var hide_spinner = $(this).hasClass("nospinner") == true;
         if (hide_spinner == false) {
@@ -143,7 +141,7 @@ $( document ).ready(function() {
             var dialog = $("#DirtyFormWarning");
             $('#DirtyFormWarningProceedButton').attr("href", url);
             // If the URL does not begin with "#" then show the dialog.
-            if (url && url.indexOf("#") != 0 && logout_warning == false) {
+            if (url && url.indexOf("#") != 0) {
                 $(dialog).modal("show");
                 DirtyFormWarningOpen = true;
 		event.preventDefault();
@@ -180,7 +178,7 @@ $( document ).ready(function() {
     });
     $('tbody').on("click", "tr", function(elem){
         var link=$(elem.currentTarget).data("link");
-        if(link && elem.target.tagName!=="INPUT" && isDirty == false) {
+        if(link && elem.target.tagName!=="INPUT" && (typeof isDirty === "undefined" || isDirty == false)) {
            location.href=link;
         }
     });

@@ -1,3 +1,15 @@
+1.8
+===
+- Implemented session timer widget. The widget shows the remaining time in the
+  session before the autologout will be triggered.
+  The widget needs to be enabled in the .ini file. See documentation for more
+  details.
+- Dogpile caching for SQL need to be enabled explicit now.
+- Enhanced breadcrum feature. Allow to define additional actions which should
+  be displayed in the breadcrumbs beside the default actions.
+- Changed Mailer. The Subject of the Mails do not include a prepended name of the
+  application anymore.
+
 1.7
 ===
 - Ringo no longer does automatic extension registering on server
