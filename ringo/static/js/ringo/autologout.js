@@ -51,7 +51,7 @@ $(function(){
             if (currentTime == 0 ) location.href=logout_url;
         }
 
-         if (currentTime > 0) displayTime();
+         if (currentTime > 0 && location.pathname !== "/auth/autologout") displayTime();
 
     }();
 })
