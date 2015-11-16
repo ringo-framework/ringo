@@ -1,5 +1,6 @@
 """Functiont to work with forms."""
 import os
+import inspect
 from formbar.form import Form
 from formbar.config import Config, load, parse
 from formbar.helpers import get_css_files, get_js_files
@@ -75,13 +76,17 @@ def get_form_config(item, formname):
     :formname: name of the form which should be returned
     :returns: Formconfig
     """
-    cachename = "%s.%s" % (item.__class__.__name__, formname)
+    if inspect.isclass(item):
+        cachename = "%s.%s" % (item.__name__, formname)
+        filename = "%s.xml" % item.__tablename__
+    else:
+        cachename = "%s.%s" % (item.__class__.__name__, formname)
+        filename = "%s.xml" % item.__class__.__tablename__
     name = item.__module__.split(".")[0]
     if not CACHE_FORM_CONFIG.get(cachename):
         if hasattr(item, 'fid'):
             config = get_form_config_from_db(item.fid, formname)
         else:
-            filename = "%s.xml" % item.__class__.__tablename__
             config = get_form_config_from_file(name, filename, formname)
         CACHE_FORM_CONFIG.set(cachename, config)
     return CACHE_FORM_CONFIG.get(cachename)
