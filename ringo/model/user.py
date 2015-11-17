@@ -38,6 +38,22 @@ nm_action_roles = sa.Table(
 )
 
 
+class Login(Base):
+    """Class to for logins of a user. Attempts to login into the
+    application are stored in a table in the database. Each attemp is
+    stored with the datetime, the user and the state of the login.
+
+    This information can later be used to give information on suspicious
+    logins."""
+    __tablename__ = "user_logins"
+
+    id = sa.Column(sa.Integer, primary_key=True)
+    datetime = sa.Column(sa.DateTime)
+    success = sa.Column(sa.Boolean)
+    uid = sa.Column(sa.Integer, sa.ForeignKey("users.id"))
+    user = sa.orm.relationship("User", backref="logins")
+
+
 class PasswordResetRequest(Base):
     __tablename__ = 'password_reset_requests'
     user = sa.orm.relationship("User", backref='reset_tokens')
@@ -48,6 +64,7 @@ class PasswordResetRequest(Base):
 
     def __str__(self):
         return self.token
+
 
 class UserSetting(Base):
     __tablename__ = 'user_settings'
@@ -68,6 +85,7 @@ class UserSetting(Base):
         dump = json.dumps(settings)
         log.debug("Setting usersetting for %s: %s" % (key, dump))
         self.settings = dump
+
 
 class UserFactory(BaseFactory):
 
