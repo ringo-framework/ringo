@@ -48,10 +48,14 @@ class Login(Base):
     __tablename__ = "user_logins"
 
     id = sa.Column(sa.Integer, primary_key=True)
-    datetime = sa.Column(sa.DateTime)
+    datetime = sa.Column(sa.DateTime, default=datetime.utcnow)
     success = sa.Column(sa.Boolean)
     uid = sa.Column(sa.Integer, sa.ForeignKey("users.id"))
     user = sa.orm.relationship("User", backref="logins")
+
+    def __init__(self, user, success):
+        self.success = success
+        user.logins.append(self)
 
 
 class PasswordResetRequest(Base):
