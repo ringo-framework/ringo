@@ -5,7 +5,6 @@ mapping={'app_title': h.get_app_title()}
 <div class="page-header">
 <h1>Home</h1>
 </div>
-
 % if request.user:
 <%include file="/logininfo.mako" />
 % endif
