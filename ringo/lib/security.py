@@ -538,6 +538,36 @@ def login(username, password):
     return None
 
 
+def get_last_successfull_login(request, user):
+    result = request.db.query(Login)\
+                .filter(Login.success == True)\
+                .order_by(Login.id.asc())\
+                .all()
+    if len(result) > 1:
+        return result[-2]
+    return None
+
+
+def get_last_logins(request, since, success=None):
+    """Returns a list of last logins since the given datetime.
+
+    :request: Current request
+    :since: Datetime object
+    :success: Boolean flag to indicate to only return successfull or
+              failed logins. If None all logins are returned.
+    :returns: List of Login items
+
+    """
+    result = request.db.query(Login)\
+                .filter(Login.datetime > since)\
+                .order_by(Login.id.desc())\
+                .all()
+    if success is None:
+        return result
+    else:
+        return [l for l in result if l.success == success]
+
+
 class AuthorizationException(Exception):
     """Exception to be raise if a authorization error is detected."""
     pass
