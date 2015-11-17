@@ -21,7 +21,7 @@ from ringo.lib.sql import DBSession
 from ringo.lib.alchemy import get_relations_from_clazz
 from ringo.model.base import BaseItem
 from ringo.model.modul import ModulItem
-from ringo.model.user import User, PasswordResetRequest
+from ringo.model.user import User, PasswordResetRequest, Login
 
 log = logging.getLogger(__name__)
 
@@ -516,6 +516,7 @@ def login(username, password):
     if user:
         if verify_password(password, user.password):
             if user.activated:
+                Login(user, success=True)
                 user.last_login = datetime.utcnow()
                 log.info("Login successfull '%s'" % (username))
                 if passwords_needs_update(user.password):
@@ -523,10 +524,12 @@ def login(username, password):
                     user.password = encrypt_password(password)
                 return user
             else:
+                Login(user, success=False)
                 log.info("Login failed for user '%s'. "
                          "Reason: Not activated" % username)
                 return user
         else:
+            Login(user, success=False)
             log.info("Login failed for user '%s'. "
                      "Reason: Wrong password" % username)
     else:
