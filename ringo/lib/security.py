@@ -547,6 +547,15 @@ def get_last_successfull_login(request, user):
         return result[-2]
     return None
 
+def get_last_failed_login(request, user):
+    result = request.db.query(Login)\
+                .filter(Login.success == False)\
+                .order_by(Login.id.asc())\
+                .all()
+    if len(result) > 1:
+        return result[-2]
+    return None
+
 
 def get_last_logins(request, since, success=None):
     """Returns a list of last logins since the given datetime.
