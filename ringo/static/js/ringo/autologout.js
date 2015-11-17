@@ -3,7 +3,11 @@ function formatTime(time) {
     var min = parseInt(time / 6000),
         sec = parseInt(time / 100) - (min * 60),
         hundredths = pad(time - (sec * 100) - (min * 6000), 2);
-    return (min > 0 ? pad(min, 2) : "00") + ":" + pad(sec, 2);
+    if (min >= 3) {
+        return min + "min";
+    } else {
+        return (min > 0 ? pad(min, 2) : "00") + ":" + pad(sec, 2);
+    }
 }
 
 function pad(number, length) {
