@@ -1,7 +1,10 @@
 <% 
 last_login = s.get_last_successfull_login(request, request.user)
 last_failed_login = s.get_last_failed_login(request, request.user)
-failed_logins = s.get_last_logins(request, last_login.datetime, success=False)
+if last_login:
+  failed_logins = s.get_last_logins(request, last_login.datetime, success=False)
+else:
+  failed_logins = []
 login_fishy = len(failed_logins) > 5
 %>
 % if request.registry.settings.get("layout.show_logininfo") == "true":
