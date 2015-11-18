@@ -543,22 +543,21 @@ def get_last_successfull_login(request, user):
     if user is not None:
         result = request.db.query(Login) \
             .filter(Login.success == True, Login.uid == user.id) \
-            .order_by(Login.id.asc()) \
-            .all()
+            .order_by(Login.datetime.desc()) \
+            .limit(2).all()
         if len(result) > 1:
-            return result[-2]
+            return result[1]
     return None
 
 
 def get_last_failed_login(request, user):
+    result = None
     if user is not None:
         result = request.db.query(Login) \
             .filter(Login.success == False, Login.uid == user.id) \
-            .order_by(Login.id.asc()) \
-            .all()
-        if len(result) > 1:
-            return result[-2]
-    return None
+            .order_by(Login.datetime.desc()) \
+            .first()
+    return result
 
 
 def get_last_logins(request, since, success=None):
