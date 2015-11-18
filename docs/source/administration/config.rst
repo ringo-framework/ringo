@@ -125,6 +125,11 @@ attemps since the last successful login.
 
 Default is false, no info is shown.
 
+.. note::
+        The login info is an inclued mako file in the index.mako template.
+        Please do not forget to include the logininfo.mako template in your
+        index page in case you have overwritten the index page.
+
 Sessions
 ========
 
