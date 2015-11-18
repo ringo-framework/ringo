@@ -370,7 +370,7 @@ msgstr ""
 #: ringo/templates/logininfo.mako:14
 msgid "This could be an <strong>attempt of misuse</strong> of your user account."
 msgstr ""
-"Das kann ein <strong>Versuch des Missbrauchs</strong> ihres Benutzerkonto"
+"Das kann ein <strong>Versuch des Missbrauchs</strong> ihres Benutzerkontos"
 " sein."
 
 #: ringo/templates/logininfo.mako:23
