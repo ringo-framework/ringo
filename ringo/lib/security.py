@@ -540,7 +540,7 @@ def login(username, password):
 
 def get_last_successfull_login(request, user):
     result = request.db.query(Login)\
-                .filter(Login.success == True, Login.user == user)\
+                .filter(Login.success == True, Login.uid == user.id)\
                 .order_by(Login.id.asc())\
                 .all()
     if len(result) > 1:
@@ -549,7 +549,7 @@ def get_last_successfull_login(request, user):
 
 def get_last_failed_login(request, user):
     result = request.db.query(Login)\
-                .filter(Login.success == False, Login.user == user)\
+                .filter(Login.success == False, Login.uid == user.id)\
                 .order_by(Login.id.asc())\
                 .all()
     if len(result) > 1:
@@ -568,7 +568,7 @@ def get_last_logins(request, since, success=None):
 
     """
     result = request.db.query(Login)\
-                .filter(Login.datetime > since)\
+                .filter(Login.datetime > since, Login.uid == request.user.id)\
                 .order_by(Login.id.desc())\
                 .all()
     if success is None:
