@@ -7,7 +7,7 @@ else:
   failed_logins = []
 login_fishy = len(failed_logins) > 5
 %>
-% if request.registry.settings.get("layout.show_logininfo") == "true" and last_login:
+% if request.user and request.registry.settings.get("layout.show_logininfo") == "true" and last_login:
 % if login_fishy:
 <div class="row">
   <div class="col-md-12">
