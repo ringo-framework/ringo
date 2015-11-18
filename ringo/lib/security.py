@@ -571,6 +571,9 @@ def get_last_logins(request, since, success=None):
     :returns: List of Login items
 
     """
+    if request.user is None:
+        return []
+
     result = request.db.query(Login) \
         .filter(Login.datetime > since, Login.uid == request.user.id) \
         .order_by(Login.id.desc()) \
