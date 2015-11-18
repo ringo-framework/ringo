@@ -4,6 +4,7 @@ last_failed_login = s.get_last_failed_login(request, request.user)
 failed_logins = s.get_last_logins(request, last_login.datetime, success=False)
 login_fishy = len(failed_logins) > 5
 %>
+% if request.registry.settings.get("layout.show_logininfo") == "true":
 % if login_fishy:
 <div class="row">
   <div class="col-md-12">
@@ -30,3 +31,4 @@ login_fishy = len(failed_logins) > 5
     </span>
   </div>
 </div>
+%endif
