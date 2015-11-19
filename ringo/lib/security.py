@@ -5,23 +5,20 @@ import string
 import random
 from passlib.context import CryptContext
 from datetime import datetime
-
 from pyramid.events import ContextFound, NewRequest
-from pyramid.security import unauthenticated_userid,\
-    has_permission as has_permission_,\
+from pyramid.security import unauthenticated_userid, \
+    has_permission as has_permission_, \
     Allow, ALL_PERMISSIONS
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.httpexceptions import HTTPUnauthorized
-
 from sqlalchemy.orm.exc import NoResultFound
-
 from ringo.lib.helpers import get_item_modul
 from ringo.lib.sql import DBSession
 from ringo.lib.alchemy import get_relations_from_clazz
 from ringo.model.base import BaseItem
 from ringo.model.modul import ModulItem
-from ringo.model.user import User, PasswordResetRequest
+from ringo.model.user import User, PasswordResetRequest, Login
 
 log = logging.getLogger(__name__)
 
@@ -53,6 +50,7 @@ def get_cookie_secret(settings):
     if not secret:
         secret = password_generator(50)
     return secret
+
 
 pwd_context = CryptContext(
     # replace this list with the hash(es) you wish to support.
@@ -161,7 +159,7 @@ def setup_ringo_security(config):
                                                secure=secure,
                                                hashalg='sha512',
                                                timeout=timeout,
-                                               reissue_time=timeout/10,
+                                               reissue_time=timeout / 10,
                                                callback=get_principals,
                                                include_ip=include_ip,
                                                path=path,
@@ -378,6 +376,7 @@ def get_principals(userid, request):
     log.debug('Principals for userid "%s": %s' % (userid, principals))
     return principals
 
+
 # ROLES
 #######
 
@@ -402,6 +401,7 @@ def get_roles(user):
     """
     return user.roles
 
+
 # GROUPS
 ########
 
@@ -414,6 +414,7 @@ def has_group(user, group):
 
     groups = [g.name for g in user.groups]
     return group in groups
+
 
 # Helpers
 #########
@@ -516,6 +517,7 @@ def login(username, password):
     if user:
         if verify_password(password, user.password):
             if user.activated:
+                Login(user, success=True)
                 user.last_login = datetime.utcnow()
                 log.info("Login successfull '%s'" % (username))
                 if passwords_needs_update(user.password):
@@ -523,16 +525,62 @@ def login(username, password):
                     user.password = encrypt_password(password)
                 return user
             else:
+                Login(user, success=False)
                 log.info("Login failed for user '%s'. "
                          "Reason: Not activated" % username)
                 return user
         else:
+            Login(user, success=False)
             log.info("Login failed for user '%s'. "
                      "Reason: Wrong password" % username)
     else:
         log.info("Login failed for user '%s'. "
                  "Reason: Username not known" % username)
     return None
+
+
+def get_last_successfull_login(request, user):
+    if user is not None:
+        result = request.db.query(Login) \
+            .filter(Login.success == True, Login.uid == user.id) \
+            .order_by(Login.datetime.desc()) \
+            .limit(2).all()
+        if len(result) > 1:
+            return result[1]
+    return None
+
+
+def get_last_failed_login(request, user):
+    result = None
+    if user is not None:
+        result = request.db.query(Login) \
+            .filter(Login.success == False, Login.uid == user.id) \
+            .order_by(Login.datetime.desc()) \
+            .first()
+    return result
+
+
+def get_last_logins(request, since, success=None):
+    """Returns a list of last logins since the given datetime.
+
+    :request: Current request
+    :since: Datetime object
+    :success: Boolean flag to indicate to only return successfull or
+              failed logins. If None all logins are returned.
+    :returns: List of Login items
+
+    """
+    if request.user is None:
+        return []
+
+    result = request.db.query(Login) \
+        .filter(Login.datetime > since, Login.uid == request.user.id) \
+        .order_by(Login.id.desc()) \
+        .all()
+    if success is None:
+        return result
+    else:
+        return [l for l in result if l.success == success]
 
 
 class AuthorizationException(Exception):
@@ -635,7 +683,7 @@ class ValueChecker(object):
                 # checking permissions. Allowing links to a modul item
                 # is currently not known to be a security thread.
                 if (isinstance(value, ModulItem)
-                   or has_permission("read", value, request)):
+                    or has_permission("read", value, request)):
                     continue
                 else:
                     if modifier > 0:

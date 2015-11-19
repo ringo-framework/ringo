@@ -1,3 +1,13 @@
+1.9
+===
+- Log login attemps. Each successfull or failed login will now be saved in a
+  table called "user_logins".
+- Show info on last successful and last failed login on the index page of the
+  application. Additionally show a warning if there have been more than 5
+  failed logins since the last successful login.
+  This feature need to be enabled in the ini file. See documentation for more
+  details.
+
 1.8
 ===
 - Implemented session timer widget. The widget shows the remaining time in the

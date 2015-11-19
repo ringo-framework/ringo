@@ -112,6 +112,24 @@ Default is false, no widget is shown.
 
 The time of the session timer is configured in :ref:`admin_autologout`.
 
+Login Info
+----------
+You can configure to show the last successful and last failed login on the
+start page. This can help the user to identify possible misuse of their
+account.
+
+Additionally a warning is shown if there has been more than 5 failed login
+attemps since the last successful login.
+
+* layout.show_logininfo = true.
+
+Default is false, no info is shown.
+
+.. note::
+        The login info is an inclued mako file in the index.mako template.
+        Please do not forget to include the logininfo.mako template in your
+        index page in case you have overwritten the index page.
+
 Sessions
 ========
 
