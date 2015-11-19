@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 1.8.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-11-10 11:32+0100\n"
+"POT-Creation-Date: 2015-11-17 16:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,7 +91,7 @@ msgid ""
 " item values"
 msgstr ""
 
-#: ringo/templates/about.mako:4 ringo/templates/footer.mako:20
+#: ringo/templates/about.mako:4 ringo/templates/footer.mako:21
 msgid "About"
 msgstr ""
 
@@ -160,7 +160,7 @@ msgstr ""
 msgid "Advanced"
 msgstr ""
 
-#: ringo/templates/base.mako:184 ringo/templates/footer.mako:7
+#: ringo/templates/base.mako:184 ringo/templates/footer.mako:8
 msgid "Administration"
 msgstr ""
 
@@ -172,7 +172,7 @@ msgstr ""
 msgid "Advanced actions"
 msgstr ""
 
-#: ringo/templates/contact.mako:4 ringo/templates/footer.mako:23
+#: ringo/templates/contact.mako:4 ringo/templates/footer.mako:24
 msgid "Contact"
 msgstr ""
 
@@ -204,11 +204,11 @@ msgid ""
 "the Ringo issue tracker."
 msgstr ""
 
-#: ringo/templates/footer.mako:26
+#: ringo/templates/footer.mako:27
 msgid "Documentation"
 msgstr ""
 
-#: ringo/templates/footer.mako:29
+#: ringo/templates/footer.mako:30
 msgid "Show version information"
 msgstr ""
 
@@ -243,7 +243,7 @@ msgstr ""
 
 #. Label for login field in form config
 #. Label for user.login column in overview table config
-#: ringo/templates/header.mako:88 ringo/templates/index.mako:18
+#: ringo/templates/header.mako:88 ringo/templates/index.mako:22
 #: ringo/templates/auth/confirm_user.mako:19
 #: ringo/templates/auth/confirm_user.mako:24 ringo/templates/auth/login.mako:5
 #: ringo/templates/auth/reset_password.mako:19
@@ -253,11 +253,11 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: ringo/templates/index.mako:8
+#: ringo/templates/index.mako:12
 msgid "Welcome to ${app_title}!"
 msgstr ""
 
-#: ringo/templates/index.mako:9
+#: ringo/templates/index.mako:13
 msgid ""
 "What you see here is the default dashboard and layout based on the Ringo "
 "application framework. This is your home. Your dashboard. Usually this page "
@@ -265,11 +265,11 @@ msgid ""
 "news and more in this application."
 msgstr ""
 
-#: ringo/templates/index.mako:11
+#: ringo/templates/index.mako:15
 msgid "Next stop: Login!"
 msgstr ""
 
-#: ringo/templates/index.mako:12
+#: ringo/templates/index.mako:16
 msgid ""
 "This is the dashboard as seen by anonymous users. To get a better impression "
 "of the functionality provided by Ringo then you can login now.<br></br>Please"
@@ -280,7 +280,7 @@ msgstr ""
 #. Label for user field in form config
 #. Label for login column in overview table config
 #. Label for login column in members table config
-#: ringo/templates/index.mako:14 ringo/views/forms/auth.xml:1
+#: ringo/templates/index.mako:18 ringo/views/forms/auth.xml:1
 #: ringo/views/forms/profiles.xml:9 ringo/views/tables/users.json:4
 #: ringo/views/tables/users.json:12
 msgid "Loginname"
@@ -288,26 +288,26 @@ msgstr ""
 
 #. Label for pass field in form config
 #. Label for password field in form config
-#: ringo/templates/index.mako:15 ringo/views/forms/auth.xml:2
+#: ringo/templates/index.mako:19 ringo/views/forms/auth.xml:2
 #: ringo/views/forms/users.xml:4
 msgid "Password"
 msgstr ""
 
-#: ringo/templates/index.mako:17
+#: ringo/templates/index.mako:21
 msgid ""
 "Please do not forget to change the password after your first login! What are "
 "you waiting for?"
 msgstr ""
 
-#: ringo/templates/index.mako:18
+#: ringo/templates/index.mako:22
 msgid "Login in the application"
 msgstr ""
 
-#: ringo/templates/index.mako:20
+#: ringo/templates/index.mako:24
 msgid "What to do next?"
 msgstr ""
 
-#: ringo/templates/index.mako:21
+#: ringo/templates/index.mako:25
 msgid ""
 "The Ringo application framework provides already some basic functionality "
 "which is ready for use in your fresh created application. It time to make a "
@@ -315,11 +315,32 @@ msgid ""
 "included and how things work."
 msgstr ""
 
-#: ringo/templates/index.mako:22
+#: ringo/templates/index.mako:26
 msgid ""
 "You probably want to change this page and other things. No problem. A good "
 "starting point is the documentation. Please consult the part on development "
 "and learn how to change and add things to this application. Happy coding! :)"
+msgstr ""
+
+#: ringo/templates/logininfo.mako:13
+#, python-format
+msgid ""
+"There have been more than <strong>5 failed login attemps</strong> since the "
+"last successfull login on <strong>%s</strong>"
+msgstr ""
+
+#: ringo/templates/logininfo.mako:14
+msgid "This could be an <strong>attempt of misuse</strong> of your user account."
+msgstr ""
+
+#: ringo/templates/logininfo.mako:23
+#, python-format
+msgid "The last login was on %s"
+msgstr ""
+
+#: ringo/templates/logininfo.mako:25
+#, python-format
+msgid "The last failed login was on %s"
 msgstr ""
 
 #: ringo/templates/sessiontimer.mako:2
@@ -699,49 +720,49 @@ msgstr ""
 msgid "Login was successfull"
 msgstr ""
 
-#: ringo/views/auth.py:84
+#: ringo/views/auth.py:86
 msgid "Logout was successfull"
 msgstr ""
 
-#: ringo/views/auth.py:151
+#: ringo/views/auth.py:164
 msgid "Confirm user registration"
 msgstr ""
 
-#: ringo/views/auth.py:161
+#: ringo/views/auth.py:174
 msgid ""
 "User has been created and a confirmation mail was sent to the users email "
 "adress. Please check your email."
 msgstr ""
 
-#: ringo/views/auth.py:181
+#: ringo/views/auth.py:194
 msgid "The user has beed successfull confirmed."
 msgstr ""
 
-#: ringo/views/auth.py:183
+#: ringo/views/auth.py:196
 msgid "The user was not confirmed. Maybe the confirmation token was not valid?"
 msgstr ""
 
-#: ringo/views/auth.py:207
+#: ringo/views/auth.py:220
 msgid "Password reset request"
 msgstr ""
 
-#: ringo/views/auth.py:216
+#: ringo/views/auth.py:229
 msgid ""
 "Password reset token has been sent to the users email address. Please check "
 "your email."
 msgstr ""
 
-#: ringo/views/auth.py:237
+#: ringo/views/auth.py:250
 msgid "Password has been reseted"
 msgstr ""
 
-#: ringo/views/auth.py:244
+#: ringo/views/auth.py:257
 msgid ""
 "Password was resetted and sent to the users email address. Please check your "
 "email."
 msgstr ""
 
-#: ringo/views/auth.py:248
+#: ringo/views/auth.py:261
 msgid "Password was not resetted. Maybe the request token was not valid?"
 msgstr ""
 

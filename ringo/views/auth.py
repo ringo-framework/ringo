@@ -90,6 +90,17 @@ def logout(request):
 
 @view_config(route_name='autologout', renderer='/auth/autologout.mako')
 def autologout(request):
+
+    # For the first call the user is still authenticated. So
+    # delete the auth cookie and trigger a redirect calling the same
+    # page.
+    if request.user:
+        headers = forget(request)
+        target_url = request.route_path('autologout')
+        return HTTPFound(location=target_url, headers=headers)
+
+    # User is not authenticated here anymore. So simply render the
+    # logout page.
     _ = request.translate
     return {"_": _}
 
