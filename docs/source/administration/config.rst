@@ -1,8 +1,17 @@
 *************************
 Application Configuration
 *************************
+The application can be configured by setting values in the
+``ini`` file. Ringo provides some helper methods to give directly access to
+some of the configuration options.
+
 Application
 ===========
+Helper methods giving access to the configuration options are available in the `appinfo` module.
+
+.. automodule:: ringo.lib.helpers.appinfo
+   :members: get_app_mode, get_app_title, get_app_inheritance_path
+
 
 Title
 -----
@@ -10,6 +19,8 @@ The name of the application used at various places in the application
 can be configured with the following varible.
 
 * app.title = Application name 
+
+The title is available using the :func:`get_app_title` function.
 
 .. _config_app_base:
 
@@ -25,6 +36,9 @@ If your application is based on another ringo based application you can
 configure the name of the application here. Setting this configuration
 will modify the inheritance path of the application.
 
+The inhertance_path is available using the :func:`get_app_inheritance_path`
+function.
+
 Example:
 The current application package is named "foo". "foo" is based on "bar". And
 "bar" is based on "ringo". The inheritance path is foo->bar->ringo.
@@ -33,6 +47,88 @@ This has consequences for the loading of form and table configurations.
 When trying to load form or table configuration ringo will iterate over
 the inheritance path and try to load the configuration from each
 application within the inheritance path.
+
+Application Mode
+----------------
+The application can be configured to be in a special "mode". Where mode can be
+a demo, development, education or any other flavour of your application.
+Setting the mode will result in some visual indication which is is different
+to the normal application mode.
+
+* app.mode =
+
+Short description of the mode. If this value is set a application will have
+some visual indication.
+
+* app.mode_desc =
+
+A longer description of the mode.
+
+* app.mode_color_primary = #F2DEDE
+* app.mode_color_secondary = red
+
+The color of the mode indicator header and the border around the application.
+Defaults to #F2DEDE (light red) and red. Allowed values are any usable in CSS,
+such as hexadecimal or RGB values, named colors, etc.
+
+The mode is available using the :func:`get_app_mode` function.
+
+Layout
+======
+
+Default Overview complexity
+---------------------------
+
+.. versionchanged:: 1.5
+   Prior version 1.5 the default overview was always the more complex
+   overview.
+
+You can define which complexity the the overview pages in
+ringo will have on default. There are two complexities available:
+
+1. A simple Overview. This overview provides a simple
+   search widget which may be enough for the most use cases.
+2. A advanced more complex overview. This overview provides a stackable
+   search, regular expressions, pagination and a feature to save a search.
+
+* layout.advanced_overviews = Default is false, which means without
+  further configuration the simple overviews are used.
+
+The complexity can be configured per overview table using the
+``table.json`` configuration which is available for all tables in the
+system.
+
+.. _admin_sessiontimer:
+
+Session Timer
+-------------
+You can configure to show a session timer widget in the header of the
+application. The session timer will show the time left in the current session
+and provides a button to refresh the session.
+
+* layout.show_sessiontimer = true.
+  
+Default is false, no widget is shown.
+
+The time of the session timer is configured in :ref:`admin_autologout`.
+
+Login Info
+----------
+You can configure to show the last successful and last failed login on the
+start page. This can help the user to identify possible misuse of their
+account.
+
+Additionally a warning is shown if there has been more than 5 failed login
+attemps since the last successful login.
+
+* layout.show_logininfo = true.
+
+Default is false, no info is shown.
+
+.. note::
+        The login info is an inclued mako file in the index.mako template.
+        Please do not forget to include the logininfo.mako template in your
+        index page in case you have overwritten the index page.
 
 Sessions
 ========
@@ -75,6 +171,8 @@ Authentication is stored with in a auth_tkt cookie.  See `Cookie options on
 for more details. The settings as taken from the global :ref:`conf_cookies`
 security settings.
 
+.. _admin_autologout:
+
 Autologout
 -----------
 The authentication only stay valid for the given time. After that time a
@@ -90,6 +188,8 @@ auth.timeout_warning
 The timeout_warning variable defines how many seconds before the actual logout a
 warning dialog will be raised.
 
+If you want to display a nice sessiontimer than look also in :ref:`admin_sessiontimer`.
+
 Passwort reminder and user registration
 ---------------------------------------
 Ringo provides methods to allow users to register a new account or send
@@ -103,6 +203,14 @@ auth.register_user
 auth.password_reminder
         Defaults to `false`. Enable the option to let the user reset their
         password.
+
+.. note::
+    To enable this feature the mailsystem must be configured too. You
+    need to set the mail host and the default sender in your config.
+
+.. note::
+    To enable this feature the mailsystem must be configured too. You
+    need to set the mail host and the default sender in your config.
 
 Security
 ========
@@ -217,6 +325,36 @@ The enhance the security follwing the recommodation of measurement M 4.401 of
    Caching of dynmic generated pages might result in some unexpected behaviour
    such as outdated items in overview lists. Therefor ther default disables
    caching here.
+
+DB Caching
+==========
+.. warning::
+        This feature is experimantal. It might change or removed completely in
+        the next versions of Ringo.
+
+Ringo supports file based caching of DB queries using a dogpile cache. Caching
+is disabled on default and must be enabled.
+
+.. note::
+        Ringo does not try to use the cache on default. You will need to
+        write code to tell Ringo to do so explicit! Unless you do not have any
+        code that tries to use the cache you will not need to enable it here
+        at all.
+
+To enable the cache you need to define where to save the cache:
+
+ * db.cachedir = path/to/the/cachebasedir
+
+The queries are cached in so called `regions` which will stay valid for a
+given time before the cache is invalidated. The regions can be configured in
+the following way:
+
+ * db.cacheregions = default:3600 short:50 ...
+
+The multiple regions are separated with spaces. A singe regions consists of the
+name and the time the regions should be valid. Name and time is colomn
+separated.
+
 
 Mail
 ====

@@ -16,15 +16,16 @@ var opts = {
   top: '50%', // Top position relative to parent
   left: '50%' // Left position relative to parent
 };
-
 var timer;
 var spinner = new Spinner(opts);
 var spinner_timer = 800; //threshold in ms after spinner starts
 
 $( document ).ready(function() {
-    $("#logoutWarningOK").click(hideLogoutWarning);
     $(':button').not('[data-toggle="dropdown"], [type="reset"], [target="_blank"]').click(function () {
-        startSpinner(spinner_timer);
+        var hide_spinner = $(this).hasClass("nospinner") == true;
+        if (hide_spinner == false) {
+            startSpinner(spinner_timer);
+        }
     });
     $('[data-toggle="tooltip"]').tooltip();
     $('.dialog').modal({
@@ -55,8 +56,10 @@ $( document ).ready(function() {
            /* Disable initial sort */
            "aaSorting": [],
            "bInfo": true,
-           "bAutoWidth": true
+           "bAutoWidth": true,
+           "fnInitComplete":onDTTableRendered
      });
+    // This overview is used for the simple overview page!
     $('.datatable-simple').dataTable( {
            "oLanguage": {
                 "sUrl": application_path + "/ringo-static/js/datatables/i18n/"+language+".json"
@@ -67,8 +70,10 @@ $( document ).ready(function() {
            "bSort": true,
            /* Disable initial sort */
            "aaSorting": [],
-           "bInfo": false,
-           "bAutoWidth": false
+           "bInfo": true,
+           "bAutoWidth": false,
+           "fnInitComplete":onDTTableRendered,
+           "dom": '<"search-widget"<"row"<"col-md-6"f><"col-md-6"<"pull-right"i>>>>'
     });
     $('.datatable-blank').dataTable({
           "oLanguage": {
@@ -81,20 +86,20 @@ $( document ).ready(function() {
           /* Disable initial sort */
           "aaSorting": [],
           "bInfo": false,
-          "bAutoWidth": false
+          "bAutoWidth": false,
+          "fnInitComplete":onDTTableRendered
     });
-    // Add form-controll class to search fields, needed for BS3
-    $('.dataTables_filter input').addClass("form-control");
-    $('.dataTables_length select').addClass("form-control");
     // Make the formbar navigation sticky when the user scrolls down.
     var width = $( document ).width();
-    if ( width > 768 ) {
-        $('.formbar-outline').affix({
-           offset: {
-           //top: $('header').height()
-           top: 140 }
-        });
-    }
+    if( width > 992) {
+      $('.formbar-outline').affix({
+        offset: {top: 208 }
+      });
+    } else if (width > 768 ){
+      $('.formbar-outline').affix({
+        offset: {top: 236 }
+      });
+    } else {} 
     // Enable tooltips on the text elements in datatables 
     //$('#data-table td a').tooltip(
     //   {
@@ -125,10 +130,8 @@ $( document ).ready(function() {
     $('form').each(function() {
         $(this).data('initialValue', $(this).serialize());
     });
-    $('a').not('[href^="mailto:"], [target="_blank"]').click(function(event) {
-        var isDirty = false;
-        var element = event.target;
-        var url = $(element).attr("href");
+    function openDirtyDialog(url, hide_spinner, event) {
+        isDirty = false;
         $('form').each(function () {
             if($(this).data('initialValue') != $(this).serialize()){
                 isDirty = true;
@@ -137,20 +140,34 @@ $( document ).ready(function() {
         if((isDirty == true) && (DirtyFormWarningOpen == false)) {
             var dialog = $("#DirtyFormWarning");
             $('#DirtyFormWarningProceedButton').attr("href", url);
-            // If the URL does not begin with "#" than show the dialog.
-            if (url && url.indexOf("#") != 0 && logout_warning == false) {
+            // If the URL does not begin with "#" then show the dialog.
+            if (url && url.indexOf("#") != 0) {
                 $(dialog).modal("show");
                 DirtyFormWarningOpen = true;
-                event.preventDefault();
+		event.preventDefault();
                 return false;
             }
             return true;
         }
         hash_i = url.indexOf("#");
         has_hash = (hash_i  == -1) == false;
-        if (((location.pathname != url) && url != "") && (has_hash == false)) {
+        if (((location.pathname != url) && url != "") && (has_hash == false) && (hide_spinner == false)) {
             startSpinner(spinner_timer);
         }
+    }
+    $('a').not('[href^="mailto:"], [target="_blank"]').click(function(event) {
+        var element = event.target;
+        var url = $(element).attr("href");
+        var hide_spinner = $(element).hasClass("nospinner") == true;
+        openDirtyDialog(url, hide_spinner, event);
+        
+    });
+    $('.link').not('a').click(function(event) {
+        var element = event.target;
+        var parentWithUrl = $(element).parents('[data-link]');
+        var url = parentWithUrl.data('link');
+        var hide_spinner = $(element).hasClass("nospinner") == true;
+        openDirtyDialog(url, hide_spinner, event);
     });
     $('#DirtyFormWarningCancelButton').click(function(event) {
             var dialog = $("#DirtyFormWarning");
@@ -159,7 +176,19 @@ $( document ).ready(function() {
             event.preventDefault();
             return false;
     });
+    $('tbody').on("click", "tr", function(elem){
+        var link=$(elem.currentTarget).data("link");
+        if(link && elem.target.tagName!=="INPUT" && (typeof isDirty === "undefined" || isDirty == false)) {
+           location.href=link;
+        }
+    });
 });
+
+function onDTTableRendered() {
+    // Add form-controll class to search fields, needed for BS3
+    $('.dataTables_filter input').addClass("form-control");
+    $('.dataTables_length select').addClass("form-control");
+}
 
 $( window ).unload(function() {
     stopSpinner();
@@ -190,7 +219,7 @@ function openModalForm(event) {
   });
   // now strip the content
   var title = $("h1", page.responseText).text();
-  var content = $("#form", page.responseText);
+  var content = $(".formbar-form", page.responseText);
   // Better leave url and attach some kind of javascript action to load the
   // result of the POST into the popup.
   $("form", content).attr("action", url);

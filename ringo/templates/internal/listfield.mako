@@ -13,6 +13,25 @@ for item in items:
   else:
     hidden_items.append(item)
 
+def render_item_row(request, clazz, permission, item, value, modal=False, backlink=True, nolinks=False):
+  out = []
+  out.append('<tr')
+  out.append('item-id="%s"' % item[0].id)
+  # Only take the path of the url and ignore any previous search filters.
+  if permission and (not nolinks):
+    try:
+      url = request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)
+      if backlink:
+        url += "?backurl=%s" % request.current_route_path()
+      out.append('data-link="%s"' % url)
+    except:
+      # This can happen if no routes are defined for the item. e.g actions
+      pass
+    if modal:
+      out.append('class="modalform"')
+  out.append('>')
+  return " ".join(out)
+
 def render_item_link(request, clazz, permission, item, value, modal=False, backlink=True):
   out = []
   css_class = ["link"]
@@ -32,23 +51,37 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
     out.append(cgi.escape('%s' % value))
   out.append('</a>')
   return " ".join(out)
+
+def render_item_add_link(request, clazz, foreignkey, clazzpath, id, backlink, form):
+  query = {}
+  query['addrelation'] = foreignkey+':'+clazzpath+':'+str(id)
+  if backlink != 'false':
+    query['backurl'] = request.current_route_path()
+  if form:
+    query['form'] = form
+  url = request.route_path(h.get_action_routename(clazz, "create"), _query=query)
+  return url
 %>
 
 % if field.renderer.showsearch == "true" and not field.is_readonly():
-<table class="table table-condensed table-striped datatable-simple">
+<table class="table table-condensed table-striped table-hover datatable-simple">
 % else:
-<table class="table table-condensed table-striped datatable-blank content-shorten">
+<table class="table table-condensed table-striped table-hover datatable-blank content-shorten">
 % endif
   <thead>
     % if not field.is_readonly() and not field.renderer.hideadd == "true" and s.has_permission("create", clazz, request) and h.get_item_modul(request, clazz).has_action("create"):
     <tr class="table-toolbar">
       <th colspan="${len(tableconfig.get_columns())+1}">
-        <a class="btn btn-primary btn-xs" href="#" title="${_('Add a new %s entry') % h.get_item_modul(request, clazz).get_label()}"
-          onclick="addItem('${request.route_path(h.get_action_routename(clazz,
-          "create"))}', '${field.name}', '${field.renderer.form}',
-          '${field._form._item.id}', '${h.get_item_modul(request,
-      pclazz).clazzpath}', '${field.renderer.backlink != 'false'}')"
-      ><i class="glyphicon glyphicon-plus"></i> ${_('New')}</a>
+        <a class="btn btn-primary btn-xs"
+           title="${_('Add a new %s entry') % h.get_item_modul(request, clazz).get_label()}"
+           href="${render_item_add_link(request,
+                                        clazz,
+                                        field.name,
+                                        h.get_item_modul(request, pclazz).clazzpath,
+                                        field._form._item.id,
+                                        (field.renderer.backlink),
+                                        field.renderer.form)}">
+          <i class="glyphicon glyphicon-plus"></i> ${_('New')}</a>
       </th>
     </tr>
     % endif
@@ -76,7 +109,10 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
       elif not field.renderer.showall == "true":
         continue
       %>
-      <tr>
+      ${h.literal(render_item_row(request, clazz, permission, item, value,
+                  (field.renderer.openmodal == "true"),
+                  (field.renderer.backlink != "false"),
+                  (field.renderer.nolinks == "true")))}
       ## Readonly -> Do nothing
       % if not field.is_readonly():
         % if field.renderer.onlylinked != "true":
@@ -111,14 +147,8 @@ def render_item_link(request, clazz, permission, item, value, modal=False, backl
           except AttributeError:
             value = "NaF"
         %>
-        <td class="${num > 0 and 'hidden-xs'}">
-        % if permission and not field.renderer.nolinks == "true":
-            ${h.literal(render_item_link(request, clazz, permission, item, value,
-                              (field.renderer.openmodal == "true"),
-                              (field.renderer.backlink != "false")))}
-        % else:
+        <td class="${num > 0 and 'hidden-xs'} ${(field.renderer.nolinks != "true") and permission and  'link'}">
           ${value}
-        % endif
         </td>
       % endfor
     </tr>

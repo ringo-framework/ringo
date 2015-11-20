@@ -31,11 +31,13 @@ def is_login_unique(field, data):
 
 def is_registration_enabled(settings):
     return (bool(settings.get('mail.host'))
+            and bool(settings.get('mail.default_sender'))
             and settings.get('auth.register_user') == "true")
 
 
 def is_pwreminder_enabled(settings):
     return (bool(settings.get('mail.host'))
+            and bool(settings.get('mail.default_sender'))
             and settings.get('auth.password_reminder') == "true")
 
 
@@ -78,6 +80,8 @@ def logout(request):
     handle_history(request)
     _ = request.translate
     target_url = request.route_path('home')
+    if request.params.get('autologout'):
+        target_url = request.route_path('autologout')
     headers = forget(request)
     msg = _("Logout was successfull")
     request.session.flash(msg, 'success')
@@ -86,6 +90,17 @@ def logout(request):
 
 @view_config(route_name='autologout', renderer='/auth/autologout.mako')
 def autologout(request):
+
+    # For the first call the user is still authenticated. So
+    # delete the auth cookie and trigger a redirect calling the same
+    # page.
+    if request.user:
+        headers = forget(request)
+        target_url = request.route_path('autologout')
+        return HTTPFound(location=target_url, headers=headers)
+
+    # User is not authenticated here anymore. So simply render the
+    # logout page.
     _ = request.translate
     return {"_": _}
 

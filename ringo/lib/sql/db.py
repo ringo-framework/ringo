@@ -10,8 +10,6 @@ from sqlalchemy.pool import Pool
 
 from ringo.lib.sql.cache import regions, init_cache
 
-init_cache()
-
 log = logging.getLogger(__name__)
 
 # Session initialisation
@@ -58,6 +56,12 @@ def ping_connection(dbapi_connection, connection_record, connection_proxy):
     cursor.close()
 
 def setup_db_engine(settings):
+    cachedir = settings.get("db.cachedir")
+    regions = []
+    for region in settings.get("db.cacheregions", "").split(" "):
+        regions.append(region.split(":"))
+    if cachedir:
+        init_cache(cachedir, regions)
     return engine_from_config(settings, 'sqlalchemy.')
 
 def setup_db_session(engine):

@@ -137,7 +137,7 @@ def handle_POST_request(form, request, callback, event, renderers=None):
             else:
                 values = checker.check(clazz, form.data, request, item)
                 item.save(values, request)
-            handle_event(request, item, form._config.id)
+            handle_event(request, item, event)
             handle_add_relation(request, item)
             handle_callback(request, callback)
             handle_caching(request)
@@ -250,7 +250,7 @@ def handle_params(request):
             params['values'][key] = value
     form = request.GET.get('form')
     if form:
-        request.session['%s.form' % clazz] = form
+        #request.session['%s.form' % clazz] = form
         params['form'] = form
     relation = request.GET.get('addrelation')
     if relation:

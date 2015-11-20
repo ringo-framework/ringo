@@ -8,17 +8,23 @@
     <meta content="" name="author">
     <meta content="${client_language}" name="client_language">
     <meta content="${application_path}" name="application_path">
+    <meta content="${s.get_auth_timeout(request.registry.settings)}" name="auth_timeout">
+    <meta content="${s.get_auth_timeout_warning(request.registry.settings)}" name="auth_warning">
+    <meta content="${request.route_path("autologout")}" name="auth_logout">
+    <meta content="${request.route_path("keepalive")}" name="auth_keepalive">
+    <meta content="${request.user}" name="auth_user">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="${request.static_path('ringo:static/bootstrap/css/bootstrap.min.css')}" rel="stylesheet" media="screen">
     <link href="${request.static_path('ringo:static/bootstrap/css/bootstrap-theme.min.css')}" rel="stylesheet" media="screen">
-    <link href="${request.static_path('ringo:static/css/layout.css')}" rel="stylesheet" media="screen">
-    <link href="${request.static_path('ringo:static/css/widgets.css')}" rel="stylesheet" media="screen">
-    <link href="${request.static_path('ringo:static/css/style.css')}" rel="stylesheet" media="screen">
-    <link href="${request.static_path('ringo:static/font-awesome/css/font-awesome.min.css')}" rel="stylesheet">
     % for filename in formbar_css_filenames: 
       <link href="${request.static_path('formbar:static/%s' % filename)}" rel="stylesheet" media="screen">
     % endfor
+    <link href="${request.static_path('ringo:static/css/layout.css')}" rel="stylesheet" media="screen">
+    <link href="${request.static_path('ringo:static/css/widgets.css')}" rel="stylesheet" media="screen">
+    <link href="${request.static_path('ringo:static/css/style.css')}" rel="stylesheet" media="screen">
+    <link href="${request.static_path('ringo:static/css/jquery-ui.min.css')}" rel="stylesheet" media="screen">
+    <link href="${request.static_path('ringo:static/font-awesome/css/font-awesome.min.css')}" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -26,9 +32,8 @@
     <![endif]-->
 
     <!-- Fav and touch icons -->
-    <link href="${request.static_path('ringo:static/images/icons/favicons/apple-touch-icon-128.png')}" sizes="128x128" rel="apple-touch-icon-precomposed">
-    <link href="${request.static_path('ringo:static/images/icons/favicons/favicon.png')}" rel="shortcut icon">
     <script src="${request.static_path('ringo:static/js/jquery.js')}"></script>
+    <script src="${request.static_path('ringo:static/js/jquery-ui.js')}"></script>
     <script src="${request.static_path('ringo:static/js/spin.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.spin.js')}"></script>
     <script src="${request.static_path('ringo:static/bootstrap/js/bootstrap.min.js')}"></script>
@@ -40,6 +45,7 @@
     % endfor
     <script src="${request.static_path('ringo:static/js/listfield.js')}"></script>
     <script src="${request.static_path('ringo:static/js/helpers.js')}"></script>
+    <%include file="/favicons.mako" />
     <%include file="/custom-header.mako" />
   </head>
   <body>
@@ -64,18 +70,15 @@
   <script src="${request.static_path('ringo:static/js/ringo/autologout.js')}"></script>
   <script src="${request.static_path('ringo:static/js/init.js')}"></script>
   % if request.user:
-  <script>
-      logoutCountdown(${s.get_auth_timeout(request.registry.settings)}, '${request.route_path("autologout")}', ${s.get_auth_timeout_warning(request.registry.settings)});
-  </script>
   <div class="modal fade" id="logoutWarning">
     <div class="modal-dialog">
       <div class="panel panel-warning">
         <div class="panel-heading"><strong>${_('Logout will happen soon')}</strong></div>
         <div class="panel-body">
-          <p>${_('You will be logged out automatically in a short time because of inactivity. Please close this dialog and init a new request to renew your session timer.')}</p>
+          <p>${_('Your session will expire soon because of inactivity. Click on "Renew session" to continue work and renew your session. Otherwise you will be logged out automatically shortly and all unsaved data will get lost.')}</p>
         </div>
         <div class="panel-footer">
-          <a href="${request.route_path('keepalive')}" target="_blank" class="btn btn-default" id="logoutWarningOK">${_('Ok')}</a>
+          <a href="#" class="btn btn-default" id="logoutWarningOK">${_('Renew session')}</a>
         </div>
       </div>
     </div>
@@ -162,11 +165,11 @@
       elif action.name == "Delete":
         title = _('Delete item')
       else:
-        title = action.description
+        title = _(action.description)
       icon = get_icon(action)
-      if action.display == "hide":
+      if not action.is_visible("context"):
         continue
-      elif action.name.lower() in ['import', 'export'] or action.display == "secondary":
+      elif action.name.lower() in ['import', 'export'] or "secondary" in action.display.split(","):
         context_actions.append((action, icon))
         continue
       %>

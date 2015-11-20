@@ -2,8 +2,23 @@
 CLI Administration
 ******************
 
+Use the following command to get general help on the available commands::
+
+        ringo-admin help
+
+.. important::
+        All of the following commands will take the `development.ini`
+        configuration file as their defautl configfile to retrieve
+        informations like the db connection. Please make sure you set the
+        correct config file before invoking the command to prevent operations
+        on the wrong database!
+
 Database
 ========
+Use the following command to get general help on the available commands::
+
+        ringo-admin db help
+
 Init database
 -------------
 The database can be initiated with the following command::
@@ -58,6 +73,10 @@ with the name of the database table which has a appended "s". E.g the *user*
 modul becomes to *users*. This is even true if the appended "s" is written
 wrong.
 
+Use the following command to get general help on the available commands::
+
+        ringo-admin fixtures help
+
 Load data
 ---------
 By invoking the following command::
@@ -82,15 +101,40 @@ Using the `--path` allows to define a alternative path to the fixture files.
 
 Modules
 =======
+Use the following command to get general help on the available commands::
+
+        ringo-admin modules help
 
 Add new modul
 -------------
+By invoking the following command::
+
+        ringo-admin modul add <modulname in singular form> 
+
+A new modul will be added to your application. See :ref:`dev_modules` for more
+details.
 
 Generate model fields from form config
 --------------------------------------
+By invoking the following command::
+
+        ringo-admin modul fields <name of the modul>
+
+The python code with the SQLAlchemy model will be generated. The code can be
+pasted into the model.
 
 User
 ====
+Use the following command to get general help on the available commands::
+
+        ringo-admin user help
 
 Set password
 ------------
+The password of a given user can be changed/set by invoking the following
+command::
+
+        ringo-admin user <login> --password <password>
+
+The `password` parameter is optional. If not given ringo will autoegenerate a
+new password for you.

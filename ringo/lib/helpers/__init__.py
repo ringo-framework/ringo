@@ -6,7 +6,9 @@ from ringo.lib.helpers.appinfo import (
     get_app_title,
     get_app_url,
     get_path_to,
-    get_app_inheritance_path
+    get_app_inheritance_path,
+    get_app_mode,
+    get_breadcrumbs
 )
 
 from webhelpers.html import literal, escape, HTML

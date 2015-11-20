@@ -2,7 +2,8 @@
 <div class="page-header">
   <div class="row">
     <div class="col-sm-8">
-      <h1>${len(itemlist.items)} ${N_(h.get_item_modul(request, clazz).get_label(plural=True))}</h1>
+      <h1>
+        ${N_(h.get_item_modul(request, clazz).get_label(plural=True))}</h1>
     </div>
     <div class="col-sm-4 visible-xs">
       <div class="context-menu">
@@ -24,8 +25,8 @@
         <div class="btn-toolbar">
           <div class="btn-group">
             <%
-              show_create =  h.get_item_modul(request, clazz).has_action('create') and h.get_item_modul(request, clazz).get_action('create').display != 'hide' and s.has_permission('create', request.context, request)
-              show_import =  h.get_item_modul(request, clazz).has_action('import') and h.get_item_modul(request, clazz).get_action('import').display != 'hide' and s.has_permission('import', request.context, request)
+              show_create =  h.get_item_modul(request, clazz).has_action('create') and h.get_item_modul(request, clazz).get_action('create').is_visible("overview") and s.has_permission('create', request.context, request)
+              show_import =  h.get_item_modul(request, clazz).has_action('import') and h.get_item_modul(request, clazz).get_action('import').is_visible("overview") and s.has_permission('import', request.context, request)
             %>
             % if show_create:
               <a href="${request.route_path(h.get_action_routename(clazz, 'create'))}" title="${_('Add a new %s entry') % h.get_item_modul(request, clazz).get_label()}" class="btn btn-primary"><i class="glyphicon glyphicon-plus">&nbsp;</i>${_('New')}</a>

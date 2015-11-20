@@ -12,9 +12,12 @@ from pyramid.paster import (
     get_appsettings,
     setup_logging,
 )
-from ringo.lib.sql import DBSession
+from ringo.lib.sql import DBSession, NTDBSession
 from ringo.lib.helpers import get_app_location, dynamic_import
-from ringo.lib.imexport import JSONExporter, JSONImporter, CSVExporter
+from ringo.lib.imexport import (
+    JSONExporter, JSONImporter,
+    CSVExporter, CSVImporter
+)
 from ringo.model.modul import ModulItem
 
 log = logging.getLogger(__name__)
@@ -67,12 +70,16 @@ def get_engine(config_file):
     engine = engine_from_config(settings, 'sqlalchemy.')
     return engine
 
-def get_session(config_file):
+def get_session(config_file, transactional=True):
     """Will return a database session based on the application
     configuration"""
     engine = get_engine(config_file)
-    DBSession.configure(bind=engine)
-    return DBSession
+    if transactional:
+        DBSession.configure(bind=engine)
+        return DBSession
+    else:
+        NTDBSession.configure(bind=engine)
+        return NTDBSession
 
 
 def copy_initial_migration_scripts(args):
@@ -150,6 +157,12 @@ def handle_db_init_command(args):
 def handle_db_upgrade_command(args):
     cfg = get_alembic_config(args)
     command.upgrade(cfg, "head")
+    if cfg.get_main_option("sqlalchemy.url").find("postgres") > -1:
+    	handle_db_fixsequence_command(args)
+
+def handle_db_downgrade_command(args):
+    cfg = get_alembic_config(args)
+    command.downgrade(cfg, "-1")
     handle_db_fixsequence_command(args)
 
 def handle_db_revision_command(args):
@@ -178,7 +191,10 @@ def handle_db_loaddata_command(args):
     session = get_session(os.path.join(*path))
     modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == args.modul).all()[0].clazzpath
     modul = dynamic_import(modul_clazzpath)
-    importer = JSONImporter(modul, session)
+    if args.format == "json":
+        importer = JSONImporter(modul, session)
+    else:
+        importer = CSVImporter(modul, session)
     items = []
     updated = 0
     created = 0

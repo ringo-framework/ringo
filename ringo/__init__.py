@@ -6,7 +6,7 @@ from ringo.resources import get_resource_factory
 from ringo.lib.i18n import locale_negotiator
 from ringo.lib.sql.db import setup_db_session, setup_db_engine
 from ringo.model import Base
-from ringo.model.user import User
+from ringo.model.user import User, Usergroup
 
 log = logging.getLogger(__name__)
 
@@ -75,6 +75,9 @@ def setup_routes(config):
     config.add_route('users-changepassword',
                      'users/changepassword/{id}',
                      factory=get_resource_factory(User))
+    config.add_route('usergroups-setstandin',
+                     'usergroups/setstandin/{id}',
+                     factory=get_resource_factory(Usergroup))
     config.add_route('rules-evaluate', 'rest/rule/evaluate')
     config.add_route('form-render', 'rest/form/render')
     config.add_route('keepalive', 'rest/keepalive')

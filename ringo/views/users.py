@@ -3,6 +3,7 @@ import logging
 import sqlalchemy as sa
 import re
 from pyramid.httpexceptions import HTTPBadRequest, HTTPForbidden, HTTPFound
+from pyramid.security import forget
 from pyramid.view import view_config
 from formbar.form import Form, Validator
 
@@ -11,14 +12,17 @@ from ringo.views.helpers import get_item_from_request, get_current_form_page
 
 from ringo.views.request import (
     handle_history,
-    handle_params
+    handle_params,
+    handle_caching
 )
 
 from ringo.lib.form import get_form_config
 from ringo.lib.helpers import import_model, get_action_routename
-from ringo.lib.security import login, encrypt_password
+from ringo.lib.security import login, encrypt_password, has_permission
 from ringo.lib.sql.cache import invalidate_cache
+
 User = import_model('ringo.model.user.User')
+Usergroup = import_model('ringo.model.user.Usergroup')
 
 log = logging.getLogger(__name__)
 
@@ -53,8 +57,8 @@ def check_password(field, data):
 ###########################################################################
 def user_name_create_validator(field, data, db):
     """Validator to ensure username uniqueness when creating users"""
-    return db.query(User)\
-        .filter(User.login == data[field]).count() == 0
+    return db.query(User) \
+               .filter(User.login == data[field]).count() == 0
 
 
 def user_name_update_validator(field, data, params):
@@ -62,9 +66,9 @@ def user_name_update_validator(field, data, params):
     db = params['db']
 
     # Only consider names for the other users
-    return db.query(User)\
-        .filter(User.login == data[field],
-                ~(User.id == params['pk'])).count() == 0
+    return db.query(User) \
+               .filter(User.login == data[field],
+                       ~(User.id == params['pk'])).count() == 0
 
 
 def password_nonletter_validator(field, data):
@@ -96,7 +100,6 @@ def create_(request, callback=None):
             callbacks.extend(callback)
         else:
             callbacks.append(callback)
-
 
     _ = request.translate
     uniqueness_validator = Validator('login',
@@ -140,6 +143,43 @@ def update_(request):
     return update(request, validators=[uniqueness_validator,
                                        pw_len_validator,
                                        pw_nonchar_validator])
+
+
+@view_config(route_name=get_action_routename(Usergroup, 'setstandin'),
+             renderer='/usergroups/setstandin.mako')
+def setstandin(request, allowed_users=None):
+    """Setting members in the default usergroup of the current user.
+    Technically this is adding a standin for this user."""
+
+    # For normal users users shall only be allowed to set the standin
+    # for their own usergroup. So check this and otherwise raise an exception.
+    usergroup = get_item_from_request(request)
+    user = request.db.query(User).filter(User.login == usergroup.name).one()
+    
+    # No login (request.user is missing) => redirect to login.
+    if not request.user:
+        raise HTTPFound(location=request.route_path('login'),
+                        headers=forget(request))
+
+    if (usergroup.id != request.user.default_gid
+       and not has_permission("update", usergroup, request)):
+        raise HTTPForbidden()
+    clazz = Usergroup
+    request.session['%s.form' % clazz] = "membersonly"
+    request.session['%s.backurl' % clazz] = request.current_route_path()
+    request.session.save()
+    values = {}
+    if allowed_users:
+        values['_allowedusers'] = [u.login for u in allowed_users]
+
+    # Result may be a HTTPFOUND object.
+    result = update(request, values=values)
+    if isinstance(result, dict):
+        result['user'] = user
+
+    # Reset form value in session
+    handle_caching(request)
+    return result
 
 
 @view_config(route_name=get_action_routename(User, 'changepassword'),
@@ -215,6 +255,7 @@ def changepassword(request):
     rvalue['item'] = item
     rvalue['form'] = form.render(page=get_current_form_page(clazz, request))
     return rvalue
+
 
 ###########################################################################
 #                               REST SERVICE                              #

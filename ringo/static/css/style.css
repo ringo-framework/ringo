@@ -68,3 +68,36 @@ img.icon {
 nav ul.pagination {
   margin: 0;
 }
+
+/* Media depended affix CSS */
+@media(max-width:767px){
+  .formbar-outline.affix {
+    position: static;
+    width: 100%;
+    top: 0;
+    z-index:10;
+  }
+}
+
+@media(min-width:768px){
+  .formbar-outline.affix {
+    position: fixed;
+    top: 0;
+    z-index:10;
+    width: 157.5px;
+  }
+}
+@media(min-width:992px){
+  .formbar-outline.affix {
+    width: 212.5px;
+  }
+}
+@media(min-width:1200px){
+  .formbar-outline.affix {
+    width: 262.5px;
+  }
+}
+/* affix default (bootstrap overwrite) */
+.affix{
+  position:static;
+}

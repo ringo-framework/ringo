@@ -43,6 +43,55 @@
   text-decoration: none;
 }
 
+.navbar-static-top {
+  margin-bottom: 0px;
+}
+
+/**********************************************************************
+ *                             Logininfo                              *
+ **********************************************************************/
+
+#logininfo {
+    text-align: right;
+    font-size: 0.85em;
+}
+
+#logininfowarning {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+/****************************************************************************
+ *                               Sessiontimer                               *
+ ****************************************************************************/
+
+#sessiontimer {
+  width: 100px;
+  position: relative;
+  top: 10px;
+}
+
+#sessiontimer input {
+  background-color: white;
+}
+
+#sessiontimer div.input-group-addon {
+  cursor: pointer;
+}
+
+/****************************************************************************
+ *                                Breadcrumb                                *
+ ****************************************************************************/
+
+#breadcrumb {
+  margin-bottom: 20px;
+}
+
+#breadcrumb ol {
+  padding: 5px 15px;
+  font-size: smaller;
+  margin-bottom: 0px;
+}
 
 /* Status message
  * *************************************************************************/
@@ -76,6 +125,10 @@
   color: black;
 }
 
+.table tbody td.link {
+    cursor:pointer
+}
+
 .table td a.filter {
   border-top: 1px dotted;
   cursor: zoom-in;
@@ -94,12 +147,17 @@ table.content-shorten td {
 }
 
 #pagination-size-selector {
+    margin-right: 20px;
+}
+
+#pagination-size-selector select {
   width: auto;
   display: inline;
 }
 
  /* Datatables
  **********************************************************************/
+
 div.dataTables_length {
     float: right;
     padding: 10px;
@@ -111,26 +169,18 @@ div.dataTables_length select {
 }
 
 .dataTables_filter input {
+    margin-left: 5px;
     margin-bottom: 0px;
     width: 200px;
     display: inline;
 }
-.dataTables_filter {
-    background-color: #F5F5F5;
-    border: 1px solid #E3E3E3;
-    border-radius: 3px 3px 3px 3px;
-    padding: 9px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
-    margin-bottom: 10px;
-    min-height: 20px;
-}
 
 div.dataTables_info {
     position: relative;
-    top: -10px;
+    top: 8px;
     font-size: 0.9em;
-    float: left;
 }
+
 div.dataTables_paginate {
     position: relative;
     top: -10px;

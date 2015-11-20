@@ -7,7 +7,8 @@ from ringo.lib.helpers.misc import get_item_modul
 from ringo.lib.helpers import literal
 from ringo.lib.security import has_permission
 from ringo.lib.renderer import (
-    ListRenderer
+    ListRenderer,
+    DTListRenderer
 )
 from ringo.lib.renderer.dialogs import (
     WarningDialogRenderer
@@ -50,7 +51,12 @@ def handle_paginating(clazz, request):
 
     name = clazz.__tablename__
     # Default pagination options
-    if get_table_config(clazz).is_paginated():
+    table_config = get_table_config(clazz)
+    settings = request.registry.settings
+    default = settings.get("layout.advanced_overviews") == "true"
+    # Only set paginated if the table is the advancedsearch as the
+    # simple search provides its own client sided pagination.
+    if table_config.is_paginated() and table_config.is_advancedsearch(default):
         default_page = 0 # First page
         default_size = 50
     else:
@@ -278,6 +284,18 @@ def bundle_(request):
     return handler(request, items, None)
 
 
+def get_list_renderer(listing, request):
+    """Returns the renderer for an listing.
+    Allow to use DTListRenderer if the renderer configuration is set."""
+    tableconfig = get_table_config(listing.clazz)
+    settings = request.registry.settings
+    default = settings.get("layout.advanced_overviews") == "true"
+    if tableconfig.is_advancedsearch(default):
+        return ListRenderer(listing)
+    else:
+        return DTListRenderer(listing)
+
+
 def list_(request):
     clazz = request.context.__model__
     # Important! Prevent any write access on the database for this
@@ -337,7 +355,7 @@ def list_(request):
                 request.db.flush()
         request.session.save()
 
-    renderer = ListRenderer(listing)
+    renderer = get_list_renderer(listing, request)
     rendered_page = renderer.render(request)
     rvalue['clazz'] = clazz
     rvalue['listing'] = rendered_page

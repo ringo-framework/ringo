@@ -84,15 +84,63 @@ class ActionItem(BaseItem, Base):
     """Flag to indicate if the action should be available in the bundled
     actions"""
     display = sa.Column(sa.String, nullable=False, default="primary")
-    """Optional. Configure where the action will be displayed. If display is
-    'secondary' the action will be rendererd in the advanced dropdown
-    context menu. If set to 'hide' the action will not be rendered at
-    all. Default is 'primary'"""
+    """Optional. Configures a) If the action will be rendered at all and
+    b) where to render the action in the context menu.
+
+    The display variable is a comma separated list of values which
+    defines the visibility. The following values are valid:
+
+    ============== ===========
+    value          description
+    ============== ===========
+    primary        Action is globally visible and will be rendered in
+                   the primary context menu.
+    secondary      Action is globally visible and will be rendered in
+                   the secondary menu.
+    hide           Completly hide the action. This effects both context
+                   menu and overview.
+    hide-context   Kind of modifier in addition to the `primary` and
+                   `secondary` setting. Adding this value will still show
+                   the action in the context but hide the action in the
+                   overview.
+    hide-overview  Kind of modifier in addition to the `primary` and
+                   `secondary` setting. Adding this value will still show
+                   the action in the overview but hide the action in the
+                   context menu.
+    ============== ===========
+
+    Examples:
+
+    * "primary,hide-context": Show action in overview only
+    * "primary,hide-overview": Show action in context only, render
+      action in primary context menu
+    * "secondary": Show action globally, render action in secondary menu
+      of context menu.
+    * "hide": Completly hide the action.
+
+    """
     permission = sa.Column(sa.String, nullable=False, default='')
     """Optional. Configure an alternative permission the user must have
     to be allowed to call this action. Known values are 'list', 'create',
     'read', 'update', 'delete', 'import', 'export'. If empty the
     permission system will use the the lowered name of the action."""
+
+    def is_visible(self, location):
+        """Checks based on the setting in the display configuration
+        attribute if the action is visible in the given location.
+        Location can be be `overview` or `context`.
+
+        :location: String of location to check
+        :returns: True or False
+        """
+        display = self.display.split(",")
+        if "hide" in display:
+            return False
+        if location == "overview" and "hide-overview" in display:
+            return False
+        if location == "context" and "hide-context" in display:
+            return False
+        return True
 
 
 class ModulItem(BaseItem, Base):
@@ -165,6 +213,13 @@ class ModulItem(BaseItem, Base):
     """Preload the actions and associated roles to the action of the
     modul.  Are needed for permission checks. This will reduce the
     number of SQL-queries very much!"""
+
+    @property
+    def clazzbases(self):
+        """Property which returns the base classes of the model of the
+        modul. This is usefull and currently used for filtering in
+        forms. e.g filtering modules which are tagable"""
+        return [b.__name__ for b in self.get_clazz().__bases__]
 
     def get_clazz(self):
         """Returns the class defined in the clazzpath attribute.

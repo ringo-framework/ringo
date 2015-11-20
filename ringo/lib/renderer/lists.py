@@ -85,6 +85,16 @@ class DTListRenderer(object):
 
     def render(self, request):
         """Initialize renderer"""
+
+        # Get the bundles_actions.
+        # If bundle_actions is True, display checkboxes and more in the table.
+        bundled_actions = []
+        for action in get_item_actions(request, self.listing.clazz):
+            if action.bundle and security.has_permission(action.name.lower(),
+                                                         request.context,
+                                                         request):
+                bundled_actions.append(action)
+
         values = {'items': self.listing.items,
                   'clazz': self.listing.clazz,
                   'listing': self.listing,
@@ -92,5 +102,6 @@ class DTListRenderer(object):
                   '_': request.translate,
                   's': security,
                   'h': ringo.lib.helpers,
+                  'bundled_actions': bundled_actions,
                   'tableconfig': self.config}
-        return self.template.render(**values)
+        return literal(self.template.render(**values))

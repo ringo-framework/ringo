@@ -18,10 +18,8 @@
         % else:
           <option value="${option[1]}">${_(option[0])}</option>
         % endif
-      % else:
-        % if unicode(option[1]) == unicode(field.get_value()):
-          <option value="${option[1]}" selected="selected">${_(option[0])}</option>
-        % endif
+      % elif unicode(option[1]) == unicode(field.get_value()) and not field.renderer.remove_filtered == "true":
+        <option value="${option[1]}" selected="selected">${_(option[0])}</option>
       % endif
     % endfor
   </select>
