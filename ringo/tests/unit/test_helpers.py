@@ -195,3 +195,10 @@ def test_format_negative_timedelta():
     end = datetime(1977, 3, 7, 1, 0)
     result = format_timedelta(start - end)
     assert result == "-01:00:00"
+
+
+def test_get_saved_searches_unauthorized(apprequest):
+    from ringo.lib.helpers import get_saved_searches
+    apprequest.user = None
+    result = get_saved_searches(apprequest, "test")
+    assert result == {}
