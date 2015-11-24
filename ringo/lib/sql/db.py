@@ -63,7 +63,7 @@ def setup_db_engine(settings):
         regions.append(region.split(":"))
     if cachedir:
         init_cache(cachedir, regions)
-    if settings.get("app.testing") == "true":
+    if settings.get("app.mode") == "testing":
         return engine_from_config(settings, 'sqlalchemy.',
                                   poolclass=StaticPool)
     else:
@@ -73,7 +73,7 @@ def setup_db_engine(settings):
 def setup_db_session(engine, settings):
     # Onyl use ZopeTransactionExtension if not in testmode to prevent
     # autocommits after each request.
-    if settings.get("app.testing") == "true":
+    if settings.get("app.mode") == "testing":
         DBSession.configure(bind=engine)
     else:
         DBSession.configure(bind=engine, extension=ZopeTransactionExtension())
@@ -116,7 +116,7 @@ def _close_test_session(request):
 
 def connect_on_request(event):
     request = event.request
-    if request.registry.settings.get("app.testing") == "true":
+    if request.registry.settings.get("app.mode") == "testing":
         request._testing = True
         request = _open_test_session(request)
     else:
@@ -126,7 +126,7 @@ def connect_on_request(event):
 
 
 def close_db_connection(request):
-    if (request.registry.settings.get("app.testing") == "true"):
+    if (request.registry.settings.get("app.mode") == "testing"):
         _close_test_session(request)
     else:
         request.db.close()
