@@ -17,7 +17,7 @@ def main(global_config, **settings):
     # Setup two db sessions. One using transactions (default) and one
     # without transactions.
     engine = setup_db_engine(settings)
-    setup_db_session(engine)
+    setup_db_session(engine, settings)
     Base.metadata.bind = engine
     config = Configurator(settings=settings,
                           locale_negotiator=locale_negotiator)

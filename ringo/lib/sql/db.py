@@ -69,8 +69,13 @@ def setup_db_engine(settings):
         return engine_from_config(settings, 'sqlalchemy.')
 
 
-def setup_db_session(engine):
-    DBSession.configure(bind=engine)
+def setup_db_session(engine, settings):
+    # Onyl use ZopeTransactionExtension if not in testmode to prevent
+    # autocommits after each request.
+    if settings.get("app.testing") == "true":
+        DBSession.configure(bind=engine)
+    else:
+        DBSession.configure(bind=engine, extension=ZopeTransactionExtension())
     NTDBSession.configure(bind=engine)
 
 
