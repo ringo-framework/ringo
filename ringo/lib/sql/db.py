@@ -92,10 +92,13 @@ def _open_test_session(request):
         log.debug("Begin Testcase")
         testsession = DBSession()
         request.db = testsession
+        request._active_testcase = True
     elif testsession is None:
         request.db = DBSession()
+        request._active_testcase = False
     else:
         log.debug("Continue Testcase")
+        request._active_testcase = True
         request.db = testsession
     return request
 
