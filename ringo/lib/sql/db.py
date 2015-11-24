@@ -27,6 +27,7 @@ NTDBSession = scoped_session(
                     query_cls=query.query_callable(regions)
                 )
             )
+testsession = None
 
 
 # Pessimisitic detection of disconnects of connections in the connection pool
@@ -81,7 +82,15 @@ def setup_connect_on_request(config):
 
 def connect_on_request(event):
     request = event.request
-    request.db = DBSession
+    if request.registry.settings.get("app.testing") == "true":
+        global testsession
+        if request.params.get("_testcase") == "begin":
+            testsession = DBSession()
+            request.db = testsession
+        else:
+            request.db = testsession
+    else:
+        request.db = DBSession()
     request.add_finished_callback(close_db_connection)
 
 
@@ -89,6 +98,10 @@ def close_db_connection(request):
     if request.response.status.startswith(('4', '5')):
         request.db.rollback()
         request.db.close()
+    elif request.registry.settings.get("app.testing") == "true":
+        if request.params.get("_testcase") == "end":
+            request.db.rollback()
+            request.db.close()
     else:
         request.db.commit()
         request.db.close()
