@@ -56,6 +56,8 @@ def setup_routes(config):
 
     # SINGLE PAGES
     ##############
+    config.add_route('start_test_case', '_test_case/start')
+    config.add_route('stop_test_case', '_test_case/stop')
     config.add_route('login', 'auth/login')
     config.add_route('register_user', 'auth/register_user')
     config.add_route('confirm_user', 'auth/confirm_user/{token}')
