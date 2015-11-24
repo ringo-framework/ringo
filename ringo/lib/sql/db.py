@@ -3,7 +3,6 @@ import query
 from pyramid.events import NewRequest
 from sqlalchemy import engine_from_config
 from sqlalchemy.orm import scoped_session, sessionmaker
-from zope.sqlalchemy import ZopeTransactionExtension
 from sqlalchemy import exc
 from sqlalchemy import event
 from sqlalchemy.pool import Pool
@@ -20,7 +19,6 @@ log = logging.getLogger(__name__)
 DBSession = scoped_session(
                 sessionmaker(
                     query_cls=query.query_callable(regions),
-                    extension=ZopeTransactionExtension()
                 )
             )
 
