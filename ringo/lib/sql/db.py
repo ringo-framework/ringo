@@ -86,37 +86,47 @@ def setup_connect_on_request(config):
     config.add_subscriber(connect_on_request, NewRequest)
 
 
-def connect_on_request(event):
-    request = event.request
-    if request.registry.settings.get("app.testing") == "true":
-        global testsession
-        if request.params.get("_testcase") == "begin":
-            log.debug("Begin Testcase")
-            testsession = DBSession()
-            request.db = testsession
-        elif testsession is None:
-            request.db = DBSession()
-        else:
-            log.debug("Continue Testcase")
-            request.db = testsession
-    else:
-        request.db = DBSession()
-    request.add_finished_callback(close_db_connection)
-
-
-def close_db_connection(request):
+def _open_test_session(request):
     global testsession
-    if request.response.status.startswith(('4', '5')):
-        request.db.rollback()
-        request.db.close()
-    elif (request.registry.settings.get("app.testing") == "true"
-          and testsession is not None):
+    if request.params.get("_testcase") == "begin":
+        log.debug("Begin Testcase")
+        testsession = DBSession()
+        request.db = testsession
+    elif testsession is None:
+        request.db = DBSession()
+    else:
+        log.debug("Continue Testcase")
+        request.db = testsession
+    return request
+
+
+def _close_test_session(request):
+    global testsession
+    if testsession is not None:
         if request.params.get("_testcase") == "end":
             log.debug("End Testcase")
             request.db.rollback()
             request.db.close()
             testsession = None
-        request.db.flush()
+        else:
+            request.db.flush()
     else:
         request.db.commit()
+
+
+def connect_on_request(event):
+    request = event.request
+    if request.registry.settings.get("app.testing") == "true":
+        request._testing = True
+        request = _open_test_session(request)
+    else:
+        request._testing = False
+        request.db = DBSession()
+    request.add_finished_callback(close_db_connection)
+
+
+def close_db_connection(request):
+    if (request.registry.settings.get("app.testing") == "true"):
+        _close_test_session(request)
+    else:
         request.db.close()
