@@ -5,7 +5,7 @@ from sqlalchemy import engine_from_config
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy import exc
 from sqlalchemy import event
-from sqlalchemy.pool import Pool
+from sqlalchemy.pool import Pool, StaticPool
 
 from ringo.lib.sql.cache import regions, init_cache
 
@@ -53,6 +53,7 @@ def ping_connection(dbapi_connection, connection_record, connection_proxy):
         raise exc.DisconnectionError()
     cursor.close()
 
+
 def setup_db_engine(settings):
     cachedir = settings.get("db.cachedir")
     regions = []
@@ -60,11 +61,17 @@ def setup_db_engine(settings):
         regions.append(region.split(":"))
     if cachedir:
         init_cache(cachedir, regions)
-    return engine_from_config(settings, 'sqlalchemy.')
+    if settings.get("app.testing") == "true":
+        return engine_from_config(settings, 'sqlalchemy.',
+                                  poolclass=StaticPool)
+    else:
+        return engine_from_config(settings, 'sqlalchemy.')
+
 
 def setup_db_session(engine):
     DBSession.configure(bind=engine)
     NTDBSession.configure(bind=engine)
+
 
 # Session initialisation
 ########################
