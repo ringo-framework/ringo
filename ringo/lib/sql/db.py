@@ -1,5 +1,6 @@
 import logging
 import query
+from zope.sqlalchemy import ZopeTransactionExtension
 from pyramid.events import NewRequest
 from sqlalchemy import engine_from_config
 from sqlalchemy.orm import scoped_session, sessionmaker
