@@ -85,11 +85,13 @@ def connect_on_request(event):
     if request.registry.settings.get("app.testing") == "true":
         global testsession
         if request.params.get("_testcase") == "begin":
+            log.debug("Begin Testcase")
             testsession = DBSession()
             request.db = testsession
         elif testsession is None:
             request.db = DBSession()
         else:
+            log.debug("Continue Testcase")
             request.db = testsession
     else:
         request.db = DBSession()
@@ -104,6 +106,7 @@ def close_db_connection(request):
     elif (request.registry.settings.get("app.testing") == "true"
           and testsession is not None):
         if request.params.get("_testcase") == "end":
+            log.debug("End Testcase")
             request.db.rollback()
             request.db.close()
             testsession = None
