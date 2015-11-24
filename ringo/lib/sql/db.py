@@ -79,4 +79,9 @@ def connect_on_request(event):
 
 
 def close_db_connection(request):
-    request.db.close()
+    if request.response.status.startswith(('4', '5')):
+        request.db.rollback()
+        request.db.close()
+    else:
+        request.db.commit()
+        request.db.close()
