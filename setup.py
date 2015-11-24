@@ -17,6 +17,7 @@ requires = [
     'pyramid_mako',
     'pyramid_beaker',
     'pyramid_mailer',
+    'zope.sqlalchemy',
     'waitress',
     'babel',
     'formbar>=0.9.4',
