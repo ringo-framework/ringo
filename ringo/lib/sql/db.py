@@ -82,8 +82,8 @@ def setup_db_session(engine, settings):
 
 # Session initialisation
 ########################
-def setup_connect_on_request(config):
-    config.add_subscriber(connect_on_request, NewRequest)
+def setup_session_on_request(config):
+    config.add_subscriber(add_session_to_request, NewRequest)
 
 
 def _open_test_session(request):
@@ -117,7 +117,7 @@ def _close_test_session(request):
         request.db.commit()
 
 
-def connect_on_request(event):
+def add_session_to_request(event):
     request = event.request
     if request.registry.settings.get("app.mode") == "testing":
         request._testing = True
@@ -125,10 +125,10 @@ def connect_on_request(event):
     else:
         request._testing = False
         request.db = DBSession()
-    request.add_finished_callback(close_db_connection)
+    request.add_finished_callback(close_session)
 
 
-def close_db_connection(request):
+def close_session(request):
     if (request.registry.settings.get("app.mode") == "testing"):
         _close_test_session(request)
     else:
