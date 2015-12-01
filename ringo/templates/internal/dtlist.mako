@@ -1,8 +1,11 @@
 <%
 from ringo.lib.helpers import prettify
 %>
-<form id="data-table" name="data-table" role="form" action="${request.route_path(h.get_action_routename(clazz, 'bundle'))}" method="POST">
-<table id="data" class="table table-condensed table-striped table-hover datatable-simple">
+<script>
+  ${dtconfig | n}
+</script>
+<form class="form-inline" id="data-table" name="data-table" role="form" action="${request.route_path(h.get_action_routename(clazz, 'bundle'))}" method="POST">
+<table id="${tableid}" class="table table-condensed table-striped table-hover">
   <thead>
     <tr>
       % if bundled_actions and len(items) > 0:
