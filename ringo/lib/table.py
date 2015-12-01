@@ -134,6 +134,8 @@ class TableConfig:
     * *advancedsearch*: If False, a more complex overview with stacked
       search regex and save features is used. Otherwise a more simple
       overview. Default to use the simple overview.
+    * *show-info*: It True than a info field showing number of items in the 
+      table
 
     For DT tables you can define different search filters which are
     defined in the *filters* section. Filters is a list of different
