@@ -4,6 +4,7 @@ import pkg_resources
 from mako.lookup import TemplateLookup
 import ringo.lib.helpers
 from ringo.lib.helpers import (
+    get_app_name,
     get_saved_searches,
     get_item_actions,
     literal
@@ -83,6 +84,36 @@ class DTListRenderer(object):
         self.config = get_table_config(self.listing.clazz, tablename)
         self.template = template_lookup.get_template("internal/dtlist.mako")
 
+        # Template for JS datatable configuration
+        self.js_template = template_lookup.get_template("internal/dtlist.js.mako")
+
+
+    def _get_table_id(self):
+        table_id = ["dt",
+                    self.config.clazz.__tablename__,
+                    self.config.name]
+        table_id = "_".join(table_id)
+        return table_id
+
+
+    def _render_js_config(self, request, table_id):
+        app = get_app_name()
+        app_dir = pkg_resources.get_distribution(app).location
+        path = os.path.join(app_dir, app, 'static', 'tmp')
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+        values = {'tableconfig': self.config,
+                  'table_id': table_id,
+                  'request': request}
+        fname = os.path.join(path, table_id + ".js")
+        content = self.js_template.render(**values)
+
+        #with open(fname, "w") as js:
+        #    js.write(content)
+
+        return content
+
     def render(self, request):
         """Initialize renderer"""
 
@@ -94,7 +125,8 @@ class DTListRenderer(object):
                                                          request.context,
                                                          request):
                 bundled_actions.append(action)
-
+        table_id = self._get_table_id()
+        table_config = self._render_js_config(request, table_id)
         values = {'items': self.listing.items,
                   'clazz': self.listing.clazz,
                   'listing': self.listing,
@@ -103,5 +135,7 @@ class DTListRenderer(object):
                   's': security,
                   'h': ringo.lib.helpers,
                   'bundled_actions': bundled_actions,
-                  'tableconfig': self.config}
+                  'tableconfig': self.config,
+                  'tableid': table_id,
+                  'dtconfig': table_config}
         return literal(self.template.render(**values))
