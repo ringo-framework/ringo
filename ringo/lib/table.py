@@ -217,6 +217,18 @@ class TableConfig:
             cols.append(col)
         return cols
 
+    def get_column_index(self, name):
+        """Will return the index of the column in the overview. Index is
+        count from left to right. This method is used to match the
+        configured columns in this configuration with the columns in the
+        datatables which can be addressed by its index. Please note the
+        the index of the datatables columns are increased by 1. So you
+        will need to add 1 to the result of this method."""
+        for num, col in enumerate(self.get_columns()):
+            if col["name"] == name:
+                return num
+        return 0
+
     def get_default_sort_column(self):
         """Returns the name of the attribute of the clazz which is
         marked as field for default sorting in the *settings* section of
