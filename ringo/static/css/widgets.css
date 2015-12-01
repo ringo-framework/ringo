@@ -170,20 +170,31 @@ div.dataTables_length select {
 
 .dataTables_filter input[type=search] {
     margin-left: 5px;
-    margin-right: 5px;
+    margin-right: 10px;
     margin-bottom: 0px;
     width: 200px;
     display: inline;
 }
 
-.dataTables_filter input[type=checkbox] {
+
+.search-filters input[type=checkbox] {
   position: relative;
+  margin-right: 3px;
   top: -2px;
+}
+
+
+.search-filters div.searchfilter {
+  margin-right: 15px;
+}
+
+div.dataTables_filter{
+    display: inline-block;
 }
 
 div.dataTables_info {
     position: relative;
-    top: 8px;
+    top: -8px;
     font-size: 0.9em;
 }
 

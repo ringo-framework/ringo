@@ -7,7 +7,7 @@ function on${table_id}TableRendered(settings, json) {
   onDTTableRendered();
   % for fltr in tableconfig.get_filters():
   <% id = table_id + "_" + fltr.field %>
-  $('.dataTables_filter').append('<div class="checkbox searchfilter"><label><input class="form-control" id="${id}" type="checkbox" value="1" ${fltr.active and 'checked="checked"'}>${fltr.label}</label></div>');
+  $('.search-filters').append('<div class="checkbox searchfilter"><label><input class="form-control" id="${id}" type="checkbox" value="1" ${fltr.active and 'checked="checked"'}>${fltr.label}</label></div>');
   % endfor
   % for fltr in tableconfig.get_filters():
     var column_${tableconfig.get_column_index(fltr.field)} = api.column(${tableconfig.get_column_index(fltr.field)+1});
@@ -74,7 +74,7 @@ $( document ).ready(function() {
    "bAutoWidth": false,
    "fnInitComplete":on${table_id}TableRendered,
    "dom":
-   '<"search-widget"<"row"<"col-md-6"f><"col-md-6"<"pull-right"i>>><"row"<"col-md-12 custom-search-filters">>>'
+   '<"search-widget"<"row"<"col-md-12 search-filters"f>>><"row"<"col-md-12"<"pull-right"i>>>'
   });
 });
 
