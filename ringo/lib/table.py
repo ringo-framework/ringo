@@ -172,6 +172,14 @@ class TableConfig:
         config = self.config.get(self.name)
         return config.get('settings', {})
 
+    def get_filters(self):
+        """Returns the filters for the table as dictionary
+        :returns: Filters dictionary
+
+        """
+        config = self.config.get(self.name)
+        return [Filter(fltr) for fltr in config.get('filters', [])]
+
     def is_autoresponsive(self):
         settings = self.get_settings()
         return settings.get("auto-responsive", True)
