@@ -74,7 +74,17 @@ class TableConfig:
                     "default-sort-order": "desc",
                     "auto-responsive": true,
                     "advancedsearch": true
-                }
+                },
+                "filters": [
+                    {
+                        "field": "fieldname",
+                        "type": "checkbox",
+                        "expr": "",
+                        "regex": false,
+                        "smart": true,
+                        "caseinsensitive": true
+                    }
+                ]
             }
         }
 
@@ -120,6 +130,25 @@ class TableConfig:
     * *advancedsearch*: If False, a more complex overview with stacked
       search regex and save features is used. Otherwise a more simple
       overview. Default to use the simple overview.
+
+    For DT tables you can define different search filters which are
+    defined in the *filters* section. Filters is a list of different
+    filter options. Each filter has the following options:
+
+    * *field*: The name of the field on which the filter will be applied.
+    * *label*: The label of the filter.
+    * *active*: If true the filter will be active.
+    * *type*: Type of the rendering. Currently only "checkbox" is
+      supported. The checkbox renderer will active or deactive a filter
+      a a certain row.
+    * *expr*: The expression for the filter.
+    * *smart*: If set to True this filter is a smart filter. Defaults to True.
+    * *regex*: If set to True this the expression is handled as a
+      regular expression. Defaults to False.
+    * *caseinsensitive*: If set to True the search is caseinsensitive.
+      Defaults to True.
+
+
     """
 
     def __init__(self, clazz, name):
