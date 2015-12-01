@@ -124,16 +124,17 @@ class TableConfig:
     * *searchable*: If True, the table is searchable and a search field is
       shown.
     * *default-search*: Default search filter for the table
-    * *auto-responsive*: If True than only the first column of a table
-      will be displayed on small devices. Else you need to configure the
-      "screen" attribute for the fields.
-    * *pagination*: If True pagination of the results will be enabled.
-      The table will have gui element to configure pagination of the
-      table. Defaults to false.
-    * *sortable*: If True, the table is sortable by dragging the rows.
     * *advancedsearch*: If False, a more complex overview with stacked
       search regex and save features is used. Otherwise a more simple
       overview. Default to use the simple overview.
+
+    * *pagination*: If True pagination of the results will be enabled.
+      The table will have gui element to configure pagination of the
+      table. Defaults to false.
+
+    * *auto-responsive*: If True than only the first column of a table
+      will be displayed on small devices. Else you need to configure the
+      "screen" attribute for the fields.
     * *show-info*: It True than a info field showing number of items in the 
       table
 
