@@ -7,7 +7,7 @@ function on${table_id}TableRendered(settings, json) {
   onDTTableRendered();
   % for fltr in tableconfig.get_filters():
   <% id = table_id + "_" + fltr.field %>
-  $('.search-filters').append('<div class="checkbox searchfilter"><label><input class="form-control" id="${id}" type="checkbox" value="1" ${fltr.active and 'checked="checked"'}>${fltr.label}</label></div>');
+  $('.search-filters').append('<div class="checkbox searchfilter"><label><input class="form-control" id="${id}" type="checkbox" value="1" ${fltr.active and 'checked="checked"'}>${_(fltr.label)}</label></div>');
   % endfor
   % for fltr in tableconfig.get_filters():
     var column_${tableconfig.get_column_index(fltr.field)} = api.column(${tableconfig.get_column_index(fltr.field)+1});
@@ -18,7 +18,7 @@ function on${table_id}TableRendered(settings, json) {
   function filter_${table_id}_${fltr.field}(field) {
     var filter = ""
     if ($(field).is(':checked')) {
-      filter = '${fltr.expr}';
+      filter = '${_(fltr.expr)}';
     } else {
       filter = '';
     }
