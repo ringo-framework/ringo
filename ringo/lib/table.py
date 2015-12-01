@@ -120,6 +120,9 @@ class TableConfig:
     * *default-sort-field*: Name of the column which should be used as
       default sorting on the table. Defaults to the first column in the table.
     * *default-sort-order*: Sort order (desc, asc) Defaults to asc.
+
+    * *searchable*: If True, the table is searchable and a search field is
+      shown.
     * *default-search*: Default search filter for the table
     * *auto-responsive*: If True than only the first column of a table
       will be displayed on small devices. Else you need to configure the
@@ -188,6 +191,10 @@ class TableConfig:
     def is_sortable(self):
         settings = self.get_settings()
         return settings.get("sortable", True)
+
+    def is_searchable(self):
+        settings = self.get_settings()
+        return settings.get("searchable", True)
 
     def is_paginated(self):
         settings = self.get_settings()
