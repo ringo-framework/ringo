@@ -105,7 +105,8 @@ class DTListRenderer(object):
 
         values = {'tableconfig': self.config,
                   'table_id': table_id,
-                  'request': request}
+                  'request': request,
+                  '_': request.translate}
         fname = os.path.join(path, table_id + ".js")
         content = self.js_template.render(**values)
 
