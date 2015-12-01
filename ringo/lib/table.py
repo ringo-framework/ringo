@@ -237,3 +237,32 @@ def _load_overview_config(clazz):
     if not config:
         raise IOError("Could not load table configuration for %s" % cfile)
     return json.load(config)
+
+
+class Filter(object):
+    """This class represents a custom filter used in Listings using the
+    datatables JS extension. This class is used to give access to the
+    relevant attribute of a filter. Some of the attributes are processed
+    to be ready to be used directly in JS code."""
+
+    def __init__(self, conf):
+        self._conf = conf
+        self.expr = self._conf.get("expr", "")
+        self.field = self._conf.get("field", "")
+        self.label = self._conf.get("label", "")
+        self.type = self._conf.get("type", "checkbox")
+        self.active = self._conf.get("active", True)
+
+        # JS Options used in filter method
+        if self._conf.get("regex", False):
+            self.regex = "true"
+        else:
+            self.regex = "false"
+        if self._conf.get("smart", True) and not self._conf.get("regex", False):
+            self.smart = "true"
+        else:
+            self.smart = "false"
+        if self._conf.get("caseinsensitive", True):
+            self.caseinsensitive = "true"
+        else:
+            self.caseinsensitive = "false"
