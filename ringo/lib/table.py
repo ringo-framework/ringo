@@ -116,6 +116,7 @@ class TableConfig:
 
     Further the table has some table wide configuration options:
 
+    * *sortable*: If True, the table is sortable.
     * *default-sort-field*: Name of the column which should be used as
       default sorting on the table. Defaults to the first column in the table.
     * *default-sort-order*: Sort order (desc, asc) Defaults to asc.
@@ -186,7 +187,7 @@ class TableConfig:
 
     def is_sortable(self):
         settings = self.get_settings()
-        return settings.get("sortable", False)
+        return settings.get("sortable", True)
 
     def is_paginated(self):
         settings = self.get_settings()
