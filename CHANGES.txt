@@ -9,6 +9,9 @@
   rendering the overview. This generated configuration will replace the static
   predefined datatable configurations found in the init.js.
 
+* Added datatable-moment.js  plugin to allow sorting datatable tables based on
+  datefields.
+
 1.9.1
 =====
 Bugfixrelease
