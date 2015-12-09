@@ -19,12 +19,15 @@ from ringo.lib.helpers import prettify
     % for item in items[listing.pagination_start:listing.pagination_end]:
       <%
       permission = None
+      data_link = "#"
       if s.has_permission("update", item, request):
         permission = "update"
+        data_link = request.route_path(h.get_action_routename(clazz, permission), id=item.id)
       elif s.has_permission("read", item, request):
         permission = "read"
+        data_link = request.route_path(h.get_action_routename(clazz, permission), id=item.id)
       %>
-    <tr item-id="${item.id}" data-link="${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}">
+      <tr item-id="${item.id}" data-link="${data_link}">
       % if bundled_actions:
         <td>
           <input type="checkbox" name="id" value="${item.id}">

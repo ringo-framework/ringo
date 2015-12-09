@@ -386,6 +386,8 @@ def has_role(user, role):
     :user: User instance
     :returns: True or False
     """
+    if user is None:
+        return False
     return user.has_role(role)
 
 

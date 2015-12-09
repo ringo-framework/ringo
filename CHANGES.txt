@@ -1,3 +1,11 @@
+1.9.1
+=====
+Bugfixrelease
+
+- Fix internal list renderer and handle case if current user has no
+  permissions at all. Then no links will be rendered.
+- Fix has_role method. Handle case if current user is None.
+
 1.9
 ===
 - Log login attemps. Each successfull or failed login will now be saved in a
