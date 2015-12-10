@@ -85,6 +85,7 @@ def setup_fixture_parser(subparsers, parent):
     fixture_parser.add_argument('--path',
                               metavar='path',
                               help='Path to the fixture files')
+    return sp
 
 
 def setup_application_parser(subparsers, parent):
@@ -103,6 +104,7 @@ def setup_application_parser(subparsers, parent):
                               metavar='name',
                               help='Name of the application')
     app_parser.set_defaults(func=handle_app_init_command)
+    return sp
 
 
 def setup_user_parser(subparsers, parent):
@@ -125,6 +127,7 @@ def setup_user_parser(subparsers, parent):
                               metavar='password',
                               help='Password for the user')
     passwd_parser.set_defaults(func=handle_user_passwd_command)
+    return sp
 
 
 def setup_modul_parser(subparsers, parent):
@@ -165,6 +168,7 @@ def setup_modul_parser(subparsers, parent):
                                type=modul_name,
                                help='Name of the modul to delete')
     delete_parser.set_defaults(func=handle_modul_delete_command)
+    return sp
 
 
 def setup_db_parser(subparsers, parent):
@@ -267,6 +271,7 @@ def setup_db_parser(subparsers, parent):
                                 help='Fixes sequences in postgres databases',
                                 parents=[parent])
     upgrade_parser.set_defaults(func=handle_db_fixsequence_command)
+    return sp
 
 
 def setup_global_argument_parser():
@@ -287,16 +292,19 @@ def setup_global_argument_parser():
 
 
 def setup_parser():
-    parser = argparse.ArgumentParser(description="Administrate various "
-                                     "aspects in a ringo based application.")
+    parser = {}
+    parser["root"] = argparse.ArgumentParser(description="Administrate "
+                                             "various aspects in a ringo "
+                                             "based application.")
     global_arguments = setup_global_argument_parser()
-    subparsers = parser.add_subparsers(help='Command help')
-    setup_db_parser(subparsers, global_arguments)
-    setup_modul_parser(subparsers, global_arguments)
-    setup_user_parser(subparsers, global_arguments)
-    setup_application_parser(subparsers, global_arguments)
-    setup_fixture_parser(subparsers, global_arguments)
-    return parser
+    subparsers = parser["root"].add_subparsers(help='Command help')
+
+    parser["db"] = setup_db_parser(subparsers, global_arguments)
+    parser["modul"] = setup_modul_parser(subparsers, global_arguments)
+    parser["user"] = setup_user_parser(subparsers, global_arguments)
+    parser["app"] = setup_application_parser(subparsers, global_arguments)
+    parser["fixture"] = setup_fixture_parser(subparsers, global_arguments)
+    return (parser, subparsers, global_arguments)
 
 
 def _get_app_name():
@@ -308,8 +316,8 @@ def _get_app_name():
 
 
 def main():
-    parser = setup_parser()
-    args = parser.parse_args()
+    parser, subparsers, global_arguments = setup_parser()
+    args = parser["root"].parse_args()
     args.func(args)
 
 if __name__ == '__main__':

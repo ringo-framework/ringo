@@ -22,7 +22,8 @@ function checkOne(checkId, element) {
   check(checkId);
 }
 
-function check(checkId) {
+function check(checkId, element) {
+  $(element).attr('checked', !$(element).attr('checked'));
   /* Will add a hidden checkbox with no value in case no other checkbox is
    * selected. This is needed to items with no selection, as in this case html
    * does not submit the checkbox field at all. So this is a hack to simulate

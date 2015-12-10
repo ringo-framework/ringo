@@ -101,6 +101,26 @@ def extract_i18n_tableconfig(fileobj, keywords, comment_tags, options):
                    col.get('label'),
                    ["Label for %s column in %s table config"
                     % (col.get('name'), key)])
+        for col in tc.get('filters', []):
+            lineno += 1
+            # "_" is one of the default keywords which marks a string
+            # for extraction. As the json file does not have any
+            # keywords. Set a dummy funcname here.
+            yield (lineno,
+                   "_",
+                   col.get('label'),
+                   ["Label for %s filter in %s table config"
+                    % (col.get('field'), key)])
+        for col in tc.get('filters', []):
+            lineno += 1
+            # "_" is one of the default keywords which marks a string
+            # for extraction. As the json file does not have any
+            # keywords. Set a dummy funcname here.
+            yield (lineno,
+                   "_",
+                   col.get('expr'),
+                   ["Expr for %s filter in %s table config"
+                    % (col.get('field'), key)])
 
 #@subscriber(NewRequest)
 #def setAcceptedLanguagesLocale(event):

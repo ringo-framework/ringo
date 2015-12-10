@@ -36,8 +36,10 @@
     <script src="${request.static_path('ringo:static/js/jquery-ui.js')}"></script>
     <script src="${request.static_path('ringo:static/js/spin.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.spin.js')}"></script>
+    <script src="${request.static_path('ringo:static/js/moment.min.js')}"></script>
     <script src="${request.static_path('ringo:static/bootstrap/js/bootstrap.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/datatables/dataTables.js')}"></script>
+    <script src="${request.static_path('ringo:static/js/datatables/datetime-moment.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.jcountdown.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.timer.js')}"></script>
     % for filename in formbar_js_filenames: 

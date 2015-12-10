@@ -68,7 +68,7 @@ mode = h.get_app_mode(request)
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> ${request.user.profile[0].first_name} ${request.user.profile[0].last_name} (${request.user.login})<b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li role="presentation" class="dropdown-header">${_('Settings')}</li>
-              <li><a href="${request.route_path('profiles-read', id=request.user.profile[0].id)}"><img class="icon" src="${request.static_path('ringo:static/images/icons/16x16/profile.png')}"/>${_('Profile')}</a></li>
+              <li><a href="${request.route_path('profiles-update', id=request.user.profile[0].id)}"><img class="icon" src="${request.static_path('ringo:static/images/icons/16x16/profile.png')}"/>${_('Profile')}</a></li>
               <li><a href="${request.route_path('users-changepassword', id=request.user.id)}"><img class="icon" src="${request.static_path('ringo:static/images/icons/16x16/application-certificate.png')}"/>${_('Change Password')}</a></li>
               <li><a href="${request.route_path('usergroups-setstandin', id=request.user.default_gid)}"><img class="icon" src="${request.static_path('ringo:static/images/icons/16x16/system-users.png')}"/>${_('Set standin')}</a></li> 
               <li class="divider"></li>

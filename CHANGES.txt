@@ -1,3 +1,17 @@
+1.10.0
+======
+* The behavior of overviews using the Datatable JS library can now be
+  configured with the JSON table configurations too. Formerly only the columns
+  can be configured.  Now other aspects like, filtering, sorting, paginating
+  etc. You can also define your own custom filters.
+
+  The configuration will be generated on the fly based on the JSON config when
+  rendering the overview. This generated configuration will replace the static
+  predefined datatable configurations found in the init.js.
+
+* Added datatable-moment.js  plugin to allow sorting datatable tables based on
+  datefields.
+
 1.9.1
 =====
 Bugfixrelease
