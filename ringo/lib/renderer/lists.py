@@ -97,23 +97,11 @@ class DTListRenderer(object):
 
 
     def _render_js_config(self, request, table_id):
-        app = get_app_name()
-        app_dir = pkg_resources.get_distribution(app).location
-        path = os.path.join(app_dir, app, 'static', 'tmp')
-        if not os.path.exists(path):
-            os.makedirs(path)
-
         values = {'tableconfig': self.config,
                   'table_id': table_id,
                   'request': request,
                   '_': request.translate}
-        fname = os.path.join(path, table_id + ".js")
-        content = self.js_template.render(**values)
-
-        #with open(fname, "w") as js:
-        #    js.write(content)
-
-        return content
+        return self.js_template.render(**values)
 
     def render(self, request):
         """Initialize renderer"""
