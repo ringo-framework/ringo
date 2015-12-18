@@ -103,14 +103,20 @@ def _add_modul(config, actions, dbsession):
 
 
 def register_modul(config, modul_config, actions=None):
-    """Will register the given modul if it is not already present. This
-    function gets called from  the inititialisation code in the
+    """Will try to register the given modul if it is not already
+    present.  If the modul is not already registred Ringo will ask the
+    user to automatically register the modul with a default to cancel.
+    The user will be intercativly asked to either enter Y or N.
+
+    This function gets called from the inititialisation code in the
     extension.
 
     :config: Application config
     :modul_config: Extension configuration as a dictionary
     :actions: List of ActionItems
+    :returns: ModulItem or None
     """
+
     name = modul_config.get("name") + "s"
     _ = lambda t: t
     modulname = modul_config.get('name')
@@ -123,14 +129,17 @@ def register_modul(config, modul_config, actions=None):
         log.info("Modul '%s' already registered" % modul_config.get('name'))
     else:
         modulname = modul_config.get('name')
-        msg = _("Warning! Ringo found a new extension named '%s' which needs "
-                "to be registred in your application. \n"
+        msg = _("\n\nWarning!\n"
+                "********\n"
+                "Ringo found a new extension named '%s' which "
+                "needs to be registred in your application.\n"
                 "Registering the extension should be done by using a DB "
                 "migration!\nHowever if this extension does not need any DB "
                 "migration or you are sure you do not want to do an explicit "
                 "registration, than Ringo can do the registration "
                 "automatically for you.\nCaution! Automatic registration may "
-                "write to your DB which can result in failing migrations")
+                "write to your DB which can result in failing migrations\n\n"
+                % modulname)
         log.info(msg)
         choice = raw_input(_("Register '%s' Y/N (N)?") % modulname)
         if choice == "Y":
