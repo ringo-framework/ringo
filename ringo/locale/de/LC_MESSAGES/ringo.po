@@ -59,8 +59,8 @@ msgid ""
 "Please press \"${Action}\" to ${action} the item. Press \"Cancel\" to "
 "cancel the action."
 msgstr ""
-"Bitte klicken Sie auf \"${Action}\", um den Eintrag zu ${action}. Klicken"
-" sie auf \"Abbrechen\", um den Vorgang abzubrechen."
+"Bitte klicken Sie auf „${Action}“, um den Eintrag zu ${action}. Klicken"
+" sie auf „Abbrechen“, um den Vorgang abzubrechen."
 
 #: ringo/model/modul.py:277
 msgid "List"
@@ -121,7 +121,7 @@ msgid ""
 "logged out automatically shortly and all unsaved data will get lost."
 msgstr ""
 "Ihre Sitzung wird in Kürze wegen Inaktivität ablaufen. Klicken Sie auf "
-"\"Sitzung verlängern\", um fortzufahren und die Sitzung zu verlängern. "
+"„Sitzung verlängern“, um fortzufahren und die Sitzung zu verlängern. "
 "Andernfalls werden Sie in Kürze automatisch abgemeldet, und alle nicht "
 "gespeicherten Eingaben gehen verloren."
 
@@ -160,11 +160,11 @@ msgstr "Öffne Übersicht"
 
 #: ringo/templates/base.mako:162
 msgid "Open in \"Edit\" mode"
-msgstr "Öffne im \"Bearbeiten\" Modus"
+msgstr "Öffne im „Bearbeiten“ Modus"
 
 #: ringo/templates/base.mako:164
 msgid "Open in \"Read\" mode"
-msgstr "Öffne im \"Lesen\" Modus"
+msgstr "Öffne im „Lesen“ Modus"
 
 #: ringo/templates/base.mako:166
 msgid "Delete item"
@@ -709,7 +709,7 @@ msgstr "Lieber Nutzer"
 
 #: ringo/templates/mails/password_reminder.mako:3
 msgid "Your password for \"${app_name}\" has been reseted successfully."
-msgstr "Ihr Passwort für \"${app_name}\" wurde erfolgreich zurückgesetzt."
+msgstr "Ihr Passwort für „${app_name}“ wurde erfolgreich zurückgesetzt."
 
 #: ringo/templates/mails/password_reminder.mako:5
 msgid "Your new password is:"
@@ -747,7 +747,7 @@ msgid ""
 "password for \"${app_name}\"."
 msgstr ""
 "Sie haben diese E-Mail erhalten, da Sie ein Zurücksetzen ihres Passworts "
-"für \"${app_name}\" beantragt haben."
+"für „${app_name}“ beantragt haben."
 
 #: ringo/templates/mails/password_reset_request.mako:6
 msgid ""
@@ -768,7 +768,7 @@ msgstr ""
 #: ringo/templates/mails/register_user.mako:3
 msgid "You have received this email because you registered for \"${app_name}\"."
 msgstr ""
-"Sie haben diese E-Mail erhalten, da Sie sich für \"${app_name}\" "
+"Sie haben diese E-Mail erhalten, da Sie sich für „${app_name}“ "
 "registriert haben."
 
 #: ringo/templates/mails/register_user.mako:5
@@ -878,7 +878,7 @@ msgstr "${item_type} erfolgreich angelegt."
 
 #: ringo/views/request.py:151
 msgid "Edited ${item_type} \"${item}\" successfully."
-msgstr "${item_type} \"${item}\" wurde erfolgreich bearbeitet."
+msgstr "${item_type} „${item}“ wurde erfolgreich bearbeitet."
 
 #: ringo/views/request.py:162
 msgid "Error while saving new ${item_type}: ${error}."
@@ -886,7 +886,7 @@ msgstr "Fehler beim Anlegen von ${item_type}: ${error}."
 
 #: ringo/views/request.py:165
 msgid "Error while saving ${item_type} \"${item}\": ${error}."
-msgstr "Fehler beim Bearbeiten von ${item_type} \"${item}\": ${error}."
+msgstr "Fehler beim Bearbeiten von ${item_type} „${item}“: ${error}."
 
 #: ringo/views/request.py:173
 msgid "Error on validation new ${item_type}."
@@ -894,7 +894,7 @@ msgstr "Fehler beim Validieren von ${item_type}."
 
 #: ringo/views/request.py:176
 msgid "Error on validation ${item_type} \"${item}\"."
-msgstr "Fehler beim Validieren von ${item_type} \"${item}\"."
+msgstr "Fehler beim Validieren von ${item_type} „${item}“."
 
 #: ringo/views/users.py:106 ringo/views/users.py:131
 msgid "This name is already in use, please use something unique."
@@ -916,11 +916,11 @@ msgstr "Das angegebene Passwort ist nicht korrekt"
 
 #: ringo/views/users.py:239
 msgid "Changed password for \"${item}\" successfull."
-msgstr "Password für \"${item}\" erfolgreich geändert."
+msgstr "Password für „${item}“ erfolgreich geändert."
 
 #: ringo/views/users.py:249
 msgid "Error on changing the password for \"${item}\"."
-msgstr "Fehler bei der Änderung des Passworts für \"${item}\"."
+msgstr "Fehler bei der Änderung des Passworts für „${item}“."
 
 #: ringo/views/base/delete.py:60
 msgid "Can not delete ${item_type} items."
@@ -1076,7 +1076,7 @@ msgstr "Wählen Sie ein Modul, für das dieses Formular verfügbar sein wird"
 #: ringo/views/forms/forms.xml:8
 msgid "Only forms in the state \"published\" will be available for other users."
 msgstr ""
-"Nur Formulare mit dem Status \"veröffentlicht\" werden für andere Nutzer "
+"Nur Formulare mit dem Status „veröffentlicht“ werden für andere Nutzer "
 "verfügbar sein."
 
 #: ringo/views/forms/forms.xml:9
