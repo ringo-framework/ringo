@@ -79,7 +79,7 @@ def _add_modul(config, actions, dbsession):
     :dbsession: Database session
     """
     # Set defaults
-    name = config.get("name") + "s"
+    name = config.get("name")
     clazzpath = config.get("clazzpath")
     str_repr = config.get("str_repr") or "%s|id"
     display = config.get("str_repr") or "hidden"
