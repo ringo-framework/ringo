@@ -82,7 +82,7 @@ def _add_modul(config, actions, dbsession):
     name = config.get("name")
     clazzpath = config.get("clazzpath")
     str_repr = config.get("str_repr") or "%s|id"
-    display = config.get("str_repr") or "hidden"
+    display = config.get("display") or "hidden"
     label = config.get("label") or name
     label_plural = config.get("label_plural") or label
 
