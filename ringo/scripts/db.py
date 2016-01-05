@@ -189,30 +189,44 @@ def handle_db_loaddata_command(args):
     path = []
     path.append(args.config)
     session = get_session(os.path.join(*path))
-    modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == args.modul).all()[0].clazzpath
+    importer = get_importer(session, args.modul, args.format)
+    with open(args.fixture) as f:
+        data = f.read()
+        items, created, updated = do_import(session,
+                                            importer, data,
+                                            (not args.loadbyid))
+
+    try:
+        transaction.commit()
+        print "Updated %s items, Created %s items" % (updated, created)
+    except Exception as e:
+        print str(e)
+        print "Loading data failed!"
+
+
+def get_importer(session, modulname, fmt):
+    modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == modulname).all()[0].clazzpath
     modul = dynamic_import(modul_clazzpath)
-    if args.format == "json":
-        importer = JSONImporter(modul, session)
+    if fmt == "json":
+        return JSONImporter(modul, session)
     else:
-        importer = CSVImporter(modul, session)
+        return CSVImporter(modul, session)
+
+
+def do_import(session, importer, data, use_uuid=True):
     items = []
     updated = 0
     created = 0
-    with open(args.fixture) as f:
-        items = importer.perform(f.read(), use_uuid=(not args.loadbyid))
-        for item, action in items:
-            # Add all new items to the session
-            if action.find("CREATE") > -1:
-                session.add(item)
-                created += 1
-            else:
-                updated += 1
-        try:
-            transaction.commit()
-            print "Updated %s items, Created %s items" % (updated, created)
-        except Exception as e:
-            print str(e)
-            print "Loading data failed!"
+    items = importer.perform(data, use_uuid=use_uuid)
+    for item, action in items:
+        # Add all new items to the session
+        if action.find("CREATE") > -1:
+            session.add(item)
+            created += 1
+        else:
+            updated += 1
+    return items, created, updated
+
 
 def handle_db_uuid_command(args):
     path = []
