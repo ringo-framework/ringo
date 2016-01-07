@@ -46,7 +46,7 @@ Installation
 ============
 Ringo is available in its latest stable version on `PyPi <https://pypi.org/toirl/ringo>`_::
 
-The source code is also available on `Bitbucket <https://bitbucket.org/ti/ringo>`_ if you want to keep track of
+The source code is also available on `Github <https://github.com/ringo-framework>`_ if you want to keep track of
 the latest development version::
 
 Please read the :ref:`development` section to learn how to setup Ringo based
