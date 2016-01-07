@@ -1,5 +1,7 @@
 """Modul to handle requests."""
 import logging
+import urllib
+import urlparse
 from pyramid.httpexceptions import HTTPFound
 from ringo.lib.security import (
     has_permission,
@@ -24,10 +26,21 @@ def encode_values(values):
     :returns: String key1:value1,key2:value2...
 
     """
-    encoded = []
+    return urllib.urlencode(values)
+
+
+def decode_values(encoded):
+    """Returns a dictionay with decoded values in the string. See
+    encode_values function.
+
+    :encoded : String key1:value1,key2:value2...
+    :returns: Dictionary with key values pairs
+    """
+    values = urlparse.parse_qs(encoded)
     for key in values:
-        encoded.append("%s:%s" % (key, values[key]))
-    return ",".join(encoded)
+        values[key] = values[key][0]
+    return values
+
 
 def is_confirmed(request):
     """Returns True id the request is confirmed"""
@@ -245,9 +258,10 @@ def handle_params(request):
     values = request.GET.get('values')
     if values:
         params['values'] = {}
-        for kvpair in values.split(','):
-            key, value = kvpair.split(':')
-            params['values'][key] = value
+        values = decode_values(values)
+        for key in values:
+            params['values'][key] = values[key]
+    import pdb; pdb.set_trace()
     form = request.GET.get('form')
     if form:
         #request.session['%s.form' % clazz] = form
