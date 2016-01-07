@@ -261,7 +261,6 @@ def handle_params(request):
         values = decode_values(values)
         for key in values:
             params['values'][key] = values[key]
-    import pdb; pdb.set_trace()
     form = request.GET.get('form')
     if form:
         #request.session['%s.form' % clazz] = form
