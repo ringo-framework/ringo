@@ -156,19 +156,22 @@ def setstandin(request, allowed_users=None):
     """Setting members in the default usergroup of the current user.
     Technically this is adding a standin for this user."""
 
+    # Check authentification
+    # As this view has now security configured it is
+    # generally callable by all users. For this reason we first check if
+    # the user is authenticated. If the user is not authenticated the
+    # raise an 401 (unauthorized) exception.
+    if not request.user:
+        raise HTTPUnauthorized
+
+    # Check authorisation
     # For normal users users shall only be allowed to set the standin
     # for their own usergroup. So check this and otherwise raise an exception.
     usergroup = get_item_from_request(request)
-    user = request.db.query(User).filter(User.login == usergroup.name).one()
-    
-    # No login (request.user is missing) => redirect to login.
-    if not request.user:
-        raise HTTPFound(location=request.route_path('login'),
-                        headers=forget(request))
-
     if (usergroup.id != request.user.default_gid
        and not has_permission("update", usergroup, request)):
         raise HTTPForbidden()
+
     clazz = Usergroup
     request.session['%s.form' % clazz] = "membersonly"
     request.session['%s.backurl' % clazz] = request.current_route_path()
@@ -180,6 +183,7 @@ def setstandin(request, allowed_users=None):
     # Result may be a HTTPFOUND object.
     result = update(request, values=values)
     if isinstance(result, dict):
+        user = request.db.query(User).filter(User.login == usergroup.name).one()
         result['user'] = user
 
     # Reset form value in session
