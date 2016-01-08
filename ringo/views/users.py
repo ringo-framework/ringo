@@ -2,7 +2,12 @@
 import logging
 import sqlalchemy as sa
 import re
-from pyramid.httpexceptions import HTTPBadRequest, HTTPForbidden, HTTPFound
+from pyramid.httpexceptions import (
+        HTTPBadRequest, 
+        HTTPForbidden, 
+        HTTPFound, 
+        HTTPUnauthorized
+)
 from pyramid.security import forget
 from pyramid.view import view_config
 from formbar.form import Form, Validator
@@ -188,6 +193,15 @@ def changepassword(request):
     """Method to change the users password by the user. The user user
     musst provide his old and the new pasword. Users are only allowed to
     change their own password."""
+
+    # Check authentification
+    # As this view has now security configured it is
+    # generally callable by all users. For this reason we first check if
+    # the user is authenticated. If the user is not authenticated the
+    # raise an 401 (unauthorized) exception.
+    if not request.user:
+        raise HTTPUnauthorized
+
     clazz = User
     handle_history(request)
     handle_params(request)
@@ -198,7 +212,8 @@ def changepassword(request):
     factory = clazz.get_item_factory()
     try:
         item = factory.load(id, request.db)
-        # Check if the user is allowed to change the password for the user.
+        # Check authorisation
+        # User are only allowed to set their own password.
         if item.id != request.user.id:
             raise HTTPForbidden()
     except sa.orm.exc.NoResultFound:
