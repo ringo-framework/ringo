@@ -133,6 +133,7 @@ def csrf_token_validation(event):
     if (request.method == 'POST'):
         csrf = request.params.get('csrf_token')
         if (csrf != unicode(request.session.get_csrf_token())):
+            log.warning("CSRF token check failed. Raising 401 exception.")
             raise HTTPUnauthorized
 
 
