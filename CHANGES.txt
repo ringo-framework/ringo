@@ -1,3 +1,48 @@
+1.10.2
+======
+Maintenance and Bugfixrelease
+
+- Cleanup after move to Github:
+	- Removed .coveragerc. Not using coverage at the moment.
+	- Removed .hgflow. Not using the hg anymore
+	- Removed .hgignore. Not using the hg anymore
+	- Removed .tx. Currently not using Transifex for translations.
+- Changed links in Documentation and README to refer to Github now.
+- Do not log that we are calling get_current_request. This is a long standing
+  design flaw in Ringo but it does not cause any known problems yet and it is
+  unlikly to change in the near future. So i replaced the logging with a
+  "fixme" comment.
+- Log failing CSRF token checks as warning.
+- Using encode_values to encode the value for the values attribut in GET
+  params now returns a urlencoded value. This results in the values will be
+  double encoded. Added decode_values helper method which can decode
+  urlencoded values back into a python dictionary. WARNING: If you are using
+  the values GET param in your application, than you may want to adapt your
+  code. 
+- Added/Improved authentification check in setstanding and changepassword
+  method by adding missing checks and more comments.
+
+1.10.1
+======
+Bugfixrelease
+
+- Updated translations.
+- Fixed bug that set the display variable wrong (uses str_repr instead) when
+  registering a extension.
+- Added compatibility mode regading Ringos behaviour on adding "s" to the
+  modul names when registering modules. The name of the modul of the extension
+  is defined in the extension itself and should be taken as it is on default.
+  However. Ringo tries also load the modul by adding an "s" to be compatible
+  with older versions.
+- Changed warning message on application startup when Ringo notices that there
+  is a extenstion which needs to be registered. Fixed showing name of the
+  extension.
+- Fix scaffold for extensions. Handle case that the user cancel the automatic
+  registering of the modul.
+- Refactored the importer code in ringo/scripts/db.py and make the code better
+  reusable for other commands.
+
+ 
 1.10.0
 ======
 * The behavior of overviews using the Datatable JS library can now be
