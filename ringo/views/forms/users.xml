@@ -42,9 +42,9 @@
     <entity id="e9" name="profile" label="Profile" readonly="true">
       <renderer type="dropdown"/>
     </entity>
-    <entity id="p1" name="first_name" label="Firstname" type="string" required="true"/>
-    <entity id="p2" name="last_name" label="Lastname" type="string" required="true"/>
-    <entity id="p3" name="email" label="E-Mail" type="email" required="true"/>
+    <entity id="p1" name="_first_name" label="Firstname" type="string" required="true"/>
+    <entity id="p2" name="_last_name" label="Lastname" type="string" required="true"/>
+    <entity id="p3" name="_email" label="E-Mail" type="email" required="true"/>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>

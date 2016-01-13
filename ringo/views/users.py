@@ -35,9 +35,9 @@ log = logging.getLogger(__name__)
 def user_create_callback(request, user):
     user = encrypt_password_callback(request, user)
     # Set profile data
-    user.profile[0].first_name = request.params.get("first_name")
-    user.profile[0].last_name = request.params.get("last_name")
-    user.profile[0].email = request.params.get("email")
+    user.profile[0].first_name = request.params.get("_first_name")
+    user.profile[0].last_name = request.params.get("_last_name")
+    user.profile[0].email = request.params.get("_email")
     return user
 
 
