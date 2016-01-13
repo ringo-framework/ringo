@@ -21,6 +21,10 @@ Maintenance and Bugfixrelease
   code. 
 - Added/Improved authentification check in setstanding and changepassword
   method by adding missing checks and more comments.
+- Make fields for the profile while user creation a logical field which is not
+  stored in the datamodel. This prevents warning messages.
+- Make field 'retype_password' a logical field which is not stored in the
+  datamodel. This prevents warning messages
 
 1.10.1
 ======
