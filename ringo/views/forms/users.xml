@@ -13,9 +13,9 @@
     </entity>
     <entity id="e2" name="password" label="Password" required="true">
       <renderer type="password"/>
-      <rule expr="$password == $retype_password" msg="Passwords must be equal"></rule>
+      <rule expr="$password == $_retype_password" msg="Passwords must be equal"></rule>
     </entity>
-    <entity id="e3" name="retype_password" label="Retype Password">
+    <entity id="e3" name="_retype_password" label="Retype Password">
       <renderer type="password"/>
     </entity>
     <entity id="e4" name="roles" label="Roles">
