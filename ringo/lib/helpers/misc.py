@@ -68,6 +68,13 @@ def _resolve_attribute(element, name, idx=None):
 
     Example: x.y[1].z
 
+    The method is tolerant agains errors when trying to resolve elements
+    in lists which are not present. This is likly the case for relations
+    when x has no elements stored in relation y. In this case the method
+    stops resolving the value and returns None. However we log this
+    situation in the debugging output as it might be a sign for an
+    error.
+
     :element: BaseItem instance
     :name: dot separated attribute name
     :returns: last element of the dot separated element.
@@ -86,7 +93,7 @@ def _resolve_attribute(element, name, idx=None):
             if len(element_list) > 0:
                 element = element_list[index]
             else:
-                log.error("IndexError in %s on %s for %s"
+                log.debug("IndexError in %s on %s for %s"
                           % (name, attr, element))
                 element = None
                 break

@@ -12,6 +12,10 @@ Maintenance and Bugfixrelease
   design flaw in Ringo but it does not cause any known problems yet and it is
   unlikly to change in the near future. So i replaced the logging with a
   "fixme" comment.
+- Log "errors" while resolving dot separated values in lists only in the debug
+  log (was error) in _resolve_attribute. As this might be a sign of an
+  missconfiguration it is actually handled in the function so we do not log an
+  error message but give a hint in in the logging in development. 
 - Log failing CSRF token checks as warning.
 - Using encode_values to encode the value for the values attribut in GET
   params now returns a urlencoded value. This results in the values will be
