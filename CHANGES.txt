@@ -1,3 +1,14 @@
+Next
+====
+- Ringo now only shows a short warning on application start if a new added or
+  removed extension is detected. It does not ask the user if ringo should
+  register the extension automatically anymore which make the startup more
+  robust on servers with no active terminal (e.g starting as WSGI). Adding or
+  removing extensions in normale usage should be added or removed by migration
+  scripts.
+- Added "ringo-admin app add-extension|remove-extension" command to add
+  or remove the initial modul and action entries during development.
+
 1.10.2
 ======
 Maintenance and Bugfixrelease
