@@ -102,24 +102,7 @@ def _add_modul(config, actions, dbsession):
     return modul
 
 
-def register_modul(config, modul_config, actions=None):
-    """Will try to register the given modul if it is not already
-    present.  If the modul is not already registred Ringo will ask the
-    user to automatically register the modul with a default to cancel.
-    The user will be intercativly asked to either enter Y or N.
-
-    This function gets called from the inititialisation code in the
-    extension.
-
-    :config: Application config
-    :modul_config: Extension configuration as a dictionary
-    :actions: List of ActionItems
-    :returns: ModulItem or None
-    """
-
-    _ = lambda t: t
-    modulname = modul_config.get('name')
-    # Load the modul
+def _load_modul_by_name(modulname):
     try:
         # FIXME:
         # Compatibilty mode. Older versions of Ringo added a 's' to the
@@ -127,42 +110,50 @@ def register_modul(config, modul_config, actions=None):
         # Newer versions use the configured extension name. So there
         # might be a mixture of old and new modul names in the database.
         # This code will handle this. (ti) <2016-01-04 13:50>
-        modul = DBSession.query(ModulItem)\
-                .filter(sa.or_(ModulItem.name == modulname,
-                               ModulItem.name == modulname + 's'))\
+        return DBSession.query(ModulItem)\
+               .filter(sa.or_(ModulItem.name == modulname,
+                              ModulItem.name == modulname + 's'))\
                 .one()
     except sa.orm.exc.NoResultFound:
-        modul = None
+        return None
+
+
+def register_modul(config, modul_config, actions=None):
+    return check_register_modul(config, modul_config, actions)
+
+
+def check_register_modul(config, modul_config, actions=None):
+    """This method is used by extension to register their modul with a
+    given config in the application. This function will check if the
+    modul is already registered. Registered in this context means that
+    the modul has an entry in the modules table
+
+    If it is not registered it will show a warning message. So the
+    function really does not register the modul but check if it is
+    registered.
+
+    :config: Application config
+    :modul_config: Extension configuration as a dictionary
+    :actions: List of ActionItems
+    :returns: ModulItem or None
+    """
+
+    modulname = modul_config.get('name')
+    modul = _load_modul_by_name(modulname)
     if modul:
-        log.info("Modul '%s' already registered" % modul_config.get('name'))
+        log.info("Extension '%s' OK" % modulname)
     else:
-        modulname = modul_config.get('name')
-        msg = _("\n\nWarning!\n"
-                "********\n"
-                "Ringo found a new extension named '%s' which "
-                "needs to be registred in your application.\n"
-                "Registering the extension should be done by using a DB "
-                "migration!\nHowever if this extension does not need any DB "
-                "migration or you are sure you do not want to do an explicit "
-                "registration, than Ringo can do the registration "
-                "automatically for you.\nCaution! Automatic registration may "
-                "write to your DB which can result in failing migrations\n\n"
-                % modulname)
-        log.info(msg)
-        choice = raw_input(_("Register '%s' Y/N (N)?") % modulname)
-        if choice == "Y":
-            modul = _add_modul(modul_config, actions, DBSession)
-            log.info("Registered modul '%s'" % modulname)
-        else:
-            log.info("Aborting Registering modul '%s'" % modulname)
+        log.warning("Extension '%s' is missing a entry in DB. "
+                    "Missing migration?" % modulname)
     return modul
 
 
-def unregister_modul(modul):
-    """Will unregister the given modul. This means deleting the modul
-    entry and all related actions. Note, that you will need to delete
-    further datastructures on your own.
+def check_unregister_modul(modul, extensions):
+    """Will check if there is a entry in the moduls table for an
+    extension which is not currently added in the application and can
+    therefor be deleted. If there is such an entry a warning is logged.
     """
-    DBSession.delete(modul)
-    transaction.commit()
-    log.info("Unregistered modul '%s'" % modul.name)
+    app_name = modul.clazzpath.split(".")[0]
+    if app_name.find("ringo_") > -1 and app_name not in extensions:
+        log.warning("Spare entry in DB for Extension '%s'. "
+                    "Missing migration?" % modul.name)

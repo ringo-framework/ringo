@@ -4,7 +4,7 @@ import pkg_resources
 import transaction
 from pyramid.events import NewRequest
 from ringo.lib import helpers
-from ringo.lib.extension import unregister_modul
+from ringo.lib.extension import check_unregister_modul
 from ringo.lib.sql.db import DBSession, NTDBSession
 from ringo.lib.helpers import get_action_routename
 from ringo.lib.form import get_formbar_css, get_formbar_js
@@ -57,10 +57,7 @@ def setup_extensions(config):
         config.include(extension)
     # Now delete all extensions which are not configured.
     for modul in DBSession.query(ModulItem).all():
-        app_name = modul.clazzpath.split(".")[0]
-        if app_name.find("ringo_") > -1:
-            if app_name not in extensions:
-                unregister_modul(modul)
+        check_unregister_modul(modul, extensions)
 
 
 def setup_modules(config):
