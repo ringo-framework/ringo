@@ -102,7 +102,7 @@ def _add_modul(config, actions, dbsession):
     return modul
 
 
-def _load_modul_by_name(modulname):
+def _load_modul_by_name(session, modulname):
     try:
         # FIXME:
         # Compatibilty mode. Older versions of Ringo added a 's' to the
@@ -110,7 +110,7 @@ def _load_modul_by_name(modulname):
         # Newer versions use the configured extension name. So there
         # might be a mixture of old and new modul names in the database.
         # This code will handle this. (ti) <2016-01-04 13:50>
-        return DBSession.query(ModulItem)\
+        return session.query(ModulItem)\
                .filter(sa.or_(ModulItem.name == modulname,
                               ModulItem.name == modulname + 's'))\
                 .one()
@@ -139,7 +139,7 @@ def check_register_modul(config, modul_config, actions=None):
     """
 
     modulname = modul_config.get('name')
-    modul = _load_modul_by_name(modulname)
+    modul = _load_modul_by_name(DBSession, modulname)
     if modul:
         log.info("Extension '%s' OK" % modulname)
     else:
