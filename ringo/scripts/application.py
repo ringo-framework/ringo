@@ -1,7 +1,9 @@
 import os
 import transaction
 from ringo.scripts.db import get_session
-from ringo.lib.helpers import get_app_location
+from ringo.lib.helpers import get_app_location, dynamic_import
+from ringo.lib.extension import _add_modul, _load_modul_by_name
+from ringo.model import extensions
 from ringo.model.user import User
 from ringo.lib.security import encrypt_password, password_generator
 
@@ -40,3 +42,38 @@ def handle_app_init_command(args):
     print("2. %s-admin db init --config %s" % (args.app, config_file))
     print("3. %s-admin fixtures load --config %s" % (args.app, config_file))
     print("4. Start application: pserve production.ini")
+
+
+def handle_ext_init_command(args):
+    path = []
+    path.append(get_app_location(args.app))
+    path.append(args.config)
+    session = get_session(os.path.join(*path))
+    for ext in extensions:
+        if ext == args.name:
+            if _load_modul_by_name(session, ext.replace("ringo_", "")):
+                print "Extension %s already added!" % args.name
+            else:
+                extension = dynamic_import("%s." % args.name)
+                _add_modul(extension.modul_config, None, session)
+                print "Extension %s added!" % args.name
+            break
+    else:
+        print "Extension %s not found!" % args.name
+
+
+def handle_ext_delete_command(args):
+    path = []
+    path.append(get_app_location(args.app))
+    path.append(args.config)
+    session = get_session(os.path.join(*path))
+    modul = _load_modul_by_name(session, args.name.replace("ringo_", ""))
+    if modul:
+        if args.name in extensions:
+            session.delete(modul)
+            transaction.commit()
+            print "Extension %s deleted!" % args.name
+        else:
+            print "Extension %s already deleted!" % args.name
+    else:
+        print "Extension %s not found!" % args.name

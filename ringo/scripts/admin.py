@@ -53,7 +53,9 @@ from ringo.scripts.user import (
 )
 
 from ringo.scripts.application import (
-    handle_app_init_command
+    handle_app_init_command,
+    handle_ext_init_command,
+    handle_ext_delete_command
 )
 
 def get_config_path(config="development.ini"):
@@ -104,6 +106,21 @@ def setup_application_parser(subparsers, parent):
                               metavar='name',
                               help='Name of the application')
     app_parser.set_defaults(func=handle_app_init_command)
+
+    reg_parser = sp.add_parser('add-extension',
+                                help=('Will create modul entries for a given extension'),
+                                parents=[parent])
+    reg_parser.add_argument('name',
+                            metavar='name',
+                            help='Name of the extension')
+    reg_parser.set_defaults(func=handle_ext_init_command)
+    unreg_parser = sp.add_parser('remove-extension',
+                                help=('Will delete modul entries for a given extension'),
+                                parents=[parent])
+    unreg_parser.add_argument('name',
+                            metavar='name',
+                            help='Name of the extension')
+    unreg_parser.set_defaults(func=handle_ext_delete_command)
     return sp
 
 
