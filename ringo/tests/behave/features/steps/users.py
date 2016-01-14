@@ -8,15 +8,15 @@ def step_impl(context, error):
     csrf = get_csrf_token(context.resp)
     values = {
         "login": "test",
-        "first_name": "xxx",
-        "last_name": "yyy",
-        "email": "test@test.de",
+        "_first_name": "xxx",
+        "_last_name": "yyy",
+        "_email": "test@test.de",
         "password": "0123456789abc",
-        "retype_password": "0123456789abc",
+        "_retype_password": "0123456789abc",
         "csrf_token": csrf
     }
     if error == "password-missmatch":
-        values['retype_password'] = "test2"
+        values['_retype_password'] = "test2"
     if error == "missing-login":
         values['login'] = ""
     context.resp = context.app.post("/%s" % "/".join(path), values, status="*")
