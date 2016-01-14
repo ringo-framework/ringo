@@ -4,8 +4,6 @@ from ringo.scripts.db import get_session
 from ringo.lib.helpers import get_app_location, dynamic_import
 from ringo.lib.extension import _add_modul, _load_modul_by_name
 from ringo.model import extensions
-from ringo.model.user import User
-from ringo.lib.security import encrypt_password, password_generator
 
 
 def handle_app_init_command(args):
