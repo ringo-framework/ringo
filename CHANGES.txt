@@ -1,5 +1,6 @@
 Next
 ====
+- Improved documentation on how to add extensions in the application.
 - Ringo now only shows a short warning on application start if a new added or
   removed extension is detected. It does not ask the user if ringo should
   register the extension automatically anymore which make the startup more
