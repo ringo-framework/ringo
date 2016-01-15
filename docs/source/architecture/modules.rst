@@ -79,7 +79,8 @@ application.
 
 Extensions
 ==========
-.. automodule:: ringo.lib.extension
+
+See :ref:`extensions`.
 
 Base Items and Listings
 =======================
