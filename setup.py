@@ -35,7 +35,10 @@ tests_requires = [
     'nose',
     'coverage',
     'webtest',
-    'mock'
+    'mock',
+    'pytest-sqlalchemy',
+    'pytest-ringo',
+    'pytest-cov'
 ]
 
 setup(name='ringo',
