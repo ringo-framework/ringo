@@ -1,13 +1,18 @@
 """
-Extensions are external pluggable modules and a option to add generic
+Extensions are external plugable modules. They are used to add generic
 functionallity to the application in a dynamic way.
 
-In contrast to modules, extensions are generic and should not implement
-application specific stuff. Extensions should be used to create
-pluggable modules with generic functionallity which can be usefull for
-all kind of applications. An example might be an appointment extensions
-which allows the user to extend the application with an appointment
-feature.
+In contrast to modules, extensions do not implement application specific
+stuff, but are generix with functionallity which is usefull for all kind
+of applications. An example might be an appointment extensions which
+allows to extend the application with an appointment feature.
+
+For more information on how to create and register extensions please
+refer to the :ref:`extensions` part of the documentation.
+
+Extension may extend the existing database and adds tables to save data
+(e.g appointments and relations of appointments to users.) or they are
+lightweight and just provides some functionallity like anonymisation.
 
 Extension can be Registered to an application by adding the extentions
 in the `extensions` list located in the `modul/__init__.py` file. As
@@ -21,8 +26,6 @@ To unregister a extension simply remove the extension from the
     unregistration of the extension. (See alembic and ringo-admin
     documentation).
 
-For more information on how to create and register extensions please
-refer to the :ref:`development` part of the documentation.
 
 """
 import logging
