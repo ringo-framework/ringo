@@ -42,9 +42,9 @@ def step_impl(context):
     response = context.app.post('/auth/register_user',
         params={'login': 'testuser',
                 'pass': 'mypass',
-                'pass2': 'mypass',
+                '_pass2': 'mypass',
                 'csrf_token': csrf,
-                'email': 'testuser@example.com',
+                '_email': 'testuser@example.com',
         },
     )
     context.resp = response

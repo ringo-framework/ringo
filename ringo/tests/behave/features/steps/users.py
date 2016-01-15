@@ -30,9 +30,9 @@ def step_impl(context, error, id):
     values = {
         "id": id,
         "login": "test2",
-        "first_name": "xxx",
-        "last_name": "yyy",
-        "email": "test@test.de",
+        "_first_name": "xxx",
+        "_last_name": "yyy",
+        "_email": "test@test.de",
         "password": "0123456789abc",
         "_retype_password": "0123456789abc",
         "csrf_token": csrf
