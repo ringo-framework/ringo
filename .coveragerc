@@ -1,2 +1,3 @@
 [report]
 omit = *tests*
+show_missing = true
