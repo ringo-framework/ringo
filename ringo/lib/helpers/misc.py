@@ -68,6 +68,13 @@ def _resolve_attribute(element, name, idx=None):
 
     Example: x.y[1].z
 
+    The method is tolerant agains errors when trying to resolve elements
+    in lists which are not present. This is likly the case for relations
+    when x has no elements stored in relation y. In this case the method
+    stops resolving the value and returns None. However we log this
+    situation in the debugging output as it might be a sign for an
+    error.
+
     :element: BaseItem instance
     :name: dot separated attribute name
     :returns: last element of the dot separated element.
@@ -86,7 +93,7 @@ def _resolve_attribute(element, name, idx=None):
             if len(element_list) > 0:
                 element = element_list[index]
             else:
-                log.error("IndexError in %s on %s for %s"
+                log.debug("IndexError in %s on %s for %s"
                           % (name, attr, element))
                 element = None
                 break
@@ -168,13 +175,13 @@ def get_item_modul(request, item):
 
 def _get_item_modul(request, item):
     if not request:
+        # FIXME: Ideally there is no need to call the methods without a
+        # request and to get the request from the app globals. If this
+        # code path is executed this is a sign the the caller is not
+        # implemented in a clean way. Well, this is a known issue for
+        # years and it currently doesn't seem to cause problems in the
+        # real world. (ti) <2016-01-12 08:55>
         request = get_current_request()
-        # Log this message only once per request!
-        if request and not hasattr(request, "has_logged_get_current_request_warning"):
-            log.warning("Calling get_item_modul with no request although "
-                        "there is a request available. "
-                        "Using 'get_current_request'...")
-            request.has_logged_get_current_request_warning = True
     if not request or not request.cache_item_modul.get(item._modul_id):
         from ringo.model.modul import ModulItem
         factory = ModulItem.get_item_factory()

@@ -74,7 +74,17 @@ class TableConfig:
                     "default-sort-order": "desc",
                     "auto-responsive": true,
                     "advancedsearch": true
-                }
+                },
+                "filters": [
+                    {
+                        "field": "fieldname",
+                        "type": "checkbox",
+                        "expr": "",
+                        "regex": false,
+                        "smart": true,
+                        "caseinsensitive": true
+                    }
+                ]
             }
         }
 
@@ -106,20 +116,46 @@ class TableConfig:
 
     Further the table has some table wide configuration options:
 
+    * *sortable*: If True, the table is sortable.
     * *default-sort-field*: Name of the column which should be used as
       default sorting on the table. Defaults to the first column in the table.
     * *default-sort-order*: Sort order (desc, asc) Defaults to asc.
+
+    * *searchable*: If True, the table is searchable and a search field is
+      shown.
     * *default-search*: Default search filter for the table
-    * *auto-responsive*: If True than only the first column of a table
-      will be displayed on small devices. Else you need to configure the
-      "screen" attribute for the fields.
-    * *pagination*: If True pagination of the results will be enabled.
-      The table will have gui element to configure pagination of the
-      table. Defaults to false.
-    * *sortable*: If True, the table is sortable by dragging the rows.
     * *advancedsearch*: If False, a more complex overview with stacked
       search regex and save features is used. Otherwise a more simple
       overview. Default to use the simple overview.
+
+    * *pagination*: If True pagination of the results will be enabled.
+      The table will have gui element to configure pagination of the
+      table. Defaults to false.
+
+    * *auto-responsive*: If True than only the first column of a table
+      will be displayed on small devices. Else you need to configure the
+      "screen" attribute for the fields.
+    * *show-info*: It True than a info field showing number of items in the 
+      table
+
+    For DT tables you can define different search filters which are
+    defined in the *filters* section. Filters is a list of different
+    filter options. Each filter has the following options:
+
+    * *field*: The name of the field on which the filter will be applied.
+    * *label*: The label of the filter.
+    * *active*: If true the filter will be active.
+    * *type*: Type of the rendering. Currently only "checkbox" is
+      supported. The checkbox renderer will active or deactive a filter
+      a a certain row.
+    * *expr*: The expression for the filter.
+    * *smart*: If set to True this filter is a smart filter. Defaults to True.
+    * *regex*: If set to True this the expression is handled as a
+      regular expression. Defaults to False.
+    * *caseinsensitive*: If set to True the search is caseinsensitive.
+      Defaults to True.
+
+
     """
 
     def __init__(self, clazz, name):
@@ -143,13 +179,25 @@ class TableConfig:
         config = self.config.get(self.name)
         return config.get('settings', {})
 
+    def get_filters(self):
+        """Returns the filters for the table as dictionary
+        :returns: Filters dictionary
+
+        """
+        config = self.config.get(self.name)
+        return [Filter(fltr) for fltr in config.get('filters', [])]
+
     def is_autoresponsive(self):
         settings = self.get_settings()
         return settings.get("auto-responsive", True)
 
     def is_sortable(self):
         settings = self.get_settings()
-        return settings.get("sortable", False)
+        return settings.get("sortable", True)
+
+    def is_searchable(self):
+        settings = self.get_settings()
+        return settings.get("searchable", True)
 
     def is_paginated(self):
         settings = self.get_settings()
@@ -168,6 +216,18 @@ class TableConfig:
         for col in config.get('columns'):
             cols.append(col)
         return cols
+
+    def get_column_index(self, name):
+        """Will return the index of the column in the overview. Index is
+        count from left to right. This method is used to match the
+        configured columns in this configuration with the columns in the
+        datatables which can be addressed by its index. Please note the
+        the index of the datatables columns are increased by 1. So you
+        will need to add 1 to the result of this method."""
+        for num, col in enumerate(self.get_columns()):
+            if col["name"] == name:
+                return num
+        return 0
 
     def get_default_sort_column(self):
         """Returns the name of the attribute of the clazz which is
@@ -237,3 +297,32 @@ def _load_overview_config(clazz):
     if not config:
         raise IOError("Could not load table configuration for %s" % cfile)
     return json.load(config)
+
+
+class Filter(object):
+    """This class represents a custom filter used in Listings using the
+    datatables JS extension. This class is used to give access to the
+    relevant attribute of a filter. Some of the attributes are processed
+    to be ready to be used directly in JS code."""
+
+    def __init__(self, conf):
+        self._conf = conf
+        self.expr = self._conf.get("expr", "")
+        self.field = self._conf.get("field", "")
+        self.label = self._conf.get("label", "")
+        self.type = self._conf.get("type", "checkbox")
+        self.active = self._conf.get("active", True)
+
+        # JS Options used in filter method
+        if self._conf.get("regex", False):
+            self.regex = "true"
+        else:
+            self.regex = "false"
+        if self._conf.get("smart", True) and not self._conf.get("regex", False):
+            self.smart = "true"
+        else:
+            self.smart = "false"
+        if self._conf.get("caseinsensitive", True):
+            self.caseinsensitive = "true"
+        else:
+            self.caseinsensitive = "false"

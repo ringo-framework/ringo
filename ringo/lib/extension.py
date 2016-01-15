@@ -79,10 +79,10 @@ def _add_modul(config, actions, dbsession):
     :dbsession: Database session
     """
     # Set defaults
-    name = config.get("name") + "s"
+    name = config.get("name")
     clazzpath = config.get("clazzpath")
     str_repr = config.get("str_repr") or "%s|id"
-    display = config.get("str_repr") or "hidden"
+    display = config.get("display") or "hidden"
     label = config.get("label") or name
     label_plural = config.get("label_plural") or label
 
@@ -103,34 +103,51 @@ def _add_modul(config, actions, dbsession):
 
 
 def register_modul(config, modul_config, actions=None):
-    """Will register the given modul if it is not already present. This
-    function gets called from  the inititialisation code in the
+    """Will try to register the given modul if it is not already
+    present.  If the modul is not already registred Ringo will ask the
+    user to automatically register the modul with a default to cancel.
+    The user will be intercativly asked to either enter Y or N.
+
+    This function gets called from the inititialisation code in the
     extension.
 
     :config: Application config
     :modul_config: Extension configuration as a dictionary
     :actions: List of ActionItems
+    :returns: ModulItem or None
     """
-    name = modul_config.get("name") + "s"
+
     _ = lambda t: t
     modulname = modul_config.get('name')
     # Load the modul
     try:
-        modul = DBSession.query(ModulItem).filter(ModulItem.name == name).one()
+        # FIXME:
+        # Compatibilty mode. Older versions of Ringo added a 's' to the
+        # extensions modul name as Ringo usally uses the plural form.
+        # Newer versions use the configured extension name. So there
+        # might be a mixture of old and new modul names in the database.
+        # This code will handle this. (ti) <2016-01-04 13:50>
+        modul = DBSession.query(ModulItem)\
+                .filter(sa.or_(ModulItem.name == modulname,
+                               ModulItem.name == modulname + 's'))\
+                .one()
     except sa.orm.exc.NoResultFound:
         modul = None
     if modul:
         log.info("Modul '%s' already registered" % modul_config.get('name'))
     else:
         modulname = modul_config.get('name')
-        msg = _("Warning! Ringo found a new extension named '%s' which needs "
-                "to be registred in your application. \n"
+        msg = _("\n\nWarning!\n"
+                "********\n"
+                "Ringo found a new extension named '%s' which "
+                "needs to be registred in your application.\n"
                 "Registering the extension should be done by using a DB "
                 "migration!\nHowever if this extension does not need any DB "
                 "migration or you are sure you do not want to do an explicit "
                 "registration, than Ringo can do the registration "
                 "automatically for you.\nCaution! Automatic registration may "
-                "write to your DB which can result in failing migrations")
+                "write to your DB which can result in failing migrations\n\n"
+                % modulname)
         log.info(msg)
         choice = raw_input(_("Register '%s' Y/N (N)?") % modulname)
         if choice == "Y":

@@ -13,9 +13,9 @@
     </entity>
     <entity id="e2" name="password" label="Password" required="true">
       <renderer type="password"/>
-      <rule expr="$password == $retype_password" msg="Passwords must be equal"></rule>
+      <rule expr="$password == $_retype_password" msg="Passwords must be equal"></rule>
     </entity>
-    <entity id="e3" name="retype_password" label="Retype Password">
+    <entity id="e3" name="_retype_password" label="Retype Password">
       <renderer type="password"/>
     </entity>
     <entity id="e4" name="roles" label="Roles">
@@ -42,9 +42,9 @@
     <entity id="e9" name="profile" label="Profile" readonly="true">
       <renderer type="dropdown"/>
     </entity>
-    <entity id="p1" name="first_name" label="Firstname" type="string" required="true"/>
-    <entity id="p2" name="last_name" label="Lastname" type="string" required="true"/>
-    <entity id="p3" name="email" label="E-Mail" type="email" required="true"/>
+    <entity id="p1" name="_first_name" label="Firstname" type="string" required="true"/>
+    <entity id="p2" name="_last_name" label="Lastname" type="string" required="true"/>
+    <entity id="p3" name="_email" label="E-Mail" type="email" required="true"/>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>

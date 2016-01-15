@@ -44,6 +44,11 @@ $( document ).ready(function() {
     /* Datatable initialisation */
     var application_path = getApplicationPath();
     var language = getDTLanguage(getLanguageFromBrowser());
+    if (language == 'german') {
+        // https://datatables.net/blog/2014-12-18 using moment.js
+        $.fn.dataTable.moment( 'DD.MM.YYYY' );
+        $.fn.dataTable.moment( 'DD.MM.YY' );
+    }
     $('.datatable-paginated').dataTable( {
            "oLanguage": {
                 "sUrl":  application_path + "/ringo-static/js/datatables/i18n/"+language+".json"

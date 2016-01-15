@@ -49,14 +49,14 @@ each application (including ringo itself) you want to develop::
         mkdir lib
         cd lib
         # Install a development version of brabbel
-        hg clone https://bitbucket.org/ti/brabbel
+        git clone https://bitbucket.org/ringo-framework/brabbel
         cd formbar
         # Install a development version of formbar.
-        hg clone https://bitbucket.org/ti/formbar
+        git clone https://bitbucket.org/ringo-framework/formbar
         cd formbar
         python setup.py develop
         # Install a development version of ringo.
-        hg clone https://bitbucket.org/ti/ringo
+        git clone https://bitbucket.org/ringo-framework/ringo
         cd ringo
         python setup.py develop
         cd ..
