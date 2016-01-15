@@ -34,7 +34,7 @@ def step_impl(context, error, id):
         "last_name": "yyy",
         "email": "test@test.de",
         "password": "0123456789abc",
-        "retype_password": "0123456789abc",
+        "_retype_password": "0123456789abc",
         "csrf_token": csrf
     }
     if error == "missing-login":
