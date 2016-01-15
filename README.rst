@@ -36,6 +36,13 @@ web application based on Ringo:
  * Nice console client for various administration tasks.
  * ...
 
+Tests
+=====
+To start the testsuite invoke the following command::
+
+        py.test --app-config test.ini
+
+
 Documentation
 =============
 The source of documentation comes with the source of Ringo and can be found in the
