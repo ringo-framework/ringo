@@ -188,7 +188,7 @@ def handle_POST_request(form, request, callback, event, renderers=None):
         else:
             msg = _('Error on validation '
                     '${item_type} "${item}".', mapping=mapping)
-        log.info(msg)
+        log.debug(msg)
         request.session.flash(msg, 'error')
     return False
 
