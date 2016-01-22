@@ -1,3 +1,19 @@
+1.10.4
+======
+Bugfixrelease
+
+- Only log validation errors in DEBUG loglevel.
+- Fixed changed field names in user registration.
+- Fixed test cases
+
+1.10.3
+======
+Bugfixrelease
+
+- Fixed bug (Introduced with 1.10.2) when encoding values in GET params. Ringo
+  uses a special notation for encoding values in the URL as GET param in the
+  `values` key. This method failed for values containing non ASCII values.
+
 1.10.3
 ======
 Bugfixrelease
