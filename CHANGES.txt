@@ -1,3 +1,12 @@
+Next
+====
+- Show info dialog at the top to the form in case the validation fails.
+  This info has been added because users reported data loss because of
+  formbar/ringo default behaviour of not saving anything in case of
+  errors. Users seems to expect that the valid part of the data has been
+  saved. This info should make the user aware of the fact that nothing
+  has been saved in case of errors
+
 1.10.4
 ======
 Bugfixrelease

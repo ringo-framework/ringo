@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-11-17 16:51+0100\n"
+"POT-Creation-Date: 2016-01-26 14:09+0100\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language-Team: German "
@@ -20,20 +20,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: ringo/lib/extension.py:126
+#: ringo/lib/extension.py:140
 #, python-format
 msgid ""
-"Warning! Ringo found a new extension named '%s' which needs to be "
-"registred in your application. \n"
+"\n"
+"\n"
+"Warning!\n"
+"********\n"
+"Ringo found a new extension named '%s' which needs to be registred in "
+"your application.\n"
 "Registering the extension should be done by using a DB migration!\n"
 "However if this extension does not need any DB migration or you are sure "
 "you do not want to do an explicit registration, than Ringo can do the "
 "registration automatically for you.\n"
 "Caution! Automatic registration may write to your DB which can result in "
-"failing migrations"
+"failing migrations\n"
+"\n"
 msgstr ""
 
-#: ringo/lib/extension.py:135
+#: ringo/lib/extension.py:152
 #, python-format
 msgid "Register '%s' Y/N (N)?"
 msgstr ""
@@ -59,8 +64,8 @@ msgid ""
 "Please press \"${Action}\" to ${action} the item. Press \"Cancel\" to "
 "cancel the action."
 msgstr ""
-"Bitte klicken Sie auf „${Action}“, um den Eintrag zu ${action}. Klicken"
-" sie auf „Abbrechen“, um den Vorgang abzubrechen."
+"Bitte klicken Sie auf „${Action}“, um den Eintrag zu ${action}. Klicken "
+"sie auf „Abbrechen“, um den Vorgang abzubrechen."
 
 #: ringo/model/modul.py:277
 msgid "List"
@@ -110,11 +115,11 @@ msgstr "Bitte geben Sie hier sinnvolle Informationen über Anwendung an."
 msgid "This application is based on the Ringo web application framework."
 msgstr "Diese Anwendung basiert auf dem Ringo Webanwendungs-Rahmen."
 
-#: ringo/templates/base.mako:76
+#: ringo/templates/base.mako:78
 msgid "Logout will happen soon"
 msgstr "Abmeldung steht kurz bevor"
 
-#: ringo/templates/base.mako:78
+#: ringo/templates/base.mako:80
 msgid ""
 "Your session will expire soon because of inactivity. Click on \"Renew "
 "session\" to continue work and renew your session. Otherwise you will be "
@@ -125,15 +130,15 @@ msgstr ""
 "Andernfalls werden Sie in Kürze automatisch abgemeldet, und alle nicht "
 "gespeicherten Eingaben gehen verloren."
 
-#: ringo/templates/base.mako:81
+#: ringo/templates/base.mako:83
 msgid "Renew session"
 msgstr "Sitzung verlängern"
 
-#: ringo/templates/base.mako:89
+#: ringo/templates/base.mako:91
 msgid "Form contains unsaved changes!"
 msgstr "Formular enthält ungespeicherte Änderungen!"
 
-#: ringo/templates/base.mako:91
+#: ringo/templates/base.mako:93
 msgid ""
 "Do you want to leave the current form without saving the changes? The "
 "changes will be lost if you do not save the data first!"
@@ -142,47 +147,47 @@ msgstr ""
 "speichern? Die Änderungen werden verloren gehen, wenn Sie das Formular "
 "nicht vorher speichern!"
 
-#: ringo/templates/base.mako:94
+#: ringo/templates/base.mako:96
 msgid "Stay in Form"
 msgstr "Im Formular bleiben"
 
-#: ringo/templates/base.mako:95
+#: ringo/templates/base.mako:97
 msgid "Leave the Form"
 msgstr "Das Formular verlassen"
 
-#: ringo/templates/base.mako:158
+#: ringo/templates/base.mako:160
 msgid "Create new item"
 msgstr "Erstelle neuen Eintrag"
 
-#: ringo/templates/base.mako:160
+#: ringo/templates/base.mako:162
 msgid "Open overview"
 msgstr "Öffne Übersicht"
 
-#: ringo/templates/base.mako:162
+#: ringo/templates/base.mako:164
 msgid "Open in \"Edit\" mode"
 msgstr "Öffne im „Bearbeiten“ Modus"
 
-#: ringo/templates/base.mako:164
+#: ringo/templates/base.mako:166
 msgid "Open in \"Read\" mode"
 msgstr "Öffne im „Lesen“ Modus"
 
-#: ringo/templates/base.mako:166
+#: ringo/templates/base.mako:168
 msgid "Delete item"
 msgstr "Lösche Eintrag"
 
-#: ringo/templates/base.mako:182
+#: ringo/templates/base.mako:184
 msgid "Advanced"
 msgstr "Erweitert"
 
-#: ringo/templates/base.mako:184 ringo/templates/footer.mako:8
+#: ringo/templates/base.mako:186 ringo/templates/footer.mako:8
 msgid "Administration"
 msgstr "Administration"
 
-#: ringo/templates/base.mako:185
+#: ringo/templates/base.mako:187
 msgid "Change ownership"
 msgstr "Ändere Eigentumsrechte"
 
-#: ringo/templates/base.mako:188
+#: ringo/templates/base.mako:190
 msgid "Advanced actions"
 msgstr "Erweiterte Aktionen"
 
@@ -199,6 +204,7 @@ msgid "If you have any questions do not hestitate to contact me."
 msgstr "Wenn Sie fragen haben, dann zögen Sie nicht mich zu kontaktieren."
 
 #. Label for email field in form config
+#. Label for _email field in form config
 #: ringo/templates/contact.mako:10 ringo/views/forms/profiles.xml:5
 #: ringo/views/forms/users.xml:14
 msgid "E-Mail"
@@ -358,7 +364,7 @@ msgstr ""
 " den den Teil zu Entwicklung und lernen Sie, wie man Dinge in der "
 "Anwendung anpasst. Happy Coding! :)"
 
-#: ringo/templates/logininfo.mako:13
+#: ringo/templates/logininfo.mako:19
 #, python-format
 msgid ""
 "There have been more than <strong>5 failed login attemps</strong> since "
@@ -367,18 +373,16 @@ msgstr ""
 "Es gab mehr als <strong>5 fehlgeschlagene Anmeldeversuche</strong> seit "
 "der letzten erfolgreichen Anmeldung am <strong>%s</strong>"
 
-#: ringo/templates/logininfo.mako:14
+#: ringo/templates/logininfo.mako:20
 msgid "This could be an <strong>attempt of misuse</strong> of your user account."
-msgstr ""
-"Das kann ein <strong>Versuch des Missbrauchs</strong> ihres Zugangs"
-" sein."
+msgstr "Das kann ein <strong>Versuch des Missbrauchs</strong> ihres Zugangs sein."
 
-#: ringo/templates/logininfo.mako:23
+#: ringo/templates/logininfo.mako:29
 #, python-format
 msgid "The last login was on %s"
 msgstr "Die letze Anmeldung war am %s"
 
-#: ringo/templates/logininfo.mako:25
+#: ringo/templates/logininfo.mako:32
 #, python-format
 msgid "The last failed login was on %s"
 msgstr "Die letzte fehlgeschlagene Anmeldung war am %s"
@@ -545,6 +549,10 @@ msgstr "Importiere %s Einträge"
 #: ringo/templates/internal/import.mako:14
 msgid "Cancel"
 msgstr "Abbrechen"
+
+#: ringo/templates/internal/dtlist.js.mako:2
+msgid "Case sensitive"
+msgstr ""
 
 #: ringo/templates/internal/export.mako:5
 msgid "Export configuration for"
@@ -872,53 +880,66 @@ msgstr ""
 "Authorisierung fehlgeschlagen. Es tut mir leid, aber Sie haben nicht die "
 "erforderlichen Rechte, um auf die Ressource zuzugreifen."
 
-#: ringo/views/request.py:146
+#: ringo/views/request.py:188
+msgid ""
+"The data could not be validated because of missing or faulty information."
+" Errors on validation cause <strong>changes are not "
+"saved</strong>!<br>Please correct the information in the red fields and "
+"save again."
+msgstr ""
+"Die Angaben konnten aufgrund von fehlenden oder fehlerhaften Eingaben "
+"nicht validiert werden. Fehler in der Validierung führen dazu, "
+"<strong>dass Änderungen nicht gespeichert werden</strong>!<br>Bitte "
+"korrigieren Sie die Eingaben in den rot markierten Feldern und Speichern "
+"Sie erneut."
+
+#: ringo/views/request.py:222
 msgid "Created new ${item_type} successfully."
 msgstr "${item_type} erfolgreich angelegt."
 
-#: ringo/views/request.py:151
+#: ringo/views/request.py:227
 msgid "Edited ${item_type} \"${item}\" successfully."
 msgstr "${item_type} „${item}“ wurde erfolgreich bearbeitet."
 
-#: ringo/views/request.py:162
+#: ringo/views/request.py:238
 msgid "Error while saving new ${item_type}: ${error}."
 msgstr "Fehler beim Anlegen von ${item_type}: ${error}."
 
-#: ringo/views/request.py:165
+#: ringo/views/request.py:241
 msgid "Error while saving ${item_type} \"${item}\": ${error}."
 msgstr "Fehler beim Bearbeiten von ${item_type} „${item}“: ${error}."
 
-#: ringo/views/request.py:173
+#: ringo/views/request.py:249
 msgid "Error on validation new ${item_type}."
 msgstr "Fehler beim Validieren von ${item_type}."
 
-#: ringo/views/request.py:176
+#: ringo/views/request.py:252
 msgid "Error on validation ${item_type} \"${item}\"."
 msgstr "Fehler beim Validieren von ${item_type} „${item}“."
 
-#: ringo/views/users.py:106 ringo/views/users.py:131
+#: ringo/views/users.py:111 ringo/views/users.py:136
 msgid "This name is already in use, please use something unique."
 msgstr ""
 "Dieser Name wird bereits benutzt, bitte nehmen Sie einen eindeutigen "
 "Namen."
 
-#: ringo/views/users.py:111 ringo/views/users.py:136 ringo/views/users.py:223
+#: ringo/views/users.py:116 ringo/views/users.py:141 ringo/views/users.py:242
 msgid "Password must be at least 12 characters long."
 msgstr "Passwort muss mindestens 12 Zeichen lang sein."
 
-#: ringo/views/users.py:115 ringo/views/users.py:140 ringo/views/users.py:227
+#: ringo/views/users.py:120 ringo/views/users.py:145 ringo/views/users.py:246
 msgid "Password must contain at least 2 non-letters."
 msgstr "Passwort muss mindestens 2 Nicht-Buchstaben enthalten."
 
-#: ringo/views/users.py:220
+#: ringo/views/users.py:239
 msgid "The given password is not correct"
 msgstr "Das angegebene Passwort ist nicht korrekt"
 
-#: ringo/views/users.py:239
+#: ringo/views/users.py:258
 msgid "Changed password for \"${item}\" successfull."
 msgstr "Password für „${item}“ erfolgreich geändert."
 
-#: ringo/views/users.py:249
+#: ringo/views/users.py:268
 msgid "Error on changing the password for \"${item}\"."
 msgstr "Fehler bei der Änderung des Passworts für „${item}“."
 
@@ -982,12 +1003,12 @@ msgstr ""
 "die die Aktion '${action}' angewendet werden kann. (${num} Einträge "
 "wurden ausgefiltert.)"
 
-#. Label for pass2 field in form config
+#. Label for _pass2 field in form config
 #: ringo/views/forms/auth.xml:3
 msgid "Retype password"
 msgstr "Passwort wiederholen"
 
-#. Label for email field in form config
+#. Label for _email field in form config
 #. Label for email column in overview table config
 #: ringo/views/forms/auth.xml:4 ringo/views/tables/profiles.json:4
 msgid "Email"
@@ -1212,6 +1233,7 @@ msgstr ""
 "befugt, den Besitzer zu ändern."
 
 #. Label for first_name field in form config
+#. Label for _first_name field in form config
 #. Label for first_name column in overview table config
 #. Label for profile[0].first_name column in overview table config
 #. Label for profile[0].first_name column in members table config
@@ -1222,6 +1244,7 @@ msgid "Firstname"
 msgstr "Vorname"
 
 #. Label for last_name field in form config
+#. Label for _last_name field in form config
 #. Label for last_name column in overview table config
 #. Label for profile[0].last_name column in overview table config
 #. Label for profile[0].last_name column in members table config
@@ -1302,7 +1325,7 @@ msgstr "Nein"
 msgid "Old Password"
 msgstr "Altes Passwort"
 
-#. Label for retype_password field in form config
+#. Label for _retype_password field in form config
 #: ringo/views/forms/users.xml:5
 msgid "Retype Password"
 msgstr "Passwort wiederholen"
