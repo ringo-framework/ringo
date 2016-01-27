@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-01-26 14:09+0100\n"
+"POT-Creation-Date: 2016-01-27 15:59+0100\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -801,33 +801,32 @@ msgstr ""
 
 #: ringo/views/request.py:188
 msgid ""
-"The data could not be validated because of missing or faulty information."
-" Errors on validation cause <strong>changes are not "
-"saved</strong>!<br>Please correct the information in the red fields and "
-"save again."
+"The information contained errors. <strong>All entries (including error-"
+"free) were not saved!</strong> Please correct your entries in the fields "
+"marked in red and resave."
 msgstr ""
 
-#: ringo/views/request.py:222
+#: ringo/views/request.py:221
 msgid "Created new ${item_type} successfully."
 msgstr ""
 
-#: ringo/views/request.py:227
+#: ringo/views/request.py:226
 msgid "Edited ${item_type} \"${item}\" successfully."
 msgstr ""
 
-#: ringo/views/request.py:238
+#: ringo/views/request.py:237
 msgid "Error while saving new ${item_type}: ${error}."
 msgstr ""
 
-#: ringo/views/request.py:241
+#: ringo/views/request.py:240
 msgid "Error while saving ${item_type} \"${item}\": ${error}."
 msgstr ""
 
-#: ringo/views/request.py:249
+#: ringo/views/request.py:248
 msgid "Error on validation new ${item_type}."
 msgstr ""
 
-#: ringo/views/request.py:252
+#: ringo/views/request.py:251
 msgid "Error on validation ${item_type} \"${item}\"."
 msgstr ""
 

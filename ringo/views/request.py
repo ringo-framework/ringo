@@ -185,11 +185,10 @@ def handle_POST_request(form, request, callback, event, renderers=None):
     # anything in case of errors. Users seems to expect that the valid
     # part of the data has been saved. This info should make the user
     # aware of the fact that nothing has been saved in case of errors.
-    error_message = _("The data could not be validated because of missing or "
-                      "faulty information. Errors on validation "
-                      "cause <strong>changes are not saved</strong>!<br>"
-                      "Please correct the information in the red fields "
-                      "and save again.")
+    error_message = _("The information contained errors. "
+                      "<strong>All entries (including error-free) were not "
+                      "saved!</strong> Please correct your entries in the "
+                      "fields marked in red and resave.")
     form.add_validator(Validator(None, literal(error_message),
                                  callback=form_has_errors,
                                  context=form))

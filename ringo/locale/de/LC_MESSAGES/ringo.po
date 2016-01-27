@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-01-26 14:09+0100\n"
+"POT-Creation-Date: 2016-01-27 15:59+0100\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language-Team: German "
@@ -882,38 +882,35 @@ msgstr ""
 
 #: ringo/views/request.py:188
 msgid ""
-"The data could not be validated because of missing or faulty information."
-" Errors on validation cause <strong>changes are not "
-"saved</strong>!<br>Please correct the information in the red fields and "
-"save again."
+"The information contained errors. <strong>All entries (including error-"
+"free) were not saved!</strong> Please correct your entries in the fields "
+"marked in red and resave."
 msgstr ""
-"Die Angaben konnten aufgrund von fehlenden oder fehlerhaften Eingaben "
-"nicht validiert werden. Fehler in der Validierung führen dazu, "
-"<strong>dass Änderungen nicht gespeichert werden</strong>!<br>Bitte "
-"korrigieren Sie die Eingaben in den rot markierten Feldern und Speichern "
-"Sie erneut."
+"Die Angaben enthalten Fehler. <strong>Sämtliche Eingaben (auch "
+"fehlerfreie) wurden nicht gespeichert!</strong> Bitte korrigieren Sie die"
+" Eingaben in den rot markierten Feldern und speichern Sie erneut."
 
-#: ringo/views/request.py:222
+#: ringo/views/request.py:221
 msgid "Created new ${item_type} successfully."
 msgstr "${item_type} erfolgreich angelegt."
 
-#: ringo/views/request.py:227
+#: ringo/views/request.py:226
 msgid "Edited ${item_type} \"${item}\" successfully."
 msgstr "${item_type} „${item}“ wurde erfolgreich bearbeitet."
 
-#: ringo/views/request.py:238
+#: ringo/views/request.py:237
 msgid "Error while saving new ${item_type}: ${error}."
 msgstr "Fehler beim Anlegen von ${item_type}: ${error}."
 
-#: ringo/views/request.py:241
+#: ringo/views/request.py:240
 msgid "Error while saving ${item_type} \"${item}\": ${error}."
 msgstr "Fehler beim Bearbeiten von ${item_type} „${item}“: ${error}."
 
-#: ringo/views/request.py:249
+#: ringo/views/request.py:248
 msgid "Error on validation new ${item_type}."
 msgstr "Fehler beim Validieren von ${item_type}."
 
-#: ringo/views/request.py:252
+#: ringo/views/request.py:251
 msgid "Error on validation ${item_type} \"${item}\"."
 msgstr "Fehler beim Validieren von ${item_type} „${item}“."
 
