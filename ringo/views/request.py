@@ -3,11 +3,12 @@ import logging
 import urllib
 import urlparse
 from pyramid.httpexceptions import HTTPFound
+from formbar.form import Validator
 from ringo.lib.security import (
     has_permission,
     ValueChecker
 )
-from ringo.lib.helpers import import_model, get_action_routename
+from ringo.lib.helpers import import_model, get_action_routename, literal
 from ringo.lib.history import History
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.views.helpers import (
@@ -18,6 +19,15 @@ from ringo.views.helpers import (
 )
 
 log = logging.getLogger(__name__)
+
+
+def form_has_errors(field, data, context):
+    """Simple validation callback which returns True if the form has not
+    errors an validation. Please make sure that this validators gets
+    called as last validator of all validators get the final result of
+    the validation."""
+    # context is the current formbar form.
+    return not context.has_errors()
 
 
 def encode_unicode_dict(unicodedict, encoding="utf-8"):
@@ -167,6 +177,21 @@ def handle_POST_request(form, request, callback, event, renderers=None):
     item_label = get_item_modul(request, clazz).get_label()
     item = get_item_from_request(request)
     mapping = {'item_type': item_label, 'item': item}
+
+    # Add a *special* validator to the form to trigger rendering a
+    # permanent info pane at the top of the form in case of errors on
+    # validation. This info has been added because users reported data
+    # loss because of formbar/ringo default behaviour of not saving
+    # anything in case of errors. Users seems to expect that the valid
+    # part of the data has been saved. This info should make the user
+    # aware of the fact that nothing has been saved in case of errors.
+    error_message = _("The information contained errors. "
+                      "<strong>All entries (including error-free) were not "
+                      "saved!</strong> Please correct your entries in the "
+                      "fields marked in red and resave.")
+    form.add_validator(Validator(None, literal(error_message),
+                                 callback=form_has_errors,
+                                 context=form))
 
     if form.validate(request.params) and "blobforms" not in request.params:
         checker = ValueChecker()
