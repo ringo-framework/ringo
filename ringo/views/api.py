@@ -32,13 +32,11 @@ def evaluate(request):
         ruleexpr = request.GET.get('rule').strip()
         rule = Rule(ruleexpr)
         result = rule.evaluate({})
-        return JSONResponse(True, result, {"msg": rule.msg,
-                                           "locale": request._LOCALE_})
+        return JSONResponse(True, result, {"msg": rule.msg}
     except:
         msg = "Can not evaluate rule '%s'" % ruleexpr
         log.error(msg)
-        return JSONResponse(False, False, {"msg": msg,
-                                           "headers": request._LOCALE_})
+        return JSONResponse(False, False, {"msg": msg}
 
 
 @view_config(route_name='form-render',
