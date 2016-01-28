@@ -1,5 +1,5 @@
-Next
-====
+1.10.5
+======
 - Show info dialog at the top to the form in case the validation fails.
   This info has been added because users reported data loss because of
   formbar/ringo default behaviour of not saving anything in case of
