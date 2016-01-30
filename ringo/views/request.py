@@ -3,11 +3,12 @@ import logging
 import urllib
 import urlparse
 from pyramid.httpexceptions import HTTPFound
+from formbar.form import Validator
 from ringo.lib.security import (
     has_permission,
     ValueChecker
 )
-from ringo.lib.helpers import import_model, get_action_routename
+from ringo.lib.helpers import import_model, get_action_routename, literal
 from ringo.lib.history import History
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.views.helpers import (
@@ -19,6 +20,40 @@ from ringo.views.helpers import (
 
 log = logging.getLogger(__name__)
 
+
+def form_has_errors(field, data, context):
+    """Simple validation callback which returns True if the form has not
+    errors an validation. Please make sure that this validators gets
+    called as last validator of all validators get the final result of
+    the validation."""
+    # context is the current formbar form.
+    return not context.has_errors()
+
+
+def encode_unicode_dict(unicodedict, encoding="utf-8"):
+    bytedict = {}
+    for key in unicodedict:
+        if isinstance(unicodedict[key], unicode):
+            bytedict[key] = unicodedict[key].encode(encoding)
+        elif isinstance(unicodedict[key], dict):
+            bytedict[key] = encode_unicode_dict(unicodedict[key])
+        else:
+            bytedict[key] = unicodedict[key]
+    return bytedict
+
+
+def decode_bytestring_dict(bytedict, encoding="utf-8"):
+    unicodedict = {}
+    for key in bytedict:
+        if isinstance(bytedict[key], str):
+            unicodedict[key] = bytedict[key].decode(encoding)
+        elif isinstance(bytedict[key], dict):
+            unicodedict[key] = decode_bytestring_dict(bytedict[key])
+        else:
+            unicodedict[key] = bytedict[key]
+    return unicodedict
+
+
 def encode_values(values):
     """Returns a string with encode the values in the given dictionary.
 
@@ -26,7 +61,9 @@ def encode_values(values):
     :returns: String key1:value1,key2:value2...
 
     """
-    return urllib.urlencode(values)
+    # Because urlencode can not handle unicode strings we encode the
+    # whole dictionary into utf8 bytestrings first.
+    return urllib.urlencode(encode_unicode_dict(values))
 
 
 def decode_values(encoded):
@@ -36,10 +73,20 @@ def decode_values(encoded):
     :encoded : String key1:value1,key2:value2...
     :returns: Dictionary with key values pairs
     """
+    # We convert the encoded querystring into a bystring to enforce that
+    # parse_pq returns a dictionary which can be later decoded using
+    # decode_bystring_dict. If we use the encoded string directly the
+    # returned dicionary would contain bytestring as unicode. e.g
+    # u'M\xc3\xbcller' which can't be decoded later.
+    encoded = str(encoded)
+
+    # Now convert the query string into a dictionary with UTF-8 encoded
+    # bytestring values.
     values = urlparse.parse_qs(encoded)
     for key in values:
         values[key] = values[key][0]
-    return values
+    # Finally convert this dictionary back into a unicode dictionary
+    return decode_bytestring_dict(values)
 
 
 def is_confirmed(request):
@@ -131,6 +178,21 @@ def handle_POST_request(form, request, callback, event, renderers=None):
     item = get_item_from_request(request)
     mapping = {'item_type': item_label, 'item': item}
 
+    # Add a *special* validator to the form to trigger rendering a
+    # permanent info pane at the top of the form in case of errors on
+    # validation. This info has been added because users reported data
+    # loss because of formbar/ringo default behaviour of not saving
+    # anything in case of errors. Users seems to expect that the valid
+    # part of the data has been saved. This info should make the user
+    # aware of the fact that nothing has been saved in case of errors.
+    error_message = _("The information contained errors. "
+                      "<strong>All entries (including error-free) were not "
+                      "saved!</strong> Please correct your entries in the "
+                      "fields marked in red and resave.")
+    form.add_validator(Validator(None, literal(error_message),
+                                 callback=form_has_errors,
+                                 context=form))
+
     if form.validate(request.params) and "blobforms" not in request.params:
         checker = ValueChecker()
         try:
@@ -188,7 +250,7 @@ def handle_POST_request(form, request, callback, event, renderers=None):
         else:
             msg = _('Error on validation '
                     '${item_type} "${item}".', mapping=mapping)
-        log.info(msg)
+        log.debug(msg)
         request.session.flash(msg, 'error')
     return False
 

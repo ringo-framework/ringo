@@ -3,6 +3,31 @@ Next version
 Removed:
 - Behaviour driven testcases using behave.
 
+1.10.5
+======
+- Show info dialog at the top to the form in case the validation fails.
+  This info has been added because users reported data loss because of
+  formbar/ringo default behaviour of not saving anything in case of
+  errors. Users seems to expect that the valid part of the data has been
+  saved. This info should make the user aware of the fact that nothing
+  has been saved in case of errors
+
+1.10.4
+======
+Bugfixrelease
+
+- Only log validation errors in DEBUG loglevel.
+- Fixed changed field names in user registration.
+- Fixed test cases
+
+1.10.3
+======
+Bugfixrelease
+
+- Fixed bug (Introduced with 1.10.2) when encoding values in GET params. Ringo
+  uses a special notation for encoding values in the URL as GET param in the
+  `values` key. This method failed for values containing non ASCII values.
+
 1.10.2
 ======
 Maintenance and Bugfixrelease
