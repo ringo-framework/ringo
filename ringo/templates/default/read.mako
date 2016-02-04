@@ -2,7 +2,7 @@
 <%namespace name="main" file="/main.mako"/>
 <div class="page-header">
   <div class="row">
-    <div class="col-sm-7">
+    <div class="col-sm-9">
       <h1 style="float:left">
         ${_(h.get_item_modul(request, clazz).get_label())}: ${item}
       </h1>
@@ -14,7 +14,7 @@
           % endif
         </span> 
     </div>
-    <div class="col-sm-5">
+    <div class="col-sm-3">
       <div class="context-menu pull-right">
         <div class="btn-toolbar">
           <div class="btn-group">
