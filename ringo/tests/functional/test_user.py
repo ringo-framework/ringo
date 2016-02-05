@@ -127,4 +127,41 @@ class TestDelete:
         transaction_begin(app)
         values = {"confirmed": 1}
         app.post("/users/delete/1", params=values, status=200)
+
+class TestChangePassword:
+
+    def test_change(self, app):
+        login(app, "admin", "secret")
+        transaction_begin(app)
+        values = {"login": "admin", "oldpassword": "secret",
+                  "password": "123123123qwe",
+                  "_retype_password": "123123123qwe"}
+        result = app.post("/users/changepassword/1", params=values, status=302)
+        transaction_rollback(app)
+
+    def test_change_wrong_old_pw(self, app):
+        login(app, "admin", "secret")
+        transaction_begin(app)
+        values = {"login": "admin", "oldpassword": "secretwrong",
+                  "password": "123123123qwe",
+                  "_retype_password": "123123123qwe"}
+        result = app.post("/users/changepassword/1", params=values, status=200)
+        transaction_rollback(app)
+
+    def test_change_password_missmatch(self, app):
+        login(app, "admin", "secret")
+        transaction_begin(app)
+        values = {"login": "admin", "oldpassword": "secret",
+                  "password": "123123123ewq",
+                  "_retype_password": "123123123qwe"}
+        result = app.post("/users/changepassword/1", params=values, status=200)
+        transaction_rollback(app)
+
+    def test_change_password_tooshort(self, app):
+        login(app, "admin", "secret")
+        transaction_begin(app)
+        values = {"login": "admin", "oldpassword": "secret",
+                  "password": "123123123",
+                  "_retype_password": "123123123"}
+        result = app.post("/users/changepassword/1", params=values, status=200)
         transaction_rollback(app)
