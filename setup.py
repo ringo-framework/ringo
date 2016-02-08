@@ -54,7 +54,6 @@ setup(name='ringo',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
-      test_suite='nose.collector',
       install_requires=requires,
       tests_require=tests_requires,
       extras_require={
