@@ -1,7 +1,9 @@
-Next version
-============
-Removed:
-- Behaviour driven testcases using behave.
+1.10.6
+======
+Refactored tests. Removed tests based on the package "behave" Now all tests
+rely on pytest. Ringo now requires a package pytest-ringo which provides some
+helper classes to make testing more easy. Further the tests now support
+rollbacks.
 
 1.10.5
 ======
