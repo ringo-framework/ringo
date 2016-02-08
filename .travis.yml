@@ -6,7 +6,8 @@ services:
 before_script:
   - psql -c 'create database ringo-test;' -U postgres
 # command to install dependencies
-install: "pip install -e .\[tests\]"
+install: 
+  - pip install -e .\[tests\]
 # command to run tests
 script: 
   - ringo-admin db init --config test.ini
