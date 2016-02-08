@@ -32,15 +32,11 @@ requires = [
 ]
 
 tests_requires = [
-    'nose',
-    'behave',
-    'coverage',
-    'webtest',
-    'mock'
+    'pytest-ringo',
 ]
 
 setup(name='ringo',
-      version = '1.10.5',
+      version = '1.10.6',
       description='A simple web framework with base functionality to build web applications.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
@@ -58,7 +54,6 @@ setup(name='ringo',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
-      test_suite='nose.collector',
       install_requires=requires,
       tests_require=tests_requires,
       extras_require={

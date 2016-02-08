@@ -1,14 +1,16 @@
-from ringo.tests import BaseUnitTest
-from ringo.lib.imexport import JSONExporter
+import pytest
+import unittest
 
-class GlobalTests(BaseUnitTest):
+pytestmark = pytest.mark.usefixtures("config")
 
-    def test_clear_cache(self):
-        from ringo.lib.cache import CACHE_TABLE_CONFIG, CACHE_FORM_CONFIG
-        CACHE_TABLE_CONFIG.clear()
-        CACHE_FORM_CONFIG.clear()
 
-class BaseItemTests(BaseUnitTest):
+def test_clear_cache():
+    from ringo.lib.cache import CACHE_TABLE_CONFIG, CACHE_FORM_CONFIG
+    CACHE_TABLE_CONFIG.clear()
+    CACHE_FORM_CONFIG.clear()
+
+
+class BaseItemTests(unittest.TestCase):
 
     def _load_item(self):
         from ringo.model.modul import ModulItem
@@ -31,6 +33,7 @@ class BaseItemTests(BaseUnitTest):
         self.assertEqual(result, u"modules")
 
     def test_json(self):
+        from ringo.lib.imexport import JSONExporter
         item = self._load_item()
         exporter = JSONExporter(item.__class__)
         result = exporter.perform([item])
@@ -79,17 +82,19 @@ class BaseItemTests(BaseUnitTest):
         self.assertEqual(result._clazz, ModulItem)
         self.assertTrue(isinstance(result, BaseFactory))
 
-    def test_get_item_list(self):
-        from ringo.model.modul import ModulItem
-        from ringo.model.base import BaseList, get_item_list
-        result = get_item_list(self.request, ModulItem, user=None)
-        self.assertTrue(isinstance(result, BaseList))
 
-    def test_get_item_actions(self):
-        from ringo.model.modul import ModulItem
-        from ringo.model.modul import ActionItem
-        from ringo.lib.helpers import get_item_actions
-        result = get_item_actions(self.request, ModulItem)
-        self.assertTrue(isinstance(result, list))
-        if len(result) > 0:
-            self.assertTrue(isinstance(result[0], ActionItem))
+def test_get_item_list(apprequest):
+    from ringo.model.modul import ModulItem
+    from ringo.model.base import BaseList, get_item_list
+    result = get_item_list(apprequest, ModulItem, user=None)
+    assert isinstance(result, BaseList)
+
+
+def test_get_item_actions(apprequest):
+    from ringo.model.modul import ModulItem
+    from ringo.model.modul import ActionItem
+    from ringo.lib.helpers import get_item_actions
+    result = get_item_actions(apprequest, ModulItem)
+    assert isinstance(result, list)
+    if len(result) > 0:
+        assert isinstance(result[0], ActionItem)

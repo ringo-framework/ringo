@@ -17,7 +17,7 @@ def main(global_config, **settings):
     # Setup two db sessions. One using transactions (default) and one
     # without transactions.
     engine = setup_db_engine(settings)
-    setup_db_session(engine)
+    setup_db_session(engine, settings)
     Base.metadata.bind = engine
     config = Configurator(settings=settings,
                           locale_negotiator=locale_negotiator)
@@ -56,6 +56,8 @@ def setup_routes(config):
 
     # SINGLE PAGES
     ##############
+    config.add_route('start_test_case', '_test_case/start')
+    config.add_route('stop_test_case', '_test_case/stop')
     config.add_route('login', 'auth/login')
     config.add_route('register_user', 'auth/register_user')
     config.add_route('confirm_user', 'auth/confirm_user/{token}')

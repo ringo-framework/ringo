@@ -2,8 +2,8 @@
 <configuration>
   <source>
     <!-- Define different entity types -->
-    <entity id="label" name="label" label="Label" type="string" required="True"/>
-    <entity id="e1" name="name" label="Name" type="string">
+    <entity id="label" name="label" label="Label" type="string" required="true"/>
+    <entity id="e1" name="name" label="Name" type="string" required="true">
       <help>Internal name for the roles. Do not change this without caution!</help>
     </entity>
     <entity id="e2" name="permissions" label="Permissions">

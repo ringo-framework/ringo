@@ -1,3 +1,10 @@
+1.10.6
+======
+Refactored tests. Removed tests based on the package "behave" Now all tests
+rely on pytest. Ringo now requires a package pytest-ringo which provides some
+helper classes to make testing more easy. Further the tests now support
+rollbacks.
+
 1.10.5
 ======
 - Show info dialog at the top to the form in case the validation fails.
@@ -14,14 +21,6 @@ Bugfixrelease
 - Only log validation errors in DEBUG loglevel.
 - Fixed changed field names in user registration.
 - Fixed test cases
-
-1.10.3
-======
-Bugfixrelease
-
-- Fixed bug (Introduced with 1.10.2) when encoding values in GET params. Ringo
-  uses a special notation for encoding values in the URL as GET param in the
-  `values` key. This method failed for values containing non ASCII values.
 
 1.10.3
 ======
@@ -188,15 +187,11 @@ Bugfixrelease
   scripts.
 - Added new "--format" flag for the "db savadata" command to determine the
   export format. Default is JSON.
-- Added "downgrade" command to the "ringo-admin db" command.
-- Fixed affix of sidebar in forms.
 
 1.3
 ===
 - Added new configuration varibale (auth.timeout_warning) to configure how
   many secods before the autologout happens a warning will be shown.
-- Improved message in autologout warning dialog.
-- Improved wording in autologout page (User sees when autologout happend)
 
 1.2.2
 =====

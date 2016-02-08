@@ -73,6 +73,28 @@ such as hexadecimal or RGB values, named colors, etc.
 
 The mode is available using the :func:`get_app_mode` function.
 
+.. index:: Testing mode
+
+Testing mode
+""""""""""""
+You can set the application in some test mode which is usefull to test the
+application. To enable the testmode set the `app.mode` attribute to *testing*.
+
+In this mode you can start Testcases which are embedded in its own transaction
+on the database.
+In a Testcase you can do a series of queries to the application and add, delete or
+modify data. 
+When you stop the Testcase the changes you have made in the Testcase will be
+rolled back.
+
+When enabled the webinterface has an additional link to start and end a
+Testcase which will be handled in a transaction.
+
+In unittests you can use the following URLs to start a Testcase:
+
+* /_test_case/start
+* /_test_case/stop
+
 Layout
 ======
 
