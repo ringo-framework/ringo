@@ -4,7 +4,7 @@ python:
 services:
   - postgresql
 before_script:
-  - psql -c 'create database ringo-test;' -U postgres
+  - psql -c 'create database ringotest;' -U postgres
 # command to install dependencies
 install: 
   - pip install git+git://github.com/ringo-framework/pytest-ringo
