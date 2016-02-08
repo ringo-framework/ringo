@@ -1,4 +1,4 @@
-from ringo.tests import BaseUnitTest
+from ringo.tests.base import BaseUnitTest
 
 
 class FormTests(BaseUnitTest):

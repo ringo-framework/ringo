@@ -1,5 +1,9 @@
 Ringo
 =====
+
+.. image:: https://travis-ci.org/ringo-framework/ringo.svg?branch=master
+    :target: https://travis-ci.org/ringo-framework/ringo
+
 Ringo is a small Python based high level web application framework build with
 Pyramid. Ringo tries to make it very easy to build form based web application
 to manage your data. Because Ringo provides many basic features which are
@@ -35,6 +39,17 @@ web application based on Ringo:
  * Widely configurable from the web UI.
  * Nice console client for various administration tasks.
  * ...
+
+Tests
+=====
+To start the testsuite invoke the following command::
+
+        py.test --app-config test.ini
+
+Or with display of the coverage of the tests::
+
+        py.test --cov=ringo --app-config test.in
+
 
 Documentation
 =============

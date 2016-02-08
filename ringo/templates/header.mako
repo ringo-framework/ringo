@@ -19,6 +19,11 @@ mode = h.get_app_mode(request)
             % if mode[1]:
               ${mode[1]}
             % endif
+            % if request._active_testcase:
+              Testcase Active (<a href="${request.route_path("stop_test_case")}">Rollback</a>)
+            % else:
+              Testcase Inactice (<a href="${request.route_path("start_test_case")}">Start</a>)
+            % endif
           </center>
         </div>
         <div class="col-md-2">

@@ -12,7 +12,7 @@ from pyramid.paster import (
     get_appsettings,
     setup_logging,
 )
-from ringo.lib.sql import DBSession, NTDBSession
+from ringo.lib.sql import DBSession, NTDBSession, setup_db_session
 from ringo.lib.helpers import get_app_location, dynamic_import
 from ringo.lib.imexport import (
     JSONExporter, JSONImporter,
@@ -68,6 +68,7 @@ def get_engine(config_file):
     setup_logging(config_file)
     settings = get_appsettings(config_file)
     engine = engine_from_config(settings, 'sqlalchemy.')
+    setup_db_session(engine, settings)
     return engine
 
 def get_session(config_file, transactional=True):

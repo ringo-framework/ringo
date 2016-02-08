@@ -41,7 +41,7 @@ def setup(config):
     setup_extensions(config)
     setup_modules(config)
     config.include('ringo.lib.i18n.setup_translation')
-    config.include('ringo.lib.sql.db.setup_connect_on_request')
+    config.include('ringo.lib.sql.db.setup_session_on_request')
     config.include('ringo.lib.renderer.setup_render_globals')
     config.include('ringo.lib.security.setup_ringo_security')
     config.include('ringo.lib.cache.setup_cache')

@@ -143,7 +143,7 @@ def register_user(request):
             atoken = str(uuid.uuid4())
             user.activation_token = atoken
             # Set profile data
-            user.profile[0].email = form.data['email']
+            user.profile[0].email = form.data['_email']
 
             # 2. Set user group
             gfac = Usergroup.get_item_factory()

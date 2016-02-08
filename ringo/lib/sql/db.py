@@ -1,12 +1,12 @@
 import logging
 import query
+from zope.sqlalchemy import ZopeTransactionExtension
 from pyramid.events import NewRequest
 from sqlalchemy import engine_from_config
 from sqlalchemy.orm import scoped_session, sessionmaker
-from zope.sqlalchemy import ZopeTransactionExtension
 from sqlalchemy import exc
 from sqlalchemy import event
-from sqlalchemy.pool import Pool
+from sqlalchemy.pool import Pool, StaticPool
 
 from ringo.lib.sql.cache import regions, init_cache
 
@@ -20,7 +20,6 @@ log = logging.getLogger(__name__)
 DBSession = scoped_session(
                 sessionmaker(
                     query_cls=query.query_callable(regions),
-                    extension=ZopeTransactionExtension()
                 )
             )
 
@@ -29,6 +28,7 @@ NTDBSession = scoped_session(
                     query_cls=query.query_callable(regions)
                 )
             )
+testsession = None
 
 
 # Pessimisitic detection of disconnects of connections in the connection pool
@@ -55,6 +55,7 @@ def ping_connection(dbapi_connection, connection_record, connection_proxy):
         raise exc.DisconnectionError()
     cursor.close()
 
+
 def setup_db_engine(settings):
     cachedir = settings.get("db.cachedir")
     regions = []
@@ -62,23 +63,75 @@ def setup_db_engine(settings):
         regions.append(region.split(":"))
     if cachedir:
         init_cache(cachedir, regions)
-    return engine_from_config(settings, 'sqlalchemy.')
+    if settings.get("app.mode") == "testing":
+        return engine_from_config(settings, 'sqlalchemy.',
+                                  poolclass=StaticPool)
+    else:
+        return engine_from_config(settings, 'sqlalchemy.')
 
-def setup_db_session(engine):
-    DBSession.configure(bind=engine)
+
+def setup_db_session(engine, settings=None):
+    # Onyl use ZopeTransactionExtension if not in testmode to prevent
+    # autocommits after each request.
+    if not settings:
+        settings = {}
+    if settings.get("app.mode") == "testing":
+        DBSession.configure(bind=engine)
+    else:
+        DBSession.configure(bind=engine, extension=ZopeTransactionExtension())
     NTDBSession.configure(bind=engine)
+
 
 # Session initialisation
 ########################
-def setup_connect_on_request(config):
-    config.add_subscriber(connect_on_request, NewRequest)
+def setup_session_on_request(config):
+    config.add_subscriber(add_session_to_request, NewRequest)
 
 
-def connect_on_request(event):
+def _open_test_session(request):
+    global testsession
+    if request.params.get("_testcase") == "begin":
+        log.debug("Begin Testcase")
+        testsession = DBSession()
+        request.db = testsession
+        request._active_testcase = True
+    elif testsession is None:
+        request.db = DBSession()
+        request._active_testcase = False
+    else:
+        log.debug("Continue Testcase")
+        request._active_testcase = True
+        request.db = testsession
+    return request
+
+
+def _close_test_session(request):
+    global testsession
+    if testsession is not None:
+        if request.params.get("_testcase") == "end":
+            log.debug("End Testcase")
+            request.db.rollback()
+            request.db.close()
+            testsession = None
+        else:
+            request.db.flush()
+    else:
+        request.db.commit()
+
+
+def add_session_to_request(event):
     request = event.request
-    request.db = DBSession
-    request.add_finished_callback(close_db_connection)
+    if request.registry.settings.get("app.mode") == "testing":
+        request._testing = True
+        request = _open_test_session(request)
+    else:
+        request._testing = False
+        request.db = DBSession()
+    request.add_finished_callback(close_session)
 
 
-def close_db_connection(request):
-    request.db.close()
+def close_session(request):
+    if (request.registry.settings.get("app.mode") == "testing"):
+        _close_test_session(request)
+    else:
+        request.db.close()
