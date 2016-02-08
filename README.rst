@@ -42,6 +42,10 @@ To start the testsuite invoke the following command::
 
         py.test --app-config test.ini
 
+Or with display of the coverage of the tests::
+
+        py.test --cov=ringo --app-config test.in
+
 
 Documentation
 =============
