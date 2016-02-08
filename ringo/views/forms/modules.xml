@@ -2,13 +2,13 @@
 <configuration>
   <source>
     <!-- Define different entity types -->
-    <entity id="e0" name="name" label="Name" type="string">
+    <entity id="e0" name="name" label="Name" type="string" required="true">
       <help>Internal name for the modul.</help>
     </entity>
-    <entity id="e2" name="label" label="Label">
+    <entity id="e2" name="label" label="Label" required="true">
       <help>Label of the modul in singular form. Used in the UI</help>
     </entity>
-    <entity id="e3" name="label_plural" label="Label">
+    <entity id="e3" name="label_plural" label="Label" required="true">
       <help>Label of the modul in plural form. Used in the UI</help>
     </entity>
     <entity id="e4" name="description" label="Description">
