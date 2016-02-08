@@ -1,7 +1,8 @@
 Ringo
 =====
 
-[![Build Status](https://travis-ci.org/ringo-framework/ringo.svg?branch=master)](https://travis-ci.org/ringo-framework/ringo)
+.. image:: https://travis-ci.org/ringo-framework/ringo.svg?branch=master
+    :target: https://travis-ci.org/ringo-framework/ringo
 
 Ringo is a small Python based high level web application framework build with
 Pyramid. Ringo tries to make it very easy to build form based web application
