@@ -36,22 +36,6 @@ def get_ownership_form(item, db, csrf_token, eval_url,
                 translate=translate)
 
 
-def get_item_form(item, name, db, translate, renderers,
-                  csrf_token, readonly=None):
-    # TODO: Check if this method is ever called. I think the
-    # get_item_form in view/helpers is the only called method. (torsten)
-    # <2015-01-12 21:32>
-    config = get_form_config(item, name)
-    return Form(config, item, db,
-                translate=translate,
-                renderers=renderers,
-                change_page_callback={'url': 'set_current_form_page',
-                                      'item': item.__tablename__,
-                                      'itemid': item.id},
-                csrf_token=csrf_token,
-                eval_url=eval_url)
-
-
 def get_path_to_form_config(filename, app=None, location=None):
     """Returns the path the the given form configuration. The file name
     should be realtive to the default location for the configurations.
