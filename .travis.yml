@@ -1,0 +1,13 @@
+language: python
+python:
+  - "2.7"
+services:
+  - postgresql
+before_script:
+  - psql -c 'create database ringo-test;' -U postgres
+# command to install dependencies
+install: "pip install -e .\[tests\]"
+# command to run tests
+script: 
+  - ringo-admin db init --config test.ini
+  - py.test --app-config test.ini
