@@ -52,3 +52,20 @@ def test_decode_values(data):
     from ringo.lib.request.helpers import decode_values
     result = decode_values(data[1])
     assert result == data[0]
+
+values2 = [
+            {"foo": "bar", "baz": "foo"},
+            {"foo": "Dr, XXX", "bar": "foo:"},
+            {"foo": u"Dr.&Dr. XXX", "bar": u"äüöÄÜÖ"},
+            {"a": "b", "c": "d", "e": "f"},
+            {}
+         ]
+
+
+@pytest.mark.parametrize("data", values2)
+def test_decode_encode_values(data):
+    from ringo.lib.request.helpers import encode_values
+    from ringo.lib.request.helpers import decode_values
+    encoded = encode_values(data)
+    decoded = decode_values(encoded)
+    assert decoded == data
