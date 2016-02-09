@@ -13,8 +13,6 @@ from ringo.lib.history import History
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.views.helpers import (
     get_item_from_request,
-    get_ownership_form,
-    get_item_form,
     get_item_modul
 )
 
@@ -221,12 +219,14 @@ def handle_POST_request(form, request, callback, event, renderers=None):
                 msg = _('Created new ${item_type} successfully.',
                         mapping=mapping)
                 log_msg = u'User {user.login} created {item_label} {item.id}'\
-                    .format(item_label=item_label, item=item, user=request.user)
+                    .format(item_label=item_label,
+                            item=item, user=request.user)
             else:
                 msg = _('Edited ${item_type} "${item}" successfully.',
                         mapping=mapping)
                 log_msg = u'User {user.login} edited {item_label} {item.id}'\
-                    .format(item_label=item_label, item=item, user=request.user)
+                    .format(item_label=item_label,
+                            item=item, user=request.user)
             log.info(log_msg)
             request.session.flash(msg, 'success')
 
@@ -325,7 +325,6 @@ def handle_params(request):
             params['values'][key] = values[key]
     form = request.GET.get('form')
     if form:
-        #request.session['%s.form' % clazz] = form
         params['form'] = form
     relation = request.GET.get('addrelation')
     if relation:

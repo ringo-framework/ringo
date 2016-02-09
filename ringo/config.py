@@ -45,7 +45,7 @@ def setup(config):
     config.include('ringo.lib.renderer.setup_render_globals')
     config.include('ringo.lib.security.setup_ringo_security')
     config.include('ringo.lib.cache.setup_cache')
-    config.include('ringo.lib.request')
+    config.include('ringo.lib.request.app')
     config.add_subscriber(preload_modules, NewRequest)
 
 
