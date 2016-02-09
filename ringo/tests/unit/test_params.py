@@ -35,6 +35,7 @@ def test_get_values(apprequest, data):
 values = [
             ({"foo": "bar", "baz": "foo"}, "foo=bar&baz=foo"),
             ({"foo": "Dr, XXX", "bar": "foo:"}, "foo=Dr%2C+XXX&bar=foo%3A"),
+            ({"foo": u"Dr.&Dr. XXX", "bar": u"äüöÄÜÖ"}, u"foo=Dr.%26Dr.+XXX&bar=%C3%A4%C3%BC%C3%B6%C3%84%C3%9C%C3%96"),
             ({"a": "b", "c": "d", "e": "f"}, "a=b&c=d&e=f"),
             ({}, "")
          ]
