@@ -75,6 +75,16 @@ The mode is available using the :func:`get_app_mode` function.
 
 .. index:: Testing mode
 
+Cache
+-----
+You can configure to cache the loaded configurations for the form
+configs. This is usefull in production mode for a significant speed up
+when loading large forms with many rules and conditionals.
+
+* app.cache.formconfig = true
+
+The default is not to cache the configuration.
+
 Testing mode
 """"""""""""
 You can set the application in some test mode which is usefull to test the
