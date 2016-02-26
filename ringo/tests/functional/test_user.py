@@ -3,6 +3,19 @@
 import pytest
 from pytest_ringo import login, transaction_begin, transaction_rollback
 
+def create_user(app, login):
+    """Will create a new user with the given loginname.
+    :app: TODO
+    :login: Loginname of the user
+    :returns: Result of post request
+    """
+    values = {"login": login,
+              "password": "123123123qwe",
+              "_retype_password": "123123123qwe",
+              "_first_name": u"Först", "_last_name": "Last",
+              "_email": "%s@example.com" % login}
+    return app.post("/users/create", params=values, status=302)
+
 
 class TestList:
 
@@ -27,12 +40,7 @@ class TestCreate:
     def test_POST(self, app):
         login(app, "admin", "secret")
         transaction_begin(app)
-        values = {"login": "test",
-                  "password": "123123123qwe",
-                  "_retype_password": "123123123qwe",
-                  "_first_name": u"Först", "_last_name": "Last",
-                  "_email": "email@example.com"}
-        app.post("/users/create", params=values, status=302)
+        create_user(app, "test")
         transaction_rollback(app)
 
     def test_POST_password_tooshort(self, app):
