@@ -204,6 +204,7 @@ class TestSetStandin:
         app.get("/")
         transaction_rollback(app)
 
+
 class TestChangeLogin:
     """Will check if the name of the users usergroup also changes if the
     login of the user changes."""
@@ -217,4 +218,5 @@ class TestChangeLogin:
         app.post("/users/update/%s" % user["id"], params=user, status=302)
         usergroup = search_data(app, "usergroups", "name", user["login"])
         assert usergroup
+        app.get("/")
         transaction_rollback(app)
