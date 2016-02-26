@@ -3,12 +3,11 @@ import logging
 import sqlalchemy as sa
 import re
 from pyramid.httpexceptions import (
-        HTTPBadRequest, 
-        HTTPForbidden, 
-        HTTPFound, 
-        HTTPUnauthorized
+    HTTPBadRequest,
+    HTTPForbidden,
+    HTTPFound,
+    HTTPUnauthorized
 )
-from pyramid.security import forget
 from pyramid.view import view_config
 from formbar.form import Form, Validator
 
@@ -62,8 +61,7 @@ def check_password(field, data):
 ###########################################################################
 def user_name_create_validator(field, data, db):
     """Validator to ensure username uniqueness when creating users"""
-    return db.query(User) \
-               .filter(User.login == data[field]).count() == 0
+    return db.query(User).filter(User.login == data[field]).count() == 0
 
 
 def user_name_update_validator(field, data, params):
@@ -71,9 +69,8 @@ def user_name_update_validator(field, data, params):
     db = params['db']
 
     # Only consider names for the other users
-    return db.query(User) \
-               .filter(User.login == data[field],
-                       ~(User.id == params['pk'])).count() == 0
+    return db.query(User).filter(User.login == data[field],
+                                 ~(User.id == params['pk'])).count() == 0
 
 
 def password_nonletter_validator(field, data):
