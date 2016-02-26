@@ -56,9 +56,21 @@ def check_password(field, data):
     return bool(login(username, password))
 
 
+def user_update_callback(request, user):
+    """Will rename the users usergroup in case the login has been
+    changed. This is needed as the name of the usergroup is the only we
+    to find out which usergroup belongs to the user."""
+    if hasattr(request, '_oldlogin') and user.login != request._oldlogin:
+        usergroup = request.db.query(Usergroup).filter(
+            Usergroup.name == request._oldlogin).one()
+        usergroup.name = user.login
+    return user
+
 ###########################################################################
 #                               HTML VIEWS                                #
 ###########################################################################
+
+
 def user_name_create_validator(field, data, db):
     """Validator to ensure username uniqueness when creating users"""
     return db.query(User).filter(User.login == data[field]).count() == 0
@@ -128,6 +140,10 @@ def create_(request, callback=None):
              permission='update')
 def update_(request):
     user = get_item_from_request(request)
+    # Store the login name of the user in the request to make it
+    # available in the callback
+    request._oldlogin = user.login
+
     _ = request.translate
     uniqueness_validator = Validator('login',
                                      _('This name is already in use, '
@@ -144,7 +160,8 @@ def update_(request):
                                      password_nonletter_validator)
     return update(request, validators=[uniqueness_validator,
                                        pw_len_validator,
-                                       pw_nonchar_validator])
+                                       pw_nonchar_validator],
+                  callback=user_update_callback)
 
 
 @view_config(route_name=get_action_routename(Usergroup, 'setstandin'),
