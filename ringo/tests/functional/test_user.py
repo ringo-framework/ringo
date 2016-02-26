@@ -186,10 +186,9 @@ class TestSetStandin:
         transaction_begin(app)
         create_user(app, "test")
 
-        # Issue1201 in Intevation waskiq tracker. If the login is
-        # changed calling the setstandin page will failed for admin users
-        # Reason is that the code tries to get the name of the user for
-        # current usergroup by mathing groupname and loginname.
+        # Regression test for Issue1201 in Intevation waskiq tracker. If
+        # the login is changed calling the setstandin page failed for
+        # admin users.
         user = search_data(app, "users", "login", "test")
         user["login"] = "test123"
         app.post("/users/update/%s" % user["id"], params=user, status=302)

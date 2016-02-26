@@ -180,7 +180,15 @@ def setstandin(request, allowed_users=None):
     # Result may be a HTTPFOUND object.
     result = update(request, values=values)
     if isinstance(result, dict):
-        user = request.db.query(User).filter(User.login == usergroup.name).one()
+        # If the standing is set by an administrational user then the id
+        # of the usergroup´s user is stored in the the backurl.
+        if request.GET.get('backurl'):
+            user_id = request.GET.get('backurl').split('/')[-1]
+            user = request.db.query(User).filter(User.id == user_id).one()
+        # Otherwise the user sets the standin of his own group. In this
+        # case the user is already in the request.
+        else:
+            user = request.user
         result['user'] = user
 
     # Reset form value in session
