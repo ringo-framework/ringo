@@ -62,8 +62,11 @@ def user_update_callback(request, user):
     to find out which usergroup belongs to the user."""
     if hasattr(request, '_oldlogin') and user.login != request._oldlogin:
         usergroup = request.db.query(Usergroup).filter(
-            Usergroup.name == request._oldlogin).one()
-        usergroup.name = user.login
+            Usergroup.name == request._oldlogin).first()
+        # Handle case if the user user not have his own usergroup. This
+        # is true for the default admin user e.g
+        if usergroup:
+            usergroup.name = user.login
     return user
 
 ###########################################################################
