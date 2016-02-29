@@ -141,7 +141,8 @@ def create_(request, callback=None):
 @view_config(route_name=get_action_routename(User, 'update'),
              renderer='/default/update.mako',
              permission='update')
-def update_(request):
+def update_(request, callback=None, renderers=None,
+           validators=None, values=None):
     user = get_item_from_request(request)
     # Store the login name of the user in the request to make it
     # available in the callback
@@ -161,10 +162,23 @@ def update_(request):
                                      _('Password must contain at least 2 '
                                        'non-letters.'),
                                      password_nonletter_validator)
-    return update(request, validators=[uniqueness_validator,
-                                       pw_len_validator,
-                                       pw_nonchar_validator],
-                  callback=user_update_callback)
+
+    if validators is None:
+        validators = []
+    validators.append(uniqueness_validator)
+    validators.append(pw_len_validator)
+    validators.append(pw_nonchar_validator)
+
+    callbacks = []
+    callbacks.append(user_update_callback)
+    if callback:
+        if isinstance(callback, list):
+            callbacks.extend(callback)
+        else:
+            callbacks.append(callback)
+
+    return update(request, values=values,
+                  validators=validators, callback=callbacks)
 
 
 @view_config(route_name=get_action_routename(Usergroup, 'setstandin'),
