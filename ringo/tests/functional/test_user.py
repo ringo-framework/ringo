@@ -1,7 +1,23 @@
 #!/usr/bin/env python
 # encoding: utf-8
 import pytest
-from pytest_ringo import login, transaction_begin, transaction_rollback
+from pytest_ringo import (
+    login, transaction_begin, transaction_rollback,
+    search_data, get_data
+)
+
+def create_user(app, login):
+    """Will create a new user with the given loginname.
+    :app: TODO
+    :login: Loginname of the user
+    :returns: Result of post request
+    """
+    values = {"login": login,
+              "password": "123123123qwe",
+              "_retype_password": "123123123qwe",
+              "_first_name": u"Först", "_last_name": "Last",
+              "_email": "%s@example.com" % login}
+    return app.post("/users/create", params=values, status=302)
 
 
 class TestList:
@@ -27,12 +43,7 @@ class TestCreate:
     def test_POST(self, app):
         login(app, "admin", "secret")
         transaction_begin(app)
-        values = {"login": "test",
-                  "password": "123123123qwe",
-                  "_retype_password": "123123123qwe",
-                  "_first_name": u"Först", "_last_name": "Last",
-                  "_email": "email@example.com"}
-        app.post("/users/create", params=values, status=302)
+        create_user(app, "test")
         transaction_rollback(app)
 
     def test_POST_password_tooshort(self, app):
@@ -164,4 +175,48 @@ class TestChangeOwnPassword:
                   "password": "123123123",
                   "_retype_password": "123123123"}
         result = app.post("/users/changepassword/1", params=values, status=200)
+        transaction_rollback(app)
+
+
+@pytest.mark.incremental
+class TestSetStandin:
+
+    def test_create(self, app):
+        login(app, "admin", "secret")
+        transaction_begin(app)
+        create_user(app, "test")
+
+        # Regression test for Issue1201 in Intevation waskiq tracker. If
+        # the login is changed calling the setstandin page failed for
+        # admin users.
+        user = search_data(app, "users", "login", "test")
+        user["login"] = "test123"
+        app.post("/users/update/%s" % user["id"], params=user, status=302)
+
+    def test_setstandin(self, app):
+        user = search_data(app, "users", "login", "test123")
+        app.get("/usergroups/setstandin/%s" % user["default_gid"])
+
+        admin = search_data(app, "users", "login", "admin")
+        app.post("/usergroups/setstandin/%s" % user["default_gid"],
+                 params={"members": [admin["id"], user["id"]]}, status=302)
+
+        app.get("/")
+        transaction_rollback(app)
+
+
+class TestChangeLogin:
+    """Will check if the name of the users usergroup also changes if the
+    login of the user changes."""
+
+    def test_create(self, app):
+        login(app, "admin", "secret")
+        transaction_begin(app)
+        create_user(app, "test")
+        user = search_data(app, "users", "login", "test")
+        user["login"] = "test123"
+        app.post("/users/update/%s" % user["id"], params=user, status=302)
+        usergroup = search_data(app, "usergroups", "name", user["login"])
+        assert usergroup
+        app.get("/")
         transaction_rollback(app)

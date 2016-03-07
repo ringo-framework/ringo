@@ -372,5 +372,5 @@ def rest_list(request):
 
     """
     clazz = request.context.__model__
-    listing = get_item_list(request, clazz)
+    listing = get_item_list(request, clazz, user=request.user)
     return JSONResponse(True, listing)

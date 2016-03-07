@@ -1,21 +1,19 @@
-Next
-====
-- Improved documentation on how to add extensions in the application.
-- Ringo now only shows a short warning on application start if a new added or
-  removed extension is detected. It does not ask the user if ringo should
-  register the extension automatically anymore which make the startup more
-  robust on servers with no active terminal (e.g starting as WSGI). Adding or
-  removing extensions in normale usage should be added or removed by migration
-  scripts.
+1.11.0
+======
+- Tests are now based on pytest. Removed tests based on the package "behave".
+  Ringo now requires a package pytest-ringo which provides some helper classes
+  to make testing more easy. Further the tests now support rollbacks.
+- Changed behaviour how Ringo extensions are registered on application
+  startup. Ringo now only shows a short warning on application start if a new
+  added or removed extension is detected. It does not ask the user if ringo
+  should register the extension automatically anymore which make the startup
+  more robust on servers with no active terminal (e.g starting as WSGI).
+  Adding or removing extensions in normale usage should be added or removed by
+  migration scripts.
 - Added "ringo-admin app add-extension|remove-extension" command to add
   or remove the initial modul and action entries during development.
+- Improved documentation on how to add extensions in the application.
 
-1.10.6
-======
-Refactored tests. Removed tests based on the package "behave" Now all tests
-rely on pytest. Ringo now requires a package pytest-ringo which provides some
-helper classes to make testing more easy. Further the tests now support
-rollbacks.
 
 1.10.5
 ======
