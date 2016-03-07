@@ -1,3 +1,12 @@
+Next
+====
+- Small performance improvement. Added option to enable caching of the
+  form configuration. This will prevent the application to reload the
+  configuration on every request which is expensive. This is usefull for
+  production envirionments as the form will not change here. However it is not
+  recomended in development mode.
+  Please refer to the documentation to see how to enable form caching.
+
 1.11.0
 ======
 - Tests are now based on pytest. Removed tests based on the package "behave".
