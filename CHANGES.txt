@@ -6,6 +6,8 @@ Next
   production envirionments as the form will not change here. However it is not
   recomended in development mode.
   Please refer to the documentation to see how to enable form caching.
+- Fixed reraising exception withing general_exception view. Further only use
+  this view in testing mode.
 
 1.11.0
 ======

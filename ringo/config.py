@@ -18,6 +18,7 @@ from ringo.views.base import (
     rest_action_view_mapping,
     get_action_view
 )
+from ringo.views.errors import general_exception
 
 log = logging.getLogger(__name__)
 
@@ -46,6 +47,11 @@ def setup(config):
     config.include('ringo.lib.security.setup_ringo_security')
     config.include('ringo.lib.cache.setup_cache')
     config.add_subscriber(preload_modules, NewRequest)
+    ## Add general exception view to rollback the database in case of
+    ## errors in testmode.
+    if config.registry.settings.get("app.mode") == "testing":
+        config.add_view(general_exception, context=Exception)
+
 
 
 def setup_extensions(config):
@@ -140,6 +146,7 @@ def _setup_web_action(config, action, clazz, view_mapping):
         config.add_view(view_func, route_name=route_name,
                         renderer='/default/update.mako',
                         permission='read')
+
 
 
 def _setup_rest_action(config, action, clazz, view_mapping):

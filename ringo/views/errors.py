@@ -1,6 +1,6 @@
+import sys
 from pyramid.view import forbidden_view_config
 from pyramid.view import notfound_view_config
-from pyramid.view import view_config
 from pyramid.response import Response
 
 from ringo.lib.renderer import ErrorDialogRenderer
@@ -47,9 +47,12 @@ def forbidden(request):
     return rvalue
 
 
-@view_config(context=Exception)
+# If the application is in testing mode, this view will be called on
+# every exeption and takes care that the current transaction is rolled
+# back.
 def general_exception(exc, request):
     if request._testing:
         request.db.rollback()
         request.db.close()
-    raise exc
+    # Reraise the origin exception without loosing the stacktrace.
+    raise sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2]
