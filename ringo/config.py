@@ -143,6 +143,7 @@ def _setup_web_action(config, action, clazz, view_mapping):
                         permission='read')
 
 
+
 def _setup_rest_action(config, action, clazz, view_mapping):
     """Setup a route and a view for given action and clazz.
     The routes will have the follwoing following name and url:

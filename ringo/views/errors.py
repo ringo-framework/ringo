@@ -1,6 +1,6 @@
+import sys
 from pyramid.view import forbidden_view_config
 from pyramid.view import notfound_view_config
-from pyramid.view import view_config
 from pyramid.response import Response
 
 from ringo.lib.renderer import ErrorDialogRenderer
@@ -45,11 +45,3 @@ def forbidden(request):
     rvalue['dialog'] = renderer.render()
     request.response.status = 403
     return rvalue
-
-
-@view_config(context=Exception)
-def general_exception(exc, request):
-    if request._testing:
-        request.db.rollback()
-        request.db.close()
-    raise exc

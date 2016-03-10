@@ -67,9 +67,9 @@ class Cache(object):
 def setup_cache(config):
     config.add_subscriber(init_cache, NewRequest)
 
-
 def init_cache(event):
     request = event.request
+    settings = request.registry.settings
 
     if hasattr(request, "cache_item_list"):
         request.cache_item_list.clear()
@@ -80,8 +80,10 @@ def init_cache(event):
         request.cache_item_modul.clear()
     else:
         request.cache_item_modul = Cache()
+
     CACHE_TABLE_CONFIG.clear()
-    CACHE_FORM_CONFIG.clear()
+    if settings.get("app.cache.formconfig") != "true":
+        CACHE_FORM_CONFIG.clear()
     CACHE_MODULES.clear()
 
 CACHE_MODULES = Cache()

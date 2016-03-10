@@ -68,7 +68,7 @@ def get_engine(config_file):
     setup_logging(config_file)
     settings = get_appsettings(config_file)
     engine = engine_from_config(settings, 'sqlalchemy.')
-    setup_db_session(engine, settings)
+    setup_db_session(engine)
     return engine
 
 def get_session(config_file, transactional=True):
