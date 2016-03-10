@@ -2,6 +2,7 @@ from pyramid.events import NewRequest
 from pyramid.decorator import reify
 
 from ringo.lib.request.featuretoggle import FeatureToggle
+from ringo.lib.request.params import Params
 
 
 class RingoRequest(object):
@@ -16,6 +17,11 @@ class RingoRequest(object):
     def feature(self):
         """Cached property to the FeatureToggle configuration."""
         return FeatureToggle(self.request.registry.settings)
+
+    @reify
+    def params(self):
+        """Cached property to the Ringo GET params."""
+        return Params(self.request)
 
 
 def includeme(config):
