@@ -15,7 +15,6 @@ from ringo.views.base import create, rest_create, update
 from ringo.views.helpers import get_item_from_request, get_current_form_page
 
 from ringo.views.request import (
-    handle_history,
     handle_caching
 )
 
@@ -245,7 +244,6 @@ def changepassword(request):
         raise HTTPUnauthorized
 
     clazz = User
-    handle_history(request)
     _ = request.translate
     rvalue = {}
     # Load the item return 400 if the item can not be found.

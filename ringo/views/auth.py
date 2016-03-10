@@ -15,7 +15,6 @@ User = import_model('ringo.model.user.User')
 Usergroup = import_model('ringo.model.user.Usergroup')
 Role = import_model('ringo.model.user.Role')
 
-from ringo.views.request import handle_history
 from ringo.lib.helpers.appinfo import get_app_title
 from ringo.lib.form import get_path_to_form_config
 from ringo.lib.security import login as user_login, request_password_reset, \
@@ -43,7 +42,6 @@ def is_pwreminder_enabled(settings):
 
 @view_config(route_name='login', renderer='/auth/login.mako')
 def login(request):
-    handle_history(request)
     _ = request.translate
     settings = request.registry.settings
     config = Config(load(get_path_to_form_config('auth.xml', 'ringo')))
@@ -77,7 +75,6 @@ def login(request):
 
 @view_config(route_name='logout', renderer='/auth/logout.mako')
 def logout(request):
-    handle_history(request)
     _ = request.translate
     target_url = request.route_path('home')
     if request.params.get('autologout'):
@@ -116,7 +113,6 @@ def register_user(request):
     settings = request.registry.settings
     if not is_registration_enabled(settings):
         raise exc.exception_response(503)
-    handle_history(request)
     _ = request.translate
     config = Config(load(get_path_to_form_config('auth.xml', 'ringo')))
     form_config = config.get_form('register_user')
@@ -184,7 +180,6 @@ def confirm_user(request):
     settings = request.registry.settings
     if not is_registration_enabled(settings):
         raise exc.exception_response(503)
-    handle_history(request)
     _ = request.translate
     success = False
     token = request.matchdict.get('token')
@@ -204,7 +199,6 @@ def forgot_password(request):
     settings = request.registry.settings
     if not is_pwreminder_enabled(settings):
         raise exc.exception_response(503)
-    handle_history(request)
     _ = request.translate
     config = Config(load(get_path_to_form_config('auth.xml', 'ringo')))
     form_config = config.get_form('forgot_password')
@@ -239,7 +233,6 @@ def reset_password(request):
     settings = request.registry.settings
     if not is_pwreminder_enabled(settings):
         raise exc.exception_response(503)
-    handle_history(request)
     _ = request.translate
     success = False
     token = request.matchdict.get('token')

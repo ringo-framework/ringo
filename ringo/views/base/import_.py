@@ -12,7 +12,6 @@ from ringo.lib.renderer import (
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.views.request import (
     handle_event,
-    handle_history,
     is_confirmed
 )
 
@@ -96,8 +95,6 @@ def _handle_redirect(request):
 
 
 def import_(request, callback=None):
-    handle_history(request)
-
     clazz = request.context.__model__
     _ = request.translate
     renderer = ImportDialogRenderer(request, clazz)

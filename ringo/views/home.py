@@ -12,19 +12,15 @@ from ringo.lib.renderer import (
     DTListRenderer
 )
 
-from ringo.views.request import handle_history
-
 
 @view_config(route_name='home', renderer='/index.mako')
 def index_view(request):
-    handle_history(request)
     values = {}
     return values
 
 
 @view_config(route_name='about', renderer='/about.mako')
 def about_view(request):
-    handle_history(request)
     values = {}
     values['app_title'] = get_app_title()
     return values
@@ -32,7 +28,6 @@ def about_view(request):
 
 @view_config(route_name='contact', renderer='/contact.mako')
 def contact_view(request):
-    handle_history(request)
     return {}
 
 
@@ -40,7 +35,6 @@ def contact_view(request):
 def version_view(request):
     # Fetch the versions of some Packages
     # Ringo
-    handle_history(request)
     values = {}
     formbar_pkg = pkg_resources.get_distribution('formbar')
     sqla_pkg = pkg_resources.get_distribution('sqlalchemy')

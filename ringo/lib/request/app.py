@@ -3,6 +3,7 @@ from pyramid.decorator import reify
 
 from ringo.lib.request.featuretoggle import FeatureToggle
 from ringo.lib.request.params import Params, save_params_in_session
+from ringo.lib.history import handle_history
 
 
 class RingoRequest(object):
@@ -28,6 +29,7 @@ class RingoRequest(object):
 def includeme(config):
     config.add_subscriber(add_ringo_request, NewRequest)
     config.add_subscriber(save_params_in_session, ContextFound)
+    config.add_subscriber(handle_history, ContextFound)
 
 
 def add_ringo_request(event):

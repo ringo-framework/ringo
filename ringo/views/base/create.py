@@ -7,7 +7,6 @@ from ringo.views.helpers import (
     render_item_form,
 )
 from ringo.views.request import (
-    handle_history,
     handle_POST_request,
     handle_redirect_on_success,
     get_return_value
@@ -35,7 +34,6 @@ def create(request, callback=None, renderers=None, validators=None):
                  added to the form for validation
     :returns: Dictionary or Redirect.
     """
-    handle_history(request)
 
     # Create a new item
     clazz = request.context.__model__

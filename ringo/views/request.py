@@ -9,7 +9,6 @@ from ringo.lib.security import (
     ValueChecker
 )
 from ringo.lib.helpers import import_model, get_action_routename, literal
-from ringo.lib.history import History
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.views.helpers import (
     get_item_from_request,
@@ -287,14 +286,6 @@ def handle_redirect_on_success(request):
         return HTTPFound(location=url)
 
 
-def handle_history(request):
-    history = request.session.get('history')
-    if history is None:
-        history = History([])
-    history.push(request.url)
-    request.session['history'] = history
-
-
 def handle_params(request):
     """This method is outdated. DO NOT USE this method it will be
     removed. All param handling is done in request.ringo.params now."""
@@ -302,6 +293,12 @@ def handle_params(request):
             "values": request.ringo.params.values,
             "form": request.ringo.params.form,
             "addrelation": request.ringo.params.addrelation}
+
+
+def handle_history(request):
+    """This method is outdated. DO NOT USE this method it will be
+    removed. All param handling is done in request.ringo.app now."""
+    pass
 
 
 def get_return_value(request):

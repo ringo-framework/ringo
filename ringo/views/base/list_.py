@@ -14,9 +14,6 @@ from ringo.lib.renderer.dialogs import (
     WarningDialogRenderer
 )
 from ringo.views.response import JSONResponse
-from ringo.views.request import (
-    handle_history
-)
 
 # The dictionary will hold the request handlers for bundled actions. The
 # dictionary will be filled from the view definitions
@@ -213,7 +210,6 @@ def get_search(clazz, request):
 def bundle_(request):
     clazz = request.context.__model__
     module = get_item_modul(request, clazz)
-    handle_history(request)
     _ = request.translate
 
     # Handle bundle params. If the request has the bundle_action param
@@ -299,7 +295,6 @@ def list_(request):
     # Important! Prevent any write access on the database for this
     # request. This is needed as transform would modify the items values
     # else.
-    handle_history(request)
 
     # If the user enters the overview page of an item we assume that the
     # user actually leaves any context where a former set backurl is

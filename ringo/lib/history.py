@@ -1,6 +1,15 @@
 import urlparse
 
 
+def handle_history(event):
+    request = event.request
+    history = request.session.get('history')
+    if history is None:
+        history = History([])
+    history.push(request.url)
+    request.session['history'] = history
+
+
 class History:
 
     def __init__(self, history):

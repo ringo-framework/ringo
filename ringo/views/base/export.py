@@ -7,7 +7,6 @@ from ringo.lib.renderer import (
     ExportDialogRenderer
 )
 from ringo.views.request import (
-    handle_history,
     is_confirmed
 )
 from ringo.views.helpers import get_item_from_request
@@ -17,7 +16,6 @@ log = logging.getLogger(__name__)
 
 
 def export(request):
-    handle_history(request)
     item = get_item_from_request(request)
     return _handle_export_request(request, [item])
 
