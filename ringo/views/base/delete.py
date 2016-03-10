@@ -66,7 +66,7 @@ def _handle_delete_request(request, items, callback):
             request.db.rollback()
             renderer = InfoDialogRenderer(request, title, body)
             rvalue = {}
-            ok_url = request.session['history'].pop(2)
+            ok_url = request.ringo.history.pop(2)
             rvalue['dialog'] = renderer.render(ok_url)
             return rvalue
 

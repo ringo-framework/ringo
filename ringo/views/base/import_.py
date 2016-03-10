@@ -115,7 +115,7 @@ def import_(request, callback=None):
                         ) % e
             renderer = ErrorDialogRenderer(request, err_title, err_msg)
             rvalue = {}
-            ok_url = request.session['history'].pop(2)
+            ok_url = request.ringo.history.pop(2)
             rvalue['dialog'] = renderer.render(ok_url)
             rvalue['clazz'] = clazz
             return rvalue
