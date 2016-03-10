@@ -1,8 +1,8 @@
-from pyramid.events import NewRequest
+from pyramid.events import NewRequest, ContextFound
 from pyramid.decorator import reify
 
 from ringo.lib.request.featuretoggle import FeatureToggle
-from ringo.lib.request.params import Params
+from ringo.lib.request.params import Params, save_params_in_session
 
 
 class RingoRequest(object):
@@ -12,6 +12,7 @@ class RingoRequest(object):
 
     def __init__(self, request):
         self.request = request
+
 
     @reify
     def feature(self):
@@ -26,6 +27,7 @@ class RingoRequest(object):
 
 def includeme(config):
     config.add_subscriber(add_ringo_request, NewRequest)
+    config.add_subscriber(save_params_in_session, ContextFound)
 
 
 def add_ringo_request(event):

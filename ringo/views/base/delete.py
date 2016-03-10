@@ -9,7 +9,6 @@ from ringo.lib.helpers import (
 )
 from ringo.views.response import JSONResponse
 from ringo.views.request import (
-    handle_params,
     handle_history,
     is_confirmed,
     get_item_from_request
@@ -91,7 +90,6 @@ def _handle_delete_request(request, items, callback):
 def delete(request, callback=None):
     item = get_item_from_request(request)
     handle_history(request)
-    handle_params(request)
     return _handle_delete_request(request, [item], callback)
 
 

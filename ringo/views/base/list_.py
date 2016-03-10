@@ -15,7 +15,6 @@ from ringo.lib.renderer.dialogs import (
 )
 from ringo.views.response import JSONResponse
 from ringo.views.request import (
-    handle_params,
     handle_history
 )
 
@@ -215,7 +214,6 @@ def bundle_(request):
     clazz = request.context.__model__
     module = get_item_modul(request, clazz)
     handle_history(request)
-    handle_params(request)
     _ = request.translate
 
     # Handle bundle params. If the request has the bundle_action param

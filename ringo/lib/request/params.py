@@ -3,6 +3,20 @@
 from ringo.lib.request.helpers import decode_values
 
 
+def save_params_in_session(event):
+    """Method to save selected params of the request in the session.
+    This method can only be called after the context is found."""
+    request = event.request
+    if hasattr(request.context, "__model__"):
+        clazz = request.context.__model__
+        params = request.ringo.params
+        if params.backurl:
+            request.session['%s.backurl' % clazz] = params.backurl
+        if params.addrelation:
+            request.session['%s.addrelation' % clazz] = params.addrelation
+        request.session.save()
+
+
 def get_backurl(request):
     return request.GET.get('backurl')
 
@@ -57,31 +71,3 @@ class Params(object):
         identify that a item with id should be linked to the relation of
         this item."""
         return get_relation(self.request)
-
-
-#def handle_params(request):
-#
-#     * addrelation: A ":" separated string 'relation:class:id' to identify that
-#       a item with id should be linked to the relation of this item.
-#    """
-#    clazz = request.context.__model__
-#    params = {}
-#    backurl = request.GET.get('backurl')
-#    if backurl:
-#        request.session['%s.backurl' % clazz] = backurl
-#        params['backurl'] = backurl
-#    values = request.GET.get('values')
-#    if values:
-#        params['values'] = {}
-#        values = decode_values(values)
-#        for key in values:
-#            params['values'][key] = values[key]
-#    form = request.GET.get('form')
-#    if form:
-#        params['form'] = form
-#    relation = request.GET.get('addrelation')
-#    if relation:
-#        request.session['%s.addrelation' % clazz] = relation
-#        params['addrelation'] = relation
-#    request.session.save()
-#    return params

@@ -7,7 +7,6 @@ from ringo.views.helpers import (
     render_item_form,
 )
 from ringo.views.request import (
-    handle_params,
     handle_history,
     handle_POST_request,
     handle_redirect_on_success,
@@ -37,7 +36,6 @@ def create(request, callback=None, renderers=None, validators=None):
     :returns: Dictionary or Redirect.
     """
     handle_history(request)
-    params = handle_params(request)
 
     # Create a new item
     clazz = request.context.__model__
@@ -54,14 +52,14 @@ def create(request, callback=None, renderers=None, validators=None):
     # values e.g (See create function of forms)
     if not request.context.item:
         request.context.item = factory.create(request.user, {})
-    form = get_item_form(params.get("form", "create"),
+    form = get_item_form(request.ringo.params.form or "create",
                          request, renderers, validators)
     if request.POST and 'blobforms' not in request.params:
         if handle_POST_request(form, request, callback, 'create', renderers):
             return handle_redirect_on_success(request)
     rvalues = get_return_value(request)
     values = {'_roles': [str(r.name) for r in request.user.roles]}
-    values.update(params.get('values', {}))
+    values.update(request.ringo.params.values)
     rvalues['form'] = render_item_form(request, form, values, False)
     return rvalues
 

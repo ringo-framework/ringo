@@ -5,8 +5,6 @@ from ringo.views.helpers import (
     render_item_form
 )
 from ringo.views.request import (
-    handle_params,
-    handle_history,
     handle_POST_request,
     handle_redirect_on_success,
     get_item_from_request,
@@ -37,8 +35,6 @@ def update(request, callback=None, renderers=None,
              the form
     :returns: Dictionary or Redirect.
     """
-    handle_history(request)
-    handle_params(request)
     form = get_item_form('update', request, renderers, validators)
     if request.POST:
         if handle_POST_request(form, request, callback, 'update', renderers):
