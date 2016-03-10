@@ -3,12 +3,11 @@ import logging
 import sqlalchemy as sa
 import re
 from pyramid.httpexceptions import (
-        HTTPBadRequest, 
-        HTTPForbidden, 
-        HTTPFound, 
-        HTTPUnauthorized
+    HTTPBadRequest,
+    HTTPForbidden,
+    HTTPFound,
+    HTTPUnauthorized
 )
-from pyramid.security import forget
 from pyramid.view import view_config
 from formbar.form import Form, Validator
 
@@ -57,13 +56,27 @@ def check_password(field, data):
     return bool(login(username, password))
 
 
+def user_update_callback(request, user):
+    """Will rename the users usergroup in case the login has been
+    changed. This is needed as the name of the usergroup is the only we
+    to find out which usergroup belongs to the user."""
+    if hasattr(request, '_oldlogin') and user.login != request._oldlogin:
+        usergroup = request.db.query(Usergroup).filter(
+            Usergroup.name == request._oldlogin).first()
+        # Handle case if the user user not have his own usergroup. This
+        # is true for the default admin user e.g
+        if usergroup:
+            usergroup.name = user.login
+    return user
+
 ###########################################################################
 #                               HTML VIEWS                                #
 ###########################################################################
+
+
 def user_name_create_validator(field, data, db):
     """Validator to ensure username uniqueness when creating users"""
-    return db.query(User) \
-               .filter(User.login == data[field]).count() == 0
+    return db.query(User).filter(User.login == data[field]).count() == 0
 
 
 def user_name_update_validator(field, data, params):
@@ -71,9 +84,8 @@ def user_name_update_validator(field, data, params):
     db = params['db']
 
     # Only consider names for the other users
-    return db.query(User) \
-               .filter(User.login == data[field],
-                       ~(User.id == params['pk'])).count() == 0
+    return db.query(User).filter(User.login == data[field],
+                                 ~(User.id == params['pk'])).count() == 0
 
 
 def password_nonletter_validator(field, data):
@@ -129,8 +141,13 @@ def create_(request, callback=None):
 @view_config(route_name=get_action_routename(User, 'update'),
              renderer='/default/update.mako',
              permission='update')
-def update_(request):
+def update_(request, callback=None, renderers=None,
+           validators=None, values=None):
     user = get_item_from_request(request)
+    # Store the login name of the user in the request to make it
+    # available in the callback
+    request._oldlogin = user.login
+
     _ = request.translate
     uniqueness_validator = Validator('login',
                                      _('This name is already in use, '
@@ -145,9 +162,23 @@ def update_(request):
                                      _('Password must contain at least 2 '
                                        'non-letters.'),
                                      password_nonletter_validator)
-    return update(request, validators=[uniqueness_validator,
-                                       pw_len_validator,
-                                       pw_nonchar_validator])
+
+    if validators is None:
+        validators = []
+    validators.append(uniqueness_validator)
+    validators.append(pw_len_validator)
+    validators.append(pw_nonchar_validator)
+
+    callbacks = []
+    callbacks.append(user_update_callback)
+    if callback:
+        if isinstance(callback, list):
+            callbacks.extend(callback)
+        else:
+            callbacks.append(callback)
+
+    return update(request, values=values,
+                  validators=validators, callback=callbacks)
 
 
 @view_config(route_name=get_action_routename(Usergroup, 'setstandin'),
@@ -183,7 +214,15 @@ def setstandin(request, allowed_users=None):
     # Result may be a HTTPFOUND object.
     result = update(request, values=values)
     if isinstance(result, dict):
-        user = request.db.query(User).filter(User.login == usergroup.name).one()
+        # If the standing is set by an administrational user then the id
+        # of the usergroup´s user is stored in the the backurl.
+        if request.GET.get('backurl'):
+            user_id = request.GET.get('backurl').split('/')[-1]
+            user = request.db.query(User).filter(User.id == user_id).one()
+        # Otherwise the user sets the standin of his own group. In this
+        # case the user is already in the request.
+        else:
+            user = request.user
         result['user'] = user
 
     # Reset form value in session
