@@ -3,7 +3,7 @@ from pyramid.decorator import reify
 
 from ringo.lib.request.featuretoggle import FeatureToggle
 from ringo.lib.request.params import Params, save_params_in_session
-from ringo.lib.history import handle_history
+from ringo.lib.history import History, handle_history
 
 
 class RingoRequest(object):
@@ -24,6 +24,17 @@ class RingoRequest(object):
     def params(self):
         """Cached property to the Ringo GET params."""
         return Params(self.request)
+
+    @reify
+    def history(self):
+        """History of the last 5 requests."""
+        history = self.request.session.get('history')
+        if history is None:
+            history = History([])
+            history.push(self.request.url)
+            self.request.session['history'] = history
+            self.request.session.save()
+        return history
 
 
 def includeme(config):

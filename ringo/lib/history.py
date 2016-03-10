@@ -3,11 +3,9 @@ import urlparse
 
 def handle_history(event):
     request = event.request
-    history = request.session.get('history')
-    if history is None:
-        history = History([])
+    history = request.ringo.history
     history.push(request.url)
-    request.session['history'] = history
+    request.session.save()
 
 
 class History:
