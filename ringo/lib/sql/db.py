@@ -138,8 +138,10 @@ def close_test_session(request):
 
 def add_session_to_request(event):
     request = event.request
+    request.db = DBSession()
     request.add_finished_callback(close_session)
 
 
 def close_session(request):
-    request.db.close()
+    if request.db:
+        request.db.close()
