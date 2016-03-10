@@ -133,11 +133,11 @@ class ErrorDialogRenderer(DialogRenderer):
         values['icon'] = self.icon
         values['header'] = self._title
         values['body'] = self._body
-        history = self._request.session.get('history')
+        history = self._request.ringo.history
         if url:
             values['ok_url'] = url
         elif history:
-            values['ok_url'] = self._request.session['history'].pop()
+            values['ok_url'] = history.pop()
         else:
             values['ok_url'] = self._request.route_path('home')
         values['eval_url'] = self._request.application_url+get_eval_url()
