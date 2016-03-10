@@ -18,6 +18,33 @@ def test_get_backurl(apprequest, data):
 
 @pytest.mark.parametrize("data",
                          [
+                             ({"form": "myform"}, "myform"),
+                             ({"missing": "/foo/bar/baz"}, None),
+                             ({"form": ""}, ""),
+                         ])
+def test_get_form(apprequest, data):
+    from ringo.lib.request.params import get_form
+    apprequest.GET = data[0]
+    form = get_form(apprequest)
+    assert form == data[1]
+
+
+@pytest.mark.parametrize("data",
+                         [
+                             ({"addrelation": "relation.clazz.id"},
+                              "relation.clazz.id"),
+                             ({"missing": ""}, None),
+                             ({"addrelation": ""}, ""),
+                         ])
+def test_get_addrelation(apprequest, data):
+    from ringo.lib.request.params import get_relation
+    apprequest.GET = data[0]
+    relation = get_relation(apprequest)
+    assert relation == data[1]
+
+
+@pytest.mark.parametrize("data",
+                         [
                              ({"values": "foo=bar&baz=foo"},
                               {"foo": "bar", "baz": "foo"}),
                              ({"values": "foo=Dr%2C+XXX&bar=foo%3A"},

@@ -15,15 +15,14 @@ def get_values(request):
     else:
         return {}
 
+def get_form(request):
+    return request.GET.get('form')
 
-#def get_form(request):
-#    return request.GET.get('form')
-#
-#
-#def get_relation(request):
-#    return request.GET.get('addrelation')
-#
-#
+
+def get_relation(request):
+    return request.GET.get('addrelation')
+
+
 #def handle_params(request):
 #    """Handles varios sytem GET params comming with the request
 #    Known params are:
