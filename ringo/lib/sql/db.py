@@ -1,3 +1,4 @@
+import sys
 import logging
 import query
 from zope.sqlalchemy import ZopeTransactionExtension
@@ -85,27 +86,43 @@ def setup_db_session(engine, settings=None):
 # Session initialisation
 ########################
 def setup_session_on_request(config):
-    config.add_subscriber(add_session_to_request, NewRequest)
+    if config.registry.settings.get("app.mode") == "testing":
+        config.add_subscriber(add_test_session_to_request, NewRequest)
+        # Add exception view to rollback the database in case of
+        # errors in testmode. Adding a view here feels wrong, but it is
+        # the currently  only known way to to handle exceptions.
+        config.add_view(rollback_on_exception, context=Exception)
+    else:
+        config.add_subscriber(add_session_to_request, NewRequest)
 
 
-def _open_test_session(request):
+def rollback_on_exception(exc, request):
+    """If the application is in testing mode, this view will be called
+    on every exeption and takes care that the current transaction is
+    rolled back."""
+    request.db.rollback()
+    request.db.close()
+    # Reraise the origin exception without loosing the stacktrace.
+    raise sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2]
+
+
+def add_test_session_to_request(event):
     global testsession
-    if request.params.get("_testcase") == "begin":
-        log.debug("Begin Testcase")
+    request = event.request
+    if testsession is not None:
+        request.db = testsession
+        request._active_testcase = True
+    elif request.params.get("_testcase") == "begin":
         testsession = DBSession()
         request.db = testsession
         request._active_testcase = True
-    elif testsession is None:
+    else:
         request.db = DBSession()
         request._active_testcase = False
-    else:
-        log.debug("Continue Testcase")
-        request._active_testcase = True
-        request.db = testsession
-    return request
+    request.add_finished_callback(close_test_session)
 
 
-def _close_test_session(request):
+def close_test_session(request):
     global testsession
     if testsession is not None:
         if request.params.get("_testcase") == "end":
@@ -121,17 +138,8 @@ def _close_test_session(request):
 
 def add_session_to_request(event):
     request = event.request
-    if request.registry.settings.get("app.mode") == "testing":
-        request._testing = True
-        request = _open_test_session(request)
-    else:
-        request._testing = False
-        request.db = DBSession()
     request.add_finished_callback(close_session)
 
 
 def close_session(request):
-    if (request.registry.settings.get("app.mode") == "testing"):
-        _close_test_session(request)
-    else:
-        request.db.close()
+    request.db.close()
