@@ -23,19 +23,44 @@ def get_relation(request):
     return request.GET.get('addrelation')
 
 
+class Params(object):
+
+    """Class for Ringo specific GET params"""
+
+    def __init__(self, request):
+        self.request = request
+
+    @property
+    def values(self):
+        """Return a dictionary generated from a A comma separated list
+        of key/value pairs in the GET parameter. Key and value
+        are separated with an ':'"""
+        return get_values(self.request)
+
+    @property
+    def backurl(self):
+        """backurl: A url which should be called instead of the default
+        action after the next request succeeds. The backurl will be
+        saved in the session and stays there until it is deleted on a
+        successfull request. So take care to delete it to not mess up"""
+        return get_backurl(self.request)
+
+    @property
+    def form(self):
+        """form: The name of a alternative form configuration which is
+        used for the request."""
+        return get_form(self.request)
+
+    @property
+    def addrelation(self):
+        """addrelation: A ":" separated string 'relation:class:id' to
+        identify that a item with id should be linked to the relation of
+        this item."""
+        return get_relation(self.request)
+
+
 #def handle_params(request):
-#    """Handles varios sytem GET params comming with the request
-#    Known params are:
 #
-#     * backurl: A url which should be called instead of the default
-#       action after the next request succeeds. The backurl will be saved
-#       in the session and stays there until it is deleted on a
-#       successfull request. So take care to delete it to not mess up
-#       with the application logic.
-#     * form: The name of a alternative form configuration which is
-#       used for the request.
-#     * values: A comma separated list of key/value pair. Key and value
-#       are separated with an ":"
 #     * addrelation: A ":" separated string 'relation:class:id' to identify that
 #       a item with id should be linked to the relation of this item.
 #    """

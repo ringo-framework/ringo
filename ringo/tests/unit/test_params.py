@@ -96,3 +96,14 @@ def test_decode_encode_values(data):
     encoded = encode_values(data)
     decoded = decode_values(encoded)
     assert decoded == data
+
+
+def test_request_empty(apprequest):
+    from ringo.lib.request.params import Params
+    params = Params(apprequest)
+    assert params.values == {}
+    assert params.addrelation is None
+    assert params.form is None
+    assert params.backurl is None
+
+
