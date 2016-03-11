@@ -18,6 +18,19 @@ def test_get_backurl(apprequest, data):
 
 @pytest.mark.parametrize("data",
                          [
+                             ({"confirmed": "1"}, True),
+                             ({"missing": "/foo/bar/baz"}, False),
+                             ({"backurl": "0"}, False),
+                         ])
+def test_is_confirmed(apprequest, data):
+    from ringo.lib.request.params import is_confirmed
+    apprequest.params = data[0]
+    confirmed = is_confirmed(apprequest)
+    assert confirmed == data[1]
+
+
+@pytest.mark.parametrize("data",
+                         [
                              ({"form": "myform"}, "myform"),
                              ({"missing": "/foo/bar/baz"}, None),
                              ({"form": ""}, ""),
