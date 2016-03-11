@@ -29,12 +29,18 @@ def get_values(request):
     else:
         return {}
 
+
 def get_form(request):
     return request.GET.get('form')
 
 
 def get_relation(request):
     return request.GET.get('addrelation')
+
+
+def is_confirmed(request):
+    """Returns True id the request is confirmed"""
+    return request.params.get('confirmed') == "1"
 
 
 class Params(object):
@@ -71,3 +77,9 @@ class Params(object):
         identify that a item with id should be linked to the relation of
         this item."""
         return get_relation(self.request)
+
+    @property
+    def confirmed(self):
+        """confirmed: Boolean flag if the request is confirmed. E.g on
+        delete requests."""
+        return is_confirmed(self.request)

@@ -55,9 +55,12 @@ def decode_values(encoded):
     return _decode_values(encoded)
 
 
+# TODO: Mark use of this method as deprecated. Use
+# request.ringo.params.confirmed.
+# directly (ti) <2016-03-11 09:56>
 def is_confirmed(request):
     """Returns True id the request is confirmed"""
-    return request.params.get('confirmed') == "1"
+    return request.ringo.params.confirmed
 
 
 def handle_event(request, item, event):
