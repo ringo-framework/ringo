@@ -42,7 +42,6 @@ def _handle_delete_request(request, items, callback):
     _ = request.translate
     if request.method == 'POST' and request.ringo.params.confirmed:
         item_label = get_item_modul(request, clazz).get_label(plural=True)
-        item_label_log = get_item_modul(request, clazz).get_label()
         mapping = {'item_type': item_label, 'num': len(items)}
         for item in items:
             if callback:
