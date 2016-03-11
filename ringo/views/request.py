@@ -1,7 +1,5 @@
 """Modul to handle requests."""
 import logging
-import urllib
-import urlparse
 from pyramid.httpexceptions import HTTPFound
 from formbar.form import Validator
 from ringo.lib.security import (
@@ -13,6 +11,12 @@ from ringo.lib.sql.cache import invalidate_cache
 from ringo.views.helpers import (
     get_item_from_request,
     get_item_modul
+)
+from ringo.lib.request.helpers import (
+    encode_unicode_dict as _encode_unicode_dict,
+    decode_bytestring_dict as _decode_bytestring_dict,
+    encode_values as _encode_values,
+    decode_values as _decode_values
 )
 
 log = logging.getLogger(__name__)
@@ -27,63 +31,28 @@ def form_has_errors(field, data, context):
     return not context.has_errors()
 
 
+# TODO: Mark use of this method as deprecated. Use the inner method
+# directlydirectly  (ti) <2016-03-11 09:19>
 def encode_unicode_dict(unicodedict, encoding="utf-8"):
-    bytedict = {}
-    for key in unicodedict:
-        if isinstance(unicodedict[key], unicode):
-            bytedict[key] = unicodedict[key].encode(encoding)
-        elif isinstance(unicodedict[key], dict):
-            bytedict[key] = encode_unicode_dict(unicodedict[key])
-        else:
-            bytedict[key] = unicodedict[key]
-    return bytedict
+    return _encode_unicode_dict(unicodedict, encoding)
 
 
+# TODO: Mark use of this method as deprecated. Use the inner method
+# directlydirectly  (ti) <2016-03-11 09:19>
 def decode_bytestring_dict(bytedict, encoding="utf-8"):
-    unicodedict = {}
-    for key in bytedict:
-        if isinstance(bytedict[key], str):
-            unicodedict[key] = bytedict[key].decode(encoding)
-        elif isinstance(bytedict[key], dict):
-            unicodedict[key] = decode_bytestring_dict(bytedict[key])
-        else:
-            unicodedict[key] = bytedict[key]
-    return unicodedict
+    return _decode_bytestring_dict(bytedict, encoding)
 
 
+# TODO: Mark use of this method as deprecated. Use the inner method
+# directlydirectly  (ti) <2016-03-11 09:19>
 def encode_values(values):
-    """Returns a string with encode the values in the given dictionary.
-
-    :values: dictionary with key values pairs
-    :returns: String key1:value1,key2:value2...
-
-    """
-    # Because urlencode can not handle unicode strings we encode the
-    # whole dictionary into utf8 bytestrings first.
-    return urllib.urlencode(encode_unicode_dict(values))
+    return _encode_values(values)
 
 
+# TODO: Mark use of this method as deprecated. Use the inner method
+# directlydirectly  (ti) <2016-03-11 09:19>
 def decode_values(encoded):
-    """Returns a dictionay with decoded values in the string. See
-    encode_values function.
-
-    :encoded : String key1:value1,key2:value2...
-    :returns: Dictionary with key values pairs
-    """
-    # We convert the encoded querystring into a bystring to enforce that
-    # parse_pq returns a dictionary which can be later decoded using
-    # decode_bystring_dict. If we use the encoded string directly the
-    # returned dicionary would contain bytestring as unicode. e.g
-    # u'M\xc3\xbcller' which can't be decoded later.
-    encoded = str(encoded)
-
-    # Now convert the query string into a dictionary with UTF-8 encoded
-    # bytestring values.
-    values = urlparse.parse_qs(encoded)
-    for key in values:
-        values[key] = values[key][0]
-    # Finally convert this dictionary back into a unicode dictionary
-    return decode_bytestring_dict(values)
+    return _decode_values(encoded)
 
 
 def is_confirmed(request):
