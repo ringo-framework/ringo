@@ -11,11 +11,11 @@ from ringo.lib.renderer import (
 )
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.views.request import (
-    handle_event,
-    is_confirmed
+    handle_event
 )
 
 log = logging.getLogger(__name__)
+
 
 def _import(request):
     """Will read the import file from the request and create or update
@@ -101,7 +101,7 @@ def import_(request, callback=None):
     imported_items = []
     form = renderer.form
     if (request.method == 'POST'
-       and is_confirmed(request)
+       and request.ringo.params.confirmed
        and form.validate(request.params)):
         try:
             items = _import(request)

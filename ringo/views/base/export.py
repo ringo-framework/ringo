@@ -6,9 +6,6 @@ from ringo.lib.imexport import (
 from ringo.lib.renderer import (
     ExportDialogRenderer
 )
-from ringo.views.request import (
-    is_confirmed
-)
 from ringo.views.helpers import get_item_from_request
 from ringo.views.base.list_ import set_bundle_action_handler
 
@@ -29,7 +26,7 @@ def _handle_export_request(request, items, callback=None):
     renderer = ExportDialogRenderer(request, clazz)
     form = renderer.form
     if (request.method == 'POST'
-       and is_confirmed(request)
+       and request.ringo.params.confirmed
        and form.validate(request.params)):
         # Setup exporter
         ef = form.data.get('format')
