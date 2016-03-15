@@ -1,3 +1,12 @@
+1.11.1
+======
+Bugfixrelease
+
+- Reraise origin exception (including stacktrace) in case of errors in global
+  error view to allow better debugging of errors. The origin stackstrace was
+  hidden since the last version which introduces a global error view. This
+  error view hides the origin traceback.
+
 1.11.0
 ======
 - Tests are now based on pytest. Removed tests based on the package "behave".
