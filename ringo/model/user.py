@@ -174,7 +174,7 @@ ADMIN_GROUP_ID = 1
 """Role ID your the system administration group"""
 USER_GROUP_ID = 2
 """Role ID your the system user group"""
-USER_ROLE_ID = 2
+USER_ROLE_ID = 1
 """Role ID your the system user role"""
 
 

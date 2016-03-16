@@ -132,7 +132,7 @@ def register_user(request):
         if form.validate(request.params):
             # 1. Create user. Do not activate him. Default role is user.
             ufac = User.get_item_factory()
-            user = ufac.create(None)
+            user = ufac.create(None, form.data)
             # Set login from formdata
             user.login = form.data['login']
             # Encrypt password and save
