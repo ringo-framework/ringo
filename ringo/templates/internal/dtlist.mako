@@ -14,7 +14,7 @@ from ringo.lib.helpers import prettify
       </th>
       % endif
       % for field in tableconfig.get_columns():
-      <th width="${field.get('width')}">${_(field.get('label'))}</th>
+        <th width="${field.get('width')}" title="${field.get('title') or _(field.get('label'))}">${_(field.get('label'))}</th>
       % endfor
     </tr>
   </thead>
