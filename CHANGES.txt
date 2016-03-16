@@ -8,6 +8,9 @@ Next
   Please refer to the documentation to see how to enable form caching.
 - Fixed reraising exception withing general_exception view. Further only use
   this view in testing mode.
+- Make registration and activation of users over the webinterface work again. This means
+  new user can register themself using the webinterface if registration is
+  enabled.
 
 1.11.0
 ======
