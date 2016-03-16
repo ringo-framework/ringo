@@ -11,6 +11,7 @@ Next
 - Make registration and activation of users over the webinterface work again. This means
   new user can register themself using the webinterface if registration is
   enabled.
+- Added scaffolds to the MANIFEST.in file. Has been missing.
 
 1.11.0
 ======
