@@ -443,7 +443,7 @@ def activate_user(token, db):
     try:
         user = db.query(User).filter_by(activation_token=token).one()
         user.activated = True
-        user.activation_token = None
+        user.activation_token = ""
         log.info('User %s activated' % user)
         return user
     except NoResultFound:
