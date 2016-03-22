@@ -13,6 +13,10 @@ Next
   new user can register themself using the webinterface if registration is
   enabled.
 - Added scaffolds to the MANIFEST.in file. Has been missing.
+- Fixed bug which causes exceptions in testcases because new created and
+  loaded items in different Sqlachemy sessions. Use current db session from
+  request when invoking the load method of a factory to enforce all items are
+  attached to the same session.
 
 1.11.1
 ======

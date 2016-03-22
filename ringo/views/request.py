@@ -138,7 +138,7 @@ def handle_add_relation(request, item):
     rrel, rclazz, rid = addrelation.split(':')
     parent = import_model(rclazz)
     pfactory = parent.get_item_factory()
-    pitem = pfactory.load(rid)
+    pitem = pfactory.load(rid, db=request.db)
     log.debug('Linking %s to %s in %s' % (item, pitem, rrel))
     tmpattr = getattr(pitem, rrel)
     tmpattr.append(item)
