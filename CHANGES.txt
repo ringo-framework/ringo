@@ -1,5 +1,5 @@
-Next
-====
+1.11.2
+======
 - Small performance improvement. Added option to enable caching of the
   form configuration. This will prevent the application to reload the
   configuration on every request which is expensive. This is usefull for
