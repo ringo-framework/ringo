@@ -9,6 +9,7 @@ from pyramid.httpexceptions import (
     HTTPUnauthorized
 )
 from pyramid.view import view_config
+from pyramid.compat import urlparse
 from formbar.form import Form, Validator
 
 from ringo.views.base import create, rest_create, update
@@ -217,7 +218,8 @@ def setstandin(request, allowed_users=None):
         # If the standing is set by an administrational user then the id
         # of the usergroup´s user is stored in the the backurl.
         if request.GET.get('backurl'):
-            user_id = request.GET.get('backurl').split('/')[-1]
+            user_id = urlparse.urlparse(
+                request.GET.get('backurl')).path.split('/')[-1]
             user = request.db.query(User).filter(User.id == user_id).one()
         # Otherwise the user sets the standin of his own group. In this
         # case the user is already in the request.
