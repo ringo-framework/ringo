@@ -18,6 +18,8 @@
   request when invoking the load method of a factory to enforce all items are
   attached to the same session.
 - Added external requirements.txt file for scaffolds.
+- Support DATABASE_URL envirionment variable. If set than this variable will
+  be used to connect to the database. Eg: postgres://@/ringo
 
 1.11.1
 ======
