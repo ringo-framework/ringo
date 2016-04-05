@@ -1,14 +1,17 @@
 import os
 
 from setuptools import setup, find_packages
+from pip.req import parse_requirements
 
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.txt')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
+# parse_requirements() returns generator of pip.req.InstallRequirement objects
+install_reqs = parse_requirements(<requirements_path>, session=False)
 
-requires = [
-    'ringo',
-    ]
+# reqs is a list of requirement
+# e.g. ['ringo', 'ringo_printtemplates']
+requires = [str(ir.req) for ir in install_reqs]
 
 setup(name='{{package}}',
       version='0.0',
