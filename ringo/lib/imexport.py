@@ -387,7 +387,11 @@ class Importer(object):
         relations.
         """
         for field in obj.keys():
-            ftype = self._clazz_type[field]
+            try:
+                ftype = self._clazz_type[field]
+            except KeyError:
+                log.warning("Can not find field %s in %s" % (field, self._clazz_type))
+                continue
             # Handle all types of relations...
             if ftype in ["MANYTOMANY", "MANYTOONE",
                          "ONETOONE", "ONETOMANY"]:
