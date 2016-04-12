@@ -216,6 +216,7 @@ def forgot_password(request):
     form_config = config.get_form('forgot_password')
     form = Form(form_config, csrf_token=request.session.get_csrf_token(),
                 translate=_)
+    complete = False
     if request.POST:
         if form.validate(request.params):
             username = form.data.get('login')
@@ -230,13 +231,11 @@ def forgot_password(request):
                           '_': _}
                 mail = Mail([recipient], subject, template="password_reset_request", values=values)
                 mailer.send(mail)
-            target_url = request.route_path('login')
-            headers = forget(request)
             msg = _("Password reset token has been sent to the users "
                     "email address. Please check your email.")
             request.session.flash(msg, 'success')
-            return HTTPFound(location=target_url, headers=headers)
-    return {'form': form.render()}
+            complete = True
+    return {'form': form.render(), 'complete': complete}
 
 
 @view_config(route_name='reset_password',

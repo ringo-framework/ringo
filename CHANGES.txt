@@ -7,6 +7,7 @@ Next
 - Added config variable "layout.show_contextmenu" to configure the visibility
   of the context menu.
 - Improve result page after a user register a new user account.
+- Improve result page after a user request a passwort reset.
 
 1.11.2
 ======
