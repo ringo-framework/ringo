@@ -148,8 +148,8 @@ def register_user(request):
 
             # 2. Set user group
             gfac = Usergroup.get_item_factory()
-            default_grps = settings.get("auth.register_user_default_roles",
-                                        USER_GROUP_ID)
+            default_grps = settings.get("auth.register_user_default_groups",
+                                        str(USER_GROUP_ID))
             for gid in [int(id) for id in default_grps.split(",")]:
                 group = gfac.load(gid)
                 user.groups.append(group)
@@ -157,7 +157,7 @@ def register_user(request):
             # 3. Set user role
             rfac = Role.get_item_factory()
             default_roles = settings.get("auth.register_user_default_roles",
-                                         USER_ROLE_ID)
+                                         str(USER_ROLE_ID))
             for rid in [int(id) for id in default_roles.split(",")]:
                 role = rfac.load(rid)
                 user.roles.append(role)
