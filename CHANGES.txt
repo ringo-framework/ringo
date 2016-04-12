@@ -2,6 +2,8 @@ Next
 ====
 - Be more tolerant in imports. Only log in case the import includes fields
   which are not part of the model.
+- Added config varibables to define default roles and groups on user
+  registration.
 
 1.11.2
 ======

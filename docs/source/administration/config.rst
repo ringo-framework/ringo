@@ -232,6 +232,14 @@ auth.register_user
         Defaults to `false`. Enable the option to let users register a new
         account. However the account must be *finished* by the administrator.
 
+auth.register_user_default_roles
+        Defaults to the default user role. Can be defined as a comma separated
+        list of role ids.
+
+auth.register_user_default_groups
+        Defaults to the default user group. Can be defined as a comma separated
+        list of group ids.
+
 auth.password_reminder
         Defaults to `false`. Enable the option to let the user reset their
         password.
