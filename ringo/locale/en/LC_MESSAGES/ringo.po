@@ -1571,9 +1571,3 @@ msgstr ""
 #~ msgid "Register '%s' Y/N (N)?"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "To complete this process you need "
-#~ "to confirm the registration by clicking"
-#~ " the following link:"
-#~ msgstr ""
-

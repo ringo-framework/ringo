@@ -823,6 +823,8 @@ msgid ""
 "Password reset token has been sent to the users email address. Please "
 "check your email."
 msgstr ""
+"Eine Bestätigungsmail zum Zurücksetzen des Passworts wurde an die E-Mail "
+"Adresse des Nutzer geschickt. Bitte prüfen Sie ihre E-Mail."
 
 #: ringo/views/auth.py:256
 msgid "Password has been reseted"
@@ -833,6 +835,8 @@ msgid ""
 "Password was resetted and sent to the users email address. Please check "
 "your email."
 msgstr ""
+"Das Passwort wurde zurückgesetzt und an die E-Mail Adresse des Nutzer "
+"geschickt. Bitte prüfen Sie ihre E-Mail."
 
 #: ringo/views/auth.py:267
 msgid "Password was not resetted. Maybe the request token was not valid?"
