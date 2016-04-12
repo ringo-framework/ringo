@@ -27,17 +27,17 @@
     <div class="row">
       <div class="col-sm-6">
         <p>
-          <strong>${_('Current state')}:</strong> ${state._label}<br/>
-          <small>${state._description}</small>
+          <strong>${_('Current state')}:</strong> ${_(state._label)}<br/>
+          <small>${_(state._description)}</small>
         </p>
       </div>
       <div class="col-sm-6">
         % for trans in state.get_transitions():
           <div class="result-state" id="result-state-${trans._end_state._id}">
             <strong>${_('Resulting State')}:</strong>
-            ${trans._end_state._label}<br/>
+            ${_(trans._end_state._label)}<br/>
             <small>
-            ${trans._end_state._description}
+            ${_(trans._end_state._description)}
             </small>
           </div>
         % endfor
