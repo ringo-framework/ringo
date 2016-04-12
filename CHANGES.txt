@@ -4,6 +4,8 @@ Next
   which are not part of the model.
 - Added config varibables to define default roles and groups on user
   registration.
+- Added config variable "layout.show_contextmenu" to configure the visibility
+  of the context menu.
 
 1.11.2
 ======

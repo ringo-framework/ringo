@@ -162,6 +162,27 @@ Default is false, no info is shown.
         Please do not forget to include the logininfo.mako template in your
         index page in case you have overwritten the index page.
 
+
+Contextmenu
+-----------
+You can configure if the context menu will be displayed in the detailed item
+view. For simple applications this menu might provide too much functionallity
+which tends to be confusing to other users. So you can completeley disable it.
+
+.. image:: ../screenshots/ui/contextmenu.png
+
+* layout.show_contextmenu = true
+
+Default is true, so the menu is shown.
+
+.. note::
+   
+   This setting only applies for users who does not have the admin role!
+   Admins will always see the contextmenu available. Please not if your
+   disable the menu the users will loose access to some default actions like
+   changing the ownership. 
+
+
 Sessions
 ========
 

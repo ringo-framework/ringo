@@ -14,16 +14,18 @@
           % endif
         </span> 
     </div>
-    <div class="col-sm-5">
-      <div class="context-menu pull-right">
-        <div class="btn-toolbar">
-          <div class="btn-group">
-            <!-- Base ringo actions -->
-            ${main.render_item_base_actions(item)}
+    % if s.has_role(request.user, "admin") or request.registry.settings.get("layout.show_contextmenu", "true") == "true":
+      <div class="col-sm-5">
+        <div class="context-menu pull-right">
+          <div class="btn-toolbar">
+            <div class="btn-group">
+              <!-- Base ringo actions -->
+              ${main.render_item_base_actions(item)}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    % endif
   </div>
 </div>
 <div class="row">
