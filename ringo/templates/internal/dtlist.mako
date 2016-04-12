@@ -44,7 +44,7 @@ from ringo.lib.helpers import prettify
         % endif
           <%
             try:
-              value = prettify(request, item.get_value(field.get('name'), expand=field.get('expand')))
+              value = _(prettify(request, item.get_value(field.get('name'), expand=field.get('expand'))))
             except AttributeError:
               value = "NaF"
           %>
