@@ -128,6 +128,7 @@ def register_user(request):
                           'There is already a user with this name',
                           is_login_unique)
     form.add_validator(validator)
+    registration_complete = False
     if request.POST:
         if form.validate(request.params):
             # 1. Create user. Do not activate him. Default role is user.
@@ -175,13 +176,12 @@ def register_user(request):
             mail = Mail([recipient], subject, template="register_user", values=values)
             mailer.send(mail)
 
-            target_url = request.route_path('login')
-            headers = forget(request)
             msg = _("User has been created and a confirmation mail was sent"
                     " to the users email adress. Please check your email.")
             request.session.flash(msg, 'success')
-            return HTTPFound(location=target_url, headers=headers)
-    return {'form': form.render()}
+            registration_complete = True
+    return {'form': form.render(), 'complete': registration_complete}
+
 
 
 @view_config(route_name='confirm_user',
