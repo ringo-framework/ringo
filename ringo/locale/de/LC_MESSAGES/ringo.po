@@ -477,7 +477,7 @@ msgstr ""
 
 #: ringo/templates/auth/login.mako:10
 msgid "New here? Register a new account!"
-msgstr "Neu hier? Registriere einen neuen Account!"
+msgstr "Neu hier? Registrieren Sie einen neuen Zugang!"
 
 #: ringo/templates/auth/login.mako:11 ringo/templates/auth/register_user.mako:5
 #: ringo/views/forms/auth.xml:9
@@ -486,7 +486,7 @@ msgstr "Zugang registrieren"
 
 #: ringo/templates/auth/login.mako:15
 msgid "Forgot your password? Reset your password here."
-msgstr "Passwort vergessen? Setzen Sie ihr Passwort hier zurück."
+msgstr "Passwort vergessen? Setzen Sie Ihr Passwort hier zurück!"
 
 #: ringo/templates/auth/register_user.mako:11
 msgid ""
