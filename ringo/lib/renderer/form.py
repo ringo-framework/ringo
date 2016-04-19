@@ -111,6 +111,7 @@ class LinkFieldRenderer(FieldRenderer):
     * action: Name of the action for which the link will be rendered.
       Defaults to None with means the link will be either to the read or
       update view.
+    * css: CSS classes for the link.
     * backlink: If set to true a backlink will be generated.
     """
     def __init__(self, field, translate):
