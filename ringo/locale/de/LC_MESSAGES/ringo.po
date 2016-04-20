@@ -530,7 +530,7 @@ msgstr "Abbrechen"
 
 #: ringo/templates/internal/dtlist.js.mako:2
 msgid "Case sensitive"
-msgstr ""
+msgstr "Groß- und Kleinschreibung"
 
 #: ringo/templates/internal/export.mako:5
 msgid "Export configuration for"
@@ -944,7 +944,7 @@ msgstr ""
 
 #: ringo/views/base/delete.py:75
 msgid "Deleted ${num} ${item_type} successfully."
-msgstr ""
+msgstr "${num} {item_type} erfolgreich gelöscht."
 
 #: ringo/views/base/import_.py:114
 msgid "Import failed"
@@ -1007,7 +1007,7 @@ msgstr "Passwörter sind nicht identisch"
 
 #: ringo/views/forms/auth.xml:10
 msgid "Reset"
-msgstr ""
+msgstr "Zurücksetzen"
 
 #. Label for created field in form config
 #: ringo/views/forms/blobform_template.xml:3
