@@ -6,13 +6,11 @@
       <h1 style="float:left">
         ${_(h.get_item_modul(request, clazz).get_label())}: ${item}
       </h1>
+        % if request.url.find("read") >= 0:
         <span class="badge" style="float:left; margin-left:5px; margin-top:5px">
-          % if request.url.find("read") >= 0:
-            <i class="fa fa-lock"></i> 
-          % else:
-            <i class="fa fa-unlock-alt"></i> 
-          % endif
+          <i class="fa fa-lock"></i> 
         </span> 
+        % endif
     </div>
     % if s.has_role(request.user, "admin") or request.registry.settings.get("layout.show_contextmenu", "true") == "true":
       <div class="col-sm-5">
