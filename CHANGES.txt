@@ -1,4 +1,4 @@
-Next
+1.12
 ====
 - Be more tolerant in imports. Only log in case the import includes fields
   which are not part of the model.
