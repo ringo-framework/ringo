@@ -1,3 +1,8 @@
+Next
+====
+- Fixes in scaffold. Improve default MANIFEST and include more files. Make
+  README a RST-File
+
 1.12
 ====
 - Be more tolerant in imports. Only log in case the import includes fields
