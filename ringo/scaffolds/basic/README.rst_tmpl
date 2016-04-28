@@ -11,4 +11,3 @@ Getting Started
 - $venv/bin/{{package}}-admin db init
 
 - $venv/bin/pserve development.ini
-
