@@ -1,4 +1,5 @@
 import uuid
+import logging
 
 import pyramid.httpexceptions as exc
 from pyramid.security import remember, forget
@@ -21,6 +22,8 @@ from ringo.lib.form import get_path_to_form_config
 from ringo.lib.security import login as user_login, request_password_reset, \
     password_reset, activate_user, encrypt_password
 from ringo.lib.message import Mailer, Mail
+
+log = logging.getLogger(__name__)
 
 
 def is_login_unique(field, data):
@@ -82,10 +85,15 @@ def logout(request):
     target_url = request.route_path('home')
     if request.params.get('autologout'):
         target_url = request.route_path('autologout')
-    headers = forget(request)
-    msg = _("Logout was successfull")
-    request.session.flash(msg, 'success')
-    return HTTPFound(location=target_url, headers=headers)
+        return HTTPFound(location=target_url)
+    elif request.user:
+        log.info("Logout successfull '%s'" % (request.user.login))
+        msg = _("Logout was successfull")
+        headers = forget(request)
+        request.session.flash(msg, 'success')
+        return HTTPFound(location=target_url, headers=headers)
+    return HTTPFound(location=target_url)
+
 
 
 @view_config(route_name='autologout', renderer='/auth/autologout.mako')
@@ -97,6 +105,7 @@ def autologout(request):
     if request.user:
         headers = forget(request)
         target_url = request.route_path('autologout')
+        log.info("Autologout successfull '%s'" % (request.user.login))
         return HTTPFound(location=target_url, headers=headers)
 
     # User is not authenticated here anymore. So simply render the
