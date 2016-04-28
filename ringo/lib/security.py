@@ -148,7 +148,7 @@ def refresh_auth_cookie(event):
 
 def setup_ringo_security(config):
     settings = config.registry.settings
-    timeout = get_auth_timeout(settings)
+    timeout = get_auth_timeout(settings) + 5
     secret = get_cookie_secret(settings)
     secure = settings.get("security.cookie_secure", "false") == "true"
     include_ip = settings.get("security.cookie_ip", "false") == "true"
