@@ -2,23 +2,28 @@
 import logging
 import urllib
 import urlparse
-from pyramid.httpexceptions import HTTPFound
+
 from formbar.form import Validator
+from pyramid.httpexceptions import HTTPFound
+
+from ringo.lib.helpers import import_model, get_action_routename, literal
+from ringo.lib.history import History
 from ringo.lib.security import (
     has_permission,
     ValueChecker
 )
-from ringo.lib.helpers import import_model, get_action_routename, literal
-from ringo.lib.history import History
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.views.helpers import (
     get_item_from_request,
-    get_ownership_form,
-    get_item_form,
     get_item_modul
 )
 
 log = logging.getLogger(__name__)
+
+invalid_form_message = "The information contained errors. "
+"<strong>All entries (including error-free) were not "
+"saved!</strong> Please correct your entries in the "
+"fields marked in red and resave."
 
 
 def form_has_errors(field, data, context):
@@ -162,22 +167,112 @@ def handle_caching(request):
 
 
 def handle_POST_request(form, request, callback, event, renderers=None):
-    """@todo: Docstring for handle_POST_request.
+    """
 
-    :name: @todo
-    :request: @todo
-    :callback: @todo
-    :renderers: @todo
+    :form: loaded formbar form
+    :request: actual request
+    :callback: callbacks
+    :renderers: renderers
     :event: Name of the event (update, create...) Used for the event handler
     :returns: True or False
 
     """
+
+    if "blobforms" in request.params:
+        return False
+
     _ = request.translate
     clazz = request.context.__model__
     item_label = get_item_modul(request, clazz).get_label()
     item = get_item_from_request(request)
-    mapping = {'item_type': item_label, 'item': item}
+    translation_params = {
+        'item_type': item_label,
+        'item': item
+    }
 
+    validator = create_validator(_(invalid_form_message), form)
+    form.add_validator(validator)
+
+    if not form.validate(request.params):
+        msg = _(generate_validation_errormessage(event),
+                mapping=translation_params)
+        log.debug(msg)
+        request.session.flash(msg, 'error')
+        return False
+
+    try:
+        permission_checker = ValueChecker()
+        if event == "create":
+            permission_checker.check(clazz, form.data, request)
+            item = create_new_item(clazz, form, request)
+            request.context.item = item
+            values = {}
+        else:
+            values = permission_checker.check(clazz, form.data, request, item)
+        item.save(values, request)
+        handle_event(request, item, event)
+        handle_add_relation(request, item)
+        handle_callback(request, callback)
+        handle_caching(request)
+        msg, log_msg = generate_successmessage(event,
+                                               item, item_label, request.user)
+        log.info(log_msg)
+        success_message = _(msg, mapping=translation_params)
+        request.session.flash(success_message, 'success')
+
+    except Exception as error:
+        translation_params['error'] = unicode(error.message)
+        msg = _(generate_save_errormessage(event), mapping=translation_params)
+        log.exception(msg)
+        request.session.flash(msg, 'error')
+        return False
+    else:
+        return True
+
+
+def create_new_item(clazz, form, request):
+    item_factory = get_item_factory(clazz, request)
+    item = item_factory.create(request.user, form.data)
+    return item
+
+
+def get_item_factory(clazz, request):
+    try:
+        factory = clazz.get_item_factory(request)
+    except TypeError:
+        # Old version of get_item_factory method which does
+        # not take an request parameter.
+        factory = clazz.get_item_factory()
+        factory._request = request
+    return factory
+
+
+def generate_successmessage(event, item, item_label, user):
+    msg = 'Edited ${item_type} "${item}" successfully.'
+    log_msg = u'User {user.login} edited {item_label} {item.id}' \
+        .format(item_label=item_label, item=item, user=user)
+    if event == "create":
+        msg = 'Created new ${item_type} successfully.'
+        log_msg = u'User {user.login} created {item_label} {item.id}' \
+            .format(item_label=item_label, item=item, user=user)
+    return (msg, log_msg)
+
+
+def generate_save_errormessage(event):
+    suffix = '${item_type} "${item}": ${error}.'
+    if event == "create":
+        suffix = 'new ${item_type}: ${error}.'
+    return 'Error while saving ' + suffix
+
+
+def generate_validation_errormessage(event):
+    suffix = '${item_type} "${item}".'
+    if event == 'create':
+        suffix = 'new ${item_type}.'
+    return 'Error on validation' + suffix
+
+
+def create_validator(error_message, form):
     # Add a *special* validator to the form to trigger rendering a
     # permanent info pane at the top of the form in case of errors on
     # validation. This info has been added because users reported data
@@ -185,74 +280,8 @@ def handle_POST_request(form, request, callback, event, renderers=None):
     # anything in case of errors. Users seems to expect that the valid
     # part of the data has been saved. This info should make the user
     # aware of the fact that nothing has been saved in case of errors.
-    error_message = _("The information contained errors. "
-                      "<strong>All entries (including error-free) were not "
-                      "saved!</strong> Please correct your entries in the "
-                      "fields marked in red and resave.")
-    form.add_validator(Validator(None, literal(error_message),
-                                 callback=form_has_errors,
-                                 context=form))
-
-    if form.validate(request.params) and "blobforms" not in request.params:
-        checker = ValueChecker()
-        try:
-            if event == "create":
-                try:
-                    factory = clazz.get_item_factory(request)
-                except TypeError:
-                    # Old version of get_item_factory method which does
-                    # not take an request parameter.
-                    factory = clazz.get_item_factory()
-                    factory._request = request
-
-                checker.check(clazz, form.data, request)
-                item = factory.create(request.user, form.data)
-                item.save({}, request)
-                request.context.item = item
-            else:
-                values = checker.check(clazz, form.data, request, item)
-                item.save(values, request)
-            handle_event(request, item, event)
-            handle_add_relation(request, item)
-            handle_callback(request, callback)
-            handle_caching(request)
-
-            if event == "create":
-                msg = _('Created new ${item_type} successfully.',
-                        mapping=mapping)
-                log_msg = u'User {user.login} created {item_label} {item.id}'\
-                    .format(item_label=item_label, item=item, user=request.user)
-            else:
-                msg = _('Edited ${item_type} "${item}" successfully.',
-                        mapping=mapping)
-                log_msg = u'User {user.login} edited {item_label} {item.id}'\
-                    .format(item_label=item_label, item=item, user=request.user)
-            log.info(log_msg)
-            request.session.flash(msg, 'success')
-
-            return True
-        except Exception as error:
-            mapping['error'] = unicode(error.message)
-            if event == "create":
-                msg = _('Error while saving new '
-                        '${item_type}: ${error}.', mapping=mapping)
-            else:
-                msg = _('Error while saving '
-                        '${item_type} "${item}": ${error}.', mapping=mapping)
-            log.exception(msg)
-            request.session.flash(msg, 'error')
-    elif "blobforms" in request.params:
-        pass
-    else:
-        if event == "create":
-            msg = _('Error on validation new '
-                    '${item_type}.', mapping=mapping)
-        else:
-            msg = _('Error on validation '
-                    '${item_type} "${item}".', mapping=mapping)
-        log.debug(msg)
-        request.session.flash(msg, 'error')
-    return False
+    return Validator(None, literal(error_message),
+                     callback=form_has_errors, context=form)
 
 
 def handle_redirect_on_success(request):
@@ -325,7 +354,7 @@ def handle_params(request):
             params['values'][key] = values[key]
     form = request.GET.get('form')
     if form:
-        #request.session['%s.form' % clazz] = form
+        # request.session['%s.form' % clazz] = form
         params['form'] = form
     relation = request.GET.get('addrelation')
     if relation:
