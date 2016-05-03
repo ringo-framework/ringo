@@ -1,17 +1,17 @@
 include *.txt *.ini *.cfg *.rst
-include {{packages}}/alembic/alembic.ini
-include {{packages}}/alembic/script.py.mako
-recursive-include {{packages}}/alembic *.py
-recursive-include {{packages}}/fixtures *.json
-include {{packages}}/locale/de/LC_MESSAGES/{{packages}}.po
-include {{packages}}/locale/en/LC_MESSAGES/{{packages}}.po
-include {{packages}}/locale/de/LC_MESSAGES/{{packages}}.mo
-include {{packages}}/locale/en/LC_MESSAGES/{{packages}}.mo
-include {{packages}}/locale/{{packages}}.pot
-recursive-include {{packages}}/scripts *.sql
-recursive-include {{packages}}/static *
-recursive-include {{packages}}/scaffolds *
-recursive-include {{packages}}/templates *.mako
-recursive-include {{packages}}/views/forms *.xml
-recursive-include {{packages}}/views/tables *.json
+include {{package}}/alembic/alembic.ini
+include {{package}}/alembic/script.py.mako
+recursive-include {{package}}/alembic *.py
+recursive-include {{package}}/fixtures *.json
+include {{package}}/locale/de/LC_MESSAGES/{{package}}.po
+include {{package}}/locale/en/LC_MESSAGES/{{package}}.po
+include {{package}}/locale/de/LC_MESSAGES/{{package}}.mo
+include {{package}}/locale/en/LC_MESSAGES/{{package}}.mo
+include {{package}}/locale/{{package}}.pot
+recursive-include {{package}}/scripts *.sql
+recursive-include {{package}}/static *
+recursive-include {{package}}/scaffolds *
+recursive-include {{package}}/templates *.mako
+recursive-include {{package}}/views/forms *.xml
+recursive-include {{package}}/views/tables *.json
 global-exclude *.orig
