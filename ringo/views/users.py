@@ -8,6 +8,7 @@ from pyramid.httpexceptions import (
     HTTPFound,
     HTTPUnauthorized
 )
+from pyramid.security import forget
 from pyramid.view import view_config
 from pyramid.compat import urlparse
 from formbar.form import Form, Validator
@@ -315,6 +316,67 @@ def changepassword(request):
     rvalue['item'] = item
     rvalue['form'] = form.render(page=get_current_form_page(clazz, request))
     return rvalue
+
+
+@view_config(route_name=get_action_routename(User, 'removeaccount'),
+             renderer='/users/removeaccount.mako')
+def removeaccount(request):
+    """Method to remove the useraccout by the user."""
+
+    # Check authentification
+    # The view is only available for authenticated users and callable
+    # if the user is not the admin unser (id=1)
+    id = request.matchdict.get('id')
+    if not request.user or id == '1':
+        raise HTTPUnauthorized
+
+    clazz = User
+    _ = request.translate
+    handle_history(request)
+    handle_params(request)
+    # Load the item return 400 if the item can not be found.
+    factory = clazz.get_item_factory()
+
+    try:
+        item = factory.load(id, request.db)
+        # Check authorisation
+        if item.id != request.user.id:
+            raise HTTPForbidden()
+    except sa.orm.exc.NoResultFound:
+        raise HTTPBadRequest()
+
+    form = Form(get_form_config(item, 'removeaccount'),
+                item, request.db, translate=_,
+                renderers={},
+                change_page_callback={'url': 'set_current_form_page',
+                                      'item': clazz.__tablename__,
+                                      'itemid': id},
+                request=request, csrf_token=request.session.get_csrf_token())
+
+    if request.POST:
+        mapping = {'item': item}
+        if form.validate(request.params):
+            # Delete the account and redirect the user to a result page
+            request.db.delete(item)
+            headers = forget(request)
+            target_url = request.route_path('users-accountremoved')
+            return HTTPFound(location=target_url, headers=headers)
+        else:
+            msg = _('Deleting the account of '
+                    '"${item}" failed.', mapping=mapping)
+            log.info(msg)
+            request.session.flash(msg, 'error')
+
+    rvalue = {}
+    rvalue['clazz'] = clazz
+    rvalue['item'] = item
+    rvalue['form'] = form.render(page=get_current_form_page(clazz, request))
+    return rvalue
+
+@view_config(route_name='users-accountremoved',
+             renderer='/users/accountremoved.mako')
+def accountremoved(request):
+    return {}
 
 
 ###########################################################################

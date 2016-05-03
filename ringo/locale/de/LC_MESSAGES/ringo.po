@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-04-12 12:27+0200\n"
+"POT-Creation-Date: 2016-05-03 15:40+0200\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language: de\n"
@@ -19,7 +19,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.2\n"
+"Generated-By: Babel 2.3.4\n"
 
 #: ringo/lib/imexport.py:455
 msgid "UPDATE"
@@ -153,19 +153,19 @@ msgstr "Öffne im „Lesen“ Modus"
 msgid "Delete item"
 msgstr "Lösche Eintrag"
 
-#: ringo/templates/base.mako:184
+#: ringo/templates/base.mako:189
 msgid "Advanced"
 msgstr "Erweitert"
 
-#: ringo/templates/base.mako:186 ringo/templates/footer.mako:8
+#: ringo/templates/base.mako:191 ringo/templates/footer.mako:8
 msgid "Administration"
 msgstr "Administration"
 
-#: ringo/templates/base.mako:187
+#: ringo/templates/base.mako:192
 msgid "Change ownership"
 msgstr "Ändere Eigentumsrechte"
 
-#: ringo/templates/base.mako:190
+#: ringo/templates/base.mako:195
 msgid "Advanced actions"
 msgstr "Erweiterte Aktionen"
 
@@ -233,11 +233,15 @@ msgstr "Passwort ändern"
 msgid "Set standin"
 msgstr "Vertretung setzen"
 
-#: ringo/templates/header.mako:82
+#: ringo/templates/header.mako:80
+msgid "Remove account"
+msgstr "Zugang löschen"
+
+#: ringo/templates/header.mako:85
 msgid "Service"
 msgstr "Dienste"
 
-#: ringo/templates/header.mako:89
+#: ringo/templates/header.mako:92
 msgid "Logout"
 msgstr "Abmelden"
 
@@ -246,7 +250,7 @@ msgstr "Abmelden"
 #: ringo/templates/auth/confirm_user.mako:19
 #: ringo/templates/auth/confirm_user.mako:24 ringo/templates/auth/login.mako:5
 #: ringo/templates/auth/reset_password.mako:19
-#: ringo/templates/auth/reset_password.mako:24 ringo/templates/header.mako:93
+#: ringo/templates/auth/reset_password.mako:24 ringo/templates/header.mako:96
 #: ringo/templates/index.mako:22 ringo/views/forms/auth.xml:7
 #: ringo/views/forms/users.xml:1 ringo/views/forms/users.xml:2
 #: ringo/views/tables/profiles.json:6
@@ -469,11 +473,19 @@ msgstr ""
 msgid "Reset Password"
 msgstr "Passwort zurücksetzen"
 
-#: ringo/templates/auth/forgot_password.mako:11
+#: ringo/templates/auth/forgot_password.mako:12
 msgid "Enter your Loginname and a password reset email will be sent out"
 msgstr ""
 "Geben Sie ihre Anmeldekennung und Passwort ein. Eine Email mit weiteren "
 "Informationen zum Zurücksetzen des Passworts wird Ihnen zugesendet."
+
+#: ringo/templates/auth/forgot_password.mako:20 ringo/views/auth.py:243
+msgid ""
+"Password reset token has been sent to the users email address. Please "
+"check your email."
+msgstr ""
+"Eine Bestätigungsmail zum Zurücksetzen des Passworts wurde an die E-Mail "
+"Adresse des Nutzer geschickt. Bitte prüfen Sie ihre E-Mail."
 
 #: ringo/templates/auth/login.mako:10
 msgid "New here? Register a new account!"
@@ -488,7 +500,7 @@ msgstr "Zugang registrieren"
 msgid "Forgot your password? Reset your password here."
 msgstr "Passwort vergessen? Setzen Sie Ihr Passwort hier zurück!"
 
-#: ringo/templates/auth/register_user.mako:11
+#: ringo/templates/auth/register_user.mako:12
 msgid ""
 "Please fillout the form the register a new account. You will recieve an "
 "email with a confirmation link to complete the registration."
@@ -496,6 +508,14 @@ msgstr ""
 "Bitte füllen Sie das Formular aus, um einen neuen Zugang zu registrieren."
 " Sie erhalten im Anschluss eine Email mit einem Bestätigungslink, um die "
 "Registrierung abzuschließen."
+
+#: ringo/templates/auth/register_user.mako:20 ringo/views/auth.py:188
+msgid ""
+"User has been created and a confirmation mail was sent to the users email"
+" adress. Please check your email."
+msgstr ""
+"Der Benutzer wurde angelegt und eine Bestätigunsmail wurde an die E-Mail "
+"Adresse des Nutzers gesendet. Bitte prüfen Sie ihre E-Mail."
 
 #: ringo/templates/auth/reset_password.mako:7
 msgid "Password resetted"
@@ -771,66 +791,81 @@ msgstr ""
 msgid "Set standin for"
 msgstr "Vertretung setzen von"
 
+#: ringo/templates/users/accountremoved.mako:6
+msgid "Account removed"
+msgstr "Zugang gelöscht"
+
+#: ringo/templates/users/accountremoved.mako:13
+msgid "The account has been successfully removed!"
+msgstr "Der Zugang wurde erfolgreich gelöscht!"
+
 #: ringo/templates/users/changepassword.mako:6
 msgid "Change Password for"
 msgstr "Ändere Passwort für"
+
+#: ringo/templates/users/removeaccount.mako:7
+msgid "Remove account of"
+msgstr "Lösche Zugang von"
+
+#: ringo/templates/users/removeaccount.mako:14
+msgid ""
+"Here you can delete your account completely. When deleting all data of "
+"this account will be deleted too. This includes all the records that "
+"belong to that account. Next the deletion of the account may result in "
+"other users can not access records anymore."
+msgstr ""
+"Hier können Sie ihr Zugang vollständig Löschen. Beim Löschen werden "
+"sämtliche Daten dieses Zugangs gelöscht. Das beinhaltet auch alle "
+"Datensätze, die diesem Zugang gehören. Weiter kann das Löschen des "
+"Zugangs dazu führen, das andere Nutzer nicht mehr auf Datensätze "
+"zugreifen können."
+
+#: ringo/templates/users/removeaccount.mako:17
+msgid "Please note that deleting your user account can not be undone."
+msgstr ""
+"Bitte beachten Sie, dass das Löschen ihres Benutzerkontos nicht "
+"rückgängig gemacht werden kann."
 
 #: ringo/views/api.py:59
 #, python-format
 msgid "ERROR: %s"
 msgstr "FEHLER: %s"
 
-#: ringo/views/auth.py:59 ringo/views/auth.py:62
+#: ringo/views/auth.py:62 ringo/views/auth.py:65
 msgid "Login failed!"
 msgstr "Anmeldung fehlgeschlagen"
 
-#: ringo/views/auth.py:67
+#: ringo/views/auth.py:70
 msgid "Login was successfull"
 msgstr "Anmeldung war erfolgreich"
 
-#: ringo/views/auth.py:86
+#: ringo/views/auth.py:91
 msgid "Logout was successfull"
 msgstr "Abmeldung war erfolgreich"
 
-#: ringo/views/auth.py:170
+#: ringo/views/auth.py:180
 msgid "Confirm user registration"
 msgstr "Bestätigung Nutzerregistrierung"
 
-#: ringo/views/auth.py:180
-msgid ""
-"User has been created and a confirmation mail was sent to the users email"
-" adress. Please check your email."
-msgstr ""
-"Der Benutzer wurde angelegt und eine Bestätigunsmail wurde an die E-Mail "
-"Adresse des Nutzers gesendet. Bitte prüfen Sie ihre E-Mail."
-
-#: ringo/views/auth.py:200
+#: ringo/views/auth.py:209
 msgid "The user has beed successfull confirmed."
 msgstr "Der Zugang wurde erfolgreich bestätigt."
 
-#: ringo/views/auth.py:202
+#: ringo/views/auth.py:211
 msgid "The user was not confirmed. Maybe the confirmation token was not valid?"
 msgstr ""
 "Der Zugang konnte nicht bestätigt werden. Vielleicht ist das Best"
 "ätigungs-Token nicht gülitg?"
 
-#: ringo/views/auth.py:226
+#: ringo/views/auth.py:236
 msgid "Password reset request"
 msgstr "Anfrage Passwort zurücksetzen"
 
-#: ringo/views/auth.py:235
-msgid ""
-"Password reset token has been sent to the users email address. Please "
-"check your email."
-msgstr ""
-"Eine Bestätigungsmail zum Zurücksetzen des Passworts wurde an die E-Mail "
-"Adresse des Nutzer geschickt. Bitte prüfen Sie ihre E-Mail."
-
-#: ringo/views/auth.py:256
+#: ringo/views/auth.py:264
 msgid "Password has been reseted"
 msgstr "Passwort wurde zurückgesetzt"
 
-#: ringo/views/auth.py:263
+#: ringo/views/auth.py:271
 msgid ""
 "Password was resetted and sent to the users email address. Please check "
 "your email."
@@ -838,7 +873,7 @@ msgstr ""
 "Das Passwort wurde zurückgesetzt und an die E-Mail Adresse des Nutzer "
 "geschickt. Bitte prüfen Sie ihre E-Mail."
 
-#: ringo/views/auth.py:267
+#: ringo/views/auth.py:275
 msgid "Password was not resetted. Maybe the request token was not valid?"
 msgstr ""
 "Das Passwort wurde nicht zurückgesetzt. Vielleicht ist das Token nicht "
@@ -866,65 +901,35 @@ msgstr ""
 "Authorisierung fehlgeschlagen. Es tut mir leid, aber Sie haben nicht die "
 "erforderlichen Rechte, um auf die Ressource zuzugreifen."
 
-#: ringo/views/request.py:188
-msgid ""
-"The information contained errors. <strong>All entries (including error-"
-"free) were not saved!</strong> Please correct your entries in the fields "
-"marked in red and resave."
-msgstr ""
-"Die Angaben enthalten Fehler. <strong>Sämtliche Eingaben (auch "
-"fehlerfreie) wurden nicht gespeichert!</strong> Bitte korrigieren Sie die"
-" Eingaben in den rot markierten Feldern und speichern Sie erneut."
-
-#: ringo/views/request.py:221
-msgid "Created new ${item_type} successfully."
-msgstr "${item_type} erfolgreich angelegt."
-
-#: ringo/views/request.py:226
-msgid "Edited ${item_type} \"${item}\" successfully."
-msgstr "${item_type} „${item}“ wurde erfolgreich bearbeitet."
-
-#: ringo/views/request.py:237
-msgid "Error while saving new ${item_type}: ${error}."
-msgstr "Fehler beim Anlegen von ${item_type}: ${error}."
-
-#: ringo/views/request.py:240
-msgid "Error while saving ${item_type} \"${item}\": ${error}."
-msgstr "Fehler beim Bearbeiten von ${item_type} „${item}“: ${error}."
-
-#: ringo/views/request.py:248
-msgid "Error on validation new ${item_type}."
-msgstr "Fehler beim Validieren von ${item_type}."
-
-#: ringo/views/request.py:251
-msgid "Error on validation ${item_type} \"${item}\"."
-msgstr "Fehler beim Validieren von ${item_type} „${item}“."
-
-#: ringo/views/users.py:124 ringo/views/users.py:154
+#: ringo/views/users.py:125 ringo/views/users.py:155
 msgid "This name is already in use, please use something unique."
 msgstr ""
 "Dieser Name wird bereits benutzt, bitte nehmen Sie einen eindeutigen "
 "Namen."
 
-#: ringo/views/users.py:129 ringo/views/users.py:159 ringo/views/users.py:283
+#: ringo/views/users.py:130 ringo/views/users.py:160 ringo/views/users.py:284
 msgid "Password must be at least 12 characters long."
 msgstr "Passwort muss mindestens 12 Zeichen lang sein."
 
-#: ringo/views/users.py:133 ringo/views/users.py:163 ringo/views/users.py:287
+#: ringo/views/users.py:134 ringo/views/users.py:164 ringo/views/users.py:288
 msgid "Password must contain at least 2 non-letters."
 msgstr "Passwort muss mindestens 2 Nicht-Buchstaben enthalten."
 
-#: ringo/views/users.py:280
+#: ringo/views/users.py:281
 msgid "The given password is not correct"
 msgstr "Das angegebene Passwort ist nicht korrekt"
 
-#: ringo/views/users.py:299
+#: ringo/views/users.py:300
 msgid "Changed password for \"${item}\" successfull."
 msgstr "Password für „${item}“ erfolgreich geändert."
 
-#: ringo/views/users.py:309
+#: ringo/views/users.py:310
 msgid "Error on changing the password for \"${item}\"."
 msgstr "Fehler bei der Änderung des Passworts für „${item}“."
+
+#: ringo/views/users.py:365
+msgid "Deleting the account of \"${item}\" failed."
+msgstr "Löschen des Zugang von \"${item}\" ist fehlgeschlagen."
 
 #: ringo/views/base/delete.py:60
 msgid "Can not delete ${item_type} items."
@@ -1295,11 +1300,12 @@ msgstr "Benutzer"
 msgid "Internal name for the roles. Do not change this without caution!"
 msgstr "Interner Name für die Rollen. Nur mit Vorsicht ändern!"
 
-#: ringo/views/forms/roles.xml:8 ringo/views/forms/users.xml:23
+#: ringo/views/forms/roles.xml:8 ringo/views/forms/users.xml:25
+#: ringo/views/forms/users.xml:27 ringo/views/forms/users.xml:28
 msgid "Yes"
 msgstr "Ja"
 
-#: ringo/views/forms/roles.xml:9 ringo/views/forms/users.xml:24
+#: ringo/views/forms/roles.xml:9 ringo/views/forms/users.xml:26
 msgid "No"
 msgstr "Nein"
 
@@ -1337,7 +1343,21 @@ msgstr "Aktiviert"
 msgid "Activation Token"
 msgstr "Aktivierungs-Token"
 
+#. Label for _confirm_remove_account field in form config
 #: ringo/views/forms/users.xml:15
+msgid "I am sure that I want to delete my user account including all data."
+msgstr ""
+"Ich bin mir sicher, dass ich meinen Zugang inklusive aller meiner Daten "
+"löschen möchte."
+
+#. Label for _confirm_remove_account2 field in form config
+#: ringo/views/forms/users.xml:16
+msgid "I understand that deleting my account can not be undone"
+msgstr ""
+"Ich habe verstanden, das das Löschen des Zugangs nicht rückgangig gemacht"
+" werden kann."
+
+#: ringo/views/forms/users.xml:17
 msgid ""
 "The default group determines which group will be used for new entries of "
 "this user."
@@ -1345,7 +1365,7 @@ msgstr ""
 "Die Vorgabegruppe legt fest, mit welcher Benutzergruppe neue Einträge "
 "dieses Nutzers angelegt werden."
 
-#: ringo/views/forms/users.xml:16
+#: ringo/views/forms/users.xml:18
 msgid ""
 "The activation token can be used to (re)activate a deactivated or new "
 "registered user. Please call /auth/activate_user/$token to active the "
@@ -1355,23 +1375,23 @@ msgstr ""
 "neuen Nutzer zu (re)aktivieren. Bitte rufen Sie hierfür "
 "/auth/activate_user/$token auf."
 
-#: ringo/views/forms/users.xml:17
+#: ringo/views/forms/users.xml:19
 msgid "Login must have a length of greater or equal than 2"
 msgstr "Die Anmeldekennung muss größer oder gleich 2 Zeichen lang sein."
 
-#: ringo/views/forms/users.xml:18
+#: ringo/views/forms/users.xml:20
 msgid "Passwords must be equal"
 msgstr "Passwörter müssen gleich sein"
 
-#: ringo/views/forms/users.xml:19
+#: ringo/views/forms/users.xml:21
 msgid "User data"
 msgstr "Nutzerdaten"
 
-#: ringo/views/forms/users.xml:20
+#: ringo/views/forms/users.xml:22
 msgid "Profile data"
 msgstr "Profildaten"
 
-#: ringo/views/forms/users.xml:21
+#: ringo/views/forms/users.xml:23
 msgid ""
 "The password must be at least 12 characters long, and include two non-"
 "letters. Leading and tailing whitespaces are stripped."
@@ -1380,7 +1400,7 @@ msgstr ""
 "enthalten. Führende und abschließende Leerzeichen werden nicht "
 "berücksichtigt."
 
-#: ringo/views/forms/users.xml:22
+#: ringo/views/forms/users.xml:24
 msgid ""
 "The password must be at least 12 characters long, and include two non-"
 "letters"
@@ -1388,6 +1408,10 @@ msgstr ""
 "Das Passwort muss mindestens 12 Zeichen lang sein und 2 Nicht-Buchstaben "
 "enthalten. Führende und abschließende Leerzeichen werden nicht "
 "berücksichtigt."
+
+#: ringo/views/forms/users.xml:29
+msgid "Delete user account"
+msgstr "Zugang löschen"
 
 #. Label for name column in overview table config
 #: ringo/views/tables/actions.json:3
@@ -1434,5 +1458,26 @@ msgstr "Letze Anmeldung"
 #~ msgstr ""
 
 #~ msgid "Register '%s' Y/N (N)?"
+#~ msgstr ""
+
+#~ msgid "Created new ${item_type} successfully."
+#~ msgstr "${item_type} erfolgreich angelegt."
+
+#~ msgid "Edited ${item_type} \"${item}\" successfully."
+#~ msgstr "${item_type} „${item}“ wurde erfolgreich bearbeitet."
+
+#~ msgid "Error while saving new ${item_type}: ${error}."
+#~ msgstr "Fehler beim Anlegen von ${item_type}: ${error}."
+
+#~ msgid "Error while saving ${item_type} \"${item}\": ${error}."
+#~ msgstr "Fehler beim Bearbeiten von ${item_type} „${item}“: ${error}."
+
+#~ msgid "Error on validation new ${item_type}."
+#~ msgstr "Fehler beim Validieren von ${item_type}."
+
+#~ msgid "Error on validation ${item_type} \"${item}\"."
+#~ msgstr "Fehler beim Validieren von ${item_type} „${item}“."
+
+#~ msgid "Yes, I understand that deleting my account can not be undone"
 #~ msgstr ""
 

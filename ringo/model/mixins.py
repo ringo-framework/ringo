@@ -314,6 +314,13 @@ class Owned(object):
     """Variable to configure a inheritance of the uid. The variable
     should be the name of the relation to the parent element from which
     the uid will be taken"""
+    _owner_cascades = None
+    """Variable to configure the behavior of the relation to the parent
+    item if the owner of an itme is deleted. Defaults to 'save-update,
+    merge'.  See SQLAlchemy documentation for more details. This means a
+    user can not be deleted if he still owns items. Set this variable to
+    'all, delete' of you want to delete all items owned by the user
+    too."""
 
     @declared_attr
     def uid(cls):
@@ -324,8 +331,19 @@ class Owned(object):
 
     @declared_attr
     def owner(cls):
-        return relationship("User",
-                            primaryjoin="User.id==%s.uid" % cls.__name__)
+        # Defining cascading and backrefs on Userclass does not work and
+        # seems to be senseless anyway.
+        if cls.__name__ == "User":
+            return relationship("User",
+                                primaryjoin="User.id==%s.uid" % cls.__name__)
+        else:
+            # The backref is private and only used to place the cascading
+            # behaviour.
+            backref_name = "__%s_item" % cls.__name__.lower()
+            return relationship("User",
+                                primaryjoin="User.id==%s.uid" % cls.__name__,
+                                backref=backref(backref_name,
+                                                cascade=cls._owner_cascades))
 
     @declared_attr
     def gid(cls):
