@@ -1,6 +1,12 @@
 [egg_info]
-tag_build = dev
-tag_svn_revision = true
+#tag_build = dev
+
+[bdist_rpm]
+release = 1
+doc_files = CHANGES.txt README.rst
+provides = python-ringo-{{package}}
+requires =
+       python-ringo
 
 [compile_catalog]
 directory = ringo_{{package}}/locale
