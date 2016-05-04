@@ -37,7 +37,7 @@ The example assumes using a PostgreSQL database.
 Here we go. First backup your database and ensure you acually have the data in
 form of `INSERT` statements::
 
-    pg_dump --inserts efa > efa.dump.pre
+    pg_dump -a --column-inserts efa | grep INSERT > efa.dump.pre
 
 Now register your extension in your application. Registering is done in three
 steps.
@@ -77,7 +77,7 @@ This command will add the initial entries for the extension in your database.
 It time find out what actually has been added to the database to be able to
 readd these modification later in the migration script::
 
-        pg_dump --inserts efa > efa.dump.post
+        pg_dump -a --column-inserts efa | grep INSERT > efa.dump.post
         diff efa.dump.pre efa.dump.post | grep INSERT | sed -e 's/> //g' > inserts.sql
 
 The file `inserts.sql` include the modification in your database to register
