@@ -74,7 +74,7 @@ $( document ).ready(function() {
    "bAutoWidth": false,
    "fnInitComplete":on${table_id}TableRendered,
    "dom":
-   '<"search-widget"<"row"<"col-md-12 search-filters"f>>><"row"<"col-md-12"<"pull-right"i>>>'
+   '<"search-widget hidden-print"<"row"<"col-md-12 search-filters"f>>><"row"<"col-md-12"<"pull-right"i>>>'
   });
 });
 
