@@ -120,8 +120,16 @@ def set_raw_value(element, name, value):
     else:
         penulti = element
         attr = name
-    object.__setattr__(penulti, attr, value)
 
+    if isinstance(value, list) and hasattr(penulti, attr):
+        orig_set = set(getattr(penulti, attr))
+        new_set = set(value)
+        for x in orig_set - new_set:
+            getattr(penulti, attr).remove(x)
+        for x in new_set - orig_set:
+            getattr(penulti, attr).append(x)
+    else:
+        object.__setattr__(penulti, attr, value)
 
 def get_raw_value(element, name):
     """Support getting the value for a dot separated attribute of
