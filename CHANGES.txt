@@ -1,4 +1,4 @@
-Next
+1.13
 ====
 - Fixes in scaffold. Improve default MANIFEST and include more files. Make
   README a RST-File
