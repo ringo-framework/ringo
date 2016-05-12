@@ -82,6 +82,11 @@ def setup_routes(config):
     config.add_route('users-changepassword',
                      'users/changepassword/{id}',
                      factory=get_resource_factory(User))
+    config.add_route('users-removeaccount',
+                     'users/removeaccount/{id}',
+                     factory=get_resource_factory(User))
+    config.add_route('users-accountremoved',
+                     'users/accountremoved')
     config.add_route('usergroups-setstandin',
                      'usergroups/setstandin/{id}',
                      factory=get_resource_factory(Usergroup))
