@@ -7,7 +7,7 @@
         ${_(h.get_item_modul(request, clazz).get_label())}: ${item}
       </h1>
         % if request.url.find("read") >= 0:
-        <span class="badge" style="float:left; margin-left:5px; margin-top:5px">
+        <span class="badge hidden-print" style="float:left; margin-left:5px; margin-top:5px">
           <i class="fa fa-lock"></i> 
         </span> 
         % endif
