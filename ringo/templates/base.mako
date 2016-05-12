@@ -177,10 +177,10 @@
       %>
       % if action.icon.strip() == "icon-download":
       <a href="${h.get_action_url(request, item, action.name.lower())}"
-        class="btn btn-default nospinner" title="${title}"><i class="${icon}"></i></a>
+        class="btn btn-default nospinner hidden-print" title="${title}"><i class="${icon}"></i></a>
       % else:
       <a href="${h.get_action_url(request, item, action.name.lower())}"
-        class="btn btn-default" title="${title}"><i class="${icon}"></i></a>
+        class="btn btn-default hidden-print" title="${title}"><i class="${icon}"></i></a>
       % endif
     % endif
   % endfor
