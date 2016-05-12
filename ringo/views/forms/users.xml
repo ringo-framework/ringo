@@ -19,10 +19,10 @@
       <renderer type="password"/>
     </entity>
     <entity id="e4" name="roles" label="Roles">
-      <renderer type="listing" hideadd="true"/>
+      <renderer type="listing" hideadd="true" nolinks="true"/>
     </entity>
     <entity id="e5" name="groups" label="Usergroups">
-      <renderer type="listing" hideadd="true"/>
+      <renderer type="listing" hideadd="true" nolinks="true"/>
     </entity>
     <entity id="e6" name="usergroup" label="Default group">
       <help>The default group determines which group will be used for new entries of this user.</help>
