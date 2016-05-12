@@ -141,9 +141,9 @@ class BaseItem(object):
     """Configure a list of relations which are configured to be
     eager loaded."""
 
-    uuid = Column('uuid', CHAR(32),
+    uuid = Column('uuid', CHAR(36),
                   unique=True,
-                  default=lambda x: '%.32x' % uuid.uuid4())
+                  default=lambda x: str(uuid.uuid4()))
 
     def render(self):
         """This function can be used to render a different
@@ -229,7 +229,7 @@ class BaseItem(object):
         return get_permissions(modul, item)
 
     def reset_uuid(self):
-        self.uuid = '%.32x' % uuid.uuid4()
+        self.uuid = str(uuid.uuid4())
 
     def get_value(self, name, form_id="read", expand=False):
         """Return the value of the given attribute of the item. Unlike
