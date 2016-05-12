@@ -949,7 +949,7 @@ msgstr ""
 
 #: ringo/views/base/delete.py:75
 msgid "Deleted ${num} ${item_type} successfully."
-msgstr "${num} {item_type} erfolgreich gelöscht."
+msgstr "${num} ${item_type} erfolgreich gelöscht."
 
 #: ringo/views/base/import_.py:114
 msgid "Import failed"
