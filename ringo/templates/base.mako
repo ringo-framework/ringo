@@ -185,7 +185,7 @@
     % endif
   % endfor
   <div class="btn-group">
-    <button type="button" class="btn btn-default dropdown-toggle"
+    <button type="button" class="btn btn-default dropdown-toggle hidden-print"
     data-toggle="dropdown"> ${_('Advanced')} <span class="caret"></span></button>
     <ul id="context-menu-options" class="dropdown-menu  pull-right" role="menu">
       <li role="presentation" class="dropdown-header">${_('Administration')}</li>
