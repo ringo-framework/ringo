@@ -1,0 +1,9 @@
+include README.rst *.txt
+recursive-include docs *
+recursive-include examples *
+recursive-include contrib *
+recursive-include *.xml *.json
+recursive-include {{package}}/locale *.po *.mo *.pot README
+recursive-include {{package}}/static *
+recursive-include {{package}}/templates *.mako
+global-exclude *.orig

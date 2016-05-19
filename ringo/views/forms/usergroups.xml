@@ -4,6 +4,11 @@
     <!-- Define different entity types -->
     <entity id="e1" name="name" label="Name" type="string" required="true"/>
     <entity id="e2" name="members" label="Users">
+      <!-- Please note, that you will need to define custom persmissions on
+      the usergroup and users to allow ordenary users to set their standin. On
+      default users can not see users and usergroups. As this is a very
+      specific to the usecase there is no general rule to decide which users
+      are allowed here. So you need to define this you yourself. -->
       <renderer type="listing" table="members" align="vertical" filter="$name ne %login" hideadd="true"/>
     </entity>
     <entity id="e4" name="description" label="Description" type="string">
