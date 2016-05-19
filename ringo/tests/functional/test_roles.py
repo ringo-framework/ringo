@@ -67,6 +67,18 @@ class TestUpdate:
         app.post("/roles/update/1", params=values, status=200)
         transaction_rollback(app)
 
+    def test_remove_permission(self, app):
+        login(app, "admin", "secret")
+        transaction_begin(app)
+        values = {"label": "Users", "name": "user", "permissions": [21,30],
+                  "admin": "False"}
+        app.post("/roles/update/1", params=values, status=302)
+        values = {"label": "Users", "name": "user", "permissions": [21],
+                  "admin": "False"}
+        app.post("/roles/update/1", params=values, status=302)
+
+        transaction_rollback(app)
+
 
 class TestDelete:
 
