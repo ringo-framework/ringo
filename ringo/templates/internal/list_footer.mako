@@ -2,7 +2,7 @@
 ## this case the pagination does not work correct and is disabled as
 ## workaround. (ti) <2015-09-25 09:07> 
 % if bundled_actions or (tableconfig.is_paginated() and (tableconfig.is_advancedsearch(request.registry.settings.get("layout.advanced_overviews") == "true"))): 
-<div class="search-widget">
+<div class="search-widget hidden-print">
   <div class="row">
     <div class="col-xs-6">
       % if bundled_actions: 
