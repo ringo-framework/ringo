@@ -2,6 +2,9 @@ Next
 ====
 - Fixes in scaffold. Improve default MANIFEST and include more files. Make
   README a RST-File
+- Internal UUID field is now 36 chars long. UUID is now stored as defined in
+  RFC4122. Please note that existing UUIDs are not converted. You can convert
+  exitsing UUIDs by using the "ringo-admin db resetuuid" command.
 
 1.12
 ====
