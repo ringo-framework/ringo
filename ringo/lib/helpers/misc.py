@@ -121,6 +121,12 @@ def set_raw_value(element, name, value):
         penulti = element
         attr = name
 
+    # Special handling of setting lists. Which fixes #19
+    # https://github.com/ringo-framework/ringo/issues/19. Unfortunatly
+    # this seems to fix the issue but we do need know why. This
+    # workaround is only need (and actually works) for lists which are
+    # already exting in the item. In all other cases we still use the
+    # old behaviour.
     if isinstance(value, list) and hasattr(penulti, attr):
         orig_set = set(getattr(penulti, attr))
         new_set = set(value)
@@ -130,6 +136,7 @@ def set_raw_value(element, name, value):
             getattr(penulti, attr).append(x)
     else:
         object.__setattr__(penulti, attr, value)
+
 
 def get_raw_value(element, name):
     """Support getting the value for a dot separated attribute of

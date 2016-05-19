@@ -2,6 +2,7 @@ Next
 ====
 - Fixes in scaffold. Improve default MANIFEST and include more files. Make
   README a RST-File
+- Fixed #19 (https://github.com/ringo-framework/ringo/issues/19)
 
 1.12
 ====
