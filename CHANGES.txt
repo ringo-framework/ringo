@@ -11,6 +11,9 @@ Next
   the models to e.g configure to delete all items which are owned by the item
   to. On default users can only delete their account if the do now own any
   items anymore. 
+- Implemented "roles" config variable for columns in table configs. If
+  defined columns are only visible to users who have one of the
+  configured roles.
 
 1.12
 ====
