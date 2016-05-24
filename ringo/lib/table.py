@@ -220,7 +220,8 @@ class TableConfig:
         for col in config.get('columns'):
             if user and col.get("roles"):
                 # Check if user has on of the required roles.
-                for role in col.get("roles").split() + ['admin']:
+                roles = col.get("roles").split(",") + ['admin']
+                for role in roles:
                     if has_role(user, role):
                         cols.append(col)
                         break
