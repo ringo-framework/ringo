@@ -127,7 +127,9 @@ def set_raw_value(element, name, value):
     # workaround is only need (and actually works) for lists which are
     # already exting in the item. In all other cases we still use the
     # old behaviour.
-    if isinstance(value, list) and hasattr(penulti, attr):
+    if (isinstance(value, list) and
+       hasattr(penulti, attr) and
+       isinstance(getattr(penulti, attr), list)):
         orig_set = set(getattr(penulti, attr))
         new_set = set(value)
         for x in orig_set - new_set:
