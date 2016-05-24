@@ -13,7 +13,7 @@ from ringo.lib.helpers import prettify
         <input type="checkbox" name="check_all" onclick="checkAll('id');">
       </th>
       % endif
-      % for field in tableconfig.get_columns():
+      % for field in tableconfig.get_columns(request.user):
         <th width="${field.get('width')}" title="${field.get('title') or _(field.get('label'))}">${_(field.get('label'))}</th>
       % endfor
     </tr>
@@ -36,7 +36,7 @@ from ringo.lib.helpers import prettify
           <input type="checkbox" name="id" value="${item.id}">
         </td>
       % endif
-      % for field in tableconfig.get_columns():
+      % for field in tableconfig.get_columns(request.user):
         % if permission:
           <td class="link">
         % else:

@@ -2,11 +2,18 @@
 ====
 - Fixes in scaffold. Improve default MANIFEST and include more files. Make
   README a RST-File
+- Internal UUID field is now 36 chars long. UUID is now stored as defined in
+  RFC4122. Please note that existing UUIDs are not converted. You can convert
+  exitsing UUIDs by using the "ringo-admin db resetuuid" command.
+- Fixed #19 (https://github.com/ringo-framework/ringo/issues/19)
 - Let users delete their own account. You can define the behavior to items
   defined by the user by setting the _owner_cascades class variable with in
   the models to e.g configure to delete all items which are owned by the item
   to. On default users can only delete their account if the do now own any
   items anymore. 
+- Implemented "roles" config variable for columns in table configs. If
+  defined columns are only visible to users who have one of the
+  configured roles.
 
 1.12
 ====
