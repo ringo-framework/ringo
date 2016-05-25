@@ -15,15 +15,15 @@
     <meta content="${request.user}" name="auth_user">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
-    <link href="${request.static_path('ringo:static/bootstrap/css/bootstrap.min.css')}" rel="stylesheet" media="screen">
-    <link href="${request.static_path('ringo:static/bootstrap/css/bootstrap-theme.min.css')}" rel="stylesheet" media="screen">
+    <link href="${request.static_path('ringo:static/bootstrap/css/bootstrap.min.css')}" rel="stylesheet">
+    <link href="${request.static_path('ringo:static/bootstrap/css/bootstrap-theme.min.css')}" rel="stylesheet">
     % for filename in formbar_css_filenames: 
-      <link href="${request.static_path('formbar:static/%s' % filename)}" rel="stylesheet" media="screen">
+      <link href="${request.static_path('formbar:static/%s' % filename)}" rel="stylesheet">
     % endfor
-    <link href="${request.static_path('ringo:static/css/layout.css')}" rel="stylesheet" media="screen">
-    <link href="${request.static_path('ringo:static/css/widgets.css')}" rel="stylesheet" media="screen">
-    <link href="${request.static_path('ringo:static/css/style.css')}" rel="stylesheet" media="screen">
-    <link href="${request.static_path('ringo:static/css/jquery-ui.min.css')}" rel="stylesheet" media="screen">
+    <link href="${request.static_path('ringo:static/css/layout.css')}" rel="stylesheet">
+    <link href="${request.static_path('ringo:static/css/widgets.css')}" rel="stylesheet">
+    <link href="${request.static_path('ringo:static/css/style.css')}" rel="stylesheet">
+    <link href="${request.static_path('ringo:static/css/jquery-ui.min.css')}" rel="stylesheet">
     <link href="${request.static_path('ringo:static/font-awesome/css/font-awesome.min.css')}" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -177,15 +177,15 @@
       %>
       % if action.icon.strip() == "icon-download":
       <a href="${h.get_action_url(request, item, action.name.lower())}"
-        class="btn btn-default nospinner" title="${title}"><i class="${icon}"></i></a>
+        class="btn btn-default nospinner hidden-print" title="${title}"><i class="${icon}"></i></a>
       % else:
       <a href="${h.get_action_url(request, item, action.name.lower())}"
-        class="btn btn-default" title="${title}"><i class="${icon}"></i></a>
+        class="btn btn-default hidden-print" title="${title}"><i class="${icon}"></i></a>
       % endif
     % endif
   % endfor
   <div class="btn-group">
-    <button type="button" class="btn btn-default dropdown-toggle"
+    <button type="button" class="btn btn-default dropdown-toggle hidden-print"
     data-toggle="dropdown"> ${_('Advanced')} <span class="caret"></span></button>
     <ul id="context-menu-options" class="dropdown-menu  pull-right" role="menu">
       <li role="presentation" class="dropdown-header">${_('Administration')}</li>

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container hidden-print">
 
   <div class="row">
     <div class="col-sm-6">

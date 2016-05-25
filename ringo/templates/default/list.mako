@@ -6,7 +6,7 @@
         ${N_(h.get_item_modul(request, clazz).get_label(plural=True))}</h1>
     </div>
     <div class="col-sm-4 visible-xs">
-      <div class="context-menu">
+      <div class="context-menu hidden-print">
         <div class="btn-toolbar">
           <div class="btn-group btn-group-justified">
             % if h.get_item_modul(request, clazz).has_action('create'):
@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="col-sm-4 hidden-xs">
-      <div class="context-menu pull-right">
+      <div class="context-menu pull-right hidden-print">
         <div class="btn-toolbar">
           <div class="btn-group">
             <%

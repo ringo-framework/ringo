@@ -1,6 +1,6 @@
 <%def name="render_breadcrumb(request)">
   <% breadcrumbs = h.get_breadcrumbs(request) %>
-    <div id="breadcrumb" class="container">
+    <div id="breadcrumb" class="container hidden-print">
       % if breadcrumbs and request.user:
       <ol class="breadcrumb">
       % for element in breadcrumbs:
