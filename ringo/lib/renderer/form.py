@@ -113,6 +113,7 @@ class LinkFieldRenderer(FieldRenderer):
       update view.
     * css: CSS classes for the link.
     * backlink: If set to true a backlink will be generated.
+    * target: Set target attribute of the link.
     """
     def __init__(self, field, translate):
         """@todo: to be defined"""
