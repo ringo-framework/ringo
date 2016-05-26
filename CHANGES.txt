@@ -14,6 +14,7 @@
 - Implemented "roles" config variable for columns in table configs. If
   defined columns are only visible to users who have one of the
   configured roles.
+- Added "target" attribute to the Linkfieldrenderer.
 
 1.12
 ====
