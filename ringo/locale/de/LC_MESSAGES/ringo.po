@@ -1445,6 +1445,41 @@ msgstr "Gruppen"
 msgid "Last login"
 msgstr "Letze Anmeldung"
 
+#: ringo/views/request.py:188      
+msgid ""      
+"The information contained errors. <strong>All entries (including error-"      
+"free) were not saved!</strong> Please correct your entries in the fields "      
+"marked in red and resave."      
+msgstr ""      
+"Die Angaben enthalten Fehler. <strong>Sämtliche Eingaben (auch "      
+"fehlerfreie) wurden nicht gespeichert!</strong> Bitte korrigieren Sie die"      
+" Eingaben in den rot markierten Feldern und speichern Sie erneut."      
+
+#: ringo/views/request.py:221      
+msgid "Created new ${item_type} successfully."
+msgstr "${item_type} erfolgreich angelegt."
+
+
+#: ringo/views/request.py:226      
+msgid "Edited ${item_type} \"${item}\" successfully."
+msgstr "${item_type} „${item}“ wurde erfolgreich bearbeitet."
+
+#: ringo/views/request.py:237
+msgid "Error while saving new ${item_type}: ${error}."
+msgstr "Fehler beim Anlegen von ${item_type}: ${error}."
+
+#: ringo/views/request.py:240
+msgid "Error while saving ${item_type} \"${item}\": ${error}."
+msgstr "Fehler beim Bearbeiten von ${item_type} „${item}“: ${error}."
+
+#: ringo/views/request.py:248
+msgid "Error on validation new ${item_type}."
+msgstr "Fehler beim Validieren von ${item_type}."
+
+#: ringo/views/request.py:251
+msgid "Error on validation ${item_type} \"${item}\"."
+msgstr "Fehler beim Validieren von ${item_type} „${item}“."
+
 #~ msgid "Open item in %s mode"
 #~ msgstr "Öffne Eintrag im %s Modus"
 
