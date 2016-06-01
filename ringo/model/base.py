@@ -282,9 +282,17 @@ class BaseItem(object):
             form_config = get_form_config(obj, form_id)
             try:
                 field_config = form_config.get_field(name)
+                options = []
                 for option in field_config.options:
-                    if str(raw_value) == str(option[1]):
-                        return option[0]
+                    # Handle "list" values "{"",1,2}"
+                    if str(raw_value).startswith("{") and str(raw_value).endswith("}"):
+                        for value in raw_value.strip("}").strip("{").split(","):
+                            if str(value) == str(option[1]):
+                                options.append(option[0])
+                    elif str(raw_value) == str(option[1]):
+                        options.append(option[0])
+                        break
+                return ", ".join(options)
             except KeyError:
                 # If the field/value which should to be expanded is not
                 # included in the form the form library will raise a
