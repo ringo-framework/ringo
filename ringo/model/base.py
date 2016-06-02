@@ -292,7 +292,12 @@ class BaseItem(object):
                     elif str(raw_value) == str(option[1]):
                         options.append(option[0])
                         break
-                return ", ".join(options)
+                # If we can not match a value we return the raw value.
+                # This can also happen if the user tries to expand value
+                # which do not have options.
+                if len(options) > 0:
+                    return ", ".join(options)
+                return raw_value
             except KeyError:
                 # If the field/value which should to be expanded is not
                 # included in the form the form library will raise a
