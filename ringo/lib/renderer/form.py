@@ -357,12 +357,18 @@ class ListingFieldRenderer(FormbarSelectionField):
     def render(self):
         """Initialize renderer"""
         html = []
+        active = 'active' if self._active else 'inactive'
         config = self._field._config.renderer
         has_errors = len(self._field.get_errors())
         has_warnings = len(self._field.get_warnings())
-        class_options = "form-group %s %s" % ((has_errors and 'has-error'),
-                                              (has_warnings and 'has-warning'))
+        class_options = "form-group %s %s %s" % ((has_errors and 'has-error'),
+                                              (has_warnings and 'has-warning'),(active))
         html.append(HTML.tag("div", _closed=False,
+                             rules=u"{}".format(";".join(self._field.rules_to_string)),
+                             formgroup="{}".format(self._field.name),
+                             id="{}".format(self._field.name),
+                             desired="{}".format(self._field.desired),
+                             required="{}".format(self._field.required),
                              class_=class_options))
         html.append(self._render_label())
         if self._field.is_readonly() or self.onlylinked == "true":
