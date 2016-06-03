@@ -291,6 +291,13 @@ class Exporter(object):
         return self.serialize(data)
 
 
+class XLSXExporter(Exporter):
+    """Docstring for XLSXExporter. """
+
+    def serialize(self, data):
+        import pdb; pdb.set_trace()
+
+
 class JSONExporter(Exporter):
     """Docstring for JSONExporter. """
 

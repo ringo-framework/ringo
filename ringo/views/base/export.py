@@ -1,7 +1,8 @@
 import logging
 from ringo.lib.imexport import (
     JSONExporter,
-    CSVExporter
+    CSVExporter,
+    XLSXExporter
 )
 from ringo.lib.renderer import (
     ExportDialogRenderer
@@ -41,6 +42,8 @@ def _handle_export_request(request, items, callback=None):
             exporter = JSONExporter(clazz)
         elif ef == "csv":
             exporter = CSVExporter(clazz)
+        elif ef == "xlsx":
+            exporter = XLSXExporter(clazz)
         export = exporter.perform(items)
         # Build response
         resp = request.response
