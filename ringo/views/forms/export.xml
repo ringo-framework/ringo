@@ -7,6 +7,7 @@
       <options>
         <option value="json">JSON</option>
         <option value="csv">CSV</option>
+        <option value="xlsx">XLSX</option>
       </options>
     </entity>
   </source>
