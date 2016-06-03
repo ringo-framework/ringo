@@ -1,6 +1,7 @@
 Next
 ====
 - Expand values from checkboxes too.
+- Added XLSX Export.
 
 1.13
 ====
