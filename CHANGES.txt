@@ -1,3 +1,7 @@
+Next
+====
+- Expand values from checkboxes too.
+
 1.13
 ====
 - Fixes in scaffold. Improve default MANIFEST and include more files. Make
