@@ -171,6 +171,14 @@ class BaseItem(object):
         return self.get_value(name)
 
     def __getattr__(self, name):
+        # In some cases it is needed to be able to trigger getting the
+        # exapanded value without calling the get_value method. This can
+        # be achieved by accessing the attribute with a special name.
+        # Lets say you want to get the expanded value for `foo`. You get
+        # this by asking for `foo__e_x_p_a_n_d`
+        if name.endswith("__e_x_p_a_n_d"):
+            return self.get_value(name.replace("__e_x_p_a_n_d", ""),
+                                  expand=True)
         return get_raw_value(self, name)
 
     def __setattr__(self, name, value):

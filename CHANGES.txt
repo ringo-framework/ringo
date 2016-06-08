@@ -2,6 +2,11 @@ Next
 ====
 - Expand values from checkboxes too.
 - Added XLSX Export.
+- Introduced special suffix `__e_x_p_a_n_d` for attributes which can be used to
+  access the expanded value of the attribute as alternative to the call of
+  get_value. This is needed because it is not always possible to call the
+  get_value method. Example: getattr(obj, 'foo__e_x_p_a_n_d') will return the
+  expanded value of the `foo` attribute.
 
 1.13
 ====
