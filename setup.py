@@ -59,7 +59,6 @@ setup(name='ringo',
       tests_require=tests_requires,
       extras_require={
           "tests": tests_requires,
-          "converter": ["py3o.template", "py3o.renderers.pyuno"],
           "develop": ["Sphinx", "pyramid_debugtoolbar"]
       },
       entry_points="""\

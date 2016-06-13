@@ -7,6 +7,9 @@ Next
   get_value. This is needed because it is not always possible to call the
   get_value method. Example: getattr(obj, 'foo__e_x_p_a_n_d') will return the
   expanded value of the `foo` attribute.
+- Removed ODF-Converter from Ringo core. It is now part of the
+  ringo_printtemplate extensions as this is the only place where it is
+  actually used.
 
 1.13
 ====
