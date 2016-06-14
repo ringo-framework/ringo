@@ -136,8 +136,9 @@ class TestDelete:
         values = {"confirmed": 1}
         app.post("/users/delete/%s" % id, params=values, status=302)
 
-    @pytest.mark.xfail
     def test_delete_POST_admin_confirm_yes(self, app):
+        """Admin user can not delete himself. This triggers a circular
+        dependecy which is handled with the fix of #5"""
         login(app, "admin", "secret")
         transaction_begin(app)
         values = {"confirmed": 1}
