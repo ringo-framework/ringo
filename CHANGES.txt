@@ -10,6 +10,7 @@ Next
 - Removed ODF-Converter from Ringo core. It is now part of the
   ringo_printtemplate extensions as this is the only place where it is
   actually used.
+- #11 Check uniqueness of name when on creating and update of roles.
 
 1.13
 ====
