@@ -11,6 +11,8 @@ Next
   ringo_printtemplate extensions as this is the only place where it is
   actually used.
 - #11 Check uniqueness of name when on creating and update of roles.
+- #14 Make name field of modules readonly. Field is internal and not meant to
+  be editable.
 
 1.13
 ====
