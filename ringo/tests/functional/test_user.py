@@ -44,6 +44,10 @@ class TestCreate:
         login(app, "admin", "secret")
         transaction_begin(app)
         create_user(app, "test")
+        udata = search_data(app, "users", "login", "test")
+        gdata = search_data(app, "usergroups", "name", "test")
+        # Check that the default_gid is set to the users usergroup
+        assert gdata.get("id") == udata.get("default_gid") 
         transaction_rollback(app)
 
     def test_POST_password_tooshort(self, app):
