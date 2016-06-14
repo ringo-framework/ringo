@@ -10,6 +10,7 @@
 - Removed ODF-Converter from Ringo core. It is now part of the
   ringo_printtemplate extensions as this is the only place where it is
   actually used.
+- #5 show info dialog on circualr dependency error on deletion
 - #11 Check uniqueness of name when on creating and update of roles.
 - #14 Make name field of modules readonly. Field is internal and not meant to
   be editable.

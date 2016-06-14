@@ -55,7 +55,7 @@ def _handle_delete_request(request, items, callback):
         invalidate_cache()
         try:
             request.db.flush()
-        except sa.exc.IntegrityError as e:
+        except (sa.exc.CircularDependencyError, sa.exc.IntegrityError) as e:
             mapping["error"] = e.message.decode("utf-8")
             title = _("Can not delete ${item_type} items.",
                       mapping=mapping)

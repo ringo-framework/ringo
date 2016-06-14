@@ -77,11 +77,19 @@ class TestDelete:
         app.post("/usergroups/delete/2", params=values, status=302)
         transaction_rollback(app)
 
-    @pytest.mark.xfail
     def test_delete_POST_admin_confirm_yes(self, app):
-        # FIXME: https://github.com/ringo-framework/ringo/issues/5 (ti) <2016-01-18 16:46> 
+        """admin user group can not be deleted see
+        https://github.com/ringo-framework/ringo/issues/5 for more
+        details."""
         login(app, "admin", "secret")
         transaction_begin(app)
         values = {"confirmed": 1}
-        app.post("/usergroups/delete/1", params=values, status=302)
+        app.post("/usergroups/delete/1", params=values, status=200)
+        transaction_rollback(app)
+
+    def test_delete_POST_usergroup_confirm_yes(self, app):
+        login(app, "admin", "secret")
+        transaction_begin(app)
+        values = {"confirmed": 1}
+        app.post("/usergroups/delete/2", params=values, status=302)
         transaction_rollback(app)
