@@ -29,6 +29,7 @@ from ringo.lib.sql.cache import invalidate_cache
 
 User = import_model('ringo.model.user.User')
 Usergroup = import_model('ringo.model.user.Usergroup')
+Role = import_model('ringo.model.user.Role')
 
 log = logging.getLogger(__name__)
 
@@ -377,6 +378,69 @@ def removeaccount(request):
              renderer='/users/accountremoved.mako')
 def accountremoved(request):
     return {}
+
+def role_name_create_validator(field, data, db):
+    """Validator to ensure username uniqueness when creating users"""
+    return db.query(Role).filter(Role.name== data[field]).count() == 0
+
+
+def role_name_update_validator(field, data, params):
+    """Validator to ensure username uniqueness when updating users"""
+    db = params['db']
+
+    # Only consider names for the other users
+    return db.query(Role).filter(Role.name == data[field],
+                                 ~(Role.id == params['pk'])).count() == 0
+
+@view_config(route_name=get_action_routename(Role, 'create'),
+             renderer='/default/create.mako',
+             permission='create')
+def role_create_(request, callbacks=None):
+    """View to create new roles.
+
+    :request: Current request
+    :callback: Optional paramter for callback(s)
+    """
+
+    _ = request.translate
+    uniqueness_validator = Validator('name',
+                                     _('This name is already in use, '
+                                       'please use something unique.'),
+                                     role_name_create_validator,
+                                     request.db)
+    return create(request, callbacks,
+                  validators=[uniqueness_validator])
+
+
+@view_config(route_name=get_action_routename(Role, 'update'),
+             renderer='/default/update.mako',
+             permission='update')
+def role_update_(request, callback=None, renderers=None,
+           validators=None, values=None):
+    role = get_item_from_request(request)
+    # Store the name of the role in the request to make it
+    # available in the callback
+    request._oldname = role.name
+
+    _ = request.translate
+    uniqueness_validator = Validator('name',
+                                     _('This name is already in use, '
+                                       'please use something unique.'),
+                                     role_name_update_validator,
+                                     {'pk': role.id, 'db': request.db})
+    if validators is None:
+        validators = []
+    validators.append(uniqueness_validator)
+
+    callbacks = []
+    if callback:
+        if isinstance(callback, list):
+            callbacks.extend(callback)
+        else:
+            callbacks.append(callback)
+
+    return update(request, values=values,
+                  validators=validators, callback=callbacks)
 
 
 ###########################################################################
