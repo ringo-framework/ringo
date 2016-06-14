@@ -73,7 +73,6 @@ class TestUpdate:
         app.post("/roles/update/1", params=values, status=200)
         transaction_rollback(app)
 
-    @pytest.mark.xfail
     def test_remove_permission(self, app):
         login(app, "admin", "secret")
         transaction_begin(app)

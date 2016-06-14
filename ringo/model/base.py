@@ -372,7 +372,29 @@ class BaseItem(object):
                 continue
             if hasattr(self, key):
                 log.debug("Setting value '%s' in %s" % (value, key))
-                setattr(self, key, value)
+                if isinstance(value, list):
+                    # Special handling for relations in NM relations.
+                    # See ticket #19 in Ringo issue tracker for more
+                    # details. Simply exchaning the relations in this
+                    # case seems not to work. I case of the error in
+                    # triggering the deleting of items in the
+                    # nm-relation from both sides. In this case the
+                    # second deletion will fail.
+                    #
+                    # Regarding to
+                    # http://docs.sqlalchemy.org/en/latest/orm/basic_relationships.html#deleting-rows-from-the-many-to-many-table
+                    # relations should be removed by using remove(item).
+                    # Howver poping the items before adding the new
+                    # items seems to work too. I excpet that poping the
+                    # items will somehow tweak SQLAlchemy in the way
+                    # that it handles deleting items correct now.
+                    listvalues = getattr(self, key)
+                    while listvalues:
+                        listvalues.pop(0)
+                    for nvalue in value:
+                        listvalues.append(nvalue)
+                else:
+                    setattr(self, key, value)
             else:
                 log.warning('Not saving "%s". Attribute not found' % key)
 
