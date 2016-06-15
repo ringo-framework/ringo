@@ -29,7 +29,7 @@ requires = [
     'python-Levenshtein',
     'webhelpers',
     'psycopg2',
-    'XlsxWriter'
+    'xlsxwriter'
 ]
 
 tests_requires = [
