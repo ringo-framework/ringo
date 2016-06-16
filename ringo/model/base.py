@@ -372,7 +372,8 @@ class BaseItem(object):
                 continue
             if hasattr(self, key):
                 log.debug("Setting value '%s' in %s" % (value, key))
-                if isinstance(value, list):
+                oldvalue = getattr(self, key)
+                if isinstance(value, list) and isinstance(oldvalue, list):
                     # Special handling for relations in NM relations.
                     # See ticket #19 in Ringo issue tracker for more
                     # details. Simply exchaning the relations in this
@@ -388,11 +389,10 @@ class BaseItem(object):
                     # items seems to work too. I excpet that poping the
                     # items will somehow tweak SQLAlchemy in the way
                     # that it handles deleting items correct now.
-                    listvalues = getattr(self, key)
-                    while listvalues:
-                        listvalues.pop(0)
+                    while oldvalue:
+                        oldvalue.pop(0)
                     for nvalue in value:
-                        listvalues.append(nvalue)
+                        oldvalue.append(nvalue)
                 else:
                     setattr(self, key, value)
             else:
