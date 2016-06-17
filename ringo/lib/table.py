@@ -194,6 +194,10 @@ class TableConfig:
         settings = self.get_settings()
         return settings.get("auto-responsive", True)
 
+    def is_bundled(self):
+        settings = self.get_settings()
+        return settings.get("bundled", True)
+
     def is_sortable(self):
         settings = self.get_settings()
         return settings.get("sortable", True)
