@@ -52,7 +52,11 @@ $( document ).ready(function() {
     ## Render sorting settings
     % if tableconfig.is_sortable():
       "bSort": true,
-      "order": [[${tableconfig.get_column_index(tableconfig.get_default_sort_column())+1}, "${tableconfig.get_default_sort_order()}"]],
+      % if tableconfig.is_bundled():
+        "order": [[${tableconfig.get_column_index(tableconfig.get_default_sort_column())+1}, "${tableconfig.get_default_sort_order()}"]],
+      % else:
+        "order": [[${tableconfig.get_column_index(tableconfig.get_default_sort_column())}, "${tableconfig.get_default_sort_order()}"]],
+      % endif
     % else:
       "bSort": false,
     % endif
