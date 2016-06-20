@@ -62,6 +62,10 @@ def create(request, callback=None, renderers=None, validators=None):
     rvalues = get_return_value(request)
     values = {'_roles': [str(r.name) for r in request.user.roles]}
     values.update(params.get('values', {}))
+    form_values = request.session.get("form_values") or {}
+    values.update(form_values)
+    request.session["form_values"] = None
+    request.session.save()
     rvalues['form'] = render_item_form(request, form, values, False)
     return rvalues
 
