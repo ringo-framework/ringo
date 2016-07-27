@@ -122,6 +122,21 @@ def handle_callback(request, callback, item=None):
     return item
 
 
+def get_relation_item(request):
+    clazz = request.context.__model__
+    addrelation = request.session.get('%s.addrelation' % clazz)
+    if not addrelation:
+        addrelation = request.params.get("addrelation")
+        if not addrelation:
+            return None
+    rrel, rclazz, rid = addrelation.split(':')
+    parent = import_model(rclazz)
+    factory = parent.get_item_factory()
+    item = factory.load(rid, db=request.db)
+    return item, rrel
+
+
+
 def handle_add_relation(request, item):
     """Handle linking of the new item to antoher relation. The relation
     was provided as GET parameter in the current request and is now
@@ -131,19 +146,18 @@ def handle_add_relation(request, item):
     :item: new item with should be linked
 
     """
-    clazz = request.context.__model__
-    addrelation = request.session.get('%s.addrelation' % clazz)
-    if not addrelation:
+    relation_tuple = get_relation_item(request)
+    if relation_tuple:
+        rrel = relation_tuple[1]
+        pitem = relation_tuple[0]
+        clazz = request.context.__model__
+        log.debug('Linking %s to %s in %s' % (item, pitem, rrel))
+        tmpattr = getattr(pitem, rrel)
+        tmpattr.append(item)
+        # Delete value from session after the relation has been added
+        del request.session['%s.addrelation' % clazz]
+    else:
         return item
-    rrel, rclazz, rid = addrelation.split(':')
-    parent = import_model(rclazz)
-    pfactory = parent.get_item_factory()
-    pitem = pfactory.load(rid, db=request.db)
-    log.debug('Linking %s to %s in %s' % (item, pitem, rrel))
-    tmpattr = getattr(pitem, rrel)
-    tmpattr.append(item)
-    # Delete value from session after the relation has been added
-    del request.session['%s.addrelation' % clazz]
     request.session.save()
 
 
