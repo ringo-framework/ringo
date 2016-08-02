@@ -1,3 +1,8 @@
+1.14.1
+======
+- Fixed issue21 (https://github.com/ringo-framework/ringo/issues/21). Enabled
+  sorting config in Listingfieldrenderer.
+
 1.14
 ====
 - Expand values from checkboxes too.
