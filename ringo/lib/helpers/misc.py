@@ -26,6 +26,10 @@ def serialize(value):
         return sorted([v.id for v in value])
     if hasattr(value, 'id'):
         return [value.id]
+    # Even if Ringo does not have a bytearray type yet the serialize
+    # method supports it to convert the given value into unicode
+    if isinstance(value, bytearray):
+        return value.decode("utf-8")
     return unicode(value)
 
 def safestring(unsafe):
