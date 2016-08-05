@@ -6,9 +6,8 @@
 Welcome to Ringo's documentation!
 =================================
 
-Contents:
-
 .. toctree::
+   start
    :maxdepth: 2
 
 
