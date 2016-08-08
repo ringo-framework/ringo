@@ -175,20 +175,169 @@ Tutorials
 ***************
 Add a new modul
 ***************
-Please make sure you understand the concept of :ref:`modules` before adding a new module. In some cases it might be sufficient to only :ref:`add_view`
+Please make sure you understand the concept of :ref:`modules` before adding a
+new module. In some cases it might be sufficient to only :ref:`add_view`.
+
+First you create the initial files and a migration to "install" the module in
+your application using the :ref:`climod` command. Please use the singular form
+of the name of the module::
+
+        ringo-admin modul add <modulname in singular form>
+
+This will generate a bunch of files:
+
+ * A model file
+ * A XML configuration for the form configuration
+ * A JSON configuration for the overview/listing configuration
+ * A migration file to install the modul.
+
+Upgrade the database to apply the generated migration and to install the
+initial data for the module by using the :ref:`clidb` command::
+
+        ringo-admin db upgrade
+
+The module is now installed and ready for use. Restart your application. The
+module should now be listed in the main menu. You can already call all CRUD
+actions of the module, but for now no data is saved as the model of the module
+is basically empty. So its time to add some fields to your new module.
+
+
+******************
+Extending a module
+******************
+
+Add new fields
+==============
+Adding new fields to the module means finally means adding new fields to the
+model of the module and finally to do a migration.
+
+There are two ways to to this:
+
+ 1. You do all the work on your own and add the fields directly in the model file of your module. If you want to choose this way I recommend reading the `SQLAlchemy documentation on Decalaritve Mapping <http://docs.sqlalchemy.org/en/latest/orm/mapping_styles.html#declarative-mapping>`_
+
+ 2. You focus on developing the form of the module and let Ringo generate the relevant part of the model your you. This way you only need to copy and paste the generated model code into your model. If you choose this way than you should become familiar with the :ref:`formconfig` (Which is a crucial part of Ringo development anyway).
+
+Whatever way you choose it finally ends in the generating a migration file
+and upgrading the database using the :ref:`clidb` command::
+
+        ringo-admin db revision
+        ringo-admin db upgrade
+
+Build relations between modules
+===============================
+Adding a relation between two modules is usually done in two steps:
+
+ 1. Add fields to the model for the foreign key and add an ORM relation.
+ 2. Migrate the database.
+
+Here is a short example from `ringo/model/user.py`::
+
+        class User(BaseItem, Owned, Base):
+                ...
+                sid = sa.Column(sa.Integer, sa.ForeignKey('user_settings.id'))
+                # user_settings is the name of the table in the database for
+                # the settings. This field refers to the id column of that
+                # table.
+                ...
+                settings = sa.orm.relationship("UserSetting", uselist=False,
+                                               cascade="all,delete")
+                # UserSetting is the name of the Python class to which the
+                relation is set.
+
+If you want to use this relation later in forms than you must refer to the
+`settings` attribute of the User and **not** to foreign key.
+
+There is nothing specific in Ringo on adding a foreign key and a relation to
+the model so all relevant information can be found in the `ORM
+documentation <http://docs.sqlalchemy.org/en/latest/orm/basic_relationships.html>`_ of SQLAlchemy.
+
+.. tip::
+        If you have a bidirectional relation between to modules we recommend
+        to set up the ORM relation in both modules instead of using the
+        *backlink* feature of SQLAlchemy. Writing to relations tends to be
+        better readable esspecially when it comes to cascading rules.
+
+.. _add_mixin:
+
+Extend modul with a mixin
+=========================
+Please make sure you understand the concept of :ref:`mixins` before extending the module. In some cases it might be sufficient to only :ref:`add_view` or :ref:`add_action`.
+
+
+.. index::
+   single: CRUD
+
+.. _add_action:
+
+Add a new action to a modul
+===========================
+Initially each module has only the default :ref:`crud` actions available.
+However the module can be extended by adding a new specific action.
+
+
+.. _formconfig:
 
 ******************
 Form configuration
 ******************
+Form configuration is done in XML files. Configurations are stored in
+`<yourproject>/views/forms/` folder.
+
+Ringo uses the `formbar <http://formbar.readthedocs.io/en/latest/>`_ library
+for form handling.it gives you plenty of nice features like easy design,
+validation, conditional fields and rule expressions to only name some of them.
+
+.. tip::
+        You can easily add fields to the form, change the layout and see the
+        results immediately when you reload the page. This is a great help
+        when you design forms. The only restriction to this is storing the
+        data and doing 
+
 Using formbar
 =============
+Please have a look into the `formbar documentation <http://formbar.readthedocs.io/en/latest/>`_ to learn how to configure forms using formbar and check the forms in `ringo/views/forms` for some examples.
+
 Generate model fields
 =====================
+After you have added new fields to the form you need to add those fields to
+the model too. Ringo provides a small helper command for this which will
+generate the relevant fields from the given form for your model::
+
+        ringo-admin modul fields <name of modul in plural form>
+
+This will print some code to *stdout* which can be pasted into the model of
+the module.
+
+Don't forget to generate migration and upgrade the database::
+
+        ringo-admin db revision
+        ringo-admin db upgrade
+
 Ringo specific renderer
 =======================
+Ringo comes with some specific renderers which extends the default renderers
+of formbar. They usually are aware of accessing to Ringo specific attributes
+like permissions checks e.g.
+
+Checkbox
+--------
+.. autoclass:: ringo.lib.renderer.form.CheckboxFieldRenderer
+
+Dropdown
+--------
+.. autoclass:: ringo.lib.renderer.form.DropdownFieldRenderer
+
+Links
+-----
+.. autoclass:: ringo.lib.renderer.form.LinkFieldRenderer
+
 Listings
 --------
+.. autoclass:: ringo.lib.renderer.form.ListingFieldRenderer
 
+State
+-----
+.. autoclass:: ringo.lib.renderer.form.StateFieldRenderer
 
 
 
@@ -201,27 +350,6 @@ Sorting
 =======
 Filters
 =======
-
-
-.. _add_mixin:
-
-*************************
-Extend modul with a mixin
-*************************
-Please make sure you understand the concept of :ref:`mixins` before extending the module. In some cases it might be sufficient to only :ref:`add_view` or :ref:`add_action`.
-
-
-.. index::
-   single: CRUD
-
-.. _add_action:
-
-***************************
-Add a new action to a modul
-***************************
-Initially each module has only the default :ref:`crud` actions available.
-However the module can be extended by adding a new specific action.
-
 
 .. _add_view:
 
@@ -333,6 +461,9 @@ ringo-admin user
 ********************
 ringo-admin fixtures
 ********************
+
+.. _climod:
+
 *****************
 ringo-admin modul
 *****************
