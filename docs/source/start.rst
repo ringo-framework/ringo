@@ -274,6 +274,27 @@ Add a new action to a modul
 Initially each module has only the default :ref:`crud` actions available.
 However the module can be extended by adding a new specific action.
 
+Setup breadcrumbs
+=================
+Breadcrumbs are a great way to help users to navigate through a nested set of
+related modules and alway show them where they are.
+
+Ringo can show breadcrumbs. They are optional. If you want them you need to
+configure a `Sitemap`. The sitemap is build in the *__init__.py* file of your
+application::
+
+        from ringo.lib.sitetree import site_tree_branches
+        sitetree = { your sitetree configureation goes here }
+        site_tree_branches.append(sitetree)
+
+For a detailed description on how to build a see the documentation of the
+sitetree module.
+
+Sitetree module
+---------------
+.. automodule:: ringo.lib.sitetree
+
+
 
 .. _formconfig:
 
@@ -375,6 +396,7 @@ Custom CSS
 
 Custom Javascript
 =================
+
 
 ##############
 Under the hood
