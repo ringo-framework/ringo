@@ -295,7 +295,6 @@ Sitetree module
 .. automodule:: ringo.lib.sitetree
 
 
-
 .. _formconfig:
 
 ******************
@@ -359,6 +358,74 @@ Listings
 State
 -----
 .. autoclass:: ringo.lib.renderer.form.StateFieldRenderer
+
+
+Writing a new renderer
+======================
+Ringo let you easily define your own custom renderer. Custom renderers are
+used to display the data in a free defined form. You can define new input
+elements or present you data in diagram e.g.
+
+Writing an using custom renderers is done in two steps:
+
+ 1. You write the renderer and templates
+ 2. You bind in the new renderer in the application
+
+Renderer part
+-------------
+First create a new renderer by ineriting from an existing one. Formbar and
+Ringo already provide some renderers which can be used. Renderers are usally
+located in `lib/renderers.py` or `lib/renderers/form.py`.
+
+Here you see the code for a simple renderer::
+
+        import os
+        import pkg_resources
+        from mako.lookup import TemplateLookup
+        from formbar.renderer import FieldRenderer
+        from ringo.lib.renderer.form import renderers
+
+        # We need to configure the template lookup system and "register" a new
+        # location of the templates. Mako will search in this locations for
+        # templates to render.
+        base_dir = pkg_resources.get_distribution("namofapplication").location
+        template_dir = os.path.join(base_dir, 'nameofapplication', 'templates')
+        template_lookup = TemplateLookup(directories=[template_dir],
+                                         default_filters=['h'])
+
+        # Now create your renderer. And define the template which is used on
+        # rendering.
+        class MyFieldRenderer(FieldRenderer):
+
+            def __init__(self, field, translate):
+                FieldRenderer.__init__(self, field, translate)
+                self.template = template_lookup.get_template("path/to/field/template.mako")
+
+
+        # Finally register the template in ringo to make the renderer known in
+        # formbar.
+        renderers['myrenderer'] = Myfieldrenderer
+
+A template looks like this::
+        
+        <div id="${field.id}">
+                I'm the body of your field with name ${field.name}. In
+                ${field._form} which is there to render fields of
+                ${field._form._item} with renderer ${field.renderer}. Add
+                content here.
+        </div>
+
+
+View part
+---------
+Using the new renderer is about configuring the renderer for an entity::
+
+        <entity ...>
+                <renderer type="myrenderer"/>
+        </entity>
+
+The type of the renderer is the name of the renderer under which it has been
+registered in ringo.
 
 
 
