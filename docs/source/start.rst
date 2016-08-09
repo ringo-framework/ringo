@@ -375,7 +375,7 @@ Renderer part
 -------------
 First create a new renderer by ineriting from an existing one. Formbar and
 Ringo already provide some renderers which can be used. Renderers are usally
-located in `lib/renderers.py` or `lib/renderers/form.py`.
+located in `lib/renderer.py` or `lib/renderer/form.py`.
 
 Here you see the code for a simple renderer::
 
