@@ -534,9 +534,34 @@ Available extensions
 ******
 Mixins
 ******
+.. automodule:: ringo.model.mixins
 
 Available mixins
 ================
+
+.. _mixin_meta:
+
+Meta
+----
+.. autoclass:: ringo.model.mixins.Meta
+
+.. _mixin_owned:
+
+Owned
+-----
+.. autoclass:: ringo.model.mixins.Owned
+
+.. _mixin_nested:
+
+Nested
+------
+.. autoclass:: ringo.model.mixins.Nested
+
+.. _mixin_logged:
+
+StateMixin
+----------
+.. autoclass:: ringo.model.mixins.StateMixin
 
 ********
 Security
