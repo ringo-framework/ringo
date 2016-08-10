@@ -734,6 +734,11 @@ the password reset.
 .. [#] The ownership feature can be added by using the :ref:`mixin_owned`
    mixin.
 
+********************
+States and Workflows
+********************
+.. automodule:: ringo.model.statemachine
+
 #############
 Configuration
 #############
