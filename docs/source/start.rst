@@ -489,38 +489,49 @@ Projectlayout
 *******
 Modules
 *******
+The term "Module" is central and often used in ringo. Therefore it is important
+to understand what a module is.
+
+In short: Ringo's functionality is the sum of all modules
+functionality. Ringo or a ringo based application can be extended by adding
+new modules. If there is any data in the application which needs to be created
+by the user and stored permanently in the database it is very likely done
+within a modul.
+
+**Example:** Think of an application to organise your orders in a shopping
+application e.g. So you will have to store customers, articles, orders, prices,
+addresses etc. Each of those will be its own modul.
+
+.. image:: images/modules.png
+   :alt: Schema of a module.
+
+A module provides the infrastructure to work with a certain type of data in a
+web application. Where certain type of data means users, files, movies etc.
+rather than integers or datevalues. Lets call them items from now on.
+
+Basically a module consists of
+
+ * a model for the items you want to work with
+ * views to handle incoming request and generating the proper responses for
+ * templates which define how the pages in the application will look like. 
+ * configuration files to define how the forms and overview tables will look like.
 
 .. _crud:
 
 CRUD actions
 ============
+Modules provide actions which can be used to manipulate the item of a module.
+Ringo provides some basic CRUD [#]_ actions which are available on default for every module.
 
-List
-----
-Create
-------
-Read
-----
-Update
-------
-Delete
-------
-Import
-------
-Export
-------
+* Create: Create new items.
+* Read: Show the item in detail in readonly mode.
+* Update: Edit items of the module.
+* Delete: Deleting items.
+* List: Listing all items of the module. This is slightly different to the action to read a single item.
+* Import (CSV, JSON)
+* Export (CSV, JSON)
 
-
-
-
-
-
-
-
-
-
-
-
+.. [#] CRUD means: Create, Read, Update, Delete
 
 **********
 Extensions
@@ -570,6 +581,7 @@ Security is an important aspect of ringo. This chapter will describe the
 permission system and explains how ringo handle common security threats.
 
 .. _permissionsystem:
+
 Permission System
 =================
 The permission system addresses two basic questions:
