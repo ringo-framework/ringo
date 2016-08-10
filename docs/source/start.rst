@@ -445,6 +445,19 @@ Filters
 Add a new view
 **************
 
+********************
+Custom authorisation
+********************
+If you need to change the way Ringo builds the ACL on default you can change this behavior by 
+overwriting the ``_get_permissions`` class method of the BaseItem in your model.
+
+.. todo::
+        Give an example
+
+.. todo::
+        Write about inheritance of authorisation
+
+
 ***********************
 All about customization
 ***********************
@@ -610,18 +623,6 @@ for more information how things work in general under the hood.
 
 See :ref:`api-security` for documentation on helper functions used to build
 the ACL.
-
-Custom authorisation
-^^^^^^^^^^^^^^^^^^^^
-If you need to change the way Ringo builds the ACL on default you can change this behavior by 
-overwriting the ``_get_permissions`` class method of the BaseItem in your model.
-
-.. todo::
-        Give an example
-
-Authorisation inheritance
-^^^^^^^^^^^^^^^^^^^^^^^^^
-Write me
 
 Security measurements
 =====================
