@@ -623,12 +623,120 @@ overwriting the ``_get_permissions`` class method of the BaseItem in your model.
 ***********************
 All about customization
 ***********************
-How Ringo overwrites the defaults
-=================================
+The behaviour of the application can be modified in different ways. You can
+customize the **layout** of forms, overviews and or the whole page layout and
+you can customize the **logic** of your application.
 
-Change default templates
+There are basically two ways to customize your application:
+
+ 1. Overwriting defaults to customize existing behavior.
+ 2. Extending existing application logic
+
+
+.. rubric:: Defaults in Ringo
+
+If you have created a new application you may wonder that there are so less
+files generated. There are no views generated, no templates and you can not
+find any static files.
+
+There reason for that is that ringo is using its defaults for the new
+application: 
+
+ 1. Views for all modules including the basic CRUD actions has been configured
+     on application start. They all use the base default actions defined in
+     Ringo.
+ 2. Templates, form configurations, overview configuration and translations
+     are searched in different locations. Actually on each request ringo tries
+     to load a more specific version of a template but falls back to the ringo
+     default as long as it can not find a
+
+So if you want to customize your application you can overwrite the default.
+
+Overwriting views
+=================
+Application logic is defined in the view function. The view for specific
+actions can be overwritten.  In the following example we will overwrite the
+default 'index' method of the 'home' view, but this also works for the CRUD
+actions of a module. Define your custom method in your view file::
+
+        @view_config(route_name='home', renderer='/index.mako')
+        def index_view(request):
+            # Write your own logic here.
+            handle_history(request)
+            values = {}
+            ...
+            return values
+
+Note, that we reconfigure the view by calling 'view_config' with an already
+configured route_name. This will overwrite the configured view and the
+application will use your custom view now for the route named 'home'.
+
+If you only want to extend the functionallity from the default you can do this
+too. No need to rewrite the default logic again in your custom view::
+
+        from ringo.views.home import index_view as ringo_index_view
+
+        @view_config(route_name='home', renderer='/index.mako')
+        def index_view(request):
+            # First call the default view.
+            values = ringo_index_view(request)
+            # Now extend the logic.
+            ...
+            # Finally return the values.
+            return values
+
+.. rubric:: Using callbacks in the views
+
+Callbacks can be used to implement custom application logic after the logic of
+the default view has been processed. This is usefull e.g if you want to send
+notification mails, modifiy values after a new item has been created or clean
+up things after something has been deleted.
+
+A callback has the following structure::
+
+        def foo_callback(request, item):
+            """
+            :request: Current request
+            :item: Item which has been created, edited, deleted...
+            :returns item
+            """
+            # Do something with the item and finally return the item.
+            return item
+
+The request and the item should give you all the context you should need to to the
+desired modifications.
+
+The callback must be supplied in the call of the main view function like
+this::
+
+        @view_config(route_name=Foo.get_action_routename('create'),
+                renderer='/default/create.mako',
+                permission='create')
+        def create(request):
+                return create_(Foo, request, callback=foo_callback)
+
+.. versionadded:: 1.2.2
+        The callback can now optionally be a list of callback functions. This
+        can be used to stack multiple callbacks.
+
+Overwriting static files 
 ========================
-Typical default templates are the `about`, `index` and `contact` templates.
+Static files are templates, form and overview configurations.
+To overwrite the default simply copy the file from ringo into your application
+with the same name at the same location. Now you can do the modifications in
+the copied file. 
+
+.. hint::
+        In case you want to overwrite the forms checkout formbars inheritance
+        and include feature if you only want to do small changes.
+
+After that restart ringo so that ringo knows about new files
+it should consider to load. On the next request you application should load
+the overwritten version of the file.
+
+
+Overwriting translations 
+========================
 
 Add custom logo
 ===============
