@@ -5,6 +5,12 @@
 
 Welcome to Ringo's documentation!
 =================================
+Ringo is a small Python based high level web application framework build with
+Pyramid. Ringo tries to make it very easy to build form based web application
+to manage your data. Because ringo provides many basic features which are
+often used in modern webapplications it greatly speeds up development. But it
+is also flexible and offers many ways to configure the layout, behaviour and
+workflow of your application.
 
 .. toctree::
    start
