@@ -110,14 +110,14 @@ Quickstart
 *********************************
 Bootstrap Development Environment
 *********************************
-
-Do::
+To start with an empty development environemt do the follwing::
 
         apt-get install git
         curl -O https://raw.githubusercontent.com/ringo-framework/ringo/master/bootstrap-dev-env.sh
         sh bootstrap-dev-env.sh ringo
 
-Structure::
+This command will generate a folder which includes some subfolder for the
+virtualenv and needed libraries::
 
         ringo
         |-- env
@@ -128,7 +128,14 @@ Structure::
             |-- formbar
             `-- ringo
 
+The general layout of an development environment looks like this::
 
+ * appname: Root folder of the environment. Usually named with the name of the
+   application.
+ * lib: Folder for libraries. To be able to have differen versions of the core
+   libraries ringo and formbar I recommend to install the development version
+   for each application.
+ * env: The virtual python environment.
 
 *********************
 A minimal Application
@@ -476,6 +483,69 @@ Custom CSS
 
 Custom Javascript
 =================
+
+***********************************
+Inheritance from other applications
+***********************************
+Lets say you have a appliation called ''Foo'' which should be used as a
+platform in the same way as ringo was a platform for the ''Foo'' application.
+Now you want to create an application ''Bar'' based on ''Foo''.
+
+The procedure to this is almost the same despite three things.
+
+1. After creating the application you need to modify the `__init__.py` file of
+your application to include the configuration of the ''Foo'' application::
+
+        # Include basic ringo configuration.
+        config.include('ringo')
+        config.include('foo')
+        config.include('bar')
+        for extension in extensions:
+            config.include(extension)
+        ...
+        config.scan('foo')
+        config.scan()
+        
+If you also have overwritten views in your ''Foo'' application you must also 
+scan the foo package. Otherwide you application is not aware of these overwritten 
+methods.
+
+2. The search path for the mako templates need to be extended as we want the
+templates of the ''Foo'' application in our application too::
+
+        # mako template settings
+        mako.directories =
+                bar:templates
+                foo:templates
+                ringo:templates
+
+3. In order to have a working migration setup you will need to import the
+model of the base appliction to the model of the inherited application::
+
+       import bar.model
+
+This will ensure that all the model will be available to alembic. Otherwise
+many tables would be scheduled for a drop.
+
+4. Set the configuration variable `app.base` to ''foo''.
+See :ref:`config_app_base` for more details.
+
+5. The initialisation of the database is a little bit different as we want to
+initialize the database with the migration scripts and fixtures of ''Foo''::
+
+        bar-admin db init --base foo
+        bar-admin fixtures load --app foo
+
+While the migration scripts are copied from foo to bar when initialising the
+database for the first time, the fixtures are not! The bar application only
+includes the fixtures from the base ringo application. If you want to use the
+fixtures from foo on default, then you need to copy the files yourself::
+
+        rm </path/to/bar/>/bar/fixtures/*
+        cp -r <path/to/foo/>/foo/fixtures/* </path/to/bar/>/bar/fixtures
+
+
+Voilà! That is it.
 
 
 ##############
