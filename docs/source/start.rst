@@ -601,28 +601,9 @@ Sorting
 Filters
 =======
 
-.. _add_view:
-
-**************
-Add a new view
-**************
-
 ********************
-Custom authorisation
+Overwriting defaults
 ********************
-If you need to change the way Ringo builds the ACL on default you can change this behavior by 
-overwriting the ``_get_permissions`` class method of the BaseItem in your model.
-
-.. todo::
-        Give an example
-
-.. todo::
-        Write about inheritance of authorisation
-
-
-***********************
-All about customization
-***********************
 The behaviour of the application can be modified in different ways. You can
 customize the **layout** of forms, overviews and or the whole page layout and
 you can customize the **logic** of your application.
@@ -746,6 +727,26 @@ Custom CSS
 
 Custom Javascript
 =================
+
+
+.. _add_view:
+
+************
+Adding views
+************
+
+********************
+Custom authorisation
+********************
+If you need to change the way Ringo builds the ACL on default you can change this behavior by 
+overwriting the ``_get_permissions`` class method of the BaseItem in your model.
+
+.. todo::
+        Give an example
+
+.. todo::
+        Write about inheritance of authorisation
+
 
 ***********************************
 Inheritance from other applications
