@@ -514,9 +514,6 @@ Using this scaffold will create an application which uses ringo functionality
 by simply importing it at the right places and take care the basic
 configuration is done in the proper way.
 
-*************
-Projectlayout
-*************
 .. _modules:
 
 *******
