@@ -12,6 +12,8 @@ often used in modern webapplications it greatly speeds up development. But it
 is also flexible and offers many ways to configure the layout, behaviour and
 workflow of your application.
 
+The parts of ringo including its core, libraries and extensions are available on `Github <https://github.com/ringo-framework>`_.
+
 .. toctree::
    start
    :maxdepth: 2
