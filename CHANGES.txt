@@ -1,3 +1,7 @@
+Next
+====
+- Rewrite of the documentation.
+
 1.14
 ====
 - Expand values from checkboxes too.
