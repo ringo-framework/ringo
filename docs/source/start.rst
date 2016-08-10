@@ -636,9 +636,13 @@ Ringo provides some basic CRUD [#]_ actions which are available on default for e
 **********
 Extensions
 **********
+.. automodule:: ringo.lib.extension
 
 Available extensions
 ====================
+A list of available extensions can be found on `Github
+<https://github.com/ringo-framework>`_. Repositiries named `ringo_*` are
+extensions.
 
 .. _mixins:
 
