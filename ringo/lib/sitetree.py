@@ -1,8 +1,5 @@
 #!/usr/bin/env python
 # encoding: utf-8
-from ringo.lib.helpers.misc import get_open_url, get_item_modul
-
-
 """Modul to handle the sitetree structure of the application in order to
 render a breadcrumb widget.
 
@@ -61,6 +58,8 @@ application. It should have the following structure::
    a way back to where you come from. To prevent this behaviour you can
    define addtional actions which will be shown.
 """
+
+from ringo.lib.helpers.misc import get_open_url, get_item_modul
 
 site_tree_branches = []
 

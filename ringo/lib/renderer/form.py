@@ -293,6 +293,12 @@ class ListingFieldRenderer(FormbarSelectionField):
       modal popup.
     * backlink: "true" or "false". If true the user will be redirected
       back to the listing after creating a new item. Defaults to true.
+
+    Example::
+
+        <entity ...>
+            <renderer type="listing" showall="true" table="details"/>
+        </entity>
     """
 
     def __init__(self, field, translate):

@@ -1,5 +1,6 @@
-1.14.1
-======
+Next
+====
+- Rewrite of the documentation.
 - Fixed issue21 (https://github.com/ringo-framework/ringo/issues/21). Enabled
   sorting config in Listingfieldrenderer.
 
