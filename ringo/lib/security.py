@@ -681,12 +681,14 @@ class ValueChecker(object):
 
             # Now iterate over all value which need to be checked.
             for value, modifier in to_check:
-                # If the relation is a ModulItem also do no checks.
+                # If the relation is a ModulItem or is not a Baseitem at
+                # all also do no checks.
                 # Modulitem do not have any uid or gid which will allow
                 # checking permissions. Allowing links to a modul item
                 # is currently not known to be a security thread.
                 if (isinstance(value, ModulItem)
-                    or has_permission("read", value, request)):
+                    or has_permission("read", value, request)
+                    or not isinstance(value, BaseItem)):
                     continue
                 else:
                     if modifier > 0:

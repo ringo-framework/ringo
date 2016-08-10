@@ -352,7 +352,8 @@ class ListingFieldRenderer(FormbarSelectionField):
                 selected = selected.items
             elif not isinstance(selected, list):
                 selected = [selected]
-            return selected
+            selected_ids = [s.id for s in selected]
+            return [i for i in items if i.id in selected_ids]
         except AttributeError:
             # Can happen when designing forms an the model of the item
             # is not yet configured.

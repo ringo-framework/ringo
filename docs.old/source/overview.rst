@@ -53,9 +53,8 @@ Please read the :ref:`development` section to learn how to setup Ringo based
 application.
 
 .. note::
-   Ringo was developed within a Python 2.7.3 environment. Older versions will
-   not work as Ringo uses some XML features only available in Python >= 2.7.3.
-   Newer versions might work, but it is not tested.
+   Ringo was developed within a Python 2.7.x environment. Older versions will
+   not work as Ringo uses some XML features only available in Python >= 2.7.x.
 
 Contact
 =======
