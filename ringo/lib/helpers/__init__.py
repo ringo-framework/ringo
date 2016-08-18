@@ -6,7 +6,7 @@ from ringo.lib.helpers.appinfo import (
     get_app_title,
     get_path_to
 )
-
+from webhelpers.html import literal, escape, HTML
 from ringo.lib.helpers.format import (
     prettify,
     get_local_datetime,

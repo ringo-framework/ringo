@@ -12,7 +12,8 @@ from formbar.renderer import (
 import ringo.lib.helpers as helpers
 from ringo.lib.helpers import (
     get_action_routename,
-    get_item_modul
+    get_item_modul,
+    literal, escape, HTML
 )
 from ringo.model.base import BaseItem, BaseList, get_item_list
 from ringo.lib.table import get_table_config
@@ -137,9 +138,9 @@ class DropdownFieldRenderer(FormbarDropdown):
         try:
             item = getattr(self._field._form._item, self._field.name)
         except AttributeError:
-            log.warning("Missing %s attribute in %s" % (self._field.name,
-                                                        self._field._form._item))
-            return "".join(html)
+            log.warning("Missing %s attribute in %s"
+                        % (self._field.name, self._field._form._item))
+            return literal("").join(html)
 
         if not isinstance(item, list):
             items.append(item)
@@ -148,8 +149,10 @@ class DropdownFieldRenderer(FormbarDropdown):
         for item in items:
             url = get_link_url(item, self._field._form._request)
             if url:
-                html.append('<a href="%s">%s</a>' % (url, cgi.escape(unicode(item))))
-        return "".join(html)
+                html.append(HTML.tag("a", href=("%s" % url), _closed=False))
+                html.append(escape(unicode(item)))
+                html.append(HTML.tag("/a", _closed=False))
+        return literal("").join(html)
 
     def _render_label(self):
         html = []
@@ -157,8 +160,10 @@ class DropdownFieldRenderer(FormbarDropdown):
         if not self._field.is_readonly() and not self.nolink == "true":
             link = self.render_link()
             if link:
-                html.append(" [%s]" % link)
-        return "".join(html)
+                html.append(" [")
+                html.append(link)
+                html.append("]")
+        return literal("").join(html)
 
 
 class StateFieldRenderer(FormbarDropdown):
