@@ -161,7 +161,7 @@ def handle_caching(request):
     request.session.save()
 
 
-def handle_POST_request(form, request, callback, event, renderers=None):
+def handle_POST_request(form, request, callback, event="", renderers=None):
     """@todo: Docstring for handle_POST_request.
 
     :name: @todo
