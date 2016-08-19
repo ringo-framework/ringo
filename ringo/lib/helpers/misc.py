@@ -12,6 +12,12 @@ def serialize(value):
     of the given python value."""
     if value is None:
         return ""
+    if isinstance(value, unicode):
+        return value
+    if isinstance(value, int):
+        return unicode(value)
+    if isinstance(value, float):
+        return unicode(value)
     if isinstance(value, datetime):
         return value.strftime("%Y-%m-%d %H:%M:%S")
     if isinstance(value, bool):
@@ -26,6 +32,12 @@ def serialize(value):
         return sorted([v.id for v in value])
     if hasattr(value, 'id'):
         return [value.id]
+    # Even if Ringo does not have a bytearray type yet the serialize
+    # method supports it to convert the given value into unicode
+    if isinstance(value, bytearray):
+        return value.decode("utf-8")
+    log.warning("Unhandled type '%s'. "
+                "Using default and converting to unicode" % type(value))
     return unicode(value)
 
 def safestring(unsafe):

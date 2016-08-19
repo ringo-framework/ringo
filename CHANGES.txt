@@ -1,5 +1,8 @@
 Next
 ====
+- Rewrite of the documentation.
+- Fixed issue21 (https://github.com/ringo-framework/ringo/issues/21). Enabled
+  sorting config in Listingfieldrenderer.
 - Expand values from checkboxes too.
 - Added XLSX Export.
 - Introduced special suffix `__e_x_p_a_n_d` for attributes which can be used to

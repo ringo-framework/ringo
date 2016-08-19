@@ -3,7 +3,10 @@ def parse_setting(name, settings, default=None):
     if value and not isinstance(value, list):
         values = []
         for v in value.split(" "):
-            values.append("'%s'" % v)
+            if v in ['self', 'unsafe-inline', 'none', 'unsafe-eval']:
+                values.append("'%s'" % v)
+            else:
+                values.append("%s" % v)
         return values
     else:
         return value

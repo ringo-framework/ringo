@@ -88,7 +88,7 @@ def get_rendered_ownership_form(request):
     form = get_ownership_form(request)
     modul = get_item_modul(request, item)
     usergroup_modul = get_item_modul(request, Usergroup)
-    _groups = [str(g.name) for g in request.user.groups]
+    _groups = [unicode(g.name) for g in request.user.groups]
     _admin = (_has_administrational_role(modul, request.user)
               or has_role(request.user, "admin")
               or _has_administrational_role(usergroup_modul, request.user))

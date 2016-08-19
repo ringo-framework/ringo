@@ -299,6 +299,12 @@ class ListingFieldRenderer(FormbarSelectionField):
       modal popup.
     * backlink: "true" or "false". If true the user will be redirected
       back to the listing after creating a new item. Defaults to true.
+
+    Example::
+
+        <entity ...>
+            <renderer type="listing" showall="true" table="details"/>
+        </entity>
     """
 
     def __init__(self, field, translate):
@@ -352,7 +358,8 @@ class ListingFieldRenderer(FormbarSelectionField):
                 selected = selected.items
             elif not isinstance(selected, list):
                 selected = [selected]
-            return selected
+            selected_ids = [s.id for s in selected]
+            return [i for i in items if i.id in selected_ids]
         except AttributeError:
             # Can happen when designing forms an the model of the item
             # is not yet configured.
