@@ -589,6 +589,42 @@ Using the new renderer is about configuring the renderer for an entity::
 The type of the renderer is the name of the renderer under which it has been
 registered in ringo.
 
+Using forms in views
+====================
+Here is some pseudo code to get the idea. In the first step you need to get
+the form::
+
+        from ringo.views.helpers import (
+                get_item_form, 
+                render_item_form
+        )
+        from ringo.views.request import (
+                handle_POST_request,
+                handle_redirect_on_success
+        )
+
+
+        # This is currently hackish :( A form needs the class and the item.
+        # This is usally part of the request already in case of the defalt CRUD
+        # actions. If we have a custom view we need to set those attributes in
+        # the request for ourself.
+        request.context.__model__ = ItemClass 
+        request.context.item = item
+
+        form = get_item_form('nameoftheform', request)
+
+Now we need to handle POST request of the form in case we actually want to
+save data and not only render the form. We use standard Ringo functionality
+for this::
+
+        if request.POST:
+                if handle_POST_request(form, request):
+                        url = request.route_patch("nameofthisroute")
+                        return handle_redirect_on_success(request, backurl=url)
+
+        # In all other cases render the form. It's now up to you to return the
+        # rendererd form to the template.
+        rendered_form = render_item_form(request, form)
 
 
 **********************
