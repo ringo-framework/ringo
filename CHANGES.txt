@@ -1,4 +1,4 @@
-1.14
+Next
 ====
 - Expand values from checkboxes too.
 - Added XLSX Export.
@@ -18,6 +18,7 @@
   be editable.
 - #19 Fixed removing permissions (in general fixed removing items from
   nm-relations.) 
+- Added "button" layout for the Statefieldrenderer.
 
 1.13
 ====
