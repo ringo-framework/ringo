@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-05-03 15:40+0200\n"
+"POT-Creation-Date: 2016-08-19 09:31+0200\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language: de\n"
@@ -21,11 +21,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: ringo/lib/imexport.py:455
+#: ringo/lib/imexport.py:489
 msgid "UPDATE"
 msgstr "AKTUALISIERUNG"
 
-#: ringo/lib/imexport.py:458
+#: ringo/lib/imexport.py:492
 msgid "CREATE"
 msgstr "ANLEGEN"
 
@@ -685,25 +685,29 @@ msgstr "Einträge"
 msgid "Print configuration for"
 msgstr "Druckkonfiguration für"
 
+#: ringo/templates/internal/statefield.mako:8
+msgid "Please select one of the following actions to change the state:"
+msgstr "Bitte wählen Sie eine der folgenden Möglichkeiten, um den Status zu ändern:"
+
 #. Label for review_state column in overview table config
-#: ringo/templates/internal/statefield.mako:3 ringo/views/forms/forms.xml:10
+#: ringo/templates/internal/statefield.mako:14 ringo/views/forms/forms.xml:10
 #: ringo/views/tables/forms.json:5
 msgid "State"
 msgstr "Status"
 
-#: ringo/templates/internal/statefield.mako:18
+#: ringo/templates/internal/statefield.mako:29
 msgid "State transition"
 msgstr "Zustandswechsel"
 
-#: ringo/templates/internal/statefield.mako:20
+#: ringo/templates/internal/statefield.mako:31
 msgid "No Transition"
 msgstr "Kein Wechsel"
 
-#: ringo/templates/internal/statefield.mako:30
+#: ringo/templates/internal/statefield.mako:41
 msgid "Current state"
 msgstr "Aktueller Zustand"
 
-#: ringo/templates/internal/statefield.mako:37
+#: ringo/templates/internal/statefield.mako:48
 msgid "Resulting State"
 msgstr "Resultierender Zustand"
 
@@ -901,33 +905,68 @@ msgstr ""
 "Authorisierung fehlgeschlagen. Es tut mir leid, aber Sie haben nicht die "
 "erforderlichen Rechte, um auf die Ressource zuzugreifen."
 
-#: ringo/views/users.py:125 ringo/views/users.py:155
+#: ringo/views/request.py:188
+msgid ""
+"The information contained errors. <strong>All entries (including error-"
+"free) were not saved!</strong> Please correct your entries in the fields "
+"marked in red and resave."
+msgstr ""
+"Die Angaben enthalten Fehler. <strong>Sämtliche Eingaben (auch "
+"fehlerfreie) wurden nicht gespeichert!</strong> Bitte korrigieren Sie die"
+" Eingaben in den rot markierten Feldern und speichern Sie erneut."
+
+#: ringo/views/request.py:221
+msgid "Created new ${item_type} successfully."
+msgstr "${item_type} erfolgreich angelegt."
+
+#: ringo/views/request.py:226
+msgid "Edited ${item_type} \"${item}\" successfully."
+msgstr "${item_type} „${item}“ wurde erfolgreich bearbeitet."
+
+#: ringo/views/request.py:237
+msgid "Error while saving new ${item_type}: ${error}."
+msgstr "Fehler beim Anlegen von ${item_type}: ${error}."
+
+#: ringo/views/request.py:240
+msgid "Error while saving ${item_type} \"${item}\": ${error}."
+msgstr "Fehler beim Bearbeiten von ${item_type} „${item}“: ${error}."
+
+#: ringo/views/request.py:248
+msgid "Error on validation new ${item_type}."
+msgstr "Fehler beim Validieren von ${item_type}."
+
+#: ringo/views/request.py:251
+msgid "Error on validation ${item_type} \"${item}\"."
+msgstr "Fehler beim Validieren von ${item_type} „${item}“."
+
+#: ringo/views/users.py:126 ringo/views/users.py:156 ringo/views/users.py:407
+#: ringo/views/users.py:427
 msgid "This name is already in use, please use something unique."
 msgstr ""
 "Dieser Name wird bereits benutzt, bitte nehmen Sie einen eindeutigen "
 "Namen."
 
-#: ringo/views/users.py:130 ringo/views/users.py:160 ringo/views/users.py:284
+#: ringo/views/users.py:131 ringo/views/users.py:161 ringo/views/users.py:285
 msgid "Password must be at least 12 characters long."
 msgstr "Passwort muss mindestens 12 Zeichen lang sein."
 
-#: ringo/views/users.py:134 ringo/views/users.py:164 ringo/views/users.py:288
+#: ringo/views/users.py:135 ringo/views/users.py:165 ringo/views/users.py:289
 msgid "Password must contain at least 2 non-letters."
 msgstr "Passwort muss mindestens 2 Nicht-Buchstaben enthalten."
 
-#: ringo/views/users.py:281
+#: ringo/views/users.py:282
 msgid "The given password is not correct"
 msgstr "Das angegebene Passwort ist nicht korrekt"
 
-#: ringo/views/users.py:300
+#: ringo/views/users.py:301
 msgid "Changed password for \"${item}\" successfull."
 msgstr "Password für „${item}“ erfolgreich geändert."
 
-#: ringo/views/users.py:310
+#: ringo/views/users.py:311
 msgid "Error on changing the password for \"${item}\"."
 msgstr "Fehler bei der Änderung des Passworts für „${item}“."
 
-#: ringo/views/users.py:365
+#: ringo/views/users.py:366
 msgid "Deleting the account of \"${item}\" failed."
 msgstr "Löschen des Zugang von \"${item}\" ist fehlgeschlagen."
 
@@ -1041,6 +1080,10 @@ msgstr "JSON"
 #: ringo/views/forms/export.xml:3 ringo/views/forms/import.xml:4
 msgid "CSV"
 msgstr "CSV"
+
+#: ringo/views/forms/export.xml:4
+msgid "XLSX"
+msgstr ""
 
 #. Label for title field in form config
 #. Label for title column in overview table config
@@ -1444,41 +1487,6 @@ msgstr "Gruppen"
 #: ringo/views/tables/users.json:8
 msgid "Last login"
 msgstr "Letze Anmeldung"
-
-#: ringo/views/request.py:188      
-msgid ""      
-"The information contained errors. <strong>All entries (including error-"      
-"free) were not saved!</strong> Please correct your entries in the fields "      
-"marked in red and resave."      
-msgstr ""      
-"Die Angaben enthalten Fehler. <strong>Sämtliche Eingaben (auch "      
-"fehlerfreie) wurden nicht gespeichert!</strong> Bitte korrigieren Sie die"      
-" Eingaben in den rot markierten Feldern und speichern Sie erneut."      
-
-#: ringo/views/request.py:221      
-msgid "Created new ${item_type} successfully."
-msgstr "${item_type} erfolgreich angelegt."
-
-
-#: ringo/views/request.py:226      
-msgid "Edited ${item_type} \"${item}\" successfully."
-msgstr "${item_type} „${item}“ wurde erfolgreich bearbeitet."
-
-#: ringo/views/request.py:237
-msgid "Error while saving new ${item_type}: ${error}."
-msgstr "Fehler beim Anlegen von ${item_type}: ${error}."
-
-#: ringo/views/request.py:240
-msgid "Error while saving ${item_type} \"${item}\": ${error}."
-msgstr "Fehler beim Bearbeiten von ${item_type} „${item}“: ${error}."
-
-#: ringo/views/request.py:248
-msgid "Error on validation new ${item_type}."
-msgstr "Fehler beim Validieren von ${item_type}."
-
-#: ringo/views/request.py:251
-msgid "Error on validation ${item_type} \"${item}\"."
-msgstr "Fehler beim Validieren von ${item_type} „${item}“."
 
 #~ msgid "Open item in %s mode"
 #~ msgstr "Öffne Eintrag im %s Modus"
