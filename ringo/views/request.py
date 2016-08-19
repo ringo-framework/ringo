@@ -255,7 +255,7 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
     return False
 
 
-def handle_redirect_on_success(request):
+def handle_redirect_on_success(request, backurl=None):
     """Will return a redirect. If there has been a saved "backurl" the
     redirect will on on this url. In all other cases the function will
     try to determine if the item in the request can be opened in edit
@@ -264,16 +264,19 @@ def handle_redirect_on_success(request):
     called.
 
     :request: Current request
+    :backurl: Optional. Set backurl manually. This will overwrite
+    backurls saved in the session. 
     :returns: Redirect
     """
 
     item = get_item_from_request(request)
     clazz = request.context.__model__
-    backurl = request.session.get('%s.backurl' % clazz)
+    backurl = backurl or request.session.get('%s.backurl' % clazz)
     if backurl:
         # Redirect to the configured backurl.
-        del request.session['%s.backurl' % clazz]
-        request.session.save()
+        if request.session.get('%s.backurl' % clazz):
+            del request.session['%s.backurl' % clazz]
+            request.session.save()
         return HTTPFound(location=backurl)
     else:
         # Handle redirect after success.
