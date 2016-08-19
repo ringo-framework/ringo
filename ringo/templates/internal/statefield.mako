@@ -1,5 +1,16 @@
 <div class="form-group">
-% if field.renderer.layout == "simple":
+% if field.renderer.layout == "button":
+  <label for="${field.id}">${field.label}</label>
+  <div class="readonlyfield" name="${field.name}">
+      ${_(state._label)}
+  </div>
+  % if len(state.get_transitions()) > 0:
+    <p>${_("Please select one of the following actions to change the state:")}</p>
+    % for trans in state.get_transitions():
+      <button class="btn btn-default btn-block" type="submit" name="${field.name}" value="${trans._end_state._id}">${_(trans._label)}</button>
+    % endfor
+  % endif
+% elif field.renderer.layout == "simple":
 <label for="${field.id}">${_('State')}</label>
 <select id="${field.id}" name="${field.name}" class="form-control">
   <option value="${state._id}">${_(state._label)}</option>
