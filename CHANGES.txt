@@ -22,6 +22,7 @@ Next
 - #19 Fixed removing permissions (in general fixed removing items from
   nm-relations.) 
 - Added "button" layout for the Statefieldrenderer.
+- Handle "Save and proceed" button (New feature in formbar).
 
 1.13
 ====
