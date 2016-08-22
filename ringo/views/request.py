@@ -15,7 +15,10 @@ from ringo.views.helpers import (
     get_item_from_request,
     get_ownership_form,
     get_item_form,
-    get_item_modul
+    get_item_modul,
+    get_current_form_page,
+    set_current_form_page,
+    get_next_form_page
 )
 
 log = logging.getLogger(__name__)
@@ -243,6 +246,15 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
                     .format(item_label=item_label, item=item, user=request.user)
             log.info(log_msg)
             request.session.flash(msg, 'success')
+
+            # Set next form page.
+            if request.params["_submit"] == "nextpage":
+                table = clazz.__table__
+                itemid = item.id
+                page = get_next_form_page(form,
+                                          get_current_form_page(clazz,
+                                                                request))
+                set_current_form_page(table, itemid, page, request)
 
             return True
         except Exception as error:

@@ -209,6 +209,27 @@ def get_current_form_page(clazz, request):
     else:
         return 1
 
+
+def get_next_form_page(form, current_page):
+    """Returns the id of the next formpage, Returns current_page if
+    there is no next page.
+
+    :form: A formbar form instance
+    :current_page: id of the current page:
+    :returns: ID of the next page in the form
+    """
+    found = False
+    for page in form.pages:
+        if found:
+            return page.attrib.get("id").strip("p")
+        if current_page == int(page.attrib.get("id").strip("p")):
+            # Return page id on next iteration.
+            found = True
+    else:
+        # We did not found anything and the iteration ends.
+        return current_page
+
+
 def set_current_form_page(table, itemid, page, request):
     """Will save the given page of a form as the current page of the
     form in the session in the session. The key in the session is build
