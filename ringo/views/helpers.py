@@ -209,6 +209,20 @@ def get_current_form_page(clazz, request):
     else:
         return 1
 
+def set_current_form_page(table, itemid, page, request):
+    """Will save the given page of a form as the current page of the
+    form in the session in the session. The key in the session is build
+    as `<tablenameofitems>.<itemid>.form.page`
+
+    :tabel: Name of the table where the items are stored.
+    :itemid: ID of the item for which the page is stored.
+    :page: ID of the page.
+    :request: Current request
+    :returns: Response
+    """
+    request.session['%s.%s.form.page' % (table, itemid)] = page
+    request.session.save()
+
 
 def get_item_from_request(request):
     """On every request pyramid will use a resource factory to load the
