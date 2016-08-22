@@ -9,6 +9,7 @@ from formbar.config import Config, parse
 from formbar.rules import Rule
 
 from ringo.views.response import JSONResponse
+from ringo.views.helpers import set_current_form_page as save_form_page
 
 log = logging.getLogger(__name__)
 
@@ -72,10 +73,8 @@ def set_current_form_page(request):
     :returns: Response
     """
     page = request.GET.get('page')
-    item = request.GET.get('item')
+    tablename = request.GET.get('item')
     itemid = request.GET.get('itemid')
-    if page and item and itemid:
-        #request.session['%s.form.page' % key] = page_id
-        request.session['%s.%s.form.page' % (item, itemid)] = page
-        request.session.save()
+    if page and tablename and itemid:
+        save_form_page(tablename, itemid, page, request)
     return Response(body='OK', content_type='text/plain')
