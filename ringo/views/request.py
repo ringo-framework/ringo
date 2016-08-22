@@ -248,7 +248,7 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
             request.session.flash(msg, 'success')
 
             # Set next form page.
-            if request.params["_submit"] == "nextpage":
+            if request.params.get("_submit") == "nextpage":
                 table = clazz.__table__
                 itemid = item.id
                 page = get_next_form_page(form,
