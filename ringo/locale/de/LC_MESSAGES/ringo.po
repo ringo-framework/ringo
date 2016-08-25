@@ -485,7 +485,7 @@ msgid ""
 "check your email."
 msgstr ""
 "Eine Bestätigungsmail zum Zurücksetzen des Passworts wurde an die E-Mail "
-"Adresse des Nutzer geschickt. Bitte prüfen Sie ihre E-Mail."
+"Adresse des Nutzer geschickt. Bitte prüfen Sie Ihre E-Mail."
 
 #: ringo/templates/auth/login.mako:10
 msgid "New here? Register a new account!"
@@ -514,8 +514,8 @@ msgid ""
 "User has been created and a confirmation mail was sent to the users email"
 " adress. Please check your email."
 msgstr ""
-"Der Benutzer wurde angelegt und eine Bestätigunsmail wurde an die E-Mail "
-"Adresse des Nutzers gesendet. Bitte prüfen Sie ihre E-Mail."
+"Der Zugang wurde angelegt und eine Bestätigungsmail wurde an die "
+"angegebene E-Mail-Adresse gesendet. Bitte prüfen Sie Ihre E-Mail."
 
 #: ringo/templates/auth/reset_password.mako:7
 msgid "Password resetted"
@@ -687,7 +687,9 @@ msgstr "Druckkonfiguration für"
 
 #: ringo/templates/internal/statefield.mako:8
 msgid "Please select one of the following actions to change the state:"
-msgstr "Bitte wählen Sie eine der folgenden Möglichkeiten, um den Status zu ändern:"
+msgstr ""
+"Bitte wählen Sie eine der folgenden Möglichkeiten, um den Status zu "
+"ändern:"
 
 #. Label for review_state column in overview table config
 #: ringo/templates/internal/statefield.mako:14 ringo/views/forms/forms.xml:10
