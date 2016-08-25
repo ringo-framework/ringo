@@ -23,6 +23,8 @@ Next
   nm-relations.) 
 - Added "button" layout for the Statefieldrenderer.
 - Handle "Save and proceed" button (New feature in formbar).
+- Added StaticListRenderer. Can be used to render simple static overviews of
+  items.
 
 1.13
 ====
