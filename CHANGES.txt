@@ -27,6 +27,7 @@ Next
   items.
 - On user registration the password strength is now checked. Password must be
   at least 12 chars long und need to have 2 non chars.
+- Add option to define rolespecific descriptions of the state.
 
 1.13
 ====
