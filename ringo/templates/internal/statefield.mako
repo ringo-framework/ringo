@@ -43,7 +43,7 @@
       <div class="col-sm-6">
         <p>
           <strong>${_('Current state')}:</strong> ${_(state._label)}<br/>
-          <small>${_(state._description)}</small>
+          <small>${_(state.get_description(request.user))}</small>
         </p>
       </div>
       <div class="col-sm-6">
@@ -52,7 +52,7 @@
             <strong>${_('Resulting State')}:</strong>
             ${_(trans._end_state._label)}<br/>
             <small>
-            ${_(trans._end_state._description)}
+              ${_(trans._end_state.get_description(request.user))}
             </small>
           </div>
         % endfor
