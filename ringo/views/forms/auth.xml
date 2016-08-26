@@ -2,16 +2,22 @@
 <configuration>
   <source>
     <!-- Define different entity types -->
-    <entity id="e1" name="login" label="Loginname" type="string" required="true" autofocus="true"/>
+    <entity id="e1" name="login" label="Loginname" type="string" required="true" autofocus="true">
+      <help display="text">The loginname is used together with the password to login into the application.</help>
+    </entity>
     <entity id="e2" name="pass" label="Password">
       <renderer type="password"/>
       <rule expr="bool($pass)" msg="Password is required" method="pre"/>
+      <help display="text">The password must be at least 12 chars long and must contain 2 non
+      non-letters.</help>
     </entity>
     <entity id="e4" name="_pass2" label="Retype password">
       <renderer type="password"/>
       <rule expr="$pass==$_pass2" msg="Password are not equal" method="pre"/>
     </entity>
-    <entity id="e5" name="_email" label="Email" type="email" required="true"/>
+    <entity id="e5" name="_email" label="Email" type="email" required="true">
+      <help display="text">The email is required to send you system messages like  notifications on events in the application, or confirmation emails.</help>
+    </entity>
   </source>
   <form id="loginform" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="s1"/>

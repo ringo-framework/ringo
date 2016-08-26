@@ -25,6 +25,8 @@ Next
 - Handle "Save and proceed" button (New feature in formbar).
 - Added StaticListRenderer. Can be used to render simple static overviews of
   items.
+- On user registration the password strength is now checked. Password must be
+  at least 12 chars long und need to have 2 non chars.
 
 1.13
 ====
