@@ -4,7 +4,7 @@
   <div class="readonlyfield" name="${field.name}">
       ${_(state._label)}
   </div>
-  % if state.get_description():
+  % if state.get_description(request.user):
     <p><small><strong>${_('Description')}:</strong>
         ${state.get_description(request.user) | n}</small></p>
   % endif
