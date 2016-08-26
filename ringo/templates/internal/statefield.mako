@@ -4,6 +4,10 @@
   <div class="readonlyfield" name="${field.name}">
       ${_(state._label)}
   </div>
+  % if state.get_description():
+    <p><small><strong>${_('Description')}:</strong>
+        ${state.get_description(request.user) | n}</small></p>
+  % endif
   % if len(state.get_transitions()) > 0:
     <p>${_("Please select one of the following actions to change the state:")}</p>
     % for trans in state.get_transitions():

@@ -312,6 +312,24 @@ class State(object):
         """
         return self._disabled_actions.get(role, [])
 
+    def get_description(self, user=None):
+        """Returns the description of this state. If user is provided
+        the returned description is determined by the users role to show
+        the appropriate description.
+
+        :user: User object.
+        :returns: string of description
+
+        """
+        # Check if _dscription is configured with descriptions per role
+        if isinstance(self._description, dict):
+            for rolename in self._description:
+                if user.has_role(rolename):
+                    return self._description[rolename]
+            return self._description["user"]
+        else:
+            return self._description
+
     def get_transitions(self, ignore_checks=False):
         """Returns the available transitions to other states.
 
