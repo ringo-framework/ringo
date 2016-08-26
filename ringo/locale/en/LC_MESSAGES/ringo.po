@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-08-26 09:32+0200\n"
+"POT-Creation-Date: 2016-08-26 10:15+0200\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -937,29 +937,29 @@ msgid "Email"
 msgstr ""
 
 #: ringo/views/forms/auth.xml:5
+msgid "Password is required"
+msgstr ""
+
+#: ringo/views/forms/auth.xml:6
+msgid "Password are not equal"
+msgstr ""
+
+#: ringo/views/forms/auth.xml:7
 msgid ""
 "The loginname is used together with the password to login into the "
 "application."
 msgstr ""
 
-#: ringo/views/forms/auth.xml:6
-msgid ""
-"The password must be at least 12 chars long and must contain 2 non\n"
-"      non-letters."
-msgstr ""
-
-#: ringo/views/forms/auth.xml:7
-msgid ""
-"The email is required to send you system messages like  notifications on "
-"events in the application, or confirmation emails."
-msgstr ""
-
 #: ringo/views/forms/auth.xml:8
-msgid "Password is required"
+msgid ""
+"The password must be at least 12 chars long and must contain 2 non non-"
+"letters."
 msgstr ""
 
 #: ringo/views/forms/auth.xml:9
-msgid "Password are not equal"
+msgid ""
+"The email is required to send you system messages like  notifications on "
+"events in the application, or confirmation emails."
 msgstr ""
 
 #: ringo/views/forms/auth.xml:13
