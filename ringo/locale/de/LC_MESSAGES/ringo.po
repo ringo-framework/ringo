@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-08-26 09:32+0200\n"
+"POT-Creation-Date: 2016-08-26 10:15+0200\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language: de\n"
@@ -1050,6 +1050,14 @@ msgid "Email"
 msgstr "E-Mail"
 
 #: ringo/views/forms/auth.xml:5
+msgid "Password is required"
+msgstr "Passwort ist ein Pflichtfeld"
+
+#: ringo/views/forms/auth.xml:6
+msgid "Password are not equal"
+msgstr "Passwörter sind nicht identisch"
+
+#: ringo/views/forms/auth.xml:7
 msgid ""
 "The loginname is used together with the password to login into the "
 "application."
@@ -1057,15 +1065,15 @@ msgstr ""
 "Die Anmeldekennung wird zusammen mit dem Passwort zur Anmeldung in die "
 "Anwendung genutzt."
 
-#: ringo/views/forms/auth.xml:6
+#: ringo/views/forms/auth.xml:8
 msgid ""
-"The password must be at least 12 chars long and must contain 2 non\n"
-"      non-letters."
+"The password must be at least 12 chars long and must contain 2 non non-"
+"letters."
 msgstr ""
 "Das Passwort muss mindestens 12 Zeichen lang sein und 2 Nicht-Buchstaben "
 "enthalten."
 
-#: ringo/views/forms/auth.xml:7
+#: ringo/views/forms/auth.xml:9
 msgid ""
 "The email is required to send you system messages like  notifications on "
 "events in the application, or confirmation emails."
@@ -1073,14 +1081,6 @@ msgstr ""
 "Die E-Mail wird benötigt, um Ihnen Systemnachrichten, wie "
 "Benachrichtigungen bei Ereignissen in der Anwendung, oder "
 "Bestätigungsmails zuzusenden."
-
-#: ringo/views/forms/auth.xml:8
-msgid "Password is required"
-msgstr "Passwort ist ein Pflichtfeld"
-
-#: ringo/views/forms/auth.xml:9
-msgid "Password are not equal"
-msgstr "Passwörter sind nicht identisch"
 
 #: ringo/views/forms/auth.xml:13
 msgid "Reset"
