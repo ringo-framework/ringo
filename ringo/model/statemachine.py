@@ -269,7 +269,11 @@ class State(object):
         :statemachine: Statemachine
         :id: Id of the state
         :label: Label of the Statemachine (short description)
-        :description: Long description of the state.
+        :description: Long description of the state. Description can be
+        a dictionary to set different descriptions of the state
+        depending on the role of the user. The key of dictionary is the
+        rolename. {'rolename', 'Description...'}. So set a description
+        of all users use the "users" role.
         :disabled_actions: Dictionary with a list of actions which are
         disabled for a role. {'rolename': ['read', 'update']}
 
@@ -326,7 +330,7 @@ class State(object):
             for rolename in self._description:
                 if user.has_role(rolename):
                     return self._description[rolename]
-            return self._description["user"]
+            return self._description.get("user")
         else:
             return self._description
 
