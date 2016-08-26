@@ -17,6 +17,10 @@ Usergroup = import_model('ringo.model.user.Usergroup')
 Role = import_model('ringo.model.user.Role')
 
 from ringo.views.request import handle_history
+from ringo.views.users import (
+    password_minlength_validator,
+    password_nonletter_validator
+)
 from ringo.lib.helpers.appinfo import get_app_title
 from ringo.lib.form import get_path_to_form_config
 from ringo.lib.security import login as user_login, request_password_reset, \
@@ -133,10 +137,21 @@ def register_user(request):
                 translate=_)
     # Do extra validation which is not handled by formbar.
     # Is the login unique?
-    validator = Validator('login',
-                          'There is already a user with this name',
-                          is_login_unique)
-    form.add_validator(validator)
+    login_unique_validator = Validator('login',
+                                       _('There is already a user with this '
+                                         'name'),
+                                       is_login_unique)
+    pw_len_validator = Validator('pass',
+                                 _('Password must be at least 12 characters '
+                                   'long.'),
+                                 password_minlength_validator)
+    pw_nonchar_validator = Validator('pass',
+                                     _('Password must contain at least 2 '
+                                       'non-letters.'),
+                                     password_nonletter_validator)
+    form.add_validator(login_unique_validator)
+    form.add_validator(pw_len_validator)
+    form.add_validator(pw_nonchar_validator)
     registration_complete = False
     if request.POST:
         if form.validate(request.params):
