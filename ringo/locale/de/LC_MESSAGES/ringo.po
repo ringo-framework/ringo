@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-08-26 10:15+0200\n"
+"POT-Creation-Date: 2016-08-26 13:03+0200\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language: de\n"
@@ -685,31 +685,37 @@ msgstr "Einträge"
 msgid "Print configuration for"
 msgstr "Druckkonfiguration für"
 
-#: ringo/templates/internal/statefield.mako:8
-msgid "Please select one of the following actions to change the state:"
-msgstr ""
-"Bitte wählen Sie eine der folgenden Möglichkeiten, um den Status zu "
-"ändern:"
+#. Label for description field in form config
+#. Label for description column in overview table config
+#: ringo/templates/internal/statefield.mako:8 ringo/views/forms/forms.xml:2
+#: ringo/views/forms/modules.xml:4 ringo/views/forms/roles.xml:5
+#: ringo/views/forms/usergroups.xml:3 ringo/views/tables/forms.json:3
+msgid "Description"
+msgstr "Beschreibung"
+
+#: ringo/templates/internal/statefield.mako:12
+msgid "Please select one of the following steps:"
+msgstr "Bitte wählen Sie einen der folgenden Schritte:"
 
 #. Label for review_state column in overview table config
-#: ringo/templates/internal/statefield.mako:14 ringo/views/forms/forms.xml:10
+#: ringo/templates/internal/statefield.mako:18 ringo/views/forms/forms.xml:10
 #: ringo/views/tables/forms.json:5
 msgid "State"
 msgstr "Status"
 
-#: ringo/templates/internal/statefield.mako:29
+#: ringo/templates/internal/statefield.mako:33
 msgid "State transition"
 msgstr "Zustandswechsel"
 
-#: ringo/templates/internal/statefield.mako:31
+#: ringo/templates/internal/statefield.mako:35
 msgid "No Transition"
 msgstr "Kein Wechsel"
 
-#: ringo/templates/internal/statefield.mako:41
+#: ringo/templates/internal/statefield.mako:45
 msgid "Current state"
 msgstr "Aktueller Zustand"
 
-#: ringo/templates/internal/statefield.mako:48
+#: ringo/templates/internal/statefield.mako:52
 msgid "Resulting State"
 msgstr "Resultierender Zustand"
 
@@ -1123,14 +1129,6 @@ msgstr ""
 #: ringo/views/forms/forms.xml:1 ringo/views/tables/forms.json:2
 msgid "Title"
 msgstr "Titel"
-
-#. Label for description field in form config
-#. Label for description column in overview table config
-#: ringo/views/forms/forms.xml:2 ringo/views/forms/modules.xml:4
-#: ringo/views/forms/roles.xml:5 ringo/views/forms/usergroups.xml:3
-#: ringo/views/tables/forms.json:3
-msgid "Description"
-msgstr "Beschreibung"
 
 #. Label for category field in form config
 #: ringo/views/forms/forms.xml:3
@@ -1556,4 +1554,9 @@ msgstr "Letze Anmeldung"
 
 #~ msgid "Yes, I understand that deleting my account can not be undone"
 #~ msgstr ""
+
+#~ msgid "Please select one of the following actions to change the state:"
+#~ msgstr ""
+#~ "Bitte wählen Sie eine der folgenden "
+#~ "Möglichkeiten, um den Status zu ändern:"
 

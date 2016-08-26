@@ -9,7 +9,7 @@
         ${state.get_description(request.user) | n}</small></p>
   % endif
   % if len(state.get_transitions()) > 0:
-    <p>${_("Please select one of the following actions to change the state:")}</p>
+    <p>${_("Please select one of the following steps:")}</p>
     % for trans in state.get_transitions():
       <button class="btn btn-default btn-block" type="submit" name="${field.name}" value="${trans._end_state._id}">${_(trans._label)}</button>
     % endfor
