@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-08-19 09:31+0200\n"
+"POT-Creation-Date: 2016-08-26 09:32+0200\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language: de\n"
@@ -251,7 +251,7 @@ msgstr "Abmelden"
 #: ringo/templates/auth/confirm_user.mako:24 ringo/templates/auth/login.mako:5
 #: ringo/templates/auth/reset_password.mako:19
 #: ringo/templates/auth/reset_password.mako:24 ringo/templates/header.mako:96
-#: ringo/templates/index.mako:22 ringo/views/forms/auth.xml:7
+#: ringo/templates/index.mako:22 ringo/views/forms/auth.xml:10
 #: ringo/views/forms/users.xml:1 ringo/views/forms/users.xml:2
 #: ringo/views/tables/profiles.json:6
 msgid "Login"
@@ -469,7 +469,7 @@ msgstr ""
 "Informationen an die Administration."
 
 #: ringo/templates/auth/forgot_password.mako:5
-#: ringo/templates/auth/login.mako:16 ringo/views/forms/auth.xml:8
+#: ringo/templates/auth/login.mako:16 ringo/views/forms/auth.xml:11
 msgid "Reset Password"
 msgstr "Passwort zurücksetzen"
 
@@ -479,7 +479,7 @@ msgstr ""
 "Geben Sie ihre Anmeldekennung und Passwort ein. Eine Email mit weiteren "
 "Informationen zum Zurücksetzen des Passworts wird Ihnen zugesendet."
 
-#: ringo/templates/auth/forgot_password.mako:20 ringo/views/auth.py:243
+#: ringo/templates/auth/forgot_password.mako:20 ringo/views/auth.py:258
 msgid ""
 "Password reset token has been sent to the users email address. Please "
 "check your email."
@@ -492,7 +492,7 @@ msgid "New here? Register a new account!"
 msgstr "Neu hier? Registrieren Sie einen neuen Zugang!"
 
 #: ringo/templates/auth/login.mako:11 ringo/templates/auth/register_user.mako:5
-#: ringo/views/forms/auth.xml:9
+#: ringo/views/forms/auth.xml:12
 msgid "Register Account"
 msgstr "Zugang registrieren"
 
@@ -509,7 +509,7 @@ msgstr ""
 " Sie erhalten im Anschluss eine Email mit einem Bestätigungslink, um die "
 "Registrierung abzuschließen."
 
-#: ringo/templates/auth/register_user.mako:20 ringo/views/auth.py:188
+#: ringo/templates/auth/register_user.mako:20 ringo/views/auth.py:203
 msgid ""
 "User has been created and a confirmation mail was sent to the users email"
 " adress. Please check your email."
@@ -832,46 +832,60 @@ msgstr ""
 "Bitte beachten Sie, dass das Löschen ihres Benutzerkontos nicht "
 "rückgängig gemacht werden kann."
 
-#: ringo/views/api.py:59
+#: ringo/views/api.py:60
 #, python-format
 msgid "ERROR: %s"
 msgstr "FEHLER: %s"
 
-#: ringo/views/auth.py:62 ringo/views/auth.py:65
+#: ringo/views/auth.py:66 ringo/views/auth.py:69
 msgid "Login failed!"
 msgstr "Anmeldung fehlgeschlagen"
 
-#: ringo/views/auth.py:70
+#: ringo/views/auth.py:74
 msgid "Login was successfull"
 msgstr "Anmeldung war erfolgreich"
 
-#: ringo/views/auth.py:91
+#: ringo/views/auth.py:95
 msgid "Logout was successfull"
 msgstr "Abmeldung war erfolgreich"
 
-#: ringo/views/auth.py:180
+#: ringo/views/auth.py:141
+msgid "There is already a user with this name"
+msgstr ""
+
+#: ringo/views/auth.py:145 ringo/views/users.py:131 ringo/views/users.py:161
+#: ringo/views/users.py:285
+msgid "Password must be at least 12 characters long."
+msgstr "Passwort muss mindestens 12 Zeichen lang sein."
+
+#: ringo/views/auth.py:149 ringo/views/users.py:135 ringo/views/users.py:165
+#: ringo/views/users.py:289
+msgid "Password must contain at least 2 non-letters."
+msgstr "Passwort muss mindestens 2 Nicht-Buchstaben enthalten."
+
+#: ringo/views/auth.py:195
 msgid "Confirm user registration"
 msgstr "Bestätigung Nutzerregistrierung"
 
-#: ringo/views/auth.py:209
+#: ringo/views/auth.py:224
 msgid "The user has beed successfull confirmed."
 msgstr "Der Zugang wurde erfolgreich bestätigt."
 
-#: ringo/views/auth.py:211
+#: ringo/views/auth.py:226
 msgid "The user was not confirmed. Maybe the confirmation token was not valid?"
 msgstr ""
 "Der Zugang konnte nicht bestätigt werden. Vielleicht ist das Best"
 "ätigungs-Token nicht gülitg?"
 
-#: ringo/views/auth.py:236
+#: ringo/views/auth.py:251
 msgid "Password reset request"
 msgstr "Anfrage Passwort zurücksetzen"
 
-#: ringo/views/auth.py:264
+#: ringo/views/auth.py:279
 msgid "Password has been reseted"
 msgstr "Passwort wurde zurückgesetzt"
 
-#: ringo/views/auth.py:271
+#: ringo/views/auth.py:286
 msgid ""
 "Password was resetted and sent to the users email address. Please check "
 "your email."
@@ -879,7 +893,7 @@ msgstr ""
 "Das Passwort wurde zurückgesetzt und an die E-Mail Adresse des Nutzer "
 "geschickt. Bitte prüfen Sie ihre E-Mail."
 
-#: ringo/views/auth.py:275
+#: ringo/views/auth.py:290
 msgid "Password was not resetted. Maybe the request token was not valid?"
 msgstr ""
 "Das Passwort wurde nicht zurückgesetzt. Vielleicht ist das Token nicht "
@@ -907,7 +921,7 @@ msgstr ""
 "Authorisierung fehlgeschlagen. Es tut mir leid, aber Sie haben nicht die "
 "erforderlichen Rechte, um auf die Ressource zuzugreifen."
 
-#: ringo/views/request.py:188
+#: ringo/views/request.py:205
 msgid ""
 "The information contained errors. <strong>All entries (including error-"
 "free) were not saved!</strong> Please correct your entries in the fields "
@@ -917,27 +931,27 @@ msgstr ""
 "fehlerfreie) wurden nicht gespeichert!</strong> Bitte korrigieren Sie die"
 " Eingaben in den rot markierten Feldern und speichern Sie erneut."
 
-#: ringo/views/request.py:221
+#: ringo/views/request.py:238
 msgid "Created new ${item_type} successfully."
 msgstr "${item_type} erfolgreich angelegt."
 
-#: ringo/views/request.py:226
+#: ringo/views/request.py:243
 msgid "Edited ${item_type} \"${item}\" successfully."
 msgstr "${item_type} „${item}“ wurde erfolgreich bearbeitet."
 
-#: ringo/views/request.py:237
+#: ringo/views/request.py:263
 msgid "Error while saving new ${item_type}: ${error}."
 msgstr "Fehler beim Anlegen von ${item_type}: ${error}."
 
-#: ringo/views/request.py:240
+#: ringo/views/request.py:266
 msgid "Error while saving ${item_type} \"${item}\": ${error}."
 msgstr "Fehler beim Bearbeiten von ${item_type} „${item}“: ${error}."
 
-#: ringo/views/request.py:248
+#: ringo/views/request.py:274
 msgid "Error on validation new ${item_type}."
 msgstr "Fehler beim Validieren von ${item_type}."
 
-#: ringo/views/request.py:251
+#: ringo/views/request.py:277
 msgid "Error on validation ${item_type} \"${item}\"."
 msgstr "Fehler beim Validieren von ${item_type} „${item}“."
 
@@ -947,14 +961,6 @@ msgid "This name is already in use, please use something unique."
 msgstr ""
 "Dieser Name wird bereits benutzt, bitte nehmen Sie einen eindeutigen "
 "Namen."
-
-#: ringo/views/users.py:131 ringo/views/users.py:161 ringo/views/users.py:285
-msgid "Password must be at least 12 characters long."
-msgstr "Passwort muss mindestens 12 Zeichen lang sein."
-
-#: ringo/views/users.py:135 ringo/views/users.py:165 ringo/views/users.py:289
-msgid "Password must contain at least 2 non-letters."
-msgstr "Passwort muss mindestens 2 Nicht-Buchstaben enthalten."
 
 #: ringo/views/users.py:282
 msgid "The given password is not correct"
@@ -1044,14 +1050,39 @@ msgid "Email"
 msgstr "E-Mail"
 
 #: ringo/views/forms/auth.xml:5
+msgid ""
+"The loginname is used together with the password to login into the "
+"application."
+msgstr ""
+"Die Anmeldekennung wird zusammen mit dem Passwort zur Anmeldung in die "
+"Anwendung genutzt."
+
+#: ringo/views/forms/auth.xml:6
+msgid ""
+"The password must be at least 12 chars long and must contain 2 non\n"
+"      non-letters."
+msgstr ""
+"Das Passwort muss mindestens 12 Zeichen lang sein und 2 Nicht-Buchstaben "
+"enthalten."
+
+#: ringo/views/forms/auth.xml:7
+msgid ""
+"The email is required to send you system messages like  notifications on "
+"events in the application, or confirmation emails."
+msgstr ""
+"Die E-Mail wird benötigt, um Ihnen Systemnachrichten, wie "
+"Benachrichtigungen bei Ereignissen in der Anwendung, oder "
+"Bestätigungsmails zuzusenden."
+
+#: ringo/views/forms/auth.xml:8
 msgid "Password is required"
 msgstr "Passwort ist ein Pflichtfeld"
 
-#: ringo/views/forms/auth.xml:6
+#: ringo/views/forms/auth.xml:9
 msgid "Password are not equal"
 msgstr "Passwörter sind nicht identisch"
 
-#: ringo/views/forms/auth.xml:10
+#: ringo/views/forms/auth.xml:13
 msgid "Reset"
 msgstr "Zurücksetzen"
 
