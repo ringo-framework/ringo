@@ -37,16 +37,30 @@ def get_ownership_form(item, db, csrf_token, eval_url,
 
 
 def get_path_to_form_config(filename, app=None, location=None):
-    """Returns the path the the given form configuration. The file name
-    should be realtive to the default location for the configurations.
+    """Returns the path to the given form configuration. The filename
+    should be realtive to the default `location` for the configurations
+    in the given `app`.
 
-    :file: filename
+    :file: Name of the form condifguration.
+    :app: You can define the name of the application from where the form
+    should be loaded. If no name is provied the code will search along
+    the inheritance path of the current application and return the first
+    form configuration it can find. Returns None if no configuration can
+    be found.
+    :location: Default is 'views/forms' you can define an alternative location.
     :returns: Absolute path to the configuration file
 
     """
     if location is None:
         location = "views/forms"
-    return get_path_to(os.path.join(location, filename), app)
+    if app is None:
+        for app in get_app_inheritance_path():
+            path = get_path_to(os.path.join(location, filename), app)
+            if os.path.exists(path):
+                return path
+        return path
+    else:
+        return get_path_to(os.path.join(location, filename), app)
 
 
 def get_form_config(item, formname):
@@ -78,32 +92,21 @@ def get_form_config(item, formname):
 
 def get_form_config_from_file(name, filename, formname):
     """Return the file based configuration for a given form. The
-    configuration tried to be loaded from the current application first.
-    If this fails it tries to load it from the extension or orign
-    application and finally from the ringo application."""
+    configuration tried to be loaded from the current application (and
+    its origins) first.  If this fails it tries to load it from the
+    extension."""
     loaded_config = None
-    for appname in get_app_inheritance_path():
-        try:
-            # Always first try to load from the current application. No
-            # matter what the current name is as name can be different from
-            # the appname in case of loading forms for an extension. In this
-            # case first try to load the form configuration from the
-            # application to be able to overwrite the forms.
+    try:
+        path = get_path_to_form_config(filename)
+        if os.path.exists(path):
+            loaded_config = load(path)
+        elif name.startswith("ringo_"):
             loaded_config = load(get_path_to_form_config(filename,
-                                                         appname))
-            break
-        except IOError:
-        # Silently ignore IOErrors here as is Ok when trying to load the
-        # configurations files while iterating over the possible config
-        # file locations. If the file can finally not be loaded an IOError
-        # is raised at the end.
-            pass
-    else:
-        if name.startswith("ringo_"):
-            loaded_config = load(get_path_to_form_config(filename, name,
-                                                         location="."))
-    # If we can't load the config file after searching in all locations, raise
-    # an IOError. Hint: Maybe you missed to set the app.base config variable?
+                                                         name, location="."))
+    except:
+        pass
+    # If we can't load the config file, raise an IOError. Hint: Maybe
+    # you missed to set the app.base config variable?
     if loaded_config is None:
         raise IOError("Could not load form configuration for %s" % filename)
     return Config(loaded_config).get_form(formname)
