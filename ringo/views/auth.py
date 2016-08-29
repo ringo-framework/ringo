@@ -53,7 +53,7 @@ def login(request):
     handle_history(request)
     _ = request.translate
     settings = request.registry.settings
-    config = Config(load(get_path_to_form_config('auth.xml', 'ringo')))
+    config = Config(load(get_path_to_form_config('auth.xml')))
     form_config = config.get_form('loginform')
     form = Form(form_config, csrf_token=request.session.get_csrf_token(),
                 translate=_)
@@ -131,7 +131,8 @@ def register_user(request):
         raise exc.exception_response(503)
     handle_history(request)
     _ = request.translate
-    config = Config(load(get_path_to_form_config('auth.xml', 'ringo')))
+    print get_path_to_form_config('auth.xml')
+    config = Config(load(get_path_to_form_config('auth.xml')))
     form_config = config.get_form('register_user')
     form = Form(form_config, csrf_token=request.session.get_csrf_token(),
                 translate=_)
@@ -236,7 +237,7 @@ def forgot_password(request):
         raise exc.exception_response(503)
     handle_history(request)
     _ = request.translate
-    config = Config(load(get_path_to_form_config('auth.xml', 'ringo')))
+    config = Config(load(get_path_to_form_config('auth.xml')))
     form_config = config.get_form('forgot_password')
     form = Form(form_config, csrf_token=request.session.get_csrf_token(),
                 translate=_)
