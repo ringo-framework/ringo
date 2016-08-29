@@ -32,17 +32,25 @@
   </form>
   <form id="register_user" method="POST" action="" enctype="multipart/form-data">
     <row>
-      <col><field ref="e1"/></col>
-      <col><text>The loginname is used together with the password to login into the application.</text></col>
-    </row>
-    <row>
-      <col width="3"><field ref="e2"/></col>
-      <col width="3"><field ref="e4"/></col>
-      <col width="6"><text>The password must be at least 12 chars long and must contain 2 non non-letters.</text></col>
-    </row>
-    <row>
-      <col><field ref="e5"/></col>
-      <col><text>The email is required to send you system messages like  notifications on events in the application, or confirmation emails.</text></col>
+      <col>
+        <row>
+          <col><field ref="e1"/></col>
+        </row>
+        <row>
+          <col><field ref="e2"/></col>
+          <col><field ref="e4"/></col>
+        </row>
+        <row>
+          <col><field ref="e5"/></col>
+        </row>
+      </col>
+      <col>
+        <fieldset label="Help">
+          <text>The loginname is used together with the password to login into the application.</text>
+          <text>The password must be at least 12 chars long and must contain 2 non non-letters.</text>
+          <text>The email is required to send you system messages like notifications on events in the application, or confirmation emails.</text>
+        </fieldset>
+      </col>
     </row>
     <buttons>
       <button type="submit">Register Account</button>

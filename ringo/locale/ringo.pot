@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 1.14.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-08-26 13:03+0200\n"
+"POT-Creation-Date: 2016-08-29 08:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -234,7 +234,7 @@ msgstr ""
 #: ringo/templates/auth/confirm_user.mako:24 ringo/templates/auth/login.mako:5
 #: ringo/templates/auth/reset_password.mako:19
 #: ringo/templates/auth/reset_password.mako:24 ringo/templates/header.mako:96
-#: ringo/templates/index.mako:22 ringo/views/forms/auth.xml:10
+#: ringo/templates/index.mako:22 ringo/views/forms/auth.xml:11
 #: ringo/views/forms/users.xml:1 ringo/views/forms/users.xml:2
 #: ringo/views/tables/profiles.json:6
 msgid "Login"
@@ -412,7 +412,7 @@ msgid ""
 msgstr ""
 
 #: ringo/templates/auth/forgot_password.mako:5 ringo/templates/auth/login.mako:16
-#: ringo/views/forms/auth.xml:11
+#: ringo/views/forms/auth.xml:12
 msgid "Reset Password"
 msgstr ""
 
@@ -420,7 +420,7 @@ msgstr ""
 msgid "Enter your Loginname and a password reset email will be sent out"
 msgstr ""
 
-#: ringo/templates/auth/forgot_password.mako:20 ringo/views/auth.py:258
+#: ringo/templates/auth/forgot_password.mako:20 ringo/views/auth.py:259
 msgid ""
 "Password reset token has been sent to the users email address. Please check "
 "your email."
@@ -431,7 +431,7 @@ msgid "New here? Register a new account!"
 msgstr ""
 
 #: ringo/templates/auth/login.mako:11 ringo/templates/auth/register_user.mako:5
-#: ringo/views/forms/auth.xml:12
+#: ringo/views/forms/auth.xml:13
 msgid "Register Account"
 msgstr ""
 
@@ -445,7 +445,7 @@ msgid ""
 " with a confirmation link to complete the registration."
 msgstr ""
 
-#: ringo/templates/auth/register_user.mako:20 ringo/views/auth.py:203
+#: ringo/templates/auth/register_user.mako:20 ringo/views/auth.py:204
 msgid ""
 "User has been created and a confirmation mail was sent to the users email "
 "adress. Please check your email."
@@ -765,47 +765,47 @@ msgstr ""
 msgid "Logout was successfull"
 msgstr ""
 
-#: ringo/views/auth.py:141
+#: ringo/views/auth.py:142
 msgid "There is already a user with this name"
 msgstr ""
 
-#: ringo/views/auth.py:145 ringo/views/users.py:131 ringo/views/users.py:161
+#: ringo/views/auth.py:146 ringo/views/users.py:131 ringo/views/users.py:161
 #: ringo/views/users.py:285
 msgid "Password must be at least 12 characters long."
 msgstr ""
 
-#: ringo/views/auth.py:149 ringo/views/users.py:135 ringo/views/users.py:165
+#: ringo/views/auth.py:150 ringo/views/users.py:135 ringo/views/users.py:165
 #: ringo/views/users.py:289
 msgid "Password must contain at least 2 non-letters."
 msgstr ""
 
-#: ringo/views/auth.py:195
+#: ringo/views/auth.py:196
 msgid "Confirm user registration"
 msgstr ""
 
-#: ringo/views/auth.py:224
+#: ringo/views/auth.py:225
 msgid "The user has beed successfull confirmed."
 msgstr ""
 
-#: ringo/views/auth.py:226
+#: ringo/views/auth.py:227
 msgid "The user was not confirmed. Maybe the confirmation token was not valid?"
 msgstr ""
 
-#: ringo/views/auth.py:251
+#: ringo/views/auth.py:252
 msgid "Password reset request"
 msgstr ""
 
-#: ringo/views/auth.py:279
+#: ringo/views/auth.py:280
 msgid "Password has been reseted"
 msgstr ""
 
-#: ringo/views/auth.py:286
+#: ringo/views/auth.py:287
 msgid ""
 "Password was resetted and sent to the users email address. Please check your "
 "email."
 msgstr ""
 
-#: ringo/views/auth.py:290
+#: ringo/views/auth.py:291
 msgid "Password was not resetted. Maybe the request token was not valid?"
 msgstr ""
 
@@ -947,24 +947,28 @@ msgid "Password are not equal"
 msgstr ""
 
 #: ringo/views/forms/auth.xml:7
+msgid "Help"
+msgstr ""
+
+#: ringo/views/forms/auth.xml:8
 msgid ""
 "The loginname is used together with the password to login into the "
 "application."
 msgstr ""
 
-#: ringo/views/forms/auth.xml:8
+#: ringo/views/forms/auth.xml:9
 msgid ""
 "The password must be at least 12 chars long and must contain 2 non non-"
 "letters."
 msgstr ""
 
-#: ringo/views/forms/auth.xml:9
+#: ringo/views/forms/auth.xml:10
 msgid ""
-"The email is required to send you system messages like  notifications on "
+"The email is required to send you system messages like notifications on "
 "events in the application, or confirmation emails."
 msgstr ""
 
-#: ringo/views/forms/auth.xml:13
+#: ringo/views/forms/auth.xml:14
 msgid "Reset"
 msgstr ""
 
