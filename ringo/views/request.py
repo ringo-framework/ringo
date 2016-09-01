@@ -2,6 +2,7 @@
 import logging
 import urllib
 import urlparse
+import transaction
 from pyramid.httpexceptions import HTTPFound
 from formbar.form import Validator
 from ringo.lib.security import (
@@ -210,6 +211,10 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
                                  callback=form_has_errors,
                                  context=form))
 
+    # Begin a nested transaction. In case an error occours while saving
+    # the data the nested transaction will be rolled back. The parent
+    # session will be still ok.
+    request.db.begin_nested()
     if form.validate(request.params) and "blobforms" not in request.params:
         checker = ValueChecker()
         try:
@@ -256,8 +261,11 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
                                                                 request))
                 set_current_form_page(table, itemid, page, request)
 
+            # In case all is ok commit the nested session.
+            transaction.commit()
             return True
         except Exception as error:
+            request.db.rollback()
             mapping['error'] = unicode(error.message)
             if event == "create":
                 msg = _('Error while saving new '
@@ -271,6 +279,7 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
     elif "blobforms" in request.params:
         pass
     else:
+        request.db.rollback()
         if event == "create":
             msg = _('Error on validation new '
                     '${item_type}.', mapping=mapping)
