@@ -261,8 +261,8 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
                                                                 request))
                 set_current_form_page(table, itemid, page, request)
 
-            # In case all is ok commit the nested session.
-            transaction.commit()
+            # In case all is ok merge the nested session.
+            request.db.merge(item)
             return True
         except Exception as error:
             request.db.rollback()
