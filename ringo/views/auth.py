@@ -21,7 +21,7 @@ from ringo.lib.helpers.appinfo import get_app_title
 from ringo.lib.helpers.misc import dynamic_import
 from ringo.lib.form import get_path_to_form_config
 from ringo.lib.security import login as user_login, request_password_reset, \
-    password_reset, activate_user, encrypt_password
+    password_reset, activate_user, encrypt_password, AuthentificationException
 from ringo.lib.message import Mailer, Mail
 
 User = import_model('ringo.model.user.User')
@@ -84,7 +84,7 @@ def login(request):
                     callback = dynamic_import(settings.get("auth.callback"))
                     callback(request, user)
                     authenticated = True
-                except Exception as e:
+                except AuthentificationException as e:
                     msg = e.message
                     request.session.flash(msg, 'critical')
             else:

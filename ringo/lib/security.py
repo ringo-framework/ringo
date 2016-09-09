@@ -586,6 +586,11 @@ def get_last_logins(request, since, success=None):
         return [l for l in result if l.success == success]
 
 
+class AuthentificationException(Exception):
+    """Exception to be raise if error on authentification is detected."""
+    pass
+
+
 class AuthorizationException(Exception):
     """Exception to be raise if a authorization error is detected."""
     pass

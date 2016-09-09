@@ -1448,8 +1448,12 @@ authentification proccess by doing further checks on the user, or
 trigger some actions after the user logs in. The callback must have the
 following form::
 
+        from ringo.lib.security import AuthentificationException
+
         def auth_callback(request, user):
-            # Implement logic.
+            # permit admin user to login.
+            if user.login == "admin":
+                raise AuthentificationException("Admin is not allowed")
 
 To cancel the authentification the function must raise an exception. The message
 of the exception is used as error message. In all other cases to user is
