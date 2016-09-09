@@ -1440,6 +1440,29 @@ auth.password_reminder
     To enable this feature the mailsystem must be configured too. You
     need to set the mail host and the default sender in your config.
 
+Authentification callback
+=========================
+You can configure a callback method which is called after the user is
+basically authenticated. This callback can be used to cancel the
+authentification proccess by doing further checks on the user, or
+trigger some actions after the user logs in. The callback must have the
+following form::
+
+        def auth_callback(request, user):
+            # Implement logic.
+
+To cancel the authentification the function must raise an exception. The message
+of the exception is used as error message. In all other cases to user is
+authenticated.
+
+Can need to configure this callback in the *ini* file:
+
+auth.callback = foo.bar.callback
+
+*foo.bar.callback* must be the modul path which can be used to import the
+function.
+
+
 ********
 Security
 ********
