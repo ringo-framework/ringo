@@ -28,6 +28,9 @@ Next
 - On user registration the password strength is now checked. Password must be
   at least 12 chars long und need to have 2 non chars.
 - Add option to define rolespecific descriptions of the state.
+- Add option to configure a callback after a user has authenticated with the
+  application. This callback can be used to cancel the authentification or to
+  further actions after the user logs in.
 
 1.13
 ====
