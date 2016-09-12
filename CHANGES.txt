@@ -1,3 +1,37 @@
+Next
+====
+- Rewrite of the documentation.
+- Fixed issue21 (https://github.com/ringo-framework/ringo/issues/21). Enabled
+  sorting config in Listingfieldrenderer.
+- Expand values from checkboxes too.
+- Added XLSX Export.
+- Introduced special suffix `__e_x_p_a_n_d` for attributes which can be used to
+  access the expanded value of the attribute as alternative to the call of
+  get_value. This is needed because it is not always possible to call the
+  get_value method. Example: getattr(obj, 'foo__e_x_p_a_n_d') will return the
+  expanded value of the `foo` attribute.
+- Removed ODF-Converter from Ringo core. It is now part of the
+  ringo_printtemplate extensions as this is the only place where it is
+  actually used.
+- #5 Show info dialog on circualr dependency error on deletion
+- #11 Check uniqueness of name when on creating and update of roles.
+- #12 With fix for #5 the admin user can not delete himself anymore, because
+  of handling of circular dependency.
+- #14 Make name field of modules readonly. Field is internal and not meant to
+  be editable.
+- #19 Fixed removing permissions (in general fixed removing items from
+  nm-relations.) 
+- Added "button" layout for the Statefieldrenderer.
+- Handle "Save and proceed" button (New feature in formbar).
+- Added StaticListRenderer. Can be used to render simple static overviews of
+  items.
+- On user registration the password strength is now checked. Password must be
+  at least 12 chars long und need to have 2 non chars.
+- Add option to define rolespecific descriptions of the state.
+- Add option to configure a callback after a user has authenticated with the
+  application. This callback can be used to cancel the authentification or to
+  further actions after the user logs in.
+
 1.13
 ====
 - Fixes in scaffold. Improve default MANIFEST and include more files. Make

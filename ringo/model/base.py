@@ -171,6 +171,14 @@ class BaseItem(object):
         return self.get_value(name)
 
     def __getattr__(self, name):
+        # In some cases it is needed to be able to trigger getting the
+        # exapanded value without calling the get_value method. This can
+        # be achieved by accessing the attribute with a special name.
+        # Lets say you want to get the expanded value for `foo`. You get
+        # this by asking for `foo__e_x_p_a_n_d`
+        if name.endswith("__e_x_p_a_n_d"):
+            return self.get_value(name.replace("__e_x_p_a_n_d", ""),
+                                  expand=True)
         return get_raw_value(self, name)
 
     def __setattr__(self, name, value):
@@ -282,9 +290,22 @@ class BaseItem(object):
             form_config = get_form_config(obj, form_id)
             try:
                 field_config = form_config.get_field(name)
+                options = []
                 for option in field_config.options:
-                    if str(raw_value) == str(option[1]):
-                        return option[0]
+                    # Handle "list" values "{"",1,2}"
+                    if str(raw_value).startswith("{") and str(raw_value).endswith("}"):
+                        for value in raw_value.strip("}").strip("{").split(","):
+                            if str(value) == str(option[1]):
+                                options.append(option[0])
+                    elif str(raw_value) == str(option[1]):
+                        options.append(option[0])
+                        break
+                # If we can not match a value we return the raw value.
+                # This can also happen if the user tries to expand value
+                # which do not have options.
+                if len(options) > 0:
+                    return ", ".join(options)
+                return raw_value
             except KeyError:
                 # If the field/value which should to be expanded is not
                 # included in the form the form library will raise a
@@ -351,7 +372,29 @@ class BaseItem(object):
                 continue
             if hasattr(self, key):
                 log.debug("Setting value '%s' in %s" % (value, key))
-                setattr(self, key, value)
+                oldvalue = getattr(self, key)
+                if isinstance(value, list) and isinstance(oldvalue, list):
+                    # Special handling for relations in NM relations.
+                    # See ticket #19 in Ringo issue tracker for more
+                    # details. Simply exchaning the relations in this
+                    # case seems not to work. I case of the error in
+                    # triggering the deleting of items in the
+                    # nm-relation from both sides. In this case the
+                    # second deletion will fail.
+                    #
+                    # Regarding to
+                    # http://docs.sqlalchemy.org/en/latest/orm/basic_relationships.html#deleting-rows-from-the-many-to-many-table
+                    # relations should be removed by using remove(item).
+                    # Howver poping the items before adding the new
+                    # items seems to work too. I excpet that poping the
+                    # items will somehow tweak SQLAlchemy in the way
+                    # that it handles deleting items correct now.
+                    while oldvalue:
+                        oldvalue.pop(0)
+                    for nvalue in value:
+                        oldvalue.append(nvalue)
+                else:
+                    setattr(self, key, value)
             else:
                 log.warning('Not saving "%s". Attribute not found' % key)
 

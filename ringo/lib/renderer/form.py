@@ -223,14 +223,20 @@ class StateFieldRenderer(FormbarDropdown):
     a textfield showing the current state of the item and a dropdown
     with available actions which can be done from this state.
 
-    You can configure the layout of the statefield by setting the layout
-    option. On default the renderer shows the current state with
-    description and the resulting state and description when choosing a
-    transtion. Setting the option to simple will render a simple
-    dropdown with the current state as part of the fields label and the
-    available transitions as options of the dropdown
+    * layout: Option to change the layout of the statefield. The
+    renderer offers currently three options to render setting the
+    `layout` attribute of the renderer:
 
-    * layout: Option to change the layout of the statefield.
+        1. default: In default the renderer shows the current state with
+        description and the resulting state and description when
+        choosing a transtion.
+        2. simple: Simple will render a simple dropdown with the current
+        state as part of the fields label and the available transitions
+        as options of the dropdown
+        3. button: Botton will render the current state the available
+        transitions as a button. The button will work like a submit
+        button of the form so if the user clicks on it the form data
+        will be submitted and the state is changed.
 
     """
 
@@ -293,6 +299,12 @@ class ListingFieldRenderer(FormbarSelectionField):
       modal popup.
     * backlink: "true" or "false". If true the user will be redirected
       back to the listing after creating a new item. Defaults to true.
+
+    Example::
+
+        <entity ...>
+            <renderer type="listing" showall="true" table="details"/>
+        </entity>
     """
 
     def __init__(self, field, translate):
@@ -346,7 +358,8 @@ class ListingFieldRenderer(FormbarSelectionField):
                 selected = selected.items
             elif not isinstance(selected, list):
                 selected = [selected]
-            return selected
+            selected_ids = [s.id for s in selected]
+            return [i for i in items if i.id in selected_ids]
         except AttributeError:
             # Can happen when designing forms an the model of the item
             # is not yet configured.

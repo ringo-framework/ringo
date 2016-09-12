@@ -40,15 +40,6 @@ class TestUpdate:
         app.post("/modules/update/1", params=values, status=302)
         transaction_rollback(app)
 
-    @pytest.mark.xfail
-    def test_update_POST_name_not_unique(self, app):
-        login(app, "admin", "secret")
-        transaction_begin(app)
-        values = {"name": "users", "label": "Modul",
-                  "label_plural": "Modules"}
-        app.post("/modules/update/1", params=values, status=200)
-        transaction_rollback(app)
-
     def test_update_POST_missing_name(self, app):
         login(app, "admin", "secret")
         transaction_begin(app)

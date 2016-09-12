@@ -12,6 +12,12 @@ def serialize(value):
     of the given python value."""
     if value is None:
         return ""
+    if isinstance(value, unicode):
+        return value
+    if isinstance(value, int):
+        return unicode(value)
+    if isinstance(value, float):
+        return unicode(value)
     if isinstance(value, datetime):
         return value.strftime("%Y-%m-%d %H:%M:%S")
     if isinstance(value, bool):
@@ -26,6 +32,12 @@ def serialize(value):
         return sorted([v.id for v in value])
     if hasattr(value, 'id'):
         return [value.id]
+    # Even if Ringo does not have a bytearray type yet the serialize
+    # method supports it to convert the given value into unicode
+    if isinstance(value, bytearray):
+        return value.decode("utf-8")
+    log.warning("Unhandled type '%s'. "
+                "Using default and converting to unicode" % type(value))
     return unicode(value)
 
 def safestring(unsafe):
@@ -120,13 +132,6 @@ def set_raw_value(element, name, value):
     else:
         penulti = element
         attr = name
-
-    # Special handling of setting lists. Which fixes #19
-    # https://github.com/ringo-framework/ringo/issues/19. Unfortunatly
-    # this seems to fix the issue but we do need know why. This
-    # workaround is only need (and actually works) for lists which are
-    # already exting in the item. In all other cases we still use the
-    # old behaviour.
     object.__setattr__(penulti, attr, value)
 
 

@@ -17,7 +17,8 @@ from ringo.views.request import (
 log = logging.getLogger(__name__)
 
 
-def create(request, callback=None, renderers=None, validators=None):
+def create(request, callback=None, renderers=None,
+           validators=None, values=None):
     """Base method to handle create requests. This view will render a
     create form to update items on (GET) requests.
 
@@ -34,6 +35,8 @@ def create(request, callback=None, renderers=None, validators=None):
                 for renderering some form elements.
     :validators: List of external formbar validators which should be
                  added to the form for validation
+    :values: Dictionary of additional values which will be available in
+             the form
     :returns: Dictionary or Redirect.
     """
     handle_history(request)
@@ -54,18 +57,21 @@ def create(request, callback=None, renderers=None, validators=None):
     # values e.g (See create function of forms)
     if not request.context.item:
         request.context.item = factory.create(request.user, {})
-    form = get_item_form(params.get("form", "create"),
-                         request, renderers, validators)
-    if request.POST and 'blobforms' not in request.params:
-        if handle_POST_request(form, request, callback, 'create', renderers):
-            return handle_redirect_on_success(request)
-    rvalues = get_return_value(request)
-    values = {'_roles': [str(r.name) for r in request.user.roles]}
+    if values is None:
+        values = {}
+    values['_roles'] = [str(r.name) for r in request.user.roles]
     values.update(params.get('values', {}))
     form_values = request.session.get("form_values") or {}
     values.update(form_values)
     request.session["form_values"] = None
     request.session.save()
+
+    form = get_item_form(params.get("form", "create"),
+                         request, renderers, validators, values=values)
+    if request.POST and 'blobforms' not in request.params:
+        if handle_POST_request(form, request, callback, 'create', renderers):
+            return handle_redirect_on_success(request)
+    rvalues = get_return_value(request)
     rvalues['form'] = render_item_form(request, form, values, False)
     return rvalues
 

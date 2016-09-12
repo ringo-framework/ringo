@@ -12,16 +12,21 @@ from formbar.form import Form, Validator
 from ringo.lib.sql import DBSession
 from ringo.model.user import USER_GROUP_ID, USER_ROLE_ID
 from ringo.lib.helpers import import_model
+from ringo.views.request import handle_history
+from ringo.views.users import (
+    password_minlength_validator,
+    password_nonletter_validator
+)
+from ringo.lib.helpers.appinfo import get_app_title
+from ringo.lib.helpers.misc import dynamic_import
+from ringo.lib.form import get_path_to_form_config
+from ringo.lib.security import login as user_login, request_password_reset, \
+    password_reset, activate_user, encrypt_password, AuthentificationException
+from ringo.lib.message import Mailer, Mail
+
 User = import_model('ringo.model.user.User')
 Usergroup = import_model('ringo.model.user.Usergroup')
 Role = import_model('ringo.model.user.Role')
-
-from ringo.views.request import handle_history
-from ringo.lib.helpers.appinfo import get_app_title
-from ringo.lib.form import get_path_to_form_config
-from ringo.lib.security import login as user_login, request_password_reset, \
-    password_reset, activate_user, encrypt_password
-from ringo.lib.message import Mailer, Mail
 
 log = logging.getLogger(__name__)
 
@@ -33,15 +38,19 @@ def is_login_unique(field, data):
 
 
 def is_registration_enabled(settings):
-    return (bool(settings.get('mail.host'))
-            and bool(settings.get('mail.default_sender'))
-            and settings.get('auth.register_user') == "true")
+    return (bool(settings.get('mail.host')) and
+            bool(settings.get('mail.default_sender')) and
+            settings.get('auth.register_user') == "true")
 
 
 def is_pwreminder_enabled(settings):
-    return (bool(settings.get('mail.host'))
-            and bool(settings.get('mail.default_sender'))
-            and settings.get('auth.password_reminder') == "true")
+    return (bool(settings.get('mail.host')) and
+            bool(settings.get('mail.default_sender')) and
+            settings.get('auth.password_reminder') == "true")
+
+
+def is_authcallback_enabled(settings):
+    return bool(settings.get('auth.callback'))
 
 
 @view_config(route_name='login', renderer='/auth/login.mako')
@@ -49,7 +58,7 @@ def login(request):
     handle_history(request)
     _ = request.translate
     settings = request.registry.settings
-    config = Config(load(get_path_to_form_config('auth.xml', 'ringo')))
+    config = Config(load(get_path_to_form_config('auth.xml')))
     form_config = config.get_form('loginform')
     form = Form(form_config, csrf_token=request.session.get_csrf_token(),
                 translate=_)
@@ -67,11 +76,26 @@ def login(request):
             target_url = request.route_path('accountdisabled')
             return HTTPFound(location=target_url)
         else:
-            msg = _("Login was successfull")
-            request.session.flash(msg, 'success')
-            headers = remember(request, user.id)
-            target_url = request.route_path('home')
-            return HTTPFound(location=target_url, headers=headers)
+
+            # Handle authentication callback.
+            if is_authcallback_enabled(settings):
+                authenticated = False
+                try:
+                    callback = dynamic_import(settings.get("auth.callback"))
+                    callback(request, user)
+                    authenticated = True
+                except AuthentificationException as e:
+                    msg = e.message
+                    request.session.flash(msg, 'critical')
+            else:
+                authenticated = True
+
+            if authenticated:
+                msg = _("Login was successfull")
+                request.session.flash(msg, 'success')
+                headers = remember(request, user.id)
+                target_url = request.route_path('home')
+                return HTTPFound(location=target_url, headers=headers)
 
     return {'form': form.render(),
             'registration_enabled': is_registration_enabled(settings),
@@ -95,7 +119,6 @@ def logout(request):
     return HTTPFound(location=target_url)
 
 
-
 @view_config(route_name='autologout', renderer='/auth/autologout.mako')
 def autologout(request):
 
@@ -113,6 +136,7 @@ def autologout(request):
     _ = request.translate
     return {"_": _}
 
+
 @view_config(route_name='accountdisabled', renderer='/auth/disabled.mako')
 def accountdisabled(request):
     _ = request.translate
@@ -127,16 +151,27 @@ def register_user(request):
         raise exc.exception_response(503)
     handle_history(request)
     _ = request.translate
-    config = Config(load(get_path_to_form_config('auth.xml', 'ringo')))
+    config = Config(load(get_path_to_form_config('auth.xml')))
     form_config = config.get_form('register_user')
     form = Form(form_config, csrf_token=request.session.get_csrf_token(),
                 translate=_)
     # Do extra validation which is not handled by formbar.
     # Is the login unique?
-    validator = Validator('login',
-                          'There is already a user with this name',
-                          is_login_unique)
-    form.add_validator(validator)
+    login_unique_validator = Validator('login',
+                                       _('There is already a user with this '
+                                         'name'),
+                                       is_login_unique)
+    pw_len_validator = Validator('pass',
+                                 _('Password must be at least 12 characters '
+                                   'long.'),
+                                 password_minlength_validator)
+    pw_nonchar_validator = Validator('pass',
+                                     _('Password must contain at least 2 '
+                                       'non-letters.'),
+                                     password_nonletter_validator)
+    form.add_validator(login_unique_validator)
+    form.add_validator(pw_len_validator)
+    form.add_validator(pw_nonchar_validator)
     registration_complete = False
     if request.POST:
         if form.validate(request.params):
@@ -182,7 +217,10 @@ def register_user(request):
                       'app_name': get_app_title(),
                       'email': settings['mail.default_sender'],
                       '_': _}
-            mail = Mail([recipient], subject, template="register_user", values=values)
+            mail = Mail([recipient],
+                        subject,
+                        template="register_user",
+                        values=values)
             mailer.send(mail)
 
             msg = _("User has been created and a confirmation mail was sent"
@@ -190,7 +228,6 @@ def register_user(request):
             request.session.flash(msg, 'success')
             registration_complete = True
     return {'form': form.render(), 'complete': registration_complete}
-
 
 
 @view_config(route_name='confirm_user',
@@ -221,7 +258,7 @@ def forgot_password(request):
         raise exc.exception_response(503)
     handle_history(request)
     _ = request.translate
-    config = Config(load(get_path_to_form_config('auth.xml', 'ringo')))
+    config = Config(load(get_path_to_form_config('auth.xml')))
     form_config = config.get_form('forgot_password')
     form = Form(form_config, csrf_token=request.session.get_csrf_token(),
                 translate=_)
@@ -233,12 +270,17 @@ def forgot_password(request):
             if user:
                 mailer = Mailer(request)
                 recipient = user.profile[0].email
+                token = user.reset_tokens[-1]
                 subject = _('Password reset request')
-                values = {'url': request.route_url('reset_password', token=user.reset_tokens[-1]),
+                values = {'url': request.route_url('reset_password',
+                                                   token=token),
                           'app_name': get_app_title(),
                           'email': settings['mail.default_sender'],
                           '_': _}
-                mail = Mail([recipient], subject, template="password_reset_request", values=values)
+                mail = Mail([recipient],
+                            subject,
+                            template="password_reset_request",
+                            values=values)
                 mailer.send(mail)
             msg = _("Password reset token has been sent to the users "
                     "email address. Please check your email.")
@@ -266,7 +308,10 @@ def reset_password(request):
                   'app_name': get_app_title(),
                   'email': settings['mail.default_sender'],
                   '_': _}
-        mail = Mail([recipient], subject, template="password_reminder", values=values)
+        mail = Mail([recipient],
+                    subject,
+                    template="password_reminder",
+                    values=values)
         mailer.send(mail)
         msg = _("Password was resetted and sent to the users email address."
                 " Please check your email.")

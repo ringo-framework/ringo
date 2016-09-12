@@ -88,7 +88,7 @@ def get_rendered_ownership_form(request):
     form = get_ownership_form(request)
     modul = get_item_modul(request, item)
     usergroup_modul = get_item_modul(request, Usergroup)
-    _groups = [str(g.name) for g in request.user.groups]
+    _groups = [unicode(g.name) for g in request.user.groups]
     _admin = (_has_administrational_role(modul, request.user)
               or has_role(request.user, "admin")
               or _has_administrational_role(usergroup_modul, request.user))
@@ -141,7 +141,7 @@ def render_item_form(request, form, values=None, validate=True):
                        previous_values=previous_values)
 
 
-def get_item_form(name, request, renderers=None, validators=None):
+def get_item_form(name, request, renderers=None, validators=None, values=None):
     """Will return a form for the given item
 
     :name: Name of the form
@@ -150,12 +150,16 @@ def get_item_form(name, request, renderers=None, validators=None):
                 for renderering some form elements.
     :validators: List of external formbar validators which should be
                  added to the form for validation
+    :values: Dictionary with external values to prefill the form or add
+    addional values for rule evaluation.
     :returns: Form
     """
     if renderers is None:
         renderers = {}
     if validators is None:
         validators = []
+    if values is None:
+        values = {}
     item = get_item_from_request(request)
     renderers = add_renderers(renderers)
     clazz = request.context.__model__
@@ -180,7 +184,8 @@ def get_item_form(name, request, renderers=None, validators=None):
                 csrf_token=request.session.get_csrf_token(),
                 eval_url=get_eval_url(),
                 url_prefix=get_app_url(request),
-                locale=locale_negotiator(request))
+                locale=locale_negotiator(request),
+                values=values)
     # Add validators
     for validator in validators:
         form.add_validator(validator)
@@ -203,6 +208,41 @@ def get_current_form_page(clazz, request):
         return int(page)
     else:
         return 1
+
+
+def get_next_form_page(form, current_page):
+    """Returns the id of the next formpage, Returns current_page if
+    there is no next page.
+
+    :form: A formbar form instance
+    :current_page: id of the current page:
+    :returns: ID of the next page in the form
+    """
+    found = False
+    for page in form.pages:
+        if found:
+            return page.attrib.get("id").strip("p")
+        if current_page == int(page.attrib.get("id").strip("p")):
+            # Return page id on next iteration.
+            found = True
+    else:
+        # We did not found anything and the iteration ends.
+        return current_page
+
+
+def set_current_form_page(table, itemid, page, request):
+    """Will save the given page of a form as the current page of the
+    form in the session in the session. The key in the session is build
+    as `<tablenameofitems>.<itemid>.form.page`
+
+    :tabel: Name of the table where the items are stored.
+    :itemid: ID of the item for which the page is stored.
+    :page: ID of the page.
+    :request: Current request
+    :returns: Response
+    """
+    request.session['%s.%s.form.page' % (table, itemid)] = page
+    request.session.save()
 
 
 def get_item_from_request(request):

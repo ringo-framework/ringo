@@ -221,4 +221,10 @@
       ${message}
     </div>
   % endfor
+  % for message in request.session.pop_flash('critical'):
+    <div class="alert alert-danger alert-dismissible">
+      <button type="button" class="close nospinner" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      ${message}
+    </div>
+  % endfor
 </%def>

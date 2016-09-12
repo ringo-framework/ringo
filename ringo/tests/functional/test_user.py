@@ -44,6 +44,10 @@ class TestCreate:
         login(app, "admin", "secret")
         transaction_begin(app)
         create_user(app, "test")
+        udata = search_data(app, "users", "login", "test")
+        gdata = search_data(app, "usergroups", "name", "test")
+        # Check that the default_gid is set to the users usergroup
+        assert gdata.get("id") == udata.get("default_gid") 
         transaction_rollback(app)
 
     def test_POST_password_tooshort(self, app):
@@ -132,8 +136,9 @@ class TestDelete:
         values = {"confirmed": 1}
         app.post("/users/delete/%s" % id, params=values, status=302)
 
-    @pytest.mark.xfail
     def test_delete_POST_admin_confirm_yes(self, app):
+        """Admin user can not delete himself. This triggers a circular
+        dependecy which is handled with the fix of #5"""
         login(app, "admin", "secret")
         transaction_begin(app)
         values = {"confirmed": 1}
