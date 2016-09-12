@@ -18,9 +18,10 @@ from ringo.views.users import (
     password_nonletter_validator
 )
 from ringo.lib.helpers.appinfo import get_app_title
+from ringo.lib.helpers.misc import dynamic_import
 from ringo.lib.form import get_path_to_form_config
 from ringo.lib.security import login as user_login, request_password_reset, \
-    password_reset, activate_user, encrypt_password
+    password_reset, activate_user, encrypt_password, AuthentificationException
 from ringo.lib.message import Mailer, Mail
 
 User = import_model('ringo.model.user.User')
@@ -48,6 +49,10 @@ def is_pwreminder_enabled(settings):
             settings.get('auth.password_reminder') == "true")
 
 
+def is_authcallback_enabled(settings):
+    return bool(settings.get('auth.callback'))
+
+
 @view_config(route_name='login', renderer='/auth/login.mako')
 def login(request):
     handle_history(request)
@@ -71,11 +76,26 @@ def login(request):
             target_url = request.route_path('accountdisabled')
             return HTTPFound(location=target_url)
         else:
-            msg = _("Login was successfull")
-            request.session.flash(msg, 'success')
-            headers = remember(request, user.id)
-            target_url = request.route_path('home')
-            return HTTPFound(location=target_url, headers=headers)
+
+            # Handle authentication callback.
+            if is_authcallback_enabled(settings):
+                authenticated = False
+                try:
+                    callback = dynamic_import(settings.get("auth.callback"))
+                    callback(request, user)
+                    authenticated = True
+                except AuthentificationException as e:
+                    msg = e.message
+                    request.session.flash(msg, 'critical')
+            else:
+                authenticated = True
+
+            if authenticated:
+                msg = _("Login was successfull")
+                request.session.flash(msg, 'success')
+                headers = remember(request, user.id)
+                target_url = request.route_path('home')
+                return HTTPFound(location=target_url, headers=headers)
 
     return {'form': form.render(),
             'registration_enabled': is_registration_enabled(settings),
