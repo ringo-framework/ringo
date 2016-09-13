@@ -196,6 +196,11 @@ def setup_ringo_security(config):
         config.add_tween('ringo.tweens.clickjacking.clickjacking_factory')
     if settings.get("security.header_csp", "false") == "true":
         config.add_tween('ringo.tweens.csp.csp_factory')
+    if settings.get("auth.anonymous_user"):
+        log.info("Setting up anonymous access.")
+        config.add_tween('ringo.tweens.anonymous_access.user_factory')
+    else:
+        config.add_tween('ringo.tweens.anonymous_access.ensure_logout')
 
 
 def get_user(request):
