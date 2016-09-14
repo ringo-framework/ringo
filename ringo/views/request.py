@@ -209,11 +209,11 @@ def handle_POST_request(form, request, callback, event, renderers=None):
                 item = factory.create(request.user, form.data)
                 item.save({}, request)
                 request.context.item = item
+                handle_add_relation(request, item)
             else:
                 values = checker.check(clazz, form.data, request, item)
                 item.save(values, request)
             handle_event(request, item, event)
-            handle_add_relation(request, item)
             handle_callback(request, callback)
             handle_caching(request)
 
