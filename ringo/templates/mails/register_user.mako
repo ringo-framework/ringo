@@ -1,3 +1,4 @@
+## -*- coding: utf-8 -*-
 ${_('Dear user')},
 
 ${_('You have received this email because you requested a user registration for "${app_name}".', mapping={'app_name': app_name})}
