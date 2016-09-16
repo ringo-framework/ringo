@@ -379,7 +379,6 @@ class ListingFieldRenderer(FormbarSelectionField):
         html.append(HTML.tag("div", _closed=False,
                              rules=u"{}".format(";".join(self._field.rules_to_string)),
                              formgroup="{}".format(self._field.name),
-                             id="{}".format(self._field.name),
                              desired="{}".format(self._field.desired),
                              required="{}".format(self._field.required),
                              class_=class_options))
