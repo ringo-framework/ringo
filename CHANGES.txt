@@ -31,6 +31,13 @@ Next
 - Add option to configure a callback after a user has authenticated with the
   application. This callback can be used to cancel the authentification or to
   further actions after the user logs in.
+- Added sorting icons for datatables.
+-
+
+1.13.3
+======
+Bugfix release. Fixes serious problem handling addrelations based on the
+session variable. This error may cause wrong relations between items.
 
 1.13
 ====
