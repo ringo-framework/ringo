@@ -3,6 +3,7 @@
   <label for="${field.id}">${field.label}</label>
   <div class="readonlyfield" name="${field.name}">
       ${_(state._label)}
+      <input type="hidden" name="${field.name}" id="${field.id}" value="${field.get_value()}" datatype="integer"/>
   </div>
   % if state.get_description(request.user):
     <p><small><strong>${_('Description')}:</strong>
