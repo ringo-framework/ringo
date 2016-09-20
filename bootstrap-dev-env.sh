@@ -1,11 +1,12 @@
 #!/bin/sh
 #set -x
 
-USAGE="Usage: `basename $0` [-hv] [-c git-url] [-n] app"
+USAGE="Usage: `basename $0` [-hv] [-s] [-c git-url] [-n] app"
 VERSION="0.0"
 
 NEWAPP=0
 GIT="0"
+SYSTEMSITEPACKAGES=0
 
 # URLS
 BRABBEL=https://github.com/ringo-framework/brabbel
@@ -14,7 +15,7 @@ RINGO=https://github.com/ringo-framework/ringo
 
 
 # Parse command line options.
-while getopts hvnc: OPT; do
+while getopts hvsnc: OPT; do
     case "$OPT" in
         h)
             echo $USAGE
@@ -23,6 +24,9 @@ while getopts hvnc: OPT; do
         v)
             echo "`basename $0` version $VERSION"
             exit 0
+            ;;
+        s)
+            SYSTEMSITEPACKAGES=1
             ;;
         n)
             NEWAPP=1
@@ -65,7 +69,11 @@ fi
 
 cd $APP
 if ! [ -d "env" ]; then
-  virtualenv env
+  if [ $SYSTEMSITEPACKAGES -eq 1 ]; then
+    virtualenv --system-site-packages env
+  else
+    virtualenv env
+  fi
 fi
 
 . env/bin/activate
