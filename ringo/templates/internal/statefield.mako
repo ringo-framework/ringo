@@ -3,6 +3,8 @@
   <label for="${field.id}">${field.label}</label>
   <div class="readonlyfield" name="${field.name}">
       ${_(state._label)}
+      ## The value is changed by JS in case the user clicks on the
+      ## button to change the state.
       <input type="hidden" name="${field.name}" id="${field.id}" value="${field.get_value()}" datatype="integer"/>
   </div>
   % if state.get_description(request.user):
@@ -11,8 +13,13 @@
   % endif
   % if len(state.get_transitions()) > 0:
     <p>${_("Please select one of the following steps:")}</p>
-    % for trans in state.get_transitions():
-      <button class="btn btn-default btn-block" type="submit" name="${field.name}" value="${trans._end_state._id}">${_(trans._label)}</button>
+    % for num, trans in enumerate(state.get_transitions()):
+      <button class="btn btn-default btn-block" type="submit" id="btn_state_${num}_${field.name}">${_(trans._label)}</button>
+      <script>
+        $('#btn_state_${num}_${field.name}').click(function() {
+          $('input[name="${field.name}"]').val(${trans._end_state._id})
+        })
+      </script>
     % endfor
   % endif
 % elif field.renderer.layout == "simple":
