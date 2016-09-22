@@ -1035,14 +1035,6 @@ these roles.
 If the user is the owner of the item, or is member of the items group, then
 all permissions of the users roles will be applied.
 
-.. note::
-        Currently there is no anonymous access to the item. See Issue61 in the
-        ringo bugtracker. A workaround might be to setup a user group with
-        all users of the system and assing the needed roles to it. Then set
-        this group as the item group.
-
-See :ref:`authorisation` for more details on this.
-
 .. _authentification:
 
 Authentification
@@ -1058,6 +1050,29 @@ after every new request of the user. The timeout can be configured in the
 application configuration bei setting the 'auth.timeout' config variable.
 
 .. _authorisation:
+
+Anonymous Authentification
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+On default Ringo does not provide an anonymous access to the application
+(Despite of some static pages). So you must login before you can work with the
+application and have appropriate permissions.
+
+To implement an anonymous access to the application you will need to do
+three things:
+
+1. Create a dedicated user which will be used as the anonymous user.
+2. Create roles with appropriate permissions on the different moduels to
+   grant this anonymous user access on the data. Please note, that these
+   roles must be "admin"  roles to disable the owner/group check on
+   authorisation as we want the anonymous user to be able to basically
+   all items. The only restriction is than configured by the permissions
+   of the role.
+3. Enable this anonymous user in the `ini` file. See
+   :ref:`anonymous_access` for more details.
+
+
+
+
 
 Authorisation
 -------------
@@ -1466,6 +1481,22 @@ auth.callback = foo.bar.callback
 *foo.bar.callback* must be the modul path which can be used to import the
 function.
 
+.. _anonymous_access:
+
+"Anonymous" access
+==================
+But you can define a default user which is used as authenticated user:
+
+auth.anonymous_user
+        Defaults to None. So no user is authenticated.
+
+.. warning::
+    If enabled every user which enters the application will use the
+    application as the configured user in the same way as the user really logs
+    in.
+
+You can define the user by givin the loginname of the user. Of course
+the user must be present in the application.
 
 ********
 Security

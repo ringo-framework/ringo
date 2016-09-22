@@ -62,7 +62,9 @@ mode = h.get_app_mode(request)
         % endfor
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        % if request.user:
+        ## Check if there is a user and the user has an ID which means
+        ## it is not the anonymous user.
+        % if request.user and request.registry.settings.get("auth.anonymous_user") != request.user.login:
         <li>
         % if request.registry.settings.get("layout.show_sessiontimer") == "true":
           <%include file="/sessiontimer.mako" />
