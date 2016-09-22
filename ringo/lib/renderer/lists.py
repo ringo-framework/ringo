@@ -96,10 +96,11 @@ class DTListRenderer(object):
         return table_id
 
 
-    def _render_js_config(self, request, table_id):
+    def _render_js_config(self, request, table_id, bundled_actions):
         values = {'tableconfig': self.config,
                   'table_id': table_id,
                   'request': request,
+                  'bundled_actions': bundled_actions,
                   '_': request.translate}
         return self.js_template.render(**values)
 
@@ -115,7 +116,9 @@ class DTListRenderer(object):
                                                          request):
                 bundled_actions.append(action)
         table_id = self._get_table_id()
-        table_config = self._render_js_config(request, table_id)
+        table_config = self._render_js_config(request,
+                                              table_id,
+                                              bundled_actions)
         values = {'items': self.listing.items,
                   'clazz': self.listing.clazz,
                   'listing': self.listing,
