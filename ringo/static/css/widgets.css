@@ -158,6 +158,12 @@ table.content-shorten td {
  /* Datatables
  **********************************************************************/
 
+/* Overwrite padding in th to be aligend with the rest of the table.
+ * This change was neeed after enabling the sorting icons. */
+table.dataTable thead th {
+    padding: 10px 10px;
+}
+
 div.dataTables_length {
     float: right;
     padding: 10px;
