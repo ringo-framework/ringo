@@ -9,7 +9,7 @@ from ringo.lib.helpers import prettify
   <thead>
     <tr>
       % if bundled_actions and len(items) > 0:
-      <th width="2em">
+        <th width="2em" class="checkboxrow">
         <input type="checkbox" name="check_all" onclick="checkAll('id');">
       </th>
       % endif
@@ -46,6 +46,10 @@ from ringo.lib.helpers import prettify
             try:
               value = prettify(request, item.get_value(field.get('name'), expand=field.get('expand')))
               if field.get('expand'):
+                ## In contrast to "freeform" fields expanded values coming from a
+                ## selection usually needs to be translated as they are
+                ## stored as static text in aspecific language in the
+                ## form config.
                 value = _(value)
             except AttributeError:
               value = "NaF"
