@@ -6,6 +6,7 @@
     % else:
       ${field.renderer.render_link() or _(field.get_value(expand=True)) or "&nbsp;"}
     % endif
+    <input type="hidden" name="${field.name}" value="${field.get_value()}"/>
   </div>
 % else:
   <select class="form-control" id="${field.id}" name="${field.name}">
