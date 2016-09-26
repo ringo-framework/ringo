@@ -1,3 +1,9 @@
+Next
+====
+- Bugfix for "app.mode" config option. App mode was broken for all modes
+  execept "testing" because the test db request was accessed in all cases even
+  if its not present.
+
 1.14.0
 ======
 - Rewrite of the documentation.
