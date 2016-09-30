@@ -256,6 +256,7 @@ class StateFieldRenderer(FormbarDropdown):
                                    request=self._field._form._request)
         state = sm.get_state()
         values["state"] = state
+        values["request"] = self._field._form._request
         return values
 
 
