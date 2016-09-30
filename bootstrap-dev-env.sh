@@ -108,17 +108,17 @@ cd ..
 
 if [ $NEWAPP -eq 1 ]; then
   pcreate -t ringo $APP
-  cd $APP
+  mv $APP src
+  cd src
   python setup.py develop
   cd ..
-  mv $APP src
 fi
 
 if [ $GIT != "0"  ]; then
   git clone $GIT $APP
-  cd $APP
+  mv $APP src
+  cd src
   python setup.py develop
   cd ..
-  mv $APP src
 fi
 exit 0
