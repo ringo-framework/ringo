@@ -31,9 +31,11 @@ def user_factory(handler, registry):
 def ensure_logout(handler, registry):
     def user_tween(request):
         anon_login = request.session.get("auth.anonymous_user")
-        if request.user and anon_login == request.user.login:
+        if anon_login and request.user and (request.user.login == anon_login):
             log.info("Anonymous logout")
             headers = forget(request)
+            del request.session["auth.anonymous_user"]
+            request.session.save()
             target_url = request.route_path('home')
             return HTTPFound(location=target_url, headers=headers)
         return handler(request)
