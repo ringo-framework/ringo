@@ -1,4 +1,3 @@
-<div class="form-group">
 % if field.renderer.layout == "button":
   <label for="${field.id}">${field.label}</label>
   <div class="readonlyfield" name="${field.name}">
@@ -69,7 +68,6 @@
   </div>
 </div>
 % endif
-</div>
 
 <script>
   $("#${field.id}").change(function() {

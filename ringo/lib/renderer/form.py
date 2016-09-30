@@ -249,30 +249,15 @@ class StateFieldRenderer(FormbarDropdown):
     def _render_label(self):
         return literal("")
 
-    def render(self):
-        """Initialize renderer"""
-        html = []
-        # Get all available transitions from the current state for this
-        # item and request.
+    def _get_template_values(self):
+        values = FieldRenderer._get_template_values(self)
         item = self._field._form._item
         sm = item.get_statemachine(self._field.name,
                                    request=self._field._form._request)
         state = sm.get_state()
-        has_errors = len(self._field.get_errors())
-        has_warnings = len(self._field.get_warnings())
+        values["state"] = state
+        return values
 
-        class_options = "form-group %s %s" % ((has_errors and 'has-error'),
-                                              (has_warnings and 'has-warning'))
-        #html.append(HTML.tag("div", _closed=False,
-        #                     class_=class_options))
-        html.append(self._render_label())
-        values = {'field': self._field,
-                  'request': self._field._form._request,
-                  'state': state,
-                  '_': self._field._form._translate}
-        html.append(literal(self.template.render(**values)))
-        #html.append(HTML.tag("\div", _closed=False))
-        return literal("").join(html)
 
 
 class ListingFieldRenderer(FormbarSelectionField):
