@@ -10,7 +10,11 @@ function on${table_id}TableRendered(settings, json) {
   $('.search-filters').append('<div class="checkbox searchfilter"><label><input class="form-control" id="${id}" type="checkbox" value="1" ${fltr.active and 'checked="checked"'}>${_(fltr.label)}</label></div>');
   % endfor
   % for fltr in tableconfig.get_filters():
+    % if tableconfig.is_bundled() and len(bundled_actions) > 0:
     var column_${tableconfig.get_column_index(fltr.field)} = api.column(${tableconfig.get_column_index(fltr.field)+1});
+    % else:
+    var column_${tableconfig.get_column_index(fltr.field)} = api.column(${tableconfig.get_column_index(fltr.field)});
+    % endif
   % if fltr.type == "checkbox":
   $('#${table_id}_${fltr.field}').change(function() {
     filter_${table_id}_${fltr.field}(this);
