@@ -181,6 +181,7 @@ class DropdownFieldRenderer(FormbarDropdown):
         values['options'] = filter_options_on_permissions(
             self._field._form._request,
             values['options'])
+        values['h'] = helpers
         return values
 
     def render_link(self):
