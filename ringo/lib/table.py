@@ -217,7 +217,7 @@ class TableConfig:
     def get_columns(self, user=None):
         """Return a list of configured columns within the configuration.
         Each colum is a dictionary containing the one or more available
-        conifguration attributes."""
+        configuration attributes."""
         from ringo.lib.security import has_role
         cols = []
         config = self.config.get(self.name)
