@@ -358,7 +358,7 @@ class CSVExporter(Exporter):
 class Importer(object):
     """Docstring for Importer."""
 
-    def __init__(self, clazz, db=None):
+    def __init__(self, clazz, db=None, use_strict=False):
         """@todo: to be defined1.
 
         :clazz: The clazz for which we will import data
@@ -367,6 +367,7 @@ class Importer(object):
         self._clazz = clazz
         self._db = db
         self._clazz_type = self._get_types(clazz)
+        self._use_strict = use_strict
 
     def _get_types(self, clazz):
         type_mapping = {}
@@ -472,6 +473,8 @@ class Importer(object):
         imported_items = []
         import_data = self.deserialize(data)
         factory = self._clazz.get_item_factory()
+        if self._use_strict:
+            factory._use_strict = self._use_strict
         _ = translate
         for values in import_data:
             if use_uuid:
@@ -485,7 +488,7 @@ class Importer(object):
                 # error on loading.
                 item = factory.load(id or "thisiddoesnotexist",
                                     uuid=use_uuid)
-                item.set_values(values)
+                item.set_values(values, use_strict=self._use_strict)
                 operation = _("UPDATE")
             except:
                 item = factory.create(user=user, values=values)

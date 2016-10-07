@@ -342,7 +342,7 @@ class BaseItem(object):
             values[field] = value
         return values
 
-    def set_values(self, values):
+    def set_values(self, values, use_strict=False):
         """Will set the values of the item. The values to be set are
         provided by a dictionary with key value pairs given with the
         `values` option. Keys in the dictionary beginning with "_" are
@@ -364,6 +364,8 @@ class BaseItem(object):
             key if this is a new relation.
 
         :values: Dictionary with values to be set
+        :use_strict: boolean, if true raise a exception if an attribute is
+                     missing (default: False).
         """
 
         for key, value in values.iteritems():
@@ -397,6 +399,10 @@ class BaseItem(object):
                     setattr(self, key, value)
             else:
                 log.warning('Not saving "%s". Attribute not found' % key)
+                if use_strict:
+                    raise AttributeError(('Not setting "%s".'
+                                         ' Attribute not found.') % key)
+
 
     def save(self, data, request=None):
         """Method to set new values and 'saving' changes to the item. In
@@ -774,7 +780,7 @@ class BaseFactory(object):
     can be initiated by calling the :func:`.BaseItem.get_item_factory`
     class method."""
 
-    def __init__(self, clazz, request=None):
+    def __init__(self, clazz, request=None, use_strict=False):
         """Inits the factory.
 
         :clazz: The clazz of which new items will be created
@@ -782,6 +788,7 @@ class BaseFactory(object):
         """
         self._clazz = clazz
         self._request = request
+        self._use_strict = use_strict
 
     def create(self, user, values):
         """Will create a new instance of clazz. The instance is it is
@@ -808,7 +815,10 @@ class BaseFactory(object):
             elif (user is not None and user.default_gid):
                 item.gid = user.default_gid
         if values:
-            item.set_values(values)
+            if hasattr(self, "_use_strict"):
+                item.set_values(values, use_strict=self._use_strict)
+            else:
+                item.set_values(values)
         return item
 
     def load(self, id, db=None, cache="", uuid=False, field=None):
