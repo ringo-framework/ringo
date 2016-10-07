@@ -82,7 +82,25 @@ $( document ).ready(function() {
    "bAutoWidth": false,
    "fnInitComplete":on${table_id}TableRendered,
    "dom":
-   '<"search-widget hidden-print"<"row"<"col-md-12 search-filters"f>>><"row"<"col-md-12"<"pull-right"i>>>'
+   '<"search-widget hidden-print"<"row"<"col-md-12 search-filters"f>>><"row"<"col-md-12"<"pull-right"i>>>',
+   "columns": [
+      % for field in tableconfig.get_columns(request.user):
+        {
+          "visible":  
+            % if field.get('visible', True):
+              true,
+            % else:
+              false,
+            % endif
+          "searchable":  
+            % if field.get('searchable', True):
+              true
+            % else:
+              false
+            % endif
+        },
+      % endfor
+   ]
   });
 });
 

@@ -116,6 +116,11 @@ class TableConfig:
     * *roles* A comma separated list of rolenames. If defined the column
       will only be listed for users which have the given role. Default
       behaviour is to list a columns to all roles.
+    * *searchable* A flag indicating whether the field should be searchable
+      with datatables. By default all fields are searched.
+    * *visible* A flag indicating whether the field should be shown in the
+      table. This can be combined with the searchable attribute to implement
+      hidden, but searchable elements. By default all fields are shown.
 
     Further the table has some table wide configuration options:
 
