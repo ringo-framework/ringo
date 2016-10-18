@@ -10,7 +10,10 @@ from ringo.lib.helpers import import_model, get_action_routename, literal
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.views.helpers import (
     get_item_from_request,
-    get_item_modul
+    get_item_modul,
+    get_current_form_page,
+    set_current_form_page,
+    get_next_form_page
 )
 from ringo.lib.request.helpers import (
     encode_unicode_dict as _encode_unicode_dict,
@@ -91,6 +94,20 @@ def handle_callback(request, callback, item=None):
     return item
 
 
+def get_relation_item(request):
+    clazz = request.context.__model__
+    addrelation = request.session.get('%s.addrelation' % clazz)
+    if not addrelation:
+        addrelation = request.params.get("addrelation")
+        if not addrelation:
+            return None
+    rrel, rclazz, rid = addrelation.split(':')
+    parent = import_model(rclazz)
+    factory = parent.get_item_factory()
+    item = factory.load(rid, db=request.db)
+    return item, rrel
+
+
 def handle_add_relation(request, item):
     """Handle linking of the new item to antoher relation. The relation
     was provided as GET parameter in the current request and is now
@@ -100,19 +117,18 @@ def handle_add_relation(request, item):
     :item: new item with should be linked
 
     """
-    clazz = request.context.__model__
-    addrelation = request.session.get('%s.addrelation' % clazz)
-    if not addrelation:
+    relation_tuple = get_relation_item(request)
+    if relation_tuple:
+        rrel = relation_tuple[1]
+        pitem = relation_tuple[0]
+        clazz = request.context.__model__
+        log.debug('Linking %s to %s in %s' % (item, pitem, rrel))
+        tmpattr = getattr(pitem, rrel)
+        tmpattr.append(item)
+        # Delete value from session after the relation has been added
+        del request.session['%s.addrelation' % clazz]
+    else:
         return item
-    rrel, rclazz, rid = addrelation.split(':')
-    parent = import_model(rclazz)
-    pfactory = parent.get_item_factory()
-    pitem = pfactory.load(rid)
-    log.debug('Linking %s to %s in %s' % (item, pitem, rrel))
-    tmpattr = getattr(pitem, rrel)
-    tmpattr.append(item)
-    # Delete value from session after the relation has been added
-    del request.session['%s.addrelation' % clazz]
     request.session.save()
 
 
@@ -130,7 +146,7 @@ def handle_caching(request):
     request.session.save()
 
 
-def handle_POST_request(form, request, callback, event, renderers=None):
+def handle_POST_request(form, request, callback, event="", renderers=None):
     """@todo: Docstring for handle_POST_request.
 
     :name: @todo
@@ -162,6 +178,10 @@ def handle_POST_request(form, request, callback, event, renderers=None):
                                  callback=form_has_errors,
                                  context=form))
 
+    # Begin a nested transaction. In case an error occours while saving
+    # the data the nested transaction will be rolled back. The parent
+    # session will be still ok.
+    request.db.begin_nested()
     if form.validate(request.params) and "blobforms" not in request.params:
         checker = ValueChecker()
         try:
@@ -178,11 +198,11 @@ def handle_POST_request(form, request, callback, event, renderers=None):
                 item = factory.create(request.user, form.data)
                 item.save({}, request)
                 request.context.item = item
+                handle_add_relation(request, item)
             else:
                 values = checker.check(clazz, form.data, request, item)
                 item.save(values, request)
             handle_event(request, item, event)
-            handle_add_relation(request, item)
             handle_callback(request, callback)
             handle_caching(request)
 
@@ -201,8 +221,20 @@ def handle_POST_request(form, request, callback, event, renderers=None):
             log.info(log_msg)
             request.session.flash(msg, 'success')
 
+            # Set next form page.
+            if request.params.get("_submit") == "nextpage":
+                table = clazz.__table__
+                itemid = item.id
+                page = get_next_form_page(form,
+                                          get_current_form_page(clazz,
+                                                                request))
+                set_current_form_page(table, itemid, page, request)
+
+            # In case all is ok merge the nested session.
+            request.db.merge(item)
             return True
         except Exception as error:
+            request.db.rollback()
             mapping['error'] = unicode(error.message)
             if event == "create":
                 msg = _('Error while saving new '
@@ -211,10 +243,12 @@ def handle_POST_request(form, request, callback, event, renderers=None):
                 msg = _('Error while saving '
                         '${item_type} "${item}": ${error}.', mapping=mapping)
             log.exception(msg)
-            request.session.flash(msg, 'error')
+            request.session.flash(msg, 'critical')
+            return False
     elif "blobforms" in request.params:
         pass
     else:
+        request.db.rollback()
         if event == "create":
             msg = _('Error on validation new '
                     '${item_type}.', mapping=mapping)
@@ -226,7 +260,7 @@ def handle_POST_request(form, request, callback, event, renderers=None):
     return False
 
 
-def handle_redirect_on_success(request):
+def handle_redirect_on_success(request, backurl=None):
     """Will return a redirect. If there has been a saved "backurl" the
     redirect will on on this url. In all other cases the function will
     try to determine if the item in the request can be opened in edit
@@ -235,16 +269,19 @@ def handle_redirect_on_success(request):
     called.
 
     :request: Current request
+    :backurl: Optional. Set backurl manually. This will overwrite
+    backurls saved in the session.
     :returns: Redirect
     """
 
     item = get_item_from_request(request)
     clazz = request.context.__model__
-    backurl = request.session.get('%s.backurl' % clazz)
+    backurl = backurl or request.session.get('%s.backurl' % clazz)
     if backurl:
         # Redirect to the configured backurl.
-        del request.session['%s.backurl' % clazz]
-        request.session.save()
+        if request.session.get('%s.backurl' % clazz):
+            del request.session['%s.backurl' % clazz]
+            request.session.save()
         return HTTPFound(location=backurl)
     else:
         # Handle redirect after success.

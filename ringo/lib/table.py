@@ -113,6 +113,9 @@ class TableConfig:
       Defaults to No.
     * *title* A tooltip will be rendered for the table header of the
       column.
+    * *roles* A comma separated list of rolenames. If defined the column
+      will only be listed for users which have the given role. Default
+      behaviour is to list a columns to all roles.
 
     Further the table has some table wide configuration options:
 
@@ -191,6 +194,10 @@ class TableConfig:
         settings = self.get_settings()
         return settings.get("auto-responsive", True)
 
+    def is_bundled(self):
+        settings = self.get_settings()
+        return settings.get("bundled", True)
+
     def is_sortable(self):
         settings = self.get_settings()
         return settings.get("sortable", True)
@@ -207,14 +214,23 @@ class TableConfig:
         settings = self.get_settings()
         return settings.get("advancedsearch", default)
 
-    def get_columns(self):
+    def get_columns(self, user=None):
         """Return a list of configured columns within the configuration.
         Each colum is a dictionary containing the one or more available
         conifguration attributes."""
+        from ringo.lib.security import has_role
         cols = []
         config = self.config.get(self.name)
         for col in config.get('columns'):
-            cols.append(col)
+            if user and col.get("roles"):
+                # Check if user has on of the required roles.
+                roles = col.get("roles").split(",") + ['admin']
+                for role in roles:
+                    if has_role(user, role):
+                        cols.append(col)
+                        break
+            else:
+                cols.append(col)
         return cols
 
     def get_column_index(self, name):

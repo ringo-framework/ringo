@@ -96,10 +96,11 @@ class DTListRenderer(object):
         return table_id
 
 
-    def _render_js_config(self, request, table_id):
+    def _render_js_config(self, request, table_id, bundled_actions):
         values = {'tableconfig': self.config,
                   'table_id': table_id,
                   'request': request,
+                  'bundled_actions': bundled_actions,
                   '_': request.translate}
         return self.js_template.render(**values)
 
@@ -115,7 +116,9 @@ class DTListRenderer(object):
                                                          request):
                 bundled_actions.append(action)
         table_id = self._get_table_id()
-        table_config = self._render_js_config(request, table_id)
+        table_config = self._render_js_config(request,
+                                              table_id,
+                                              bundled_actions)
         values = {'items': self.listing.items,
                   'clazz': self.listing.clazz,
                   'listing': self.listing,
@@ -127,4 +130,36 @@ class DTListRenderer(object):
                   'tableconfig': self.config,
                   'tableid': table_id,
                   'dtconfig': table_config}
+        return literal(self.template.render(**values))
+
+
+class StaticListRenderer(ListRenderer):
+
+    """Docstring for StaticListRendenderer."""
+
+    def __init__(self, listing, tablename=None):
+        self.listing = listing
+        self.config = get_table_config(self.listing.clazz, tablename)
+        self.template = template_lookup.get_template("internal/staticlist.mako")
+
+    def _get_table_id(self):
+        table_id = ["static",
+                    self.config.clazz.__tablename__,
+                    self.config.name]
+        table_id = "_".join(table_id)
+        return table_id
+
+    def render(self, request):
+        """Initialize renderer"""
+
+        table_id = self._get_table_id()
+        values = {'items': self.listing.items,
+                  'clazz': self.listing.clazz,
+                  'listing': self.listing,
+                  'request': request,
+                  '_': request.translate,
+                  's': security,
+                  'h': ringo.lib.helpers,
+                  'tableconfig': self.config,
+                  'tableid': table_id}
         return literal(self.template.render(**values))

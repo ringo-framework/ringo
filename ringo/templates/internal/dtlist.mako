@@ -9,12 +9,12 @@ from ringo.lib.helpers import prettify
   <thead>
     <tr>
       % if bundled_actions and len(items) > 0:
-      <th width="2em">
+        <th width="2em" class="checkboxrow">
         <input type="checkbox" name="check_all" onclick="checkAll('id');">
       </th>
       % endif
-      % for field in tableconfig.get_columns():
-      <th width="${field.get('width')}">${_(field.get('label'))}</th>
+      % for field in tableconfig.get_columns(request.user):
+        <th width="${field.get('width')}" title="${field.get('title') or _(field.get('label'))}">${_(field.get('label'))}</th>
       % endfor
     </tr>
   </thead>
@@ -36,7 +36,7 @@ from ringo.lib.helpers import prettify
           <input type="checkbox" name="id" value="${item.id}">
         </td>
       % endif
-      % for field in tableconfig.get_columns():
+      % for field in tableconfig.get_columns(request.user):
         % if permission:
           <td class="link">
         % else:
@@ -45,6 +45,12 @@ from ringo.lib.helpers import prettify
           <%
             try:
               value = prettify(request, item.get_value(field.get('name'), expand=field.get('expand')))
+              if field.get('expand'):
+                ## In contrast to "freeform" fields expanded values coming from a
+                ## selection usually needs to be translated as they are
+                ## stored as static text in aspecific language in the
+                ## form config.
+                value = _(value)
             except AttributeError:
               value = "NaF"
           %>

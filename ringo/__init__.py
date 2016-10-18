@@ -1,3 +1,4 @@
+import os
 import logging
 from pyramid.config import Configurator
 from pyramid_beaker import session_factory_from_settings
@@ -16,6 +17,10 @@ def main(global_config, **settings):
     """
     # Setup two db sessions. One using transactions (default) and one
     # without transactions.
+    databaseurl = os.environ.get('DATABASE_URL')
+    if databaseurl:
+        settings['sqlalchemy.url'] = databaseurl
+        log.info("Using database url from ENV: %s" % databaseurl)
     engine = setup_db_engine(settings)
     setup_db_session(engine, settings)
     Base.metadata.bind = engine
@@ -32,7 +37,6 @@ def includeme(config):
     config.include('pyramid_beaker')
     config.include('pyramid_mako')
     config.include('ringo.config.setup')
-    config.include('ringo.lib.odfconv.setup')
     config = setup_static_views(config)
     config = setup_routes(config)
     config.scan()
@@ -77,6 +81,11 @@ def setup_routes(config):
     config.add_route('users-changepassword',
                      'users/changepassword/{id}',
                      factory=get_resource_factory(User))
+    config.add_route('users-removeaccount',
+                     'users/removeaccount/{id}',
+                     factory=get_resource_factory(User))
+    config.add_route('users-accountremoved',
+                     'users/accountremoved')
     config.add_route('usergroups-setstandin',
                      'usergroups/setstandin/{id}',
                      factory=get_resource_factory(Usergroup))

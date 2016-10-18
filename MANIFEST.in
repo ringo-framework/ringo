@@ -11,6 +11,7 @@ include ringo/locale/en/LC_MESSAGES/ringo.mo
 include ringo/locale/ringo.pot
 recursive-include ringo/scripts *.sql
 recursive-include ringo/static *
+recursive-include ringo/scaffolds *
 recursive-include ringo/templates *.mako
 recursive-include ringo/views/forms *.xml
 recursive-include ringo/views/tables *.json

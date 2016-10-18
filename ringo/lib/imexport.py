@@ -6,6 +6,11 @@ import csv
 import codecs
 import cStringIO
 import sets
+try:
+        import cStringIO as StringIO
+except ImportError:
+        import StringIO
+import xlsxwriter
 import sqlalchemy as sa
 
 from ringo.model.base import BaseItem
@@ -291,6 +296,35 @@ class Exporter(object):
         return self.serialize(data)
 
 
+class XLSXExporter(Exporter):
+    """Docstring for XLSXExporter. """
+
+    def serialize(self, data):
+        output = StringIO.StringIO()
+        book = xlsxwriter.Workbook(output)
+        if len(data) > 0:
+            keys = sorted(data[0].keys())
+            sheet = book.add_worksheet(self._clazz.__tablename__)
+            row = 0
+            col = 0
+            # write header
+            for key in keys:
+                sheet.write(row, col, key)
+                col += 1
+            # write data
+            col = 0
+            row = 1
+            for item in data:
+                for key in keys:
+                    sheet.write(row, col, item[key])
+                    col += 1
+                row += 1
+                col = 0
+        book.close()
+        output.seek(0)
+        return output.read()
+
+
 class JSONExporter(Exporter):
     """Docstring for JSONExporter. """
 
@@ -387,7 +421,11 @@ class Importer(object):
         relations.
         """
         for field in obj.keys():
-            ftype = self._clazz_type[field]
+            try:
+                ftype = self._clazz_type[field]
+            except KeyError:
+                log.warning("Can not find field %s in %s" % (field, self._clazz_type))
+                continue
             # Handle all types of relations...
             if ftype in ["MANYTOMANY", "MANYTOONE",
                          "ONETOONE", "ONETOMANY"]:

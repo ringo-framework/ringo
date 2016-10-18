@@ -1,2 +1,17 @@
 include *.txt *.ini *.cfg *.rst
-recursive-include {{package}} *.ico *.png *.css *.gif *.jpg *.pt *.txt *.mak *.mako *.js *.html *.xml
+include {{package}}/alembic/alembic.ini
+include {{package}}/alembic/script.py.mako
+recursive-include {{package}}/alembic *.py
+recursive-include {{package}}/fixtures *.json
+include {{package}}/locale/de/LC_MESSAGES/{{package}}.po
+include {{package}}/locale/en/LC_MESSAGES/{{package}}.po
+include {{package}}/locale/de/LC_MESSAGES/{{package}}.mo
+include {{package}}/locale/en/LC_MESSAGES/{{package}}.mo
+include {{package}}/locale/{{package}}.pot
+recursive-include {{package}}/scripts *.sql
+recursive-include {{package}}/static *
+recursive-include {{package}}/scaffolds *
+recursive-include {{package}}/templates *.mako
+recursive-include {{package}}/views/forms *.xml
+recursive-include {{package}}/views/tables *.json
+global-exclude *.orig

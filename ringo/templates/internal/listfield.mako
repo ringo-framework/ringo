@@ -71,8 +71,8 @@ def render_item_add_link(request, clazz, foreignkey, clazzpath, id, backlink, fo
   <thead>
     % if not field.is_readonly() and not field.renderer.hideadd == "true" and s.has_permission("create", clazz, request) and h.get_item_modul(request, clazz).has_action("create"):
     <tr class="table-toolbar">
-      <th colspan="${len(tableconfig.get_columns())+1}">
-        <a class="btn btn-primary btn-xs"
+      <th colspan="${len(tableconfig.get_columns(request.user))+1}">
+        <a class="btn btn-primary btn-xs hidden-print"
            title="${_('Add a new %s entry') % h.get_item_modul(request, clazz).get_label()}"
            href="${render_item_add_link(request,
                                         clazz,
@@ -93,7 +93,7 @@ def render_item_add_link(request, clazz, foreignkey, clazzpath, id, backlink, fo
         % endif
       </th>
     % endif
-      % for num, col in enumerate(tableconfig.get_columns()):
+      % for num, col in enumerate(tableconfig.get_columns(request.user)):
       <th class="${num > 0 and 'hidden-xs'}" width="${col.get('width')}">${_(col.get('label'))}</th>
       % endfor
     </tr>
@@ -136,7 +136,7 @@ def render_item_add_link(request, clazz, foreignkey, clazzpath, id, backlink, fo
           <input style="display:none" type="checkbox" value="${item[0].id}" name="${field.name}" checked="checked"/>
         % endif
       % endif
-      % for num, col in enumerate(tableconfig.get_columns()):
+      % for num, col in enumerate(tableconfig.get_columns(request.user)):
         <%
           try:
             rvalue = prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand')))

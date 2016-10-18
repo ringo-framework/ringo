@@ -148,7 +148,7 @@ def refresh_auth_cookie(event):
 
 def setup_ringo_security(config):
     settings = config.registry.settings
-    timeout = get_auth_timeout(settings)
+    timeout = get_auth_timeout(settings) + 5
     secret = get_cookie_secret(settings)
     secure = settings.get("security.cookie_secure", "false") == "true"
     include_ip = settings.get("security.cookie_ip", "false") == "true"
@@ -196,6 +196,11 @@ def setup_ringo_security(config):
         config.add_tween('ringo.tweens.clickjacking.clickjacking_factory')
     if settings.get("security.header_csp", "false") == "true":
         config.add_tween('ringo.tweens.csp.csp_factory')
+    if settings.get("auth.anonymous_user"):
+        log.info("Setting up anonymous access.")
+        config.add_tween('ringo.tweens.anonymous_access.user_factory')
+    else:
+        config.add_tween('ringo.tweens.anonymous_access.ensure_logout')
 
 
 def get_user(request):
@@ -443,7 +448,7 @@ def activate_user(token, db):
     try:
         user = db.query(User).filter_by(activation_token=token).one()
         user.activated = True
-        user.activation_token = None
+        user.activation_token = ""
         log.info('User %s activated' % user)
         return user
     except NoResultFound:
@@ -586,6 +591,11 @@ def get_last_logins(request, since, success=None):
         return [l for l in result if l.success == success]
 
 
+class AuthentificationException(Exception):
+    """Exception to be raise if error on authentification is detected."""
+    pass
+
+
 class AuthorizationException(Exception):
     """Exception to be raise if a authorization error is detected."""
     pass
@@ -681,12 +691,14 @@ class ValueChecker(object):
 
             # Now iterate over all value which need to be checked.
             for value, modifier in to_check:
-                # If the relation is a ModulItem also do no checks.
+                # If the relation is a ModulItem or is not a Baseitem at
+                # all also do no checks.
                 # Modulitem do not have any uid or gid which will allow
                 # checking permissions. Allowing links to a modul item
                 # is currently not known to be a security thread.
                 if (isinstance(value, ModulItem)
-                    or has_permission("read", value, request)):
+                    or has_permission("read", value, request)
+                    or not isinstance(value, BaseItem)):
                     continue
                 else:
                     if modifier > 0:

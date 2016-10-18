@@ -8,7 +8,9 @@ from pyramid.httpexceptions import (
     HTTPFound,
     HTTPUnauthorized
 )
+from pyramid.security import forget
 from pyramid.view import view_config
+from pyramid.compat import urlparse
 from formbar.form import Form, Validator
 
 from ringo.views.base import create, rest_create, update
@@ -25,6 +27,7 @@ from ringo.lib.sql.cache import invalidate_cache
 
 User = import_model('ringo.model.user.User')
 Usergroup = import_model('ringo.model.user.Usergroup')
+Role = import_model('ringo.model.user.Role')
 
 log = logging.getLogger(__name__)
 
@@ -215,7 +218,8 @@ def setstandin(request, allowed_users=None):
         # If the standing is set by an administrational user then the id
         # of the usergroup´s user is stored in the the backurl.
         if request.GET.get('backurl'):
-            user_id = request.GET.get('backurl').split('/')[-1]
+            user_id = urlparse.urlparse(
+                request.GET.get('backurl')).path.split('/')[-1]
             user = request.db.query(User).filter(User.id == user_id).one()
         # Otherwise the user sets the standin of his own group. In this
         # case the user is already in the request.
@@ -309,6 +313,128 @@ def changepassword(request):
     rvalue['item'] = item
     rvalue['form'] = form.render(page=get_current_form_page(clazz, request))
     return rvalue
+
+
+@view_config(route_name=get_action_routename(User, 'removeaccount'),
+             renderer='/users/removeaccount.mako')
+def removeaccount(request):
+    """Method to remove the useraccout by the user."""
+
+    # Check authentification
+    # The view is only available for authenticated users and callable
+    # if the user is not the admin unser (id=1)
+    id = request.matchdict.get('id')
+    if not request.user or id == '1':
+        raise HTTPUnauthorized
+
+    clazz = User
+    _ = request.translate
+    # Load the item return 400 if the item can not be found.
+    factory = clazz.get_item_factory()
+
+    try:
+        item = factory.load(id, request.db)
+        # Check authorisation
+        if item.id != request.user.id:
+            raise HTTPForbidden()
+    except sa.orm.exc.NoResultFound:
+        raise HTTPBadRequest()
+
+    form = Form(get_form_config(item, 'removeaccount'),
+                item, request.db, translate=_,
+                renderers={},
+                change_page_callback={'url': 'set_current_form_page',
+                                      'item': clazz.__tablename__,
+                                      'itemid': id},
+                request=request, csrf_token=request.session.get_csrf_token())
+
+    if request.POST:
+        mapping = {'item': item}
+        if form.validate(request.params):
+            # Delete the account and redirect the user to a result page
+            request.db.delete(item)
+            headers = forget(request)
+            target_url = request.route_path('users-accountremoved')
+            return HTTPFound(location=target_url, headers=headers)
+        else:
+            msg = _('Deleting the account of '
+                    '"${item}" failed.', mapping=mapping)
+            log.info(msg)
+            request.session.flash(msg, 'error')
+
+    rvalue = {}
+    rvalue['clazz'] = clazz
+    rvalue['item'] = item
+    rvalue['form'] = form.render(page=get_current_form_page(clazz, request))
+    return rvalue
+
+@view_config(route_name='users-accountremoved',
+             renderer='/users/accountremoved.mako')
+def accountremoved(request):
+    return {}
+
+def role_name_create_validator(field, data, db):
+    """Validator to ensure username uniqueness when creating users"""
+    return db.query(Role).filter(Role.name== data[field]).count() == 0
+
+
+def role_name_update_validator(field, data, params):
+    """Validator to ensure username uniqueness when updating users"""
+    db = params['db']
+
+    # Only consider names for the other users
+    return db.query(Role).filter(Role.name == data[field],
+                                 ~(Role.id == params['pk'])).count() == 0
+
+@view_config(route_name=get_action_routename(Role, 'create'),
+             renderer='/default/create.mako',
+             permission='create')
+def role_create_(request, callbacks=None):
+    """View to create new roles.
+
+    :request: Current request
+    :callback: Optional paramter for callback(s)
+    """
+
+    _ = request.translate
+    uniqueness_validator = Validator('name',
+                                     _('This name is already in use, '
+                                       'please use something unique.'),
+                                     role_name_create_validator,
+                                     request.db)
+    return create(request, callbacks,
+                  validators=[uniqueness_validator])
+
+
+@view_config(route_name=get_action_routename(Role, 'update'),
+             renderer='/default/update.mako',
+             permission='update')
+def role_update_(request, callback=None, renderers=None,
+           validators=None, values=None):
+    role = get_item_from_request(request)
+    # Store the name of the role in the request to make it
+    # available in the callback
+    request._oldname = role.name
+
+    _ = request.translate
+    uniqueness_validator = Validator('name',
+                                     _('This name is already in use, '
+                                       'please use something unique.'),
+                                     role_name_update_validator,
+                                     {'pk': role.id, 'db': request.db})
+    if validators is None:
+        validators = []
+    validators.append(uniqueness_validator)
+
+    callbacks = []
+    if callback:
+        if isinstance(callback, list):
+            callbacks.extend(callback)
+        else:
+            callbacks.append(callback)
+
+    return update(request, values=values,
+                  validators=validators, callback=callbacks)
 
 
 ###########################################################################

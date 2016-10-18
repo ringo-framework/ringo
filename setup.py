@@ -28,7 +28,8 @@ requires = [
     'fuzzy',
     'python-Levenshtein',
     'webhelpers',
-    'psycopg2'
+    'psycopg2',
+    'xlsxwriter'
 ]
 
 tests_requires = [
@@ -36,7 +37,7 @@ tests_requires = [
 ]
 
 setup(name='ringo',
-      version = '1.11.0',
+      version = '1.14.0',
       description='A simple web framework with base functionality to build web applications.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
@@ -58,7 +59,6 @@ setup(name='ringo',
       tests_require=tests_requires,
       extras_require={
           "tests": tests_requires,
-          "converter": ["py3o.template", "py3o.renderers.pyuno"],
           "develop": ["Sphinx", "pyramid_debugtoolbar"]
       },
       entry_points="""\

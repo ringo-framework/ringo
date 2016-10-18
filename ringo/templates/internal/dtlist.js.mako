@@ -52,7 +52,11 @@ $( document ).ready(function() {
     ## Render sorting settings
     % if tableconfig.is_sortable():
       "bSort": true,
-      "order": [[${tableconfig.get_column_index(tableconfig.get_default_sort_column())+1}, "${tableconfig.get_default_sort_order()}"]],
+      % if tableconfig.is_bundled() and len(bundled_actions) > 0:
+        "order": [[${tableconfig.get_column_index(tableconfig.get_default_sort_column())+1}, "${tableconfig.get_default_sort_order()}"]],
+      % else:
+        "order": [[${tableconfig.get_column_index(tableconfig.get_default_sort_column())}, "${tableconfig.get_default_sort_order()}"]],
+      % endif
     % else:
       "bSort": false,
     % endif
@@ -74,7 +78,7 @@ $( document ).ready(function() {
    "bAutoWidth": false,
    "fnInitComplete":on${table_id}TableRendered,
    "dom":
-   '<"search-widget"<"row"<"col-md-12 search-filters"f>>><"row"<"col-md-12"<"pull-right"i>>>'
+   '<"search-widget hidden-print"<"row"<"col-md-12 search-filters"f>>><"row"<"col-md-12"<"pull-right"i>>>'
   });
 });
 

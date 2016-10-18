@@ -1,7 +1,7 @@
-*.py[cod]
+*.py[ecod]
 *.sqlite
 *.swp
-
+setup.cfge
 # C extensions
 *.so
 

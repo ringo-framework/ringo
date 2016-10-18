@@ -6,24 +6,24 @@
       <h1 style="float:left">
         ${_(h.get_item_modul(request, clazz).get_label())}: ${item}
       </h1>
-        <span class="badge" style="float:left; margin-left:5px; margin-top:5px">
-          % if request.url.find("read") >= 0:
-            <i class="fa fa-lock"></i> 
-          % else:
-            <i class="fa fa-unlock-alt"></i> 
-          % endif
+        % if request.url.find("read") >= 0:
+        <span class="badge hidden-print" style="float:left; margin-left:5px; margin-top:5px">
+          <i class="fa fa-lock"></i> 
         </span> 
+        % endif
     </div>
-    <div class="col-sm-5">
-      <div class="context-menu pull-right">
-        <div class="btn-toolbar">
-          <div class="btn-group">
-            <!-- Base ringo actions -->
-            ${main.render_item_base_actions(item)}
+    % if s.has_role(request.user, "admin") or request.registry.settings.get("layout.show_contextmenu", "true") == "true":
+      <div class="col-sm-5">
+        <div class="context-menu pull-right">
+          <div class="btn-toolbar">
+            <div class="btn-group">
+              <!-- Base ringo actions -->
+              ${main.render_item_base_actions(item)}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    % endif
   </div>
 </div>
 <div class="row">

@@ -2,7 +2,7 @@
 # encoding: utf-8
 import pytest
 from pytest_ringo import (
-    login, transaction_begin, transaction_rollback,
+    login, logout, transaction_begin, transaction_rollback,
     search_data, get_data
 )
 
@@ -44,6 +44,10 @@ class TestCreate:
         login(app, "admin", "secret")
         transaction_begin(app)
         create_user(app, "test")
+        udata = search_data(app, "users", "login", "test")
+        gdata = search_data(app, "usergroups", "name", "test")
+        # Check that the default_gid is set to the users usergroup
+        assert gdata.get("id") == udata.get("default_gid") 
         transaction_rollback(app)
 
     def test_POST_password_tooshort(self, app):
@@ -132,8 +136,9 @@ class TestDelete:
         values = {"confirmed": 1}
         app.post("/users/delete/%s" % id, params=values, status=302)
 
-    @pytest.mark.xfail
     def test_delete_POST_admin_confirm_yes(self, app):
+        """Admin user can not delete himself. This triggers a circular
+        dependecy which is handled with the fix of #5"""
         login(app, "admin", "secret")
         transaction_begin(app)
         values = {"confirmed": 1}
@@ -218,5 +223,61 @@ class TestChangeLogin:
         app.post("/users/update/%s" % user["id"], params=user, status=302)
         usergroup = search_data(app, "usergroups", "name", user["login"])
         assert usergroup
+        app.get("/")
+        transaction_rollback(app)
+
+
+class TestRemoveAccount:
+    """Will check if a registered user can delete his own account."""
+
+    def test_unauthenticated(self, app):
+        """Methods is called as unautheticated user"""
+        logout(app)
+        transaction_begin(app)
+        app.get("/users/removeaccount/1", status=401)
+        app.get("/")
+        transaction_rollback(app)
+
+    def test_unauthorized(self, app):
+        """Method is called with a different uid than the id uf the
+        current user. This is not allowed the users are only allowed to
+        delete their own account."""
+        login(app, "admin", "secret")
+        transaction_begin(app)
+        create_user(app, "test")
+        user = search_data(app, "users", "login", "test")
+        app.get("/users/removeaccount/%s" % user["id"], params=user, status=403)
+        app.get("/")
+        transaction_rollback(app)
+
+    def test_unconfirmed(self, app):
+        """User must confirm the deletion twice"""
+        transaction_begin(app)
+        login(app, "admin", "secret")
+        create_user(app, "test")
+        user = search_data(app, "users", "login", "test")
+        login(app, "test", "123123123qwe")
+        app.get("/users/removeaccount/%s" % user["id"], status=200)
+        params = {}
+        app.post("/users/removeaccount/%s" % user["id"], params=params, status=200)
+        params = {"_confirm_remove_account": ["1"]}
+        app.post("/users/removeaccount/%s" % user["id"], params=params, status=200)
+        params = {"_confirm_remove_account2": ["1"]}
+        app.post("/users/removeaccount/%s" % user["id"], params=params, status=200)
+        app.get("/")
+        transaction_rollback(app)
+
+    def test_confirmed(self, app):
+        """User must confirm the deletion twice"""
+        transaction_begin(app)
+        login(app, "admin", "secret")
+        create_user(app, "test")
+        user = search_data(app, "users", "login", "test")
+        login(app, "test", "123123123qwe")
+
+        app.get("/users/removeaccount/%s" % user["id"], status=200)
+        params = {"_confirm_remove_account2": ["1"], "_confirm_remove_account": ["1"]}
+        app.post("/users/removeaccount/%s" % user["id"], params=params, status=302)
+
         app.get("/")
         transaction_rollback(app)

@@ -37,6 +37,7 @@ img.icon {
 }
 .page-header h1 {
   margin: 0px 0;
+  clear: left;
 }
 
 #footer  {
@@ -100,4 +101,12 @@ nav ul.pagination {
 /* affix default (bootstrap overwrite) */
 .affix{
   position:static;
+}
+
+/* dont show link href in print layout
+ * See http://drupal.stackexchange.com/questions/59900/how-to-get-rid-of-added-urls-when-printing-a-bootstrap-themed-page */
+@media print {
+  a[href]:after {
+    content: none;
+  }
 }
