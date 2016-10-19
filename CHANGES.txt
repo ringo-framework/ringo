@@ -2,7 +2,10 @@ Next
 ====
 - Bugfix for "app.mode" config option. App mode was broken for all modes
   execept "testing" because the test db request was accessed in all cases even
-  if its not present.
+  if its not present
+- Added "hidden" and "searchable" configuration options to the tableconfig.
+  This allows to define which field are searchable. Can be combined to make
+  hiddenfields searchable.
 
 1.14.0
 ======
