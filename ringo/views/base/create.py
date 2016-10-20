@@ -57,6 +57,11 @@ def create(request, callback=None, renderers=None,
         values = {}
     values['_roles'] = [str(r.name) for r in request.user.roles]
     values.update(request.ringo.params.values)
+
+    #  FIXME: "form_values" seems to be only used in one single
+    #  application (efa). For now we will leave this here to not break
+    #  any things but it should be removed.
+    #  See https://github.com/ringo-framework/ringo/issues/31
     form_values = request.session.get("form_values") or {}
     values.update(form_values)
     request.session["form_values"] = None
