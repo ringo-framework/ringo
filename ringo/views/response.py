@@ -43,6 +43,10 @@ class JSONResponse(object):
         elif isinstance(self._data, BaseList):
             exporter = JSONExporter(self._data.__class__)
             self._data = exporter.perform(self._data.items)
+        elif isinstance(self._data, list):
+            if len(self._data) > 1 and isinstance(self._data[0], BaseItem):
+                exporter = JSONExporter(self._data[0].__class__)
+                self._data = exporter.perform(self._data)
         rvalue['data'] = self._data
         rvalue['params'] = self._params
         return rvalue
