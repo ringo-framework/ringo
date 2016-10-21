@@ -372,12 +372,12 @@ class BaseItem(object):
             # Ignore private form fields
             if key.startswith('_'):
                 continue
-            oldvalue = getattr(self, key)
-            # If oldvalue is equal to the new value we need no
-            # change at all in the model so continue
-            if oldvalue == value:
-                continue
             if hasattr(self, key):
+                oldvalue = getattr(self, key)
+                # If oldvalue is equal to the new value we need no
+                # change at all in the model so continue
+                if oldvalue == value:
+                    continue
                 log.debug("Setting value '%s' in %s" % (value, key))
                 if isinstance(value, list) and isinstance(oldvalue, list):
                     # Special handling for relations in NM relations.
