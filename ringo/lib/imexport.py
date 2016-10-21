@@ -516,16 +516,6 @@ class JSONImporter(Importer):
         return conv
 
 
-class DictImporter(Importer):
-    """Import from a python dictionary with serialized values."""
-
-    def deserialize(self, data):
-        result = []
-        for d in data:
-            result.append(self._deserialize_values(d))
-        return result
-
-
 class CSVImporter(Importer):
     """Docstring for CSVImporter."""
 
