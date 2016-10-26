@@ -146,6 +146,7 @@ class User(BaseItem, Owned, Base):
     last_login = sa.Column(sa.DateTime)
 
     # Relations
+    profile = sa.orm.relation("Profile", cascade="all, delete-orphan")
     roles = sa.orm.relationship("Role",
                                 secondary=nm_user_roles,
                                 backref='users')
@@ -225,7 +226,5 @@ class Profile(BaseItem, Owned, Base):
 
     # The foreign key to the user is injected from the Owned mixin.
     user = sa.orm.relation("User", cascade="all, delete",
-                           backref=sa.orm.backref("profile",
-                                                  cascade="all,delete-orphan"),
                            single_parent=True,
                            uselist=False)
