@@ -2,7 +2,10 @@ Next
 ====
 - Bugfix for "app.mode" config option. App mode was broken for all modes
   execept "testing" because the test db request was accessed in all cases even
-  if its not present.
+  if its not present
+- Changed API of importer. Removed "use_uuid" attribute. You must now provide
+  the key which is used to load items from the database using the "load_key"
+  attribute which defaults to "uuid".
 
 1.14.0
 ======
