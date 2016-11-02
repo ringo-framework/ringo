@@ -84,6 +84,12 @@ $( document ).ready(function() {
    "dom":
    '<"search-widget hidden-print"<"row"<"col-md-12 search-filters"f>>><"row"<"col-md-12"<"pull-right"i>>>',
    "columns": [
+      % if bundled_actions:
+        {
+          "visible": true,
+          "searchable": false
+        },
+      % endif
       % for field in tableconfig.get_columns(request.user):
         {
           "visible":  
