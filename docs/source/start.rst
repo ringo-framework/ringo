@@ -803,9 +803,11 @@ application::
 
         config.add_route('fooroute', 'path/to/foo/view')
 
-Often you want to to do somethink this items of a modul. When using a simple
+Often you want to to do something with items of a modul. When using a simple
 view the item is not already part of the request on default. This can be
-changed by defining a ressource factory which will load the item::
+changed by defining a ressource factory which will load the item. In the following
+example a `Foo` item with the given id in the URL will be loaded and is 
+available in the item as `request.item`.::
 
         from ringo.resources import get_resource_factory
         from app.model.foo import Foo
