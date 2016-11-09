@@ -281,6 +281,19 @@ Add a new action to a modul
 Initially each module has only the default :ref:`crud` actions available.
 However the module can be extended by adding a new specific action.
 
+.. info::
+        If you just want to make some find of new functionality available in
+        the modul adding a new view (:ref:`add_view`) might be sufficient.
+
+If you add a new action to a modul
+
+
+
+There are two ways how to add a new action to a modul. One method which is
+more integrated within the ringo framework are a simple  allowing fine graded permissions
+settings and  
+
+
 Setup breadcrumbs
 =================
 Breadcrumbs are a great way to help users to navigate through a nested set of
@@ -770,6 +783,101 @@ Custom Javascript
 ************
 Adding views
 ************
+There is almost no ringo specific magic on adding new views to the application
+to implement new functionality. Adding new views is basically pure Pyramid as
+described in the `Pyramid documentation on view configuration
+<http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/viewconfig.html#adding-view-configuration-using-the-view-config-decorator>`_. 
+
+So just create a new view callable and configure it with the '@view_config'::
+
+        from pyramid.view import view_config
+
+        @view_config(route_name='fooroute', renderer='/foo.mako')
+        def foo(request):
+                # Do the work and return values which are available in the
+                # template as # dictionary
+                return {}
+
+and add the route configuration in the '__init__.py' file of your
+application::
+
+        config.add_route('fooroute', 'path/to/foo/view')
+
+Often you want to to do somethink this items of a modul. When using a simple
+view the item is not already part of the request on default. This can be
+changed by defining a ressource factory which will load the item::
+
+        from ringo.resources import get_resource_factory
+        from app.model.foo import Foo
+
+        config.add_route('fooroute', 'path/to/foo/view/{id}',
+                         factory=get_resource_factory(Foo))
+
+
+The `home.py view
+<https://github.com/ringo-framework/ringo/blob/master/ringo/views/home.py>`_
+is a good starting point to see how a simple view is added to Ringo.
+
+However there are some limitations on views. This is because they are not so deeply
+integrated into the ringo framework. They are a quick way to add some
+functionality which the following drawbacks:
+
+1. Permissions to call the view can not configured by setting permissions in
+   the rolesystem. Permission checks need to be implemented within the view.
+   See :ref:`add_view_permission` for more details.
+
+2. The view can not be displayed in the action bundle, or the context menu of
+   a single item. You need to make the view available by either adding a
+   link in a template (:ref:`add_view_totemplate`) or as button in the form
+   (:ref:`add_view_toform`) on your own.
+
+If one or more points are crucial for you then you might want to 
+:ref:`add_action`.
+
+.. _add_view_permission:
+
+Setting permissions
+====================
+Permisson related methods are defined in `lib.security`.
+Here is an example of how to check if the current user is allowed to read a
+certain item::
+
+        import pyramid.httpexceptions as exc
+        from ringo.lib.security import has_permission
+        from app.model.foo import Foo
+
+        def foo(request):
+            item_id = request.params.get("id")
+            factory = Foo.get_item_factory()
+            item = factory.load(item_id)
+            # You can check for one of the known CRUD actions. It will be
+            checked against the permissions of the current user in the
+            request.
+            if not has_permission("read", item, request):
+                raise exc.HTTPForbidden()
+            # continue...
+            return {}
+
+Make sure you do the permission check as the very first thing in the view.
+
+.. _add_view_toform:
+
+Call view from within forms
+===========================
+Calling a view in the form is basically done in the same way as described in
+:ref:`add_view_totemplate`. You will utilize the `HtmlRenderer of formbar
+<http://formbar.readthedocs.io/en/latest/config.html#html>`_ to render the
+link.
+
+
+.. _add_view_totemplate:
+
+Call view from template
+=======================
+Assuming you have configured a new view with the routename `myroutename` than
+the example code to render a link as a button in the following goes like this::
+
+        <a href="${request.route_path('myroutename')}" class="btn btn-primary">Click me</a> 
 
 ********************
 Custom authorisation
