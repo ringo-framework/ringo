@@ -1,4 +1,5 @@
 """Modul for the messanging system in ringo"""
+import re
 import logging
 import datetime
 import json
@@ -404,8 +405,15 @@ class Importer(object):
                 obj[field] = datetime.datetime.strptime(
                     obj[field], "%Y-%m-%d").date()
             elif self._clazz_type[field] == "DATETIME":
-                obj[field] = datetime.datetime.strptime(
-                    obj[field], "%Y-%m-%d %H:%M:%S")
+                # Interval fields are implemented as DATETIME
+                # See http://docs.sqlalchemy.org/en/latest/core/type_basics.html#sqlalchemy.types.Interval
+                # Check if we have a interval here
+                iv = re.compile(u"^\d{1,2}:\d{1,2}:\d{1,2}")
+                if iv.match(obj[field]):
+                    t = datetime.datetime.strptime(obj[field], "%H:%M:%S")
+                    obj[field] = datetime.timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
+                else:
+                    obj[field] = datetime.datetime.strptime(obj[field], "%Y-%m-%d %H:%M:%S")
         return obj
 
     def _deserialize_relations(self, obj):
