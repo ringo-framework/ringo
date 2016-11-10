@@ -2,6 +2,7 @@ import logging
 import json
 import sqlalchemy as sa
 from datetime import datetime
+from ringo.lib.alchemy import get_prop_from_instance
 from ringo.model import Base
 from ringo.model.base import BaseItem, BaseFactory
 from ringo.model.mixins import Owned
@@ -112,7 +113,10 @@ class UserFactory(BaseFactory):
         new_user = BaseFactory.create(self, user, values)
 
         # Now create a a new Profile
-        profile_factory = BaseFactory(Profile)
+        profile_property = get_prop_from_instance(new_user, "profile",
+                                                  include_relations=True)
+        profile_class = profile_property.mapper.class_
+        profile_factory = BaseFactory(profile_class)
         profile = profile_factory.create(user, {})
         new_user.profile.append(profile)
 
