@@ -3,7 +3,7 @@ Installation
 ############
 
 Ringo depends on some external libraries, like `Pyramid
-<https://pylonsproject>`_, `SQLAlchemy <https://sqlalchemy.org>`_ and `Formbar <https://formbar.readthedocs.org>`_. Pyramid is a very general open source
+<https://pylonsproject>`_, `SQLAlchemy <https://sqlalchemy.org>`_ and `Formbar <https://formbar.readthedocs.io>`_. Pyramid is a very general open source
 Python web framework. SQLAlchemy is a very mature and powerfull ORM to get an
 abstraction layer to your database. Formbar is a library to layout and handle
 HTML forms in a easy way.
@@ -480,7 +480,7 @@ coding basically consists of two basic steps:
 First create a backup of your current database! Registering a extension in
 your application may involve modifications of the database. Having a backup is
 a good idea anyway but also in important step to be able to see changes made
-while registering and to :ref:`extension_create_migration`.
+while registering.
 
 The example assumes using a PostgreSQL database.
 
@@ -543,9 +543,8 @@ Registration is finished with this step. You now must create a migration
 script to add futher tables in your database and to make the registration of
 the modul persistent.
 
-.. _extension_create_migration:
-
 .. rubric:: Create an initial migration script
+
 A migration script is used to make the registration and modification of the
 database by the extension persistent. So you can install the application later
 without doing these steps over and over again.
@@ -565,6 +564,7 @@ one single step.
 
 
 .. rubric:: What next?
+
 After you registered the extension and make the changes persistent in a
 migration script its time to use the extensions functionallity.
 
@@ -590,7 +590,7 @@ Form configuration
 Form configuration is done in XML files. Configurations are stored in
 `<yourproject>/views/forms/` folder.
 
-Ringo uses the `formbar <http://formbar.readthedocs.io/en/latest/>`_ library
+Ringo uses the `formbar <https://formbar.readthedocs.io>`_ library
 for form handling.it gives you plenty of nice features like easy design,
 validation, conditional fields and rule expressions to only name some of them.
 
@@ -602,7 +602,7 @@ validation, conditional fields and rule expressions to only name some of them.
 
 Using formbar
 =============
-Please have a look into the `formbar documentation <http://formbar.readthedocs.io/en/latest/>`_ to learn how to configure forms using formbar and check the forms in `ringo/views/forms` for some examples.
+Please have a look into the `formbar documentation <https://formbar.readthedocs.io/en/latest/>`_ to learn how to configure forms using formbar and check the forms in `ringo/views/forms` for some examples.
 
 Generate model fields
 =====================
@@ -1257,6 +1257,16 @@ these roles.
 If the user is the owner of the item, or is member of the items group, then
 all permissions of the users roles will be applied.
 
+.. _roles:
+
+Roles
+-----
+
+..  TODO: Write roles section (ti) <2016-11-11 20:13> 
+
+
+
+
 .. _authentification:
 
 Authentification
@@ -1318,8 +1328,10 @@ See `Adding Authorization tutorial
 <http://docs.pylonsproject.org/projects/pyramid/en/latest/tutorials/wiki2/authorization.html>`_
 for more information how things work in general under the hood.
 
-See :ref:`api-security` for documentation on helper functions used to build
+See :mod:`ringo.lib.security` for documentation on helper functions used to build
 the ACL.
+
+
 
 Security measurements
 =====================
@@ -1372,7 +1384,7 @@ ownership [#]_ per item is is important for the authorisation.
 Let us begin with the `modules` table. This table will store information on
 all available modules in the system. It basically stores the configuration per
 modul.  As described in the :ref:`modules` section each modul has
-(:ref:`module_actions`) which are stored in the `actions` table. The NM-table
+(:ref:`crud`) which are stored in the `actions` table. The NM-table
 `nm_actions_roles` define which `roles` are allowed to use the actions in the
 module. See :ref:`permissionsystem` for more information on how the
 :ref:`authorisation` is implemented in ringo.
@@ -1572,7 +1584,7 @@ You can configure if the context menu will be displayed in the detailed item
 view. For simple applications this menu might provide too much functionallity
 which tends to be confusing to other users. So you can completeley disable it.
 
-.. image:: ../screenshots/ui/contextmenu.png
+.. image:: images/screenshots/ui/contextmenu.png
 
 * layout.show_contextmenu = true
 
@@ -2047,7 +2059,7 @@ By invoking the following command::
 
         ringo-admin modul add <modulname in singular form> 
 
-A new modul will be added to your application. See :ref:`dev_modules` for more
+A new modul will be added to your application. See :ref:`modules` for more
 details.
 
 Generate model fields from form config
