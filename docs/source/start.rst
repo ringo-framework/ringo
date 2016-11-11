@@ -311,6 +311,11 @@ and the next id of the action entry::
         INSERT INTO actions (id, mid, name, url, icon, description, bundle, display, permission) 
         VALUES (119, 1000, 'Foo', 'foo/{id}', 'icon-eye-read', '', false, '', '');
 
+.. note::
+        If you want to add a action which should also be available as a
+        bundled action (selectable from the dropdown on the overview page) you
+        need to set the `bundle` attribute to 'true'.
+
 Find details on the values for the action entry in `ActionItem source
 <https://github.com/ringo-framework/ringo/blob/master/ringo/model/modul.py#L46>`_
 
@@ -325,8 +330,8 @@ sequences in the database::
         ringo-admin db fixsequence
 
 
-View callable
--------------
+View
+----
 Create a new callable for the `foo` action. Usually this is done in the
 `/views/bar.py`::
 
@@ -341,6 +346,40 @@ Create a new callable for the `foo` action. Usually this is done in the
             # Implement logic here.
             return {}
 
+Bundle view
+-----------
+This is an example of a simple bundled action::
+
+        from ringo.lib.helpers import get_action_routename
+        from ringo.views.base.list_ import set_bundle_action_handler
+        from ringo.views.request import is_confirmed
+        from ringo.lib.renderer import (
+                ConfirmDialogRenderer,
+                InfoDialogRenderer
+        )
+
+        from myapp.model.bar import Bar
+
+        def my_bundle_view(request, items, callback=None):
+            if (request.method == 'POST' and
+                is_confirmed(request)):
+                    for item in items:
+                        pass # Do the action for each item here.
+                    renderer = InfoDialogRenderer(request, "Title", "Body")
+                    rvalue = {}
+                    rvalue['dialog'] = renderer.render(url=request.route_path(get_action_routename(Bar, "list")))
+                    return rvalue
+            else:
+                renderer = ConfirmDialogRenderer(request, Bar, "foo", "Title")
+                rvalue = {}
+                rvalue['dialog'] = renderer.render(items)
+                return rvalue
+
+        set_bundle_action_handler("foo", my_bundle_view)
+
+This bundled action will show a confirmation dialog which needs to be
+confirmed. After that the view will iterate over all selected items and show a
+info dialog at the end.
 
 Permissions
 -----------
