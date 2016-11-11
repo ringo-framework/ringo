@@ -273,6 +273,9 @@ Please make sure you understand the concept of :ref:`mixins` before extending th
 
 .. index::
    single: CRUD
+   single: Action
+   single: Bundle
+   single: Bundled Action
 
 .. _add_action:
 
@@ -281,17 +284,87 @@ Add a new action to a modul
 Initially each module has only the default :ref:`crud` actions available.
 However the module can be extended by adding a new specific action.
 
-.. info::
-        If you just want to make some find of new functionality available in
-        the modul adding a new view (:ref:`add_view`) might be sufficient.
+In the following example we will add a `foo` action to the `bar` module.
 
-If you add a new action to a modul
+Action entry
+------------
+
+Get the modul id of the `bar` modul from the database::
+
+        select id from modules where name = 'bar';
+        -> 1000
+
+Get the max id in the actions table::
+
+        select max(id) from actions;
+        -> 118
+
+Add a new action entry for this module in the database. Create a new migration
+file for this::
+
+        ringo-admin db revision
+
+Open the new generated migration file and add the following statement to
+upgrade the database. Use the modul id
+and the next id of the action entry::
+
+        INSERT INTO actions (id, mid, name, url, icon, description, bundle, display, permission) 
+        VALUES (119, 1000, 'Foo', 'foo/{id}', 'icon-eye-read', '', false, '', '');
+
+Find details on the values for the action entry in `ActionItem source
+<https://github.com/ringo-framework/ringo/blob/master/ringo/model/modul.py#L46>`_
 
 
+Don't forget to add the statement to downgrade the migration as well::
 
-There are two ways how to add a new action to a modul. One method which is
-more integrated within the ringo framework are a simple  allowing fine graded permissions
-settings and  
+        DELETE FROM actions where id = 119;
+
+After manual inserting a new action entry in the database you need to fix the
+sequences in the database::
+
+        ringo-admin db fixsequence
+
+
+View callable
+-------------
+Create a new callable for the `foo` action. Usually this is done in the
+`/views/bar.py`::
+
+        from pyramid.view import view_config
+        from ringo.lib.helpers import get_action_routename
+
+        from myapp.model.bar import Bar 
+
+        @view_config(route_name=get_action_routename(Bar, "foo"),
+                     renderer="/foo.mako")
+        def my_foo_view(request):
+            # Implement logic here.
+            return {}
+
+
+Permissions
+-----------
+Modifications on the permissions should be done in a migration script::
+
+        ringo-admin db revision
+
+So here are the required steps to craft the needed INSERT and DELETE
+statements.
+
+First get the id of the role which should be able to call the action::
+
+       SELECT id FROM roles WHERE name = 'users';
+       -> 2
+
+Now SQL statements for the migration script will be::
+
+        INSERT INTO nm_actions_roles (aid, rid) VALUES (119, 2);
+        DELETE FROM nm_actions_roles WHERE aid = 119 and rid = 2;
+
+As always when manually inserting something in the database call the
+fixsequence command::
+
+        ringo-admin db fixsequence
 
 
 Setup breadcrumbs
