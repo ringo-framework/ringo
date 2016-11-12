@@ -3,7 +3,7 @@ Installation
 ############
 
 Ringo depends on some external libraries, like `Pyramid
-<https://pylonsproject>`_, `SQLAlchemy <https://sqlalchemy.org>`_ and `Formbar <https://formbar.readthedocs.org>`_. Pyramid is a very general open source
+<https://pylonsproject>`_, `SQLAlchemy <https://sqlalchemy.org>`_ and `Formbar <https://formbar.readthedocs.io>`_. Pyramid is a very general open source
 Python web framework. SQLAlchemy is a very mature and powerfull ORM to get an
 abstraction layer to your database. Formbar is a library to layout and handle
 HTML forms in a easy way.
@@ -273,6 +273,9 @@ Please make sure you understand the concept of :ref:`mixins` before extending th
 
 .. index::
    single: CRUD
+   single: Action
+   single: Bundle
+   single: Bundled Action
 
 .. _add_action:
 
@@ -280,6 +283,128 @@ Add a new action to a modul
 ===========================
 Initially each module has only the default :ref:`crud` actions available.
 However the module can be extended by adding a new specific action.
+
+In the following example we will add a `foo` action to the `bar` module.
+
+Action entry
+------------
+
+Get the modul id of the `bar` modul from the database::
+
+        select id from modules where name = 'bar';
+        -> 1000
+
+Get the max id in the actions table::
+
+        select max(id) from actions;
+        -> 118
+
+Add a new action entry for this module in the database. Create a new migration
+file for this::
+
+        ringo-admin db revision
+
+Open the new generated migration file and add the following statement to
+upgrade the database. Use the modul id
+and the next id of the action entry::
+
+        INSERT INTO actions (id, mid, name, url, icon, description, bundle, display, permission) 
+        VALUES (119, 1000, 'Foo', 'foo/{id}', 'icon-eye-read', '', false, '', '');
+
+.. note::
+        If you want to add a action which should also be available as a
+        bundled action (selectable from the dropdown on the overview page) you
+        need to set the `bundle` attribute to 'true'.
+
+Find details on the values for the action entry in `ActionItem source
+<https://github.com/ringo-framework/ringo/blob/master/ringo/model/modul.py#L46>`_
+
+
+Don't forget to add the statement to downgrade the migration as well::
+
+        DELETE FROM actions where id = 119;
+
+After manual inserting a new action entry in the database you need to fix the
+sequences in the database::
+
+        ringo-admin db fixsequence
+
+
+View
+----
+Create a new callable for the `foo` action. Usually this is done in the
+`/views/bar.py`::
+
+        from pyramid.view import view_config
+        from ringo.lib.helpers import get_action_routename
+
+        from myapp.model.bar import Bar 
+
+        @view_config(route_name=get_action_routename(Bar, "foo"),
+                     renderer="/foo.mako")
+        def my_foo_view(request):
+            # Implement logic here.
+            return {}
+
+Bundle view
+-----------
+This is an example of a simple bundled action::
+
+        from ringo.lib.helpers import get_action_routename
+        from ringo.views.base.list_ import set_bundle_action_handler
+        from ringo.views.request import is_confirmed
+        from ringo.lib.renderer import (
+                ConfirmDialogRenderer,
+                InfoDialogRenderer
+        )
+
+        from myapp.model.bar import Bar
+
+        def my_bundle_view(request, items, callback=None):
+            if (request.method == 'POST' and
+                is_confirmed(request)):
+                    for item in items:
+                        pass # Do the action for each item here.
+                    renderer = InfoDialogRenderer(request, "Title", "Body")
+                    rvalue = {}
+                    rvalue['dialog'] = renderer.render(url=request.route_path(get_action_routename(Bar, "list")))
+                    return rvalue
+            else:
+                renderer = ConfirmDialogRenderer(request, Bar, "foo", "Title")
+                rvalue = {}
+                rvalue['dialog'] = renderer.render(items)
+                return rvalue
+
+        set_bundle_action_handler("foo", my_bundle_view)
+
+This bundled action will show a confirmation dialog which needs to be
+confirmed. After that the view will iterate over all selected items and show a
+info dialog at the end.
+
+Permissions
+-----------
+Modifications on the permissions should be done in a migration script::
+
+        ringo-admin db revision
+
+So here are the required steps to craft the needed INSERT and DELETE
+statements.
+
+First get the id of the role which should be able to call the action::
+
+       SELECT id FROM roles WHERE name = 'users';
+       -> 2
+
+Now SQL statements for the migration script will be::
+
+        INSERT INTO nm_actions_roles (aid, rid) VALUES (119, 2);
+        DELETE FROM nm_actions_roles WHERE aid = 119 and rid = 2;
+
+As always when manually inserting something in the database call the
+fixsequence command::
+
+        ringo-admin db fixsequence
+
 
 Setup breadcrumbs
 =================
@@ -355,7 +480,7 @@ coding basically consists of two basic steps:
 First create a backup of your current database! Registering a extension in
 your application may involve modifications of the database. Having a backup is
 a good idea anyway but also in important step to be able to see changes made
-while registering and to :ref:`extension_create_migration`.
+while registering.
 
 The example assumes using a PostgreSQL database.
 
@@ -418,9 +543,8 @@ Registration is finished with this step. You now must create a migration
 script to add futher tables in your database and to make the registration of
 the modul persistent.
 
-.. _extension_create_migration:
-
 .. rubric:: Create an initial migration script
+
 A migration script is used to make the registration and modification of the
 database by the extension persistent. So you can install the application later
 without doing these steps over and over again.
@@ -440,6 +564,7 @@ one single step.
 
 
 .. rubric:: What next?
+
 After you registered the extension and make the changes persistent in a
 migration script its time to use the extensions functionallity.
 
@@ -465,7 +590,7 @@ Form configuration
 Form configuration is done in XML files. Configurations are stored in
 `<yourproject>/views/forms/` folder.
 
-Ringo uses the `formbar <http://formbar.readthedocs.io/en/latest/>`_ library
+Ringo uses the `formbar <https://formbar.readthedocs.io>`_ library
 for form handling.it gives you plenty of nice features like easy design,
 validation, conditional fields and rule expressions to only name some of them.
 
@@ -477,7 +602,7 @@ validation, conditional fields and rule expressions to only name some of them.
 
 Using formbar
 =============
-Please have a look into the `formbar documentation <http://formbar.readthedocs.io/en/latest/>`_ to learn how to configure forms using formbar and check the forms in `ringo/views/forms` for some examples.
+Please have a look into the `formbar documentation <https://formbar.readthedocs.io/en/latest/>`_ to learn how to configure forms using formbar and check the forms in `ringo/views/forms` for some examples.
 
 Generate model fields
 =====================
@@ -770,6 +895,103 @@ Custom Javascript
 ************
 Adding views
 ************
+There is almost no ringo specific magic on adding new views to the application
+to implement new functionality. Adding new views is basically pure Pyramid as
+described in the `Pyramid documentation on view configuration
+<http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/viewconfig.html#adding-view-configuration-using-the-view-config-decorator>`_. 
+
+So just create a new view callable and configure it with the '@view_config'::
+
+        from pyramid.view import view_config
+
+        @view_config(route_name='fooroute', renderer='/foo.mako')
+        def foo(request):
+                # Do the work and return values which are available in the
+                # template as # dictionary
+                return {}
+
+and add the route configuration in the '__init__.py' file of your
+application::
+
+        config.add_route('fooroute', 'path/to/foo/view')
+
+Often you want to to do something with items of a modul. When using a simple
+view the item is not already part of the request on default. This can be
+changed by defining a ressource factory which will load the item. In the following
+example a `Foo` item with the given id in the URL will be loaded and is 
+available in the item as `request.item`.::
+
+        from ringo.resources import get_resource_factory
+        from app.model.foo import Foo
+
+        config.add_route('fooroute', 'path/to/foo/view/{id}',
+                         factory=get_resource_factory(Foo))
+
+
+The `home.py view
+<https://github.com/ringo-framework/ringo/blob/master/ringo/views/home.py>`_
+is a good starting point to see how a simple view is added to Ringo.
+
+However there are some limitations on views. This is because they are not so deeply
+integrated into the ringo framework. They are a quick way to add some
+functionality which the following drawbacks:
+
+1. Permissions to call the view can not configured by setting permissions in
+   the rolesystem. Permission checks need to be implemented within the view.
+   See :ref:`add_view_permission` for more details.
+
+2. The view can not be displayed in the action bundle, or the context menu of
+   a single item. You need to make the view available by either adding a
+   link in a template (:ref:`add_view_totemplate`) or as button in the form
+   (:ref:`add_view_toform`) on your own.
+
+If one or more points are crucial for you then you might want to 
+:ref:`add_action`.
+
+.. _add_view_permission:
+
+Setting permissions
+====================
+Permisson related methods are defined in `lib.security`.
+Here is an example of how to check if the current user is allowed to read a
+certain item::
+
+        import pyramid.httpexceptions as exc
+        from ringo.lib.security import has_permission
+        from app.model.foo import Foo
+
+        def foo(request):
+            item_id = request.params.get("id")
+            factory = Foo.get_item_factory()
+            item = factory.load(item_id)
+            # You can check for one of the known CRUD actions. It will be
+            checked against the permissions of the current user in the
+            request.
+            if not has_permission("read", item, request):
+                raise exc.HTTPForbidden()
+            # continue...
+            return {}
+
+Make sure you do the permission check as the very first thing in the view.
+
+.. _add_view_toform:
+
+Call view from within forms
+===========================
+Calling a view in the form is basically done in the same way as described in
+:ref:`add_view_totemplate`. You will utilize the `HtmlRenderer of formbar
+<http://formbar.readthedocs.io/en/latest/config.html#html>`_ to render the
+link.
+
+
+.. _add_view_totemplate:
+
+Call view from template
+=======================
+Assuming you have configured a new view with the routename `myroutename` than
+the example code to render a link as a button in the following goes like this::
+
+        <a href="${request.route_path('myroutename')}" class="btn btn-primary">Click me</a> 
 
 ********************
 Custom authorisation
@@ -1035,6 +1257,16 @@ these roles.
 If the user is the owner of the item, or is member of the items group, then
 all permissions of the users roles will be applied.
 
+.. _roles:
+
+Roles
+-----
+
+..  TODO: Write roles section (ti) <2016-11-11 20:13> 
+
+
+
+
 .. _authentification:
 
 Authentification
@@ -1096,8 +1328,10 @@ See `Adding Authorization tutorial
 <http://docs.pylonsproject.org/projects/pyramid/en/latest/tutorials/wiki2/authorization.html>`_
 for more information how things work in general under the hood.
 
-See :ref:`api-security` for documentation on helper functions used to build
+See :mod:`ringo.lib.security` for documentation on helper functions used to build
 the ACL.
+
+
 
 Security measurements
 =====================
@@ -1150,7 +1384,7 @@ ownership [#]_ per item is is important for the authorisation.
 Let us begin with the `modules` table. This table will store information on
 all available modules in the system. It basically stores the configuration per
 modul.  As described in the :ref:`modules` section each modul has
-(:ref:`module_actions`) which are stored in the `actions` table. The NM-table
+(:ref:`crud`) which are stored in the `actions` table. The NM-table
 `nm_actions_roles` define which `roles` are allowed to use the actions in the
 module. See :ref:`permissionsystem` for more information on how the
 :ref:`authorisation` is implemented in ringo.
@@ -1350,7 +1584,7 @@ You can configure if the context menu will be displayed in the detailed item
 view. For simple applications this menu might provide too much functionallity
 which tends to be confusing to other users. So you can completeley disable it.
 
-.. image:: ../screenshots/ui/contextmenu.png
+.. image:: images/screenshots/ui/contextmenu.png
 
 * layout.show_contextmenu = true
 
@@ -1825,7 +2059,7 @@ By invoking the following command::
 
         ringo-admin modul add <modulname in singular form> 
 
-A new modul will be added to your application. See :ref:`dev_modules` for more
+A new modul will be added to your application. See :ref:`modules` for more
 details.
 
 Generate model fields from form config

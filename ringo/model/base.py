@@ -371,8 +371,12 @@ class BaseItem(object):
             if key.startswith('_'):
                 continue
             if hasattr(self, key):
-                log.debug("Setting value '%s' in %s" % (value, key))
                 oldvalue = getattr(self, key)
+                # If oldvalue is equal to the new value we need no
+                # change at all in the model so continue
+                if oldvalue == value:
+                    continue
+                log.debug("Setting value '%s' in %s" % (value, key))
                 if isinstance(value, list) and isinstance(oldvalue, list):
                     # Special handling for relations in NM relations.
                     # See ticket #19 in Ringo issue tracker for more

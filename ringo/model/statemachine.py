@@ -17,7 +17,7 @@ which must be true before the state can switch into another. Finally you
 can write certain handlers which are called right after the state has
 changed.
 
-A state machine can be attached to the items using a :ref:`mixin_state`
+A state machine can be attached to the items using a `State Mixin`
 which organises the state machines an provides a unique interface.
 """
 
