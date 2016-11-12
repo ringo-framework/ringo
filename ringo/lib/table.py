@@ -2,7 +2,7 @@
 import logging
 import os
 import json
-from ringo.lib.helpers import get_path_to, get_app_inheritance_path
+from ringo.lib.helpers import get_path_to, get_app_inheritance_path, dynamic_import
 from ringo.lib.cache import CACHE_TABLE_CONFIG
 
 log = logging.getLogger(__name__)
@@ -66,7 +66,8 @@ class TableConfig:
                         "screen": "xlarge",
                         "expand": true,
                         "filter": false,
-                        "title": "Tooltip title"
+                        "title": "Tooltip title",
+                        "renderer": "path.to.renderer.callable"
                     }
                 ]
                 "settings": {
@@ -116,6 +117,9 @@ class TableConfig:
     * *roles* A comma separated list of rolenames. If defined the column
       will only be listed for users which have the given role. Default
       behaviour is to list a columns to all roles.
+    * *renderer* defines a callable which is used to render the
+      field in the form "app.lib.renderer.myrenderer". The function will
+      take the request, the fieldname, and the renderer as parameters.
 
     Further the table has some table wide configuration options:
 
@@ -275,6 +279,12 @@ class TableConfig:
             if def_search:
                 return def_search
         return []
+
+    def get_renderer(self, col):
+        if "renderer" in col:
+            return dynamic_import(col["renderer"])
+        else:
+            return None
 
 
 def _load_overview_config(clazz):

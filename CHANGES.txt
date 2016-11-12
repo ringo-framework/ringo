@@ -6,6 +6,8 @@ Next
 - Changed API of importer. Removed "use_uuid" attribute. You must now provide
   the key which is used to load items from the database using the "load_key"
   attribute which defaults to "uuid".
+- Added "renderer" config option to the overview configuration. This lets you
+  set a custom renderer for a column.
 
 1.14.0
 ======

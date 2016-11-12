@@ -755,8 +755,33 @@ for this::
 **********************
 Overview configuration
 **********************
+
+.. autoclass:: ringo.lib.table.TableConfig
+
 Fields
 ======
+Customs rendering
+-----------------
+Sometime you may want to render some information of the item in a different
+way. This is possible by setting the `renderer` config option and writing a
+custom render function.
+
+Example field configuration::
+
+        {"name": "field", "label": "Fieldname", "renderer": "foo.bar.myrenderer"}
+
+The field `field` must exist to prevent warnings while rendering the overview.
+However the field does not really matter here as the renderer will get
+all informations you may need to to a nice rendering::
+
+        from ringo.lib.helpers import literal
+
+        def myrenderer(request, item, column, tableconfig):
+            # Do the renderer. In case you return so HTML do not forget to
+            # escape all values and return a literal
+            return literal("<strong>Hello world!</strong>")
+
+
 Sorting
 =======
 Filters
