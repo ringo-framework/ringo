@@ -146,6 +146,11 @@ class ActionItem(BaseItem, Base):
             return False
         return True
 
+    def get_permission(self):
+        if self.permission:
+            return self.permission.lower()
+        return self.name.lower()
+
 
 class ModulItem(BaseItem, Base):
     """A ModulItem is the representation and configuration of a
