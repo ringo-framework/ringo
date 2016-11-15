@@ -57,8 +57,6 @@ from ringo.lib.helpers import prettify
                   value = _(value)
             except AttributeError:
               value = "NaF"
-            except AttributeError:
-              value = "NaF"
           %>
           ${value}
         </td>
