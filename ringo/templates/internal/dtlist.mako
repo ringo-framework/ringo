@@ -44,13 +44,19 @@ from ringo.lib.helpers import prettify
         % endif
           <%
             try:
-              value = prettify(request, item.get_value(field.get('name'), expand=field.get('expand')))
-              if field.get('expand'):
-                ## In contrast to "freeform" fields expanded values coming from a
-                ## selection usually needs to be translated as they are
-                ## stored as static text in aspecific language in the
-                ## form config.
-                value = _(value)
+              colrenderer = tableconfig.get_renderer(field)
+              if colrenderer:
+                value = colrenderer(request, item, field, tableconfig)
+              else:
+                value = prettify(request, item.get_value(field.get('name'), expand=field.get('expand')))
+                if field.get('expand'):
+                  ## In contrast to "freeform" fields expanded values coming from a
+                  ## selection usually needs to be translated as they are
+                  ## stored as static text in aspecific language in the
+                  ## form config.
+                  value = _(value)
+            except AttributeError:
+              value = "NaF"
             except AttributeError:
               value = "NaF"
           %>
