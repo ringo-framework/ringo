@@ -5,8 +5,13 @@ import subprocess
 import uuid
 import transaction
 import pkg_resources
+from pyramid.paster import bootstrap
+from pyramid import testing
+from pyramid.registry import Registry
 from sqlalchemy import func
 from mako.lookup import TemplateLookup
+from formbar.config import Config, load
+from formbar.form import Form
 from ringo.lib.helpers import get_app_location, dynamic_import
 from ringo.scripts.db import (
     get_session, create_new_revision
@@ -389,3 +394,38 @@ def handle_modul_add_command(args):
     print ""
     print "touch %s" % path
     print "%s-admin db upgrade" % args.app
+
+
+def handle_modul_validate_command(args):
+    path = []
+    path.append(get_app_location(args.app))
+    path.append(args.config)
+
+    env = bootstrap(args.config)
+    session = get_session(os.path.join(*path))
+    package = args.app
+    name = args.name
+    label = name.capitalize()
+    clazzpath = ".".join([package, 'model', name, label])
+    clazz = dynamic_import(clazzpath)
+
+    # Import validators
+    # Load form
+    config = Config(load(args.form))
+    form_config = config.get_form('update')
+
+    for item in session.query(clazz).all():
+        env['request'].item = item
+        form = Form(form_config, item, request=env['request'])
+        try:
+            valid = form.validate(None, args.evaluate)
+        except:
+            print("ERROR on validation for {}".format(item.id))
+            continue
+
+        if form.has_errors():
+            print("ERRORS for {}".format(item.id))
+            print(form.get_errors())
+        if form.has_warnings():
+            print("WARNINGS for {}".format(item.id))
+            print(form.get_warnings())

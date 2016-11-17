@@ -46,6 +46,7 @@ from ringo.scripts.modul import (
     handle_modul_add_command,
     handle_modul_delete_command,
     handle_modul_fields_command,
+    handle_modul_validate_command,
 )
 
 from ringo.scripts.user import (
@@ -185,6 +186,24 @@ def setup_modul_parser(subparsers, parent):
                                type=modul_name,
                                help='Name of the modul to delete')
     delete_parser.set_defaults(func=handle_modul_delete_command)
+
+    # Validate command
+    validate_parser = sp.add_parser('validate',
+                                  help='Validate the entries of a modul',
+                                  parents=[parent])
+    validate_parser.add_argument('name',
+                               type=modul_name,
+                               help='Name of the modul to delete')
+    validate_parser.add_argument('--form',
+                               help='Path to the form with is used to do the validation.',
+                               default=None)
+    validate_parser.add_argument('--no-evaluate',
+                               help='Disabled conditional evaluation of form. Evaluate all rules.',
+                               action="store_false",
+                               dest="evaluate",
+                               default=True)
+
+    validate_parser.set_defaults(func=handle_modul_validate_command)
     return sp
 
 
