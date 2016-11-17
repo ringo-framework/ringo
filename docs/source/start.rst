@@ -2097,6 +2097,19 @@ By invoking the following command::
 The python code with the SQLAlchemy model will be generated. The code can be
 pasted into the model.
 
+Validate modul
+==============
+By invoking the following command::
+
+        ringo-admin modul validate <modulname in singular form> --form path/to/form/config.xml [--no-evaluate] 
+
+All items of the modul will get validated against the given form. If
+'--no-evaluate' flag is set than the validaten will be done on all fields and
+rules are checked regardless of whether fields and rules are deactivated due
+to the current data stock.
+
+The command will out errors and warnings for every item in the modul.
+
 ***************
 ringo-admin app
 ***************
