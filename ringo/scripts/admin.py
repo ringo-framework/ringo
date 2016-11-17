@@ -197,7 +197,7 @@ def setup_modul_parser(subparsers, parent):
     validate_parser.add_argument('--form',
                                help='Path to the form with is used to do the validation.',
                                default=None)
-    validate_parser.add_argument('--no-evaluate',
+    validate_parser.add_argument('--ignore-conditionals',
                                help='Disabled conditional evaluation of form. Evaluate all rules.',
                                action="store_false",
                                dest="evaluate",

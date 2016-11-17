@@ -2101,10 +2101,10 @@ Validate modul
 ==============
 By invoking the following command::
 
-        ringo-admin modul validate <modulname in singular form> --form path/to/form/config.xml [--no-evaluate] 
+        ringo-admin modul validate <modulname in singular form> --form path/to/form/config.xml [--ignore-conditionals] 
 
 All items of the modul will get validated against the given form. If
-'--no-evaluate' flag is set than the validaten will be done on all fields and
+'--ignore-conditionals' flag is set than the validaten will be done on all fields and
 rules are checked regardless of whether fields and rules are deactivated due
 to the current data stock.
 
