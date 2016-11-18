@@ -139,7 +139,11 @@ $( document ).ready(function() {
         isDirty = false;
         $('form').each(function () {
             if($(this).data('initialValue') != $(this).serialize()){
-                isDirty = true;
+                // The DirtyFormWarning should not be shown in the print
+                // dialog. See waskiq/issue2049.
+                if($(this).attr("action").indexOf("print") == -1) {
+                    isDirty = true;
+                }
             }
         });
         if((isDirty == true) && (DirtyFormWarningOpen == false)) {
