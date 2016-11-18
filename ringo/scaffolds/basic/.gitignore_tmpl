@@ -1,0 +1,22 @@
+*.py[ecod]
+*.sqlite
+*.swp
+setup.cfge
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+data
+eggs
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+.cache
+
+# Translations
+*.mo
+
