@@ -32,17 +32,18 @@
                     and s.has_permission(action.get_permission(), request.context, request)):
                       actions.append(action)
             %>
-            % if len(actions) == 1:
-              ${render_link(actions[0], clazz)}
-            % elif len(actions) > 1:
-              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-              <ul class="dropdown-menu">
-                % for action in actions:
-                <li>
-                  ${render_link(action, clazz)}
-                </li>
-                % endfor 
-              </ul>
+            % if len(actions) > 0:
+              ${render_link(actions[0], clazz, btn=True)}
+              % if len(actions) > 1:
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                  % for action in actions:
+                  <li>
+                    ${render_link(action, clazz)}
+                  </li>
+                  % endfor 
+                </ul>
+              % endif
             % endif
           </div>
         </div>
@@ -55,7 +56,7 @@
     ${listing}
   </div>
 </div>
-<%def name="render_link(action, clazz)">
+<%def name="render_link(action, clazz, btn=False)">
   <%
     url = request.route_path(h.get_action_routename(clazz, action.name.lower()))
     if action.description:
@@ -73,6 +74,10 @@
       name = _('Import')
     else:
       name = action.name
+    if btn:
+      btn_css = "btn btn-primary"
+    else:
+      btn_css = ""
   %>
-  <a href="${url}" title="${title}" class="btn btn-primary"><i class="${icon}">&nbsp;</i>${name}</a>
+  <a href="${url}" title="${title}" class="${btn_css}"><i class="${icon}">&nbsp;</i>${name}</a>
 </%def>

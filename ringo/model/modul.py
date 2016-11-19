@@ -133,14 +133,14 @@ class ActionItem(BaseItem, Base):
         :location: String of location to check
         :returns: True or False
         """
-        if self.name.lower() == "list":
-            return False
         display = self.display.split(",")
         if "hide" in display:
             return False
-        if ((location == "overview"
-             and "hide-overview" in display)
-             or self.url.find("{") > -1):
+        if location == "overview" and self.name.lower() == "list":
+            return False
+        if location == "overview" and self.url.find("{") > -1:
+            return False
+        if location == "overview" and "hide-overview" in display:
             return False
         if location == "context" and "hide-context" in display:
             return False
