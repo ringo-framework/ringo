@@ -65,10 +65,12 @@ class Cache(object):
         return self._data
 
 def setup_cache(config):
-    config.add_subscriber(init_cache, NewRequest)
+    config.add_subscriber(_init_cache, NewRequest)
 
-def init_cache(event):
-    request = event.request
+def _init_cache(event):
+    init_cache(event.request)
+
+def init_cache(request):
     settings = request.registry.settings
 
     if hasattr(request, "cache_item_list"):

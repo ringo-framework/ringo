@@ -200,11 +200,15 @@ def handle_db_loaddata_command(args):
     path.append(args.config)
     session = get_session(os.path.join(*path))
     importer = get_importer(session, args.modul, args.format)
+    if args.loadbyid:
+        load_key = "id"
+    else:
+        load_key = "uuid"
     with open(args.fixture) as f:
         data = f.read()
         items, created, updated = do_import(session,
                                             importer, data,
-                                            (not args.loadbyid))
+                                            load_key)
 
     try:
         transaction.commit()
@@ -223,11 +227,11 @@ def get_importer(session, modulname, fmt):
         return CSVImporter(modul, session)
 
 
-def do_import(session, importer, data, use_uuid=True):
+def do_import(session, importer, data, load_key):
     items = []
     updated = 0
     created = 0
-    items = importer.perform(data, use_uuid=use_uuid)
+    items = importer.perform(data, load_key=load_key)
     for item, action in items:
         # Add all new items to the session
         if action.find("CREATE") > -1:

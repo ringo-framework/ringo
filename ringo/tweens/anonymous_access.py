@@ -2,6 +2,7 @@ import logging
 from pyramid.security import remember, forget
 from pyramid.httpexceptions import HTTPFound
 from ringo.lib.sql.db import NTDBSession as db
+from ringo.lib.cache import init_cache
 from ringo.model.user import User
 
 log = logging.getLogger(__name__)
@@ -16,6 +17,11 @@ def user_factory(handler, registry):
         ANONYMOUS_USER = db.query(User).filter(User.login == login).one()
 
     def user_tween(request):
+        # Cache must be existing. Because we are in a tween this code
+        # is executed _before_ the "NewRequest" event is handled in the
+        # application which usually ensures that the cache is
+        # initialised. So we will "pre"-init the cache here.
+        init_cache(request)
         if not request.user:
             log.info("Anonymous login")
             request.user = ANONYMOUS_USER

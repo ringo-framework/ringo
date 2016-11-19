@@ -1,4 +1,5 @@
 <%inherit file="/main.mako" />
+<%namespace name="base" file="/base.mako"/>
 <div class="page-header">
   <div class="row">
     <div class="col-sm-8">
@@ -25,27 +26,22 @@
         <div class="btn-toolbar">
           <div class="btn-group">
             <%
-              show_create =  h.get_item_modul(request, clazz).has_action('create') and h.get_item_modul(request, clazz).get_action('create').is_visible("overview") and s.has_permission('create', request.context, request)
-              show_import =  h.get_item_modul(request, clazz).has_action('import') and h.get_item_modul(request, clazz).get_action('import').is_visible("overview") and s.has_permission('import', request.context, request)
+              actions = []
+              for action in h.get_item_modul(request, clazz).actions:
+                if (action.is_visible("overview")
+                    and s.has_permission(action.get_permission(), request.context, request)):
+                      actions.append(action)
             %>
-            % if show_create:
-              <a href="${request.route_path(h.get_action_routename(clazz, 'create'))}" title="${_('Add a new %s entry') % h.get_item_modul(request, clazz).get_label()}" class="btn btn-primary"><i class="glyphicon glyphicon-plus">&nbsp;</i>${_('New')}</a>
-            % elif show_import:
-              <a href="${request.route_path(h.get_action_routename(clazz, 'import'))}" title="${_('Import new %s entries') % h.get_item_modul(request, clazz).get_label()}" class="btn btn-primary"><i class="glyphicon glyphicon-import">&nbsp;</i>${_('New')}</a>
-            % endif
-            % if show_create and show_import:
+            % if len(actions) == 1:
+              ${render_link(actions[0], clazz)}
+            % elif len(actions) > 1:
               <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
               <ul class="dropdown-menu">
-                % if show_create:
+                % for action in actions:
                 <li>
-                  <a href="${request.route_path(h.get_action_routename(clazz, 'create'))}" title="${_('Add a new %s entry') % h.get_item_modul(request, clazz).get_label()}"><i class="glyphicon glyphicon-plus">&nbsp;</i>${_('Create')}</a>
+                  ${render_link(action, clazz)}
                 </li>
-                % endif
-                % if show_import:
-                <li>
-                  <a href="${request.route_path(h.get_action_routename(clazz, 'import'))}" title="${_('Import new %s entries') % h.get_item_modul(request, clazz).get_label()}"><i class="glyphicon glyphicon-import">&nbsp;</i>${_('Import')}</a>
-                </li>
-                % endif
+                % endfor 
               </ul>
             % endif
           </div>
@@ -59,3 +55,24 @@
     ${listing}
   </div>
 </div>
+<%def name="render_link(action, clazz)">
+  <%
+    url = request.route_path(h.get_action_routename(clazz, action.name.lower()))
+    if action.description:
+      title = _('Add a new %s entry') % h.get_item_modul(request, clazz).get_label()
+    elif action.name.lower() == "create":
+      title = _('Add a new %s entry') % h.get_item_modul(request, clazz).get_label()
+    elif action.name.lower() == "import":
+      title = _('Import new %s entries') % h.get_item_modul(request, clazz).get_label()
+    else: 
+      title = action.name
+    icon = base.get_icon(action)
+    if action.name.lower() == "create":
+      name = _('Add')
+    elif action.name.lower() == "import":
+      name = _('Import')
+    else:
+      name = action.name
+  %>
+  <a href="${url}" title="${title}" class="btn btn-primary"><i class="${icon}">&nbsp;</i>${name}</a>
+</%def>

@@ -139,11 +139,14 @@ def render_item_add_link(request, clazz, foreignkey, clazzpath, id, backlink, fo
       % for num, col in enumerate(tableconfig.get_columns(request.user)):
         <%
           try:
-            rvalue = prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand')))
+            colrenderer = tableconfig.get_renderer(col)
+            if colrenderer:
+              value = colrenderer(request, item, col, tableconfig)
+            else:
+              rvalue = prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand')))
+              value = _(rvalue)
             if isinstance(rvalue, list):
               value = ", ".join(unicode(v) for v in rvalue)
-            else:
-              value = _(rvalue)
           except AttributeError:
             value = "NaF"
         %>
