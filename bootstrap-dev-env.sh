@@ -118,7 +118,11 @@ if [ $GIT != "0"  ]; then
   git clone $GIT $APP
   mv $APP src
   cd src
-  python setup.py develop
+  if [ -f "requirements.txt" ]; then
+    pip install -r requirements.txt
+  else
+    python setup.py develop
+  fi
   cd ..
 fi
 exit 0
