@@ -6,6 +6,11 @@ img.icon {
     margin: 0 5px;
 }
 
+/* Add margin to fa icons in buttons */
+a.btn i.fa {
+    margin: 0 10px 0 0;
+}
+
 /* Bootstrap overwrites
  ****************************************************************************/
 /* Hide carret in dropup menus as they are displayed in up direction which
@@ -37,6 +42,7 @@ img.icon {
 }
 .page-header h1 {
   margin: 0px 0;
+  clear: left;
 }
 
 #footer  {
@@ -100,4 +106,12 @@ nav ul.pagination {
 /* affix default (bootstrap overwrite) */
 .affix{
   position:static;
+}
+
+/* dont show link href in print layout
+ * See http://drupal.stackexchange.com/questions/59900/how-to-get-rid-of-added-urls-when-printing-a-bootstrap-themed-page */
+@media print {
+  a[href]:after {
+    content: none;
+  }
 }

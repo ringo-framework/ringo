@@ -26,12 +26,12 @@ class RessourceFactory(object):
 
         item_id = request.matchdict.get('id')
         if item_id and not self.item:
-            self.item = self._load_item(item_id)
+            self.item = self._load_item(item_id, request)
         if not self.__modul__:
             self.__modul__ = get_item_modul(request, self.__model__)
         self.__acl__ = self._get_item_permissions(request)
 
-    def _load_item(self, id):
+    def _load_item(self, id, request):
         """Will load an item from the given clazz. The id of the item to
         load is taken from the request matchdict. If no item can be found an
         Exception is raised.
@@ -52,7 +52,7 @@ class RessourceFactory(object):
         # request in such cases.
         try:
             factory = self.__model__.get_item_factory()
-            return factory.load(id)
+            return factory.load(id, request.db)
         except NoResultFound:
             return None
 

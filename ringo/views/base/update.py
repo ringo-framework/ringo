@@ -35,15 +35,15 @@ def update(request, callback=None, renderers=None,
              the form
     :returns: Dictionary or Redirect.
     """
-    form = get_item_form('update', request, renderers, validators)
+    if values is None:
+        values = {}
+    values['_roles'] = [str(r.name) for r in request.user.roles]
+    form = get_item_form('update', request, renderers, validators, values)
     if request.POST:
         if handle_POST_request(form, request, callback, 'update', renderers):
             return handle_redirect_on_success(request)
 
     rvalues = get_return_value(request)
-    if values is None:
-        values = {}
-    values['_roles'] = [str(r.name) for r in request.user.roles]
     rvalues['form'] = render_item_form(request, form, values)
     return rvalues
 

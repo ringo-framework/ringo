@@ -17,7 +17,7 @@ which must be true before the state can switch into another. Finally you
 can write certain handlers which are called right after the state has
 changed.
 
-A state machine can be attached to the items using a :ref:`mixin_state`
+A state machine can be attached to the items using a `State Mixin`
 which organises the state machines an provides a unique interface.
 """
 
@@ -269,7 +269,11 @@ class State(object):
         :statemachine: Statemachine
         :id: Id of the state
         :label: Label of the Statemachine (short description)
-        :description: Long description of the state.
+        :description: Long description of the state. Description can be
+        a dictionary to set different descriptions of the state
+        depending on the role of the user. The key of dictionary is the
+        rolename. {'rolename', 'Description...'}. So set a description
+        of all users use the "users" role.
         :disabled_actions: Dictionary with a list of actions which are
         disabled for a role. {'rolename': ['read', 'update']}
 
@@ -311,6 +315,24 @@ class State(object):
 
         """
         return self._disabled_actions.get(role, [])
+
+    def get_description(self, user=None):
+        """Returns the description of this state. If user is provided
+        the returned description is determined by the users role to show
+        the appropriate description.
+
+        :user: User object.
+        :returns: string of description
+
+        """
+        # Check if _dscription is configured with descriptions per role
+        if isinstance(self._description, dict):
+            for rolename in self._description:
+                if user.has_role(rolename):
+                    return self._description[rolename]
+            return self._description.get("user")
+        else:
+            return self._description
 
     def get_transitions(self, ignore_checks=False):
         """Returns the available transitions to other states.

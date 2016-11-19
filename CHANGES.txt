@@ -1,5 +1,86 @@
 Next
 ====
+- Bugfix for "app.mode" config option. App mode was broken for all modes
+  execept "testing" because the test db request was accessed in all cases even
+  if its not present
+- Changed API of importer. Removed "use_uuid" attribute. You must now provide
+  the key which is used to load items from the database using the "load_key"
+  attribute which defaults to "uuid".
+- Added "renderer" config option to the overview configuration. This lets you
+  set a custom renderer for a column.
+
+1.14.0
+======
+- Rewrite of the documentation.
+- Fixed issue21 (https://github.com/ringo-framework/ringo/issues/21). Enabled
+  sorting config in Listingfieldrenderer.
+- Expand values from checkboxes too.
+- Added XLSX Export.
+- Introduced special suffix `__e_x_p_a_n_d` for attributes which can be used to
+  access the expanded value of the attribute as alternative to the call of
+  get_value. This is needed because it is not always possible to call the
+  get_value method. Example: getattr(obj, 'foo__e_x_p_a_n_d') will return the
+  expanded value of the `foo` attribute.
+- Removed ODF-Converter from Ringo core. It is now part of the
+  ringo_printtemplate extensions as this is the only place where it is
+  actually used.
+- #5 Show info dialog on circualr dependency error on deletion
+- #11 Check uniqueness of name when on creating and update of roles.
+- #12 With fix for #5 the admin user can not delete himself anymore, because
+  of handling of circular dependency.
+- #14 Make name field of modules readonly. Field is internal and not meant to
+  be editable.
+- #19 Fixed removing permissions (in general fixed removing items from
+  nm-relations.) 
+- Added "button" layout for the Statefieldrenderer.
+- Handle "Save and proceed" button (New feature in formbar).
+- Added StaticListRenderer. Can be used to render simple static overviews of
+  items.
+- On user registration the password strength is now checked. Password must be
+  at least 12 chars long und need to have 2 non chars.
+- Add option to define rolespecific descriptions of the state.
+- Add option to configure a callback after a user has authenticated with the
+  application. This callback can be used to cancel the authentification or to
+  further actions after the user logs in.
+- Added sorting icons for datatables.
+-
+
+1.13.3
+======
+Bugfix release. Fixes serious problem handling addrelations based on the
+session variable. This error may cause wrong relations between items.
+
+1.13
+====
+- Fixes in scaffold. Improve default MANIFEST and include more files. Make
+  README a RST-File
+- Internal UUID field is now 36 chars long. UUID is now stored as defined in
+  RFC4122. Please note that existing UUIDs are not converted. You can convert
+  exitsing UUIDs by using the "ringo-admin db resetuuid" command.
+- Fixed #19 (https://github.com/ringo-framework/ringo/issues/19)
+- Let users delete their own account. You can define the behavior to items
+  defined by the user by setting the _owner_cascades class variable with in
+  the models to e.g configure to delete all items which are owned by the item
+  to. On default users can only delete their account if the do now own any
+  items anymore. 
+- Implemented "roles" config variable for columns in table configs. If
+  defined columns are only visible to users who have one of the
+  configured roles.
+- Added "target" attribute to the Linkfieldrenderer.
+
+1.12
+====
+- Be more tolerant in imports. Only log in case the import includes fields
+  which are not part of the model.
+- Added config varibables to define default roles and groups on user
+  registration.
+- Added config variable "layout.show_contextmenu" to configure the visibility
+  of the context menu.
+- Improve result page after a user register a new user account.
+- Improve result page after a user request a passwort reset.
+
+1.11.2
+======
 - Small performance improvement. Added option to enable caching of the
   form configuration. This will prevent the application to reload the
   configuration on every request which is expensive. This is usefull for
@@ -8,6 +89,27 @@ Next
   Please refer to the documentation to see how to enable form caching.
 - Fixed reraising exception withing general_exception view. Further only use
   this view in testing mode.
+- Render title tooltips in table header of overviews
+- Make registration and activation of users over the webinterface work again. This means
+  new user can register themself using the webinterface if registration is
+  enabled.
+- Added scaffolds to the MANIFEST.in file. Has been missing.
+- Fixed bug which causes exceptions in testcases because new created and
+  loaded items in different Sqlachemy sessions. Use current db session from
+  request when invoking the load method of a factory to enforce all items are
+  attached to the same session.
+- Added external requirements.txt file for scaffolds.
+- Support DATABASE_URL envirionment variable. If set than this variable will
+  be used to connect to the database. Eg: postgres://@/ringo
+
+1.11.1
+======
+Bugfixrelease
+
+- Reraise origin exception (including stacktrace) in case of errors in global
+  error view to allow better debugging of errors. The origin stackstrace was
+  hidden since the last version which introduces a global error view. This
+  error view hides the origin traceback.
 
 1.11.0
 ======

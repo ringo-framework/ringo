@@ -133,14 +133,23 @@ class ActionItem(BaseItem, Base):
         :location: String of location to check
         :returns: True or False
         """
+        if self.name.lower() == "list":
+            return False
         display = self.display.split(",")
         if "hide" in display:
             return False
-        if location == "overview" and "hide-overview" in display:
+        if ((location == "overview"
+             and "hide-overview" in display)
+             or self.url.find("{") > -1):
             return False
         if location == "context" and "hide-context" in display:
             return False
         return True
+
+    def get_permission(self):
+        if self.permission:
+            return self.permission.lower()
+        return self.name.lower()
 
 
 class ModulItem(BaseItem, Base):

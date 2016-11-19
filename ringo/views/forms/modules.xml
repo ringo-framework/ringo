@@ -2,7 +2,7 @@
 <configuration>
   <source>
     <!-- Define different entity types -->
-    <entity id="e0" name="name" label="Name" type="string" required="true">
+    <entity id="e0" name="name" label="Name" type="string" required="true" readonly="true">
       <help>Internal name for the modul.</help>
     </entity>
     <entity id="e2" name="label" label="Label" required="true">

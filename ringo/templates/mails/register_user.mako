@@ -1,8 +1,10 @@
+## -*- coding: utf-8 -*-
 ${_('Dear user')},
 
-${_('You have received this email because you registered for "${app_name}".', mapping={'app_name': app_name})}
+${_('You have received this email because you requested a user registration for "${app_name}".', mapping={'app_name': app_name})}
 
-${_('To complete the registration you need to confirm the registration by clicking the following link:')}
+${_('To complete this request you need to confirm the registration by clicking the following link:')}
+
 ${url}
 
 ${_('kind regards')}

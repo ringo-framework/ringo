@@ -54,7 +54,7 @@ if sortable:
           <label class="sr-only" for="field">${_('Fields')}</label>
           <select name="field"  class="form-control input-small">
             <option value="">${_('All columns')}</option>
-            % for field in tableconfig.get_columns():
+            % for field in tableconfig.get_columns(request.user):
               % if field.get('name') == search_field:
                 <option value="${field.get('name')}" selected>${_(field.get('label'))}</option>
               % else:
@@ -113,7 +113,7 @@ if sortable:
       <input type="checkbox" name="check_all" onclick="checkAll('id');">
     </th>
   % endif
-  % for num, field in enumerate(tableconfig.get_columns()):
+  % for num, field in enumerate(tableconfig.get_columns(request.user)):
     % if autoresponsive:
       <th width="${field.get('width')}" class="${num > 0 and 'hidden-xs'}">
     % else:
@@ -166,7 +166,7 @@ if sortable:
       <input type="checkbox" name="id" value="${item.id}">
     </td>
     % endif
-    % for num, field in enumerate(tableconfig.get_columns()):
+    % for num, field in enumerate(tableconfig.get_columns(request.user)):
       % if autoresponsive:
         <td class="${num > 0 and 'hidden-xs'} ${permission and 'link'}">
       % else:
@@ -174,8 +174,18 @@ if sortable:
       % endif
         <%
             try:
-              value = h.prettify(request, item.get_value(field.get('name'), expand=field.get('expand')))
-            except:
+              colrenderer = tableconfig.get_renderer(field)
+              if colrenderer:
+                value = colrenderer(request, item, field, tableconfig)
+              else:
+                value = h.prettify(request, item.get_value(field.get('name'), expand=field.get('expand')))
+                if field.get('expand'):
+                  ## In contrast to "freeform" fields expanded values coming from a
+                  ## selection usually needs to be translated as they are
+                  ## stored as static text in aspecific language in the
+                  ## form config.
+                  value = _(value)
+            except AttributeError:
               value = "NaF"
         %>
         % if field.get('filter'):
@@ -214,9 +224,9 @@ if sortable:
   % if len(items) == 0:
   <tr>
     % if bundled_actions:
-      <td colspan="${len(tableconfig.get_columns())+1}">
+      <td colspan="${len(tableconfig.get_columns(request.user))+1}">
     % else:
-      <td colspan="${len(tableconfig.get_columns())}">
+      <td colspan="${len(tableconfig.get_columns(request.user))}">
     % endif
     ${_('No items found')}
     </td>

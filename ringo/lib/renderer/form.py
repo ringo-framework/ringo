@@ -111,7 +111,9 @@ class LinkFieldRenderer(FieldRenderer):
     * action: Name of the action for which the link will be rendered.
       Defaults to None with means the link will be either to the read or
       update view.
+    * css: CSS classes for the link.
     * backlink: If set to true a backlink will be generated.
+    * target: Set target attribute of the link.
     """
     def __init__(self, field, translate):
         """@todo: to be defined"""
@@ -179,6 +181,7 @@ class DropdownFieldRenderer(FormbarDropdown):
         values['options'] = filter_options_on_permissions(
             self._field._form._request,
             values['options'])
+        values['h'] = helpers
         return values
 
     def render_link(self):
@@ -221,14 +224,22 @@ class StateFieldRenderer(FormbarDropdown):
     a textfield showing the current state of the item and a dropdown
     with available actions which can be done from this state.
 
-    You can configure the layout of the statefield by setting the layout
-    option. On default the renderer shows the current state with
-    description and the resulting state and description when choosing a
-    transtion. Setting the option to simple will render a simple
-    dropdown with the current state as part of the fields label and the
-    available transitions as options of the dropdown
+    * layout: Option to change the layout of the statefield. The
+      renderer offers currently three options to render setting the
+      `layout` attribute of the renderer:
 
-    * layout: Option to change the layout of the statefield.
+        1. default: In default the renderer shows the current state with
+           description and the resulting state and description when
+           choosing a transtion.
+
+        2. simple: Simple will render a simple dropdown with the current
+           state as part of the fields label and the available
+           transitions as options of the dropdown
+
+        3. button: Botton will render the current state the available
+           transitions as a button. The button will work like a submit
+           button of the form so if the user clicks on it the form data
+           will be submitted and the state is changed.
 
     """
 
@@ -241,30 +252,16 @@ class StateFieldRenderer(FormbarDropdown):
     def _render_label(self):
         return literal("")
 
-    def render(self):
-        """Initialize renderer"""
-        html = []
-        # Get all available transitions from the current state for this
-        # item and request.
+    def _get_template_values(self):
+        values = FieldRenderer._get_template_values(self)
         item = self._field._form._item
         sm = item.get_statemachine(self._field.name,
                                    request=self._field._form._request)
         state = sm.get_state()
-        has_errors = len(self._field.get_errors())
-        has_warnings = len(self._field.get_warnings())
+        values["state"] = state
+        values["request"] = self._field._form._request
+        return values
 
-        class_options = "form-group %s %s" % ((has_errors and 'has-error'),
-                                              (has_warnings and 'has-warning'))
-        #html.append(HTML.tag("div", _closed=False,
-        #                     class_=class_options))
-        html.append(self._render_label())
-        values = {'field': self._field,
-                  'request': self._field._form._request,
-                  'state': state,
-                  '_': self._field._form._translate}
-        html.append(literal(self.template.render(**values)))
-        #html.append(HTML.tag("\div", _closed=False))
-        return literal("").join(html)
 
 
 class ListingFieldRenderer(FormbarSelectionField):
@@ -291,6 +288,12 @@ class ListingFieldRenderer(FormbarSelectionField):
       modal popup.
     * backlink: "true" or "false". If true the user will be redirected
       back to the listing after creating a new item. Defaults to true.
+
+    Example::
+
+        <entity ...>
+            <renderer type="listing" showall="true" table="details"/>
+        </entity>
     """
 
     def __init__(self, field, translate):
@@ -344,7 +347,8 @@ class ListingFieldRenderer(FormbarSelectionField):
                 selected = selected.items
             elif not isinstance(selected, list):
                 selected = [selected]
-            return selected
+            selected_ids = [s.id for s in selected]
+            return [i for i in items if i.id in selected_ids]
         except AttributeError:
             # Can happen when designing forms an the model of the item
             # is not yet configured.
@@ -355,12 +359,17 @@ class ListingFieldRenderer(FormbarSelectionField):
     def render(self):
         """Initialize renderer"""
         html = []
+        active = 'active' if self._active else 'inactive'
         config = self._field._config.renderer
         has_errors = len(self._field.get_errors())
         has_warnings = len(self._field.get_warnings())
-        class_options = "form-group %s %s" % ((has_errors and 'has-error'),
-                                              (has_warnings and 'has-warning'))
+        class_options = "form-group %s %s %s" % ((has_errors and 'has-error'),
+                                              (has_warnings and 'has-warning'),(active))
         html.append(HTML.tag("div", _closed=False,
+                             rules=u"{}".format(";".join(self._field.rules_to_string)),
+                             formgroup="{}".format(self._field.name),
+                             desired="{}".format(self._field.desired),
+                             required="{}".format(self._field.required),
                              class_=class_options))
         html.append(self._render_label())
         if self._field.is_readonly() or self.onlylinked == "true":

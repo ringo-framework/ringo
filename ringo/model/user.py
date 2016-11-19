@@ -2,6 +2,7 @@ import logging
 import json
 import sqlalchemy as sa
 from datetime import datetime
+from ringo.lib.alchemy import get_prop_from_instance
 from ringo.model import Base
 from ringo.model.base import BaseItem, BaseFactory
 from ringo.model.mixins import Owned
@@ -112,7 +113,10 @@ class UserFactory(BaseFactory):
         new_user = BaseFactory.create(self, user, values)
 
         # Now create a a new Profile
-        profile_factory = BaseFactory(Profile)
+        profile_property = get_prop_from_instance(new_user, "profile",
+                                                  include_relations=True)
+        profile_class = profile_property.mapper.class_
+        profile_factory = BaseFactory(profile_class)
         profile = profile_factory.create(user, {})
         new_user.profile.append(profile)
 
@@ -146,6 +150,7 @@ class User(BaseItem, Owned, Base):
     last_login = sa.Column(sa.DateTime)
 
     # Relations
+    profile = sa.orm.relation("Profile", cascade="all, delete-orphan")
     roles = sa.orm.relationship("Role",
                                 secondary=nm_user_roles,
                                 backref='users')
@@ -174,7 +179,7 @@ ADMIN_GROUP_ID = 1
 """Role ID your the system administration group"""
 USER_GROUP_ID = 2
 """Role ID your the system user group"""
-USER_ROLE_ID = 2
+USER_ROLE_ID = 1
 """Role ID your the system user role"""
 
 
@@ -225,7 +230,5 @@ class Profile(BaseItem, Owned, Base):
 
     # The foreign key to the user is injected from the Owned mixin.
     user = sa.orm.relation("User", cascade="all, delete",
-                           backref=sa.orm.backref("profile",
-                                                  cascade="all,delete-orphan"),
                            single_parent=True,
                            uselist=False)

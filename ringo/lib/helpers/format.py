@@ -70,7 +70,7 @@ def prettify(request, value):
         return value.render()
     elif value is None:
         return ""
-    return _(value)
+    return value
 
 ###########################################################################
 #                               Times & Dates                             #

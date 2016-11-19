@@ -25,7 +25,7 @@ def read(request, callback=None, renderers=None):
     handle_callback(request, callback)
     rvalues = get_return_value(request)
     values = {'_roles': [str(r.name) for r in request.user.roles]}
-    form = get_item_form('read', request, renderers)
+    form = get_item_form('read', request, renderers, values=values)
     rvalues['form'] = render_item_form(request, form, values)
     return rvalues
 

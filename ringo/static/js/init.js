@@ -46,7 +46,9 @@ $( document ).ready(function() {
     var language = getDTLanguage(getLanguageFromBrowser());
     if (language == 'german') {
         // https://datatables.net/blog/2014-12-18 using moment.js
+        $.fn.dataTable.moment( 'DD.MM.YYYY, HH:mm' );
         $.fn.dataTable.moment( 'DD.MM.YYYY' );
+        $.fn.dataTable.moment( 'DD.MM.YY, HH:mm' );
         $.fn.dataTable.moment( 'DD.MM.YY' );
     }
     $('.datatable-paginated').dataTable( {

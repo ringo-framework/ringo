@@ -2,10 +2,18 @@
   <div class="readonlyfield" name="${field.name}" value="${field.get_value()}">
     % if field.get_previous_value() is not None:
       ${renderer._render_diff(_(field.get_previous_value("", expand=True)),
-        field.renderer.render_link() or _(field.get_value(expand=True)) or "&nbsp;")}
+        field.renderer.render_link() or _(field.get_value(expand=True)) or  h.literal("&nbsp;"))}
     % else:
-      ${field.renderer.render_link() or _(field.get_value(expand=True)) or "&nbsp;"}
+      ${field.renderer.render_link() or _(field.get_value(expand=True)) or h.literal("&nbsp;")}
     % endif
+    <%
+      value = field.get_value()
+      if not isinstance(value, list):
+        value = [value]
+    %>
+    % for v in value:
+      <input type="hidden" name="${field.name}" value="${v}"/>
+    % endfor
   </div>
 % else:
   <select class="form-control" id="${field.id}" name="${field.name}">

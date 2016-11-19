@@ -22,6 +22,15 @@ from ringo.model.modul import ModulItem
 
 log = logging.getLogger(__name__)
 
+
+def get_appsettings_(config_file):
+    settings = get_appsettings(config_file)
+    databaseurl = os.environ.get('DATABASE_URL')
+    if databaseurl:
+        settings['sqlalchemy.url'] = databaseurl
+    return settings
+
+
 def is_locked(filepath):
     """Checks if a file is locked by opening it in append mode.
     If no exception thrown, then the file is not locked.
@@ -66,7 +75,7 @@ def get_last_revision_file(args):
 
 def get_engine(config_file):
     setup_logging(config_file)
-    settings = get_appsettings(config_file)
+    settings = get_appsettings_(config_file)
     engine = engine_from_config(settings, 'sqlalchemy.')
     setup_db_session(engine)
     return engine
@@ -140,7 +149,7 @@ def get_alembic_config(args, app=None):
     config_path.append("alembic.ini")
     cfg = Config(os.path.join(*config_path))
     if args.config:
-        app_config = get_appsettings(args.config)
+        app_config = get_appsettings_(args.config)
         cfg.set_main_option("sqlalchemy.url",
                             app_config.get('sqlalchemy.url'))
         cfg.set_main_option("script_location",
@@ -191,11 +200,15 @@ def handle_db_loaddata_command(args):
     path.append(args.config)
     session = get_session(os.path.join(*path))
     importer = get_importer(session, args.modul, args.format)
+    if args.loadbyid:
+        load_key = "id"
+    else:
+        load_key = "uuid"
     with open(args.fixture) as f:
         data = f.read()
         items, created, updated = do_import(session,
                                             importer, data,
-                                            (not args.loadbyid))
+                                            load_key)
 
     try:
         transaction.commit()
@@ -214,11 +227,11 @@ def get_importer(session, modulname, fmt):
         return CSVImporter(modul, session)
 
 
-def do_import(session, importer, data, use_uuid=True):
+def do_import(session, importer, data, load_key):
     items = []
     updated = 0
     created = 0
-    items = importer.perform(data, use_uuid=use_uuid)
+    items = importer.perform(data, load_key=load_key)
     for item, action in items:
         # Add all new items to the session
         if action.find("CREATE") > -1:

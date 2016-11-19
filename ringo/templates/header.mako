@@ -19,10 +19,12 @@ mode = h.get_app_mode(request)
             % if mode[1]:
               ${mode[1]}
             % endif
-            % if request._active_testcase:
-              Testcase Active (<a href="${request.route_path("stop_test_case")}">Rollback</a>)
-            % else:
-              Testcase Inactice (<a href="${request.route_path("start_test_case")}">Start</a>)
+            % if mode[0] == "testing":
+              % if request._active_testcase:
+                Testcase Active (<a href="${request.route_path("stop_test_case")}">Rollback</a>)
+              % else:
+                Testcase Inactice (<a href="${request.route_path("start_test_case")}">Start</a>)
+              % endif
             % endif
           </center>
         </div>
@@ -62,7 +64,9 @@ mode = h.get_app_mode(request)
         % endfor
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        % if request.user:
+        ## Check if there is a user and the user has an ID which means
+        ## it is not the anonymous user.
+        % if request.user and request.registry.settings.get("auth.anonymous_user") != request.user.login:
         <li>
         % if request.registry.settings.get("layout.show_sessiontimer") == "true":
           <%include file="/sessiontimer.mako" />
@@ -76,6 +80,9 @@ mode = h.get_app_mode(request)
               <li><a href="${request.route_path('profiles-update', id=request.user.profile[0].id)}"><img class="icon" src="${request.static_path('ringo:static/images/icons/16x16/profile.png')}"/>${_('Profile')}</a></li>
               <li><a href="${request.route_path('users-changepassword', id=request.user.id)}"><img class="icon" src="${request.static_path('ringo:static/images/icons/16x16/application-certificate.png')}"/>${_('Change Password')}</a></li>
               <li><a href="${request.route_path('usergroups-setstandin', id=request.user.default_gid)}"><img class="icon" src="${request.static_path('ringo:static/images/icons/16x16/system-users.png')}"/>${_('Set standin')}</a></li> 
+              % if request.user.login != "admin":
+                <li><a href="${request.route_path('users-removeaccount', id=request.user.id)}"><img class="icon" src="${request.static_path('ringo:static/images/icons/16x16/dialog-warning.png')}"/>${_('Remove account')}</a></li>
+              % endif
               <li class="divider"></li>
               <% user_menu_modules = h.get_modules(request, 'user-menu') %>
                 % if len(user_menu_modules) > 0:

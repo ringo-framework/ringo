@@ -19,10 +19,10 @@
       <renderer type="password"/>
     </entity>
     <entity id="e4" name="roles" label="Roles">
-      <renderer type="listing" hideadd="true"/>
+      <renderer type="listing" hideadd="true" nolinks="true"/>
     </entity>
     <entity id="e5" name="groups" label="Usergroups">
-      <renderer type="listing" hideadd="true"/>
+      <renderer type="listing" hideadd="true" nolinks="true"/>
     </entity>
     <entity id="e6" name="usergroup" label="Default group">
       <help>The default group determines which group will be used for new entries of this user.</help>
@@ -45,6 +45,18 @@
     <entity id="p1" name="_first_name" label="Firstname" type="string" required="true"/>
     <entity id="p2" name="_last_name" label="Lastname" type="string" required="true"/>
     <entity id="p3" name="_email" label="E-Mail" type="email" required="true"/>
+    <entity id="e21" name="_confirm_remove_account" label="I am sure that I want to delete my user account including all data." type="integer" required="true">
+      <renderer type="checkbox"/>
+      <options>
+        <option value="1">Yes</option>
+      </options>
+    </entity>
+    <entity id="e22" name="_confirm_remove_account2" label="I understand that deleting my account can not be undone" type="integer" required="true">
+      <renderer type="checkbox"/>
+      <options>
+        <option value="1">Yes</option>
+      </options>
+    </entity>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
     <snippet ref="create_snippet"/>
@@ -69,6 +81,17 @@
         <text>The password must be at least 12 characters long, and include two non-letters. Leading and tailing whitespaces are stripped.</text>
       </col>
     </row>
+  </form>
+  <form id="removeaccount"  autocomplete="off" method="POST" action="" enctype="multipart/form-data">
+    <row>
+      <col><field ref="e21"></field></col>
+    </row>
+    <row>
+      <col><field ref="e22"></field></col>
+    </row>
+    <buttons>
+      <button type="submit" name="_submit" class="btn btn-danger">Delete user account</button>
+    </buttons>
   </form>
 
   <!-- Create-->

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 import pytest
-from pytest_ringo import login, transaction_begin, transaction_rollback
+from pytest_ringo import login, transaction_begin, transaction_rollback, search_data 
 
 
 class TestList:
@@ -31,7 +31,6 @@ class TestCreate:
         app.post("/roles/create", params=values, status=302)
         transaction_rollback(app)
 
-    @pytest.mark.xfail
     def test_POST_existing_group(self, app):
         login(app, "admin", "secret")
         transaction_begin(app)
@@ -53,6 +52,13 @@ class TestUpdate:
         app.post("/roles/update/1", params=values, status=302)
         transaction_rollback(app)
 
+    def test_update_POST_notunique(self, app):
+        login(app, "admin", "secret")
+        transaction_begin(app)
+        values = {"name": "admin", "label": "admintest"}
+        app.post("/roles/update/1", params=values, status=200)
+        transaction_rollback(app)
+
     def test_update_POST_missing_name(self, app):
         login(app, "admin", "secret")
         transaction_begin(app)
@@ -65,6 +71,18 @@ class TestUpdate:
         transaction_begin(app)
         values = {"name": "admin", "label": ""}
         app.post("/roles/update/1", params=values, status=200)
+        transaction_rollback(app)
+
+    def test_remove_permission(self, app):
+        login(app, "admin", "secret")
+        transaction_begin(app)
+        values = {"label": "Users", "name": "user", "permissions": [21,30],
+                  "admin": "False"}
+        app.post("/roles/update/1", params=values, status=302)
+        values = {"label": "Users", "name": "user", "permissions": [21],
+                  "admin": "False"}
+        app.post("/roles/update/1", params=values, status=302)
+
         transaction_rollback(app)
 
 

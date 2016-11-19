@@ -1,4 +1,5 @@
 """Modul for the messanging system in ringo"""
+import re
 import logging
 import datetime
 import json
@@ -6,6 +7,11 @@ import csv
 import codecs
 import cStringIO
 import sets
+try:
+        import cStringIO as StringIO
+except ImportError:
+        import StringIO
+import xlsxwriter
 import sqlalchemy as sa
 
 from ringo.model.base import BaseItem
@@ -291,6 +297,35 @@ class Exporter(object):
         return self.serialize(data)
 
 
+class XLSXExporter(Exporter):
+    """Docstring for XLSXExporter. """
+
+    def serialize(self, data):
+        output = StringIO.StringIO()
+        book = xlsxwriter.Workbook(output)
+        if len(data) > 0:
+            keys = sorted(data[0].keys())
+            sheet = book.add_worksheet(self._clazz.__tablename__)
+            row = 0
+            col = 0
+            # write header
+            for key in keys:
+                sheet.write(row, col, key)
+                col += 1
+            # write data
+            col = 0
+            row = 1
+            for item in data:
+                for key in keys:
+                    sheet.write(row, col, item[key])
+                    col += 1
+                row += 1
+                col = 0
+        book.close()
+        output.seek(0)
+        return output.read()
+
+
 class JSONExporter(Exporter):
     """Docstring for JSONExporter. """
 
@@ -370,8 +405,15 @@ class Importer(object):
                 obj[field] = datetime.datetime.strptime(
                     obj[field], "%Y-%m-%d").date()
             elif self._clazz_type[field] == "DATETIME":
-                obj[field] = datetime.datetime.strptime(
-                    obj[field], "%Y-%m-%d %H:%M:%S")
+                # Interval fields are implemented as DATETIME
+                # See http://docs.sqlalchemy.org/en/latest/core/type_basics.html#sqlalchemy.types.Interval
+                # Check if we have a interval here
+                iv = re.compile(u"^\d{1,2}:\d{1,2}:\d{1,2}")
+                if iv.match(obj[field]):
+                    t = datetime.datetime.strptime(obj[field], "%H:%M:%S")
+                    obj[field] = datetime.timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
+                else:
+                    obj[field] = datetime.datetime.strptime(obj[field], "%Y-%m-%d %H:%M:%S")
         return obj
 
     def _deserialize_relations(self, obj):
@@ -387,7 +429,11 @@ class Importer(object):
         relations.
         """
         for field in obj.keys():
-            ftype = self._clazz_type[field]
+            try:
+                ftype = self._clazz_type[field]
+            except KeyError:
+                log.warning("Can not find field %s in %s" % (field, self._clazz_type))
+                continue
             # Handle all types of relations...
             if ftype in ["MANYTOMANY", "MANYTOONE",
                          "ONETOONE", "ONETOMANY"]:
@@ -418,7 +464,7 @@ class Importer(object):
         """
         return {}
 
-    def perform(self, data, user=None, translate=lambda x: x, use_uuid=True):
+    def perform(self, data, user=None, translate=lambda x: x, load_key="uuid"):
         """Will return a list of imported items. The list will contain a
         tupel of the item and a string which gives information on the
         operaten (update, create). For create operations the new item
@@ -427,7 +473,8 @@ class Importer(object):
         :data: Importdata as string (JSON, XML...)
         :user: User object. Used when creating objects.
         :translate: Translation method.
-        :use_uuid: Loading items by their uuid.
+        :load_key: Define name of the key which is used to load the
+        item.
         :returns: List of imported items
 
         """
@@ -436,20 +483,22 @@ class Importer(object):
         factory = self._clazz.get_item_factory()
         _ = translate
         for values in import_data:
-            if use_uuid:
+            if load_key == "uuid":
                 id = values.get('uuid')
                 if "id" in values:
                     del values["id"]
+                load_key = "uuid"
             else:
-                id = values.get('id')
+                id = values.get(load_key)
             try:
                 # uuid might be empty for new items, which will raise an
                 # error on loading.
-                item = factory.load(id or "thisiddoesnotexist",
-                                    uuid=use_uuid)
+                item = factory.load(id, field=load_key)
                 item.set_values(values)
                 operation = _("UPDATE")
-            except:
+            except sa.orm.exc.NoResultFound:
+                if ("id" in values and not values["id"]):
+                    del values["id"]
                 item = factory.create(user=user, values=values)
                 operation = _("CREATE")
             imported_items.append((item, operation))

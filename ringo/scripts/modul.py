@@ -40,7 +40,7 @@ def get_modul_fixture(name, package, session):
                                      name, fixture["label"]])
     fixture["display"] = "header-menu"
     fixture["str_repr"] = "%s|id"
-    fixture["uuid"] = uuid.uuid4().hex
+    fixture["uuid"] = str(uuid.uuid4())
     return fixture
 
 
@@ -53,7 +53,7 @@ def get_action_fixtures(session, mid, ignore=[]):
         if action in ignore:
             continue
         fixture = {}
-        myuuid = uuid.uuid4().hex
+        myuuid = str(uuid.uuid4())
         if action == "list":
             name = "List"
             url = "list"
