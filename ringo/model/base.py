@@ -145,12 +145,12 @@ class BaseItem(object):
                   unique=True,
                   default=lambda x: str(uuid.uuid4()))
 
-    def render(self):
+    def render(self, request=None):
         """This function can be used to render a different
         representation of the item. On default it also returns the
         simple string representation. Usefull to build some HTML used in
         links e.g overviews and lists"""
-        return self.__str__()
+        return self.__unicode__()
 
     def __str__(self):
         return self.__unicode__()
@@ -196,7 +196,7 @@ class BaseItem(object):
         modul = load_modul(self)
         format_str, fields = modul.get_str_repr()
         if format_str:
-            return format_str % tuple([prettify(None, self.get_value(f)) for f in fields])
+            return format_str % tuple([prettify(None, self.get_value(f, expand=True)) for f in fields])
         else:
             return "%s" % str(self.id or self.__class__)
 

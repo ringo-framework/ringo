@@ -4,7 +4,10 @@
   <div class="row">
     <div class="col-sm-7">
       <h1 style="float:left">
-        ${_(h.get_item_modul(request, clazz).get_label())}: ${item}
+        % if request.registry.settings.get("layout.show_modulname") != "false":
+          ${_(h.get_item_modul(request, clazz).get_label())}:
+        % endif
+        ${item.render(request)}
       </h1>
         % if request.url.find("read") >= 0:
         <span class="badge hidden-print" style="float:left; margin-left:5px; margin-top:5px">
