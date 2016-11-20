@@ -126,7 +126,10 @@ class UserFactory(BaseFactory):
         new_user.settings = settings
 
         # A usergroup
-        usergroup_factory = BaseFactory(Usergroup)
+        usergroup_property = get_prop_from_instance(new_user, "usergroup",
+                                                    include_relations=True)
+        usergroup_class = usergroup_property.mapper.class_
+        usergroup_factory = BaseFactory(usergroup_class)
         usergroup = usergroup_factory.create(None, {})
         usergroup.name = new_user.login
         usergroup.members.append(new_user)
