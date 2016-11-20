@@ -196,7 +196,7 @@ class BaseItem(object):
         modul = load_modul(self)
         format_str, fields = modul.get_str_repr()
         if format_str:
-            return format_str % tuple([prettify(None, self.get_value(f, expand=True)) for f in fields])
+            return format_str % tuple([prettify(None, self.get_value(f)) for f in fields])
         else:
             return "%s" % str(self.id or self.__class__)
 
