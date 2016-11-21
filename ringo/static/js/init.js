@@ -155,7 +155,7 @@ $( document ).ready(function() {
             if (url && url.indexOf("#") != 0) {
                 $(dialog).modal("show");
                 DirtyFormWarningOpen = true;
-		event.preventDefault();
+                event.preventDefault();
                 return false;
             }
             return true;
@@ -171,7 +171,6 @@ $( document ).ready(function() {
         var url = $(element).attr("href");
         var hide_spinner = $(element).hasClass("nospinner") == true;
         openDirtyDialog(url, hide_spinner, event);
-        
     });
     $('.link').not('a').click(function(event) {
         var element = event.target;
