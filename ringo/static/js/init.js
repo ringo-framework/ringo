@@ -139,9 +139,11 @@ $( document ).ready(function() {
         isDirty = false;
         $('form').each(function () {
             if($(this).data('initialValue') != $(this).serialize()){
-                // The DirtyFormWarning should not be shown in the print
-                // dialog. See waskiq/issue2049.
-                if($(this).attr("action").indexOf("print") == -1) {
+                // The DirtyFormWarning should not be shown, if the form
+                // has the attribute "no-dirtyable". See waskiq/issue2049.
+                var no_dirtyable = $(this).attr("no-dirtyable")
+                if(typeof no_dirtyable === typeof undefined
+                   || no_dirtyable != "true") {
                     isDirty = true;
                 }
             }
