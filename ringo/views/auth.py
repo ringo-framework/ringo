@@ -282,10 +282,17 @@ def forgot_password(request):
                             template="password_reset_request",
                             values=values)
                 mailer.send(mail)
-            msg = _("Password reset token has been sent to the users "
-                    "email address. Please check your email.")
-            request.session.flash(msg, 'success')
-            complete = True
+                msg = _("Password reset token has been sent to the users "
+                        "email address. Please check your email.")
+                request.session.flash(msg, 'success')
+                complete = True
+            else:
+                msg = _("Login doesn't exist or written wrong")
+                request.session.flash(msg, "error")
+                form = Form(form_config,
+                            csrf_token=request.session.get_csrf_token(),
+                            translate=_)
+                complete = False
     return {'form': form.render(), 'complete': complete}
 
 

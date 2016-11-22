@@ -141,7 +141,13 @@ $( document ).ready(function() {
         isDirty = false;
         $('form').each(function () {
             if($(this).data('initialValue') != $(this).serialize()){
-                isDirty = true;
+                // The DirtyFormWarning should not be shown, if the form
+                // has the attribute "no-dirtyable". See waskiq/issue2049.
+                var no_dirtyable = $(this).attr("no-dirtyable")
+                if(typeof no_dirtyable === typeof undefined
+                   || no_dirtyable != "true") {
+                    isDirty = true;
+                }
             }
         });
         if((isDirty == true) && (DirtyFormWarningOpen == false)) {
@@ -151,7 +157,7 @@ $( document ).ready(function() {
             if (url && url.indexOf("#") != 0) {
                 $(dialog).modal("show");
                 DirtyFormWarningOpen = true;
-		event.preventDefault();
+                event.preventDefault();
                 return false;
             }
             return true;
@@ -167,7 +173,6 @@ $( document ).ready(function() {
         var url = $(element).attr("href");
         var hide_spinner = $(element).hasClass("nospinner") == true;
         openDirtyDialog(url, hide_spinner, event);
-        
     });
     $('.link').not('a').click(function(event) {
         var element = event.target;

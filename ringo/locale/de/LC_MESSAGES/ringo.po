@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-08-29 08:26+0200\n"
+"POT-Creation-Date: 2016-11-03 10:57+0100\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language: de\n"
@@ -21,11 +21,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: ringo/lib/imexport.py:489
+#: ringo/lib/imexport.py:492
 msgid "UPDATE"
 msgstr "AKTUALISIERUNG"
 
-#: ringo/lib/imexport.py:492
+#: ringo/lib/imexport.py:495
 msgid "CREATE"
 msgstr "ANLEGEN"
 
@@ -93,11 +93,11 @@ msgstr "Bitte geben Sie hier sinnvolle Informationen über Anwendung an."
 msgid "This application is based on the Ringo web application framework."
 msgstr "Diese Anwendung basiert auf dem Ringo Webanwendungs-Rahmen."
 
-#: ringo/templates/base.mako:78
+#: ringo/templates/base.mako:80
 msgid "Logout will happen soon"
 msgstr "Abmeldung steht kurz bevor"
 
-#: ringo/templates/base.mako:80
+#: ringo/templates/base.mako:82
 msgid ""
 "Your session will expire soon because of inactivity. Click on \"Renew "
 "session\" to continue work and renew your session. Otherwise you will be "
@@ -108,15 +108,15 @@ msgstr ""
 "Andernfalls werden Sie in Kürze automatisch abgemeldet, und alle nicht "
 "gespeicherten Eingaben gehen verloren."
 
-#: ringo/templates/base.mako:83
+#: ringo/templates/base.mako:85
 msgid "Renew session"
 msgstr "Sitzung verlängern"
 
-#: ringo/templates/base.mako:91
+#: ringo/templates/base.mako:93
 msgid "Form contains unsaved changes!"
 msgstr "Formular enthält ungespeicherte Änderungen!"
 
-#: ringo/templates/base.mako:93
+#: ringo/templates/base.mako:95
 msgid ""
 "Do you want to leave the current form without saving the changes? The "
 "changes will be lost if you do not save the data first!"
@@ -125,47 +125,47 @@ msgstr ""
 "speichern? Die Änderungen werden verloren gehen, wenn Sie das Formular "
 "nicht vorher speichern!"
 
-#: ringo/templates/base.mako:96
+#: ringo/templates/base.mako:98
 msgid "Stay in Form"
 msgstr "Im Formular bleiben"
 
-#: ringo/templates/base.mako:97
+#: ringo/templates/base.mako:99
 msgid "Leave the Form"
 msgstr "Das Formular verlassen"
 
-#: ringo/templates/base.mako:160
+#: ringo/templates/base.mako:162
 msgid "Create new item"
 msgstr "Erstelle neuen Eintrag"
 
-#: ringo/templates/base.mako:162
+#: ringo/templates/base.mako:164
 msgid "Open overview"
 msgstr "Öffne Übersicht"
 
-#: ringo/templates/base.mako:164
+#: ringo/templates/base.mako:166
 msgid "Open in \"Edit\" mode"
 msgstr "Öffne im „Bearbeiten“ Modus"
 
-#: ringo/templates/base.mako:166
+#: ringo/templates/base.mako:168
 msgid "Open in \"Read\" mode"
 msgstr "Öffne im „Lesen“ Modus"
 
-#: ringo/templates/base.mako:168
+#: ringo/templates/base.mako:170
 msgid "Delete item"
 msgstr "Lösche Eintrag"
 
-#: ringo/templates/base.mako:189
+#: ringo/templates/base.mako:191
 msgid "Advanced"
 msgstr "Erweitert"
 
-#: ringo/templates/base.mako:191 ringo/templates/footer.mako:8
+#: ringo/templates/base.mako:193 ringo/templates/footer.mako:8
 msgid "Administration"
 msgstr "Administration"
 
-#: ringo/templates/base.mako:192
+#: ringo/templates/base.mako:194
 msgid "Change ownership"
 msgstr "Ändere Eigentumsrechte"
 
-#: ringo/templates/base.mako:195
+#: ringo/templates/base.mako:197
 msgid "Advanced actions"
 msgstr "Erweiterte Aktionen"
 
@@ -212,36 +212,36 @@ msgstr "Dokumentation"
 msgid "Show version information"
 msgstr "Zeige Informationen zur Version"
 
-#: ringo/templates/header.mako:58
+#: ringo/templates/header.mako:60
 msgid "Home"
 msgstr "Startseite"
 
-#: ringo/templates/header.mako:75
+#: ringo/templates/header.mako:79
 msgid "Settings"
 msgstr "Einstellungen"
 
 #. Label for profile field in form config
-#: ringo/templates/header.mako:76 ringo/views/forms/users.xml:11
+#: ringo/templates/header.mako:80 ringo/views/forms/users.xml:11
 msgid "Profile"
 msgstr "Profil"
 
-#: ringo/templates/header.mako:77
+#: ringo/templates/header.mako:81
 msgid "Change Password"
 msgstr "Passwort ändern"
 
-#: ringo/templates/header.mako:78
+#: ringo/templates/header.mako:82
 msgid "Set standin"
 msgstr "Vertretung setzen"
 
-#: ringo/templates/header.mako:80
+#: ringo/templates/header.mako:84
 msgid "Remove account"
 msgstr "Zugang löschen"
 
-#: ringo/templates/header.mako:85
+#: ringo/templates/header.mako:89
 msgid "Service"
 msgstr "Dienste"
 
-#: ringo/templates/header.mako:92
+#: ringo/templates/header.mako:96
 msgid "Logout"
 msgstr "Abmelden"
 
@@ -250,7 +250,7 @@ msgstr "Abmelden"
 #: ringo/templates/auth/confirm_user.mako:19
 #: ringo/templates/auth/confirm_user.mako:24 ringo/templates/auth/login.mako:5
 #: ringo/templates/auth/reset_password.mako:19
-#: ringo/templates/auth/reset_password.mako:24 ringo/templates/header.mako:96
+#: ringo/templates/auth/reset_password.mako:24 ringo/templates/header.mako:100
 #: ringo/templates/index.mako:22 ringo/views/forms/auth.xml:11
 #: ringo/views/forms/users.xml:1 ringo/views/forms/users.xml:2
 #: ringo/views/tables/profiles.json:6
@@ -479,7 +479,7 @@ msgstr ""
 "Geben Sie ihre Anmeldekennung und Passwort ein. Eine Email mit weiteren "
 "Informationen zum Zurücksetzen des Passworts wird Ihnen zugesendet."
 
-#: ringo/templates/auth/forgot_password.mako:20 ringo/views/auth.py:259
+#: ringo/templates/auth/forgot_password.mako:20 ringo/views/auth.py:285
 msgid ""
 "Password reset token has been sent to the users email address. Please "
 "check your email."
@@ -509,7 +509,7 @@ msgstr ""
 " Sie erhalten im Anschluss eine Email mit einem Bestätigungslink, um die "
 "Registrierung abzuschließen."
 
-#: ringo/templates/auth/register_user.mako:20 ringo/views/auth.py:204
+#: ringo/templates/auth/register_user.mako:20 ringo/views/auth.py:226
 msgid ""
 "User has been created and a confirmation mail was sent to the users email"
 " adress. Please check your email."
@@ -687,41 +687,41 @@ msgstr "Druckkonfiguration für"
 
 #. Label for description field in form config
 #. Label for description column in overview table config
-#: ringo/templates/internal/statefield.mako:8 ringo/views/forms/forms.xml:2
+#: ringo/templates/internal/statefield.mako:10 ringo/views/forms/forms.xml:2
 #: ringo/views/forms/modules.xml:4 ringo/views/forms/roles.xml:5
 #: ringo/views/forms/usergroups.xml:3 ringo/views/tables/forms.json:3
 msgid "Description"
 msgstr "Beschreibung"
 
-#: ringo/templates/internal/statefield.mako:12
+#: ringo/templates/internal/statefield.mako:14
 msgid "Please select one of the following steps:"
 msgstr "Bitte wählen Sie einen der folgenden Schritte:"
 
 #. Label for review_state column in overview table config
-#: ringo/templates/internal/statefield.mako:18 ringo/views/forms/forms.xml:10
+#: ringo/templates/internal/statefield.mako:25 ringo/views/forms/forms.xml:10
 #: ringo/views/tables/forms.json:5
 msgid "State"
 msgstr "Status"
 
-#: ringo/templates/internal/statefield.mako:33
+#: ringo/templates/internal/statefield.mako:40
 msgid "State transition"
 msgstr "Zustandswechsel"
 
-#: ringo/templates/internal/statefield.mako:35
+#: ringo/templates/internal/statefield.mako:42
 msgid "No Transition"
 msgstr "Kein Wechsel"
 
-#: ringo/templates/internal/statefield.mako:45
+#: ringo/templates/internal/statefield.mako:52
 msgid "Current state"
 msgstr "Aktueller Zustand"
 
-#: ringo/templates/internal/statefield.mako:52
+#: ringo/templates/internal/statefield.mako:59
 msgid "Resulting State"
 msgstr "Resultierender Zustand"
 
 #: ringo/templates/mails/password_reminder.mako:1
 #: ringo/templates/mails/password_reset_request.mako:1
-#: ringo/templates/mails/register_user.mako:1
+#: ringo/templates/mails/register_user.mako:2
 msgid "Dear user"
 msgstr "Lieber Nutzer"
 
@@ -739,19 +739,19 @@ msgstr "Bitte vergessen Sie nicht das Passwort alsbald möglich zu ändern."
 
 #: ringo/templates/mails/password_reminder.mako:10
 #: ringo/templates/mails/password_reset_request.mako:11
-#: ringo/templates/mails/register_user.mako:9
+#: ringo/templates/mails/register_user.mako:10
 msgid "kind regards"
 msgstr "mit den besten Grüßen"
 
 #: ringo/templates/mails/password_reminder.mako:11
 #: ringo/templates/mails/password_reset_request.mako:12
-#: ringo/templates/mails/register_user.mako:10
+#: ringo/templates/mails/register_user.mako:11
 msgid "your ${app_name} team"
 msgstr "Ihr Team von „${app_name}“"
 
 #: ringo/templates/mails/password_reminder.mako:13
 #: ringo/templates/mails/password_reset_request.mako:14
-#: ringo/templates/mails/register_user.mako:12
+#: ringo/templates/mails/register_user.mako:13
 msgid ""
 "This email was sent automatically. Please do not reply on this email. In "
 "case of questions please send an email to ${email}."
@@ -783,7 +783,7 @@ msgstr ""
 "Nachdem Sie das Zurücksetzen bestätigt haben, wird Ihnen das neue "
 "Password per E-Mail zugesendet."
 
-#: ringo/templates/mails/register_user.mako:3
+#: ringo/templates/mails/register_user.mako:4
 msgid ""
 "You have received this email because you requested a user registration "
 "for \"${app_name}\"."
@@ -791,7 +791,7 @@ msgstr ""
 "Sie haben diese E-Mail erhalten, da Sie einen Zugang zur Anwendung "
 "„${app_name}“ angefordert haben."
 
-#: ringo/templates/mails/register_user.mako:5
+#: ringo/templates/mails/register_user.mako:6
 msgid ""
 "To complete this request you need to confirm the registration by clicking"
 " the following link:"
@@ -843,55 +843,59 @@ msgstr ""
 msgid "ERROR: %s"
 msgstr "FEHLER: %s"
 
-#: ringo/views/auth.py:66 ringo/views/auth.py:69
+#: ringo/views/auth.py:71 ringo/views/auth.py:74
 msgid "Login failed!"
 msgstr "Anmeldung fehlgeschlagen"
 
-#: ringo/views/auth.py:74
+#: ringo/views/auth.py:94
 msgid "Login was successfull"
 msgstr "Anmeldung war erfolgreich"
 
-#: ringo/views/auth.py:95
+#: ringo/views/auth.py:115
 msgid "Logout was successfull"
 msgstr "Abmeldung war erfolgreich"
 
-#: ringo/views/auth.py:142
+#: ringo/views/auth.py:161
 msgid "There is already a user with this name"
 msgstr ""
 
-#: ringo/views/auth.py:146 ringo/views/users.py:131 ringo/views/users.py:161
+#: ringo/views/auth.py:165 ringo/views/users.py:131 ringo/views/users.py:161
 #: ringo/views/users.py:285
 msgid "Password must be at least 12 characters long."
 msgstr "Passwort muss mindestens 12 Zeichen lang sein."
 
-#: ringo/views/auth.py:150 ringo/views/users.py:135 ringo/views/users.py:165
+#: ringo/views/auth.py:169 ringo/views/users.py:135 ringo/views/users.py:165
 #: ringo/views/users.py:289
 msgid "Password must contain at least 2 non-letters."
 msgstr "Passwort muss mindestens 2 Nicht-Buchstaben enthalten."
 
-#: ringo/views/auth.py:196
+#: ringo/views/auth.py:215
 msgid "Confirm user registration"
 msgstr "Bestätigung Nutzerregistrierung"
 
-#: ringo/views/auth.py:225
+#: ringo/views/auth.py:246
 msgid "The user has beed successfull confirmed."
 msgstr "Der Zugang wurde erfolgreich bestätigt."
 
-#: ringo/views/auth.py:227
+#: ringo/views/auth.py:248
 msgid "The user was not confirmed. Maybe the confirmation token was not valid?"
 msgstr ""
 "Der Zugang konnte nicht bestätigt werden. Vielleicht ist das Best"
 "ätigungs-Token nicht gülitg?"
 
-#: ringo/views/auth.py:252
+#: ringo/views/auth.py:274
 msgid "Password reset request"
 msgstr "Anfrage Passwort zurücksetzen"
 
-#: ringo/views/auth.py:280
+#: ringo/views/auth.py:290
+msgid "Login doesn't exist or written wrong"
+msgstr "Anmeldekennung existiert nicht oder ist falsch geschrieben."
+
+#: ringo/views/auth.py:313
 msgid "Password has been reseted"
 msgstr "Passwort wurde zurückgesetzt"
 
-#: ringo/views/auth.py:287
+#: ringo/views/auth.py:323
 msgid ""
 "Password was resetted and sent to the users email address. Please check "
 "your email."
@@ -899,7 +903,7 @@ msgstr ""
 "Das Passwort wurde zurückgesetzt und an die E-Mail Adresse des Nutzer "
 "geschickt. Bitte prüfen Sie ihre E-Mail."
 
-#: ringo/views/auth.py:291
+#: ringo/views/auth.py:327
 msgid "Password was not resetted. Maybe the request token was not valid?"
 msgstr ""
 "Das Passwort wurde nicht zurückgesetzt. Vielleicht ist das Token nicht "
@@ -927,7 +931,7 @@ msgstr ""
 "Authorisierung fehlgeschlagen. Es tut mir leid, aber Sie haben nicht die "
 "erforderlichen Rechte, um auf die Ressource zuzugreifen."
 
-#: ringo/views/request.py:205
+#: ringo/views/request.py:206
 msgid ""
 "The information contained errors. <strong>All entries (including error-"
 "free) were not saved!</strong> Please correct your entries in the fields "
@@ -937,27 +941,27 @@ msgstr ""
 "fehlerfreie) wurden nicht gespeichert!</strong> Bitte korrigieren Sie die"
 " Eingaben in den rot markierten Feldern und speichern Sie erneut."
 
-#: ringo/views/request.py:238
+#: ringo/views/request.py:243
 msgid "Created new ${item_type} successfully."
 msgstr "${item_type} erfolgreich angelegt."
 
-#: ringo/views/request.py:243
+#: ringo/views/request.py:248
 msgid "Edited ${item_type} \"${item}\" successfully."
 msgstr "${item_type} „${item}“ wurde erfolgreich bearbeitet."
 
-#: ringo/views/request.py:263
+#: ringo/views/request.py:271
 msgid "Error while saving new ${item_type}: ${error}."
 msgstr "Fehler beim Anlegen von ${item_type}: ${error}."
 
-#: ringo/views/request.py:266
+#: ringo/views/request.py:274
 msgid "Error while saving ${item_type} \"${item}\": ${error}."
 msgstr "Fehler beim Bearbeiten von ${item_type} „${item}“: ${error}."
 
-#: ringo/views/request.py:274
+#: ringo/views/request.py:284
 msgid "Error on validation new ${item_type}."
 msgstr "Fehler beim Validieren von ${item_type}."
 
-#: ringo/views/request.py:277
+#: ringo/views/request.py:287
 msgid "Error on validation ${item_type} \"${item}\"."
 msgstr "Fehler beim Validieren von ${item_type} „${item}“."
 
