@@ -1091,10 +1091,29 @@ the example code to render a link as a button in the following goes like this::
 Custom authorisation
 ********************
 If you need to change the way Ringo builds the ACL on default you can change this behavior by 
-overwriting the ``_get_permissions`` class method of the BaseItem in your model.
+overwriting the ``_get_permissions`` class method of the BaseItem in your model::
 
-.. todo::
-        Give an example
+    from pyramid.security import Allow
+
+    @classmethod
+    def _get_permissions(cls, modul, item, request):
+
+        # Default ACL. Direct access
+        permissions = BaseItem._get_permissions(modul, item, request)
+
+        # The default permissions are configured using the setting from the
+        # roles. We can now modifiy/extend the default permissions. In the
+        # following example we allow of users with role "foo" to read the
+        # item
+        permissions.append((Allow, 'role:foo', 'read'))
+
+        # An alternativ can be to allow a specific user (by its id/uid) to
+        # access the item
+        if has_role(request.user, 'foo'):
+            uid = request.user.id 
+            permissions.append((Allow, 'uid:{}'.format(uid), 'read'))
+
+        return permissions
 
 .. todo::
         Write about inheritance of authorisation
