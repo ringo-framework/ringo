@@ -185,15 +185,23 @@ def handle_db_savedata_command(args):
     session = get_session(os.path.join(*path))
     modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == args.modul).all()[0].clazzpath
     modul = dynamic_import(modul_clazzpath)
+    data = session.query(modul).order_by(modul.id).all()
     if args.format == "json":
         exporter = JSONExporter(modul, serialized=False,
                                 relations=args.include_relations)
+        data = prepare_data(data)
     else:
         exporter = CSVExporter(modul, serialized=False,
                                relations=args.include_relations)
-    print exporter.perform(session.query(modul)
-                          .order_by(modul.id)
-                          .all())
+    print exporter.perform(data)
+
+def prepare_data(applications):
+    import datetime
+    for application in applications:
+        for field, value in application.__dict__.items():
+            if isinstance(value, datetime.date):
+                application.__setattr__(field, str(value))
+    return applications
 
 def handle_db_loaddata_command(args):
     path = []

@@ -120,6 +120,11 @@ class TableConfig:
     * *renderer* defines a callable which is used to render the
       field in the form "app.lib.renderer.myrenderer". The function will
       take the request, the fieldname, and the renderer as parameters.
+    * *searchable* A flag indicating whether the field should be searchable
+      with datatables. By default all fields are searched.
+    * *visible* A flag indicating whether the field should be shown in the
+      table. This can be combined with the searchable attribute to implement
+      hidden, but searchable elements. By default all fields are shown.
 
     Further the table has some table wide configuration options:
 
@@ -221,7 +226,7 @@ class TableConfig:
     def get_columns(self, user=None):
         """Return a list of configured columns within the configuration.
         Each colum is a dictionary containing the one or more available
-        conifguration attributes."""
+        configuration attributes."""
         from ringo.lib.security import has_role
         cols = []
         config = self.config.get(self.name)

@@ -14,7 +14,11 @@ from ringo.lib.helpers import prettify
       </th>
       % endif
       % for field in tableconfig.get_columns(request.user):
-        <th width="${field.get('width')}" title="${field.get('title') or _(field.get('label'))}">${_(field.get('label'))}</th>
+        <th
+        % if not field.get('visible', True):
+          style="display: none;"
+        % endif
+        width="${field.get('width')}" title="${field.get('title') or _(field.get('label'))}">${_(field.get('label'))}</th>
       % endfor
     </tr>
   </thead>
@@ -37,11 +41,14 @@ from ringo.lib.helpers import prettify
         </td>
       % endif
       % for field in tableconfig.get_columns(request.user):
+        <td 
         % if permission:
-          <td class="link">
-        % else:
-          <td>
+          class="link"
         % endif
+        % if not field.get('visible', True):
+          style="display: none;"
+        % endif
+        >
           <%
             try:
               colrenderer = tableconfig.get_renderer(field)

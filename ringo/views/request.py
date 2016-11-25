@@ -266,7 +266,7 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
             return True
         except Exception as error:
             request.db.rollback()
-            mapping['error'] = unicode(error.message)
+            mapping['error'] = unicode(error.message, 'utf-8')
             if event == "create":
                 msg = _('Error while saving new '
                         '${item_type}: ${error}.', mapping=mapping)
