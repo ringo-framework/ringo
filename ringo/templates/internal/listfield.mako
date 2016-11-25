@@ -31,7 +31,7 @@ for item in items:
     </tr>
     % endif
     <tr>
-    % if not field.is_readonly():
+    % if not (field.is_readonly() or field.renderer.onlylinked == "true"):
       <th width="20px">
         % if not field.renderer.multiple == "false":
           <input type="checkbox" name="check_all" onclick="checkAll('${field.name}');">
@@ -53,7 +53,7 @@ for item in items:
         permission = "read"
       %>
       <tr>
-      % if not field.is_readonly():
+      % if not (field.is_readonly() or field.renderer.onlylinked == "true"):
         <td>
           % if not field.renderer.multiple == "false":
             % if str(item[0].id) in selected:
