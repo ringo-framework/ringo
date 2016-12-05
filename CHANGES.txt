@@ -1,5 +1,5 @@
-Next
-====
+1.15.0
+======
 - Bugfix for "app.mode" config option. App mode was broken for all modes
   execept "testing" because the test db request was accessed in all cases even
   if its not present
