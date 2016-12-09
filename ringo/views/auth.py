@@ -276,6 +276,7 @@ def forgot_password(request):
                                                    token=token),
                           'app_name': get_app_title(),
                           'email': settings['mail.default_sender'],
+                          'username': username,
                           '_': _}
                 mail = Mail([recipient],
                             subject,
