@@ -7,22 +7,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-11-03 10:57+0100\n"
+"POT-Creation-Date: 2016-12-12 11:44+0100\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: en\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
+"Generated-By: Babel 1.3\n"
 
-#: ringo/lib/imexport.py:492
+#: ringo/lib/imexport.py:501
 msgid "UPDATE"
 msgstr ""
 
-#: ringo/lib/imexport.py:495
+#: ringo/lib/imexport.py:506
 msgid "CREATE"
 msgstr ""
 
@@ -40,31 +39,31 @@ msgid ""
 "cancel the action."
 msgstr ""
 
-#: ringo/model/modul.py:277
+#: ringo/model/modul.py:286
 msgid "List"
 msgstr ""
 
-#: ringo/model/modul.py:280 ringo/templates/default/list.mako:41
+#: ringo/model/modul.py:289
 msgid "Create"
 msgstr ""
 
-#: ringo/model/modul.py:283
+#: ringo/model/modul.py:292
 msgid "Read"
 msgstr ""
 
-#: ringo/model/modul.py:286
+#: ringo/model/modul.py:295
 msgid "Update"
 msgstr ""
 
-#: ringo/model/modul.py:289
+#: ringo/model/modul.py:298
 msgid "Delete"
 msgstr ""
 
-#: ringo/model/modul.py:293 ringo/templates/default/list.mako:46
+#: ringo/model/modul.py:302 ringo/templates/default/list.mako:74
 msgid "Import"
 msgstr ""
 
-#: ringo/model/modul.py:296
+#: ringo/model/modul.py:305
 msgid "Export"
 msgstr ""
 
@@ -231,11 +230,11 @@ msgstr ""
 
 #. Label for login field in form config
 #. Label for user.login column in overview table config
+#: ringo/templates/header.mako:100 ringo/templates/index.mako:22
 #: ringo/templates/auth/confirm_user.mako:19
 #: ringo/templates/auth/confirm_user.mako:24 ringo/templates/auth/login.mako:5
 #: ringo/templates/auth/reset_password.mako:19
-#: ringo/templates/auth/reset_password.mako:24 ringo/templates/header.mako:100
-#: ringo/templates/index.mako:22 ringo/views/forms/auth.xml:11
+#: ringo/templates/auth/reset_password.mako:24 ringo/views/forms/auth.xml:11
 #: ringo/views/forms/users.xml:1 ringo/views/forms/users.xml:2
 #: ringo/views/tables/profiles.json:6
 msgid "Login"
@@ -423,7 +422,7 @@ msgstr ""
 msgid "Enter your Loginname and a password reset email will be sent out"
 msgstr ""
 
-#: ringo/templates/auth/forgot_password.mako:20 ringo/views/auth.py:285
+#: ringo/templates/auth/forgot_password.mako:20 ringo/views/auth.py:286
 msgid ""
 "Password reset token has been sent to the users email address. Please "
 "check your email."
@@ -462,22 +461,25 @@ msgstr ""
 msgid "Password not resetted"
 msgstr ""
 
-#: ringo/templates/default/create.mako:5 ringo/templates/default/list.mako:15
-#: ringo/templates/default/list.mako:32 ringo/templates/default/list.mako:34
+#: ringo/templates/default/create.mako:5 ringo/templates/default/list.mako:16
 #: ringo/templates/internal/listfield.mako:84
 msgid "New"
 msgstr ""
 
-#: ringo/templates/default/list.mako:15 ringo/templates/default/list.mako:32
-#: ringo/templates/default/list.mako:41
+#: ringo/templates/default/list.mako:16 ringo/templates/default/list.mako:63
+#: ringo/templates/default/list.mako:65
 #: ringo/templates/internal/listfield.mako:76
 #, python-format
 msgid "Add a new %s entry"
 msgstr ""
 
-#: ringo/templates/default/list.mako:34 ringo/templates/default/list.mako:46
+#: ringo/templates/default/list.mako:67
 #, python-format
 msgid "Import new %s entries"
+msgstr ""
+
+#: ringo/templates/default/list.mako:72
+msgid "Add"
 msgstr ""
 
 #: ringo/templates/internal/confirm.mako:13
@@ -499,7 +501,7 @@ msgid "You have selected %s %s for export:"
 msgstr ""
 
 #: ringo/templates/internal/export.mako:17
-#: ringo/templates/internal/list.mako:244
+#: ringo/templates/internal/list.mako:254
 #: ringo/templates/internal/print.mako:11
 msgid "Close"
 msgstr ""
@@ -566,7 +568,7 @@ msgstr ""
 msgid "Options "
 msgstr ""
 
-#: ringo/templates/internal/list.mako:92 ringo/templates/internal/list.mako:235
+#: ringo/templates/internal/list.mako:92 ringo/templates/internal/list.mako:245
 msgid "Save current search filter"
 msgstr ""
 
@@ -586,21 +588,21 @@ msgstr ""
 msgid "${num_filter} filter applied"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:221
+#: ringo/templates/internal/list.mako:231
 msgid "No items found"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:237
+#: ringo/templates/internal/list.mako:247
 msgid "Queryname"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:240
+#: ringo/templates/internal/list.mako:250
 msgid ""
 "Please insert a name for your query. It it will be selectable under this "
 "name in the options menu of the search after saving."
 msgstr ""
 
-#: ringo/templates/internal/list.mako:243
+#: ringo/templates/internal/list.mako:253
 msgid "Save Query"
 msgstr ""
 
@@ -695,7 +697,7 @@ msgstr ""
 #: ringo/templates/mails/password_reset_request.mako:3
 msgid ""
 "You have received this email because you requested the reset of your "
-"password for \"${app_name}\"."
+"password for ${app_name}: ${username}."
 msgstr ""
 
 #: ringo/templates/mails/password_reset_request.mako:6
@@ -801,21 +803,21 @@ msgstr ""
 msgid "Password reset request"
 msgstr ""
 
-#: ringo/views/auth.py:290
+#: ringo/views/auth.py:291
 msgid "Login doesn't exist or written wrong"
 msgstr ""
 
-#: ringo/views/auth.py:313
+#: ringo/views/auth.py:314
 msgid "Password has been reseted"
 msgstr ""
 
-#: ringo/views/auth.py:323
+#: ringo/views/auth.py:324
 msgid ""
 "Password was resetted and sent to the users email address. Please check "
 "your email."
 msgstr ""
 
-#: ringo/views/auth.py:327
+#: ringo/views/auth.py:328
 msgid "Password was not resetted. Maybe the request token was not valid?"
 msgstr ""
 
@@ -1681,5 +1683,11 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Please select one of the following actions to change the state:"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "You have received this email because "
+#~ "you requested the reset of your "
+#~ "password for \"${app_name}\"."
 #~ msgstr ""
 
