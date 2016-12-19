@@ -78,7 +78,7 @@ def create(request, callback=None, renderers=None,
         if handle_POST_request(form, request, callback, 'create', renderers):
             return handle_redirect_on_success(request)
     rvalues = get_return_value(request)
-    rvalues['form'] = render_item_form(request, form, values, False)
+    rvalues['form'] = render_item_form(request, form, validate=False)
     return rvalues
 
 

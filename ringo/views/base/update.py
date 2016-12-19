@@ -48,7 +48,7 @@ def update(request, callback=None, renderers=None,
             return handle_redirect_on_success(request)
 
     rvalues = get_return_value(request)
-    rvalues['form'] = render_item_form(request, form, values)
+    rvalues['form'] = render_item_form(request, form)
     return rvalues
 
 
