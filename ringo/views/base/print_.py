@@ -1,20 +1,47 @@
 import logging
 import StringIO
+from xml.sax.saxutils import escape
 from py3o.template import Template
 from ringo.lib.renderer import (
     PrintDialogRenderer
 )
+from genshi.core import Markup
 from ringo.views.request import (
     handle_params,
     handle_history,
     is_confirmed,
     get_item_from_request,
 )
+from ringo.lib.helpers import prettify
 
 log = logging.getLogger(__name__)
 
 
-def _render_template(template, item):
+class PrintValueGetter(object):
+
+    def __init__(self, item, request):
+        self.item = item
+        self.request = request
+
+    def __str__(self):
+        return str(self.item)
+
+    def __unicode__(self):
+        return unicode(self.item)
+
+    def __getattr__(self, name):
+        if hasattr(self.item, name):
+            value = self.item.get_value(name, expand=True)
+            if isinstance(value, BaseItem):
+                return PrintValueGetter(value, self.request)
+            elif isinstance(value, basestring):
+                value = escape(value)
+                return Markup(value.replace("\n", "<text:line-break/>"))
+            else:
+                return prettify(self.request, value)
+
+
+def _render_template(request, template, item):
     """Will render the given template with the items data.
 
     :template: @todo
@@ -24,7 +51,7 @@ def _render_template(template, item):
     """
     out = StringIO.StringIO()
     temp = Template(StringIO.StringIO(template.data), out)
-    temp.render({"item": item})
+    temp.render({"item": item, "print_item": PrintValueGetter(item, request)})
     return out
 
 
@@ -55,7 +82,7 @@ def print_(request):
        and form.validate(request.params)):
         template = form.data.get('printtemplates')[0]
         # Render the template
-        out = _render_template(template, item)
+        out = _render_template(request, template, item)
         # Build response
         return _build_response(request, template, out)
     else:
