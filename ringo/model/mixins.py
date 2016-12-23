@@ -190,7 +190,7 @@ class Blobform(object):
                 return json_data[name]
         return get_raw_value(self, name)
 
-    def set_values(self, values):
+    def set_values(self, values, use_strict=False):
         """Will set the given values into Blobform items. This function
         overwrites the default behavior of the BaseItem and takes care
         that the data will be saved in the data attribute as JSON
