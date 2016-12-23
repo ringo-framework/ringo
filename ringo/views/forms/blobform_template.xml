@@ -29,7 +29,11 @@
 
   <snippet id="s1">
     <row>
-      <col><field ref="dummy"/></col>
+      <col>
+        <field ref="fid"/>
+        <field ref="_roles"/>
+        <field ref="dummy"/>
+      </col>
     </row>
   </snippet>
 </configuration>
