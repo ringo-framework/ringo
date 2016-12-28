@@ -3,6 +3,7 @@ import cgi
 import os
 import pkg_resources
 from mako.lookup import TemplateLookup
+from formbar.fields import rules_to_string
 from formbar.renderer import (
     FieldRenderer,
     DropdownFieldRenderer as FormbarDropdown,
@@ -366,7 +367,7 @@ class ListingFieldRenderer(FormbarSelectionField):
         class_options = "form-group %s %s %s" % ((has_errors and 'has-error'),
                                               (has_warnings and 'has-warning'),(active))
         html.append(HTML.tag("div", _closed=False,
-                             rules=u"{}".format(";".join(self._field.rules_to_string)),
+                             rules=u"{}".format(";".join(rules_to_string(self._field))),
                              formgroup="{}".format(self._field.name),
                              desired="{}".format(self._field.desired),
                              required="{}".format(self._field.required),
