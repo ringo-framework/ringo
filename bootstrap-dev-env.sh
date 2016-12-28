@@ -1,21 +1,34 @@
 #!/bin/sh
 #set -x
 
-USAGE="Usage: `basename $0` [-hv] [-s] [-c git-url] [-n] app"
+USAGE="Usage: `basename $0` [-hv] [-s] [-e] [-l logfile.txt] [-c git-url] [-n] app"
 VERSION="0.0"
 
 NEWAPP=0
 GIT="0"
 SYSTEMSITEPACKAGES=0
+INSTALLEXT=0
+LOGFILE=/dev/null
 
 # URLS
-BRABBEL=https://github.com/ringo-framework/brabbel
-FORMBAR=https://github.com/ringo-framework/formbar
-RINGO=https://github.com/ringo-framework/ringo
+BRABBEL=https://github.com/ringo-framework/brabbel.git
+FORMBAR=https://github.com/ringo-framework/formbar.git
+RINGO=https://github.com/ringo-framework/ringo.git
+PYTESTRINGO=https://github.com/ringo-framework/pytest-ringo.git
+
+# EXTENSIONS
+PRINTTEMPLATES=https://github.com/ringo-framework/ringo_printtemplates.git
+COMMENT=https://github.com/ringo-framework/ringo_comment.git
+EVALUATION=https://github.com/ringo-framework/ringo_evaluation.git
+DIAGRAM=https://github.com/ringo-framework/ringo_diagram.git
+FILE=https://github.com/ringo-framework/ringo_file.git
+NEWS=https://github.com/ringo-framework/ringo_news.git
+TAG=https://github.com/ringo-framework/ringo_tag.git
+EXTENSIONS="$PRINTTEMPLATES $COMMENT $EVALUATION $DIAGRAM $FILE $NEWS $TAG"
 
 
 # Parse command line options.
-while getopts hvsnc: OPT; do
+while getopts hvsnec:l: OPT; do
     case "$OPT" in
         h)
             echo $USAGE
@@ -31,8 +44,14 @@ while getopts hvsnc: OPT; do
         n)
             NEWAPP=1
             ;;
+        e)
+            INSTALLEXT=1
+            ;;
         c)
             GIT=$OPTARG
+            ;;
+        l)
+            LOGFILE=$OPTARG
             ;;
         \?)
             # getopts issues an error message
@@ -69,60 +88,73 @@ fi
 
 cd $APP
 if ! [ -d "env" ]; then
+  printf "Installing virtualenv... "
   if [ $SYSTEMSITEPACKAGES -eq 1 ]; then
-    virtualenv --system-site-packages env
+    virtualenv --system-site-packages env > $LOGFILE  2>&1
   else
-    virtualenv env
+    virtualenv env > $LOGFILE  2>&1
   fi
+  printf "OK\n"
 fi
 
 . env/bin/activate
-pip install setuptools --upgrade
+pip install setuptools --upgrade > $LOGFILE  2>&1
+
+Deploy() {
+  DIR=`echo $1 | awk -F \/ '{split($NF, P, "."); print P[1]}'`
+  if ! [ -d $DIR ]; then
+    printf "Installing $DIR... "
+    git clone $path $DIR > $LOGFILE  2>&1
+    cd $DIR
+    python setup.py develop > $LOGFILE  2>&1
+    printf "OK\n"
+    cd ..
+  fi
+}
 
 if ! [ -d lib ]; then
   mkdir lib
 fi
-
 cd lib
-if ! [ -d brabbel ]; then
-  git clone $BRABBEL
-  cd brabbel
-  python setup.py develop
-  cd ..
+# Install base libs
+for path in $BRABBEL $FORMBAR $RINGO; do
+  Deploy $path
+done
+# Install extensions
+if [ $INSTALLEXT -eq 1 ]; then
+  for path in $EXTENSIONS; do
+    Deploy $path
+  done
 fi
 
-if ! [ -d formbar ]; then
-  git clone $FORMBAR
-  cd formbar
-  python setup.py develop
-  cd ..
-fi
-
-if ! [ -d ringo ]; then
-  git clone $RINGO
-  cd ringo
-  python setup.py develop
-  cd ..
-fi
 cd ..
 
 if [ $NEWAPP -eq 1 ]; then
+  printf "Creating new app $APP... "
   pcreate -t ringo $APP
   mv $APP src
   cd src
-  python setup.py develop
+  python setup.py develop > $LOGFILE  2>&1
+  printf "OK\n"
   cd ..
 fi
 
 if [ $GIT != "0"  ]; then
+  printf "Cloning app $APP... "
   git clone $GIT $APP
   mv $APP src
   cd src
   if [ -f "requirements.txt" ]; then
-    pip install -r requirements.txt
+    pip install -r requirements.txt > $LOGFILE  2>&1
   else
-    python setup.py develop
+    python setup.py develop > $LOGFILE  2>&1
   fi
+  printf "OK\n"
   cd ..
 fi
+
+echo "Ringo Setup Ready. Next steps:"
+echo ""
+echo "cd $APP"
+echo "source env/bin/activate"
 exit 0

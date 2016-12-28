@@ -63,13 +63,13 @@ def render_item_add_link(request, clazz, foreignkey, clazzpath, id, backlink, fo
   return url
 %>
 
-% if field.renderer.showsearch == "true" and not field.is_readonly():
+% if field.renderer.showsearch == "true" and not field.readonly:
 <table class="table table-condensed table-striped table-hover datatable-simple">
 % else:
 <table class="table table-condensed table-striped table-hover datatable-blank content-shorten">
 % endif
   <thead>
-    % if not field.is_readonly() and not field.renderer.hideadd == "true" and s.has_permission("create", clazz, request) and h.get_item_modul(request, clazz).has_action("create"):
+    % if not field.readonly and not field.renderer.hideadd == "true" and s.has_permission("create", clazz, request) and h.get_item_modul(request, clazz).has_action("create"):
     <tr class="table-toolbar">
       <th colspan="${len(tableconfig.get_columns(request.user))+1}">
         <a class="btn btn-primary btn-xs hidden-print"
@@ -86,7 +86,7 @@ def render_item_add_link(request, clazz, foreignkey, clazzpath, id, backlink, fo
     </tr>
     % endif
     <tr>
-    % if not field.is_readonly() and field.renderer.onlylinked != "true":
+    % if not field.readonly and field.renderer.onlylinked != "true":
       <th width="20px">
         % if not field.renderer.multiple == "false":
           <input type="checkbox" name="check_all" onclick="checkAll('${field.name}');">
@@ -114,7 +114,7 @@ def render_item_add_link(request, clazz, foreignkey, clazzpath, id, backlink, fo
                   (field.renderer.backlink != "false"),
                   (field.renderer.nolinks == "true")))}
       ## Readonly -> Do nothing
-      % if not field.is_readonly():
+      % if not field.readonly:
         % if field.renderer.onlylinked != "true":
           <td>
             % if not field.renderer.multiple == "false":
