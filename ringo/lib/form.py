@@ -15,6 +15,7 @@ formbar_css_filenames = []
 formbar_js_filenames = []
 form_lock = Lock()
 
+
 def get_eval_url():
     """Returns the REST API endpoint for form evaluation"""
     return '/rest/rule/evaluate'

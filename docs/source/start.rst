@@ -846,6 +846,12 @@ The `renderer` refers to a callable which is defined like this::
         from ringo.lib.helpers import literal
 
         def myrenderer(request, item, column, tableconfig):
+	    # Depending where where this method is called the item is 
+	    # either a tuple or the item. If it is called from the 
+	    # ListfieldRenderer the item is a tuple
+	    if isinstance(item, tuple):
+	        item = item[0]
+		
             # Do the renderering. In case you return HTML do not forget to
             # escape all values properly and finally return a literal.
             return literal("<strong>Hello world!</strong>")

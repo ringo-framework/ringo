@@ -37,7 +37,7 @@
     </entity>
     <entity id="forms" name="blobforms" label="Forms">
       <help>Select a forms which will be used to create the new item</help>
-      <renderer type="dropdown" nolink="true" remove_filtered="true" filter="( @name eq %modul ) and ( %review_state_id eq '2' ) or ( 'admin' in $user.get_roles ) or ( 'formularmanager' in $user.get_roles )"/>
+      <renderer type="dropdown" nolink="true" remove_filtered="true" filter="( @name eq %modul ) and ( %review_state_id eq '2' ) or ( 'admin' in $user.roles ) or ( 'formularmanager' in $user.roles )"/>
     </entity>
   </source>
   <form id="create" autocomplete="off" method="POST" action="" enctype="multipart/form-data">

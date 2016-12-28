@@ -3,6 +3,7 @@ import cgi
 import os
 import pkg_resources
 from mako.lookup import TemplateLookup
+from formbar.fields import rules_to_string
 from formbar.renderer import (
     FieldRenderer,
     DropdownFieldRenderer as FormbarDropdown,
@@ -209,7 +210,7 @@ class DropdownFieldRenderer(FormbarDropdown):
     def _render_label(self):
         html = []
         html.append(FormbarDropdown._render_label(self))
-        if not self._field.is_readonly() and not self.nolink == "true":
+        if not self._field.readonly and not self.nolink == "true":
             link = self.render_link()
             if link:
                 html.append(" [")
@@ -366,13 +367,13 @@ class ListingFieldRenderer(FormbarSelectionField):
         class_options = "form-group %s %s %s" % ((has_errors and 'has-error'),
                                               (has_warnings and 'has-warning'),(active))
         html.append(HTML.tag("div", _closed=False,
-                             rules=u"{}".format(";".join(self._field.rules_to_string)),
+                             rules=u"{}".format(";".join(rules_to_string(self._field))),
                              formgroup="{}".format(self._field.name),
                              desired="{}".format(self._field.desired),
                              required="{}".format(self._field.required),
                              class_=class_options))
         html.append(self._render_label())
-        if self._field.is_readonly() or self.onlylinked == "true":
+        if self._field.readonly or self.onlylinked == "true":
             items = self._get_selected_items(self.itemlist.items)
         else:
             items = self.itemlist.items

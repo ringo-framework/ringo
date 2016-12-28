@@ -2,7 +2,7 @@
 
 [alembic]
 # path to migration scripts
-script_location = ./
+script_location = {{package}}/alembic
 
 # template used to generate migration files
 # file_template = %%(rev)s_%%(slug)s
@@ -10,9 +10,7 @@ script_location = ./
 # set to 'true' to run the environment during
 # the 'revision' command, regardless of autogenerate
 # revision_environment = false
-
-sqlalchemy.url = sqlite:///%(here)s/{{package}}.sqlite
-
+sqlalchemy.url = postgresql://@/{{package}}
 
 # Logging configuration
 [loggers]
