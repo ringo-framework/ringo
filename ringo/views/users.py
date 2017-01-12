@@ -24,7 +24,7 @@ from ringo.views.request import (
 
 from ringo.lib.form import get_form_config
 from ringo.lib.helpers import import_model, get_action_routename
-from ringo.lib.security import login, encrypt_password, has_permission
+from ringo.lib.security import verify_password, load_user, encrypt_password, has_permission
 from ringo.lib.sql.cache import invalidate_cache
 
 User = import_model('ringo.model.user.User')
@@ -56,7 +56,7 @@ def check_password(field, data):
     """Validator function as helper for formbar validators"""
     password = data[field]
     username = data["login"]
-    return bool(login(username, password))
+    return verify_password(password, load_user(username).password)
 
 
 def user_update_callback(request, user):
