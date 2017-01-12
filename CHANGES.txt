@@ -1,3 +1,7 @@
+1.15.1
+======
+- Removed wrong "login logging" if a user changes his password.
+
 1.15.0
 ======
 - Bugfix for "app.mode" config option. App mode was broken for all modes
