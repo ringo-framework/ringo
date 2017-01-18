@@ -216,6 +216,7 @@ def register_user(request):
             values = {'url': request.route_url('confirm_user', token=atoken),
                       'app_name': get_app_title(),
                       'email': settings['mail.default_sender'],
+                      'login': user.login,
                       '_': _}
             mail = Mail([recipient],
                         subject,
