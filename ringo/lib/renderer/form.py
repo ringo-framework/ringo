@@ -209,7 +209,7 @@ class DropdownFieldRenderer(FormbarDropdown):
     def _render_label(self):
         html = []
         html.append(FormbarDropdown._render_label(self))
-        if not self._field.is_readonly() and not self.nolink == "true":
+        if not self._field.readonly and not self.nolink == "true":
             link = self.render_link()
             if link:
                 html.append(" [")
@@ -372,7 +372,7 @@ class ListingFieldRenderer(FormbarSelectionField):
                              required="{}".format(self._field.required),
                              class_=class_options))
         html.append(self._render_label())
-        if self._field.is_readonly() or self.onlylinked == "true":
+        if self._field.readonly or self.onlylinked == "true":
             items = self._get_selected_items(self.itemlist.items)
         else:
             items = self.itemlist.items
