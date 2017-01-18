@@ -9,6 +9,7 @@ from formbar.renderer import (
     SelectionFieldRenderer as FormbarSelectionField,
     CheckboxFieldRenderer as FormbarCheckboxField
 )
+from formbar.fields import rules_to_string
 import ringo.lib.helpers as helpers
 from ringo.lib.helpers import get_action_routename, literal, escape, HTML
 from ringo.model.base import BaseItem, BaseList, get_item_list
@@ -366,7 +367,7 @@ class ListingFieldRenderer(FormbarSelectionField):
         class_options = "form-group %s %s %s" % ((has_errors and 'has-error'),
                                               (has_warnings and 'has-warning'),(active))
         html.append(HTML.tag("div", _closed=False,
-                             rules=u"{}".format(";".join(self._field.rules_to_string)),
+                             rules=u"{}".format(";".join(rules_to_string(self._field))),
                              formgroup="{}".format(self._field.name),
                              desired="{}".format(self._field.desired),
                              required="{}".format(self._field.required),
