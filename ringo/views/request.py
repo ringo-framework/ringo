@@ -268,12 +268,18 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
             request.db.rollback()
             mapping['error'] = unicode(error.message)
             if event == "create":
+                log_msg = _(u'User {user.login} created'
+                            '{item_label}').format(item_label=item_label,
+                                                   user=request.user)
                 msg = _('Error while saving new '
                         '${item_type}: ${error}.', mapping=mapping)
             else:
+                log_msg = _(u'User {user.login} edited '
+                            '{item_label} {item.id}').format(item_label=item_label,
+                                                             item=item, user=request.user)
                 msg = _('Error while saving '
                         '${item_type} "${item}": ${error}.', mapping=mapping)
-            log.exception(msg)
+            log.exception(log_msg)
             request.session.flash(msg, 'critical')
             return False
     elif "blobforms" in request.params:
