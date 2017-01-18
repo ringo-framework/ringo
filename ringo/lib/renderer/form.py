@@ -3,6 +3,7 @@ import cgi
 import os
 import pkg_resources
 from mako.lookup import TemplateLookup
+from formbar.fields import rules_to_string
 from formbar.renderer import (
     FieldRenderer,
     DropdownFieldRenderer as FormbarDropdown,
