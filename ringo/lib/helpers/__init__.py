@@ -4,6 +4,8 @@ from ringo.lib.helpers.appinfo import (
     get_app_version,
     get_app_location,
     get_app_title,
+    get_app_logo,
+    get_app_customstatic,
     get_app_url,
     get_path_to,
     get_app_inheritance_path,
