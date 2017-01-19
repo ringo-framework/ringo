@@ -1530,6 +1530,9 @@ States and Workflows
 ********************
 .. automodule:: ringo.model.statemachine
 
+.. index::
+   double: Configuration; Application
+
 #############
 Configuration
 #############
@@ -1543,8 +1546,10 @@ Application
 Helper methods giving access to the configuration options are available in the `appinfo` module.
 
 .. automodule:: ringo.lib.helpers.appinfo
-   :members: get_app_mode, get_app_title, get_app_inheritance_path
+   :members: get_app_mode, get_app_title, get_app_logo, get_app_inheritance_path
 
+.. index::
+   single: Configuration; Title
 
 Title
 =====
@@ -1555,7 +1560,40 @@ can be configured with the following varible.
 
 The title is available using the :func:`get_app_title` function.
 
+.. index::
+   single: Configuration; Custom static files
+   see: Branding; Configuration
+
+Custom static directory
+=======================
+It is possible to define a directory to include custom static files which
+should not be part of the application. This can be usefull for application
+branding to place custom logo graphics etc. You can define the path to the
+root of that custom static folder.
+
+* app.customstatic = /path/to/your/folder
+
+If not defined it will be ringo:static.
+
+.. index::
+   single: Configuration; Logo
+
+Logo
+====
+The logo of the application used in the header of the page. You can define a
+path to the logo relative to the given custom static directory which should be
+displayed. If no logo is set then no logo is displayed at all.
+
+If you need more customization on the logo, then you need to overwrite the
+logo.mako template.
+
+* app.logo = images/ringo-logo-64.png
+
+The logo is available using the :func:`get_app_logo` function.
+
 .. _config_app_base:
+.. index::
+   double: Configuration; Inheritance
 
 Application Base
 ================
