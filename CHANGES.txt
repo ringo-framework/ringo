@@ -1,6 +1,10 @@
 1.15.1
 ======
 - Removed wrong "login logging" if a user changes his password.
+- Added new config vars for application:
+	* app.logo
+	* app.customstatic
+  See documentation for more details.
 
 1.15.0
 ======
