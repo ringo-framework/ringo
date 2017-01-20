@@ -127,18 +127,14 @@ def handle_callback(request, callback, item=None):
 
 
 def get_relation_item(request):
-    clazz = request.context.__model__
-    addrelation = request.session.get('%s.addrelation' % clazz)
+    addrelation = request.params.get("addrelation")
     if not addrelation:
-        addrelation = request.params.get("addrelation")
-        if not addrelation:
-            return None
+        return None
     rrel, rclazz, rid = addrelation.split(':')
     parent = import_model(rclazz)
     factory = parent.get_item_factory()
     item = factory.load(rid, db=request.db)
     return item, rrel
-
 
 
 def handle_add_relation(request, item):
@@ -158,8 +154,6 @@ def handle_add_relation(request, item):
         log.debug('Linking %s to %s in %s' % (item, pitem, rrel))
         tmpattr = getattr(pitem, rrel)
         tmpattr.append(item)
-        # Delete value from session after the relation has been added
-        del request.session['%s.addrelation' % clazz]
     else:
         return item
     request.session.save()
