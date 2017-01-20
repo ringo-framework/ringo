@@ -245,12 +245,16 @@ def list_(request):
     handle_history(request)
 
     # If the user enters the overview page of an item we assume that the
-    # user actually leaves any context where a former set backurl is
-    # relevant anymore. So delete it.
+    # user actually leaves any context where a former set backurl and
+    # addrelation is # relevant anymore. So delete it.
     backurl = request.session.get('%s.backurl' % clazz)
+    addrelation = request.session.get('%s.addrelation' % clazz)
     if backurl:
         # Redirect to the configured backurl.
         del request.session['%s.backurl' % clazz]
+        request.session.save()
+    if addrelation:
+        del request.session['%s.addrelation' % clazz]
         request.session.save()
 
     rvalue = {}

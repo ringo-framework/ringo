@@ -63,10 +63,6 @@ def handle_POST_request(form, request, callback, event, renderers=None):
     mapping = {'item_type': item_label, 'item': item}
 
     if form.validate(request.params) and "blobforms" not in request.params:
-        # Handle linking of the new item to antoher relation. The
-        # relation was provided as GET parameter in the current
-        # request and is now saved in the session.
-        addrelation = request.session.get('%s.addrelation' % clazz)
         try:
             item.save(form.data, request)
             msg = _('Edited ${item_type} "${item}" successfull.',
@@ -76,7 +72,11 @@ def handle_POST_request(form, request, callback, event, renderers=None):
             handle_event(request, item, form._config.id)
             handle_callback(request, callback)
 
-            if addrelation:
+            # Handle linking of the new item to antoher relation. The
+            # relation was provided as GET parameter in the current
+            # request and is now saved in the session.
+            addrelation = request.session.get('%s.addrelation' % clazz)
+            if event == "create" and addrelation:
                 rrel, rclazz, rid = addrelation.split(':')
                 parent = import_model(rclazz)
                 pfactory = parent.get_item_factory()
@@ -84,6 +84,7 @@ def handle_POST_request(form, request, callback, event, renderers=None):
                 log.debug('Linking %s to %s in %s' % (item, pitem, rrel))
                 tmpattr = getattr(pitem, rrel)
                 tmpattr.append(item)
+                del request.session['%s.addrelation' % clazz]
 
             # Invalidate cache
             invalidate_cache()
