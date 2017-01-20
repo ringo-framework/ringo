@@ -1,8 +1,7 @@
-"""Modul to handle requests."""
+"""Module to handle requests."""
 import logging
 import urllib
 import urlparse
-import transaction
 from pyramid.httpexceptions import HTTPFound
 from formbar.form import Validator
 from ringo.lib.security import (
@@ -14,8 +13,6 @@ from ringo.lib.history import History
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.views.helpers import (
     get_item_from_request,
-    get_ownership_form,
-    get_item_form,
     get_item_modul,
     get_current_form_page,
     set_current_form_page,
@@ -151,7 +148,6 @@ def handle_add_relation(request, item):
     if relation_tuple:
         rrel = relation_tuple[1]
         pitem = relation_tuple[0]
-        clazz = request.context.__model__
         log.debug('Linking %s to %s in %s' % (item, pitem, rrel))
         tmpattr = getattr(pitem, rrel)
         tmpattr.append(item)
@@ -294,7 +290,7 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
 
 def handle_redirect_on_success(request, backurl=None):
     """Will return a redirect. If there has been a saved "backurl" the
-    redirect will on on this url. In all other cases the function will
+    redirect will on on this URL. In all other cases the function will
     try to determine if the item in the request can be opened in edit
     mode or not. If the current user is allowed to open the item in
     edit mode then the update view is called. Else the read view is
@@ -302,7 +298,7 @@ def handle_redirect_on_success(request, backurl=None):
 
     :request: Current request
     :backurl: Optional. Set backurl manually. This will overwrite
-    backurls saved in the session. 
+    backurl saved in the session.
     :returns: Redirect
     """
 
