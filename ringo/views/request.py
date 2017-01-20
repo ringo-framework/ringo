@@ -127,7 +127,8 @@ def handle_callback(request, callback, item=None):
 
 
 def get_relation_item(request):
-    addrelation = request.params.get("addrelation")
+    params = handle_params(request)
+    addrelation = params.get("addrelation")
     if not addrelation:
         return None
     rrel, rclazz, rid = addrelation.split(':')
