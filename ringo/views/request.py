@@ -220,9 +220,9 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
 
                 checker.check(clazz, form.data, request)
                 item = factory.create(request.user, form.data)
+                handle_add_relation(request, item)
                 item.save({}, request)
                 request.context.item = item
-                handle_add_relation(request, item)
             else:
                 values = checker.check(clazz, form.data, request, item)
                 item.save(values, request)

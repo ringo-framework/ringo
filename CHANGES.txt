@@ -6,6 +6,8 @@
 	* app.customstatic
   See documentation for more details.
 - Fix #16 Do not save "addrelation" paramenter in session
+- Fix #33 Set relations on creation before saving the item to prevent
+  violation of NOT NULL contraints.
 
 1.15.0
 ======
