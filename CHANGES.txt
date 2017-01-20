@@ -5,6 +5,7 @@
 	* app.logo
 	* app.customstatic
   See documentation for more details.
+- Fix #16 Do not save "addrelation" paramenter in session
 
 1.15.0
 ======
