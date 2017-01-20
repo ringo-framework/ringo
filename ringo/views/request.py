@@ -364,11 +364,9 @@ def handle_params(request):
             params['values'][key] = values[key]
     form = request.GET.get('form')
     if form:
-        #request.session['%s.form' % clazz] = form
         params['form'] = form
-    relation = request.GET.get('addrelation')
+    relation = request.params.get("addrelation")
     if relation:
-        request.session['%s.addrelation' % clazz] = relation
         params['addrelation'] = relation
     request.session.save()
     return params
