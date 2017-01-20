@@ -335,13 +335,17 @@ def handle_history(request):
 
 
 def handle_params(request):
-    """Handles varios sytem GET params comming with the request
+    """Handles various query parameters coming with GET and POST
+    requests. This function will work like a filter which only allows
+    known defined params. The function will return a dictionary with the
+    filtered parameters.
+
     Known params are:
 
-     * backurl: A url which should be called instead of the default
+     * backurl: A URL which should be called instead of the default
        action after the next request succeeds. The backurl will be saved
        in the session and stays there until it is deleted on a
-       successfull request. So take care to delete it to not mess up
+       successful request. So take care to delete it to not mess up
        with the application logic.
      * form: The name of a alternative form configuration which is
        used for the request.
