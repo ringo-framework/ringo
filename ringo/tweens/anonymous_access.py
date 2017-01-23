@@ -23,7 +23,6 @@ def user_factory(handler, registry):
         # initialised. So we will "pre"-init the cache here.
         init_cache(request)
         if not request.user:
-            log.info("Anonymous login")
             request.user = ANONYMOUS_USER
             request.session["auth.anonymous_user"] = ANONYMOUS_USER.login
             request.session.save()
@@ -38,7 +37,6 @@ def ensure_logout(handler, registry):
     def user_tween(request):
         anon_login = request.session.get("auth.anonymous_user")
         if anon_login and request.user and (request.user.login == anon_login):
-            log.info("Anonymous logout")
             headers = forget(request)
             del request.session["auth.anonymous_user"]
             request.session.save()
