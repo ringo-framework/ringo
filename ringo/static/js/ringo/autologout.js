@@ -20,6 +20,7 @@ $(function(){
     LogoutTimer=function(){
         var auth_timeout = $("meta[name='auth_timeout']").attr("content") * 1000;
         var auth_warning = $("meta[name='auth_warning']").attr("content") * 1000;
+        var auth_user = $("meta[name='auth_user']").attr("content");
         var keep_alive_url = $("meta[name='auth_keepalive']").attr("content");
         var logout_url = $("meta[name='auth_logout']").attr("content");
         var currentTime = auth_timeout;
@@ -48,8 +49,10 @@ $(function(){
                 }
                 $countdown = $("#sessiontimer input");
                 $countdown.val(formatTime(currentTime));
-                currentTime -=1000;
-                setTimeout(displayTime, 1000);
+                if (auth_user != 'anonymous') {
+                    currentTime -=1000;
+                    setTimeout(displayTime, 1000);
+                }
             }
 
             if (currentTime == 0 ) location.href=logout_url+"?autologout=true";
