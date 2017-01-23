@@ -128,7 +128,8 @@ def autologout(request):
     if request.user:
         headers = forget(request)
         target_url = request.route_path('autologout')
-        log.info("Autologout successfull '%s'" % (request.user.login))
+        if request.user.login != request.settings.get("auth.anonymous_user"):
+            log.info("Autologout successfull '%s'" % (request.user.login))
         return HTTPFound(location=target_url, headers=headers)
 
     # User is not authenticated here anymore. So simply render the
