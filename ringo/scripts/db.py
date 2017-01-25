@@ -8,6 +8,7 @@ import transaction
 from invoke import run
 from alembic.config import Config
 from alembic import command
+
 from pyramid.paster import (
     get_appsettings,
     setup_logging,
@@ -18,6 +19,7 @@ from ringo.lib.imexport import (
     JSONExporter, JSONImporter,
     CSVExporter, CSVImporter
 )
+from ringo.model.base import BaseList
 from ringo.model.modul import ModulItem
 
 log = logging.getLogger(__name__)
@@ -186,6 +188,18 @@ def handle_db_savedata_command(args):
     modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == args.modul).all()[0].clazzpath
     modul = dynamic_import(modul_clazzpath)
     data = session.query(modul).order_by(modul.id).all()
+
+    if args.filter:
+        # Build Baselist which is used for filtering.
+        filter_stack = []
+        listing = BaseList(modul, db=None, items=data)
+        for f in args.filter.split(";"):
+            filter_item = f.split(",")
+            filter_item[2] = bool(filter_item[2])
+            filter_stack.append(tuple(filter_item))
+        listing.filter(filter_stack)
+        data = listing.items
+
     if args.format == "json":
         exporter = JSONExporter(modul, serialized=False,
                                 relations=args.include_relations)
