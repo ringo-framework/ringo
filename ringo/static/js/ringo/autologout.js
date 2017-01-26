@@ -41,7 +41,7 @@ $(function(){
             $("#logoutWarning").modal("hide");
         }
 
-        function displayTime(){
+        function displayTime() {
             if (currentTime > 0) {
                 if (currentTime < auth_warning && !display_warning){
                     display_warning = true;
@@ -49,16 +49,13 @@ $(function(){
                 }
                 $countdown = $("#sessiontimer input");
                 $countdown.val(formatTime(currentTime));
-                if (auth_user != 'anonymous') {
-                    currentTime -=1000;
-                    setTimeout(displayTime, 1000);
-                }
+                currentTime -=1000;
+                setTimeout(displayTime, 1000);
             }
-
             if (currentTime == 0 ) location.href=logout_url+"?autologout=true";
         }
-
-         if (currentTime > 0 && location.pathname) displayTime();
-
+        if (auth_user != 'anonymous') {
+            if (currentTime > 0 && location.pathname) displayTime();
+        }
     }();
 })
