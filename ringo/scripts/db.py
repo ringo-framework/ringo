@@ -2,6 +2,7 @@ import logging
 import shutil
 import os
 import time
+import json
 from sqlalchemy import engine_from_config
 import transaction
 
@@ -17,7 +18,8 @@ from ringo.lib.sql import DBSession, NTDBSession, setup_db_session
 from ringo.lib.helpers import get_app_location, dynamic_import
 from ringo.lib.imexport import (
     JSONExporter, JSONImporter,
-    CSVExporter, CSVImporter
+    CSVExporter, CSVImporter,
+    ExportConfiguration
 )
 from ringo.model.base import BaseList
 from ringo.model.modul import ModulItem
@@ -200,13 +202,21 @@ def handle_db_savedata_command(args):
         listing.filter(filter_stack)
         data = listing.items
 
+    if args.export_config:
+        with open(args.export_config, "r") as export_configfile:
+            export_config = ExportConfiguration(json.load(export_configfile))
+    else:
+        export_config = ExportConfiguration(json.loads("[]"))
+
     if args.format == "json":
         exporter = JSONExporter(modul, serialized=False,
-                                relations=args.include_relations)
+                                relations=args.include_relations,
+                                config=export_config)
         data = prepare_data(data)
     else:
         exporter = CSVExporter(modul, serialized=False,
-                               relations=args.include_relations)
+                               relations=args.include_relations,
+                               config=export_config)
     print exporter.perform(data)
 
 def prepare_data(applications):

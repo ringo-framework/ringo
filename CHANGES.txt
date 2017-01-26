@@ -1,6 +1,5 @@
-1.15.1
+1.16.0
 ======
-- Removed wrong "login logging" if a user changes his password.
 - Added new config vars for application:
 	* app.logo
 	* app.customstatic
@@ -11,6 +10,14 @@
 - Removed RecursiveExporter and RecursiveRelationExporter. These exporter has
   only been used in the ringo_evalulation extension and are now moved in this
   extension
+- Add --filter option to the CLI "ringo savedata" command to allow
+  filtering of what should be exported.
+- Add --export-config option to the CLI "ringo savedata" command to allow
+  recursive exports.
+
+1.15.1
+======
+- Removed wrong "login logging" if a user changes his password.
 
 1.15.0
 ======
