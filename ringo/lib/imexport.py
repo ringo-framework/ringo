@@ -118,46 +118,62 @@ class UnicodeCSVWriter:
 
 class Exporter(object):
 
-    """Docstring for Exporter. """
+    """Base exporter to export items of the given class. The
+    exporter will return a list of dictionarys with key values pairs
+    of the values for each items which should be exported.
 
-    def __init__(self, clazz, fields=None, serialized=True, relations=False):
-        """Base exporter to export items of the given class. The
-        exporter will return a list of dictionarys with key values pairs
-        of the values for each items which should be exported. The
-        fields to be exported can be configured. You can configure if
-        the values should be serialized too.
+    The export is done by calling the `perform` method of this
+    class.
 
-        On default no relations will be exported. This can be changed by
-        either setting the relations flag to true or defining relations
-        explicit in the fields attribute.
+    On default the exporter will return all fields of the item but
+    no relations or related items. However the Exporter is able to
+    export related items if configured correct. In this case the
+    Exporter will return a list of nested dictionaries.
 
-        Exported relations will the id of the linked items.
+    You can configure which will be exported on each item by either
+    using the `fields` parameter. If no fields are provided all fields
+    excluding the relations will be exported. The order of the
+    configured fields will determine the order of the fields in the
+    export (If supported e.g CSV).
+    
+    A more detailed option to configur the content of the export you can
+    provide a ExportConfiguration to the exporter.
 
-        :clazz: Clazz of the items which will be exported
+    On default the exported items will be `serialized`. This means
+    that each value is converted into a export specific format. E.g
+    dates are converted into ISO8601 notation in the JSONExporter.
+    If set to false the the values are real python values.
+
+    Using the `relations` parameter is deprecated. It can be used as a
+    shortcut to add ORM relation of the item into the export.  Exported
+    relations will be the id of the linked items. In connection with the
+    serialized parameter the string representation of the linked items
+    are exported.
+    """
+
+    def __init__(self, clazz, fields=None, serialized=True, relations=False, config=None):
+        """
+        :clazz: Clazz of the items which will be exported.
         :fields: List of fields and relations which should be exported.
-        If no fields are provided all fields excluding the relations
-        will be exported. The order of the configured fields will
-        determine the order of the fields in the export (If supported
-        e.g CSV).
-        :serialized: Flag to indicate that the exported values should be
-        serialized e.g dates will be converted into ISO8601 format. If
-        realtions are included in the export the serialzed form will be
-        the string representation of the item.
-        Defaults to True.
+        :serialized: Flag to indicate that the exported values should be serialized.
+        :config: ExportConfiguration for the exporter.
 
         """
         self._clazz = clazz
         self._fields = fields
         self._serialized = serialized
         self._relations = relations
+        self._config = config
 
     def serialize(self, data):
-        """Will convert the given python data dictionary into a string
-        containing JSON data
+        """Method to convert the given python listing with the exported
+        items into a serialized form. This is depended on the concrete
+        exporter. This default implementation just returns the given
+        data as it is. You can overwrite this method in a more specific
+        renderer.
 
-        :data: Dictionary containing Python data.
+        :data: List containing exported items.
         :returns: String representing the data
-
         """
         return data
 
@@ -175,10 +191,13 @@ class Exporter(object):
         return values
 
     def perform(self, items):
-        """Returns the serialized item as string
+        """Will export the given items. Depending if the Exporter has
+        been initialised with the `serialized` parameter the export will
+        return a list of dictionaries (each with the values) or in the
+        exporter specific format (e.g. JSON).
 
-        :items: @todo
-        :returns: @todo
+        :items: Items which will be exported.
+        :returns: Exported items. (Format Depends on the export configuration).
 
         """
         data = []
