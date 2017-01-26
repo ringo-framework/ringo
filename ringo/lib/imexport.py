@@ -201,7 +201,13 @@ class Exporter(object):
 
         """
         data = []
-        for item in items:
+        # Check if the given item(s) is a list. If not we put it into a
+        # temporary list.
+        if not isinstance(items, list):
+            _items = [items]
+        else:
+            _items = items
+        for item in _items:
             # Ensure that every item has a UUID. Set missing UUID here
             # if the item has no uuid set yet.
             if not item.uuid:
@@ -232,6 +238,14 @@ class Exporter(object):
                             value = serialize(value)
                         values[field] = value
             data.append(self.flatten(values))
+
+        # If the input to the method was a single item we will return a
+        # single exported item.
+        if not isinstance(items, list):
+            if len(data) > 0:
+                data = data[0]
+            else:
+                data = None
         return self.serialize(data)
 
 
