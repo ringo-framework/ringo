@@ -21,6 +21,45 @@ from ringo.lib.helpers import serialize
 log = logging.getLogger(__name__)
 
 
+class ExportConfiguration(object):
+
+    """
+    Example export configuration::
+
+        ["id", "foo", "bar", {"baz": ["f1", "f2", {"r1": [...]}, "baq": [...]}]
+
+    In this configuration "id", "foo", "bar"... "f2" are considered as
+    fields of the exported items. In contrast the keys of the nested
+    dictionarys are taken as the name of the relations. The following
+    list defines again the fields of the items in the relation.
+    """
+
+    def __init__(self, jsonconfig):
+        self.config = jsonconfig
+        self.relations = self._parse(jsonconfig)
+
+    def _parse(self, config, relation="root"):
+        """Will return a dictionary with the field configuration for each
+        relation found in the export configuration. The field configuration
+        is a list of fieldnames.
+
+        :config: Export configuration
+        :relation: Name of the "current" relation. The name "root" is a
+        placeholder for the elements on the first level of the export.
+        :returns: Dict with realtion configuration
+
+        """
+        relations = {}
+        relations[relation] = []
+        for field in config:
+            if isinstance(field, dict):
+                for rel in field:
+                    relations.update(self._parse(field[rel], rel))
+            else:
+                relations[relation].append(field)
+        return relations
+
+
 class ExtendedJSONEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, BaseItem):
