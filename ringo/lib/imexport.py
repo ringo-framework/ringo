@@ -206,17 +206,31 @@ class Exporter(object):
             # if the item has no uuid set yet.
             if not item.uuid:
                 item.reset_uuid()
-            if self._fields is None:
-                # Default export. Export all fields excluding relations
-                values = item.get_values(serialized=self._serialized,
-                                         include_relations=self._relations)
+
+            # Check if a configuration is provided.
+            if not self._config or len(self._config.config) == 0:
+                # No configuration is provided. Export all fields
+                # exluding relations.
+                values = item.get_values(serialized=self._serialized)
             else:
+                # Configuration is provided. Export fields and relations
+                # based on the given configuration.
                 values = {}
-                for field in self._fields:
-                    value = item.get_value(field)
-                    if self._serialized:
-                        value = serialize(value)
-                    values[field] = value
+                for field in self._config.config:
+                    if isinstance(field, dict):
+                        for relation in field:
+                            clazz = getattr(self._clazz, relation).mapper.class_
+                            exporter = Exporter(clazz,
+                                                serialized=self._serialized,
+                                                config=ExportConfiguration(field[relation]))
+                            value = item.get_value(relation)
+                            value = exporter.perform(value)
+                            values[relation] = value
+                    else:
+                        value = item.get_value(field)
+                        if self._serialized:
+                            value = serialize(value)
+                        values[field] = value
             data.append(self.flatten(values))
         return self.serialize(data)
 
