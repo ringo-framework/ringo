@@ -40,6 +40,7 @@ def user_factory(handler, registry):
 def ensure_logout(handler, registry):
     def user_tween(request):
         anon_login = request.session.get("auth.anonymous_user")
+        init_cache(request)
         if anon_login and request.user and (request.user.login == anon_login):
             headers = forget(request)
             del request.session["auth.anonymous_user"]
