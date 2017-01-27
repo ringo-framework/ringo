@@ -16,7 +16,7 @@ import sqlalchemy as sa
 
 from ringo.model.base import BaseItem
 from ringo.model.user import UserSetting
-from ringo.lib.helpers import serialize
+from ringo.lib.helpers import serialize, deserialize
 
 log = logging.getLogger(__name__)
 
@@ -431,13 +431,17 @@ class Importer(object):
         :returns: List of imported items
 
         """
-        imported_items = []
         import_data = self.deserialize(data)
+        return self._perform(import_data, user, translate, load_key)
+
+
+    def _perform(self, data, user=None, translate=lambda x: x, load_key="uuid"):
+        imported_items = []
         factory = self._clazz.get_item_factory()
         if self._use_strict:
             factory._use_strict = self._use_strict
         _ = translate
-        for values in import_data:
+        for values in data:
             if load_key == "uuid":
                 id = values.get('uuid')
                 if "id" in values:
@@ -449,6 +453,20 @@ class Importer(object):
                 # uuid might be empty for new items, which will raise an
                 # error on loading.
                 item = factory.load(id, field=load_key)
+                for field in values:
+                    datatype = self._clazz_type[field].lower()
+                    if isinstance(values[field], dict):
+                        clazz = getattr(self._clazz, field).mapper.class_
+                        importer = Importer(clazz, db=self._db, use_strict=self._use_strict)
+                        if not isinstance(values[field], list):
+                            import_data = [values[field]]
+                        imported_item = importer._perform(import_data, user=user, translate=translate, load_key=load_key)
+                        if datatype == "manytoone":
+                            values[field] = imported_item[0][0]
+                        else:
+                            raise TypeError("{} relation not supported".format(datatype))
+                    else:
+                        values[field] = deserialize(values[field], datatype)
                 item.set_values(values, use_strict=self._use_strict)
                 operation = _("UPDATE")
             except sa.orm.exc.NoResultFound:
@@ -463,17 +481,13 @@ class Importer(object):
 class JSONImporter(Importer):
     """Docstring for JSONImporter."""
 
-    def _deserialize_hook(self, obj):
-        obj = self._deserialize_values(obj)
-        return self._deserialize_relations(obj)
-
     def deserialize(self, data):
         """Will convert the JSON data back into a dictionary with python values
 
         :data: String JSON data
         :returns: List of dictionary with python values
         """
-        conv = json.loads(data, object_hook=self._deserialize_hook)
+        conv = json.loads(data)
         if isinstance(conv, dict):
             return [conv]
         return conv
