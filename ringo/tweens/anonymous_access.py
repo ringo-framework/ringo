@@ -30,9 +30,8 @@ def user_factory(handler, registry):
                 request.user = ANONYMOUS_USER
                 request.session["auth.anonymous_user"] = ANONYMOUS_USER.login
                 request.session.save()
-                target_url = request.route_path('home')
                 headers = remember(request, ANONYMOUS_USER.id)
-                return HTTPFound(location=target_url, headers=headers)
+                return HTTPFound(location=request.path, headers=headers)
         return handler(request)
     return user_tween
 
