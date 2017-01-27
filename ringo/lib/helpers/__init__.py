@@ -24,6 +24,7 @@ from ringo.lib.helpers.format import (
 
 from ringo.lib.helpers.misc import (
     serialize,
+    deserialize,
     safestring,
     age,
     get_raw_value,

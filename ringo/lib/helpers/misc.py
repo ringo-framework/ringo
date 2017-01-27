@@ -2,9 +2,31 @@ import logging
 import string
 from datetime import datetime
 from pyramid.threadlocal import get_current_request
+import formbar.converters as converters
 from ringo.lib.sql import DBSession
 
+
 log = logging.getLogger(__name__)
+
+
+def deserialize(value, datatype):
+    """Very simple helper function which returns a python version
+    of the given serialized value."""
+    if datatype == "varchar":
+        return value
+    elif datatype == "integer":
+        return converters.to_integer(value)
+    elif datatype == "float":
+        return converters.to_float(value)
+    elif datatype == "datetime":
+        return converters.to_datetime(value)
+    elif datatype == "date":
+        return converters.to_date(value)
+    elif datatype == "char(36)":
+        # UUID
+        return value
+    else:
+        raise TypeError("{} is not supported".format(datatype))
 
 
 def serialize(value):
@@ -39,6 +61,7 @@ def serialize(value):
     log.warning("Unhandled type '%s'. "
                 "Using default and converting to unicode" % type(value))
     return unicode(value)
+
 
 def safestring(unsafe):
     """Returns a 'safe' version of the given string. All non ascii chars
@@ -286,7 +309,7 @@ def get_saved_searches(request, name):
 
 
 def get_modules(request, display):
-    #  FIXME: Circular import (ti) <2015-05-11 21:52> 
+    # FIXME: Circular import (ti) <2015-05-11 21:52>
     from ringo.lib.security import has_permission
     user_moduls = []
     # The modules has been load already and are cached. So get them from
