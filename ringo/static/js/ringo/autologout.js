@@ -52,7 +52,7 @@ $(function(){
                 currentTime -=1000;
                 setTimeout(displayTime, 1000);
             }
-            if (currentTime == 0 ) location.href=logout_url+"?autologout=true";
+            if (auth_user !== '' && currentTime == 0 ) location.href=logout_url+"?autologout=true";
         }
         if (auth_user != 'anonymous') {
             if (currentTime > 0 && location.pathname) displayTime();
