@@ -24,14 +24,27 @@ log = logging.getLogger(__name__)
 class ExportConfiguration(object):
 
     """
+    You can provide a JSON configuration file for the export to define
+    which fields of the given modul should be imported in detail.
+    Providing a configuration file allows you to export also
+    `properties` and related Items which are not part of the default
+    export.
+
     Example export configuration::
 
-        ["id", "foo", "bar", {"baz": ["f1", "f2", {"r1": [...]}, "baq": [...]}]
 
-    In this configuration "id", "foo", "bar"... "f2" are considered as
-    fields of the exported items. In contrast the keys of the nested
-    dictionarys are taken as the name of the relations. The following
-    list defines again the fields of the items in the relation.
+        ["f1", "f2", "f3", {"bar": ["f4", "f5", {"baz": [...]}}]
+
+    In this configuration "id", "foo", "bar" considered as fields of the
+    exported item. In contrast the keys of the nested dictionarys are
+    taken as the name of the relations. The following list defines again
+    the fields of the items in the relation.  So assuming you are
+    exporting items of type "Foo" the export will include fields "f1",
+    "f2", and "f3". Further "Foo" is related to "Bar" items in the
+    relation "bar". From the "Bar" items the fields "f4" and "f5" are
+    included. The "Bar" items have themself a relation called "baz" and
+    again you can follow the scheme to define a detail configuration of
+    what should be in the export.
     """
 
     def __init__(self, jsonconfig):
