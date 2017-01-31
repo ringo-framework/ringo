@@ -1,4 +1,5 @@
 import logging
+import re
 import string
 from datetime import datetime
 from pyramid.threadlocal import get_current_request
@@ -12,13 +13,22 @@ log = logging.getLogger(__name__)
 def deserialize(value, datatype):
     """Very simple helper function which returns a python version
     of the given serialized value."""
-    if datatype == "varchar":
+    if datatype in ["varchar", "text"]:
         return value
+    elif value in  ["", None]:
+        return None
     elif datatype == "integer":
         return converters.to_integer(value)
     elif datatype == "float":
         return converters.to_float(value)
     elif datatype == "datetime":
+        # Interval fields are implemented as DATETIME
+        # See http://docs.sqlalchemy.org/en/latest/core/type_basics.html#sqlalchemy.types.Interval
+        # Check if we have a interval here
+        iv = re.compile(u"^\d{1,2}:\d{1,2}:\d{1,2}")
+        if iv.match(value):
+            t = datetime.datetime.strptime(value, "%H:%M:%S")
+            return datetime.timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
         return converters.to_datetime(value)
     elif datatype == "date":
         return converters.to_date(value)
