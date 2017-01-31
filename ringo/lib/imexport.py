@@ -1,5 +1,4 @@
 """Modul for the messanging system in ringo"""
-import re
 import logging
 import datetime
 import json
@@ -17,6 +16,7 @@ import sqlalchemy as sa
 from ringo.model.base import BaseItem
 from ringo.model.user import UserSetting
 from ringo.lib.helpers import serialize, deserialize
+from ringo.lib.alchemy import get_props_from_instance
 
 log = logging.getLogger(__name__)
 
@@ -58,6 +58,18 @@ class ExportConfiguration(object):
             else:
                 relations[relation].append(field)
         return relations
+
+    def includes_wildcard(self):
+        return "*" in self.config
+
+    def get_relation_fields(self):
+        fields = []
+        for f in self.config:
+            if f == "*":
+                continue
+            else:
+                fields.append(f)
+        return fields
 
 
 class ExtendedJSONEncoder(json.JSONEncoder):
@@ -135,7 +147,7 @@ class Exporter(object):
     excluding the relations will be exported. The order of the
     configured fields will determine the order of the fields in the
     export (If supported e.g CSV).
-    
+
     A more detailed option to configur the content of the export you can
     provide a ExportConfiguration to the exporter.
 
@@ -222,7 +234,12 @@ class Exporter(object):
                 # Configuration is provided. Export fields and relations
                 # based on the given configuration.
                 values = {}
-                for field in self._config.config:
+                if self._config.includes_wildcard():
+                    fields = [p.key for p in get_props_from_instance(item)]
+                    fields.extend(self._config.get_relation_fields())
+                else:
+                    fields = self._config.config
+                for field in fields:
                     if isinstance(field, dict):
                         for relation in field:
                             clazz = getattr(self._clazz, relation).mapper.class_
