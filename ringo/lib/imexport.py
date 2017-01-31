@@ -343,30 +343,14 @@ class Importer(object):
         and datetime deserialisation
         """
         for field in obj:
-            if (not field in self._clazz_type
-               or not self._clazz_type[field] in ['DATE',
-                                                  'DATETIME',
-                                                  'INTEGER']
-               or obj[field] is None):
+            if (field not in self._clazz_type or
+               obj[field] is None):
                 continue
-            elif obj[field] == "":
-                obj[field] = None
-                continue
-            elif self._clazz_type[field] == "INTEGER":
-                obj[field] = int(obj[field])
-            elif self._clazz_type[field] == "DATE":
-                obj[field] = datetime.datetime.strptime(
-                    obj[field], "%Y-%m-%d").date()
-            elif self._clazz_type[field] == "DATETIME":
-                # Interval fields are implemented as DATETIME
-                # See http://docs.sqlalchemy.org/en/latest/core/type_basics.html#sqlalchemy.types.Interval
-                # Check if we have a interval here
-                iv = re.compile(u"^\d{1,2}:\d{1,2}:\d{1,2}")
-                if iv.match(obj[field]):
-                    t = datetime.datetime.strptime(obj[field], "%H:%M:%S")
-                    obj[field] = datetime.timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
-                else:
-                    obj[field] = datetime.datetime.strptime(obj[field], "%Y-%m-%d %H:%M:%S")
+            else:
+                datatype = self._clazz_type[field].lower()
+                if datatype in ['manytoone', 'manytomany', 'onetomany', 'onetoone']:
+                    continue
+                obj[field] = deserialize(obj[field], datatype)
         return obj
 
     def _deserialize_relations(self, obj):
@@ -431,11 +415,7 @@ class Importer(object):
         :returns: List of imported items
 
         """
-        import_data = self.deserialize(data)
-        return self._perform(import_data, user, translate, load_key)
-
-
-    def _perform(self, data, user=None, translate=lambda x: x, load_key="uuid"):
+        data = self.deserialize(data)
         imported_items = []
         factory = self._clazz.get_item_factory()
         if self._use_strict:
@@ -453,20 +433,6 @@ class Importer(object):
                 # uuid might be empty for new items, which will raise an
                 # error on loading.
                 item = factory.load(id, field=load_key)
-                for field in values:
-                    datatype = self._clazz_type[field].lower()
-                    if isinstance(values[field], dict):
-                        clazz = getattr(self._clazz, field).mapper.class_
-                        importer = Importer(clazz, db=self._db, use_strict=self._use_strict)
-                        if not isinstance(values[field], list):
-                            import_data = [values[field]]
-                        imported_item = importer._perform(import_data, user=user, translate=translate, load_key=load_key)
-                        if datatype == "manytoone":
-                            values[field] = imported_item[0][0]
-                        else:
-                            raise TypeError("{} relation not supported".format(datatype))
-                    else:
-                        values[field] = deserialize(values[field], datatype)
                 item.set_values(values, use_strict=self._use_strict)
                 operation = _("UPDATE")
             except sa.orm.exc.NoResultFound:
@@ -481,6 +447,27 @@ class Importer(object):
 class JSONImporter(Importer):
     """Docstring for JSONImporter."""
 
+    def _deserialize_recursive(self, obj):
+        # This code is currently experimental.
+        for field in obj:
+            if isinstance(obj[field], dict):
+                clazz = getattr(self._clazz, field).mapper.class_
+                importer = JSONImporter(clazz, db=self._db, use_strict=self._use_strict)
+                if not isinstance(obj[field], list):
+                    import_data = [obj[field]]
+                    imported_item = importer.perform(json.dumps(import_data))
+                    obj[field] = imported_item[0][0]
+                else:
+                    import_data = obj[field]
+                    imported_item = importer.perform(json.dumps(import_data))
+                    obj[field] = [x[0] for x in imported_item]
+        return obj
+
+    def _deserialize_hook(self, obj):
+        obj = self._deserialize_recursive(obj)
+        obj = self._deserialize_values(obj)
+        return self._deserialize_relations(obj)
+
     def deserialize(self, data):
         """Will convert the JSON data back into a dictionary with python values
 
@@ -489,8 +476,8 @@ class JSONImporter(Importer):
         """
         conv = json.loads(data)
         if isinstance(conv, dict):
-            return [conv]
-        return conv
+            conv = [conv]
+        return [self._deserialize_hook(c) for c in conv]
 
 
 class CSVImporter(Importer):
