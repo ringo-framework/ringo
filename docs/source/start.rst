@@ -694,17 +694,29 @@ Ringo comes with some specific renderers which extends the default renderers
 of formbar. They usually are aware of accessing to Ringo specific attributes
 like permissions checks e.g.
 
+.. index::
+   triple: Form;Renderer;Checkbox
+
 Checkbox
 --------
 .. autoclass:: ringo.lib.renderer.form.CheckboxFieldRenderer
+
+.. index::
+   triple: Form;Renderer;Dropdown
 
 Dropdown
 --------
 .. autoclass:: ringo.lib.renderer.form.DropdownFieldRenderer
 
+.. index::
+   triple: Form;Renderer;Links
+
 Links
 -----
 .. autoclass:: ringo.lib.renderer.form.LinkFieldRenderer
+
+.. index::
+   triple: Form;Renderer;Listings
 
 Listings
 --------
@@ -1591,9 +1603,9 @@ logo.mako template.
 
 The logo is available using the :func:`get_app_logo` function.
 
-.. _config_app_base:
 .. index::
    double: Configuration; Inheritance
+.. _config_app_base:
 
 Application Base
 ================
