@@ -1388,14 +1388,14 @@ these roles.
 If the user is the owner of the item, or is member of the items group, then
 all permissions of the users roles will be applied.
 
+.. index::
+   double: Authentification;Roles
 .. _roles:
 
 Roles
 -----
 
-..  TODO: Write roles section (ti) <2016-11-11 20:13> 
-
-
+.. autoclass:: ringo.model.user.Role
 
 
 .. _authentification:
@@ -1412,6 +1412,8 @@ The authentification has a default timeout of 30min. The timeout will be reset
 after every new request of the user. The timeout can be configured in the
 application configuration bei setting the 'auth.timeout' config variable.
 
+.. index::
+   double: Authentification;Anonymous Access
 .. _authorisation:
 
 Anonymous Authentification
@@ -1420,22 +1422,31 @@ On default Ringo does not provide an anonymous access to the application
 (Despite of some static pages). So you must login before you can work with the
 application and have appropriate permissions.
 
+Anonymous access in Ringo is implemented by using a Proxy-User. This user must
+be existent in the database and properly configured. To enable anonymous
+access to the application you must configure this use as anonymous user. See
+:ref:`anonymous_access` for more details.
+
+From now on every every user will be automatically logged in as this
+configured user to the application and will all the permissions the user has.
+
+.. warning::
+        Be careful with the configuration of the anonymous user. Double check
+        the permissions of the anonymous user and check the configuration in
+        the ini file and make sure you did not configure a high privileged
+        user like the admin as anonymous user.
+
 To implement an anonymous access to the application you will need to do
 three things:
 
 1. Create a dedicated user which will be used as the anonymous user.
-2. Create roles with appropriate permissions on the different moduels to
+2. Create roles with appropriate permissions on the different modules to
    grant this anonymous user access on the data. Please note, that these
    roles must be "admin"  roles to disable the owner/group check on
    authorisation as we want the anonymous user to be able to basically
    all items. The only restriction is than configured by the permissions
    of the role.
-3. Enable this anonymous user in the `ini` file. See
-   :ref:`anonymous_access` for more details.
-
-
-
-
+3. Enable this anonymous user in the `ini` file.
 
 Authorisation
 -------------
