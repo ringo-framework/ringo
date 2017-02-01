@@ -37,7 +37,7 @@ tests_requires = [
 ]
 
 setup(name='ringo',
-      version = '1.15.1',
+      version = '1.15.2',
       description='A simple web framework with base functionality to build web applications.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
