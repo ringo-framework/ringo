@@ -145,12 +145,12 @@ class BaseItem(object):
                   unique=True,
                   default=lambda x: str(uuid.uuid4()))
 
-    def render(self):
+    def render(self, request=None):
         """This function can be used to render a different
         representation of the item. On default it also returns the
         simple string representation. Usefull to build some HTML used in
         links e.g overviews and lists"""
-        return self.__str__()
+        return self.__unicode__()
 
     def __str__(self):
         return self.__unicode__()
@@ -239,7 +239,7 @@ class BaseItem(object):
     def reset_uuid(self):
         self.uuid = str(uuid.uuid4())
 
-    def get_value(self, name, form_id="read", expand=False):
+    def get_value(self, name, form_id="read", expand=False, strict=True):
         """Return the value of the given attribute of the item. Unlike
         accessing the value directly this function this function
         optionally supports the expansion of the value before
@@ -253,19 +253,33 @@ class BaseItem(object):
         literal value from the value in the database by looking in the
         form identified by the `form_id` attribute.
 
+        Strict mode means that in case the given attribute `name` can
+        not be accesses a error log message will be triggered. However
+        there are some cases where the attribute can not be accesses for
+        some known reasons and therefor the error should not be logged
+        but passed silently. As this is highly situation depended you
+        can call this method with `stric=False` to prevent logging. Here
+        are two examples where you migh want to disable logging:
+
+            * Overviews. In case you want to display related items like
+            'country.code' but the item does not have a related country (yet).
+            * For blobforms as attributes can be added and removed by
+            the user on the fly. So there is a good chance that older
+            items do not have this attribute.
+
         :name: Name of the attribute with the value
         :form_id: ID of the form which will be used for expansion
         :expand: Expand the value before returning it
+        :strict: Log error if the value can not be accessed. Defaults to True.
         :returns: Value of the named attribute
         """
 
         try:
             raw_value = getattr(self, name)
-        except:
-            # This error is only acceptable for blobforms as attributes
-            # can be added and removed by the user on the fly. So there
-            # is a good chance that older items do not have this attribute.
-            if hasattr(self, 'id'):
+        except AttributeError:
+            if not strict:
+                pass
+            elif hasattr(self, 'id'):
                 log.error("Attribute '%s' not found in '%s'; id:%s"
                           % (name, repr(self), self.id))
             else:
@@ -342,7 +356,7 @@ class BaseItem(object):
             values[field] = value
         return values
 
-    def set_values(self, values):
+    def set_values(self, values, use_strict=False):
         """Will set the values of the item. The values to be set are
         provided by a dictionary with key value pairs given with the
         `values` option. Keys in the dictionary beginning with "_" are
@@ -364,6 +378,8 @@ class BaseItem(object):
             key if this is a new relation.
 
         :values: Dictionary with values to be set
+        :use_strict: boolean, if true raise a exception if an attribute is
+                     missing (default: False).
         """
 
         for key, value in values.iteritems():
@@ -401,6 +417,10 @@ class BaseItem(object):
                     setattr(self, key, value)
             else:
                 log.warning('Not saving "%s". Attribute not found' % key)
+                if use_strict:
+                    raise AttributeError(('Not setting "%s".'
+                                         ' Attribute not found.') % key)
+
 
     def save(self, data, request=None):
         """Method to set new values and 'saving' changes to the item. In
@@ -596,8 +616,20 @@ class BaseList(object):
             if cache in regions.keys():
                 q = set_relation_caching(q, self.clazz, cache)
                 q = q.options(FromCache(cache))
+
+            # Added support for eager loading of items in the overview:
+            # http://docs.sqlalchemy.org/en/latest/orm/loading_relationships.html#relationship-loading-techniques
+            # This also support loading along paths to support
+            # releations which are deeper than one level.
             for relation in self.clazz._sql_eager_loads:
-                q = q.options(joinedload(relation))
+                joinedload_path = None
+                # Load along path
+                for rel in relation.split("."):
+                    if joinedload_path is None:
+                        joinedload_path = joinedload(rel)
+                    else:
+                        joinedload_path = joinedload_path.joinedload(rel)
+                q = q.options(joinedload_path)
             self.items = q.all()
         else:
             self.items = items
@@ -778,7 +810,7 @@ class BaseFactory(object):
     can be initiated by calling the :func:`.BaseItem.get_item_factory`
     class method."""
 
-    def __init__(self, clazz, request=None):
+    def __init__(self, clazz, request=None, use_strict=False):
         """Inits the factory.
 
         :clazz: The clazz of which new items will be created
@@ -786,6 +818,7 @@ class BaseFactory(object):
         """
         self._clazz = clazz
         self._request = request
+        self._use_strict = use_strict
 
     def create(self, user, values):
         """Will create a new instance of clazz. The instance is it is
@@ -812,7 +845,10 @@ class BaseFactory(object):
             elif (user is not None and user.default_gid):
                 item.gid = user.default_gid
         if values:
-            item.set_values(values)
+            if hasattr(self, "_use_strict"):
+                item.set_values(values, use_strict=self._use_strict)
+            else:
+                item.set_values(values)
         return item
 
     def load(self, id, db=None, cache="", uuid=False, field=None):

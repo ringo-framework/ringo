@@ -125,9 +125,9 @@ def autologout(request):
     if request.user:
         headers = forget(request)
         target_url = request.route_path('autologout')
-        log.info("Autologout successfull '%s'" % (request.user.login))
+        if request.user.login != request.registry.settings.get("auth.anonymous_user"):
+            log.info("Autologout successfull '%s'" % (request.user.login))
         return HTTPFound(location=target_url, headers=headers)
-
     # User is not authenticated here anymore. So simply render the
     # logout page.
     _ = request.translate
@@ -212,6 +212,7 @@ def register_user(request):
             values = {'url': request.route_url('confirm_user', token=atoken),
                       'app_name': get_app_title(),
                       'email': settings['mail.default_sender'],
+                      'login': user.login,
                       '_': _}
             mail = Mail([recipient],
                         subject,
@@ -270,16 +271,24 @@ def forgot_password(request):
                                                    token=token),
                           'app_name': get_app_title(),
                           'email': settings['mail.default_sender'],
+                          'username': username,
                           '_': _}
                 mail = Mail([recipient],
                             subject,
                             template="password_reset_request",
                             values=values)
                 mailer.send(mail)
-            msg = _("Password reset token has been sent to the users "
-                    "email address. Please check your email.")
-            request.session.flash(msg, 'success')
-            complete = True
+                msg = _("Password reset token has been sent to the users "
+                        "email address. Please check your email.")
+                request.session.flash(msg, 'success')
+                complete = True
+            else:
+                msg = _("Login doesn't exist or written wrong")
+                request.session.flash(msg, "error")
+                form = Form(form_config,
+                            csrf_token=request.session.get_csrf_token(),
+                            translate=_)
+                complete = False
     return {'form': form.render(), 'complete': complete}
 
 

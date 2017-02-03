@@ -46,7 +46,9 @@ $( document ).ready(function() {
     var language = getDTLanguage(getLanguageFromBrowser());
     if (language == 'german') {
         // https://datatables.net/blog/2014-12-18 using moment.js
+        $.fn.dataTable.moment( 'DD.MM.YYYY, HH:mm' );
         $.fn.dataTable.moment( 'DD.MM.YYYY' );
+        $.fn.dataTable.moment( 'DD.MM.YY, HH:mm' );
         $.fn.dataTable.moment( 'DD.MM.YY' );
     }
     $('.datatable-paginated').dataTable( {
@@ -132,14 +134,20 @@ $( document ).ready(function() {
     // Check the initial values of the form and warn the user if the leaves
     // the page without saving the form.
     var DirtyFormWarningOpen = false;
-    $('form').each(function() {
+    $('.formbar-form form').each(function() {
         $(this).data('initialValue', $(this).serialize());
     });
     function openDirtyDialog(url, hide_spinner, event) {
         isDirty = false;
-        $('form').each(function () {
+        $('.formbar-form form').each(function () {
             if($(this).data('initialValue') != $(this).serialize()){
-                isDirty = true;
+                // The DirtyFormWarning should not be shown, if the form
+                // has the attribute "no-dirtyable". See waskiq/issue2049.
+                var no_dirtyable = $(this).attr("no-dirtyable")
+                if(typeof no_dirtyable === typeof undefined
+                   || no_dirtyable != "true") {
+                    isDirty = true;
+                }
             }
         });
         if((isDirty == true) && (DirtyFormWarningOpen == false)) {
@@ -149,7 +157,7 @@ $( document ).ready(function() {
             if (url && url.indexOf("#") != 0) {
                 $(dialog).modal("show");
                 DirtyFormWarningOpen = true;
-		event.preventDefault();
+                event.preventDefault();
                 return false;
             }
             return true;
@@ -165,7 +173,6 @@ $( document ).ready(function() {
         var url = $(element).attr("href");
         var hide_spinner = $(element).hasClass("nospinner") == true;
         openDirtyDialog(url, hide_spinner, event);
-        
     });
     $('.link').not('a').click(function(event) {
         var element = event.target;

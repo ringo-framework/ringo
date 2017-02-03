@@ -13,8 +13,8 @@ proper interface to use the added functionality. Example::
             ...
 
 The comment class in the example only defines the two fields `id` and
-`comment`. But as it inherits from :ref:`mixin_nested`, :ref:`mixin_meta` and
-:ref:`mixin_owned` it also will have date fields with the creation and date of
+`comment`. But as it inherits from the `Nested`, `Meta` and
+`Owned` mixin it also will have date fields with the creation and date of
 the last update, references to the user and group which ownes the Comment.
 Further the 'Nested' mixin will ensure the comments can reference each other
 to be able to build a hierarchy structure (e.g Threads in the example of the
@@ -28,7 +28,6 @@ comments).
 
     As most of the mixins will add additional tables and database fields
     to your item it is needed to migrate your database to the new model.
-    See :ref:`alembic_migration` section for more information.
 """
 import datetime
 import json
@@ -191,7 +190,7 @@ class Blobform(object):
                 return json_data[name]
         return get_raw_value(self, name)
 
-    def set_values(self, values):
+    def set_values(self, values, use_strict=False):
         """Will set the given values into Blobform items. This function
         overwrites the default behavior of the BaseItem and takes care
         that the data will be saved in the data attribute as JSON

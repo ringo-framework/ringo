@@ -3,12 +3,14 @@ import cgi
 import os
 import pkg_resources
 from mako.lookup import TemplateLookup
+from formbar.fields import rules_to_string
 from formbar.renderer import (
     FieldRenderer,
     DropdownFieldRenderer as FormbarDropdown,
     SelectionFieldRenderer as FormbarSelectionField,
     CheckboxFieldRenderer as FormbarCheckboxField
 )
+from formbar.fields import rules_to_string
 import ringo.lib.helpers as helpers
 from ringo.lib.helpers import get_action_routename, literal, escape, HTML
 from ringo.model.base import BaseItem, BaseList, get_item_list
@@ -209,7 +211,7 @@ class DropdownFieldRenderer(FormbarDropdown):
     def _render_label(self):
         html = []
         html.append(FormbarDropdown._render_label(self))
-        if not self._field.is_readonly() and not self.nolink == "true":
+        if not self._field.readonly and not self.nolink == "true":
             link = self.render_link()
             if link:
                 html.append(" [")
@@ -225,19 +227,21 @@ class StateFieldRenderer(FormbarDropdown):
     with available actions which can be done from this state.
 
     * layout: Option to change the layout of the statefield. The
-    renderer offers currently three options to render setting the
-    `layout` attribute of the renderer:
+      renderer offers currently three options to render setting the
+      `layout` attribute of the renderer:
 
         1. default: In default the renderer shows the current state with
-        description and the resulting state and description when
-        choosing a transtion.
+           description and the resulting state and description when
+           choosing a transtion.
+
         2. simple: Simple will render a simple dropdown with the current
-        state as part of the fields label and the available transitions
-        as options of the dropdown
+           state as part of the fields label and the available
+           transitions as options of the dropdown
+
         3. button: Botton will render the current state the available
-        transitions as a button. The button will work like a submit
-        button of the form so if the user clicks on it the form data
-        will be submitted and the state is changed.
+           transitions as a button. The button will work like a submit
+           button of the form so if the user clicks on it the form data
+           will be submitted and the state is changed.
 
     """
 
@@ -289,9 +293,13 @@ class ListingFieldRenderer(FormbarSelectionField):
 
     Example::
 
-        <entity ...>
+        <entity id="foo" name="name_of_the_orm_relation" ...>
             <renderer type="listing" showall="true" table="details"/>
         </entity>
+
+    Please note that the name of the entity must be the name of the
+    relation in the ORM model which links the items you want to list in
+    the listing.
     """
 
     def __init__(self, field, translate):
@@ -364,13 +372,13 @@ class ListingFieldRenderer(FormbarSelectionField):
         class_options = "form-group %s %s %s" % ((has_errors and 'has-error'),
                                               (has_warnings and 'has-warning'),(active))
         html.append(HTML.tag("div", _closed=False,
-                             rules=u"{}".format(";".join(self._field.rules_to_string)),
+                             rules=u"{}".format(";".join(rules_to_string(self._field))),
                              formgroup="{}".format(self._field.name),
                              desired="{}".format(self._field.desired),
                              required="{}".format(self._field.required),
                              class_=class_options))
         html.append(self._render_label())
-        if self._field.is_readonly() or self.onlylinked == "true":
+        if self._field.readonly or self.onlylinked == "true":
             items = self._get_selected_items(self.itemlist.items)
         else:
             items = self.itemlist.items

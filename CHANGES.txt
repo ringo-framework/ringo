@@ -1,8 +1,30 @@
-Next
-====
+1.15.1
+======
+- Removed wrong "login logging" if a user changes his password.
+- Added new config vars for application:
+	* app.logo
+	* app.customstatic
+  See documentation for more details.
+- Fix #16 Do not save "addrelation" paramenter in session
+- Fix #33 Set relations on creation before saving the item to prevent
+  violation of NOT NULL contraints.
+- Added `strict` flag to get_values method. Set this to False to suppress
+  error logging in case a attribute can not be found.
+- Improved documentation
+
+1.15.0
+======
 - Bugfix for "app.mode" config option. App mode was broken for all modes
   execept "testing" because the test db request was accessed in all cases even
-  if its not present.
+  if its not present
+- Changed API of importer. Removed "use_uuid" attribute. You must now provide
+  the key which is used to load items from the database using the "load_key"
+  attribute which defaults to "uuid".
+- Added "renderer" config option to the overview configuration. This lets you
+  set a custom renderer for a column.
+- Added "hidden" and "searchable" configuration options to the tableconfig.
+  This allows to define which field are searchable. Can be combined to make
+  hiddenfields searchable.
 
 1.14.0
 ======

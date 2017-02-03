@@ -5,8 +5,11 @@ services:
   - postgresql
 before_script:
   - psql -c 'create database ringotest;' -U postgres
-# command to install dependencies
-install: 
+# command to install dependencies,
+# Deactivate the installation of formbar if you want 
+# to build with a release version of formbar and not with the latest development version
+install:
+  - pip install git+https://github.com/ringo-framework/formbar
   - pip install -e .\[tests\]
 # command to run tests
 script: 

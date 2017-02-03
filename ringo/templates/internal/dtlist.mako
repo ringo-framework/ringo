@@ -14,7 +14,11 @@ from ringo.lib.helpers import prettify
       </th>
       % endif
       % for field in tableconfig.get_columns(request.user):
-        <th width="${field.get('width')}" title="${field.get('title') or _(field.get('label'))}">${_(field.get('label'))}</th>
+        <th
+        % if not field.get('visible', True):
+          style="display: none;"
+        % endif
+        width="${field.get('width')}" title="${field.get('title') or _(field.get('label'))}">${_(field.get('label'))}</th>
       % endfor
     </tr>
   </thead>
@@ -37,20 +41,27 @@ from ringo.lib.helpers import prettify
         </td>
       % endif
       % for field in tableconfig.get_columns(request.user):
+        <td 
         % if permission:
-          <td class="link">
-        % else:
-          <td>
+          class="link"
         % endif
+        % if not field.get('visible', True):
+          style="display: none;"
+        % endif
+        >
           <%
             try:
-              value = prettify(request, item.get_value(field.get('name'), expand=field.get('expand')))
-              if field.get('expand'):
-                ## In contrast to "freeform" fields expanded values coming from a
-                ## selection usually needs to be translated as they are
-                ## stored as static text in aspecific language in the
-                ## form config.
-                value = _(value)
+              colrenderer = tableconfig.get_renderer(field)
+              if colrenderer:
+                value = colrenderer(request, item, field, tableconfig)
+              else:
+                value = prettify(request, item.get_value(field.get('name'), expand=field.get('expand'), strict=field.get('strict', True)))
+                if field.get('expand'):
+                  ## In contrast to "freeform" fields expanded values coming from a
+                  ## selection usually needs to be translated as they are
+                  ## stored as static text in aspecific language in the
+                  ## form config.
+                  value = _(value)
             except AttributeError:
               value = "NaF"
           %>

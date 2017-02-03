@@ -2,6 +2,7 @@
 <configuration>
   <source>
     <!-- Define different entity types -->
+    <entity id="id" name="id" label="Role-ID" type="integer" readonly="true"/>
     <entity id="label" name="label" label="Label" type="string" required="true"/>
     <entity id="e1" name="name" label="Name" type="string" required="true">
       <help>Internal name for the roles. Do not change this without caution!</help>
@@ -27,22 +28,29 @@
     <snippet ref="create_snippet"/>
   </form>
   <form id="update" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
-    <snippet ref="create_snippet"/>
+    <snippet ref="update_snippet"/>
   </form>
   <form id="read" readonly="true">
-    <snippet ref="create_snippet"/>
+    <snippet ref="update_snippet"/>
   </form>
 
   <!-- Create-->
   <snippet id="create_snippet">
+    <row>
+      <col><field ref="label"/></col>
+    </row>
+    <snippet ref="s1"/>
+  </snippet>
+  <snippet id="update_snippet">
+    <row>
+      <col width="11"><field ref="label"/></col>
+      <col width="1"><field ref="id"/></col>
+    </row>
     <snippet ref="s1"/>
   </snippet>
 
   <!-- Role -->
   <snippet id="s1">
-    <row>
-      <col><field ref="label"/></col>
-    </row>
     <row>
       <col><field ref="e1"/></col>
     </row>

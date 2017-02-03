@@ -20,6 +20,7 @@ $(function(){
     LogoutTimer=function(){
         var auth_timeout = $("meta[name='auth_timeout']").attr("content") * 1000;
         var auth_warning = $("meta[name='auth_warning']").attr("content") * 1000;
+        var auth_user = $("meta[name='auth_user']").attr("content");
         var keep_alive_url = $("meta[name='auth_keepalive']").attr("content");
         var logout_url = $("meta[name='auth_logout']").attr("content");
         var currentTime = auth_timeout;
@@ -40,7 +41,7 @@ $(function(){
             $("#logoutWarning").modal("hide");
         }
 
-        function displayTime(){
+        function displayTime() {
             if (currentTime > 0) {
                 if (currentTime < auth_warning && !display_warning){
                     display_warning = true;
@@ -51,11 +52,10 @@ $(function(){
                 currentTime -=1000;
                 setTimeout(displayTime, 1000);
             }
-
-            if (currentTime == 0 ) location.href=logout_url+"?autologout=true";
+            if (auth_user !== '' && currentTime == 0 ) location.href=logout_url+"?autologout=true";
         }
-
-         if (currentTime > 0 && location.pathname) displayTime();
-
+        if (auth_user != 'anonymous') {
+            if (currentTime > 0 && location.pathname) displayTime();
+        }
     }();
 })

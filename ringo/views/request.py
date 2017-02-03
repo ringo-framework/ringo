@@ -1,4 +1,4 @@
-"""Modul to handle requests."""
+"""Module to handle requests."""
 import logging
 from pyramid.httpexceptions import HTTPFound
 from formbar.form import Validator
@@ -95,12 +95,9 @@ def handle_callback(request, callback, item=None):
 
 
 def get_relation_item(request):
-    clazz = request.context.__model__
-    addrelation = request.session.get('%s.addrelation' % clazz)
+    addrelation = request.ringo.params.addrelation
     if not addrelation:
-        addrelation = request.params.get("addrelation")
-        if not addrelation:
-            return None
+        return None
     rrel, rclazz, rid = addrelation.split(':')
     parent = import_model(rclazz)
     factory = parent.get_item_factory()
@@ -121,12 +118,9 @@ def handle_add_relation(request, item):
     if relation_tuple:
         rrel = relation_tuple[1]
         pitem = relation_tuple[0]
-        clazz = request.context.__model__
         log.debug('Linking %s to %s in %s' % (item, pitem, rrel))
         tmpattr = getattr(pitem, rrel)
         tmpattr.append(item)
-        # Delete value from session after the relation has been added
-        del request.session['%s.addrelation' % clazz]
     else:
         return item
     request.session.save()
@@ -196,9 +190,9 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
 
                 checker.check(clazz, form.data, request)
                 item = factory.create(request.user, form.data)
+                handle_add_relation(request, item)
                 item.save({}, request)
                 request.context.item = item
-                handle_add_relation(request, item)
             else:
                 values = checker.check(clazz, form.data, request, item)
                 item.save(values, request)
@@ -237,12 +231,18 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
             request.db.rollback()
             mapping['error'] = unicode(error.message)
             if event == "create":
+                log_msg = _(u'User {user.login} created'
+                            '{item_label}').format(item_label=item_label,
+                                                   user=request.user)
                 msg = _('Error while saving new '
                         '${item_type}: ${error}.', mapping=mapping)
             else:
+                log_msg = _(u'User {user.login} edited '
+                            '{item_label} {item.id}').format(item_label=item_label,
+                                                             item=item, user=request.user)
                 msg = _('Error while saving '
                         '${item_type} "${item}": ${error}.', mapping=mapping)
-            log.exception(msg)
+            log.exception(log_msg)
             request.session.flash(msg, 'critical')
             return False
     elif "blobforms" in request.params:
@@ -262,7 +262,7 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
 
 def handle_redirect_on_success(request, backurl=None):
     """Will return a redirect. If there has been a saved "backurl" the
-    redirect will on on this url. In all other cases the function will
+    redirect will on on this URL. In all other cases the function will
     try to determine if the item in the request can be opened in edit
     mode or not. If the current user is allowed to open the item in
     edit mode then the update view is called. Else the read view is
@@ -270,7 +270,7 @@ def handle_redirect_on_success(request, backurl=None):
 
     :request: Current request
     :backurl: Optional. Set backurl manually. This will overwrite
-    backurls saved in the session.
+    backurl saved in the session.
     :returns: Redirect
     """
 

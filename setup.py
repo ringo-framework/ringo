@@ -20,7 +20,7 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'babel',
-    'formbar>=0.9.4',
+    'formbar',
     'invoke',
     'dogpile.cache',
     'passlib',
@@ -37,7 +37,7 @@ tests_requires = [
 ]
 
 setup(name='ringo',
-      version = '1.14.0',
+      version = '1.15.0',
       description='A simple web framework with base functionality to build web applications.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[

@@ -35,7 +35,7 @@
     <label for="${field.id}">${_(field.label)}</label>
   </div>
   <div class="panel-body">
-    % if not field.is_readonly():
+    % if not field.readonly:
     <p>
       <strong>${_('State transition')}:</strong><br/>
       <select id="${field.id}" name="${field.name}" class="form-control">

@@ -10,7 +10,11 @@ function on${table_id}TableRendered(settings, json) {
   $('.search-filters').append('<div class="checkbox searchfilter"><label><input class="form-control" id="${id}" type="checkbox" value="1" ${fltr.active and 'checked="checked"'}>${_(fltr.label)}</label></div>');
   % endfor
   % for fltr in tableconfig.get_filters():
+    % if tableconfig.is_bundled() and len(bundled_actions) > 0:
     var column_${tableconfig.get_column_index(fltr.field)} = api.column(${tableconfig.get_column_index(fltr.field)+1});
+    % else:
+    var column_${tableconfig.get_column_index(fltr.field)} = api.column(${tableconfig.get_column_index(fltr.field)});
+    % endif
   % if fltr.type == "checkbox":
   $('#${table_id}_${fltr.field}').change(function() {
     filter_${table_id}_${fltr.field}(this);
@@ -78,7 +82,31 @@ $( document ).ready(function() {
    "bAutoWidth": false,
    "fnInitComplete":on${table_id}TableRendered,
    "dom":
-   '<"search-widget hidden-print"<"row"<"col-md-12 search-filters"f>>><"row"<"col-md-12"<"pull-right"i>>>'
+   '<"search-widget hidden-print"<"row"<"col-md-12 search-filters"f>>><"row"<"col-md-12"<"pull-right"i>>>',
+   "columns": [
+      % if bundled_actions:
+        {
+          "visible": true,
+          "searchable": false
+        },
+      % endif
+      % for field in tableconfig.get_columns(request.user):
+        {
+          "visible":  
+            % if field.get('visible', True):
+              true,
+            % else:
+              false,
+            % endif
+          "searchable":  
+            % if field.get('searchable', True):
+              true
+            % else:
+              false
+            % endif
+        },
+      % endfor
+   ]
   });
 });
 

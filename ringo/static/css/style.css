@@ -6,6 +6,11 @@ img.icon {
     margin: 0 5px;
 }
 
+/* Add margin to fa icons in buttons */
+a.btn i.fa {
+    margin: 0 10px 0 0;
+}
+
 /* Bootstrap overwrites
  ****************************************************************************/
 /* Hide carret in dropup menus as they are displayed in up direction which

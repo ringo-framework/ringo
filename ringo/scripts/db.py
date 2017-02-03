@@ -185,26 +185,38 @@ def handle_db_savedata_command(args):
     session = get_session(os.path.join(*path))
     modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == args.modul).all()[0].clazzpath
     modul = dynamic_import(modul_clazzpath)
+    data = session.query(modul).order_by(modul.id).all()
     if args.format == "json":
         exporter = JSONExporter(modul, serialized=False,
                                 relations=args.include_relations)
+        data = prepare_data(data)
     else:
         exporter = CSVExporter(modul, serialized=False,
                                relations=args.include_relations)
-    print exporter.perform(session.query(modul)
-                          .order_by(modul.id)
-                          .all())
+    print exporter.perform(data)
+
+def prepare_data(applications):
+    import datetime
+    for application in applications:
+        for field, value in application.__dict__.items():
+            if isinstance(value, datetime.date):
+                application.__setattr__(field, str(value))
+    return applications
 
 def handle_db_loaddata_command(args):
     path = []
     path.append(args.config)
     session = get_session(os.path.join(*path))
     importer = get_importer(session, args.modul, args.format)
+    if args.loadbyid:
+        load_key = "id"
+    else:
+        load_key = "uuid"
     with open(args.fixture) as f:
         data = f.read()
         items, created, updated = do_import(session,
                                             importer, data,
-                                            (not args.loadbyid))
+                                            load_key)
 
     try:
         transaction.commit()
@@ -223,11 +235,11 @@ def get_importer(session, modulname, fmt):
         return CSVImporter(modul, session)
 
 
-def do_import(session, importer, data, use_uuid=True):
+def do_import(session, importer, data, load_key):
     items = []
     updated = 0
     created = 0
-    items = importer.perform(data, use_uuid=use_uuid)
+    items = importer.perform(data, load_key=load_key)
     for item, action in items:
         # Add all new items to the session
         if action.find("CREATE") > -1:

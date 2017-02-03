@@ -13,7 +13,7 @@ from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.httpexceptions import HTTPUnauthorized
 from sqlalchemy.orm.exc import NoResultFound
-from ringo.lib.helpers import get_item_modul
+from ringo.lib.helpers import get_item_modul, dynamic_import
 from ringo.lib.sql import DBSession
 from ringo.lib.alchemy import get_relations_from_clazz
 from ringo.model.base import BaseItem
@@ -430,7 +430,9 @@ def has_group(user, group):
 
 def _load_user(userid, request):
     try:
-        factory = User.get_item_factory()
+        modul = get_item_modul(request, User)
+        UserClazz = dynamic_import(modul.clazzpath)
+        factory = UserClazz.get_item_factory()
         return factory.load(userid)
     except NoResultFound:
         return None

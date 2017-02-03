@@ -8,7 +8,7 @@ of applications. An example might be an appointment extensions which
 allows to extend the application with an appointment feature.
 
 For more information on how to create and register extensions please
-refer to the :ref:`extensions` part of the documentation.
+refer to the `Extensions` part of the documentation.
 
 Extension may extend the existing database and adds tables to save data
 (e.g appointments and relations of appointments to users.) or they are
