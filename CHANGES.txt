@@ -10,6 +10,7 @@
   violation of NOT NULL contraints.
 - Added `strict` flag to get_values method. Set this to False to suppress
   error logging in case a attribute can not be found.
+- Improved documentation
 
 1.15.0
 ======

@@ -65,7 +65,7 @@ from ringo.lib.helpers import prettify
             except AttributeError:
               value = "NaF"
           %>
-          ${value}${field.get('strict')} 
+          ${value}
         </td>
       % endfor
     </tr>
