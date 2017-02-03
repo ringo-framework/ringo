@@ -616,8 +616,20 @@ class BaseList(object):
             if cache in regions.keys():
                 q = set_relation_caching(q, self.clazz, cache)
                 q = q.options(FromCache(cache))
+
+            # Added support for eager loading of items in the overview:
+            # http://docs.sqlalchemy.org/en/latest/orm/loading_relationships.html#relationship-loading-techniques
+            # This also support loading along paths to support
+            # releations which are deeper than one level.
             for relation in self.clazz._sql_eager_loads:
-                q = q.options(joinedload(relation))
+                joinedload_path = None
+                # Load along path
+                for rel in relation.split("."):
+                    if joinedload_path is None:
+                        joinedload_path = joinedload(rel)
+                    else:
+                        joinedload_path = joinedload_path.joinedload(rel)
+                q = q.options(joinedload_path)
             self.items = q.all()
         else:
             self.items = items
