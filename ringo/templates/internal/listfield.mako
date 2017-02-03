@@ -143,7 +143,7 @@ def render_item_add_link(request, clazz, foreignkey, clazzpath, id, backlink, fo
             if colrenderer:
               value = colrenderer(request, item, col, tableconfig)
             else:
-              rvalue = prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand')))
+              rvalue = prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand'), strict=field.get('strict', True)))
               value = _(rvalue)
               if isinstance(rvalue, list):
                 value = ", ".join(unicode(v) for v in rvalue)
