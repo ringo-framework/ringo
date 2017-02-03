@@ -239,7 +239,7 @@ class BaseItem(object):
     def reset_uuid(self):
         self.uuid = str(uuid.uuid4())
 
-    def get_value(self, name, form_id="read", expand=False):
+    def get_value(self, name, form_id="read", expand=False, strict=True):
         """Return the value of the given attribute of the item. Unlike
         accessing the value directly this function this function
         optionally supports the expansion of the value before
@@ -253,19 +253,33 @@ class BaseItem(object):
         literal value from the value in the database by looking in the
         form identified by the `form_id` attribute.
 
+        Strict mode means that in case the given attribute `name` can
+        not be accesses a error log message will be triggered. However
+        there are some cases where the attribute can not be accesses for
+        some known reasons and therefor the error should not be logged
+        but passed silently. As this is highly situation depended you
+        can call this method with `stric=False` to prevent logging. Here
+        are two examples where you migh want to disable logging:
+
+            * Overviews. In case you want to display related items like
+            'country.code' but the item does not have a related country (yet).
+            * For blobforms as attributes can be added and removed by
+            the user on the fly. So there is a good chance that older
+            items do not have this attribute.
+
         :name: Name of the attribute with the value
         :form_id: ID of the form which will be used for expansion
         :expand: Expand the value before returning it
+        :strict: Log error if the value can not be accessed. Defaults to True.
         :returns: Value of the named attribute
         """
 
         try:
             raw_value = getattr(self, name)
-        except:
-            # This error is only acceptable for blobforms as attributes
-            # can be added and removed by the user on the fly. So there
-            # is a good chance that older items do not have this attribute.
-            if hasattr(self, 'id'):
+        except AttributeError:
+            if not strict:
+                pass
+            elif hasattr(self, 'id'):
                 log.error("Attribute '%s' not found in '%s'; id:%s"
                           % (name, repr(self), self.id))
             else:
