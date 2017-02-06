@@ -1424,11 +1424,14 @@ application and have appropriate permissions.
 
 Anonymous access in Ringo is implemented by using a Proxy-User. This user must
 be existent in the database and properly configured. To enable anonymous
-access to the application you must configure this use as anonymous user. See
+access to the application you must configure this user as anonymous user. See
 :ref:`anonymous_access` for more details.
 
-From now on every every user will be automatically logged in as this
-configured user to the application and will all the permissions the user has.
+If enabled every request to the application will automatically be 
+authenticated with the configured anonymous user (As long as the User is not 
+already logged in). The request will be done with all configured permissions 
+of the roles the configured anonymous has. So you can configure in details 
+which permissions a anonymous user will have.
 
 .. warning::
         Be careful with the configuration of the anonymous user. Double check
