@@ -178,7 +178,7 @@ if sortable:
               if colrenderer:
                 value = colrenderer(request, item, field, tableconfig)
               else:
-                value = h.prettify(request, item.get_value(field.get('name'), expand=field.get('expand')))
+                value = h.prettify(request, item.get_value(field.get('name'), expand=field.get('expand'), strict=field.get('strict', True)))
                 if field.get('expand'):
                   ## In contrast to "freeform" fields expanded values coming from a
                   ## selection usually needs to be translated as they are

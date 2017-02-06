@@ -14,10 +14,11 @@
   filtering of what should be exported.
 - Add --export-config option to the CLI "ringo savedata" command to allow
   recursive exports.
-
-1.15.1
-======
 - Removed wrong "login logging" if a user changes his password.
+- Added `strict` flag to get_values method. Set this to False to suppress
+  error logging in case a attribute can not be found.
+- Improved documentation
+- Fixed issue #35: Added Json Datatype for columns
 
 1.15.0
 ======

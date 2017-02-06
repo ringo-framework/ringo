@@ -293,9 +293,13 @@ class ListingFieldRenderer(FormbarSelectionField):
 
     Example::
 
-        <entity ...>
+        <entity id="foo" name="name_of_the_orm_relation" ...>
             <renderer type="listing" showall="true" table="details"/>
         </entity>
+
+    Please note that the name of the entity must be the name of the
+    relation in the ORM model which links the items you want to list in
+    the listing.
     """
 
     def __init__(self, field, translate):
