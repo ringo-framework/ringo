@@ -2175,11 +2175,13 @@ The default export format is JSON. You can change the export format to CSV by
 providing the `--format` option.
 
 Only values of the given modul are exported. This includes *all*
-fields of the module but no relations. You can include the relations as
-well in the export by setting the `--include-relations`. However this does not
-really include the related items and its values but only add another field in
-the export with the name of the relation in the modul. The value will be the
-string representation of the related item.
+fields of the module but no relations. 
+
+You can include the relations as well in the export by setting the
+`--include-relations`. However this does not really include the related items
+and its values but only add another field in the export with the name of the
+relation in the modul. The value will be the string representation of the
+related item.
 
 You can restrict the exported items by setting a `--filter` option. With a
 filter only items of the given modul matching the filter expression are
@@ -2202,10 +2204,17 @@ expression matches any of the fields of the default overview configuration.
 It is possible to define more than one filter. All filters must match to
 include the item in the export.
 
-More detailed configurations of the export can be done by providing a
-configuration file. When using the configuration file all other options have
-no effect anymore. The default export format will be a nested JSON which will
-include all configured fields.
+A More detailed configurations of the export can be done by providing a
+configuration file by setting the `--export-configuration` option. When using the
+configuration file all other options like (format, fields or
+include-relations) have no effect anymore. The default export format will be a
+nested JSON which will include all configured fields.
+
+Details on the format of the export configuration file can be found in
+:ref:`exportconfiguration`.
+
+
+.. _exportconfiguration:
 
 Configuration File
 ------------------
