@@ -45,6 +45,11 @@ class ExportConfiguration(object):
     included. The "Bar" items have themself a relation called "baz" and
     again you can follow the scheme to define a detail configuration of
     what should be in the export.
+
+    The configuration also support wildcards. Use "*" so add all fields
+    of the item or related item::
+
+        ["*" {"bar": ["*", {"baz": [...]}}]
     """
 
     def __init__(self, jsonconfig):
