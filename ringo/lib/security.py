@@ -27,6 +27,12 @@ def password_generator(size=12, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
 
+def get_anonymous_user(settings):
+    """Will return the name of the configured anonymous user if there is
+    one. Else return None."""
+    return settings.get("auth.anonymous_user")
+
+
 def get_auth_timeout(settings):
     """Will return the amount of seconds until the auth session will
     time out. This can be configured in the application ini file. If no
@@ -196,7 +202,7 @@ def setup_ringo_security(config):
         config.add_tween('ringo.tweens.clickjacking.clickjacking_factory')
     if settings.get("security.header_csp", "false") == "true":
         config.add_tween('ringo.tweens.csp.csp_factory')
-    if settings.get("auth.anonymous_user"):
+    if get_anonymous_user(settings):
         log.info("Setting up anonymous access.")
         config.add_tween('ringo.tweens.anonymous_access.user_factory')
     else:

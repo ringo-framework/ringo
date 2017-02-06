@@ -11,6 +11,7 @@
 - Added `strict` flag to get_values method. Set this to False to suppress
   error logging in case a attribute can not be found.
 - Improved documentation
+- Fixed issue #35: Added Json Datatype for columns
 
 1.15.0
 ======
