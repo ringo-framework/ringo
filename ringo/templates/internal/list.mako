@@ -1,4 +1,5 @@
 <%
+from ringo.lib.renderer.lists import get_read_update_url
 url = request.current_route_path().split("?")[0]
 mapping = {'num_filters': len(listing.search_filter)}
 def render_filter_link(request, field, value, clazz):
@@ -154,13 +155,9 @@ if sortable:
   </tr>
   % for item in items[listing.pagination_start:listing.pagination_end]:
     <%
-    permission = None
-    if s.has_permission("update", item, request):
-      permission = "update"
-    elif s.has_permission("read", item, request):
-      permission = "read"
+      data_link = get_read_update_url(request, item, clazz, listing.is_prefiltered_for_user())
     %>
-    <tr item-id="${item.id}" data-link="${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}">
+    <tr item-id="${item.id}" data-link="${data_link}">
     % if bundled_actions:
     <td>
       <input type="checkbox" name="id" value="${item.id}">
@@ -168,9 +165,9 @@ if sortable:
     % endif
     % for num, field in enumerate(tableconfig.get_columns(request.user)):
       % if autoresponsive:
-        <td class="${num > 0 and 'hidden-xs'} ${permission and 'link'}">
+        <td class="${num > 0 and 'hidden-xs'} ${data_link and 'link'}">
       % else:
-        <td class="${render_responsive_class(field.get('screen'))} ${permission and 'link'}">
+        <td class="${render_responsive_class(field.get('screen'))} ${data_link and 'link'}">
       % endif
         <%
             try:

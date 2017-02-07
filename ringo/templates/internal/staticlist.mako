@@ -1,5 +1,6 @@
 <%
 from ringo.lib.helpers import prettify
+from ringo.lib.renderer.lists import get_read_update_url
 %>
 <table id="${tableid}" class="table table-condensed table-striped table-hover">
   <thead>
@@ -12,18 +13,11 @@ from ringo.lib.helpers import prettify
   <tbody>
     % for item in items[listing.pagination_start:listing.pagination_end]:
       <%
-      permission = None
-      data_link = "#"
-      if s.has_permission("update", item, request):
-        permission = "update"
-        data_link = request.route_path(h.get_action_routename(clazz, permission), id=item.id)
-      elif s.has_permission("read", item, request):
-        permission = "read"
-        data_link = request.route_path(h.get_action_routename(clazz, permission), id=item.id)
+      data_link = get_read_update_url(request, item, clazz, listing.is_prefiltered_for_user())
       %>
       <tr item-id="${item.id}" data-link="${data_link}">
       % for field in tableconfig.get_columns(request.user):
-        % if permission:
+        % if data_link:
           <td class="link">
         % else:
           <td>

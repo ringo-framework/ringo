@@ -7,7 +7,8 @@ from ringo.lib.helpers import (
     get_app_name,
     get_saved_searches,
     get_item_actions,
-    literal
+    literal,
+    get_action_routename
 )
 from ringo.lib.table import get_table_config
 import ringo.lib.security as security
@@ -22,6 +23,22 @@ log = logging.getLogger(__name__)
 ###########################################################################
 #                         Renderers for overviews                         #
 ###########################################################################
+
+
+def get_read_update_url(request, item, clazz, prefilterd=False):
+    """Helper method to get the URL to read or update in item in various
+    overviews. If the user of this request is not allowed to see the
+    item at all, None will be returned as the url."""
+    permissions = ['read', 'update']
+    url = None
+    for permission in permissions:
+        if permission == 'read' and prefilterd:
+            url = request.route_path(get_action_routename(clazz, permission), id=item.id)
+        elif security.has_permission(permission, item, request) or ():
+            url = request.route_path(get_action_routename(clazz, permission), id=item.id)
+        else:
+            break
+    return url
 
 
 class ListRenderer(object):
