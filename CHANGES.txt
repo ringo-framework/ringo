@@ -12,6 +12,7 @@
   error logging in case a attribute can not be found.
 - Improved documentation
 - Fixed issue #35: Added Json Datatype for columns
+- Allow multiple search filters in overview!
 
 1.15.0
 ======
