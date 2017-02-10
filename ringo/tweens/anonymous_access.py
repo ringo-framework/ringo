@@ -23,13 +23,15 @@ def user_factory(handler, registry):
         # initialised. So we will "pre"-init the cache here.
         init_cache(request)
         if not request.user:
-            log.info("Anonymous login")
-            request.user = ANONYMOUS_USER
-            request.session["auth.anonymous_user"] = ANONYMOUS_USER.login
-            request.session.save()
-            target_url = request.route_path('home')
-            headers = remember(request, ANONYMOUS_USER.id)
-            return HTTPFound(location=target_url, headers=headers)
+            # Do not (re)-authorize the user on logout and autologout
+            # pages.
+            if request.path not in [request.route_path("autologout"),
+                                    request.route_path("logout")]:
+                request.user = ANONYMOUS_USER
+                request.session["auth.anonymous_user"] = ANONYMOUS_USER.login
+                request.session.save()
+                headers = remember(request, ANONYMOUS_USER.id)
+                return HTTPFound(location=request.path, headers=headers)
         return handler(request)
     return user_tween
 
@@ -37,8 +39,8 @@ def user_factory(handler, registry):
 def ensure_logout(handler, registry):
     def user_tween(request):
         anon_login = request.session.get("auth.anonymous_user")
+        init_cache(request)
         if anon_login and request.user and (request.user.login == anon_login):
-            log.info("Anonymous logout")
             headers = forget(request)
             del request.session["auth.anonymous_user"]
             request.session.save()

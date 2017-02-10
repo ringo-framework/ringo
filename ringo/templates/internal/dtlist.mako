@@ -1,5 +1,6 @@
 <%
 from ringo.lib.helpers import prettify
+from ringo.lib.renderer.lists import get_read_update_url
 %>
 <script>
   ${dtconfig | n}
@@ -25,14 +26,7 @@ from ringo.lib.helpers import prettify
   <tbody>
     % for item in items[listing.pagination_start:listing.pagination_end]:
       <%
-      permission = None
-      data_link = "#"
-      if s.has_permission("update", item, request):
-        permission = "update"
-        data_link = request.route_path(h.get_action_routename(clazz, permission), id=item.id)
-      elif s.has_permission("read", item, request):
-        permission = "read"
-        data_link = request.route_path(h.get_action_routename(clazz, permission), id=item.id)
+      data_link = get_read_update_url(request, item, clazz, listing.is_prefiltered_for_user())
       %>
       <tr item-id="${item.id}" data-link="${data_link}">
       % if bundled_actions:
@@ -42,7 +36,7 @@ from ringo.lib.helpers import prettify
       % endif
       % for field in tableconfig.get_columns(request.user):
         <td 
-        % if permission:
+        % if data_link:
           class="link"
         % endif
         % if not field.get('visible', True):
@@ -55,7 +49,7 @@ from ringo.lib.helpers import prettify
               if colrenderer:
                 value = colrenderer(request, item, field, tableconfig)
               else:
-                value = prettify(request, item.get_value(field.get('name'), expand=field.get('expand')))
+                value = prettify(request, item.get_value(field.get('name'), expand=field.get('expand'), strict=field.get('strict', True)))
                 if field.get('expand'):
                   ## In contrast to "freeform" fields expanded values coming from a
                   ## selection usually needs to be translated as they are

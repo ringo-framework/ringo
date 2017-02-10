@@ -1,8 +1,7 @@
-"""Modul to handle requests."""
+"""Module to handle requests."""
 import logging
 import urllib
 import urlparse
-import transaction
 from pyramid.httpexceptions import HTTPFound
 from formbar.form import Validator
 from ringo.lib.security import (
@@ -14,8 +13,6 @@ from ringo.lib.history import History
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.views.helpers import (
     get_item_from_request,
-    get_ownership_form,
-    get_item_form,
     get_item_modul,
     get_current_form_page,
     set_current_form_page,
@@ -127,18 +124,15 @@ def handle_callback(request, callback, item=None):
 
 
 def get_relation_item(request):
-    clazz = request.context.__model__
-    addrelation = request.session.get('%s.addrelation' % clazz)
+    params = handle_params(request)
+    addrelation = params.get("addrelation")
     if not addrelation:
-        addrelation = request.params.get("addrelation")
-        if not addrelation:
-            return None
+        return None
     rrel, rclazz, rid = addrelation.split(':')
     parent = import_model(rclazz)
     factory = parent.get_item_factory()
     item = factory.load(rid, db=request.db)
     return item, rrel
-
 
 
 def handle_add_relation(request, item):
@@ -154,12 +148,9 @@ def handle_add_relation(request, item):
     if relation_tuple:
         rrel = relation_tuple[1]
         pitem = relation_tuple[0]
-        clazz = request.context.__model__
         log.debug('Linking %s to %s in %s' % (item, pitem, rrel))
         tmpattr = getattr(pitem, rrel)
         tmpattr.append(item)
-        # Delete value from session after the relation has been added
-        del request.session['%s.addrelation' % clazz]
     else:
         return item
     request.session.save()
@@ -229,9 +220,9 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
 
                 checker.check(clazz, form.data, request)
                 item = factory.create(request.user, form.data)
+                handle_add_relation(request, item)
                 item.save({}, request)
                 request.context.item = item
-                handle_add_relation(request, item)
             else:
                 values = checker.check(clazz, form.data, request, item)
                 item.save(values, request)
@@ -299,7 +290,7 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
 
 def handle_redirect_on_success(request, backurl=None):
     """Will return a redirect. If there has been a saved "backurl" the
-    redirect will on on this url. In all other cases the function will
+    redirect will on on this URL. In all other cases the function will
     try to determine if the item in the request can be opened in edit
     mode or not. If the current user is allowed to open the item in
     edit mode then the update view is called. Else the read view is
@@ -307,7 +298,7 @@ def handle_redirect_on_success(request, backurl=None):
 
     :request: Current request
     :backurl: Optional. Set backurl manually. This will overwrite
-    backurls saved in the session. 
+    backurl saved in the session.
     :returns: Redirect
     """
 
@@ -341,13 +332,17 @@ def handle_history(request):
 
 
 def handle_params(request):
-    """Handles varios sytem GET params comming with the request
+    """Handles various query parameters coming with GET and POST
+    requests. This function will work like a filter which only allows
+    known defined params. The function will return a dictionary with the
+    filtered parameters.
+
     Known params are:
 
-     * backurl: A url which should be called instead of the default
+     * backurl: A URL which should be called instead of the default
        action after the next request succeeds. The backurl will be saved
        in the session and stays there until it is deleted on a
-       successfull request. So take care to delete it to not mess up
+       successful request. So take care to delete it to not mess up
        with the application logic.
      * form: The name of a alternative form configuration which is
        used for the request.
@@ -370,11 +365,9 @@ def handle_params(request):
             params['values'][key] = values[key]
     form = request.GET.get('form')
     if form:
-        #request.session['%s.form' % clazz] = form
         params['form'] = form
-    relation = request.GET.get('addrelation')
+    relation = request.params.get("addrelation")
     if relation:
-        request.session['%s.addrelation' % clazz] = relation
         params['addrelation'] = relation
     request.session.save()
     return params

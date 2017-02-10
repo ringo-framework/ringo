@@ -23,6 +23,9 @@ This is a short description of what this script does.
 import os
 import sys
 import argparse
+from pyramid import testing
+from pyramid.registry import Registry
+from paste.deploy.loadwsgi import appconfig
 
 from ringo.scripts.db import (
     handle_db_init_command,
@@ -335,6 +338,17 @@ def _get_app_name():
 def main():
     parser, subparsers, global_arguments = setup_parser()
     args = parser["root"].parse_args()
+    # FIXME: Initialialising the testing modul is currently the only
+    # known way to make the settings
+    # available in the current_registry call (which is called
+    # inside
+    # ringo when loading the form).
+    config = appconfig('config:%s' % args.config, "main", relative_to='.')
+    name = config.context.distribution.project_name
+    registry = Registry(name)
+    registry.settings = config
+    testing.setUp(registry)
+
     args.func(args)
 
 if __name__ == '__main__':

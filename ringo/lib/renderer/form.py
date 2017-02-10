@@ -10,6 +10,7 @@ from formbar.renderer import (
     SelectionFieldRenderer as FormbarSelectionField,
     CheckboxFieldRenderer as FormbarCheckboxField
 )
+from formbar.fields import rules_to_string
 import ringo.lib.helpers as helpers
 from ringo.lib.helpers import get_action_routename, literal, escape, HTML
 from ringo.model.base import BaseItem, BaseList, get_item_list
@@ -292,9 +293,13 @@ class ListingFieldRenderer(FormbarSelectionField):
 
     Example::
 
-        <entity ...>
+        <entity id="foo" name="name_of_the_orm_relation" ...>
             <renderer type="listing" showall="true" table="details"/>
         </entity>
+
+    Please note that the name of the entity must be the name of the
+    relation in the ORM model which links the items you want to list in
+    the listing.
     """
 
     def __init__(self, field, translate):

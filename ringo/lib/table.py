@@ -67,7 +67,8 @@ class TableConfig:
                         "expand": true,
                         "filter": false,
                         "title": "Tooltip title",
-                        "renderer": "path.to.renderer.callable"
+                        "renderer": "path.to.renderer.callable",
+                        "strict": true
                     }
                 ]
                 "settings": {
@@ -120,6 +121,9 @@ class TableConfig:
     * *renderer* defines a callable which is used to render the
       field in the form "app.lib.renderer.myrenderer". The function will
       take the request, the fieldname, and the renderer as parameters.
+    * *strict* Log error if value can not be fetched. This is often a
+      sign of errors in the datamodel. However. If you want you can
+      disable logging errors for this attribute.
     * *searchable* A flag indicating whether the field should be searchable
       with datatables. By default all fields are searched.
     * *visible* A flag indicating whether the field should be shown in the

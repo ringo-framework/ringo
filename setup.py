@@ -20,7 +20,7 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'babel',
-    'formbar>=0.9.4',
+    'formbar',
     'invoke',
     'dogpile.cache',
     'passlib',

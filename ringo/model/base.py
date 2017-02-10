@@ -239,7 +239,7 @@ class BaseItem(object):
     def reset_uuid(self):
         self.uuid = str(uuid.uuid4())
 
-    def get_value(self, name, form_id="read", expand=False):
+    def get_value(self, name, form_id="read", expand=False, strict=True):
         """Return the value of the given attribute of the item. Unlike
         accessing the value directly this function this function
         optionally supports the expansion of the value before
@@ -253,19 +253,33 @@ class BaseItem(object):
         literal value from the value in the database by looking in the
         form identified by the `form_id` attribute.
 
+        Strict mode means that in case the given attribute `name` can
+        not be accesses a error log message will be triggered. However
+        there are some cases where the attribute can not be accesses for
+        some known reasons and therefor the error should not be logged
+        but passed silently. As this is highly situation depended you
+        can call this method with `stric=False` to prevent logging. Here
+        are two examples where you migh want to disable logging:
+
+            * Overviews. In case you want to display related items like
+            'country.code' but the item does not have a related country (yet).
+            * For blobforms as attributes can be added and removed by
+            the user on the fly. So there is a good chance that older
+            items do not have this attribute.
+
         :name: Name of the attribute with the value
         :form_id: ID of the form which will be used for expansion
         :expand: Expand the value before returning it
+        :strict: Log error if the value can not be accessed. Defaults to True.
         :returns: Value of the named attribute
         """
 
         try:
             raw_value = getattr(self, name)
-        except:
-            # This error is only acceptable for blobforms as attributes
-            # can be added and removed by the user on the fly. So there
-            # is a good chance that older items do not have this attribute.
-            if hasattr(self, 'id'):
+        except AttributeError:
+            if not strict:
+                pass
+            elif hasattr(self, 'id'):
                 log.error("Attribute '%s' not found in '%s'; id:%s"
                           % (name, repr(self), self.id))
             else:
@@ -568,6 +582,8 @@ def filter_itemlist_for_user(request, baselist):
             if has_permission('read', item, request):
                 filtered_items.append(item)
         baselist.items = filtered_items
+        # Mark this listing to be prefilterd for a user.
+        baselist._user = request.user
     return baselist
 
 
@@ -602,15 +618,36 @@ class BaseList(object):
             if cache in regions.keys():
                 q = set_relation_caching(q, self.clazz, cache)
                 q = q.options(FromCache(cache))
+
+            # Added support for eager loading of items in the overview:
+            # http://docs.sqlalchemy.org/en/latest/orm/loading_relationships.html#relationship-loading-techniques
+            # This also support loading along paths to support
+            # releations which are deeper than one level.
             for relation in self.clazz._sql_eager_loads:
-                q = q.options(joinedload(relation))
+                joinedload_path = None
+                # Load along path
+                for rel in relation.split("."):
+                    if joinedload_path is None:
+                        joinedload_path = joinedload(rel)
+                    else:
+                        joinedload_path = joinedload_path.joinedload(rel)
+                q = q.options(joinedload_path)
             self.items = q.all()
         else:
             self.items = items
         self.search_filter = []
 
+        self._user = None
+        """Internal variable which is set by the `filter_itemlist_for_user`
+        method to indicate that the list has been build for this user
+        and only contains items which are at least readable by the user.
+        """
+
     def __iter__(self):
         return iter(self.items)
+
+    def is_prefiltered_for_user(self):
+        return self._user is not None
 
     def sort(self, field, order, expand=False):
         """Will return a sorted item list. Sorting is done based on the

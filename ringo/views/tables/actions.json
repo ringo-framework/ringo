@@ -3,6 +3,7 @@
         "columns": [
             {"name": "modul.label", "label": "Modul"},
             {"name": "name", "label": "Action"},
+            {"name": "id", "label": "ID", "width": 20},
             {"name": "url", "label": "URL"}
         ]
     }

@@ -694,17 +694,29 @@ Ringo comes with some specific renderers which extends the default renderers
 of formbar. They usually are aware of accessing to Ringo specific attributes
 like permissions checks e.g.
 
+.. index::
+   triple: Form;Renderer;Checkbox
+
 Checkbox
 --------
 .. autoclass:: ringo.lib.renderer.form.CheckboxFieldRenderer
+
+.. index::
+   triple: Form;Renderer;Dropdown
 
 Dropdown
 --------
 .. autoclass:: ringo.lib.renderer.form.DropdownFieldRenderer
 
+.. index::
+   triple: Form;Renderer;Links
+
 Links
 -----
 .. autoclass:: ringo.lib.renderer.form.LinkFieldRenderer
+
+.. index::
+   triple: Form;Renderer;Listings
 
 Listings
 --------
@@ -1376,14 +1388,14 @@ these roles.
 If the user is the owner of the item, or is member of the items group, then
 all permissions of the users roles will be applied.
 
+.. index::
+   double: Authentification;Roles
 .. _roles:
 
 Roles
 -----
 
-..  TODO: Write roles section (ti) <2016-11-11 20:13> 
-
-
+.. autoclass:: ringo.model.user.Role
 
 
 .. _authentification:
@@ -1400,6 +1412,8 @@ The authentification has a default timeout of 30min. The timeout will be reset
 after every new request of the user. The timeout can be configured in the
 application configuration bei setting the 'auth.timeout' config variable.
 
+.. index::
+   double: Authentification;Anonymous Access
 .. _authorisation:
 
 Anonymous Authentification
@@ -1408,22 +1422,34 @@ On default Ringo does not provide an anonymous access to the application
 (Despite of some static pages). So you must login before you can work with the
 application and have appropriate permissions.
 
+Anonymous access in Ringo is implemented by using a Proxy-User. This user must
+be existent in the database and properly configured. To enable anonymous
+access to the application you must configure this user as anonymous user. See
+:ref:`anonymous_access` for more details.
+
+If enabled every request to the application will automatically be 
+authenticated with the configured anonymous user (As long as the User is not 
+already logged in). The request will be done with all configured permissions 
+of the roles the configured anonymous has. So you can configure in details 
+which permissions a anonymous user will have.
+
+.. warning::
+        Be careful with the configuration of the anonymous user. Double check
+        the permissions of the anonymous user and check the configuration in
+        the ini file and make sure you did not configure a high privileged
+        user like the admin as anonymous user.
+
 To implement an anonymous access to the application you will need to do
 three things:
 
 1. Create a dedicated user which will be used as the anonymous user.
-2. Create roles with appropriate permissions on the different moduels to
+2. Create roles with appropriate permissions on the different modules to
    grant this anonymous user access on the data. Please note, that these
    roles must be "admin"  roles to disable the owner/group check on
    authorisation as we want the anonymous user to be able to basically
    all items. The only restriction is than configured by the permissions
    of the role.
-3. Enable this anonymous user in the `ini` file. See
-   :ref:`anonymous_access` for more details.
-
-
-
-
+3. Enable this anonymous user in the `ini` file.
 
 Authorisation
 -------------
@@ -1530,6 +1556,9 @@ States and Workflows
 ********************
 .. automodule:: ringo.model.statemachine
 
+.. index::
+   double: Configuration; Application
+
 #############
 Configuration
 #############
@@ -1543,8 +1572,10 @@ Application
 Helper methods giving access to the configuration options are available in the `appinfo` module.
 
 .. automodule:: ringo.lib.helpers.appinfo
-   :members: get_app_mode, get_app_title, get_app_inheritance_path
+   :members: get_app_mode, get_app_title, get_app_logo, get_app_inheritance_path
 
+.. index::
+   single: Configuration; Title
 
 Title
 =====
@@ -1555,6 +1586,39 @@ can be configured with the following varible.
 
 The title is available using the :func:`get_app_title` function.
 
+.. index::
+   single: Configuration; Custom static files
+   see: Branding; Configuration
+
+Custom static directory
+=======================
+It is possible to define a directory to include custom static files which
+should not be part of the application. This can be usefull for application
+branding to place custom logo graphics etc. You can define the path to the
+root of that custom static folder.
+
+* app.customstatic = /path/to/your/folder
+
+If not defined it will be ringo:static.
+
+.. index::
+   single: Configuration; Logo
+
+Logo
+====
+The logo of the application used in the header of the page. You can define a
+path to the logo relative to the given custom static directory which should be
+displayed. If no logo is set then no logo is displayed at all.
+
+If you need more customization on the logo, then you need to overwrite the
+logo.mako template.
+
+* app.logo = images/ringo-logo-64.png
+
+The logo is available using the :func:`get_app_logo` function.
+
+.. index::
+   double: Configuration; Inheritance
 .. _config_app_base:
 
 Application Base
