@@ -119,7 +119,7 @@ $( document ).ready(function() {
        $('.main-pane').hide();
        $('#'+pane).show();
     });
-    $('#pagination-size-selector').change(function() {
+    $('#pagination-size-selector select').change(function() {
         var value = $(this).val();
         var url = $(this).attr('url') + "?pagination_size=" + value;
         startSpinner(spinner_timer);
