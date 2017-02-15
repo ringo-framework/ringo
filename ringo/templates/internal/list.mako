@@ -2,6 +2,18 @@
 from ringo.lib.renderer.lists import get_read_update_url
 url = request.current_route_path().split("?")[0]
 mapping = {'num_filters': len(listing.search_filter)}
+
+def render_link(request, field, url, value, clazz):
+  out = []
+  # Only take the path of the url and ignore any previous search filters.
+  out.append('<a href="%s" data-toggle="tooltip"' % (url))
+  out.append('class="">')
+  if hasattr(value, "render"):
+    out.append('%s</a>' % _(value.render()))
+  else:
+    out.append('%s</a>' % _(value))
+  return " ".join(out)
+
 def render_filter_link(request, field, value, clazz):
   out = []
   # Only take the path of the url and ignore any previous search filters.
@@ -157,7 +169,7 @@ if sortable:
     <%
       data_link = get_read_update_url(request, item, clazz, listing.is_prefiltered_for_user())
     %>
-    <tr item-id="${item.id}" data-link="${data_link}">
+    <tr item-id="${item.id}">
     % if bundled_actions:
     <td>
       <input type="checkbox" name="id" value="${item.id}">
@@ -165,9 +177,9 @@ if sortable:
     % endif
     % for num, field in enumerate(tableconfig.get_columns(request.user)):
       % if autoresponsive:
-        <td class="${num > 0 and 'hidden-xs'} ${data_link and 'link'}">
+        <td class="${num > 0 and 'hidden-xs'}">
       % else:
-        <td class="${render_responsive_class(field.get('screen'))} ${data_link and 'link'}">
+        <td class="${render_responsive_class(field.get('screen'))}">
       % endif
         <%
             try:
@@ -197,21 +209,17 @@ if sortable:
               for v in value:
                 links.append(render_filter_link(request, field, v, clazz))
             %>
-            ${", ".join(links)}
+            ${", ".join(links) | n}
           % else:
-            ${render_filter_link(request, field, value, clazz)}
+            ${render_filter_link(request, field, value, clazz) | n}
           % endif
         % else:
           % if isinstance(value, list):
             % for v in value:
-              % if hasattr(v, 'render'):
-                ${v.render()}
-              % else:
-                ${_(v)}
-              % endif
+              ${render_link(request, field, data_link, value, clazz) | n}
             % endfor
           % else:
-            ${_(value)}
+            ${render_link(request, field, data_link, value, clazz) | n}
           % endif
         % endif
     </td>
