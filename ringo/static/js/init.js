@@ -150,10 +150,7 @@ $( document ).ready(function() {
                 // The DirtyFormWarning should not be shown, if the form
                 // has the attribute "no-dirtyable". See waskiq/issue2049.
                 var no_dirtyable = $(this).attr("no-dirtyable")
-                if(typeof no_dirtyable === typeof undefined || no_dirtyable != "true") {
-                    isDirty = true;
-                }
-                if(typeof element_in_datatable === typeof undefined) {
+                if((typeof no_dirtyable === typeof undefined || no_dirtyable != "true") && typeof element_in_datatable === typeof undefined) {
                     isDirty = true;
                 }
             }
