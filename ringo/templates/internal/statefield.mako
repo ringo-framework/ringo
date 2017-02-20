@@ -1,5 +1,5 @@
 % if field.renderer.layout == "button":
-  <label for="${field.id}">${field.label}</label>
+  <label for="${field.id}">${_(field.label)}</label>
   <div class="readonlyfield" name="${field.name}">
       ${_(state._label)}
       ## The value is changed by JS in case the user clicks on the
