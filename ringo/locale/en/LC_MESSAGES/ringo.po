@@ -7,21 +7,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-12-12 11:44+0100\n"
+"POT-Creation-Date: 2017-02-20 17:09+0100\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 1.3\n"
+"Generated-By: Babel 2.3.4\n"
 
 #: ringo/lib/imexport.py:501
 msgid "UPDATE"
 msgstr ""
 
-#: ringo/lib/imexport.py:506
+#: ringo/lib/imexport.py:507
 msgid "CREATE"
 msgstr ""
 
@@ -85,72 +86,72 @@ msgstr ""
 msgid "This application is based on the Ringo web application framework."
 msgstr ""
 
-#: ringo/templates/base.mako:80
+#: ringo/templates/base.mako:81
 msgid "Logout will happen soon"
 msgstr ""
 
-#: ringo/templates/base.mako:82
+#: ringo/templates/base.mako:83
 msgid ""
 "Your session will expire soon because of inactivity. Click on \"Renew "
 "session\" to continue work and renew your session. Otherwise you will be "
 "logged out automatically shortly and all unsaved data will get lost."
 msgstr ""
 
-#: ringo/templates/base.mako:85
+#: ringo/templates/base.mako:86
 msgid "Renew session"
 msgstr ""
 
-#: ringo/templates/base.mako:93
+#: ringo/templates/base.mako:94
 msgid "Form contains unsaved changes!"
 msgstr ""
 
-#: ringo/templates/base.mako:95
+#: ringo/templates/base.mako:96
 msgid ""
 "Do you want to leave the current form without saving the changes? The "
 "changes will be lost if you do not save the data first!"
 msgstr ""
 
-#: ringo/templates/base.mako:98
+#: ringo/templates/base.mako:99
 msgid "Stay in Form"
 msgstr ""
 
-#: ringo/templates/base.mako:99
+#: ringo/templates/base.mako:100
 msgid "Leave the Form"
 msgstr ""
 
-#: ringo/templates/base.mako:162
+#: ringo/templates/base.mako:163
 msgid "Create new item"
 msgstr ""
 
-#: ringo/templates/base.mako:164
+#: ringo/templates/base.mako:165
 msgid "Open overview"
 msgstr ""
 
-#: ringo/templates/base.mako:166
+#: ringo/templates/base.mako:167
 msgid "Open in \"Edit\" mode"
 msgstr ""
 
-#: ringo/templates/base.mako:168
+#: ringo/templates/base.mako:169
 msgid "Open in \"Read\" mode"
 msgstr ""
 
-#: ringo/templates/base.mako:170
+#: ringo/templates/base.mako:171
 msgid "Delete item"
 msgstr ""
 
-#: ringo/templates/base.mako:191
+#: ringo/templates/base.mako:192
 msgid "Advanced"
 msgstr ""
 
-#: ringo/templates/base.mako:193 ringo/templates/footer.mako:8
+#: ringo/templates/base.mako:194 ringo/templates/footer.mako:8
 msgid "Administration"
 msgstr ""
 
-#: ringo/templates/base.mako:194
+#: ringo/templates/base.mako:195
 msgid "Change ownership"
 msgstr ""
 
-#: ringo/templates/base.mako:197
+#: ringo/templates/base.mako:198
 msgid "Advanced actions"
 msgstr ""
 
@@ -230,11 +231,11 @@ msgstr ""
 
 #. Label for login field in form config
 #. Label for user.login column in overview table config
-#: ringo/templates/header.mako:100 ringo/templates/index.mako:22
 #: ringo/templates/auth/confirm_user.mako:19
 #: ringo/templates/auth/confirm_user.mako:24 ringo/templates/auth/login.mako:5
 #: ringo/templates/auth/reset_password.mako:19
-#: ringo/templates/auth/reset_password.mako:24 ringo/views/forms/auth.xml:11
+#: ringo/templates/auth/reset_password.mako:24 ringo/templates/header.mako:100
+#: ringo/templates/index.mako:22 ringo/views/forms/auth.xml:11
 #: ringo/views/forms/users.xml:1 ringo/views/forms/users.xml:2
 #: ringo/views/tables/profiles.json:6
 msgid "Login"
@@ -341,10 +342,10 @@ msgstr ""
 
 #: ringo/templates/version.mako:7
 msgid ""
-"This program is free software; you can redistribute it and/or modify it under "
-"the terms of the GNU General Public License as published by the Free Software "
-"Foundation; either version 2 of the License, or (at your option) any later "
-"version."
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the "
+"Free Software Foundation; either version 2 of the License, or (at your "
+"option) any later version."
 msgstr ""
 
 #: ringo/templates/version.mako:9
@@ -353,23 +354,23 @@ msgstr ""
 
 #: ringo/templates/version.mako:11
 msgid ""
-"<a href=\"https://bitbucket.org/ti/ringo\" target=\"_blank\">Ringo</a> is"
-" a small Python based high level web application framework build with "
-"Pyramid . It provides basic functionality which is often used in modern "
-"web applications"
+"<a href=\"https://github.com/ringo-framework/ringo\" "
+"target=\"_blank\">Ringo</a> is a small Python based high level web "
+"application framework build with Pyramid . It provides basic "
+"functionality which is often used in modern web applications"
 msgstr ""
 
 #: ringo/templates/version.mako:13
 msgid ""
-"<a href=\"https://bitbucket.org/ti/formbar\" "
+"<a href=\"https://github.com/ringo-framework/formbar\" "
 "target=\"_blank\">Formbar</a> is a Python library to layout, render and "
 "validate HTML forms in web applications."
 msgstr ""
 
 #: ringo/templates/version.mako:15
 msgid ""
-"<a href=\"www.sqlalchemy.org\" target=\"_blank\">SQLAlchemy</a> is Python"
-" based ORM mapper."
+"<a href=\"https://www.sqlalchemy.org\" target=\"_blank\">SQLAlchemy</a> "
+"is Python based ORM mapper."
 msgstr ""
 
 #: ringo/templates/version.mako:17
@@ -423,7 +424,7 @@ msgstr ""
 msgid "Enter your Loginname and a password reset email will be sent out"
 msgstr ""
 
-#: ringo/templates/auth/forgot_password.mako:20 ringo/views/auth.py:286
+#: ringo/templates/auth/forgot_password.mako:20 ringo/views/auth.py:287
 msgid ""
 "Password reset token has been sent to the users email address. Please "
 "check your email."
@@ -448,7 +449,7 @@ msgid ""
 "email with a confirmation link to complete the registration."
 msgstr ""
 
-#: ringo/templates/auth/register_user.mako:20 ringo/views/auth.py:226
+#: ringo/templates/auth/register_user.mako:20 ringo/views/auth.py:227
 msgid ""
 "User has been created and a confirmation mail was sent to the users email"
 " adress. Please check your email."
@@ -502,7 +503,7 @@ msgid "You have selected %s %s for export:"
 msgstr ""
 
 #: ringo/templates/internal/export.mako:17
-#: ringo/templates/internal/list.mako:254
+#: ringo/templates/internal/list.mako:251
 #: ringo/templates/internal/print.mako:11
 msgid "Close"
 msgstr ""
@@ -519,7 +520,7 @@ msgstr ""
 #. Label for name column in overview table config
 #. Label for name column in selection table config
 #: ringo/templates/internal/import.mako:31 ringo/views/forms/modules.xml:1
-#: ringo/views/forms/roles.xml:2 ringo/views/forms/usergroups.xml:1
+#: ringo/views/forms/roles.xml:3 ringo/views/forms/usergroups.xml:1
 #: ringo/views/tables/modules.json:3 ringo/views/tables/usergroups.json:2
 #: ringo/views/tables/usergroups.json:5
 msgid "Name"
@@ -545,65 +546,65 @@ msgstr ""
 msgid "Overview"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:47 ringo/templates/internal/list.mako:70
+#: ringo/templates/internal/list.mako:48 ringo/templates/internal/list.mako:71
 msgid "Search"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:48
+#: ringo/templates/internal/list.mako:49
 msgid "Search for ..."
 msgstr ""
 
-#: ringo/templates/internal/list.mako:54
+#: ringo/templates/internal/list.mako:55
 msgid "Fields"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:56
+#: ringo/templates/internal/list.mako:57
 msgid "All columns"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:68
+#: ringo/templates/internal/list.mako:69
 msgid "Search+"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:74
+#: ringo/templates/internal/list.mako:75
 msgid "Options "
 msgstr ""
 
-#: ringo/templates/internal/list.mako:92 ringo/templates/internal/list.mako:245
+#: ringo/templates/internal/list.mako:93 ringo/templates/internal/list.mako:242
 msgid "Save current search filter"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:93
+#: ringo/templates/internal/list.mako:94
 msgid "Reset current search filter"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:95
+#: ringo/templates/internal/list.mako:96
 msgid "Disable regexpr in search"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:97
+#: ringo/templates/internal/list.mako:98
 msgid "Enable regexpr in search"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:102
+#: ringo/templates/internal/list.mako:103
 msgid "${num_filter} filter applied"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:231
+#: ringo/templates/internal/list.mako:228
 msgid "No items found"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:247
+#: ringo/templates/internal/list.mako:244
 msgid "Queryname"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:250
+#: ringo/templates/internal/list.mako:247
 msgid ""
 "Please insert a name for your query. It it will be selectable under this "
 "name in the options menu of the search after saving."
 msgstr ""
 
-#: ringo/templates/internal/list.mako:253
+#: ringo/templates/internal/list.mako:250
 msgid "Save Query"
 msgstr ""
 
@@ -626,7 +627,7 @@ msgstr ""
 #. Label for description field in form config
 #. Label for description column in overview table config
 #: ringo/templates/internal/statefield.mako:10 ringo/views/forms/forms.xml:2
-#: ringo/views/forms/modules.xml:4 ringo/views/forms/roles.xml:5
+#: ringo/views/forms/modules.xml:4 ringo/views/forms/roles.xml:6
 #: ringo/views/forms/usergroups.xml:3 ringo/views/tables/forms.json:3
 msgid "Description"
 msgstr ""
@@ -792,33 +793,33 @@ msgstr ""
 msgid "Confirm user registration"
 msgstr ""
 
-#: ringo/views/auth.py:246
+#: ringo/views/auth.py:247
 msgid "The user has beed successfull confirmed."
 msgstr ""
 
-#: ringo/views/auth.py:248
+#: ringo/views/auth.py:249
 msgid "The user was not confirmed. Maybe the confirmation token was not valid?"
 msgstr ""
 
-#: ringo/views/auth.py:274
+#: ringo/views/auth.py:275
 msgid "Password reset request"
 msgstr ""
 
-#: ringo/views/auth.py:291
+#: ringo/views/auth.py:292
 msgid "Login doesn't exist or written wrong"
 msgstr ""
 
-#: ringo/views/auth.py:314
+#: ringo/views/auth.py:315
 msgid "Password has been reseted"
 msgstr ""
 
-#: ringo/views/auth.py:324
+#: ringo/views/auth.py:325
 msgid ""
 "Password was resetted and sent to the users email address. Please check "
 "your email."
 msgstr ""
 
-#: ringo/views/auth.py:328
+#: ringo/views/auth.py:329
 msgid "Password was not resetted. Maybe the request token was not valid?"
 msgstr ""
 
@@ -840,34 +841,42 @@ msgid ""
 "ressource!"
 msgstr ""
 
-#: ringo/views/request.py:206
+#: ringo/views/request.py:197
 msgid ""
 "The information contained errors. <strong>All entries (including error-"
 "free) were not saved!</strong> Please correct your entries in the fields "
 "marked in red and resave."
 msgstr ""
 
-#: ringo/views/request.py:243
+#: ringo/views/request.py:234
 msgid "Created new ${item_type} successfully."
 msgstr ""
 
-#: ringo/views/request.py:248
+#: ringo/views/request.py:239
 msgid "Edited ${item_type} \"${item}\" successfully."
 msgstr ""
 
-#: ringo/views/request.py:271
+#: ringo/views/request.py:262
+msgid "User {user.login} created{item_label}"
+msgstr ""
+
+#: ringo/views/request.py:265
 msgid "Error while saving new ${item_type}: ${error}."
 msgstr ""
 
-#: ringo/views/request.py:274
+#: ringo/views/request.py:268
+msgid "User {user.login} edited {item_label} {item.id}"
+msgstr ""
+
+#: ringo/views/request.py:271
 msgid "Error while saving ${item_type} \"${item}\": ${error}."
 msgstr ""
 
-#: ringo/views/request.py:284
+#: ringo/views/request.py:281
 msgid "Error on validation new ${item_type}."
 msgstr ""
 
-#: ringo/views/request.py:287
+#: ringo/views/request.py:284
 msgid "Error on validation ${item_type} \"${item}\"."
 msgstr ""
 
@@ -908,11 +917,11 @@ msgstr ""
 msgid "Deleted ${num} ${item_type} successfully."
 msgstr ""
 
-#: ringo/views/base/import_.py:114
+#: ringo/views/base/import_.py:118
 msgid "Import failed"
 msgstr ""
 
-#: ringo/views/base/import_.py:115
+#: ringo/views/base/import_.py:119
 #, python-format
 msgid ""
 "Bad news! The import could not be finished and returns with an error.No "
@@ -1081,7 +1090,7 @@ msgstr ""
 #. Label for label column in overview table config
 #. Label for label column in selection table config
 #: ringo/views/forms/modules.xml:2 ringo/views/forms/modules.xml:3
-#: ringo/views/forms/roles.xml:1 ringo/views/tables/modules.json:2
+#: ringo/views/forms/roles.xml:2 ringo/views/tables/modules.json:2
 #: ringo/views/tables/roles.json:2 ringo/views/tables/roles.json:6
 msgid "Label"
 msgstr ""
@@ -1239,32 +1248,37 @@ msgstr ""
 msgid "Female"
 msgstr ""
 
+#. Label for id field in form config
+#: ringo/views/forms/roles.xml:1
+msgid "Role-ID"
+msgstr ""
+
 #. Label for permissions field in form config
-#: ringo/views/forms/roles.xml:3
+#: ringo/views/forms/roles.xml:4
 msgid "Permissions"
 msgstr ""
 
 #. Label for admin field in form config
-#: ringo/views/forms/roles.xml:4
+#: ringo/views/forms/roles.xml:5
 msgid "Administrational role"
 msgstr ""
 
 #. Label for users field in form config
 #. Label for members field in form config
-#: ringo/views/forms/roles.xml:6 ringo/views/forms/usergroups.xml:2
+#: ringo/views/forms/roles.xml:7 ringo/views/forms/usergroups.xml:2
 msgid "Users"
 msgstr ""
 
-#: ringo/views/forms/roles.xml:7
+#: ringo/views/forms/roles.xml:8
 msgid "Internal name for the roles. Do not change this without caution!"
 msgstr ""
 
-#: ringo/views/forms/roles.xml:8 ringo/views/forms/users.xml:25
+#: ringo/views/forms/roles.xml:9 ringo/views/forms/users.xml:25
 #: ringo/views/forms/users.xml:27 ringo/views/forms/users.xml:28
 msgid "Yes"
 msgstr ""
 
-#: ringo/views/forms/roles.xml:9 ringo/views/forms/users.xml:26
+#: ringo/views/forms/roles.xml:10 ringo/views/forms/users.xml:26
 msgid "No"
 msgstr ""
 
@@ -1362,8 +1376,13 @@ msgstr ""
 msgid "Action"
 msgstr ""
 
-#. Label for url column in overview table config
+#. Label for id column in overview table config
 #: ringo/views/tables/actions.json:4
+msgid "ID"
+msgstr ""
+
+#. Label for url column in overview table config
+#: ringo/views/tables/actions.json:5
 msgid "URL"
 msgstr ""
 
@@ -1687,8 +1706,24 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid ""
-#~ "You have received this email because "
-#~ "you requested the reset of your "
-#~ "password for \"${app_name}\"."
+#~ "<a href=\"https://bitbucket.org/ti/ringo\" "
+#~ "target=\"_blank\">Ringo</a> is a small Python"
+#~ " based high level web application "
+#~ "framework build with Pyramid . It "
+#~ "provides basic functionality which is "
+#~ "often used in modern web applications"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "<a href=\"https://bitbucket.org/ti/formbar\" "
+#~ "target=\"_blank\">Formbar</a> is a Python "
+#~ "library to layout, render and validate"
+#~ " HTML forms in web applications."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "<a href=\"www.sqlalchemy.org\" "
+#~ "target=\"_blank\">SQLAlchemy</a> is Python based "
+#~ "ORM mapper."
 #~ msgstr ""
 
