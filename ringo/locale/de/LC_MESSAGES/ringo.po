@@ -864,7 +864,7 @@ msgstr "Abmeldung war erfolgreich"
 
 #: ringo/views/auth.py:161
 msgid "There is already a user with this name"
-msgstr ""
+msgstr "Ein Benutzer mit diesem Namens existiert bereits. "
 
 #: ringo/views/auth.py:165 ringo/views/users.py:131 ringo/views/users.py:161
 #: ringo/views/users.py:285
