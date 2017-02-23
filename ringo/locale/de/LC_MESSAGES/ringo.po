@@ -416,9 +416,6 @@ msgstr ""
 "Rendern und Validieren von HTML-Formularen in Webanwendungen."
 
 #: ringo/templates/version.mako:15
-#, fuzzy
-#| msgid "" "<a href=\"www.sqlalchemy.org\" target=\"_blank\">SQLAlchemy</a> is
-#| Python" " based ORM mapper."
 msgid ""
 "<a href=\"https://www.sqlalchemy.org\" target=\"_blank\">SQLAlchemy</a> "
 "is Python based ORM mapper."
