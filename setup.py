@@ -13,7 +13,7 @@ requires = [
     'SQLAlchemy',
     'alembic',
     'transaction',
-    'pyramid_tm',
+    'pyramid_tm<2.0',
     'pyramid_mako',
     'pyramid_beaker',
     'pyramid_mailer',
