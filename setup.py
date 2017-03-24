@@ -17,6 +17,7 @@ requires = [
     'pyramid_mako',
     'pyramid_beaker',
     'pyramid_mailer',
+    'repoze.sendmail==4.1',
     'zope.sqlalchemy',
     'waitress',
     'babel',
