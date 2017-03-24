@@ -289,7 +289,9 @@ def forgot_password(request):
                 request.session.flash(msg, 'success')
                 complete = True
             else:
-                msg = _("Login doesn't exist or written wrong")
+                msg = _("Passwort reset token can not be sent to the "
+                        "user. Maybe the user does not exist or has no "
+                        "configured email.")
                 request.session.flash(msg, "error")
                 form = Form(form_config,
                             csrf_token=request.session.get_csrf_token(),
