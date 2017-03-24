@@ -268,9 +268,9 @@ def forgot_password(request):
         if form.validate(request.params):
             username = form.data.get('login')
             user = request_password_reset(username, request.db)
-            if user:
-                mailer = Mailer(request)
+            if user and user.profile[0].email:
                 recipient = user.profile[0].email
+                mailer = Mailer(request)
                 token = user.reset_tokens[-1]
                 subject = _('Password reset request')
                 values = {'url': request.route_url('reset_password',
