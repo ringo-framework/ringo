@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-02-20 17:09+0100\n"
+"POT-Creation-Date: 2017-03-24 09:49+0100\n"
 "PO-Revision-Date: 2015-02-15 20:29+0100\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language: de\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "UPDATE"
 msgstr "AKTUALISIERUNG"
 
-#: ringo/lib/imexport.py:507
+#: ringo/lib/imexport.py:506
 msgid "CREATE"
 msgstr "ANLEGEN"
 
@@ -403,9 +403,6 @@ msgstr ""
 
 #: ringo/templates/version.mako:13
 #, fuzzy
-#| msgid "" "<a href=\"https://bitbucket.org/ti/formbar\" "
-#| "target=\"_blank\">Formbar</a> is a Python library to layout, render and "
-#| "validate HTML forms in web applications."
 msgid ""
 "<a href=\"https://github.com/ringo-framework/formbar\" "
 "target=\"_blank\">Formbar</a> is a Python library to layout, render and "
@@ -416,6 +413,7 @@ msgstr ""
 "Rendern und Validieren von HTML-Formularen in Webanwendungen."
 
 #: ringo/templates/version.mako:15
+#, fuzzy
 msgid ""
 "<a href=\"https://www.sqlalchemy.org\" target=\"_blank\">SQLAlchemy</a> "
 "is Python based ORM mapper."
@@ -545,7 +543,7 @@ msgstr "Importiere %s Einträge"
 
 #: ringo/templates/default/list.mako:72
 msgid "Add"
-msgstr "Neu"
+msgstr ""
 
 #: ringo/templates/internal/confirm.mako:13
 #: ringo/templates/internal/import.mako:14
@@ -566,7 +564,7 @@ msgid "You have selected %s %s for export:"
 msgstr "Sie haben %s %s für den Export selektiert:"
 
 #: ringo/templates/internal/export.mako:17
-#: ringo/templates/internal/list.mako:251
+#: ringo/templates/internal/list.mako:259
 #: ringo/templates/internal/print.mako:11
 msgid "Close"
 msgstr "Schließen"
@@ -609,59 +607,60 @@ msgstr "Fehler"
 msgid "Overview"
 msgstr "Übersicht"
 
-#: ringo/templates/internal/list.mako:48 ringo/templates/internal/list.mako:71
+#: ringo/templates/internal/list.mako:60 ringo/templates/internal/list.mako:83
 msgid "Search"
 msgstr "Suche"
 
-#: ringo/templates/internal/list.mako:49
+#: ringo/templates/internal/list.mako:61
 msgid "Search for ..."
 msgstr "Suche nach ..."
 
-#: ringo/templates/internal/list.mako:55
+#: ringo/templates/internal/list.mako:67
 msgid "Fields"
 msgstr "Felder"
 
-#: ringo/templates/internal/list.mako:57
+#: ringo/templates/internal/list.mako:69
 msgid "All columns"
 msgstr "Allen Spalten"
 
-#: ringo/templates/internal/list.mako:69
+#: ringo/templates/internal/list.mako:81
 msgid "Search+"
 msgstr "Suche+"
 
-#: ringo/templates/internal/list.mako:75
+#: ringo/templates/internal/list.mako:87
 msgid "Options "
 msgstr "Optionen "
 
-#: ringo/templates/internal/list.mako:93 ringo/templates/internal/list.mako:242
+#: ringo/templates/internal/list.mako:105
+#: ringo/templates/internal/list.mako:250
 msgid "Save current search filter"
 msgstr "Speichere aktuellen Suchfilter"
 
-#: ringo/templates/internal/list.mako:94
+#: ringo/templates/internal/list.mako:106
 msgid "Reset current search filter"
 msgstr "Aktuellen Suchfilter zurücksetzen"
 
-#: ringo/templates/internal/list.mako:96
+#: ringo/templates/internal/list.mako:108
 msgid "Disable regexpr in search"
 msgstr "Deaktiviere Regexpr in der Suche"
 
-#: ringo/templates/internal/list.mako:98
+#: ringo/templates/internal/list.mako:110
 msgid "Enable regexpr in search"
 msgstr "Aktiviere Regexpr in der Suche"
 
-#: ringo/templates/internal/list.mako:103
+#: ringo/templates/internal/list.mako:115
 msgid "${num_filter} filter applied"
 msgstr "${num_filters} Filter angewendet"
 
-#: ringo/templates/internal/list.mako:228
+#: ringo/templates/internal/list.mako:236
 msgid "No items found"
 msgstr "Keine Einträge gefunden"
 
-#: ringo/templates/internal/list.mako:244
+#: ringo/templates/internal/list.mako:252
 msgid "Queryname"
 msgstr "Abfragename"
 
-#: ringo/templates/internal/list.mako:247
+#: ringo/templates/internal/list.mako:255
 msgid ""
 "Please insert a name for your query. It it will be selectable under this "
 "name in the options menu of the search after saving."
@@ -669,7 +668,7 @@ msgstr ""
 "Bitte geben Sie einen Namen für ihre Abfrage an. Die Abfrage wird nach "
 "dem Speichern unter diesem Namen im Optionsmenü auswählbar sein."
 
-#: ringo/templates/internal/list.mako:250
+#: ringo/templates/internal/list.mako:258
 msgid "Save Query"
 msgstr "Abfrage speichern"
 
@@ -677,11 +676,11 @@ msgstr "Abfrage speichern"
 msgid "Perform"
 msgstr "Ausführen"
 
-#: ringo/templates/internal/list_footer.mako:51
+#: ringo/templates/internal/list_footer.mako:53
 msgid "Show"
 msgstr "Zeige"
 
-#: ringo/templates/internal/list_footer.mako:60
+#: ringo/templates/internal/list_footer.mako:62
 msgid "items"
 msgstr "Einträge"
 
@@ -861,7 +860,7 @@ msgstr "Abmeldung war erfolgreich"
 
 #: ringo/views/auth.py:161
 msgid "There is already a user with this name"
-msgstr "Ein Benutzer mit diesem Namens existiert bereits. "
+msgstr "Es existiert bereits ein Nutzer mit diesem Namen"
 
 #: ringo/views/auth.py:165 ringo/views/users.py:131 ringo/views/users.py:161
 #: ringo/views/users.py:285
@@ -892,14 +891,19 @@ msgid "Password reset request"
 msgstr "Anfrage Passwort zurücksetzen"
 
 #: ringo/views/auth.py:292
-msgid "Login doesn't exist or written wrong"
-msgstr "Anmeldekennung existiert nicht oder ist falsch geschrieben."
+msgid ""
+"Passwort reset token can not be sent to the user. Maybe the user does not"
+" exist or has no configured email."
+msgstr ""
+"Eine Bestätigungsmail zum Zurücksetzen des Passworts konnte verschickt "
+"werden. Vielleicht existiert der Nutzer nicht oder hat keine "
+"konfigurierte E-Mail."
 
-#: ringo/views/auth.py:315
+#: ringo/views/auth.py:317
 msgid "Password has been reseted"
 msgstr "Passwort wurde zurückgesetzt"
 
-#: ringo/views/auth.py:325
+#: ringo/views/auth.py:327
 msgid ""
 "Password was resetted and sent to the users email address. Please check "
 "your email."
@@ -907,7 +911,7 @@ msgstr ""
 "Das Passwort wurde zurückgesetzt und an die E-Mail Adresse des Nutzer "
 "geschickt. Bitte prüfen Sie ihre E-Mail."
 
-#: ringo/views/auth.py:329
+#: ringo/views/auth.py:331
 msgid "Password was not resetted. Maybe the request token was not valid?"
 msgstr ""
 "Das Passwort wurde nicht zurückgesetzt. Vielleicht ist das Token nicht "
@@ -977,8 +981,8 @@ msgstr "Fehler beim Validieren von ${item_type}."
 msgid "Error on validation ${item_type} \"${item}\"."
 msgstr "Fehler beim Validieren von ${item_type} „${item}“."
 
-#: ringo/views/users.py:126 ringo/views/users.py:156 ringo/views/users.py:407
-#: ringo/views/users.py:427
+#: ringo/views/users.py:126 ringo/views/users.py:156 ringo/views/users.py:410
+#: ringo/views/users.py:430
 msgid "This name is already in use, please use something unique."
 msgstr ""
 "Dieser Name wird bereits benutzt, bitte nehmen Sie einen eindeutigen "
@@ -1020,11 +1024,11 @@ msgstr ""
 msgid "Deleted ${num} ${item_type} successfully."
 msgstr "${num} ${item_type} erfolgreich gelöscht."
 
-#: ringo/views/base/import_.py:118
+#: ringo/views/base/import_.py:114
 msgid "Import failed"
 msgstr "Import gescheitert"
 
-#: ringo/views/base/import_.py:119
+#: ringo/views/base/import_.py:115
 #, python-format
 msgid ""
 "Bad news! The import could not be finished and returns with an error.No "
@@ -1081,7 +1085,7 @@ msgstr "Passwörter sind nicht identisch"
 
 #: ringo/views/forms/auth.xml:7
 msgid "Help"
-msgstr ""
+msgstr "Hilfe"
 
 #: ringo/views/forms/auth.xml:8
 msgid ""
@@ -1588,18 +1592,6 @@ msgstr "Letze Anmeldung"
 #~ msgid "Please select one of the following actions to change the state:"
 #~ msgstr ""
 
-#~ msgid ""
-#~ "<a href=\"https://bitbucket.org/ti/ringo\" "
-#~ "target=\"_blank\">Ringo</a> is a small Python"
-#~ " based high level web application "
-#~ "framework build with Pyramid . It "
-#~ "provides basic functionality which is "
-#~ "often used in modern web applications"
-#~ msgstr ""
-#~ "<a href=\"https://bitbucket.org/ti/ringo\" "
-#~ "target=\"_blank\">Ringo</a> ist ein kleiner "
-#~ "Webanwendungs-Rahmen, der auf Pyramid "
-#~ "basiert. Er stellt einige Basis-"
-#~ "Funktionalitäten bereit, die oft in "
-#~ "modernen Webanwendungen verwendet werden."
+#~ msgid "Login doesn't exist or written wrong"
+#~ msgstr "Anmeldekennung existiert nicht oder ist falsch geschrieben."
 

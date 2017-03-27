@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 1.16.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-02-20 17:09+0100\n"
+"POT-Creation-Date: 2017-03-24 09:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "UPDATE"
 msgstr ""
 
-#: ringo/lib/imexport.py:507
+#: ringo/lib/imexport.py:506
 msgid "CREATE"
 msgstr ""
 
@@ -497,7 +497,7 @@ msgstr ""
 msgid "You have selected %s %s for export:"
 msgstr ""
 
-#: ringo/templates/internal/export.mako:17 ringo/templates/internal/list.mako:251
+#: ringo/templates/internal/export.mako:17 ringo/templates/internal/list.mako:259
 #: ringo/templates/internal/print.mako:11
 msgid "Close"
 msgstr ""
@@ -540,65 +540,65 @@ msgstr ""
 msgid "Overview"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:48 ringo/templates/internal/list.mako:71
+#: ringo/templates/internal/list.mako:60 ringo/templates/internal/list.mako:83
 msgid "Search"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:49
+#: ringo/templates/internal/list.mako:61
 msgid "Search for ..."
 msgstr ""
 
-#: ringo/templates/internal/list.mako:55
+#: ringo/templates/internal/list.mako:67
 msgid "Fields"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:57
+#: ringo/templates/internal/list.mako:69
 msgid "All columns"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:69
+#: ringo/templates/internal/list.mako:81
 msgid "Search+"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:75
+#: ringo/templates/internal/list.mako:87
 msgid "Options "
 msgstr ""
 
-#: ringo/templates/internal/list.mako:93 ringo/templates/internal/list.mako:242
+#: ringo/templates/internal/list.mako:105 ringo/templates/internal/list.mako:250
 msgid "Save current search filter"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:94
+#: ringo/templates/internal/list.mako:106
 msgid "Reset current search filter"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:96
+#: ringo/templates/internal/list.mako:108
 msgid "Disable regexpr in search"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:98
+#: ringo/templates/internal/list.mako:110
 msgid "Enable regexpr in search"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:103
+#: ringo/templates/internal/list.mako:115
 msgid "${num_filter} filter applied"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:228
+#: ringo/templates/internal/list.mako:236
 msgid "No items found"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:244
+#: ringo/templates/internal/list.mako:252
 msgid "Queryname"
 msgstr ""
 
-#: ringo/templates/internal/list.mako:247
+#: ringo/templates/internal/list.mako:255
 msgid ""
 "Please insert a name for your query. It it will be selectable under this name"
 " in the options menu of the search after saving."
 msgstr ""
 
-#: ringo/templates/internal/list.mako:250
+#: ringo/templates/internal/list.mako:258
 msgid "Save Query"
 msgstr ""
 
@@ -606,11 +606,11 @@ msgstr ""
 msgid "Perform"
 msgstr ""
 
-#: ringo/templates/internal/list_footer.mako:51
+#: ringo/templates/internal/list_footer.mako:53
 msgid "Show"
 msgstr ""
 
-#: ringo/templates/internal/list_footer.mako:60
+#: ringo/templates/internal/list_footer.mako:62
 msgid "items"
 msgstr ""
 
@@ -800,20 +800,22 @@ msgid "Password reset request"
 msgstr ""
 
 #: ringo/views/auth.py:292
-msgid "Login doesn't exist or written wrong"
+msgid ""
+"Passwort reset token can not be sent to the user. Maybe the user does not "
+"exist or has no configured email."
 msgstr ""
 
-#: ringo/views/auth.py:315
+#: ringo/views/auth.py:317
 msgid "Password has been reseted"
 msgstr ""
 
-#: ringo/views/auth.py:325
+#: ringo/views/auth.py:327
 msgid ""
 "Password was resetted and sent to the users email address. Please check your "
 "email."
 msgstr ""
 
-#: ringo/views/auth.py:329
+#: ringo/views/auth.py:331
 msgid "Password was not resetted. Maybe the request token was not valid?"
 msgstr ""
 
@@ -874,8 +876,8 @@ msgstr ""
 msgid "Error on validation ${item_type} \"${item}\"."
 msgstr ""
 
-#: ringo/views/users.py:126 ringo/views/users.py:156 ringo/views/users.py:407
-#: ringo/views/users.py:427
+#: ringo/views/users.py:126 ringo/views/users.py:156 ringo/views/users.py:410
+#: ringo/views/users.py:430
 msgid "This name is already in use, please use something unique."
 msgstr ""
 
@@ -911,11 +913,11 @@ msgstr ""
 msgid "Deleted ${num} ${item_type} successfully."
 msgstr ""
 
-#: ringo/views/base/import_.py:118
+#: ringo/views/base/import_.py:114
 msgid "Import failed"
 msgstr ""
 
-#: ringo/views/base/import_.py:119
+#: ringo/views/base/import_.py:115
 #, python-format
 msgid ""
 "Bad news! The import could not be finished and returns with an error.No data "

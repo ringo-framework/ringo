@@ -119,8 +119,10 @@ def render_item_add_link(request, clazz, foreignkey, clazzpath, id, backlink, fo
           <td>
             % if not field.renderer.multiple == "false":
               % if str(item[0].id) in selected:
+		<span class="hidden">1</span>
                 <input type="checkbox" value="${item[0].id}" name="${field.name}" checked="checked" onclick="check('${field.name}', this);"/>
               % else:
+		<span class="hidden">0</span>
                 <input type="checkbox" value="${item[0].id}" name="${field.name}" onclick="check('${field.name}', this);"/>
               % endif
             % else:

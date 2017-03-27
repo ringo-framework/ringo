@@ -386,7 +386,7 @@ class BaseItem(object):
             # Ignore private form fields
             if key.startswith('_'):
                 continue
-            if hasattr(self, key):
+            try:
                 oldvalue = getattr(self, key)
                 # If oldvalue is equal to the new value we need no
                 # change at all in the model so continue
@@ -415,8 +415,8 @@ class BaseItem(object):
                         oldvalue.append(nvalue)
                 else:
                     setattr(self, key, value)
-            else:
-                log.warning('Not saving "%s". Attribute not found' % key)
+            except AttributeError:
+                log.warning('Not saving "%s". Attribute/Property not found' % key)
                 if use_strict:
                     raise AttributeError(('Not setting "%s".'
                                          ' Attribute not found.') % key)

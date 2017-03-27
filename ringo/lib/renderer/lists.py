@@ -44,10 +44,10 @@ def get_read_update_url(request, item, clazz, prefilterd=False):
 class ListRenderer(object):
     """Docstring for ListRenderer """
 
-    def __init__(self, listing):
+    def __init__(self, listing, tablename=None):
         """@todo: to be defined """
         self.listing = listing
-        self.config = get_table_config(self.listing.clazz)
+        self.config = get_table_config(self.listing.clazz, tablename)
         self.template = template_lookup.get_template("internal/list.mako")
 
     def render(self, request):

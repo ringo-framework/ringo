@@ -268,9 +268,9 @@ def forgot_password(request):
         if form.validate(request.params):
             username = form.data.get('login')
             user = request_password_reset(username, request.db)
-            if user:
-                mailer = Mailer(request)
+            if user and user.profile[0].email:
                 recipient = user.profile[0].email
+                mailer = Mailer(request)
                 token = user.reset_tokens[-1]
                 subject = _('Password reset request')
                 values = {'url': request.route_url('reset_password',
@@ -289,7 +289,9 @@ def forgot_password(request):
                 request.session.flash(msg, 'success')
                 complete = True
             else:
-                msg = _("Login doesn't exist or written wrong")
+                msg = _("Passwort reset token can not be sent to the "
+                        "user. Maybe the user does not exist or has no "
+                        "configured email.")
                 request.session.flash(msg, "error")
                 form = Form(form_config,
                             csrf_token=request.session.get_csrf_token(),

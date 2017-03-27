@@ -1,4 +1,7 @@
 import urlparse
+import re
+
+DOWNLOAD_URL = re.compile(".*\/download\/[0-9]+")
 
 
 class History:
@@ -19,6 +22,10 @@ class History:
         # proxies.
         split = urlparse.urlsplit(url)
         normalized_url = urlparse.urlunsplit(("", "") + split[2:])
+
+        # Ignore Download URLs
+        if DOWNLOAD_URL.match(normalized_url):
+            return
 
         if not self.history or normalized_url != self.history[-1]:
             self.history.append(normalized_url)

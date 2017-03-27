@@ -2084,20 +2084,40 @@ separated.
 ****
 Mail
 ****
+The configuration of the Mail system is described in detail in the
+`documentation of the pyramid_mailer library
+<http://docs.pylonsproject.org/projects/pyramid_mailer/en/latest/#configuration>`_
+
+Below you find a show overview of the most common used settings. If you need
+more of the settings it is save to add them to your configuration.
+
+
  * mail.host =
+
+This is the host where your MTA will listen on port 25 to receive the mails
+which it will transfer to the recipients.
+
  * mail.default_sender =
+
+This is the default sender email (From:) of the mails sent from this
+application. Often this will be changed within the application anyway but we
+need to be sure we have a default sender. Often this is a "noreply@foo.bar"
+address.
+
  * mail.username =
  * mail.password =
+
+In case your MTA requires some sort of authentication you can set it here.
 
 *********
 Converter
 *********
-.. note::
-   To be able to use the converter you need to install the "converter" extra
-   requirements. See ``setup.py`` file for more details.
+The converter has become part of the `ringo printtemplates
+extension <https://github.com/ringo-framework/ringo_printtemplates>`_. It is
+used to convert ODS files into PDF files.
 
- * converter.start = false
- * converter.pythonpath =
+Please see the README of the library for more details on how to configure the
+converter.
 
 ###############
 CLI ringo-admin
