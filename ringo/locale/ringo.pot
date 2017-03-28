@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 1.16.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-03-24 09:49+0100\n"
+"POT-Creation-Date: 2017-03-28 13:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -421,12 +421,6 @@ msgstr ""
 msgid "Enter your Loginname and a password reset email will be sent out"
 msgstr ""
 
-#: ringo/templates/auth/forgot_password.mako:20 ringo/views/auth.py:287
-msgid ""
-"Password reset token has been sent to the users email address. Please check "
-"your email."
-msgstr ""
-
 #: ringo/templates/auth/login.mako:10
 msgid "New here? Register a new account!"
 msgstr ""
@@ -795,14 +789,14 @@ msgstr ""
 msgid "The user was not confirmed. Maybe the confirmation token was not valid?"
 msgstr ""
 
-#: ringo/views/auth.py:275
+#: ringo/views/auth.py:276
 msgid "Password reset request"
 msgstr ""
 
-#: ringo/views/auth.py:292
+#: ringo/views/auth.py:295
 msgid ""
-"Passwort reset token can not be sent to the user. Maybe the user does not "
-"exist or has no configured email."
+"If the user has been found together with configured e-mail, a confirmation "
+"mail for resetting the password has been sent. Please check your e-mail box."
 msgstr ""
 
 #: ringo/views/auth.py:317
