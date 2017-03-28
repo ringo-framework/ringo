@@ -29,7 +29,7 @@ function getDTLanguage(language) {
 function checkDirtyForms () {
     var forms = document.getElementsByTagName('FORM');
     forms.forEach( function(form) {
-        if !form.attr("no-dirtyable") {
+        if (!form.attr("no-dirtyable")) {
             var childnodes = form.childNodes;
             childnodes.forEach( function(node) {
                 if (node.tagName === 'INPUT') {
