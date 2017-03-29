@@ -245,6 +245,37 @@ Voilà! That is it.
 Tutorials
 #########
 
+************************************
+How to make config changes permanent
+************************************
+Ringo allows to change the configuration of the application through the UI in
+many ways. You can add new roles, set permissions etc. All those changes are
+done in the database.
+As those changes will get lost when dropping and recreating the database we
+need a way to make save these changes in a way that they do not get lost when
+reinitialize the application.
+
+The typical way is to write a migration script and to put the changes you made
+into this script. An empty migration script can be generated like this::
+
+        ringo-admin db revision
+
+An easy way to get the changes in the database is to diff between the dump of
+the database. On dump is done before the changes are mare::
+
+        DB=ringo
+        pg_dump -a --column-inserts $DB | grep INSERT > $DB.dump.pre
+
+Now you can do the changes in the application and dump the database again::
+
+        pg_dump -a --column-inserts $DB | grep INSERT > $DB.dump.post
+
+Finally you diff the two dumps and ideally get the changes made in the
+database ready to put into the migration script::
+
+        diff $DB.dump.pre $DB.dump.post | grep INSERT | sed -e 's/> //g' > inserts.sql
+
+
 *****************
 Work with modules
 *****************
@@ -471,7 +502,7 @@ Now SQL statements for the migration script will be::
 As always when manually inserting something in the database call the
 fixsequence command::
 
-        ringo-admin db fixsequence
+        ringo-admin db fixsequence/gp_dump
 
 
 Setup breadcrumbs
