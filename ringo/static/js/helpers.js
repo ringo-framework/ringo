@@ -28,13 +28,13 @@ function getDTLanguage(language) {
  */
 function checkDirtyForms () {
     var forms = document.getElementsByTagName('FORM');
-    forms.forEach( function(form) {
-        if (!form.attr("no-dirtyable")) {
+    Array.from(forms).forEach(function(form) {
+        if (!form.hasAttribute("no-dirtyable")) {
             var childnodes = form.childNodes;
             childnodes.forEach( function(node) {
                 if (node.tagName === 'INPUT') {
-                    if (!node.attr("no-dirtyable")) {
-                        switch type {
+                    if (!node.hasAttribute("no-dirtyable")) {
+                        switch (node.type) {
                             case "checkbox":
                             case "radio":
                                 if (node.checked != node.defaultChecked) {
@@ -51,14 +51,14 @@ function checkDirtyForms () {
                     }
                 }
                 else if (node.tagName === 'TEXTAREA') {
-                    if (!node.attr("no-dirtyable")) {
+                    if (!node.hasAttribute("no-dirtyable")) {
                         if (node.value != node.defaultValue){
                             return true;
                         }
                     }
                 }
                 else if (node.tagName === 'SELECT') {
-                    if (!node.attr("no-dirtyable")) {
+                    if (!node.hasAttribute("no-dirtyable")) {
                         if (node.options[node.selectedIndex].defaultSelected){
                             return true;
                         }
@@ -68,4 +68,4 @@ function checkDirtyForms () {
         }
     });
     return false;
-})
+}
