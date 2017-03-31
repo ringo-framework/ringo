@@ -1664,7 +1664,7 @@ If your application is based on another ringo based application you can
 configure the name of the application here. Setting this configuration
 will modify the inheritance path of the application.
 
-The inhertance_path is available using the :func:`get_app_inheritance_path`
+The inheritance_path is available using the :func:`get_app_inheritance_path`
 function.
 
 Example:
@@ -1675,6 +1675,20 @@ This has consequences for the loading of form and table configurations.
 When trying to load form or table configuration ringo will iterate over
 the inheritance path and try to load the configuration from each
 application within the inheritance path.
+
+Application Locale
+==================
+The locale is used to format dates times in the application.  On default Ringo
+determines the locale by looking into the request getting the browser language
+setting. However you can enforce setting the locale of the application by
+setting the following config variable in your config
+
+* app.locale =
+
+If added (In the mean of adding the variable at all) the locale will be
+enforced. An empty value means use a "default" encoding which leads to dates
+formatted in ISO8601. Otherwise the locale must match a known ISO-3166 locale
+string.
 
 Application Mode
 ================
