@@ -1,3 +1,7 @@
+Next
+====
+- Added app.locale config var to enforce locale setting of the application.
+
 1.16.0
 ======
 - Added new config vars for application to allow better customisation
