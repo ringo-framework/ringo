@@ -20,6 +20,28 @@ from formbar.converters import from_timedelta
 ########################################################################
 
 
+def get_app_locale(request):
+    """Will retrun the name of the locale which should be used for
+    translations and formating dates and numbers.
+
+    :request: Current request
+    :returns: Locale name or None for default.
+
+    """
+    if request:
+        settings = request.registry.settings
+        lang = settings.get("app.locale")
+        if lang is not None:
+            if lang == "":
+                return None
+            else:
+                return lang
+        else:
+            return get_locale_name(request)
+    else:
+        return None
+
+
 def prettify(request, value):
     """Generic function used in template rendering to prettify a given
     pythonic value into to a more human readable form. Depending on the
@@ -35,16 +57,7 @@ def prettify(request, value):
     """
     if not request:
         request = get_current_request()
-
-    # Under some circumstances, get_current_request will return None as
-    # the current request. This makes it impossible to retrieve the
-    # current locale or getting the translate method.
-    if not request:
-        locale_name = 'en_EN'
-        _ = lambda t: t
-    else:
-        locale_name = get_locale_name(request)
-        _ = request.translate
+    locale_name = get_app_locale(request)
 
     if isinstance(value, datetime):
         return format_datetime(get_local_datetime(value),
