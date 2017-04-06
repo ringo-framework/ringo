@@ -12,34 +12,12 @@ from babel.dates import (
 )
 from webhelpers.html import literal
 from pyramid.threadlocal import get_current_request
-from pyramid.i18n import get_locale_name
+from ringo.lib.i18n import locale_negotiator
 from formbar.converters import from_timedelta
 
 ########################################################################
 #                          Formating content                           #
 ########################################################################
-
-
-def get_app_locale(request):
-    """Will retrun the name of the locale which should be used for
-    translations and formating dates and numbers.
-
-    :request: Current request
-    :returns: Locale name or None for default.
-
-    """
-    if request:
-        settings = request.registry.settings
-        lang = settings.get("app.locale")
-        if lang is not None:
-            if lang == "":
-                return None
-            else:
-                return lang
-        else:
-            return get_locale_name(request)
-    else:
-        return None
 
 
 def prettify(request, value):
@@ -57,7 +35,7 @@ def prettify(request, value):
     """
     if not request:
         request = get_current_request()
-    locale_name = get_app_locale(request)
+    locale_name = locale_negotiator(request)
 
     if isinstance(value, datetime):
         return format_datetime(get_local_datetime(value),

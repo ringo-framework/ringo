@@ -2,7 +2,7 @@ import logging
 from string import Template
 import json
 from pyramid.events import NewRequest
-from pyramid.i18n import get_localizer, TranslationStringFactory
+from pyramid.i18n import TranslationStringFactory
 from ringo.lib.helpers import literal
 
 
@@ -19,12 +19,14 @@ On default there is only two translators available for ringo. The base
 ringo translator and the formbar translator. But derived applications
 can append their own translation factory."""
 
+
 def setup_translation(config):
     config.add_translation_dirs('ringo:locale/')
     config.add_translation_dirs('formbar:locale/')
     config.add_subscriber(set_request_locale, NewRequest)
     config.add_subscriber(add_localizer, NewRequest)
     return config
+
 
 def set_request_locale(event):
     """Will set the loacle of the request depending on the users
@@ -34,6 +36,7 @@ def set_request_locale(event):
         return
     accepted = event.request.accept_language
     event.request._LOCALE_ = accepted.best_match(('en', 'fr', 'de'), 'en')
+
 
 def add_localizer(event):
     request = event.request
@@ -68,9 +71,33 @@ def add_localizer(event):
     request.translate = auto_translate
 
 
+def get_app_locale(request):
+    """Will retrun the name of the locale which should be used for
+    translations and formating dates and numbers.
+
+    :request: Current request
+    :returns: Locale name or None for default.
+
+    """
+    if request:
+        settings = request.registry.settings
+        lang = settings.get("app.locale")
+        if lang is not None:
+            if lang == "":
+                return None
+            else:
+                return lang
+        else:
+            # default_locale = request.registry.settings.get("pyramid.default_locale_name", "en")
+            accepted = request.accept_language
+            return accepted.best_match(('en', 'fr', 'de'), 'en')
+    else:
+        return None
+
+
 def locale_negotiator(request):
-    accepted = request.accept_language
-    return accepted.best_match(('en', 'fr', 'de'), 'en')
+
+    return get_app_locale(request)
 
 
 def extract_i18n_tableconfig(fileobj, keywords, comment_tags, options):
@@ -121,10 +148,3 @@ def extract_i18n_tableconfig(fileobj, keywords, comment_tags, options):
                    col.get('expr'),
                    ["Expr for %s filter in %s table config"
                     % (col.get('field'), key)])
-
-#@subscriber(NewRequest)
-#def setAcceptedLanguagesLocale(event):
-#    request = event.request
-#    if not request.accept_language:
-#        return
-#    event.request._LOCALE_ = locale_negotiator(event.request)
