@@ -37,6 +37,10 @@ def prettify(request, value):
         request = get_current_request()
     locale_name = locale_negotiator(request)
 
+    # Special handling for Dummyrequest from testing
+    if not isinstance(locale_name, basestring):
+        locale_name = None
+
     if isinstance(value, datetime):
         return format_datetime(get_local_datetime(value),
                                locale_name=locale_name, format="short")
