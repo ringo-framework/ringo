@@ -243,8 +243,12 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
             log.info(log_msg)
             request.session.flash(msg, 'success')
 
-            # Set next form page.
-            if request.params.get("_submit") == "nextpage":
+            # Set next form page. The behaviour of the Submit and
+            # differs depending if there is a backurl defined. In case
+            # there is no backurl proceed means go to the next page. In
+            # case there is a backurl it means stay on this page.
+            backurl = request.session.get('%s.backurl' % clazz)
+            if request.params.get("_submit") == "nextpage" and not backurl:
                 table = clazz.__table__
                 itemid = item.id
                 page = get_next_form_page(form,
@@ -305,6 +309,15 @@ def handle_redirect_on_success(request, backurl=None):
     item = get_item_from_request(request)
     clazz = request.context.__model__
     backurl = backurl or request.session.get('%s.backurl' % clazz)
+
+    # In case the user has clicked on the "Submit and procceed" we will
+    # ignore the backurl and delete it from the session.
+    if request.params.get("_submit") == "nextpage":
+        backurl = None
+        if request.session.get('%s.backurl' % clazz):
+            del request.session['%s.backurl' % clazz]
+            request.session.save()
+
     if backurl:
         # Redirect to the configured backurl.
         if request.session.get('%s.backurl' % clazz):
