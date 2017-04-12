@@ -102,12 +102,16 @@ def render_item_add_link(request, clazz, foreignkey, clazzpath, id, backlink, fo
     % for item in visible_items:
       <%
       permission = None
-      if s.has_permission("update", item[0], request):
-        permission = "update"
-      elif s.has_permission("read", item[0], request):
-        permission = "read"
-      elif not field.renderer.showall == "true":
-        continue
+      if field.renderer.action:
+        if s.has_permission(field.renderer.action, item[0], request):
+          permission = field.renderer.action
+      else:
+        if s.has_permission("update", item[0], request):
+          permission = "update"
+        elif s.has_permission("read", item[0], request):
+          permission = "read"
+        elif not field.renderer.showall == "true":
+          continue
       %>
       ${h.literal(render_item_row(request, clazz, permission, item, value,
                   (field.renderer.openmodal == "true"),
