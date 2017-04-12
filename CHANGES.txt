@@ -1,6 +1,8 @@
 Next
 ====
 - Added app.locale config var to enforce locale setting of the application.
+- Added uniquene constraints on nm_user_roles, nm_user_usergroups and
+  nm_action_roles table.
 
 1.16.0
 ======
