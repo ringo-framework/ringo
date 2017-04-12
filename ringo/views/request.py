@@ -243,12 +243,8 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
             log.info(log_msg)
             request.session.flash(msg, 'success')
 
-            # Set next form page. The behaviour of the Submit and
-            # differs depending if there is a backurl defined. In case
-            # there is no backurl proceed means go to the next page. In
-            # case there is a backurl it means stay on this page.
-            backurl = request.session.get('%s.backurl' % clazz)
-            if request.params.get("_submit") == "nextpage" and not backurl:
+            # Set next form page.
+            if request.params.get("_submit") == "nextpage":
                 table = clazz.__table__
                 itemid = item.id
                 page = get_next_form_page(form,
@@ -310,23 +306,16 @@ def handle_redirect_on_success(request, backurl=None):
     clazz = request.context.__model__
     backurl = backurl or request.session.get('%s.backurl' % clazz)
 
-    # In case the user has clicked on the "Submit and procceed" we will
-    # ignore the backurl and delete it from the session.
-    if request.params.get("_submit") == "nextpage":
-        backurl = None
-        if request.session.get('%s.backurl' % clazz):
-            del request.session['%s.backurl' % clazz]
-            request.session.save()
+    if request.session.get('%s.backurl' % clazz):
+        del request.session['%s.backurl' % clazz]
+        request.session.save()
 
-    if backurl:
-        # Redirect to the configured backurl.
-        if request.session.get('%s.backurl' % clazz):
-            del request.session['%s.backurl' % clazz]
-            request.session.save()
+    if backurl and request.params.get("_submit") == "return":
         return HTTPFound(location=backurl)
     else:
         # Handle redirect after success.
         # Check if the user is allowed to call the url after saving
+
         if has_permission("update", item, request):
             route_name = get_action_routename(item, 'update')
             url = request.route_path(route_name, id=item.id)
