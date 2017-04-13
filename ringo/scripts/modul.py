@@ -11,7 +11,7 @@ from ringo.lib.helpers import get_app_location, dynamic_import
 from ringo.scripts.db import (
     get_session, create_new_revision
 )
-from ringo.model.modul import ModulItem, ActionItem
+from ringo.model.modul import ModulItem, ActionItem, ACTIONS
 
 # Directory with templates to generate views and models
 base_dir = pkg_resources.get_distribution("ringo").location
@@ -48,58 +48,20 @@ def get_action_fixtures(session, mid, ignore=[]):
     # TODO: Translate the name of the Action (torsten) <2013-07-10 09:32>
     action_id = get_next_actionid(session)
     fixtures = []
-    for action in ['list', 'create', 'read', 'update',
-                   'delete', 'import', 'export']:
-        if action in ignore:
+    for key, action in ACTIONS.iteritems():
+        if key in ignore:
             continue
-        fixture = {}
         myuuid = str(uuid.uuid4())
-        if action == "list":
-            name = "List"
-            url = "list"
-            icon = "icon-list-alt"
-            bundle = False
-        if action == "create":
-            name = "Create"
-            url = "create"
-            icon = "icon-plus"
-            bundle = False
-        if action == "read":
-            name = "Read"
-            url = "read/{id}"
-            icon = "icon-eye-open"
-            bundle = False
-        if action == "update":
-            name = "Update"
-            url = "update/{id}"
-            icon = "icon-edit"
-            bundle = False
-        if action == "delete":
-            name = "Delete"
-            url = "delete/{id}"
-            icon = "icon-eye-delete"
-            bundle = False
-        if action == "import":
-            name = "Import"
-            url = "import"
-            icon = "icon-import"
-            bundle = False
-        if action == "export":
-            name = "Export"
-            url = "export/{id}"
-            icon = "icon-export"
-            bundle = True
-
+        fixture = {}
         fixture["id"] = action_id
-        fixture["mid"] = mid
-        fixture["name"] = name
-        fixture["description"] = ""
-        fixture["permission"] = ""
-        fixture["url"] = url
-        fixture["icon"] = icon
         fixture["uuid"] = myuuid
-        fixture["bundle"] = bundle
-
+        fixture["mid"] = mid
+        fixture["name"] = action.name
+        fixture["url"] = action.url or ""
+        fixture["icon"] = action.icon or ""
+        fixture["bundle"] = action.bundle or False
+        fixture["display"] = action.display or ""
+        fixture["permission"] = action.permission or ""
         fixtures.append(fixture)
         action_id += 1
     return fixtures
@@ -144,6 +106,7 @@ def _get_fixture_file(path, pattern):
             if fnmatch.fnmatch(name, pattern):
                 return os.path.join(root, name)
 
+
 def replace_sql_in_revision(path, package, name, session):
     content = None
     sql = []
@@ -159,7 +122,7 @@ def replace_sql_in_revision(path, package, name, session):
         action_sql = ("INSERT INTO actions (id, mid, uuid, name, url, ",
                       "icon, bundle, description, display, permission) ",
                       "VALUES ({id}, {mid}, '{uuid}', '{name}', ",
-                      "'{url}', '{icon}', '{bundle}', '', '', '');")
+                      "'{url}', '{icon}', '{bundle}', '', '{display}', '{permission}');")
         actions_sql.append("".join(action_sql).format(**fixture))
     sql.append("\n".join(actions_sql))
     with open(path, "r") as rf:
@@ -173,6 +136,7 @@ def replace_sql_in_revision(path, package, name, session):
         rf.write(content)
 
     print 'Ok'
+
 
 def add_fixtures(package, name, session):
     """Will add the fixtures for the new modul to the fixture files.
