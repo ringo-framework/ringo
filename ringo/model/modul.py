@@ -316,7 +316,6 @@ ACTIONS = {
                          url="",
                          icon="icon-link",
                          bundle=False,
-                         permission="read",
                          display="hide")
 }
 """Default available actions in Ringo"""
