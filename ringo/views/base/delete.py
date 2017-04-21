@@ -37,20 +37,23 @@ def _handle_redirect(request):
         history = request.session['history']
         # Redirect to page where the user initialy came from to delete
         # the current item. The url depend on how the item is deleted.
-        single_action = re.compile(".*\/\w+\/\d+$")
-        bundle_action = re.compile(".*\/\w+\/bundle$")
-        if single_action.match(history.history[-1]):
+        action = re.compile("^\/(\w+)\/(\w+).*")
+        action_match = action.match(history.history[-1])
+
+        if action_match:
             # Initiated delete from detail view of a single item.
-            # This should usually be the 3rd item in the history (1. delete
-            # action, 2. update actione of the item to be deleted, 3, page
-            # opened before the delete process.
-            url = history.pop(3)
-        elif bundle_action.match(history.history[-1]):
-            # Initiated delete from overview page of items.
-            # This should usually be the 2nd item in the history (1.
-            # delete bundle action, 2. page opened before the delete
-            # process.  For bundles this is the list action.
-            url = history.pop(2)
+            modulname = action_match.group(1)
+            while 1:
+                # Pop urls from the history as long as we find an url
+                # which does not deal with the item we have
+                # deleted.
+                url = history.pop()
+                m = action.match(url)
+                if m and (m.group(1) != modulname or m.group(2) == "list"):
+                    break
+            else:
+                # Now URL found. Redirect to the main page.
+                url = "/"
         else:
             # We are not sure where to redirect. Use "/"
             url = "/"
