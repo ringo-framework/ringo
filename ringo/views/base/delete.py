@@ -1,10 +1,10 @@
 import logging
 import sqlalchemy as sa
+import re
 from pyramid.httpexceptions import HTTPFound
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.lib.renderer import ConfirmDialogRenderer, InfoDialogRenderer
 from ringo.lib.helpers import (
-    get_action_routename,
     get_item_modul
 )
 from ringo.views.response import JSONResponse
@@ -34,9 +34,26 @@ def _handle_redirect(request):
         request.session.save()
         return HTTPFound(location=backurl)
     else:
-        # Redirect to the list view.
-        route_name = get_action_routename(clazz, 'list')
-        url = request.route_path(route_name)
+        history = request.session['history']
+        # Redirect to page where the user initialy came from to delete
+        # the current item. The url depend on how the item is deleted.
+        single_action = re.compile(".*\/\w+\/\d+$")
+        bundle_action = re.compile(".*\/\w+\/bundle$")
+        if single_action.match(history.history[-1]):
+            # Initiated delete from detail view of a single item.
+            # This should usually be the 3rd item in the history (1. delete
+            # action, 2. update actione of the item to be deleted, 3, page
+            # opened before the delete process.
+            url = history.pop(3)
+        elif bundle_action.match(history.history[-1]):
+            # Initiated delete from overview page of items.
+            # This should usually be the 2nd item in the history (1.
+            # delete bundle action, 2. page opened before the delete
+            # process.  For bundles this is the list action.
+            url = history.pop(2)
+        else:
+            # We are not sure where to redirect. Use "/"
+            url = "/"
         return HTTPFound(location=url)
 
 
@@ -45,7 +62,6 @@ def _handle_delete_request(request, items, callback):
     _ = request.translate
     if request.method == 'POST' and is_confirmed(request):
         item_label = get_item_modul(request, clazz).get_label(plural=True)
-        item_label_log = get_item_modul(request, clazz).get_label()
         mapping = {'item_type': item_label, 'num': len(items)}
         for item in items:
             if callback:
