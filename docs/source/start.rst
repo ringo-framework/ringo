@@ -1172,7 +1172,7 @@ set the ownership of the item based on the  ownership of another item
 and **not** with the uid, gid of the current user or other permission
 settings like default groups.
 
-..hint::
+.. note::
     Setting the inherited uid or gid only happens when saving the item
     explicit using the `save` method of the BaseItem. On default this is
     only the case when creating new items.
@@ -1184,23 +1184,15 @@ and gid.
 To inherit the ownership you must set a special attribute in the model::
 
     class Foo(BaseItem):
+        _inherit_gid = "parent"
+        _inherit_uid = "parent"
 
         ...
         parent = sa.orm.relation(Bar)
-        ...
-
-        _inherit_gid = parent
-        _inherit_uid = parent
-
 
 You need to define the name of the relation to the item where the uid
 and gid will be taken from. Please note that you can also set only one
 of the attibutes.
-
-
-.. todo::
-        Write about inheritance of authorisation
-
 
 ***********************************
 Inheritance from other applications
