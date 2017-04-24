@@ -157,8 +157,10 @@ $( document ).ready(function() {
     $('a').not('[href^="mailto:"], [target="_blank"]').click(function(event) {
         var element = event.target;
         var url = $(element).attr("href");
-        var hide_spinner = $(element).hasClass("nospinner") == true;
-        openDirtyDialog(url, hide_spinner, event);
+        if (url != undefined) {
+            var hide_spinner = $(element).hasClass("nospinner") == true;
+            openDirtyDialog(url, hide_spinner, event);
+        }
     });
     $('.link').not('a').click(function(event) {
         var element = event.target;
