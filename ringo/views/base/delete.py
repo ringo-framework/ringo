@@ -43,7 +43,7 @@ def _handle_redirect(request):
         if action_match:
             # Initiated delete from detail view of a single item.
             modulname = action_match.group(1)
-            while 1:
+            while history.history:
                 # Pop urls from the history as long as we find an url
                 # which does not deal with the item we have
                 # deleted.
