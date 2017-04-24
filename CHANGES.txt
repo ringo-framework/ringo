@@ -1,5 +1,16 @@
-Next
-====
+1.17.0
+======
+Incompatible change in Ringo. This will need a database update to your application!
+
+- Added new "permission". The permission to link items in the database is not
+  explicit set. Prior behavior was that all items which are allowed to read
+  can also be linked. This is often true, but since we added an anonymous
+  role there are often the need to be more explicit on this permission.
+  To update your applications database please
+  ringo/alembic/versions/4b4d1358de99_.py
+
+1.16.x
+======
 - Added app.locale config var to enforce locale setting of the application.
 - Added uniquene constraints on nm_user_roles, nm_user_usergroups and
   nm_action_roles table.
