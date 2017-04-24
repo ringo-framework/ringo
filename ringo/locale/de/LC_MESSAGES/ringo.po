@@ -25,7 +25,7 @@ msgstr ""
 msgid "UPDATE"
 msgstr "AKTUALISIERUNG"
 
-#: ringo/lib/imexport.py:506
+#: ringo/lib/imexport.py:507
 msgid "CREATE"
 msgstr "ANLEGEN"
 
@@ -402,23 +402,21 @@ msgid ""
 msgstr ""
 
 #: ringo/templates/version.mako:13
-#, fuzzy
 msgid ""
 "<a href=\"https://github.com/ringo-framework/formbar\" "
 "target=\"_blank\">Formbar</a> is a Python library to layout, render and "
 "validate HTML forms in web applications."
 msgstr ""
-"<a href=\"https://bitbucket.org/ti/formbar\" "
+"<a href=\"https://github.com/ringo-framework/formbar\" "
 "target=\"_blank\">Formbar</a> ist eine Python Bibliothek für das Layout, "
 "Rendern und Validieren von HTML-Formularen in Webanwendungen."
 
 #: ringo/templates/version.mako:15
-#, fuzzy
 msgid ""
 "<a href=\"https://www.sqlalchemy.org\" target=\"_blank\">SQLAlchemy</a> "
 "is Python based ORM mapper."
 msgstr ""
-"<a href=\"http://www.sqlalchemy.org\" target=\"_blank\">SQLAlchemy</a> "
+"<a href=\"https://www.sqlalchemy.org\" target=\"_blank\">SQLAlchemy</a> "
 "ist ein Python basierter ORM."
 
 #: ringo/templates/version.mako:17
@@ -478,6 +476,14 @@ msgstr ""
 "Geben Sie ihre Anmeldekennung und Passwort ein. Eine Email mit weiteren "
 "Informationen zum Zurücksetzen des Passworts wird Ihnen zugesendet."
 
+#: ringo/templates/auth/forgot_password.mako:20 ringo/views/auth.py:287
+msgid ""
+"Password reset token has been sent to the users email address. Please "
+"check your email."
+msgstr ""
+"Eine Bestätigungsmail zum Zurücksetzen des Passworts wurde an die E-Mail "
+"Adresse des Nutzer geschickt. Bitte prüfen Sie Ihre E-Mail."
+
 #: ringo/templates/auth/login.mako:10
 msgid "New here? Register a new account!"
 msgstr "Neu hier? Registrieren Sie einen neuen Zugang!"
@@ -535,7 +541,7 @@ msgstr "Importiere %s Einträge"
 
 #: ringo/templates/default/list.mako:72
 msgid "Add"
-msgstr ""
+msgstr "Neu"
 
 #: ringo/templates/internal/confirm.mako:13
 #: ringo/templates/internal/import.mako:14
@@ -556,7 +562,7 @@ msgid "You have selected %s %s for export:"
 msgstr "Sie haben %s %s für den Export selektiert:"
 
 #: ringo/templates/internal/export.mako:17
-#: ringo/templates/internal/list.mako:259
+#: ringo/templates/internal/list.mako:251
 #: ringo/templates/internal/print.mako:11
 msgid "Close"
 msgstr "Schließen"
@@ -1017,11 +1023,11 @@ msgstr ""
 msgid "Deleted ${num} ${item_type} successfully."
 msgstr "${num} ${item_type} erfolgreich gelöscht."
 
-#: ringo/views/base/import_.py:114
+#: ringo/views/base/import_.py:118
 msgid "Import failed"
 msgstr "Import gescheitert"
 
-#: ringo/views/base/import_.py:115
+#: ringo/views/base/import_.py:119
 #, python-format
 msgid ""
 "Bad news! The import could not be finished and returns with an error.No "
@@ -1587,4 +1593,3 @@ msgstr "Letze Anmeldung"
 
 #~ msgid "Login doesn't exist or written wrong"
 #~ msgstr "Anmeldekennung existiert nicht oder ist falsch geschrieben."
-
