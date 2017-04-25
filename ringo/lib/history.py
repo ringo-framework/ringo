@@ -42,7 +42,7 @@ class History:
 
         # Ignore URL defined from settings if configured
         for ignore in request.registry.settings.get("app.history.ignore", "").split(","):
-            if url.startswith(ignore):
+            if normalized_url.startswith(ignore):
                 return
 
         if not self.history or normalized_url != self.history[-1]:
