@@ -1743,6 +1743,17 @@ The mode is available using the :func:`get_app_mode` function.
 
 .. index:: Testing mode
 
+History ignores
+===============
+You can configure URL which will be ignored in history. This is often needed
+in case you do AJAX requests to fetch data. As you do not want those URL be
+part of the history you can configure to ignore those URLs.
+
+* app.history.ignore = /foo,/bar,/baz
+
+The ignore list is a comma separated list of fragments of an URL. The code
+will check if the current URL starts with one of the defined ignores.
+
 Cache
 =====
 You can configure to cache the loaded configurations for the form
