@@ -17,7 +17,7 @@
 % else:
 <div class="row">
   <div class="col-md-12">
-    <p>${_('Password reset token has been sent to the users email address. Please check your email.')}</p>
+    <p>${msg}</p>
   </div>
 </div>
 % endif

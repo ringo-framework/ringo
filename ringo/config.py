@@ -213,7 +213,7 @@ def setup_modul(config, modul):
     old_actions = list(a.url for a in modul.actions)
 
     for bclazz in clazz.__bases__:
-        if issubclass(bclazz, Mixin):
+        if hasattr(bclazz, "get_mixin_actions"):
             for action in bclazz.get_mixin_actions():
                 if not action.url in old_actions:
                     action.mid = clazz._modul_id

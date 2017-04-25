@@ -290,6 +290,11 @@ class ListingFieldRenderer(FormbarSelectionField):
       modal popup.
     * backlink: "true" or "false". If true the user will be redirected
       back to the listing after creating a new item. Defaults to true.
+    * action: Define the action which will be called when clicking an an
+      entry. On default the action will be determined by checking the
+      users permission and choosing between "read" or "update". Setting
+      action you can enforce using a certain action if the user has
+      sufficient permissions.
 
     Example::
 

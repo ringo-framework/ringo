@@ -258,13 +258,14 @@ def forgot_password(request):
     form = Form(form_config, csrf_token=request.session.get_csrf_token(),
                 translate=_)
     complete = False
+    msg = None
     if request.POST:
         if form.validate(request.params):
             username = form.data.get('login')
             user = request_password_reset(username, request.db)
-            if user:
-                mailer = Mailer(request)
+            if user and user.profile[0].email:
                 recipient = user.profile[0].email
+                mailer = Mailer(request)
                 token = user.reset_tokens[-1]
                 subject = _('Password reset request')
                 values = {'url': request.route_url('reset_password',
@@ -278,18 +279,19 @@ def forgot_password(request):
                             template="password_reset_request",
                             values=values)
                 mailer.send(mail)
-                msg = _("Password reset token has been sent to the users "
-                        "email address. Please check your email.")
-                request.session.flash(msg, 'success')
-                complete = True
+                log.info(u"Passwort reset token sent to "
+                         u"user {} with email {}".format(username, recipient))
             else:
-                msg = _("Login doesn't exist or written wrong")
-                request.session.flash(msg, "error")
-                form = Form(form_config,
-                            csrf_token=request.session.get_csrf_token(),
-                            translate=_)
-                complete = False
-    return {'form': form.render(), 'complete': complete}
+                log.info(u"Failed sending Passwort reset token for {}. "
+                         u"User not found or missing email".format(username))
+            # Return a message to the user which does not allow to get
+            # information about the existence of a user.
+            msg = _("If the user has been found together with configured "
+                    "e-mail, a confirmation mail for resetting the password "
+                    "has been sent. Please check your e-mail box.")
+            request.session.flash(msg, 'success')
+            complete = True
+    return {'form': form.render(), 'complete': complete, 'msg': msg}
 
 
 @view_config(route_name='reset_password',

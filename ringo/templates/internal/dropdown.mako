@@ -16,7 +16,7 @@
     % endfor
   </div>
 % else:
-  <select class="form-control" id="${field.id}" name="${field.name}">
+  <select class="form-control" id="${field.id}" name="${field.name}" datatype="${get_field_type(field)}">
     % for option in options:
       ## Depending if the options has passed the configured filter the
       ## option will be visible or hidden

@@ -503,6 +503,7 @@ class Importer(object):
                 if ("id" in values and not values["id"]):
                     del values["id"]
                 item = factory.create(user=user, values=values)
+                self._db.add(item)
                 operation = _("CREATE")
             imported_items.append((item, operation))
         return imported_items

@@ -245,6 +245,37 @@ Voilà! That is it.
 Tutorials
 #########
 
+************************************
+How to make config changes permanent
+************************************
+Ringo allows to change the configuration of the application through the UI in
+many ways. You can add new roles, set permissions etc. All those changes are
+done in the database.
+As those changes will get lost when dropping and recreating the database we
+need a way to make save these changes in a way that they do not get lost when
+reinitialize the application.
+
+The typical way is to write a migration script and to put the changes you made
+into this script. An empty migration script can be generated like this::
+
+        ringo-admin db revision
+
+An easy way to get the changes in the database is to diff between the dump of
+the database. On dump is done before the changes are mare::
+
+        DB=ringo
+        pg_dump -a --column-inserts $DB | grep INSERT > $DB.dump.pre
+
+Now you can do the changes in the application and dump the database again::
+
+        pg_dump -a --column-inserts $DB | grep INSERT > $DB.dump.post
+
+Finally you diff the two dumps and ideally get the changes made in the
+database ready to put into the migration script::
+
+        diff $DB.dump.pre $DB.dump.post | grep INSERT | sed -e 's/> //g' > inserts.sql
+
+
 *****************
 Work with modules
 *****************
@@ -471,7 +502,7 @@ Now SQL statements for the migration script will be::
 As always when manually inserting something in the database call the
 fixsequence command::
 
-        ringo-admin db fixsequence
+        ringo-admin db fixsequence/gp_dump
 
 
 Setup breadcrumbs
@@ -1133,9 +1164,35 @@ overwriting the ``_get_permissions`` class method of the BaseItem in your model:
 
         return permissions
 
-.. todo::
-        Write about inheritance of authorisation
+Ownership inheritance
+=====================
+It is possible inherit the ownership (uid, gid) of a element from a
+related element when *saving* the item. Inheritance of ownership means to
+set the ownership of the item based on the  ownership of another item
+and **not** with the uid, gid of the current user or other permission
+settings like default groups.
 
+.. note::
+    Setting the inherited uid or gid only happens when saving the item
+    explicit using the `save` method of the BaseItem. On default this is
+    only the case when creating new items.
+
+A typicall usecase is to grant users access to the item if they are
+allowed to access a related (often parent) item by inheriting the uid
+and gid.
+
+To inherit the ownership you must set a special attribute in the model::
+
+    class Foo(BaseItem):
+        _inherit_gid = "parent"
+        _inherit_uid = "parent"
+
+        ...
+        parent = sa.orm.relation(Bar)
+
+You need to define the name of the relation to the item where the uid
+and gid will be taken from. Please note that you can also set only one
+of the attibutes.
 
 ***********************************
 Inheritance from other applications
@@ -1633,7 +1690,7 @@ If your application is based on another ringo based application you can
 configure the name of the application here. Setting this configuration
 will modify the inheritance path of the application.
 
-The inhertance_path is available using the :func:`get_app_inheritance_path`
+The inheritance_path is available using the :func:`get_app_inheritance_path`
 function.
 
 Example:
@@ -1644,6 +1701,20 @@ This has consequences for the loading of form and table configurations.
 When trying to load form or table configuration ringo will iterate over
 the inheritance path and try to load the configuration from each
 application within the inheritance path.
+
+Application Locale
+==================
+The locale is used to format dates times in the application.  On default Ringo
+determines the locale by looking into the request getting the browser language
+setting. However you can enforce setting the locale of the application by
+setting the following config variable in your config
+
+* app.locale =
+
+If added (In the mean of adding the variable at all) the locale will be
+enforced. An empty value means use a "default" encoding which leads to dates
+formatted in ISO8601. Otherwise the locale must match a known ISO-3166 locale
+string.
 
 Application Mode
 ================
@@ -2109,20 +2180,40 @@ separated.
 ****
 Mail
 ****
+The configuration of the Mail system is described in detail in the
+`documentation of the pyramid_mailer library
+<http://docs.pylonsproject.org/projects/pyramid_mailer/en/latest/#configuration>`_
+
+Below you find a show overview of the most common used settings. If you need
+more of the settings it is save to add them to your configuration.
+
+
  * mail.host =
+
+This is the host where your MTA will listen on port 25 to receive the mails
+which it will transfer to the recipients.
+
  * mail.default_sender =
+
+This is the default sender email (From:) of the mails sent from this
+application. Often this will be changed within the application anyway but we
+need to be sure we have a default sender. Often this is a "noreply@foo.bar"
+address.
+
  * mail.username =
  * mail.password =
+
+In case your MTA requires some sort of authentication you can set it here.
 
 *********
 Converter
 *********
-.. note::
-   To be able to use the converter you need to install the "converter" extra
-   requirements. See ``setup.py`` file for more details.
+The converter has become part of the `ringo printtemplates
+extension <https://github.com/ringo-framework/ringo_printtemplates>`_. It is
+used to convert ODS files into PDF files.
 
- * converter.start = false
- * converter.pythonpath =
+Please see the README of the library for more details on how to configure the
+converter.
 
 ###############
 CLI ringo-admin

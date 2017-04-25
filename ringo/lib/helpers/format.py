@@ -12,7 +12,7 @@ from babel.dates import (
 )
 from webhelpers.html import literal
 from pyramid.threadlocal import get_current_request
-from pyramid.i18n import get_locale_name
+from ringo.lib.i18n import locale_negotiator
 from formbar.converters import from_timedelta
 
 ########################################################################
@@ -35,16 +35,11 @@ def prettify(request, value):
     """
     if not request:
         request = get_current_request()
+    locale_name = locale_negotiator(request)
 
-    # Under some circumstances, get_current_request will return None as
-    # the current request. This makes it impossible to retrieve the
-    # current locale or getting the translate method.
-    if not request:
-        locale_name = 'en_EN'
-        _ = lambda t: t
-    else:
-        locale_name = get_locale_name(request)
-        _ = request.translate
+    # Special handling for Dummyrequest from testing
+    if not isinstance(locale_name, basestring):
+        locale_name = None
 
     if isinstance(value, datetime):
         return format_datetime(get_local_datetime(value),

@@ -40,7 +40,11 @@ def _import(request):
         importer = JSONImporter(clazz, request.db)
     elif request.POST.get('format') == 'csv':
         importer = CSVImporter(clazz)
-    return importer.perform(importfile, request.user, request.translate)
+
+    # Decide by which key to identify the items
+    settings = request.registry.settings
+    load_key = settings.get("import.importer_load_key", 'uuid')
+    return importer.perform(importfile, request.user, request.translate, load_key=load_key)
 
 
 def _handle_save(request, items, callback):

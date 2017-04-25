@@ -1,17 +1,45 @@
-1.15.1
+1.16.1
 ======
-- Removed wrong "login logging" if a user changes his password.
-- Added new config vars for application:
-	* app.logo
-	* app.customstatic
+- Improved documentation
+- Added app.locale config var to enforce locale setting of the application.
+- Added unique constraints on nm_user_roles, nm_user_usergroups and
+  nm_action_roles table.
+
+1.16.0
+======
+- Added new config vars for application to allow better customisation
+  (branding) of applications:
+  * app.logo
+  * app.customstatic
   See documentation for more details.
+- Allow multiple search filters in overview!
+
+- Improved documentation
 - Fix #16 Do not save "addrelation" paramenter in session
 - Fix #33 Set relations on creation before saving the item to prevent
-  violation of NOT NULL contraints.
+- Fix #35 Added Json Datatype for columns violation of NOT NULL contraints.
 - Added `strict` flag to get_values method. Set this to False to suppress
   error logging in case a attribute can not be found.
-- Improved documentation
-- Fixed issue #35: Added Json Datatype for columns
+- Removed wrong "login logging" if a user changes his password.
+
+1.15.4
+======
+- Added (default) option to define the loadkey on import to the config.
+- Added missing adding to the db session while import (Only in some
+  circumstances, unknown which exactly). Seems so be forgotten.
+  At least tests shows that this does not work otherwise. 
+
+1.15.3
+======
+- Bugfix. Added missing datatype attribute in dropdown fields.
+
+1.15.2
+======
+- Removed wrong "login logging" if a user changes his password.
+
+1.15.1
+======
+- Added loginname to emails when registering a new account.
 
 1.15.0
 ======

@@ -285,9 +285,9 @@ def get_list_renderer(listing, request):
     settings = request.registry.settings
     default = settings.get("layout.advanced_overviews") == "true"
     if tableconfig.is_advancedsearch(default):
-        return ListRenderer(listing)
+        return ListRenderer(listing, request.params.get("table"))
     else:
-        return DTListRenderer(listing)
+        return DTListRenderer(listing, request.params.get("table"))
 
 
 def list_(request):

@@ -19,3 +19,53 @@ function getDTLanguage(language) {
         return "default";
     }
 }
+
+/**
+ * checks if any form in the DOM is dirty, bypassing form and input tags with
+ * the attribute 'no-dirtyable'. Returns true if some change is found
+ * (e.g. < form no-dirtyable>...< /form>)
+ * (e.g. < input type='checkbox' no-dirtyable />)
+ */
+function checkDirtyForms () {
+    var forms = document.getElementsByTagName('FORM');
+    Array.from(forms).forEach(function(form) {
+        if (!form.hasAttribute("no-dirtyable")) {
+            var childnodes = form.childNodes;
+            childnodes.forEach( function(node) {
+                if (node.tagName === 'INPUT') {
+                    if (!node.hasAttribute("no-dirtyable")) {
+                        switch (node.type) {
+                            case "checkbox":
+                            case "radio":
+                                if (node.checked != node.defaultChecked) {
+                                    return true;
+                                }
+                                break;
+                            default:
+                                //TODO check if all other input types are
+                                // covered (even html5 ones)
+                                if (node.value != node.defaultValue){
+                                    return true;
+                                }
+                        }
+                    }
+                }
+                else if (node.tagName === 'TEXTAREA') {
+                    if (!node.hasAttribute("no-dirtyable")) {
+                        if (node.value != node.defaultValue){
+                            return true;
+                        }
+                    }
+                }
+                else if (node.tagName === 'SELECT') {
+                    if (!node.hasAttribute("no-dirtyable")) {
+                        if (node.options[node.selectedIndex].defaultSelected){
+                            return true;
+                        }
+                    }
+                }
+            });
+        }
+    });
+    return false;
+}

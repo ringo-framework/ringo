@@ -13,10 +13,11 @@ requires = [
     'SQLAlchemy',
     'alembic',
     'transaction',
-    'pyramid_tm',
+    'pyramid_tm<2.0',
     'pyramid_mako',
     'pyramid_beaker',
-    'pyramid_mailer',
+    'pyramid_mailer==0.14.1',
+    'repoze.sendmail==4.1',
     'zope.sqlalchemy',
     'waitress',
     'babel',
@@ -37,7 +38,7 @@ tests_requires = [
 ]
 
 setup(name='ringo',
-      version = '1.15.0',
+      version = '1.16.0',
       description='A simple web framework with base functionality to build web applications.',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[

@@ -386,7 +386,7 @@ class BaseItem(object):
             # Ignore private form fields
             if key.startswith('_'):
                 continue
-            if hasattr(self, key):
+            try:
                 oldvalue = getattr(self, key)
                 # If oldvalue is equal to the new value we need no
                 # change at all in the model so continue
@@ -415,8 +415,8 @@ class BaseItem(object):
                         oldvalue.append(nvalue)
                 else:
                     setattr(self, key, value)
-            else:
-                log.warning('Not saving "%s". Attribute not found' % key)
+            except AttributeError:
+                log.warning('Not saving "%s". Attribute/Property not found' % key)
                 if use_strict:
                     raise AttributeError(('Not setting "%s".'
                                          ' Attribute not found.') % key)
@@ -582,6 +582,8 @@ def filter_itemlist_for_user(request, baselist):
             if has_permission('read', item, request):
                 filtered_items.append(item)
         baselist.items = filtered_items
+        # Mark this listing to be prefilterd for a user.
+        baselist._user = request.user
     return baselist
 
 
@@ -635,8 +637,17 @@ class BaseList(object):
             self.items = items
         self.search_filter = []
 
+        self._user = None
+        """Internal variable which is set by the `filter_itemlist_for_user`
+        method to indicate that the list has been build for this user
+        and only contains items which are at least readable by the user.
+        """
+
     def __iter__(self):
         return iter(self.items)
+
+    def is_prefiltered_for_user(self):
+        return self._user is not None
 
     def sort(self, field, order, expand=False):
         """Will return a sorted item list. Sorting is done based on the

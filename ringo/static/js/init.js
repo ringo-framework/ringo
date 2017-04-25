@@ -119,7 +119,7 @@ $( document ).ready(function() {
        $('.main-pane').hide();
        $('#'+pane).show();
     });
-    $('#pagination-size-selector').change(function() {
+    $('#pagination-size-selector select').change(function() {
         var value = $(this).val();
         var url = $(this).attr('url') + "?pagination_size=" + value;
         startSpinner(spinner_timer);
@@ -134,22 +134,8 @@ $( document ).ready(function() {
     // Check the initial values of the form and warn the user if the leaves
     // the page without saving the form.
     var DirtyFormWarningOpen = false;
-    $('.formbar-form form').each(function() {
-        $(this).data('initialValue', $(this).serialize());
-    });
     function openDirtyDialog(url, hide_spinner, event) {
-        isDirty = false;
-        $('.formbar-form form').each(function () {
-            if($(this).data('initialValue') != $(this).serialize()){
-                // The DirtyFormWarning should not be shown, if the form
-                // has the attribute "no-dirtyable". See waskiq/issue2049.
-                var no_dirtyable = $(this).attr("no-dirtyable")
-                if(typeof no_dirtyable === typeof undefined
-                   || no_dirtyable != "true") {
-                    isDirty = true;
-                }
-            }
-        });
+        isDirty = checkDirtyForms();
         if((isDirty == true) && (DirtyFormWarningOpen == false)) {
             var dialog = $("#DirtyFormWarning");
             $('#DirtyFormWarningProceedButton').attr("href", url);
@@ -171,8 +157,10 @@ $( document ).ready(function() {
     $('a').not('[href^="mailto:"], [target="_blank"]').click(function(event) {
         var element = event.target;
         var url = $(element).attr("href");
-        var hide_spinner = $(element).hasClass("nospinner") == true;
-        openDirtyDialog(url, hide_spinner, event);
+        if (url != undefined) {
+            var hide_spinner = $(element).hasClass("nospinner") == true;
+            openDirtyDialog(url, hide_spinner, event);
+        }
     });
     $('.link').not('a').click(function(event) {
         var element = event.target;
