@@ -35,7 +35,7 @@ def _handle_redirect(request):
         # Redirect to page where the user initialy came from to delete
         # the current item. The url depend on how the item is deleted.
         action = re.compile("^\/(\w+)\/(\w+).*")
-        action_match = action.match(history.history[-1])
+        action_match = action.match(history.last() or "")
 
         if action_match:
             # Initiated delete from detail view of a single item.

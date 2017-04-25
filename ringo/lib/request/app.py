@@ -31,7 +31,7 @@ class RingoRequest(object):
         history = self.request.session.get('history')
         if history is None:
             history = History([])
-            history.push(self.request.url)
+            history.push(self.request)
             self.request.session['history'] = history
             self.request.session.save()
         return history

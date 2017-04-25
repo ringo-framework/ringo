@@ -137,7 +137,7 @@ class ErrorDialogRenderer(DialogRenderer):
         if url:
             values['ok_url'] = url
         elif history:
-            values['ok_url'] = history.history[-1]
+            values['ok_url'] = history.last()
         else:
             values['ok_url'] = self._request.route_path('home')
         values['eval_url'] = self._request.application_url+get_eval_url()

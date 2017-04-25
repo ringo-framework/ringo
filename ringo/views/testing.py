@@ -10,7 +10,10 @@ def begin(request):
     else:
         url = request.route_path("start_test_case",
                                  _query={"_testcase": "begin"})
-    return HTTPFound(url)
+    if url:
+        return HTTPFound(url)
+    else:
+        return HTTPFound(request.url)
 
 
 @view_config(route_name='stop_test_case')
@@ -21,4 +24,7 @@ def end(request):
     else:
         url = request.route_path("stop_test_case",
                                  _query={"_testcase": "end"})
-    return HTTPFound(url)
+    if url:
+        return HTTPFound(url)
+    else:
+        return HTTPFound(request.url)
