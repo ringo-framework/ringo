@@ -76,22 +76,26 @@ def get_link_url(item, request, actionname=None, backurl=False):
 
 
 def filter_options_on_permissions(request, options):
-    """Will filter the given options based on the permissions on the
-    current user of the request. After filtering the options will only
-    have items where the user is allowed to at least read it.
+    """Will iterate over all options and build a tuple for each option
+    with the following information:
+
+    1. The option itself
+    2. The value of the option
+    3. A flag indicating if the requesting user is allowed to `link` the
+       option. This information is later used on rendering.
 
     :request: current request
-    :options: list of tuple of options (item, value, filtered)
+    :options: list of tuple of options (item, value, linkable)
     :returns: filtered list of option tuples.
 
     """
     filtered_options = []
     for option in options:
-        visible = False
-        if (option[2] and (security.has_permission('link', option[0], request)
-           or not hasattr(option[0], 'owner'))):
-            visible = True
-        filtered_options.append((option[0], option[1], visible))
+        linkable = False
+        if (option[2] and (security.has_permission('link', option[0], request) or
+           not hasattr(option[0], 'owner'))):
+            linkable = True
+        filtered_options.append((option[0], option[1], linkable))
     return filtered_options
 
 
