@@ -385,20 +385,29 @@ class ListingFieldRenderer(FormbarSelectionField):
                              required="{}".format(self._field.required),
                              class_=class_options))
         html.append(self._render_label())
+
+        # All items which can potentially be linked. However this list
+        # of items may be already filtered be defining a default filter
+        # in the overview configuration which is used for this renderer.
+        items = self.itemlist.items
+        selected_items = self._get_selected_items(items)
+
         if self._field.readonly or self.onlylinked == "true":
-            items = self._get_selected_items(self.itemlist.items)
-        else:
-            items = self.itemlist.items
+            items = selected_items
 
-        # Get filtered options and only use the items which are
-        # in the origin items list and has passed filtering.
-        items = self._field.filter_options(items)
-        # Now filter the items based on the user permissions
+        # Filter options based on the configured filter expression of
+        # the renderer. Please note the this method return a list of
+        # tuples.
+        item_tuples = self._field.filter_options(items)
+
+        # Filter the items again based on the permissions. This means
+        # resetting the third value in the tuple.
         if self.showall != "true":
-            items = filter_options_on_permissions(self._field._form._request,
-                                                  items)
+            item_tuples = filter_options_on_permissions(self._field._form._request,
+                                                        item_tuples)
 
-        values = {'items': items,
+        values = {'items': item_tuples,
+                  'selected_items': selected_items,
                   'field': self._field,
                   'clazz': self.get_class(),
                   'pclazz': self._field._form._item.__class__,
