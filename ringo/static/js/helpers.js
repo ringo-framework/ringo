@@ -65,15 +65,18 @@ function checkDirtyForms () {
             }
             elements = form.getElementsByTagName('SELECT');
             elements_as_arr = Array.from(elements);
-            if (!node.hasAttribute("no-dirtyable")){
-                try {
-                    if (!node.options[node.selectedIndex].defaultSelected){
-                        return true;
+            for (var j = 0; j < elements_as_arr.length; j++) {
+                var node = elements_as_arr[j];
+                if (!node.hasAttribute("no-dirtyable")){
+                    try {
+                        if (!node.options[node.selectedIndex].defaultSelected){
+                            return true;
+                        }
                     }
-                }
-                catch (err) {
-                    //there may be no options at all, or nothing selected
-                    //TODO: check if there are cases this could mean "dirty form"
+                    catch (err) {
+                        //there may be no options at all, or nothing selected
+                        //TODO: check if there are cases this could mean "dirty form"
+                    }
                 }
             }
         }
