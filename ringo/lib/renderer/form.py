@@ -1,5 +1,4 @@
 import logging
-import cgi
 import os
 import pkg_resources
 from mako.lookup import TemplateLookup
@@ -10,7 +9,6 @@ from formbar.renderer import (
     SelectionFieldRenderer as FormbarSelectionField,
     CheckboxFieldRenderer as FormbarCheckboxField
 )
-from formbar.fields import rules_to_string
 import ringo.lib.helpers as helpers
 from ringo.lib.helpers import get_action_routename, literal, escape, HTML
 from ringo.model.base import BaseItem, BaseList, get_item_list
@@ -28,11 +26,12 @@ log = logging.getLogger(__name__)
 #                         Renderers for form elements                     #
 ###########################################################################
 
+
 def add_renderers(custom_renderers):
     """Helper function to add ringo ringo specific renderers for form
     rendering."""
     for key in custom_renderers:
-        if not key in renderers:
+        if key not in renderers:
             renderers[key] = custom_renderers[key]
     return renderers
 
@@ -269,7 +268,6 @@ class StateFieldRenderer(FormbarDropdown):
         return values
 
 
-
 class ListingFieldRenderer(FormbarSelectionField):
     """Renderer to render a listing of linked items. Used attributes:
 
@@ -346,7 +344,7 @@ class ListingFieldRenderer(FormbarSelectionField):
         # changes value in an attribute e.g. In this case the filtered
         # item is not in the list at all and will not be sent on a POST
         # request. This will result in removing the relation!
-        search  = config.get_default_search()
+        search = config.get_default_search()
         itemlist.filter(search)
         return itemlist
 
@@ -379,7 +377,7 @@ class ListingFieldRenderer(FormbarSelectionField):
         has_errors = len(self._field.get_errors())
         has_warnings = len(self._field.get_warnings())
         class_options = "form-group %s %s %s" % ((has_errors and 'has-error'),
-                                              (has_warnings and 'has-warning'),(active))
+                                                 (has_warnings and 'has-warning'), (active))
         html.append(HTML.tag("div", _closed=False,
                              rules=u"{}".format(";".join(rules_to_string(self._field))),
                              formgroup="{}".format(self._field.name),
@@ -396,7 +394,7 @@ class ListingFieldRenderer(FormbarSelectionField):
         # in the origin items list and has passed filtering.
         items = self._field.filter_options(items)
         # Now filter the items based on the user permissions
-        if self.showall != "true": 
+        if self.showall != "true":
             items = filter_options_on_permissions(self._field._form._request,
                                                   items)
 
