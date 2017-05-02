@@ -9,11 +9,18 @@ Incompatible change in Ringo. This will need a database update to your applicati
   To update your applications database please
   ringo/alembic/versions/4b4d1358de99_.py
 
-1.16.x
+1.16.1
 ======
-- Added app.locale config var to enforce locale setting of the application.
-- Added uniquene constraints on nm_user_roles, nm_user_usergroups and
+This updated includes an optional DB Upgrade to add a UNIQUE constraint on
+some NM tables. This helps to ensure data integrity of the application.
+However this update is not mandatory and can be applied later.
+
+- Added unique constraints on nm_user_roles, nm_user_usergroups and
   nm_action_roles table.
+- Added app.locale config var to enforce locale setting of the application.
+- Added additional attribute to configure the action called when clicking on a
+  item in the Listingfieldrenderer.
+- Improved documentation
 
 1.16.0
 ======
@@ -32,18 +39,24 @@ Incompatible change in Ringo. This will need a database update to your applicati
   error logging in case a attribute can not be found.
 - Removed wrong "login logging" if a user changes his password.
 
+1.15.4
+======
+- Added (default) option to define the loadkey on import to the config.
+- Added missing adding to the db session while import (Only in some
+  circumstances, unknown which exactly). Seems so be forgotten.
+  At least tests shows that this does not work otherwise. 
+
 1.15.3
 ======
-/* TODO: Write Changes (ti) <2017-02-10 11:39> */
-
+- Bugfix. Added missing datatype attribute in dropdown fields.
 
 1.15.2
 ======
-/* TODO: Write Changes (ti) <2017-02-10 11:39> */
+- Removed wrong "login logging" if a user changes his password.
 
 1.15.1
 ======
-/* TODO: Write Changes (ti) <2017-02-10 11:39> */
+- Added loginname to emails when registering a new account.
 
 1.15.0
 ======

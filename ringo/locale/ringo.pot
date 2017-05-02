@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the ringo project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2017.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: ringo 1.16.0\n"
@@ -21,7 +20,7 @@ msgstr ""
 msgid "UPDATE"
 msgstr ""
 
-#: ringo/lib/imexport.py:506
+#: ringo/lib/imexport.py:507
 msgid "CREATE"
 msgstr ""
 
@@ -907,11 +906,11 @@ msgstr ""
 msgid "Deleted ${num} ${item_type} successfully."
 msgstr ""
 
-#: ringo/views/base/import_.py:114
+#: ringo/views/base/import_.py:118
 msgid "Import failed"
 msgstr ""
 
-#: ringo/views/base/import_.py:115
+#: ringo/views/base/import_.py:119
 #, python-format
 msgid ""
 "Bad news! The import could not be finished and returns with an error.No data "

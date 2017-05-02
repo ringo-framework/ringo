@@ -7,7 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+<<<<<<< HEAD
 "POT-Creation-Date: 2017-03-28 13:15+0200\n"
+=======
+"POT-Creation-Date: 2017-02-20 17:09+0100\n"
+>>>>>>> intevation/master
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -22,7 +26,7 @@ msgstr ""
 msgid "UPDATE"
 msgstr ""
 
-#: ringo/lib/imexport.py:506
+#: ringo/lib/imexport.py:507
 msgid "CREATE"
 msgstr ""
 
@@ -424,6 +428,15 @@ msgstr ""
 msgid "Enter your Loginname and a password reset email will be sent out"
 msgstr ""
 
+<<<<<<< HEAD
+=======
+#: ringo/templates/auth/forgot_password.mako:20 ringo/views/auth.py:287
+msgid ""
+"Password reset token has been sent to the users email address. Please "
+"check your email."
+msgstr ""
+
+>>>>>>> intevation/master
 #: ringo/templates/auth/login.mako:10
 msgid "New here? Register a new account!"
 msgstr ""
@@ -497,7 +510,11 @@ msgid "You have selected %s %s for export:"
 msgstr ""
 
 #: ringo/templates/internal/export.mako:17
+<<<<<<< HEAD
 #: ringo/templates/internal/list.mako:259
+=======
+#: ringo/templates/internal/list.mako:251
+>>>>>>> intevation/master
 #: ringo/templates/internal/print.mako:11
 msgid "Close"
 msgstr ""
@@ -540,6 +557,7 @@ msgstr ""
 msgid "Overview"
 msgstr ""
 
+<<<<<<< HEAD
 #: ringo/templates/internal/list.mako:60 ringo/templates/internal/list.mako:83
 msgid "Search"
 msgstr ""
@@ -594,12 +612,71 @@ msgid "Queryname"
 msgstr ""
 
 #: ringo/templates/internal/list.mako:255
+=======
+#: ringo/templates/internal/list.mako:48 ringo/templates/internal/list.mako:71
+msgid "Search"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:49
+msgid "Search for ..."
+msgstr ""
+
+#: ringo/templates/internal/list.mako:55
+msgid "Fields"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:57
+msgid "All columns"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:69
+msgid "Search+"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:75
+msgid "Options "
+msgstr ""
+
+#: ringo/templates/internal/list.mako:93 ringo/templates/internal/list.mako:242
+msgid "Save current search filter"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:94
+msgid "Reset current search filter"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:96
+msgid "Disable regexpr in search"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:98
+msgid "Enable regexpr in search"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:103
+msgid "${num_filter} filter applied"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:228
+msgid "No items found"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:244
+msgid "Queryname"
+msgstr ""
+
+#: ringo/templates/internal/list.mako:247
+>>>>>>> intevation/master
 msgid ""
 "Please insert a name for your query. It it will be selectable under this "
 "name in the options menu of the search after saving."
 msgstr ""
 
+<<<<<<< HEAD
 #: ringo/templates/internal/list.mako:258
+=======
+#: ringo/templates/internal/list.mako:250
+>>>>>>> intevation/master
 msgid "Save Query"
 msgstr ""
 
@@ -796,6 +873,7 @@ msgstr ""
 msgid "The user was not confirmed. Maybe the confirmation token was not valid?"
 msgstr ""
 
+<<<<<<< HEAD
 #: ringo/views/auth.py:276
 msgid "Password reset request"
 msgstr ""
@@ -812,12 +890,31 @@ msgid "Password has been reseted"
 msgstr ""
 
 #: ringo/views/auth.py:327
+=======
+#: ringo/views/auth.py:275
+msgid "Password reset request"
+msgstr ""
+
+#: ringo/views/auth.py:292
+msgid "Login doesn't exist or written wrong"
+msgstr ""
+
+#: ringo/views/auth.py:315
+msgid "Password has been reseted"
+msgstr ""
+
+#: ringo/views/auth.py:325
+>>>>>>> intevation/master
 msgid ""
 "Password was resetted and sent to the users email address. Please check "
 "your email."
 msgstr ""
 
+<<<<<<< HEAD
 #: ringo/views/auth.py:331
+=======
+#: ringo/views/auth.py:329
+>>>>>>> intevation/master
 msgid "Password was not resetted. Maybe the request token was not valid?"
 msgstr ""
 
@@ -915,11 +1012,11 @@ msgstr ""
 msgid "Deleted ${num} ${item_type} successfully."
 msgstr ""
 
-#: ringo/views/base/import_.py:114
+#: ringo/views/base/import_.py:118
 msgid "Import failed"
 msgstr ""
 
-#: ringo/views/base/import_.py:115
+#: ringo/views/base/import_.py:119
 #, python-format
 msgid ""
 "Bad news! The import could not be finished and returns with an error.No "
@@ -1703,6 +1800,29 @@ msgstr ""
 #~ msgid "Please select one of the following actions to change the state:"
 #~ msgstr ""
 
+<<<<<<< HEAD
 #~ msgid "Login doesn't exist or written wrong"
+=======
+#~ msgid ""
+#~ "<a href=\"https://bitbucket.org/ti/ringo\" "
+#~ "target=\"_blank\">Ringo</a> is a small Python"
+#~ " based high level web application "
+#~ "framework build with Pyramid . It "
+#~ "provides basic functionality which is "
+#~ "often used in modern web applications"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "<a href=\"https://bitbucket.org/ti/formbar\" "
+#~ "target=\"_blank\">Formbar</a> is a Python "
+#~ "library to layout, render and validate"
+#~ " HTML forms in web applications."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "<a href=\"www.sqlalchemy.org\" "
+#~ "target=\"_blank\">SQLAlchemy</a> is Python based "
+#~ "ORM mapper."
+>>>>>>> intevation/master
 #~ msgstr ""
 

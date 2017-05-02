@@ -7,7 +7,7 @@ function on${table_id}TableRendered(settings, json) {
   onDTTableRendered();
   % for fltr in tableconfig.get_filters():
   <% id = table_id + "_" + fltr.field %>
-  $('.search-filters').append('<div class="checkbox searchfilter"><label><input class="form-control" id="${id}_${_(fltr.expr)}" type="checkbox" value="${_(fltr.expr)}" name="${id}" ${fltr.active and 'checked="checked"'}>${_(fltr.label)}</label></div>');
+  $('.search-filters').append('<div class="checkbox searchfilter" style="position:relative;top:8px;"><label><input class="checkobx" style="position:relative;top:1px;" id="${id}_${_(fltr.expr)}" type="checkbox" value="${_(fltr.expr)}" name="${id}" ${fltr.active and 'checked="checked"'}>${_(fltr.label)}</label></div>');
   % endfor
   % for fltr in tableconfig.get_filters():
     % if tableconfig.is_bundled() and len(bundled_actions) > 0:
