@@ -21,13 +21,13 @@ function getDTLanguage(language) {
 }
 
 /**
- * checks if any form in the DOM is dirty, bypassing form and input tags with
+ * checks if any formbar-form is dirty, bypassing form and input tags with
  * the attribute 'no-dirtyable'. Returns true if some change is found
  * (e.g. < form no-dirtyable>...< /form>)
  * (e.g. < input type='checkbox' no-dirtyable />)
  */
 function checkDirtyForms () {
-    var forms = document.getElementsByTagName('FORM');
+    var forms = $("div.formbar-form").find("form");
     var forms_as_arr = Array.from(forms);
     for (var i = 0; i < forms_as_arr.length; i++){
         form = forms_as_arr[i];
