@@ -30,7 +30,7 @@
     if colrenderer:
       value = colrenderer(request, item, col, tableconfig)
     else:
-      rvalue = h.prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand'), strict=col.get('strict', True)))
+      rvalue = h.prettify(request, item.get_value(col.get('name'), expand=col.get('expand'), strict=col.get('strict', True)))
       if isinstance(rvalue, list):
         value = ", ".join(unicode(v) for v in rvalue)
       else:
@@ -78,7 +78,7 @@
     ## Render columns
     % for num, col in enumerate(tableconfig.get_columns(request.user)):
       <td class="${'link' if url else ''}">
-        ${render_value(request, item, col, tableconfig)}
+        ${render_value(request, item[0], col, tableconfig)}
       </td>
     % endfor
   </tr>
