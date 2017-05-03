@@ -415,6 +415,7 @@ class ListingFieldRenderer(FormbarSelectionField):
                   '_': self._field._form._translate,
                   's': security,
                   'h': helpers,
+                  'url_getter': get_link_url,
                   'tableconfig': get_table_config(self.itemlist.clazz,
                                                   config.table)}
         html.append(literal(self.template.render(**values)))

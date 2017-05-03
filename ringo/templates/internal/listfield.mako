@@ -16,6 +16,7 @@
   ${selection_helpers.render_table_header_cols(request, tableconfig)}
   </tr>
 </thead>
+
 <tbody>
   % for item in items:
     ## Only render linkable items or items which are already selected
@@ -24,26 +25,12 @@
     %>
     % if item[2] or is_selected:
       <%
-        openmodal = field.renderer.openmodal == "true"
-        backlink = field.renderer.backlink != "false"
-        nolinks = field.renderer.nolinks == "true"
-        permission = None
-        url = None
-        if not nolinks:
-          if field.renderer.action:
-            if s.has_permission(field.renderer.action, item[0], request):
-              permission = field.renderer.action
-          else:
-            if s.has_permission("update", item[0], request):
-              permission = "update"
-            elif s.has_permission("read", item[0], request):
-              permission = "read"
-        if permission:
-          url = request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)
-          if backlink:
-            url += "?backurl=%s" % request.current_route_path()
+        if not field.renderer.nolinks == "true":
+          url = url_getter(item[0], request, field.renderer.action, field.renderer.backlink != "false")
+        else:
+          url = None
       %>
-      <tr item-id="${item[0].id}" ${'data-link={}'.format(url) if url else ''} ${'class="modalform"' if openmodal else ''}>
+      <tr item-id="${item[0].id}" ${'data-link={}'.format(url) if url else ''} ${'class="modalform"' if (field.renderer.openmodal == "true") else ''}>
       % if not field.readonly and field.renderer.onlylinked != "true":
         ${selection_helpers.render_table_body_checkbox(field.name, item[0].id, is_selected, item[2], ('checkOne' if field.renderer.multiple == 'false' else 'check'))}
       % endif
