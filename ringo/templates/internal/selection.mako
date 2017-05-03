@@ -3,7 +3,7 @@
 ###############################################################################
 
 <%def name="render_table_header_checkbox(name, multiple=True)">
-  <th width="20px">
+  <th width="20px" class="checkboxrow">
     % if multiple:
       <input type="checkbox" name="check_all" onclick="checkAll('${name}');">
     % endif
@@ -12,7 +12,11 @@
 
 <%def name="render_table_header_cols(request, tableconfig)">
   % for num, col in enumerate(tableconfig.get_columns(request.user)):
-    <th class="${num > 0 and 'hidden-xs'}" width="${col.get('width')}">${_(col.get('label'))}</th>
+    <th style="${'' if col.get('visible', True) else 'display: none;'}" 
+        class="${num > 0 and 'hidden-xs'}"
+        title="${col.get('title') or _(col.get('label'))}"
+        width="${col.get('width')}">${_(col.get('label'))}
+    </th>
   % endfor
 </%def>
 
