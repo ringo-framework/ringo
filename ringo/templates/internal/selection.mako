@@ -1,3 +1,25 @@
+###############################################################################
+##                           Table Header Helpers                            ##
+###############################################################################
+
+<%def name="render_table_header_checkbox(name, multiple=True)">
+  <th width="20px">
+    % if multiple:
+      <input type="checkbox" name="check_all" onclick="checkAll('${name}');">
+    % endif
+  </th>
+</%def>
+
+<%def name="render_table_header_cols(request, tableconfig)">
+  % for num, col in enumerate(tableconfig.get_columns(request.user)):
+    <th class="${num > 0 and 'hidden-xs'}" width="${col.get('width')}">${_(col.get('label'))}</th>
+  % endfor
+</%def>
+
+###############################################################################
+##                               Value Helpers                               ##
+###############################################################################
+
 <%def name="render_value(request, item, col, tableconfig)">
   <%
   try:
