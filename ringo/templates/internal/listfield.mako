@@ -9,7 +9,12 @@
   % if not field.readonly and not field.renderer.hideadd == "true" and s.has_permission("create", clazz, request) and h.get_item_modul(request, clazz).has_action("create"):
     ${render_item_add_button(request, clazz, field)}
   % endif
-  ${render_table_header(request, field, tableconfig)}
+  <tr>
+  % if not field.readonly and field.renderer.onlylinked != "true":
+    ${render_table_header_checkbox(field.name, field.renderer.multiple != "false")}
+  % endif
+  ${render_table_header_cols(request, tableconfig)}
+  </tr>
 </thead>
 <tbody>
   % for item in items:
@@ -67,19 +72,18 @@
   </tr>
 </%def>
 
-<%def name="render_table_header(request, field, tableconfig)">
-  <tr>
-  % if not field.readonly and field.renderer.onlylinked != "true":
-    <th width="20px">
-      % if not field.renderer.multiple == "false":
-        <input type="checkbox" name="check_all" onclick="checkAll('${field.name}');">
-      % endif
-    </th>
-  % endif
-    % for num, col in enumerate(tableconfig.get_columns(request.user)):
+<%def name="render_table_header_checkbox(name, multiple=True)">
+  <th width="20px">
+    % if multiple:
+      <input type="checkbox" name="check_all" onclick="checkAll('${name}');">
+    % endif
+  </th>
+</%def>
+
+<%def name="render_table_header_cols(request, tableconfig)">
+  % for num, col in enumerate(tableconfig.get_columns(request.user)):
     <th class="${num > 0 and 'hidden-xs'}" width="${col.get('width')}">${_(col.get('label'))}</th>
-    % endfor
-  </tr>
+  % endfor
 </%def>
 
 <%def name="render_item_add_button(request, clazz, field)">
