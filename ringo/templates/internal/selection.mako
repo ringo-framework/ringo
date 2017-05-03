@@ -17,6 +17,26 @@
 </%def>
 
 ###############################################################################
+##                            Table Body Helpers                             ##
+###############################################################################
+
+
+<%def name="render_table_body_cols(request, item, tableconfig, css_class='')">
+  % for num, col in enumerate(tableconfig.get_columns(request.user)):
+    <td class="${css_class}">
+      ${render_value(request, item, col, tableconfig)}
+    </td>
+  % endfor
+</%def>
+
+<%def name="render_table_body_checkbox(name, value, selected, visible=True, checker='check')">
+  <td>
+    <span class="hidden">${"1" if selected else "0"}</span>
+    <input type="checkbox" value="${value}" name="${name}" class="${'' if visible else 'hidden'}" ${'checked="checked"' if selected  else ''} onclick="${checker}('${name}', this);"/>
+  </td>
+</%def>
+
+###############################################################################
 ##                               Value Helpers                               ##
 ###############################################################################
 

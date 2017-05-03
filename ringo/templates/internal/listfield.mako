@@ -45,29 +45,14 @@
       %>
       <tr item-id="${item[0].id}" ${'data-link={}'.format(url) if url else ''} ${'class="modalform"' if openmodal else ''}>
       % if not field.readonly and field.renderer.onlylinked != "true":
-        ${render_table_body_checkbox(field.name, item[0].id, is_selected, item[2], ('checkOne' if field.renderer.multiple == 'false' else 'check'))}
+        ${selection_helpers.render_table_body_checkbox(field.name, item[0].id, is_selected, item[2], ('checkOne' if field.renderer.multiple == 'false' else 'check'))}
       % endif
-      ${render_table_body_cols(request, item[0], tableconfig, 'link' if url else '')}
+      ${selection_helpers.render_table_body_cols(request, item[0], tableconfig, 'link' if url else '')}
       </tr>
     % endif
   % endfor
 </tbody>
 </table>
-
-<%def name="render_table_body_cols(request, item, tableconfig, css_class='')">
-  % for num, col in enumerate(tableconfig.get_columns(request.user)):
-    <td class="${css_class}">
-      ${selection_helpers.render_value(request, item, col, tableconfig)}
-    </td>
-  % endfor
-</%def>
-
-<%def name="render_table_body_checkbox(name, value, selected, visible=True, checker='check')">
-  <td>
-    <span class="hidden">${"1" if selected else "0"}</span>
-    <input type="checkbox" value="${value}" name="${name}" class="${'' if visible else 'hidden'}" ${'checked="checked"' if selected  else ''} onclick="${checker}('${name}', this);"/>
-  </td>
-</%def>
 
 <%def name="render_item_add_button(request, clazz, field)">
   <tr class="table-toolbar">
