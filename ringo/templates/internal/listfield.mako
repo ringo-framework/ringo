@@ -1,3 +1,4 @@
+<%namespace file="/internal/selection.mako" name="selection_helpers"/>
 % if field.renderer.showsearch == "true" and not field.readonly:
 <table class="table table-condensed table-striped table-hover datatable-simple">
 % else:
@@ -22,24 +23,6 @@
   % endfor
 </tbody>
 </table>
-
-<%def name="render_value(request, item, col, tableconfig)">
-  <%
-  try:
-    colrenderer = tableconfig.get_renderer(col)
-    if colrenderer:
-      value = colrenderer(request, item, col, tableconfig)
-    else:
-      rvalue = h.prettify(request, item.get_value(col.get('name'), expand=col.get('expand'), strict=col.get('strict', True)))
-      if isinstance(rvalue, list):
-        value = ", ".join(unicode(v) for v in rvalue)
-      else:
-        value = _(rvalue)
-  except AttributeError:
-    value = "NaF"
-  %>
-  ${value}
-</%def>
 
 <%def name="render_table_row(request, item, tableconfig, is_selected=False)">
   <%
@@ -78,7 +61,7 @@
     ## Render columns
     % for num, col in enumerate(tableconfig.get_columns(request.user)):
       <td class="${'link' if url else ''}">
-        ${render_value(request, item[0], col, tableconfig)}
+        ${selection_helpers.render_value(request, item[0], col, tableconfig)}
       </td>
     % endfor
   </tr>
