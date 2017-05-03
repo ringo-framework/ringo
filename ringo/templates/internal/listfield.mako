@@ -23,53 +23,50 @@
       is_selected = item[0].id in selected_item_ids
     %>
     % if item[2] or is_selected:
-      ${render_table_row(request, item, tableconfig, is_selected)}
+      <%
+        openmodal = field.renderer.openmodal == "true"
+        backlink = field.renderer.backlink != "false"
+        nolinks = field.renderer.nolinks == "true"
+        permission = None
+        url = None
+        if not nolinks:
+          if field.renderer.action:
+            if s.has_permission(field.renderer.action, item[0], request):
+              permission = field.renderer.action
+          else:
+            if s.has_permission("update", item[0], request):
+              permission = "update"
+            elif s.has_permission("read", item[0], request):
+              permission = "read"
+        if permission:
+          url = request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)
+          if backlink:
+            url += "?backurl=%s" % request.current_route_path()
+      %>
+      <tr item-id="${item[0].id}" ${'data-link={}'.format(url) if url else ''} ${'class="modalform"' if openmodal else ''}>
+      % if not field.readonly and field.renderer.onlylinked != "true":
+        ${render_table_body_checkbox(field.name, item[0].id, is_selected, item[2], ('checkOne' if field.renderer.multiple == 'false' else 'check'))}
+      % endif
+      ${render_table_body_cols(request, item[0], tableconfig, 'link' if url else '')}
+      </tr>
     % endif
   % endfor
 </tbody>
 </table>
 
-<%def name="render_table_row(request, item, tableconfig, is_selected=False)">
-  <%
-    openmodal = field.renderer.openmodal == "true"
-    backlink = field.renderer.backlink != "false"
-    nolinks = field.renderer.nolinks == "true"
-    permission = None
-    url = None
-    if not nolinks:
-      if field.renderer.action:
-        if s.has_permission(field.renderer.action, item[0], request):
-          permission = field.renderer.action
-      else:
-        if s.has_permission("update", item[0], request):
-          permission = "update"
-        elif s.has_permission("read", item[0], request):
-          permission = "read"
-    if permission:
-      url = request.route_path(h.get_action_routename(clazz, permission), id=item[0].id)
-      if backlink:
-        url += "?backurl=%s" % request.current_route_path()
-  %>
-  <tr item-id="${item[0].id}" ${'data-link={}'.format(url) if url else ''} ${'class="modalform"' if modalform else ''}>
-    ## Render checkbox. A checkbox is rendered
-    % if not field.readonly and field.renderer.onlylinked != "true":
-      <td>
-        <span class="hidden">${"1" if is_selected else "0"}</span>
-        <input type="checkbox" 
-               value="${item[0].id}" 
-               name="${field.name}"
-               class="${'' if item[2] else 'hidden'}"
-               ${'checked="checked"' if is_selected  else ''}
-               onclick="${'checkOne' if field.renderer.multiple == 'false' else 'check'}('${field.name}', this);"/>
-      </td>
-    % endif
-    ## Render columns
-    % for num, col in enumerate(tableconfig.get_columns(request.user)):
-      <td class="${'link' if url else ''}">
-        ${selection_helpers.render_value(request, item[0], col, tableconfig)}
-      </td>
-    % endfor
-  </tr>
+<%def name="render_table_body_cols(request, item, tableconfig, css_class='')">
+  % for num, col in enumerate(tableconfig.get_columns(request.user)):
+    <td class="${css_class}">
+      ${selection_helpers.render_value(request, item, col, tableconfig)}
+    </td>
+  % endfor
+</%def>
+
+<%def name="render_table_body_checkbox(name, value, selected, visible=True, checker='check')">
+  <td>
+    <span class="hidden">${"1" if selected else "0"}</span>
+    <input type="checkbox" value="${value}" name="${name}" class="${'' if visible else 'hidden'}" ${'checked="checked"' if selected  else ''} onclick="${checker}('${name}', this);"/>
+  </td>
 </%def>
 
 <%def name="render_item_add_button(request, clazz, field)">
