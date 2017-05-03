@@ -407,7 +407,7 @@ class ListingFieldRenderer(FormbarSelectionField):
                                                         item_tuples)
 
         values = {'items': item_tuples,
-                  'selected_items': selected_items,
+                  'selected_item_ids': [i.id for i in selected_items],
                   'field': self._field,
                   'clazz': self.get_class(),
                   'pclazz': self._field._form._item.__class__,

@@ -11,13 +11,10 @@
   ${render_table_header(request, field, tableconfig)}
 </thead>
 <tbody>
-  <%
-    selected = [x.id for x in selected_items]
-  %>
   % for item in items:
     ## Only render linkable items or items which are already selected
     <%
-      is_selected = item[0].id in selected
+      is_selected = item[0].id in selected_item_ids
     %>
     % if item[2] or is_selected:
       ${render_table_row(request, item, tableconfig, is_selected)}
