@@ -9,9 +9,9 @@ def render_link(request, field, url, value, clazz):
   out.append('<a href="%s" data-toggle="tooltip"' % (url))
   out.append('class="">')
   if hasattr(value, "render"):
-    out.append('%s</a>' % _(value.render()))
+    out.append('%s</a>' % value.render())
   else:
-    out.append('%s</a>' % _(value))
+    out.append('%s</a>' % value)
   return " ".join(out)
 
 def render_filter_link(request, field, value, clazz):
@@ -23,9 +23,9 @@ def render_filter_link(request, field, value, clazz):
   out.append('class="link filter"')
   out.append('title="Filter %s on %s in %s">' % (h.get_item_modul(request, clazz).get_label(plural=True), value, field.get('label')))
   if hasattr(value, "render"):
-    out.append('%s</a>' % _(value.render()))
+    out.append('%s</a>' % value.render())
   else:
-    out.append('%s</a>' % _(value))
+    out.append('%s</a>' % value)
   return " ".join(out)
 
 def render_responsive_class(visibleonsize):
