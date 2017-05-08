@@ -13,7 +13,6 @@ from babel.dates import (
 )
 from webhelpers.html import literal
 from pyramid.threadlocal import get_current_request
-from ringo.lib.i18n import locale_negotiator
 from formbar.converters import from_timedelta
 
 ########################################################################
