@@ -5,6 +5,7 @@ from datetime import (
     timedelta
 )
 from dateutil import tz
+import pytz
 from babel.core import Locale
 from babel.dates import (
     format_datetime as babel_format_datetime,
@@ -84,7 +85,7 @@ def get_local_datetime(dt, timezone=None):
 
     """
     if not dt.tzinfo:
-        dt = dt.replace(tzinfo=tz.gettz('UTC'))
+        dt = pytz.utc.localize(dt)
     if not timezone:
         timezone = tz.tzlocal()
     return dt.astimezone(timezone)
