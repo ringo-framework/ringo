@@ -4,6 +4,7 @@ from pyramid.decorator import reify
 from ringo.lib.request.featuretoggle import FeatureToggle
 from ringo.lib.request.params import Params, save_params_in_session
 from ringo.lib.history import History, handle_history
+from ringo.lib.i18n import locale_negotiator
 
 
 class RingoRequest(object):
@@ -19,6 +20,11 @@ class RingoRequest(object):
     def feature(self):
         """Cached property to the FeatureToggle configuration."""
         return FeatureToggle(self.request.registry.settings)
+
+    @reify
+    def locale(self):
+        """Cached property of the locale setting."""
+        return locale_negotiator(self.request)
 
     @reify
     def params(self):

@@ -35,7 +35,7 @@ def prettify(request, value):
     """
     if not request:
         request = get_current_request()
-    locale_name = locale_negotiator(request)
+    locale_name = request.ringo.locale
 
     # Special handling for Dummyrequest from testing
     if not isinstance(locale_name, basestring):
