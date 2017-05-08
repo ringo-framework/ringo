@@ -362,6 +362,12 @@ class Owned(object):
         """Returns true if the Item is owned by the given user."""
         return user.id == self.uid
 
+    def is_member(self, user):
+        if self.group:
+            return user.id in [g.id for g in self.group]
+        else:
+            return False
+
 
 class Nested(object):
     """Mixin to make nested (self-reference) Items possible. Each item
