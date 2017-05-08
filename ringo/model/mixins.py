@@ -364,7 +364,7 @@ class Owned(object):
 
     def is_member(self, user):
         if self.group:
-            return user.id in [g.id for g in self.group]
+            return user.id in [user.id for user in self.group.members]
         else:
             return False
 
