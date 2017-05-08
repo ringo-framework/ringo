@@ -557,6 +557,7 @@ def get_item_list(request, clazz, user=None, cache="", items=None):
                 # Do we need to check for ownership?
                 if has_admin_role("read", clazz, request):
                     listing = BaseList(clazz, request.db, cache, items)
+                    listing._user = request.user
                 else:
                     listing = BaseList(clazz, request.db, cache, items, request.user)
             else:
