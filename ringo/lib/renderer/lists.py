@@ -29,12 +29,14 @@ def get_read_update_url(request, item, clazz, prefilterd=False):
     """Helper method to get the URL to read or update in item in various
     overviews. If the user of this request is not allowed to see the
     item at all, None will be returned as the url."""
+
+    is_owner = item.is_owner(request.user) or item.is_member(request.user)
     permissions = ['read', 'update']
     url = None
     for permission in permissions:
         if permission == 'read' and prefilterd:
             url = request.route_path(get_action_routename(clazz, permission), id=item.id)
-        elif security.has_permission(permission, item, request) or ():
+        elif is_owner and security.has_permission(permission, item, request):
             url = request.route_path(get_action_routename(clazz, permission), id=item.id)
         else:
             break
