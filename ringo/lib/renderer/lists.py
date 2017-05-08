@@ -10,6 +10,7 @@ from ringo.lib.helpers import (
     literal,
     get_action_routename
 )
+from ringo.model.mixins import Owned
 from ringo.lib.table import get_table_config
 import ringo.lib.security as security
 
@@ -30,13 +31,15 @@ def get_read_update_url(request, item, clazz, prefilterd=False):
     overviews. If the user of this request is not allowed to see the
     item at all, None will be returned as the url."""
 
-    is_owner = item.is_owner(request.user) or item.is_member(request.user)
+    is_owner = None
+    if isinstance(item, Owned):
+        is_owner = item.is_owner(request.user) or item.is_member(request.user)
     permissions = ['read', 'update']
     url = None
     for permission in permissions:
         if permission == 'read' and prefilterd:
             url = request.route_path(get_action_routename(clazz, permission), id=item.id)
-        elif is_owner and security.has_permission(permission, item, request):
+        elif (is_owner or is_owner is None) and security.has_permission(permission, item, request):
             url = request.route_path(get_action_routename(clazz, permission), id=item.id)
         else:
             break
