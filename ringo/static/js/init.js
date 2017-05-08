@@ -134,8 +134,22 @@ $( document ).ready(function() {
     // Check the initial values of the form and warn the user if the leaves
     // the page without saving the form.
     var DirtyFormWarningOpen = false;
+    $('.formbar-form form').each(function() {
+        $(this).data('initialValue', $(this).serialize());
+    });
     function openDirtyDialog(url, hide_spinner, event) {
-        isDirty = checkDirtyForms();
+        isDirty = false;
+        $('.formbar-form form').each(function () {
+            if($(this).data('initialValue') != $(this).serialize()){
+                // The DirtyFormWarning should not be shown, if the form
+                // has the attribute "no-dirtyable". See waskiq/issue2049.
+                var no_dirtyable = $(this).attr("no-dirtyable")
+                if(typeof no_dirtyable === typeof undefined
+                    || no_dirtyable != "true") {
+                    isDirty = true;
+                    }
+            }
+        });
         if((isDirty == true) && (DirtyFormWarningOpen == false)) {
             var dialog = $("#DirtyFormWarning");
             $('#DirtyFormWarningProceedButton').attr("href", url);
