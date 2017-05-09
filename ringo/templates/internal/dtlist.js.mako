@@ -7,7 +7,7 @@ function on${table_id}TableRendered(settings, json) {
   onDTTableRendered();
   % for fltr in tableconfig.get_filters():
   <% id = table_id + "_" + fltr.field %>
-  $('.search-filters').append('<div class="checkbox searchfilter" style="position:relative;top:8px;"><label><input class="checkobx" style="position:relative;top:1px;" id="${id}_${_(fltr.expr)}" type="checkbox" value="${_(fltr.expr)}" name="${id}" ${fltr.active and 'checked="checked"'}>${_(fltr.label)}</label></div>');
+  $('.search-filters').append('<div class="checkbox searchfilter" style="position:relative;top:8px;"><label><input class="checkobx" style="position:relative;top:1px;" id="${id}_${_(fltr.id)}" type="checkbox" value="${_(fltr.expr)}" name="${id}" ${fltr.active and 'checked="checked"'}>${_(fltr.label)}</label></div>');
   % endfor
   % for fltr in tableconfig.get_filters():
     % if tableconfig.is_bundled() and len(bundled_actions) > 0:
@@ -16,7 +16,7 @@ function on${table_id}TableRendered(settings, json) {
     var column_${tableconfig.get_column_index(fltr.field)} = api.column(${tableconfig.get_column_index(fltr.field)});
     % endif
   % if fltr.type == "checkbox":
-  $('#${table_id}_${fltr.field}_${fltr.expr}').change(function() {
+  $('#${table_id}_${fltr.field}_${fltr.id}').change(function() {
     filter_${table_id}_${fltr.field}(this);
   });
   function filter_${table_id}_${fltr.field}(field) {
