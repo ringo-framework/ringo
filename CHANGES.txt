@@ -9,10 +9,12 @@ API to make getting often used values more easy.
   request.ringo object:
   	- Access History: request.ringo.history 
   	- Access Query parameters : request.ringo.params
+  	- Application locale: request.ringo.locale
 * Added Featuretoggles through the "request.ringo.feature" object. See
   documentation for more details
 * Added new configuration var "app.history.ignore" to add URLs which must not
   be added to the history.
+* Performance improvements on large overviews.
 
 1.16.2
 ======
