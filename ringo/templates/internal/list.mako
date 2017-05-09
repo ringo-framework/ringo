@@ -9,23 +9,22 @@ def render_link(request, field, url, value, clazz):
   out.append('<a href="%s" data-toggle="tooltip"' % (url))
   out.append('class="">')
   if hasattr(value, "render"):
-    out.append('%s</a>' % _(value.render()))
+    out.append('%s</a>' % value.render())
   else:
-    out.append('%s</a>' % _(value))
+    out.append('%s</a>' % value)
   return " ".join(out)
 
-def render_filter_link(request, field, value, clazz):
+def render_filter_link(url, request, field, value, clazz):
   out = []
   # Only take the path of the url and ignore any previous search filters.
-  url = request.current_route_path().split("?")[0]
   params = "form=search&search=%s&field=%s" % (value, field.get('name'))
   out.append('<a href="%s?%s" data-toggle="tooltip"' % (url, params))
   out.append('class="link filter"')
   out.append('title="Filter %s on %s in %s">' % (h.get_item_modul(request, clazz).get_label(plural=True), value, field.get('label')))
   if hasattr(value, "render"):
-    out.append('%s</a>' % _(value.render()))
+    out.append('%s</a>' % value.render())
   else:
-    out.append('%s</a>' % _(value))
+    out.append('%s</a>' % value)
   return " ".join(out)
 
 def render_responsive_class(visibleonsize):
@@ -207,11 +206,11 @@ if sortable:
             <%
               links = []
               for v in value:
-                links.append(render_filter_link(request, field, v, clazz))
+                links.append(url, render_filter_link(request, field, v, clazz))
             %>
             ${", ".join(links) | n}
           % else:
-            ${render_filter_link(request, field, value, clazz) | n}
+            ${render_filter_link(url, request, field, value, clazz) | n}
           % endif
         % else:
           % if isinstance(value, list):

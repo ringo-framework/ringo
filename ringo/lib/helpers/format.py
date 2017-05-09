@@ -13,7 +13,6 @@ from babel.dates import (
 )
 from webhelpers.html import literal
 from pyramid.threadlocal import get_current_request
-from ringo.lib.i18n import locale_negotiator
 from formbar.converters import from_timedelta
 
 ########################################################################
@@ -36,7 +35,13 @@ def prettify(request, value):
     """
     if not request:
         request = get_current_request()
-    locale_name = locale_negotiator(request)
+    try:
+        #  FIXME: While testing get_current_request returns a dummy
+        #  request object which does not have a ringo attribute.
+        #  Currenlty do not now how to add this. (ti) <2017-05-09 09:05> 
+        locale_name = request.ringo.locale
+    except AttributeError:
+        locale_name = None
 
     # Special handling for Dummyrequest from testing
     if not isinstance(locale_name, basestring):

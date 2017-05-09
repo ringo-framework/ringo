@@ -1743,6 +1743,17 @@ The mode is available using the :func:`get_app_mode` function.
 
 .. index:: Testing mode
 
+History ignores
+===============
+You can configure URL which will be ignored in history. This is often needed
+in case you do AJAX requests to fetch data. As you do not want those URL be
+part of the history you can configure to ignore those URLs.
+
+* app.history.ignore = /foo,/bar,/baz
+
+The ignore list is a comma separated list of fragments of an URL. The code
+will check if the current URL starts with one of the defined ignores.
+
 Cache
 =====
 You can configure to cache the loaded configurations for the form
@@ -1772,6 +1783,31 @@ In unittests you can use the following URLs to start a Testcase:
 
 * /_test_case/start
 * /_test_case/stop
+
+Feature Toggles
+===============
+Feature toggles can be used to enable specific code paths in the
+application by setting a config variable in the ini file. This is
+usefull to make features which are currently under development available
+
+Feature toggles are set in the *ini* file like this:: 
+
+    feature.mynewfeaure = true.
+
+The configuration is available in the current request and can be used
+everywhere in the application where the request is available.::
+
+    if request.ringo.feature.mynewfeaure:
+        # Feature is anabled
+        pass
+    else:
+        # Feature is not anabled
+        pass
+
+Please note that the value in the configuration must be set to *true* to
+consider the feature to be enabled. If the feature is set to anything
+different or isn't configured at all it is considered to be not enabled.
+
 
 ******
 Layout

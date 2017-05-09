@@ -403,6 +403,26 @@ def has_role(user, role):
     return user.has_role(role)
 
 
+def has_admin_role(action_name, clazz, request):
+    """Return True if the current user has admin role for the given
+    action_name on the given clazz. Having a admin role means that the
+    check for the ownership in context of the permissions checks can be
+    omitted.
+
+    :action_name: Name of the action
+    :clazz: clazz
+    :request: current request and user
+    :returns: True or False
+    """
+    modul = get_item_modul(request, clazz)
+    for action in modul.actions:
+        if action.name.lower() == action_name:
+            for role in action.roles:
+                if role.admin and has_role(request.user, role.name):
+                    return True
+    return False
+
+
 def get_roles(user):
     """Returns a list of roles the user has. The list contains
     `Role` object and are collected by loading roles directly

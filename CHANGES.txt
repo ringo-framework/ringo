@@ -1,3 +1,19 @@
+1.17.0
+======
+Introduced RingoRequest object. The object is available as "request.ringo" in
+the current request and will become the central place to access request
+related attribute in context of the Ringo application. The object provides an
+API to make getting often used values more easy.
+
+* Started to move getting certain values from the request into the
+  request.ringo object:
+  	- Access History: request.ringo.history 
+  	- Access Query parameters : request.ringo.params
+* Added Featuretoggles through the "request.ringo.feature" object. See
+  documentation for more details
+* Added new configuration var "app.history.ignore" to add URLs which must not
+  be added to the history.
+
 1.16.2
 ======
 Bugfix release. Restore old behaviour of dirty form checks.
