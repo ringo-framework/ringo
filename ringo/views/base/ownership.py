@@ -4,8 +4,6 @@ from ringo.views.helpers import (
     get_rendered_ownership_form
 )
 from ringo.views.request import (
-    handle_params,
-    handle_history,
     get_return_value,
     get_item_from_request,
     get_item_modul,
@@ -23,8 +21,6 @@ def ownership(request, callback=None, renderers=None):
     :callback: Current function which is called after the item has been read.
     :returns: Dictionary.
     """
-    handle_history(request)
-    handle_params(request)
     clazz = request.context.__model__
     item_label = get_item_modul(request, clazz).get_label()
     form = get_ownership_form(request)

@@ -15,7 +15,7 @@ import re
 import uuid
 import fuzzy
 import Levenshtein
-from sqlalchemy import Column, CHAR
+from sqlalchemy import Column, CHAR, or_
 from sqlalchemy.orm import joinedload, Session
 from ringo.lib.helpers import (
     serialize, get_item_modul,
@@ -540,15 +540,31 @@ def get_item_list(request, clazz, user=None, cache="", items=None):
     :returns: BaseList instance
 
     """
+    from ringo.lib.security import has_admin_role, has_permission
     if user:
         user_key = user.id
     else:
         user_key = None
     key = "%s-%s" % (clazz._modul_id, user_key)
     if not request.cache_item_list.get(key):
-        listing = BaseList(clazz, request.db, cache, items)
-        if user:
-            listing = filter_itemlist_for_user(request, listing)
+        if items:
+            listing = BaseList(clazz, request.db, cache, items)
+            if user:
+                listing = filter_itemlist_for_user(request, listing)
+        elif user:
+            # Is the current user allowed to read the items at all?
+            if has_permission("read", clazz, request):
+                # Do we need to check for ownership?
+                if has_admin_role("read", clazz, request):
+                    listing = BaseList(clazz, request.db, cache, items)
+                    listing._user = request.user
+                else:
+                    listing = BaseList(clazz, request.db, cache, items, request.user)
+            else:
+                items = []
+                listing = BaseList(clazz, request.db, cache, items)
+        else:
+            listing = BaseList(clazz, request.db, cache, items)
         # Only cache the result if not items has been prefined for the
         # list.
         if items is None:
@@ -594,14 +610,14 @@ class BaseList(object):
     The BaseList is usually created by calling the
     :func:`.get_item_list` method. Using this method the BaseList will
     include all items of a given class which are readable by the current
-    user. 
+    user.
 
     Alternatively the BaseList can be initiated directly in two ways. On
     default all items of a given class will be loaded from the database.
     The other way is to initiate the list with a list of preloaded
     items.
     """
-    def __init__(self, clazz, db, cache="", items=None):
+    def __init__(self, clazz, db, cache="", items=None, user=None):
         """A List object of. A list can be filterd, and sorted.
 
         :clazz: Class of items which will be loaded.
@@ -615,6 +631,13 @@ class BaseList(object):
         self.db = db
         if items is None:
             q = self.db.query(self.clazz)
+            if user and isinstance(self.clazz, Owned):
+                uid = user.id
+                gids = [g.id for g in user.groups]
+                q = q.filter(or_(self.clazz.uid == uid, self.clazz.gid.in_(gids)))
+                # Mark this listing to be prefilterd for a user.
+                self._user = user
+
             if cache in regions.keys():
                 q = set_relation_caching(q, self.clazz, cache)
                 q = q.options(FromCache(cache))
