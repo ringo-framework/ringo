@@ -631,7 +631,8 @@ class BaseList(object):
         self.db = db
         if items is None:
             q = self.db.query(self.clazz)
-            if user and isinstance(self.clazz, Owned):
+
+            if user and issubclass(self.clazz, Owned):
                 uid = user.id
                 gids = [g.id for g in user.groups]
                 q = q.filter(or_(self.clazz.uid == uid, self.clazz.gid.in_(gids)))
