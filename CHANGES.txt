@@ -1,3 +1,8 @@
+1.16.2
+======
+Bugfix release. Restore old behaviour of dirty form checks.
+Small performance improvements on rendering large overview lists.
+
 1.16.1
 ======
 This updated includes an optional DB Upgrade to add a UNIQUE constraint on
