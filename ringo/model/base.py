@@ -540,33 +540,15 @@ def get_item_list(request, clazz, user=None, cache="", items=None):
     :returns: BaseList instance
 
     """
-    from ringo.lib.security import has_admin_role, has_permission
     if user:
         user_key = user.id
     else:
         user_key = None
     key = "%s-%s" % (clazz._modul_id, user_key)
     if not request.cache_item_list.get(key):
-        if items:
-            listing = BaseList(clazz, request.db, cache, items)
-            if user:
-                listing = filter_itemlist_for_user(request, listing)
-        elif user:
-            # Is the current user allowed to read the items at all?
-            if has_permission("read", clazz, request):
-                # Do we need to check for ownership?
-                if has_admin_role("read", clazz, request):
-                    listing = BaseList(clazz, request.db, cache, items)
-                    listing._user = request.user
-                else:
-                    listing = BaseList(clazz, request.db, cache, items, request.user)
-            else:
-                items = []
-                listing = BaseList(clazz, request.db, cache, items)
-        else:
-            listing = BaseList(clazz, request.db, cache, items)
-        # Only cache the result if not items has been prefined for the
-        # list.
+        listing = BaseList(clazz, request.db, cache, items)
+        if user:
+            listing = filter_itemlist_for_user(request, listing)
         if items is None:
             request.cache_item_list.set(key, listing)
             return listing
@@ -631,7 +613,8 @@ class BaseList(object):
         self.db = db
         if items is None:
             q = self.db.query(self.clazz)
-            if user and isinstance(self.clazz, Owned):
+
+            if user and issubclass(self.clazz, Owned):
                 uid = user.id
                 gids = [g.id for g in user.groups]
                 q = q.filter(or_(self.clazz.uid == uid, self.clazz.gid.in_(gids)))

@@ -317,7 +317,8 @@ def get_permissions(modul, item=None):
                     continue
 
             # administrational role means allow without further
-            # ownership checks.
+            # ownership checks. If item is class than check is on modul
+            # level.
             if role.admin is True and add_perm:
                 perms.append((Allow, default_principal, permission))
 
@@ -327,6 +328,13 @@ def get_permissions(modul, item=None):
             # anyway.
             elif permission in ['create', 'list']:
                 perms.append((Allow, default_principal, permission))
+
+            # If the item is not an instance of a BaseItem then add
+            # we want to get the permission on modul
+            # level too. So again add the default principal
+            elif not isinstance(item, BaseItem) and add_perm:
+                perms.append((Allow, default_principal, permission))
+
             # If the item has a uuid the we want get the permission on
             # Item level. Only allow the owner or members of the items
             # group.
@@ -335,11 +343,7 @@ def get_permissions(modul, item=None):
                 perms.append((Allow, principal, permission))
                 principal = default_principal + ';group:%s' % item.gid
                 perms.append((Allow, principal, permission))
-            # Finally the item is not an instance of a BaseItem then add
-            # remaining action we want to get the permission on modul
-            # level too. So again add the default principal
-            elif not isinstance(item, BaseItem) and add_perm:
-                perms.append((Allow, default_principal, permission))
+
     return perms
 
 

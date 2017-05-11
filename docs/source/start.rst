@@ -950,6 +950,18 @@ Note, that we reconfigure the view by calling 'view_config' with an already
 configured route_name. This will overwrite the configured view and the
 application will use your custom view now for the route named 'home'.
 
+.. important::
+        Please do not forget to set the permissions checks in the view. If you
+        overwrite a view which requires update permissions you **must** set
+        this permission again in the view. Otherwise the permission check is
+        disabled.
+        To add a permission check you can add an `permission` attribute to the
+        `view_config` call with the name of the required permisson in lower
+        case::
+
+                @view_config(route_name='item-update', renderer='/update.mako', permission="update")
+                ...
+
 If you only want to extend the functionallity from the default you can do this
 too. No need to rewrite the default logic again in your custom view::
 

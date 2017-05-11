@@ -1,4 +1,5 @@
 """Modul to with function to work with the table configuration"""
+import base64 
 import logging
 import os
 import json
@@ -347,6 +348,9 @@ class Filter(object):
         self.label = self._conf.get("label", "")
         self.type = self._conf.get("type", "checkbox")
         self.active = self._conf.get("active", True)
+	# Decode the expr to be able to use it as as selector in jquery.
+	# Otherwise you might get an syntax error because the expression.
+	self.id = base64.urlsafe_b64encode(self.expr) 
 
         # JS Options used in filter method
         if self._conf.get("regex", False):
