@@ -15,6 +15,8 @@ API to make getting often used values more easy.
 * Added new configuration var "app.history.ignore" to add URLs which must not
   be added to the history.
 * Performance improvements on large overviews.
+* Fixed translations. Translations where broken in 1.16.x. Took last working
+  version from 1.15.4 and updated.
 
 1.16.2
 ======
