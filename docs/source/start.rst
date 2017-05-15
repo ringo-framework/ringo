@@ -244,6 +244,21 @@ Voilà! That is it.
 #########
 Tutorials
 #########
+.. _import_export:
+.. index::
+   single: Export
+   single: Import
+
+****************************
+Importing and Exporting data
+****************************
+It is possible to export and import the data of modules in different formats.
+Supported formats are **JSON** and **CSV**. The default is to export and
+import JSON.
+
+Export can be triggered in the UI (If the user has sufficient permissions, and
+export is enabled) or using the CLI commands from :ref:`clidb` to
+:ref:`clidb-export` and :ref:`clidb-import`.
 
 ************************************
 How to make config changes permanent
@@ -862,6 +877,7 @@ for this::
         # rendererd form to the template.
         rendered_form = render_item_form(request, form)
 
+.. _overview_config:
 
 **********************
 Overview configuration
@@ -2279,6 +2295,10 @@ The database can be downgraded by removing the last migration scripts::
 
         ringo-admin db downgrade 
 
+.. index::
+   single: Export
+.. _clidb-export:
+
 Export data
 ===========
 The data of a specfic module can be exported in a fixture by invoking the
@@ -2286,6 +2306,60 @@ following command::
 
 
         ringo-admin db savedata <modulname> > fixture.json
+
+The default export format is JSON. You can change the export format to CSV by
+providing the `--format` option.
+
+Only values of the given modul are exported. This includes *all*
+fields of the module but no relations. 
+
+You can include the relations as well in the export by setting the
+`--include-relations`. However this does not really include the related items
+and its values but only add another field in the export with the name of the
+relation in the modul. The value will be the string representation of the
+related item.
+
+You can restrict the exported items by setting a `--filter` option. With a
+filter only items of the given modul matching the filter expression are
+exported. The filter expression is defined in the following syntax::
+
+        --filter search,field,isregex;[search,fieldname,isregex;...]
+
+`search` defines the search expression and may be a regular expression if
+`isregexa` is "1" else "0". `fieldname` defines the name of the field on which the
+filter will apply. If field is empty, an item is exported if the search
+expression matches any of the fields of the default overview configuration.
+
+.. note::
+
+        Filtering is limited to fields which are confiured in the items
+        :ref:`overview_config`. You can not filter on fields which are not
+        included in the overview. As a workaround you can setup hidden field
+        in the overview config.
+
+It is possible to define more than one filter. All filters must match to
+include the item in the export.
+
+A More detailed configurations of the export can be done by providing a
+configuration file by setting the `--export-configuration` option. When using the
+configuration file all other options like (format, fields or
+include-relations) have no effect anymore. The default export format will be a
+nested JSON which will include all configured fields.
+
+Details on the format of the export configuration file can be found in
+:ref:`exportconfiguration`.
+
+
+.. _exportconfiguration:
+
+Configuration File
+------------------
+
+.. autoclass:: ringo.lib.imexport.ExportConfiguration
+
+.. index::
+   single: Import
+.. _clidb-import:
 
 Importing data
 ==============

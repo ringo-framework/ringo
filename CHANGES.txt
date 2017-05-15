@@ -19,16 +19,28 @@ the current request and will become the central place to access request
 related attribute in context of the Ringo application. The object provides an
 API to make getting often used values more easy.
 
-* Started to move getting certain values from the request into the
+- Started to move getting certain values from the request into the
   request.ringo object:
   	- Access History: request.ringo.history 
   	- Access Query parameters : request.ringo.params
   	- Application locale: request.ringo.locale
-* Added Featuretoggles through the "request.ringo.feature" object. See
+- Added Featuretoggles through the "request.ringo.feature" object. See
   documentation for more details
-* Added new configuration var "app.history.ignore" to add URLs which must not
+- Added new configuration var "app.history.ignore" to add URLs which must not
   be added to the history.
-* Performance improvements on large overviews.
+- Performance improvements on large overviews.
+- Fixed translations. Translations where broken in 1.16.x. Took last working
+  version from 1.15.4 and updated.
+
+Implemented recursive Import and export based on a configuration file.
+
+- Removed RecursiveExporter and RecursiveRelationExporter. These exporter has
+  only been used in the ringo_evalulation extension and are now moved in this
+  extension
+- Add --filter option to the CLI "ringo savedata" command to allow
+  filtering of what should be exported.
+- Add --export-config option to the CLI "ringo savedata" command to allow
+  recursive exports.
 
 1.16.2
 ======

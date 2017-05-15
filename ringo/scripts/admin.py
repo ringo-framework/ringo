@@ -236,6 +236,10 @@ def setup_db_parser(subparsers, parent):
                         choices=["json", "csv"],
                         default="json",
                         help="Format of the saved data")
+    savedata_parser.add_argument('--filter',
+                        help="Define a filter on the exported data to select with items should be included in the export.")
+    savedata_parser.add_argument('--export-config',
+                        help="Detailed configuration of the content of the export.")
 
     # restrict command
     savedata_parser = sp.add_parser('restrict',
