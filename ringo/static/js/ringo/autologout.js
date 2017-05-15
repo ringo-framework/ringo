@@ -21,6 +21,7 @@ $(function(){
         var auth_timeout = $("meta[name='auth_timeout']").attr("content") * 1000;
         var auth_warning = $("meta[name='auth_warning']").attr("content") * 1000;
         var auth_user = $("meta[name='auth_user']").attr("content");
+        var anonymous_user = $("meta[name='anonymous_user']").attr("content");
         var keep_alive_url = $("meta[name='auth_keepalive']").attr("content");
         var logout_url = $("meta[name='auth_logout']").attr("content");
         var currentTime = auth_timeout;
@@ -54,7 +55,7 @@ $(function(){
             }
             if (auth_user !== '' && currentTime == 0 ) location.href=logout_url+"?autologout=true";
         }
-        if (auth_user != 'anonymous') {
+        if (auth_user != anonymous_user) {
             if (currentTime > 0 && location.pathname) displayTime();
         }
     }();

@@ -7,8 +7,10 @@ from ringo.lib.helpers import (
     get_app_name,
     get_saved_searches,
     get_item_actions,
-    literal
+    literal,
+    get_action_routename
 )
+from ringo.model.mixins import Owned
 from ringo.lib.table import get_table_config
 import ringo.lib.security as security
 
@@ -24,13 +26,36 @@ log = logging.getLogger(__name__)
 ###########################################################################
 
 
+def get_read_update_url(request, item, clazz, prefilterd=False):
+    """Helper method to get the URL to read or update in item in various
+    overviews. If the user of this request is not allowed to see the
+    item at all, None will be returned as the url."""
+
+
+    is_owner = None
+    if request.user.has_role("admin"):
+        is_owner = True
+    elif isinstance(item, Owned):
+        is_owner = item.is_owner(request.user) or item.is_member(request.user)
+    permissions = ['read', 'update']
+    url = None
+    for permission in permissions:
+        if permission == 'read' and prefilterd:
+            url = request.route_path(get_action_routename(clazz, permission), id=item.id)
+        elif (is_owner or is_owner is None) and security.has_permission(permission, item, request):
+            url = request.route_path(get_action_routename(clazz, permission), id=item.id)
+        else:
+            break
+    return url
+
+
 class ListRenderer(object):
     """Docstring for ListRenderer """
 
-    def __init__(self, listing):
+    def __init__(self, listing, tablename=None):
         """@todo: to be defined """
         self.listing = listing
-        self.config = get_table_config(self.listing.clazz)
+        self.config = get_table_config(self.listing.clazz, tablename)
         self.template = template_lookup.get_template("internal/list.mako")
 
     def render(self, request):

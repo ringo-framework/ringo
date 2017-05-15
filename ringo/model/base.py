@@ -15,7 +15,7 @@ import re
 import uuid
 import fuzzy
 import Levenshtein
-from sqlalchemy import Column, CHAR
+from sqlalchemy import Column, CHAR, or_
 from sqlalchemy.orm import joinedload, Session
 from ringo.lib.helpers import (
     serialize, get_item_modul,
@@ -386,7 +386,7 @@ class BaseItem(object):
             # Ignore private form fields
             if key.startswith('_'):
                 continue
-            if hasattr(self, key):
+            try:
                 oldvalue = getattr(self, key)
                 # If oldvalue is equal to the new value we need no
                 # change at all in the model so continue
@@ -415,8 +415,8 @@ class BaseItem(object):
                         oldvalue.append(nvalue)
                 else:
                     setattr(self, key, value)
-            else:
-                log.warning('Not saving "%s". Attribute not found' % key)
+            except AttributeError:
+                log.warning('Not saving "%s". Attribute/Property not found' % key)
                 if use_strict:
                     raise AttributeError(('Not setting "%s".'
                                          ' Attribute not found.') % key)
@@ -549,8 +549,6 @@ def get_item_list(request, clazz, user=None, cache="", items=None):
         listing = BaseList(clazz, request.db, cache, items)
         if user:
             listing = filter_itemlist_for_user(request, listing)
-        # Only cache the result if not items has been prefined for the
-        # list.
         if items is None:
             request.cache_item_list.set(key, listing)
             return listing
@@ -582,6 +580,8 @@ def filter_itemlist_for_user(request, baselist):
             if has_permission('read', item, request):
                 filtered_items.append(item)
         baselist.items = filtered_items
+        # Mark this listing to be prefilterd for a user.
+        baselist._user = request.user
     return baselist
 
 
@@ -592,14 +592,14 @@ class BaseList(object):
     The BaseList is usually created by calling the
     :func:`.get_item_list` method. Using this method the BaseList will
     include all items of a given class which are readable by the current
-    user. 
+    user.
 
     Alternatively the BaseList can be initiated directly in two ways. On
     default all items of a given class will be loaded from the database.
     The other way is to initiate the list with a list of preloaded
     items.
     """
-    def __init__(self, clazz, db, cache="", items=None):
+    def __init__(self, clazz, db, cache="", items=None, user=None):
         """A List object of. A list can be filterd, and sorted.
 
         :clazz: Class of items which will be loaded.
@@ -613,6 +613,14 @@ class BaseList(object):
         self.db = db
         if items is None:
             q = self.db.query(self.clazz)
+
+            if user and issubclass(self.clazz, Owned):
+                uid = user.id
+                gids = [g.id for g in user.groups]
+                q = q.filter(or_(self.clazz.uid == uid, self.clazz.gid.in_(gids)))
+                # Mark this listing to be prefilterd for a user.
+                self._user = user
+
             if cache in regions.keys():
                 q = set_relation_caching(q, self.clazz, cache)
                 q = q.options(FromCache(cache))
@@ -635,8 +643,17 @@ class BaseList(object):
             self.items = items
         self.search_filter = []
 
+        self._user = None
+        """Internal variable which is set by the `filter_itemlist_for_user`
+        method to indicate that the list has been build for this user
+        and only contains items which are at least readable by the user.
+        """
+
     def __iter__(self):
         return iter(self.items)
+
+    def is_prefiltered_for_user(self):
+        return self._user is not None
 
     def sort(self, field, order, expand=False):
         """Will return a sorted item list. Sorting is done based on the

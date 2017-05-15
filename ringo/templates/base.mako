@@ -13,6 +13,7 @@
     <meta content="${request.route_path("autologout")}" name="auth_logout">
     <meta content="${request.route_path("keepalive")}" name="auth_keepalive">
     <meta content="${request.user or ''}" name="auth_user">
+    <meta content="${s.get_anonymous_user(request.registry.settings) or ''}" name="anonymous_user">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="${request.static_path('ringo:static/bootstrap/css/bootstrap.min.css')}" rel="stylesheet">
@@ -156,7 +157,7 @@
 <%def name="render_item_base_actions(item)">
   <% context_actions = [] %>
   % for action in h.get_item_actions(request, item):
-    % if (request.url.find(action.name.lower()) < 0) and s.has_permission((action.permission or action.name.lower()), request.context.item, request):
+    % if (request.path.find(action.name.lower()) < 0) and s.has_permission((action.permission or action.name.lower()), request.context.item, request):
       <%
       if action.name == "Create":
         title = _('Create new item')

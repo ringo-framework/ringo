@@ -11,13 +11,11 @@ from ringo.lib.renderer import (
 )
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.views.request import (
-    handle_params,
-    handle_event,
-    handle_history,
-    is_confirmed
+    handle_event
 )
 
 log = logging.getLogger(__name__)
+
 
 def _import(request):
     """Will read the import file from the request and create or update
@@ -42,7 +40,11 @@ def _import(request):
         importer = JSONImporter(clazz, request.db)
     elif request.POST.get('format') == 'csv':
         importer = CSVImporter(clazz)
-    return importer.perform(importfile, request.user, request.translate)
+
+    # Decide by which key to identify the items
+    settings = request.registry.settings
+    load_key = settings.get("import.importer_load_key", 'uuid')
+    return importer.perform(importfile, request.user, request.translate, load_key=load_key)
 
 
 def _handle_save(request, items, callback):
@@ -97,16 +99,13 @@ def _handle_redirect(request):
 
 
 def import_(request, callback=None):
-    handle_history(request)
-    handle_params(request)
-
     clazz = request.context.__model__
     _ = request.translate
     renderer = ImportDialogRenderer(request, clazz)
     imported_items = []
     form = renderer.form
     if (request.method == 'POST'
-       and is_confirmed(request)
+       and request.ringo.params.confirmed
        and form.validate(request.params)):
         try:
             items = _import(request)
@@ -120,7 +119,7 @@ def import_(request, callback=None):
                         ) % e
             renderer = ErrorDialogRenderer(request, err_title, err_msg)
             rvalue = {}
-            ok_url = request.session['history'].pop(2)
+            ok_url = request.ringo.history.pop(2)
             rvalue['dialog'] = renderer.render(ok_url)
             rvalue['clazz'] = clazz
             return rvalue

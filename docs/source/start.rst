@@ -260,6 +260,37 @@ Export can be triggered in the UI (If the user has sufficient permissions, and
 export is enabled) or using the CLI commands from :ref:`clidb` to
 :ref:`clidb-export` and :ref:`clidb-import`.
 
+************************************
+How to make config changes permanent
+************************************
+Ringo allows to change the configuration of the application through the UI in
+many ways. You can add new roles, set permissions etc. All those changes are
+done in the database.
+As those changes will get lost when dropping and recreating the database we
+need a way to make save these changes in a way that they do not get lost when
+reinitialize the application.
+
+The typical way is to write a migration script and to put the changes you made
+into this script. An empty migration script can be generated like this::
+
+        ringo-admin db revision
+
+An easy way to get the changes in the database is to diff between the dump of
+the database. On dump is done before the changes are mare::
+
+        DB=ringo
+        pg_dump -a --column-inserts $DB | grep INSERT > $DB.dump.pre
+
+Now you can do the changes in the application and dump the database again::
+
+        pg_dump -a --column-inserts $DB | grep INSERT > $DB.dump.post
+
+Finally you diff the two dumps and ideally get the changes made in the
+database ready to put into the migration script::
+
+        diff $DB.dump.pre $DB.dump.post | grep INSERT | sed -e 's/> //g' > inserts.sql
+
+
 *****************
 Work with modules
 *****************
@@ -486,7 +517,7 @@ Now SQL statements for the migration script will be::
 As always when manually inserting something in the database call the
 fixsequence command::
 
-        ringo-admin db fixsequence
+        ringo-admin db fixsequence/gp_dump
 
 
 Setup breadcrumbs
@@ -941,6 +972,18 @@ Note, that we reconfigure the view by calling 'view_config' with an already
 configured route_name. This will overwrite the configured view and the
 application will use your custom view now for the route named 'home'.
 
+.. important::
+        Please do not forget to set the permissions checks in the view. If you
+        overwrite a view which requires update permissions you **must** set
+        this permission again in the view. Otherwise the permission check is
+        disabled.
+        To add a permission check you can add an `permission` attribute to the
+        `view_config` call with the name of the required permisson in lower
+        case::
+
+                @view_config(route_name='item-update', renderer='/update.mako', permission="update")
+                ...
+
 If you only want to extend the functionallity from the default you can do this
 too. No need to rewrite the default logic again in your custom view::
 
@@ -1149,9 +1192,35 @@ overwriting the ``_get_permissions`` class method of the BaseItem in your model:
 
         return permissions
 
-.. todo::
-        Write about inheritance of authorisation
+Ownership inheritance
+=====================
+It is possible inherit the ownership (uid, gid) of a element from a
+related element when *saving* the item. Inheritance of ownership means to
+set the ownership of the item based on the  ownership of another item
+and **not** with the uid, gid of the current user or other permission
+settings like default groups.
 
+.. note::
+    Setting the inherited uid or gid only happens when saving the item
+    explicit using the `save` method of the BaseItem. On default this is
+    only the case when creating new items.
+
+A typicall usecase is to grant users access to the item if they are
+allowed to access a related (often parent) item by inheriting the uid
+and gid.
+
+To inherit the ownership you must set a special attribute in the model::
+
+    class Foo(BaseItem):
+        _inherit_gid = "parent"
+        _inherit_uid = "parent"
+
+        ...
+        parent = sa.orm.relation(Bar)
+
+You need to define the name of the relation to the item where the uid
+and gid will be taken from. Please note that you can also set only one
+of the attibutes.
 
 ***********************************
 Inheritance from other applications
@@ -1440,11 +1509,14 @@ application and have appropriate permissions.
 
 Anonymous access in Ringo is implemented by using a Proxy-User. This user must
 be existent in the database and properly configured. To enable anonymous
-access to the application you must configure this use as anonymous user. See
+access to the application you must configure this user as anonymous user. See
 :ref:`anonymous_access` for more details.
 
-From now on every every user will be automatically logged in as this
-configured user to the application and will all the permissions the user has.
+If enabled every request to the application will automatically be 
+authenticated with the configured anonymous user (As long as the User is not 
+already logged in). The request will be done with all configured permissions 
+of the roles the configured anonymous has. So you can configure in details 
+which permissions a anonymous user will have.
 
 .. warning::
         Be careful with the configuration of the anonymous user. Double check
@@ -1646,7 +1718,7 @@ If your application is based on another ringo based application you can
 configure the name of the application here. Setting this configuration
 will modify the inheritance path of the application.
 
-The inhertance_path is available using the :func:`get_app_inheritance_path`
+The inheritance_path is available using the :func:`get_app_inheritance_path`
 function.
 
 Example:
@@ -1657,6 +1729,20 @@ This has consequences for the loading of form and table configurations.
 When trying to load form or table configuration ringo will iterate over
 the inheritance path and try to load the configuration from each
 application within the inheritance path.
+
+Application Locale
+==================
+The locale is used to format dates times in the application.  On default Ringo
+determines the locale by looking into the request getting the browser language
+setting. However you can enforce setting the locale of the application by
+setting the following config variable in your config
+
+* app.locale =
+
+If added (In the mean of adding the variable at all) the locale will be
+enforced. An empty value means use a "default" encoding which leads to dates
+formatted in ISO8601. Otherwise the locale must match a known ISO-3166 locale
+string.
 
 Application Mode
 ================
@@ -1684,6 +1770,17 @@ such as hexadecimal or RGB values, named colors, etc.
 The mode is available using the :func:`get_app_mode` function.
 
 .. index:: Testing mode
+
+History ignores
+===============
+You can configure URL which will be ignored in history. This is often needed
+in case you do AJAX requests to fetch data. As you do not want those URL be
+part of the history you can configure to ignore those URLs.
+
+* app.history.ignore = /foo,/bar,/baz
+
+The ignore list is a comma separated list of fragments of an URL. The code
+will check if the current URL starts with one of the defined ignores.
 
 Cache
 =====
@@ -1714,6 +1811,31 @@ In unittests you can use the following URLs to start a Testcase:
 
 * /_test_case/start
 * /_test_case/stop
+
+Feature Toggles
+===============
+Feature toggles can be used to enable specific code paths in the
+application by setting a config variable in the ini file. This is
+usefull to make features which are currently under development available
+
+Feature toggles are set in the *ini* file like this:: 
+
+    feature.mynewfeaure = true.
+
+The configuration is available in the current request and can be used
+everywhere in the application where the request is available.::
+
+    if request.ringo.feature.mynewfeaure:
+        # Feature is anabled
+        pass
+    else:
+        # Feature is not anabled
+        pass
+
+Please note that the value in the configuration must be set to *true* to
+consider the feature to be enabled. If the feature is set to anything
+different or isn't configured at all it is considered to be not enabled.
+
 
 ******
 Layout
@@ -2097,20 +2219,40 @@ separated.
 ****
 Mail
 ****
+The configuration of the Mail system is described in detail in the
+`documentation of the pyramid_mailer library
+<http://docs.pylonsproject.org/projects/pyramid_mailer/en/latest/#configuration>`_
+
+Below you find a show overview of the most common used settings. If you need
+more of the settings it is save to add them to your configuration.
+
+
  * mail.host =
+
+This is the host where your MTA will listen on port 25 to receive the mails
+which it will transfer to the recipients.
+
  * mail.default_sender =
+
+This is the default sender email (From:) of the mails sent from this
+application. Often this will be changed within the application anyway but we
+need to be sure we have a default sender. Often this is a "noreply@foo.bar"
+address.
+
  * mail.username =
  * mail.password =
+
+In case your MTA requires some sort of authentication you can set it here.
 
 *********
 Converter
 *********
-.. note::
-   To be able to use the converter you need to install the "converter" extra
-   requirements. See ``setup.py`` file for more details.
+The converter has become part of the `ringo printtemplates
+extension <https://github.com/ringo-framework/ringo_printtemplates>`_. It is
+used to convert ODS files into PDF files.
 
- * converter.start = false
- * converter.pythonpath =
+Please see the README of the library for more details on how to configure the
+converter.
 
 ###############
 CLI ringo-admin

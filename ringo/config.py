@@ -45,6 +45,7 @@ def setup(config):
     config.include('ringo.lib.renderer.setup_render_globals')
     config.include('ringo.lib.security.setup_ringo_security')
     config.include('ringo.lib.cache.setup_cache')
+    config.include('ringo.lib.request.app')
     config.add_subscriber(preload_modules, NewRequest)
 
 
@@ -212,7 +213,7 @@ def setup_modul(config, modul):
     old_actions = list(a.url for a in modul.actions)
 
     for bclazz in clazz.__bases__:
-        if issubclass(bclazz, Mixin):
+        if hasattr(bclazz, "get_mixin_actions"):
             for action in bclazz.get_mixin_actions():
                 if not action.url in old_actions:
                     action.mid = clazz._modul_id

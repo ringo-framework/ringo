@@ -27,6 +27,12 @@ def password_generator(size=12, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
 
+def get_anonymous_user(settings):
+    """Will return the name of the configured anonymous user if there is
+    one. Else return None."""
+    return settings.get("auth.anonymous_user")
+
+
 def get_auth_timeout(settings):
     """Will return the amount of seconds until the auth session will
     time out. This can be configured in the application ini file. If no
@@ -196,7 +202,7 @@ def setup_ringo_security(config):
         config.add_tween('ringo.tweens.clickjacking.clickjacking_factory')
     if settings.get("security.header_csp", "false") == "true":
         config.add_tween('ringo.tweens.csp.csp_factory')
-    if settings.get("auth.anonymous_user"):
+    if get_anonymous_user(settings):
         log.info("Setting up anonymous access.")
         config.add_tween('ringo.tweens.anonymous_access.user_factory')
     else:
@@ -311,7 +317,8 @@ def get_permissions(modul, item=None):
                     continue
 
             # administrational role means allow without further
-            # ownership checks.
+            # ownership checks. If item is class than check is on modul
+            # level.
             if role.admin is True and add_perm:
                 perms.append((Allow, default_principal, permission))
 
@@ -321,6 +328,13 @@ def get_permissions(modul, item=None):
             # anyway.
             elif permission in ['create', 'list']:
                 perms.append((Allow, default_principal, permission))
+
+            # If the item is not an instance of a BaseItem then add
+            # we want to get the permission on modul
+            # level too. So again add the default principal
+            elif not isinstance(item, BaseItem) and add_perm:
+                perms.append((Allow, default_principal, permission))
+
             # If the item has a uuid the we want get the permission on
             # Item level. Only allow the owner or members of the items
             # group.
@@ -329,11 +343,7 @@ def get_permissions(modul, item=None):
                 perms.append((Allow, principal, permission))
                 principal = default_principal + ';group:%s' % item.gid
                 perms.append((Allow, principal, permission))
-            # Finally the item is not an instance of a BaseItem then add
-            # remaining action we want to get the permission on modul
-            # level too. So again add the default principal
-            elif not isinstance(item, BaseItem) and add_perm:
-                perms.append((Allow, default_principal, permission))
+
     return perms
 
 
@@ -395,6 +405,26 @@ def has_role(user, role):
     if user is None:
         return False
     return user.has_role(role)
+
+
+def has_admin_role(action_name, clazz, request):
+    """Return True if the current user has admin role for the given
+    action_name on the given clazz. Having a admin role means that the
+    check for the ownership in context of the permissions checks can be
+    omitted.
+
+    :action_name: Name of the action
+    :clazz: clazz
+    :request: current request and user
+    :returns: True or False
+    """
+    modul = get_item_modul(request, clazz)
+    for action in modul.actions:
+        if action.name.lower() == action_name:
+            for role in action.roles:
+                if role.admin and has_role(request.user, role.name):
+                    return True
+    return False
 
 
 def get_roles(user):

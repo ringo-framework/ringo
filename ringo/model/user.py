@@ -23,19 +23,22 @@ password_reset_requests = sa.Table(
 nm_user_roles = sa.Table(
     'nm_user_roles', Base.metadata,
     sa.Column('uid', sa.Integer, sa.ForeignKey('users.id')),
-    sa.Column('rid', sa.Integer, sa.ForeignKey('roles.id'))
+    sa.Column('rid', sa.Integer, sa.ForeignKey('roles.id')),
+    sa.UniqueConstraint('uid', 'rid')
 )
 
 nm_user_usergroups = sa.Table(
     'nm_user_usergroups', Base.metadata,
     sa.Column('uid', sa.Integer, sa.ForeignKey('users.id')),
-    sa.Column('gid', sa.Integer, sa.ForeignKey('usergroups.id'))
+    sa.Column('gid', sa.Integer, sa.ForeignKey('usergroups.id')),
+    sa.UniqueConstraint('uid', 'gid')
 )
 
 nm_action_roles = sa.Table(
     'nm_action_roles', Base.metadata,
     sa.Column('aid', sa.Integer, sa.ForeignKey('actions.id')),
-    sa.Column('rid', sa.Integer, sa.ForeignKey('roles.id'))
+    sa.Column('rid', sa.Integer, sa.ForeignKey('roles.id')),
+    sa.UniqueConstraint('aid', 'rid')
 )
 
 

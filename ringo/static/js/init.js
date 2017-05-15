@@ -119,7 +119,7 @@ $( document ).ready(function() {
        $('.main-pane').hide();
        $('#'+pane).show();
     });
-    $('#pagination-size-selector').change(function() {
+    $('#pagination-size-selector select').change(function() {
         var value = $(this).val();
         var url = $(this).attr('url') + "?pagination_size=" + value;
         startSpinner(spinner_timer);
@@ -145,9 +145,9 @@ $( document ).ready(function() {
                 // has the attribute "no-dirtyable". See waskiq/issue2049.
                 var no_dirtyable = $(this).attr("no-dirtyable")
                 if(typeof no_dirtyable === typeof undefined
-                   || no_dirtyable != "true") {
+                    || no_dirtyable != "true") {
                     isDirty = true;
-                }
+                    }
             }
         });
         if((isDirty == true) && (DirtyFormWarningOpen == false)) {
@@ -171,8 +171,10 @@ $( document ).ready(function() {
     $('a').not('[href^="mailto:"], [target="_blank"]').click(function(event) {
         var element = event.target;
         var url = $(element).attr("href");
-        var hide_spinner = $(element).hasClass("nospinner") == true;
-        openDirtyDialog(url, hide_spinner, event);
+        if (url != undefined) {
+            var hide_spinner = $(element).hasClass("nospinner") == true;
+            openDirtyDialog(url, hide_spinner, event);
+        }
     });
     $('.link').not('a').click(function(event) {
         var element = event.target;

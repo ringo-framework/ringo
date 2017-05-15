@@ -313,13 +313,15 @@ class Owned(object):
     """Variable to configure a inheritance of the uid. The variable
     should be the name of the relation to the parent element from which
     the uid will be taken"""
-    _owner_cascades = None
+    _owner_cascades = 'save-update, merge'
     """Variable to configure the behavior of the relation to the parent
     item if the owner of an itme is deleted. Defaults to 'save-update,
     merge'.  See SQLAlchemy documentation for more details. This means a
-    user can not be deleted if he still owns items. Set this variable to
-    'all, delete' of you want to delete all items owned by the user
-    too."""
+    user can be deleted depending on the ForeignKey setting of the child
+    items. In case the FK allows null values the user can be deleted and
+    the owner of the child item will be NULL. If the FK must not NULL
+    the item can not be deleted. Set this variable to 'all, delete' of
+    you want to delete all items owned by the user too."""
 
     @declared_attr
     def uid(cls):
@@ -359,6 +361,12 @@ class Owned(object):
     def is_owner(self, user):
         """Returns true if the Item is owned by the given user."""
         return user.id == self.uid
+
+    def is_member(self, user):
+        if self.group:
+            return user.id in [user.id for user in self.group.members]
+        else:
+            return False
 
 
 class Nested(object):

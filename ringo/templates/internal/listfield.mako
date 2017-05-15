@@ -102,12 +102,16 @@ def render_item_add_link(request, clazz, foreignkey, clazzpath, id, backlink, fo
     % for item in visible_items:
       <%
       permission = None
-      if s.has_permission("update", item[0], request):
-        permission = "update"
-      elif s.has_permission("read", item[0], request):
-        permission = "read"
-      elif not field.renderer.showall == "true":
-        continue
+      if field.renderer.action:
+        if s.has_permission(field.renderer.action, item[0], request):
+          permission = field.renderer.action
+      else:
+        if s.has_permission("update", item[0], request):
+          permission = "update"
+        elif s.has_permission("read", item[0], request):
+          permission = "read"
+        elif not field.renderer.showall == "true":
+          continue
       %>
       ${h.literal(render_item_row(request, clazz, permission, item, value,
                   (field.renderer.openmodal == "true"),
@@ -119,8 +123,10 @@ def render_item_add_link(request, clazz, foreignkey, clazzpath, id, backlink, fo
           <td>
             % if not field.renderer.multiple == "false":
               % if str(item[0].id) in selected:
+		<span class="hidden">1</span>
                 <input type="checkbox" value="${item[0].id}" name="${field.name}" checked="checked" onclick="check('${field.name}', this);"/>
               % else:
+		<span class="hidden">0</span>
                 <input type="checkbox" value="${item[0].id}" name="${field.name}" onclick="check('${field.name}', this);"/>
               % endif
             % else:
@@ -143,7 +149,7 @@ def render_item_add_link(request, clazz, foreignkey, clazzpath, id, backlink, fo
             if colrenderer:
               value = colrenderer(request, item, col, tableconfig)
             else:
-              rvalue = prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand'), strict=field.get('strict', True)))
+              rvalue = prettify(request, item[0].get_value(col.get('name'), expand=col.get('expand'), strict=col.get('strict', True)))
               value = _(rvalue)
               if isinstance(rvalue, list):
                 value = ", ".join(unicode(v) for v in rvalue)

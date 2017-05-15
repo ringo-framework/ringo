@@ -5,6 +5,7 @@ from datetime import (
     timedelta
 )
 from dateutil import tz
+import pytz
 from babel.core import Locale
 from babel.dates import (
     format_datetime as babel_format_datetime,
@@ -12,7 +13,6 @@ from babel.dates import (
 )
 from webhelpers.html import literal
 from pyramid.threadlocal import get_current_request
-from pyramid.i18n import get_locale_name
 from formbar.converters import from_timedelta
 
 ########################################################################
@@ -35,16 +35,17 @@ def prettify(request, value):
     """
     if not request:
         request = get_current_request()
+    try:
+        #  FIXME: While testing get_current_request returns a dummy
+        #  request object which does not have a ringo attribute.
+        #  Currenlty do not now how to add this. (ti) <2017-05-09 09:05> 
+        locale_name = request.ringo.locale
+    except AttributeError:
+        locale_name = None
 
-    # Under some circumstances, get_current_request will return None as
-    # the current request. This makes it impossible to retrieve the
-    # current locale or getting the translate method.
-    if not request:
-        locale_name = 'en_EN'
-        _ = lambda t: t
-    else:
-        locale_name = get_locale_name(request)
-        _ = request.translate
+    # Special handling for Dummyrequest from testing
+    if not isinstance(locale_name, basestring):
+        locale_name = None
 
     if isinstance(value, datetime):
         return format_datetime(get_local_datetime(value),
@@ -89,7 +90,7 @@ def get_local_datetime(dt, timezone=None):
 
     """
     if not dt.tzinfo:
-        dt = dt.replace(tzinfo=tz.gettz('UTC'))
+        dt = pytz.utc.localize(dt)
     if not timezone:
         timezone = tz.tzlocal()
     return dt.astimezone(timezone)

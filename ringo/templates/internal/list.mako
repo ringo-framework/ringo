@@ -1,18 +1,30 @@
 <%
+from ringo.lib.renderer.lists import get_read_update_url
 url = request.current_route_path().split("?")[0]
 mapping = {'num_filters': len(listing.search_filter)}
-def render_filter_link(request, field, value, clazz):
+
+def render_link(request, field, url, value, clazz):
   out = []
   # Only take the path of the url and ignore any previous search filters.
-  url = request.current_route_path().split("?")[0]
+  out.append('<a href="%s" data-toggle="tooltip"' % (url))
+  out.append('class="">')
+  if hasattr(value, "render"):
+    out.append('%s</a>' % value.render())
+  else:
+    out.append('%s</a>' % value)
+  return " ".join(out)
+
+def render_filter_link(url, request, field, value, clazz):
+  out = []
+  # Only take the path of the url and ignore any previous search filters.
   params = "form=search&search=%s&field=%s" % (value, field.get('name'))
   out.append('<a href="%s?%s" data-toggle="tooltip"' % (url, params))
   out.append('class="link filter"')
   out.append('title="Filter %s on %s in %s">' % (h.get_item_modul(request, clazz).get_label(plural=True), value, field.get('label')))
   if hasattr(value, "render"):
-    out.append('%s</a>' % _(value.render()))
+    out.append('%s</a>' % value.render())
   else:
-    out.append('%s</a>' % _(value))
+    out.append('%s</a>' % value)
   return " ".join(out)
 
 def render_responsive_class(visibleonsize):
@@ -154,13 +166,9 @@ if sortable:
   </tr>
   % for item in items[listing.pagination_start:listing.pagination_end]:
     <%
-    permission = None
-    if s.has_permission("update", item, request):
-      permission = "update"
-    elif s.has_permission("read", item, request):
-      permission = "read"
+      data_link = get_read_update_url(request, item, clazz, listing.is_prefiltered_for_user())
     %>
-    <tr item-id="${item.id}" data-link="${request.route_path(h.get_action_routename(clazz, permission), id=item.id)}">
+    <tr item-id="${item.id}">
     % if bundled_actions:
     <td>
       <input type="checkbox" name="id" value="${item.id}">
@@ -168,9 +176,9 @@ if sortable:
     % endif
     % for num, field in enumerate(tableconfig.get_columns(request.user)):
       % if autoresponsive:
-        <td class="${num > 0 and 'hidden-xs'} ${permission and 'link'}">
+        <td class="${num > 0 and 'hidden-xs'}">
       % else:
-        <td class="${render_responsive_class(field.get('screen'))} ${permission and 'link'}">
+        <td class="${render_responsive_class(field.get('screen'))}">
       % endif
         <%
             try:
@@ -198,23 +206,19 @@ if sortable:
             <%
               links = []
               for v in value:
-                links.append(render_filter_link(request, field, v, clazz))
+                links.append(url, render_filter_link(request, field, v, clazz))
             %>
-            ${", ".join(links)}
+            ${", ".join(links) | n}
           % else:
-            ${render_filter_link(request, field, value, clazz)}
+            ${render_filter_link(url, request, field, value, clazz) | n}
           % endif
         % else:
           % if isinstance(value, list):
             % for v in value:
-              % if hasattr(v, 'render'):
-                ${v.render()}
-              % else:
-                ${_(v)}
-              % endif
+              ${render_link(request, field, data_link, value, clazz) | n}
             % endfor
           % else:
-            ${_(value)}
+            ${render_link(request, field, data_link, value, clazz) | n}
           % endif
         % endif
     </td>

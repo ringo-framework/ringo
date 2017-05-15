@@ -1,7 +1,5 @@
 """Module to handle requests."""
 import logging
-import urllib
-import urlparse
 from pyramid.httpexceptions import HTTPFound
 from formbar.form import Validator
 from ringo.lib.security import (
@@ -9,7 +7,6 @@ from ringo.lib.security import (
     ValueChecker
 )
 from ringo.lib.helpers import import_model, get_action_routename, literal
-from ringo.lib.history import History
 from ringo.lib.sql.cache import invalidate_cache
 from ringo.views.helpers import (
     get_item_from_request,
@@ -17,6 +14,12 @@ from ringo.views.helpers import (
     get_current_form_page,
     set_current_form_page,
     get_next_form_page
+)
+from ringo.lib.request.helpers import (
+    encode_unicode_dict as _encode_unicode_dict,
+    decode_bytestring_dict as _decode_bytestring_dict,
+    encode_values as _encode_values,
+    decode_values as _decode_values
 )
 
 log = logging.getLogger(__name__)
@@ -31,68 +34,36 @@ def form_has_errors(field, data, context):
     return not context.has_errors()
 
 
+# TODO: Mark use of this method as deprecated. Use the inner method
+# directlydirectly  (ti) <2016-03-11 09:19>
 def encode_unicode_dict(unicodedict, encoding="utf-8"):
-    bytedict = {}
-    for key in unicodedict:
-        if isinstance(unicodedict[key], unicode):
-            bytedict[key] = unicodedict[key].encode(encoding)
-        elif isinstance(unicodedict[key], dict):
-            bytedict[key] = encode_unicode_dict(unicodedict[key])
-        else:
-            bytedict[key] = unicodedict[key]
-    return bytedict
+    return _encode_unicode_dict(unicodedict, encoding)
 
 
+# TODO: Mark use of this method as deprecated. Use the inner method
+# directlydirectly  (ti) <2016-03-11 09:19>
 def decode_bytestring_dict(bytedict, encoding="utf-8"):
-    unicodedict = {}
-    for key in bytedict:
-        if isinstance(bytedict[key], str):
-            unicodedict[key] = bytedict[key].decode(encoding)
-        elif isinstance(bytedict[key], dict):
-            unicodedict[key] = decode_bytestring_dict(bytedict[key])
-        else:
-            unicodedict[key] = bytedict[key]
-    return unicodedict
+    return _decode_bytestring_dict(bytedict, encoding)
 
 
+# TODO: Mark use of this method as deprecated. Use the inner method
+# directlydirectly  (ti) <2016-03-11 09:19>
 def encode_values(values):
-    """Returns a string with encode the values in the given dictionary.
-
-    :values: dictionary with key values pairs
-    :returns: String key1:value1,key2:value2...
-
-    """
-    # Because urlencode can not handle unicode strings we encode the
-    # whole dictionary into utf8 bytestrings first.
-    return urllib.urlencode(encode_unicode_dict(values))
+    return _encode_values(values)
 
 
+# TODO: Mark use of this method as deprecated. Use the inner method
+# directlydirectly  (ti) <2016-03-11 09:19>
 def decode_values(encoded):
-    """Returns a dictionay with decoded values in the string. See
-    encode_values function.
-
-    :encoded : String key1:value1,key2:value2...
-    :returns: Dictionary with key values pairs
-    """
-    # We convert the encoded querystring into a bystring to enforce that
-    # parse_pq returns a dictionary which can be later decoded using
-    # decode_bystring_dict. If we use the encoded string directly the
-    # returned dicionary would contain bytestring as unicode. e.g
-    # u'M\xc3\xbcller' which can't be decoded later.
-    encoded = str(encoded)
-
-    # Now convert the query string into a dictionary with UTF-8 encoded
-    # bytestring values.
-    values = urlparse.parse_qs(encoded)
-    for key in values:
-        values[key] = values[key][0]
-    # Finally convert this dictionary back into a unicode dictionary
-    return decode_bytestring_dict(values)
+    return _decode_values(encoded)
 
 
+# TODO: Mark use of this method as deprecated. Use
+# request.ringo.params.confirmed.
+# directly (ti) <2016-03-11 09:56>
 def is_confirmed(request):
     """Returns True id the request is confirmed"""
-    return request.params.get('confirmed') == "1"
+    return request.ringo.params.confirmed
 
 
 def handle_event(request, item, event):
@@ -124,8 +95,7 @@ def handle_callback(request, callback, item=None):
 
 
 def get_relation_item(request):
-    params = handle_params(request)
-    addrelation = params.get("addrelation")
+    addrelation = request.ringo.params.addrelation
     if not addrelation:
         return None
     rrel, rclazz, rid = addrelation.split(':')
@@ -234,12 +204,14 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
                 msg = _('Created new ${item_type} successfully.',
                         mapping=mapping)
                 log_msg = u'User {user.login} created {item_label} {item.id}'\
-                    .format(item_label=item_label, item=item, user=request.user)
+                    .format(item_label=item_label,
+                            item=item, user=request.user)
             else:
                 msg = _('Edited ${item_type} "${item}" successfully.',
                         mapping=mapping)
                 log_msg = u'User {user.login} edited {item_label} {item.id}'\
-                    .format(item_label=item_label, item=item, user=request.user)
+                    .format(item_label=item_label,
+                            item=item, user=request.user)
             log.info(log_msg)
             request.session.flash(msg, 'success')
 
@@ -305,15 +277,17 @@ def handle_redirect_on_success(request, backurl=None):
     item = get_item_from_request(request)
     clazz = request.context.__model__
     backurl = backurl or request.session.get('%s.backurl' % clazz)
-    if backurl:
-        # Redirect to the configured backurl.
-        if request.session.get('%s.backurl' % clazz):
-            del request.session['%s.backurl' % clazz]
-            request.session.save()
+
+    if request.session.get('%s.backurl' % clazz):
+        del request.session['%s.backurl' % clazz]
+        request.session.save()
+
+    if backurl and request.params.get("_submit") == "return":
         return HTTPFound(location=backurl)
     else:
         # Handle redirect after success.
         # Check if the user is allowed to call the url after saving
+
         if has_permission("update", item, request):
             route_name = get_action_routename(item, 'update')
             url = request.route_path(route_name, id=item.id)
@@ -323,54 +297,19 @@ def handle_redirect_on_success(request, backurl=None):
         return HTTPFound(location=url)
 
 
-def handle_history(request):
-    history = request.session.get('history')
-    if history is None:
-        history = History([])
-    history.push(request.url)
-    request.session['history'] = history
-
-
 def handle_params(request):
-    """Handles various query parameters coming with GET and POST
-    requests. This function will work like a filter which only allows
-    known defined params. The function will return a dictionary with the
-    filtered parameters.
+    """This method is outdated. DO NOT USE this method it will be
+    removed. All param handling is done in request.ringo.params now."""
+    return {"backurl": request.ringo.params.backurl,
+            "values": request.ringo.params.values,
+            "form": request.ringo.params.form,
+            "addrelation": request.ringo.params.addrelation}
 
-    Known params are:
 
-     * backurl: A URL which should be called instead of the default
-       action after the next request succeeds. The backurl will be saved
-       in the session and stays there until it is deleted on a
-       successful request. So take care to delete it to not mess up
-       with the application logic.
-     * form: The name of a alternative form configuration which is
-       used for the request.
-     * values: A comma separated list of key/value pair. Key and value
-       are separated with an ":"
-     * addrelation: A ":" separated string 'relation:class:id' to identify that
-       a item with id should be linked to the relation of this item.
-    """
-    clazz = request.context.__model__
-    params = {}
-    backurl = request.GET.get('backurl')
-    if backurl:
-        request.session['%s.backurl' % clazz] = backurl
-        params['backurl'] = backurl
-    values = request.GET.get('values')
-    if values:
-        params['values'] = {}
-        values = decode_values(values)
-        for key in values:
-            params['values'][key] = values[key]
-    form = request.GET.get('form')
-    if form:
-        params['form'] = form
-    relation = request.params.get("addrelation")
-    if relation:
-        params['addrelation'] = relation
-    request.session.save()
-    return params
+def handle_history(request):
+    """This method is outdated. DO NOT USE this method it will be
+    removed. All param handling is done in request.ringo.app now."""
+    pass
 
 
 def get_return_value(request):
