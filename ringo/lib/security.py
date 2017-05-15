@@ -319,7 +319,7 @@ def get_permissions(modul, item=None):
             # administrational role means allow without further
             # ownership checks. If item is class than check is on modul
             # level.
-            if role.admin is True and add_perm:
+            if (role.admin is True or action.admin is True) and add_perm:
                 perms.append((Allow, default_principal, permission))
 
             # Modul level (class level) permissions.

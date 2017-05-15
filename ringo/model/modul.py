@@ -131,6 +131,10 @@ class ActionItem(BaseItem, Base):
     'read', 'update', 'delete', 'import', 'export'. If empty the
     permission system will use the the lowered name of the action."""
 
+    admin = sa.Column(sa.Boolean, nullable=False, default=False, server_default="0")
+    """Optional. If set to yes no checks for ownership are made for this
+    action. Defaults to False"""
+
     def is_visible(self, location):
         """Checks based on the setting in the display configuration
         attribute if the action is visible in the given location.
