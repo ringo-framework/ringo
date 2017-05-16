@@ -27,7 +27,6 @@ $( document ).ready(function() {
             startSpinner(spinner_timer);
         }
     });
-    $('[data-toggle="tooltip"]').tooltip();
     $('.dialog').modal({
         backdrop: "static"
     });

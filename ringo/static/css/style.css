@@ -115,3 +115,47 @@ nav ul.pagination {
     content: none;
   }
 }
+
+/* Styling for tooltip contents written in data-original-title tags.
+ * The values are taken to mimic bootstrap.min.css style.
+ * Avoiding the proper bootsrap tooltips may save a lot of javascript
+ * calculations.
+ */
+
+span[data-original-title]{
+    position: relative;
+}
+
+a[data-original-title]{
+    position: relative;
+}
+
+span[data-original-title]:hover:after {
+  font-size: 12px;
+  content: attr(data-original-title);
+  position: absolute;
+  top: -100%;
+  left: -40%;
+  display: block;
+  white-space: nowrap;
+  padding: 5px 5px 5px 5px;
+  margin: -3px 3px  3px -3px;
+  color: #fff;
+  background-color: #000;
+  z-index: 1030;
+}
+
+a[data-original-title]:hover:after {
+  font-size: 12px;
+  content: attr(data-original-title);
+  position: absolute;
+  top: -100%;
+  left: -40%;
+  display: block;
+  white-space: nowrap;
+  padding: 5px 5px 5px 5px;
+  margin: -3px 3px  3px -3px;
+  color: #fff;
+  background-color: #000;
+  z-index: 1030;
+}
