@@ -87,13 +87,13 @@ def setup_db_session(engine, settings=None):
 ########################
 def setup_session_on_request(config):
     if config.registry.settings.get("app.mode") == "testing":
-        config.add_subscriber(add_test_session_to_request, NewRequest, ignore_static_urls="")
+        config.add_subscriber(add_test_session_to_request, NewRequest)
         # Add exception view to rollback the database in case of
         # errors in testmode. Adding a view here feels wrong, but it is
         # the currently  only known way to to handle exceptions.
         config.add_view(rollback_on_exception, context=Exception)
     else:
-        config.add_subscriber(add_session_to_request, NewRequest, ignore_static_urls="")
+        config.add_subscriber(add_session_to_request, NewRequest)
 
 
 def rollback_on_exception(exc, request):

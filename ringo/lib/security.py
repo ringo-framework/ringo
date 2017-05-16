@@ -192,7 +192,7 @@ def setup_ringo_security(config):
     # authentification/authorisation. As the authentification should be
     # valid as long the user shows some activity by triggering requests
     # this tween will refresh the timeout on every request.
-    config.add_subscriber(refresh_auth_cookie, NewRequest, ignore_static_urls="")
+    config.add_subscriber(refresh_auth_cookie, NewRequest)
 
     # Add tweens to add custom security headers.
     # http://ghaandeeonit.tumblr.com/post/65698553805/securing-your-pyramid-application

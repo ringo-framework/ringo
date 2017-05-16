@@ -65,7 +65,7 @@ class Cache(object):
         return self._data
 
 def setup_cache(config):
-    config.add_subscriber(_init_cache, NewRequest, ignore_static_urls="")
+    config.add_subscriber(_init_cache, NewRequest)
 
 def _init_cache(event):
     init_cache(event.request)
