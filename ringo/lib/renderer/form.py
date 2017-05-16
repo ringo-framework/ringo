@@ -160,9 +160,12 @@ class CheckboxFieldRenderer(FormbarCheckboxField):
 
     def _get_template_values(self):
         values = FormbarCheckboxField._get_template_values(self)
-        values['options'] = filter_options_on_permissions(
-            self._field._form._request,
-            values['options'])
+        if self._field.readonly:
+            values['options'] = []
+        else:
+            values['options'] = filter_options_on_permissions(
+                self._field._form._request,
+                values['options'])
         return values
 
 
@@ -183,9 +186,12 @@ class DropdownFieldRenderer(FormbarDropdown):
 
     def _get_template_values(self):
         values = FormbarDropdown._get_template_values(self)
-        values['options'] = filter_options_on_permissions(
-            self._field._form._request,
-            values['options'])
+        if self._field.readonly:
+            values['options'] = []
+        else:
+            values['options'] = filter_options_on_permissions(
+                self._field._form._request,
+                values['options'])
         values['h'] = helpers
         return values
 
@@ -402,7 +408,7 @@ class ListingFieldRenderer(FormbarSelectionField):
 
         # Filter the items again based on the permissions. This means
         # resetting the third value in the tuple.
-        if self.showall != "true":
+        if self.showall != "true" and not self._field.readonly:
             item_tuples = filter_options_on_permissions(self._field._form._request,
                                                         item_tuples)
 
