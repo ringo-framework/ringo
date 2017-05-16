@@ -64,7 +64,7 @@ def setup(config):
     config.include('ringo.lib.security.setup_ringo_security')
     config.include('ringo.lib.cache.setup_cache')
     config.include('ringo.lib.request.app')
-    config.add_subscriber(preload_modules, NewRequest)
+    config.add_subscriber(preload_modules, NewRequest, ignore_static_urls="")
 
 
 def setup_extensions(config):
