@@ -157,9 +157,12 @@ class CheckboxFieldRenderer(FormbarCheckboxField):
 
     def _get_template_values(self):
         values = FormbarCheckboxField._get_template_values(self)
-        values['options'] = filter_options_on_permissions(
-            self._field._form._request,
-            values['options'])
+        if self._field.readonly:
+            values['options'] = []
+        else:
+            values['options'] = filter_options_on_permissions(
+                self._field._form._request,
+                values['options'])
         return values
 
 
@@ -180,9 +183,12 @@ class DropdownFieldRenderer(FormbarDropdown):
 
     def _get_template_values(self):
         values = FormbarDropdown._get_template_values(self)
-        values['options'] = filter_options_on_permissions(
-            self._field._form._request,
-            values['options'])
+        if self._field.readonly:
+            values['options'] = []
+        else:
+            values['options'] = filter_options_on_permissions(
+                self._field._form._request,
+                values['options'])
         values['h'] = helpers
         return values
 
@@ -390,13 +396,14 @@ class ListingFieldRenderer(FormbarSelectionField):
 
         # Get filtered options and only use the items which are
         # in the origin items list and has passed filtering.
-        items = self._field.filter_options(items)
-        # Now filter the items based on the user permissions
-        if self.showall != "true": 
-            items = filter_options_on_permissions(self._field._form._request,
-                                                  items)
+        item_tuples = self._field.filter_options(items)
+        # Filter the items again based on the permissions. This means
+        # resetting the third value in the tuple.
+        if self.showall != "true" and not self._field.readonly:
+            item_tuples = filter_options_on_permissions(self._field._form._request,
+                                                        item_tuples)
 
-        values = {'items': items,
+        values = {'items': item_tuples,
                   'field': self._field,
                   'clazz': self.get_class(),
                   'pclazz': self._field._form._item.__class__,
