@@ -36,7 +36,7 @@
 <%def name="render_table_body_checkbox(name, value, selected, visible=True, checker='check')">
   <td>
     <span class="hidden">${"1" if selected else "0"}</span>
-    <input type="checkbox" value="${value}" name="${name}" class="${'' if visible else 'hidden'}" ${'checked="checked"' if selected  else ''} onclick="${checker}('${name}', this);"/>
+    <input type="checkbox" value="${value}" name="${name}" class="${'' if visible else 'hidden'}" ${'checked=checked' if selected  else ''} onclick="${checker}('${name}', this);"/>
   </td>
 </%def>
 
