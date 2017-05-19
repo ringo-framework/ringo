@@ -319,7 +319,7 @@ def get_permissions(modul, item=None):
             # administrational role means allow without further
             # ownership checks. If item is class than check is on modul
             # level.
-            if role.admin is True and add_perm:
+            if (role.admin is True or action.admin is True) and add_perm:
                 perms.append((Allow, default_principal, permission))
 
             # Modul level (class level) permissions.
@@ -692,7 +692,7 @@ class ValueChecker(object):
         """
         for relation in get_relations_from_clazz(clazz):
             # If the relation is not set in the values then continue, as
-            # we do not need to check anything. 
+            # we do not need to check anything.
             if relation not in values:
                 continue
 
@@ -729,7 +729,7 @@ class ValueChecker(object):
                 # checking permissions. Allowing links to a modul item
                 # is currently not known to be a security thread.
                 if (isinstance(value, ModulItem)
-                    or has_permission("read", value, request)
+                    or has_permission("link", value, request)
                     or not isinstance(value, BaseItem)):
                     continue
                 else:

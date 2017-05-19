@@ -240,5 +240,9 @@ def setup_modul(config, modul):
     NTDBSession.commit()
 
     for action in modul.actions:
+        # Link is a special actions which does not need a view. So
+        # ignore it (e.g Link action).
+        if not action.url:
+            continue
         _setup_web_action(config, action, clazz, web_action_view_mapping)
         _setup_rest_action(config, action, clazz, rest_action_view_mapping)

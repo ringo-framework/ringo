@@ -159,6 +159,8 @@
     icon = "glyphicon glyphicon-export"
   elif icon == "icon-import":
     icon = "glyphicon glyphicon-import"
+  elif icon == "icon-link":
+    icon = "glyphicon glyphicon-link"
   return icon
   %>
 </%def>
