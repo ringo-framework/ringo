@@ -15,7 +15,7 @@ import re
 import uuid
 import fuzzy
 import Levenshtein
-from sqlalchemy import Column, CHAR
+from sqlalchemy import Column, CHAR, or_
 from sqlalchemy.orm import joinedload, Session
 from ringo.lib.helpers import (
     serialize, get_item_modul,
@@ -206,6 +206,10 @@ class BaseItem(object):
         this function to create and return specific factories for the
         class."""
         return BaseFactory(cls, request)
+
+    @classmethod
+    def get_item_list(cls, request=None, user=None, cache="", items=None):
+        return get_item_list(request, cls, user=None, cache="", items=None)
 
     @classmethod
     def _get_permissions(cls, modul, item, request):
@@ -549,8 +553,6 @@ def get_item_list(request, clazz, user=None, cache="", items=None):
         listing = BaseList(clazz, request.db, cache, items)
         if user:
             listing = filter_itemlist_for_user(request, listing)
-        # Only cache the result if not items has been prefined for the
-        # list.
         if items is None:
             request.cache_item_list.set(key, listing)
             return listing
@@ -594,14 +596,14 @@ class BaseList(object):
     The BaseList is usually created by calling the
     :func:`.get_item_list` method. Using this method the BaseList will
     include all items of a given class which are readable by the current
-    user. 
+    user.
 
     Alternatively the BaseList can be initiated directly in two ways. On
     default all items of a given class will be loaded from the database.
     The other way is to initiate the list with a list of preloaded
     items.
     """
-    def __init__(self, clazz, db, cache="", items=None):
+    def __init__(self, clazz, db, cache="", items=None, user=None):
         """A List object of. A list can be filterd, and sorted.
 
         :clazz: Class of items which will be loaded.
@@ -615,6 +617,14 @@ class BaseList(object):
         self.db = db
         if items is None:
             q = self.db.query(self.clazz)
+
+            if user and issubclass(self.clazz, Owned):
+                uid = user.id
+                gids = [g.id for g in user.groups]
+                q = q.filter(or_(self.clazz.uid == uid, self.clazz.gid.in_(gids)))
+                # Mark this listing to be prefilterd for a user.
+                self._user = user
+
             if cache in regions.keys():
                 q = set_relation_caching(q, self.clazz, cache)
                 q = q.options(FromCache(cache))

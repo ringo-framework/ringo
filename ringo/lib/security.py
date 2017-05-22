@@ -317,8 +317,9 @@ def get_permissions(modul, item=None):
                     continue
 
             # administrational role means allow without further
-            # ownership checks.
-            if role.admin is True and add_perm:
+            # ownership checks. If item is class than check is on modul
+            # level.
+            if (role.admin is True or action.admin is True) and add_perm:
                 perms.append((Allow, default_principal, permission))
 
             # Modul level (class level) permissions.
@@ -327,6 +328,13 @@ def get_permissions(modul, item=None):
             # anyway.
             elif permission in ['create', 'list']:
                 perms.append((Allow, default_principal, permission))
+
+            # If the item is not an instance of a BaseItem then add
+            # we want to get the permission on modul
+            # level too. So again add the default principal
+            elif not isinstance(item, BaseItem) and add_perm:
+                perms.append((Allow, default_principal, permission))
+
             # If the item has a uuid the we want get the permission on
             # Item level. Only allow the owner or members of the items
             # group.
@@ -335,11 +343,7 @@ def get_permissions(modul, item=None):
                 perms.append((Allow, principal, permission))
                 principal = default_principal + ';group:%s' % item.gid
                 perms.append((Allow, principal, permission))
-            # Finally the item is not an instance of a BaseItem then add
-            # remaining action we want to get the permission on modul
-            # level too. So again add the default principal
-            elif not isinstance(item, BaseItem) and add_perm:
-                perms.append((Allow, default_principal, permission))
+
     return perms
 
 
@@ -401,6 +405,26 @@ def has_role(user, role):
     if user is None:
         return False
     return user.has_role(role)
+
+
+def has_admin_role(action_name, clazz, request):
+    """Return True if the current user has admin role for the given
+    action_name on the given clazz. Having a admin role means that the
+    check for the ownership in context of the permissions checks can be
+    omitted.
+
+    :action_name: Name of the action
+    :clazz: clazz
+    :request: current request and user
+    :returns: True or False
+    """
+    modul = get_item_modul(request, clazz)
+    for action in modul.actions:
+        if action.name.lower() == action_name:
+            for role in action.roles:
+                if role.admin and has_role(request.user, role.name):
+                    return True
+    return False
 
 
 def get_roles(user):
@@ -668,7 +692,7 @@ class ValueChecker(object):
         """
         for relation in get_relations_from_clazz(clazz):
             # If the relation is not set in the values then continue, as
-            # we do not need to check anything. 
+            # we do not need to check anything.
             if relation not in values:
                 continue
 
@@ -705,7 +729,7 @@ class ValueChecker(object):
                 # checking permissions. Allowing links to a modul item
                 # is currently not known to be a security thread.
                 if (isinstance(value, ModulItem)
-                    or has_permission("read", value, request)
+                    or has_permission("link", value, request)
                     or not isinstance(value, BaseItem)):
                     continue
                 else:

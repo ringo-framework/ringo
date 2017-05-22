@@ -244,6 +244,21 @@ Voilà! That is it.
 #########
 Tutorials
 #########
+.. _import_export:
+.. index::
+   single: Export
+   single: Import
+
+****************************
+Importing and Exporting data
+****************************
+It is possible to export and import the data of modules in different formats.
+Supported formats are **JSON** and **CSV**. The default is to export and
+import JSON.
+
+Export can be triggered in the UI (If the user has sufficient permissions, and
+export is enabled) or using the CLI commands from :ref:`clidb` to
+:ref:`clidb-export` and :ref:`clidb-import`.
 
 ************************************
 How to make config changes permanent
@@ -862,6 +877,7 @@ for this::
         # rendererd form to the template.
         rendered_form = render_item_form(request, form)
 
+.. _overview_config:
 
 **********************
 Overview configuration
@@ -889,12 +905,6 @@ The `renderer` refers to a callable which is defined like this::
         from ringo.lib.helpers import literal
 
         def myrenderer(request, item, column, tableconfig):
-	    # Depending where where this method is called the item is 
-	    # either a tuple or the item. If it is called from the 
-	    # ListfieldRenderer the item is a tuple
-	    if isinstance(item, tuple):
-	        item = item[0]
-		
             # Do the renderering. In case you return HTML do not forget to
             # escape all values properly and finally return a literal.
             return literal("<strong>Hello world!</strong>")
@@ -955,6 +965,18 @@ actions of a module. Define your custom method in your view file::
 Note, that we reconfigure the view by calling 'view_config' with an already
 configured route_name. This will overwrite the configured view and the
 application will use your custom view now for the route named 'home'.
+
+.. important::
+        Please do not forget to set the permissions checks in the view. If you
+        overwrite a view which requires update permissions you **must** set
+        this permission again in the view. Otherwise the permission check is
+        disabled.
+        To add a permission check you can add an `permission` attribute to the
+        `view_config` call with the name of the required permisson in lower
+        case::
+
+                @view_config(route_name='item-update', renderer='/update.mako', permission="update")
+                ...
 
 If you only want to extend the functionallity from the default you can do this
 too. No need to rewrite the default logic again in your custom view::
@@ -1743,6 +1765,17 @@ The mode is available using the :func:`get_app_mode` function.
 
 .. index:: Testing mode
 
+History ignores
+===============
+You can configure URL which will be ignored in history. This is often needed
+in case you do AJAX requests to fetch data. As you do not want those URL be
+part of the history you can configure to ignore those URLs.
+
+* app.history.ignore = /foo,/bar,/baz
+
+The ignore list is a comma separated list of fragments of an URL. The code
+will check if the current URL starts with one of the defined ignores.
+
 Cache
 =====
 You can configure to cache the loaded configurations for the form
@@ -1772,6 +1805,31 @@ In unittests you can use the following URLs to start a Testcase:
 
 * /_test_case/start
 * /_test_case/stop
+
+Feature Toggles
+===============
+Feature toggles can be used to enable specific code paths in the
+application by setting a config variable in the ini file. This is
+usefull to make features which are currently under development available
+
+Feature toggles are set in the *ini* file like this:: 
+
+    feature.mynewfeaure = true.
+
+The configuration is available in the current request and can be used
+everywhere in the application where the request is available.::
+
+    if request.ringo.feature.mynewfeaure:
+        # Feature is anabled
+        pass
+    else:
+        # Feature is not anabled
+        pass
+
+Please note that the value in the configuration must be set to *true* to
+consider the feature to be enabled. If the feature is set to anything
+different or isn't configured at all it is considered to be not enabled.
+
 
 ******
 Layout
@@ -2237,6 +2295,10 @@ The database can be downgraded by removing the last migration scripts::
 
         ringo-admin db downgrade 
 
+.. index::
+   single: Export
+.. _clidb-export:
+
 Export data
 ===========
 The data of a specfic module can be exported in a fixture by invoking the
@@ -2244,6 +2306,60 @@ following command::
 
 
         ringo-admin db savedata <modulname> > fixture.json
+
+The default export format is JSON. You can change the export format to CSV by
+providing the `--format` option.
+
+Only values of the given modul are exported. This includes *all*
+fields of the module but no relations. 
+
+You can include the relations as well in the export by setting the
+`--include-relations`. However this does not really include the related items
+and its values but only add another field in the export with the name of the
+relation in the modul. The value will be the string representation of the
+related item.
+
+You can restrict the exported items by setting a `--filter` option. With a
+filter only items of the given modul matching the filter expression are
+exported. The filter expression is defined in the following syntax::
+
+        --filter search,field,isregex;[search,fieldname,isregex;...]
+
+`search` defines the search expression and may be a regular expression if
+`isregexa` is "1" else "0". `fieldname` defines the name of the field on which the
+filter will apply. If field is empty, an item is exported if the search
+expression matches any of the fields of the default overview configuration.
+
+.. note::
+
+        Filtering is limited to fields which are confiured in the items
+        :ref:`overview_config`. You can not filter on fields which are not
+        included in the overview. As a workaround you can setup hidden field
+        in the overview config.
+
+It is possible to define more than one filter. All filters must match to
+include the item in the export.
+
+A More detailed configurations of the export can be done by providing a
+configuration file by setting the `--export-configuration` option. When using the
+configuration file all other options like (format, fields or
+include-relations) have no effect anymore. The default export format will be a
+nested JSON which will include all configured fields.
+
+Details on the format of the export configuration file can be found in
+:ref:`exportconfiguration`.
+
+
+.. _exportconfiguration:
+
+Configuration File
+------------------
+
+.. autoclass:: ringo.lib.imexport.ExportConfiguration
+
+.. index::
+   single: Import
+.. _clidb-import:
 
 Importing data
 ==============
