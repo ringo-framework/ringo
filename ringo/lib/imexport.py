@@ -420,13 +420,18 @@ class Importer(object):
                 clazz = getattr(self._clazz, field).mapper.class_
                 tmp = []
                 for item_id in obj[field]:
-                    q = self._db.query(clazz).filter(clazz.id == item_id)
-                    try:
-                        tmp.append(q.one())
-                    except:
-                        log.warning(("Can not load '%s' id: %s "
-                                     "Relation '%s' of '%s' not set"
-                                     % (clazz, item_id, field, self._clazz)))
+                    if isinstance(item_id, BaseItem):
+                        # Item has been already be deserialized in the
+                        # recursive calls.
+                        tmp.append(item_id)
+                    else:
+                        q = self._db.query(clazz).filter(clazz.id == item_id)
+                        try:
+                            tmp.append(q.one())
+                        except:
+                            log.warning(("Can not load '%s' id: %s "
+                                         "Relation '%s' of '%s' not set"
+                                         % (clazz, item_id, field, self._clazz)))
                 obj[field] = tmp
         return obj
 
@@ -489,7 +494,7 @@ class JSONImporter(Importer):
     def _deserialize_recursive(self, obj):
         # This code is currently experimental.
         for field in obj:
-            if isinstance(obj[field], dict):
+            if isinstance(obj[field], (dict, list)):
                 clazz = getattr(self._clazz, field).mapper.class_
                 importer = JSONImporter(clazz, db=self._db, use_strict=self._use_strict)
                 if not isinstance(obj[field], list):
