@@ -213,9 +213,12 @@ class Exporter(object):
         for key in data:
             # Handle data container of blobforms
             if key == "data":
-                jdata = json.loads(data[key])
-                for jkey in jdata:
-                    values[jkey] = jdata[jkey]
+                try:
+                    jdata = json.loads(data[key])
+                    for jkey in jdata:
+                        values[jkey] = jdata[jkey]
+                except ValueError:
+                    values[key] = data[key]
             else:
                 values[key] = data[key]
         return values
