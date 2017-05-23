@@ -247,6 +247,9 @@ class Exporter(object):
                 item.reset_uuid()
 
             # Check if a configuration is provided.
+
+            #  FIXME: Read support for deprecated "relations" argument?
+            #  Is missing here. (ti) <2017-05-23 14:02>
             if not self._config or len(self._config.config) == 0:
                 # No configuration is provided. Export all fields
                 # exluding relations.
