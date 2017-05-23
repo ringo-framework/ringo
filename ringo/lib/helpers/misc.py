@@ -1,6 +1,7 @@
 import logging
 import re
 import string
+import base64
 from datetime import datetime
 from pyramid.threadlocal import get_current_request
 import formbar.converters as converters
@@ -35,6 +36,8 @@ def deserialize(value, datatype):
     elif datatype == "char(36)":
         # UUID
         return value
+    elif datatype == "blob":
+        return base64.b64decode(value)
     else:
         raise TypeError("{} is not supported".format(datatype))
 
@@ -68,10 +71,13 @@ def serialize(value):
     # method supports it to convert the given value into unicode
     if isinstance(value, bytearray):
         return value.decode("utf-8")
+
     log.warning("Unhandled type '%s'. "
                 "Using default and converting to unicode" % type(value))
-    return unicode(value)
-
+    try:
+        return unicode(value)
+    except UnicodeDecodeError:
+        return base64.b64encode(value)
 
 def safestring(unsafe):
     """Returns a 'safe' version of the given string. All non ascii chars
