@@ -274,9 +274,7 @@ class Exporter(object):
                             value = exporter.perform(value)
                             values[relation] = value
                     else:
-                        value = item.get_value(field)
-                        if self._serialized:
-                            value = serialize(value)
+                        value = serialize(item.get_value(field))
                         values[field] = value
             data.append(self.flatten(values))
 
