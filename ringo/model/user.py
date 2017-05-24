@@ -1,5 +1,6 @@
 import logging
 import json
+from pyramid.security import Allow
 import sqlalchemy as sa
 from datetime import datetime
 from ringo.lib.alchemy import get_prop_from_instance
@@ -198,6 +199,18 @@ class Usergroup(BaseItem, Owned, Base):
 
     def __unicode__(self):
         return self.name
+
+    @classmethod
+    def _get_permissions(cls, modul, item, request):
+
+        # Default ACL. Direct access
+        permissions = BaseItem._get_permissions(modul, item, request)
+
+        # A usergoups can be linked by all members of the group
+        if isinstance(item, BaseItem):
+            for user in item.members:
+                permissions.append((Allow, 'uid:{}'.format(user.id), 'link'))
+        return permissions
 
 
 class Role(BaseItem, Owned, Base):
