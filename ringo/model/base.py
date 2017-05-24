@@ -45,7 +45,7 @@ def levenshteinmatch(value, search, t):
     lenS = len(search)
 
     if lenS >= lenV:
-        l =  math.ceil(lenS * t)
+        l = math.ceil(lenS * t)
     else:
         l = math.ceil(lenV * t)
     ld = Levenshtein.distance(value.encode("utf-8"), search.encode("utf-8"))
@@ -63,11 +63,11 @@ def doublemetaphone(value, search):
     if value == search:
         return True
 
-    if dmeta_value[1] != None and dmeta_search[1] != None:
+    if dmeta_value[1] is not None and dmeta_search[1] is not None:
         for v in dmeta_value:
             for s in dmeta_search:
                 if v == s:
-                    return True 
+                    return True
     return dmeta_value == dmeta_search
 
 
@@ -82,9 +82,9 @@ def smatch(value, search):
         return True
 
     if doublemetaphone(value, search):
-        return True 
+        return True
     else:
-        return levenshteinmatch(search, value, 0.3) 
+        return levenshteinmatch(search, value, 0.3)
 
 
 opmapping = {
@@ -98,7 +98,6 @@ opmapping = {
 }
 
 
- 
 def load_modul(item):
     """Will load the related modul for the given item. First we try to
     get the bound session from the object and reuse this session to load
@@ -128,15 +127,15 @@ class BaseItem(object):
 
     The class overwrites the `__getattr__` and `__setattr__` methods to
     support getting and setting dot separatedattributes like
-    'getattr(foo.bar.baz)' 
+    'getattr(foo.bar.baz)'
     """
 
     _modul_id = None
-    #  TODO: Check if its possible to set the modul of the class
-    #  dynamically on application initialisation. This might help to get
-    #  rid of the annoying loading of the modul for a class (ti)
-    #  <2015-03-10 22:53>
-    #__modul__ = None
+    # TODO: Check if its possible to set the modul of the class
+    # dynamically on application initialisation. This might help to get
+    # rid of the annoying loading of the modul for a class (ti)
+    # <2015-03-10 22:53>
+    # __modul__ = None
     _sql_eager_loads = []
     """Configure a list of relations which are configured to be
     eager loaded."""
@@ -425,7 +424,6 @@ class BaseItem(object):
                     raise AttributeError(('Not setting "%s".'
                                          ' Attribute not found.') % key)
 
-
     def save(self, data, request=None):
         """Method to set new values and 'saving' changes to the item. In
         contrast to just setting the values saving means triggering
@@ -445,7 +443,7 @@ class BaseItem(object):
         .. note::
             Making the changes persistent to the database is finally
             done on the end of the request when the transaction of the
-            current session is commited. 
+            current session is commited.
 
         Please note, that you must ensure that the submitted values are
         validated. This function does no validation on the submitted
@@ -473,23 +471,21 @@ class BaseItem(object):
             for key in self.list_statemachines():
                 new_state_id = data.get(key)
                 old_state_id = old_values.get(key)
-                if ((new_state_id and old_state_id)
-                   and (new_state_id != old_state_id)):
-                    self.change_state(request, key,
-                                      old_state_id, new_state_id)
+                if ((new_state_id and old_state_id) and
+                   (new_state_id != old_state_id)):
+                    self.change_state(request, key, old_state_id, new_state_id)
 
-        #  FIXME: Fix building a log entry. The log modul has been
-        #  converted to an extension and is not available in the ringo
-        #  core (ti) <2015-01-31 19:04>
-        ## Handle logentry
-        #if isinstance(self, Logged):
-        #    if not self.id:
-        #        subject = "Create"
-        #        text = json.dumps(self.build_changes(old_values, data))
-        #    else:
-        #        subject = "Update"
-        #        text = json.dumps(self.build_changes(old_values, data))
-        #    self.add_log_entry(subject, text, request)
+        # FIXME: Fix building a log entry. The log modul has been
+        # converted to an extension and is not available in the ringo
+        # core (ti) <2015-01-31 19:04>
+        # if isinstance(self, Logged):
+        #     if not self.id:
+        #         subject = "Create"
+        #         text = json.dumps(self.build_changes(old_values, data))
+        #     else:
+        #         subject = "Update"
+        #         text = json.dumps(self.build_changes(old_values, data))
+        #     self.add_log_entry(subject, text, request)
 
         # If the item has no id, then we assume it is a new item. So
         # add it to the database session.
@@ -726,7 +722,7 @@ class BaseList(object):
             self.pagination_end = (page + 1) * size
         self.pagination_pages = pages
 
-        ## Calculate the range to the pagination navigation
+        # Calculate the range to the pagination navigation
         start = self.pagination_current - 4
         end = self.pagination_current + 5
         if start < 0:
@@ -767,7 +763,7 @@ class BaseList(object):
         The "~" operator will trigger a fuzzy search using the Double
         Metaphone algorithm for determining equal phonetics. If the
         phonetics do not match the Levenshtein distance will be
-        calculated. 
+        calculated.
 
         The search will iterate over all items in the list. For each
         item the function will try to match the value of either all, or
@@ -856,8 +852,8 @@ class BaseFactory(object):
         item = self._clazz()
         # Try to set the ownership of the entry if the item provides the
         # fields.
-        if (hasattr(item, 'uid')
-           and user is not None):
+        if (hasattr(item, 'uid') and
+           user is not None):
             item.uid = user.id
         if (hasattr(item, 'gid')):
             modul = get_item_modul(None, item)
