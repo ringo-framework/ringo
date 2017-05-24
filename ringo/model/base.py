@@ -15,7 +15,7 @@ import re
 import uuid
 import fuzzy
 import Levenshtein
-from sqlalchemy import Column, CHAR, or_
+from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload, Session
 from ringo.lib.helpers import (
     serialize, get_item_modul,
@@ -599,7 +599,7 @@ class BaseList(object):
     The other way is to initiate the list with a list of preloaded
     items.
     """
-    def __init__(self, clazz, db, cache="", items=None, user=None):
+    def __init__(self, clazz, db, cache="", items=None):
         """A List object of. A list can be filterd, and sorted.
 
         :clazz: Class of items which will be loaded.
@@ -613,13 +613,6 @@ class BaseList(object):
         self.db = db
         if items is None:
             q = self.db.query(self.clazz)
-
-            if user and issubclass(self.clazz, Owned):
-                uid = user.id
-                gids = [g.id for g in user.groups]
-                q = q.filter(or_(self.clazz.uid == uid, self.clazz.gid.in_(gids)))
-                # Mark this listing to be prefilterd for a user.
-                self._user = user
 
             if cache in regions.keys():
                 q = set_relation_caching(q, self.clazz, cache)
