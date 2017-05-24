@@ -396,7 +396,7 @@ class BaseItem(object):
                 # change at all in the model so continue
                 if oldvalue == value:
                     continue
-                log.debug(u"Setting value '%s' in %s" % (value.decode("utf8", errors="replace"), key))
+                log.debug(u"Setting value '%s' in %s" % (str(value).decode("utf8", errors="replace"), key))
                 if isinstance(value, list) and isinstance(oldvalue, list):
                     # Special handling for relations in NM relations.
                     # See ticket #19 in Ringo issue tracker for more
