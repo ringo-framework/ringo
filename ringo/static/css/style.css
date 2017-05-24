@@ -122,15 +122,15 @@ nav ul.pagination {
  * calculations.
  */
 
-span[data-original-title]{
+span[data-original-title]:not([data-toggle="tooltip"]){
     position: relative;
 }
 
-a[data-original-title]{
+a[data-original-title]:not([data-toggle="tooltip"]){
     position: relative;
 }
 
-span[data-original-title]:hover:after {
+span[data-original-title]:not([data-toggle="tooltip"]):hover:after {
   font-size: 12px;
   content: attr(data-original-title);
   position: absolute;
@@ -145,7 +145,7 @@ span[data-original-title]:hover:after {
   z-index: 1030;
 }
 
-a[data-original-title]:hover:after {
+a[data-original-title]:not([data-toggle="tooltip"]):hover:after {
   font-size: 12px;
   content: attr(data-original-title);
   position: absolute;
