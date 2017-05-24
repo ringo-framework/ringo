@@ -122,7 +122,7 @@ if sortable:
   <tr>
   % if bundled_actions:
     <th width="2em">
-      <input type="checkbox" name="check_all" onclick="checkAll('id');">
+      <input type="checkbox" name="check_all" no-dirtyable onclick="checkAll('id');">
     </th>
   % endif
   % for num, field in enumerate(tableconfig.get_columns(request.user)):
