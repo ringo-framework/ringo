@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import logging
 from pyramid.config import Configurator
@@ -8,6 +9,10 @@ from ringo.lib.i18n import locale_negotiator
 from ringo.lib.sql.db import setup_db_session, setup_db_engine
 from ringo.model import Base
 from ringo.model.user import User, Usergroup
+
+__author__ = """Torsten Irländer"""
+__email__ = 'torsten.irlaender@googlemail.com'
+__version__ = '1.16.2'
 
 log = logging.getLogger(__name__)
 
