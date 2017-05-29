@@ -1,4 +1,10 @@
-include CHANGES.txt LICENSE.txt README.rst
+include AUTHORS.rst
+
+include CONTRIBUTING.rst
+include HISTORY.rst
+include LICENSE
+include README.rst
+
 include development.ini
 include ringo/alembic/alembic.ini
 include ringo/alembic/script.py.mako
@@ -16,3 +22,9 @@ recursive-include ringo/templates *.mako
 recursive-include ringo/views/forms *.xml
 recursive-include ringo/views/tables *.json
 global-exclude *.orig
+
+recursive-include tests *
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+
+recursive-include docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif
