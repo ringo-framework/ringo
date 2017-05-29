@@ -164,7 +164,7 @@ if sortable:
     </th>
   % endfor
   </tr>
-  % for item in items[listing.pagination_start:listing.pagination_end]:
+  % for item in items:
     <%
       data_link = get_read_update_url(request, item, clazz, listing.is_prefiltered_for_user())
     %>
