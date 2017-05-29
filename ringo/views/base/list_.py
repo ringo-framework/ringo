@@ -236,7 +236,10 @@ def load_items(request, clazz, list_params):
     query_all = request.db.query(clazz)
     query = request.db.query(clazz)
     if list_params["sorting"]:
-        sort_column = getattr(clazz, list_params["sorting"][0])
+        try:
+            sort_column = getattr(clazz, list_params["sorting"][0])
+        except AttributeError:
+            return None, 0
 
         # Sorting is only supported on a few attributes.
         if isinstance(sort_column, property):
