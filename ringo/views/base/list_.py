@@ -250,7 +250,7 @@ def load_items(request, clazz, list_params):
         else:
             query = query.order_by(sort_column.desc())
 
-    if list_params["pagination"]:
+    if list_params["pagination"] and list_params["pagination"][1]:
         start = list_params["pagination"][0] * list_params["pagination"][1]
         end = start + list_params["pagination"][1]
         items = query.slice(start, end)
