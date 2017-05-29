@@ -29,3 +29,6 @@ def get_relations_from_clazz(clazz):
     only_columns = set(get_columns_from_clazz(clazz))
     with_relations = set(get_columns_from_clazz(clazz, True))
     return with_relations-only_columns
+
+def is_relation(clazz, name):
+    return name in get_relations_from_clazz(clazz)
