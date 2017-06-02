@@ -31,22 +31,19 @@ class Callback(object):
     called during the view execution. This can either be before the
     actual action (pre) or after it (post). By setting this mode you can
     define when to call the callback. On default the execution time is
-    defined in the view.  The `data` attribute can be used to provide
-    any data which is needed to implement the application logic."""
+    defined in the view."""
 
-    def __init__(self, callback, mode=None, data=None):
+    def __init__(self, callback, mode=None):
         """Init the callback and configure its behaviour.
 
         :callback: Callable which is used as callback
         :mode: 'pre' or 'post' or None
-        :data: Custom specific data which can be added to the Callback
         """
 
         self.callback = callback
         if mode not in ["pre", "post", None]:
             raise ValueError("Mode can either be None, `pre` or `post`")
         self.mode = mode
-        self.data = data
 
     def __call__(self, request, item):
         return self.callback(request, item)
