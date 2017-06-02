@@ -11,6 +11,7 @@ from ringo.lib.security import (
 from ringo.lib.helpers import import_model, get_action_routename, literal
 from ringo.lib.history import History
 from ringo.lib.sql.cache import invalidate_cache
+from ringo.views.callbacks import Callback
 from ringo.views.helpers import (
     get_item_from_request,
     get_item_modul,
@@ -104,7 +105,7 @@ def handle_event(request, item, event):
             handler(request, item)
 
 
-def handle_callback(request, callback, item=None):
+def handle_callback(request, callbacks, item=None, mode=None):
     """Will call the given callback
 
     :request: Current request
@@ -115,11 +116,13 @@ def handle_callback(request, callback, item=None):
     """
     if not item:
         item = get_item_from_request(request)
-    if isinstance(callback, list):
-        for cb in callback:
+    if not isinstance(callbacks, list):
+        callbacks = [callbacks]
+    for cb in callbacks:
+        if isinstance(cb, Callback) and cb.mode != mode:
+            continue
+        else:
             item = cb(request, item)
-    elif callback:
-        item = callback(request, item)
     return item
 
 
@@ -209,6 +212,7 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
     if form.validate(request.params) and "blobforms" not in request.params:
         checker = ValueChecker()
         try:
+            handle_callback(request, callback, mode="pre")
             if event == "create":
                 try:
                     factory = clazz.get_item_factory(request)
@@ -227,7 +231,7 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
                 values = checker.check(clazz, form.data, request, item)
                 item.save(values, request)
             handle_event(request, item, event)
-            handle_callback(request, callback)
+            handle_callback(request, callback, mode="post")
             handle_caching(request)
 
             if event == "create":

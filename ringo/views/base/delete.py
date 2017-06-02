@@ -11,6 +11,7 @@ from ringo.views.response import JSONResponse
 from ringo.views.request import (
     handle_params,
     handle_history,
+    handle_callback,
     is_confirmed,
     get_item_from_request
 )
@@ -49,17 +50,9 @@ def _handle_delete_request(request, items, callback):
         item_label_log = get_item_modul(request, clazz).get_label()
         mapping = {'item_type': item_label, 'num': len(items)}
         for item in items:
-            if isinstance(callback, Callback) and callback.mode is not None:
-                if callback.mode == "pre":
-                    item = callback(request, item)
-                    request.db.delete(item)
-                else:
-                    request.db.delete(item)
-                    item = callback(request, item)
-            else:
-                if callback:
-                    item = callback(request, item)
-                request.db.delete(item)
+            handle_callback(request, callback, item=item, mode="pre")
+            request.db.delete(item)
+            handle_callback(request, callback, item=item, mode="post")
         # Invalidate cache
         invalidate_cache()
         try:
