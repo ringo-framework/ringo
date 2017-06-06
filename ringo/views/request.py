@@ -241,6 +241,9 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
     if form.validate(request.params) and "blobforms" not in request.params:
         checker = ValueChecker()
         try:
+            # Handle new callback objects wich are configured to be
+            # called previous the origin action. Old simple callbacks
+            # are ignored.
             handle_callback(request, callback, mode="pre")
             if event == "create":
                 try:
@@ -260,7 +263,11 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
                 values = checker.check(clazz, form.data, request, item)
                 item.save(values, request)
             handle_event(request, item, event)
-            handle_callback(request, callback, mode="post")
+            # Maintain old behaviour of callbacks. Callback are called
+            # post the origin action of the view. Therefor the callback
+            # must either be an instance of :class:Callback with mode
+            # "post" or it is a simple callable.
+            handle_callback(request, callback, mode="post,default")
             handle_caching(request)
 
             if event == "create":

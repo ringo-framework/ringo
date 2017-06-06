@@ -52,7 +52,7 @@ def _handle_delete_request(request, items, callback):
         for item in items:
             handle_callback(request, callback, item=item, mode="pre")
             request.db.delete(item)
-            handle_callback(request, callback, item=item, mode="post")
+            handle_callback(request, callback, item=item, mode="post,default")
         # Invalidate cache
         invalidate_cache()
         try:
