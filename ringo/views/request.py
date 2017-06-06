@@ -106,23 +106,52 @@ def handle_event(request, item, event):
 
 
 def handle_callback(request, callbacks, item=None, mode=None):
-    """Will call the given callback
+    """Will call the given `callbacks`. If callbacks is a list all of
+    the defined callbacks are called. The `mode` attribute is a comma
+    sperated list of string and works as some kind of filter on the
+    given callbacks and defines which callbacks are actually called.
+    :class:Callback instances can be configured to be called "pre" or
+    "post" the actual action of the view. The mode will only execute
+    matching callback instances.
+
+    There is a special mode "default" which is used to maintain the old
+    behaviour of the handling of the callbacks. Adding "default" as mode
+    will execute either simple callables as callbacks (old style) or new
+    style callbacks with undefined mode.
 
     :request: Current request
     :callback: Callable function or list of callable functions
     :item: item for which the callback will be called.
+    :mode: Filter on the given callbacks. Defines which callbacks are
+    actually called.
     :returns: item
 
     """
+    if mode is None:
+        mode = [None]
+    else:
+        modes = mode.split(",")
     if not item:
         item = get_item_from_request(request)
+    if callbacks is None:
+        return item
     if not isinstance(callbacks, list):
         callbacks = [callbacks]
     for cb in callbacks:
-        if isinstance(cb, Callback) and cb.mode != mode:
-            continue
-        else:
+        # Handle callback objects.
+        if isinstance(cb, Callback) and ((cb.mode in modes) or (cb.mode is None and "default" in modes)):
+            # New callback objects. Only call the callback if the mode
+            # matches or if the mode of the callback is non but we are
+            # in "default" mode.
             item = cb(request, item)
+        elif not isinstance(cb, Callback) and ("default" in modes or None in modes):
+            # Old simple callabel. Only call the callback if we are in
+            # default mode or no mode is given.
+            # None.
+            item = cb(request, item)
+        else:
+            # Otherwise ignore the callback
+            continue
     return item
 
 
