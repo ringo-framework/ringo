@@ -51,7 +51,7 @@ lint: ## check style with flake8
 	flake8 ringo tests
 
 test: ## run tests quickly with the default Python
-	py.test --app-config test.ini
+	py.test
 	
 
 test-all: ## run tests on every Python version with tox
