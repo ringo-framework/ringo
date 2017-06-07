@@ -44,6 +44,9 @@ function checkDirtyForms () {
                                 return true;
                             }
                             break;
+                        case "search":
+                            // search buttons aren't usually submittable
+                            break;
                         default:
                             //TODO check if all other input types are
                             // covered (even html5 ones)
