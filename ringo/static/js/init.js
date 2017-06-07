@@ -27,7 +27,6 @@ $( document ).ready(function() {
             startSpinner(spinner_timer);
         }
     });
-    $('[data-toggle="tooltip"]').tooltip();
     $('.dialog').modal({
         backdrop: "static"
     });
@@ -138,18 +137,8 @@ $( document ).ready(function() {
         $(this).data('initialValue', $(this).serialize());
     });
     function openDirtyDialog(url, hide_spinner, event) {
-        isDirty = false;
-        $('.formbar-form form').each(function () {
-            if($(this).data('initialValue') != $(this).serialize()){
-                // The DirtyFormWarning should not be shown, if the form
-                // has the attribute "no-dirtyable". See waskiq/issue2049.
-                var no_dirtyable = $(this).attr("no-dirtyable")
-                if(typeof no_dirtyable === typeof undefined
-                    || no_dirtyable != "true") {
-                    isDirty = true;
-                    }
-            }
-        });
+        isDirty = checkDirtyForms();
+
         if((isDirty == true) && (DirtyFormWarningOpen == false)) {
             var dialog = $("#DirtyFormWarning");
             $('#DirtyFormWarningProceedButton').attr("href", url);

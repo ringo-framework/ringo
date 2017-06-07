@@ -6,7 +6,7 @@ mapping = {'num_filters': len(listing.search_filter)}
 def render_link(request, field, url, value, clazz):
   out = []
   # Only take the path of the url and ignore any previous search filters.
-  out.append('<a href="%s" data-toggle="tooltip"' % (url))
+  out.append('<a href="%s" ' % (url))
   out.append('class="">')
   if hasattr(value, "render"):
     out.append('%s</a>' % value.render())
@@ -18,9 +18,9 @@ def render_filter_link(url, request, field, value, clazz):
   out = []
   # Only take the path of the url and ignore any previous search filters.
   params = "form=search&search=%s&field=%s" % (value, field.get('name'))
-  out.append('<a href="%s?%s" data-toggle="tooltip"' % (url, params))
+  out.append('<a href="%s?%s" ' % (url, params))
   out.append('class="link filter"')
-  out.append('title="Filter %s on %s in %s">' % (h.get_item_modul(request, clazz).get_label(plural=True), value, field.get('label')))
+  out.append('data-original-title="Filter %s on %s in %s">' % (h.get_item_modul(request, clazz).get_label(plural=True), value, field.get('label')))
   if hasattr(value, "render"):
     out.append('%s</a>' % value.render())
   else:
@@ -122,7 +122,7 @@ if sortable:
   <tr>
   % if bundled_actions:
     <th width="2em">
-      <input type="checkbox" name="check_all" onclick="checkAll('id');">
+      <input type="checkbox" name="check_all" no-dirtyable onclick="checkAll('id');">
     </th>
   % endif
   % for num, field in enumerate(tableconfig.get_columns(request.user)):
@@ -135,7 +135,7 @@ if sortable:
         <a
         href="${request.current_route_path().split('?')[0]}?sort_field=${field.get('name')}&sort_order=desc">
         % if field.get('title'):
-        <span data-toggle="tooltip" data-original-title="${field.get('title')}">
+        <span data-original-title="${field.get('title')}">
         % endif
         ${_(field.get('label'))}
         % if field.get('title'):
@@ -146,7 +146,7 @@ if sortable:
         <a
         href="${request.current_route_path().split('?')[0]}?sort_field=${field.get('name')}&sort_order=asc">
         % if field.get('title'):
-        <span data-toggle="tooltip" data-original-title="${field.get('title')}">
+        <span data-original-title="${field.get('title')}">
         % endif
         ${_(field.get('label'))}
         </a>
