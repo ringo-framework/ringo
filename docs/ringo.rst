@@ -16,6 +16,14 @@ Subpackages
 Submodules
 ----------
 
+ringo.cli module
+----------------
+
+.. automodule:: ringo.cli
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 ringo.config module
 -------------------
 
