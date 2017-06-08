@@ -57,7 +57,6 @@ setup(
             'main = ringo:main'
         ],
         'console_scripts': [
-            'ringo=ringo.cli:main',
             'ringo-admin = ringo.scripts.admin:main'
         ],
         'babel.extractors': [
