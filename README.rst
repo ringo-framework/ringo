@@ -5,6 +5,9 @@ Ringo
 .. image:: https://travis-ci.org/ringo-framework/ringo.svg?branch=master
     :target: https://travis-ci.org/ringo-framework/ringo
 
+.. image:: https://api.codacy.com/project/badge/Grade/9e607df2b5ed470ba2356c8523949858    
+    :target: https://www.codacy.com/app/torsten/ringo
+
 
 Ringo is a Python based high level web application framework build on top of
 Pyramid. The framework can be used to build form based management or
