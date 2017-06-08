@@ -15,4 +15,4 @@ install:
 # command to run tests
 script: 
   - ringo-admin db init --config test.ini
-  - make test
+  - py.test
