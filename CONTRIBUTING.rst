@@ -54,29 +54,53 @@ If you are proposing a feature:
 * Remember that this is a volunteer-driven project, and that contributions
   are welcome :)
 
+.. _bootstrapenv:
+
 Get Started!
 ------------
 
 Ready to contribute? Here's how to set up `ringo` for local development.
 
-1. Fork the `ringo` repo on GitHub.
-2. Clone your fork locally::
+1. Bootstrap a ringo development environment::
 
-    $ git clone git@github.com:your_name_here/ringo.git
+    $ apt-get install git
+    $ curl -O https://raw.githubusercontent.com/ringo-framework/ringo/master/bootstrap-dev-env.sh
+    $ sh bootstrap-dev-env.sh ringo
 
-3. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
+This command will generate a folder which includes some subfolder for the
+virtualenv and needed libraries::
 
-    $ mkvirtualenv ringo
-    $ cd ringo/
-    $ python setup.py develop
+        ringo
+        |-- env
+        |   |-- ...
+        |   `-- bin
+        `-- lib
+            |-- brabbel
+            |-- formbar
+            `-- ringo
 
-4. Create a branch for local development::
+The general layout of an development environment looks like this::
 
+ * appname: Root folder of the environment. Usually named with the name of the
+   application.
+ * lib: Folder for libraries. To be able to have differen versions of the core
+   libraries ringo and formbar I recommend to install the development version
+   for each application.
+ * env: The virtual python environment.
+
+2. Activate your virtualenv::
+
+    $ cd ringo
+    $ source env/bin/active
+
+3. Create a branch for local development::
+
+    $ cd lib/ringo
     $ git checkout -b name-of-your-bugfix-or-feature
 
    Now you can make your changes locally.
 
-5. When you're done making changes, check that your changes pass flake8 and the tests, including testing other Python versions with tox::
+4. When you're done making changes, check that your changes pass flake8 and the tests, including testing other Python versions with tox::
 
     $ flake8 ringo tests
     $ python setup.py test or py.test
@@ -84,7 +108,7 @@ Ready to contribute? Here's how to set up `ringo` for local development.
 
    To get flake8 and tox, just pip install them into your virtualenv.
 
-6. Commit your changes and push your branch to GitHub::
+5. Commit your changes and push your branch to GitHub::
 
     $ git add .
     $ git commit -m "Your detailed description of your changes."
