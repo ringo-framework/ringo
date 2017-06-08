@@ -1,7 +1,10 @@
-=====
+#####
 Usage
-=====
+#####
 
-To use Ringo in a project::
+.. toctree::
+   :maxdepth: 2
 
-    import ringo
+   usage/cli
+   usage/configuration 
+   usage/deployment
