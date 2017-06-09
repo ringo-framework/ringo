@@ -4,6 +4,89 @@ Deployment
 
 .. _deployment_subpath:
 
+Heroku
+======
+Ringo applications can be deployed on `Heroko <https://heroku.com>`_.  In this
+tutorial it is assumed that you already have your application running in your
+virtual environment and you already have a configured account on Heroku. For
+more information how to start deploying python application see `the tutorial on Heroku <https://https://devcenter.heroku.com/articles/getting-started-with-python#introduction>`_
+
+
+0 Initialise a new application::
+
+       # Create a new application named "myapp" with location EU
+       heroku apps:create myapp --region eu 
+
+       # Now add a new git remote to the git repo in the output of the last
+       # command.
+       git remote add heroku $gitrepoatheroku
+       # Create a Database
+       heroku addons:create heroku-postgresql:hobby-dev --app myapp
+       # Make sure sessions work as expected
+       heroku features:enable http-session-affinity -a myapp
+
+        
+1. Pip freeze your environment. To ensure that your application runs with the
+same versions as your local version please store the excact packages using
+`pip freeze`::
+
+        pip freeze > requirements.txt
+        # Or in case you just want to pin development versions of the
+        # ringo-framework
+        pip freeze | grep ringo-framework > requirements.txt
+
+2. Prepare your ini file to use a custom port for the server::
+
+        ----------development.ini--------------
+        @@ -90,7 +90,7 @@ mail.default_sender =
+        [server:main]
+        use = egg:waitress#main
+        host = 0.0.0.0
+        -port = 6543
+        +port = %(http_port)s 
+        #url_schema = http
+        #url_prefix =
+
+ 3. Create a shell script `run-heroku.sh` which does the application initialisation and
+     start. Make the script executable::
+
+        #!/bin/sh
+        python setup.py develop
+        ringo-admin db init
+        pserve development.ini http_port=$PORT
+
+ 4. Create a `.env` file to set some environment variables::
+
+        PORT=6543
+        DATABASE_URL=postgres:///$(whoami)
+
+    This file must not be checked into the repository.
+
+ 5. Create a `Proc` file which will used by Heroku to start your application::
+
+        web: ./run-heroku.sh
+
+
+ 6. Test your application locally::
+
+        heroku local
+
+ 7. Finally add your modfied development.ini and the shell script to the
+     repository and push to heroku which will trigger the build process.::
+
+        git add development.ini
+        git add run-heroku.sh
+        git add Proc 
+        git commit -m "Added support for Heroku"
+
+        # Push 
+        git push heroku
+
+
+The last command will trigger the build on the server and shows the URL where
+the application is reachable.
+
+
 ====================================================
 Running the application in a different path than "/"
 ====================================================
