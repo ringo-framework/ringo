@@ -1,3 +1,12 @@
+1.16.1-inte
+===========
+This is a Intevation specific release with implements a new feature needed
+Bewec application only and is not planned to be released in the public.
+
+- Adds a improved callback mechanism. It allows you to define the execution
+  time of the callback with in the view. It can be pre or post the actual view
+  action.
+
 1.16.0
 ======
 - Added new config vars for application to allow better customisation
