@@ -1,4 +1,5 @@
 import sys
+import os
 import logging
 import query
 from zope.sqlalchemy import ZopeTransactionExtension
@@ -60,6 +61,12 @@ def ping_connection(dbapi_connection, connection_record, connection_proxy):
 def setup_db_engine(settings):
     cachedir = settings.get("db.cachedir")
     regions = []
+
+    databaseurl = os.environ.get('DATABASE_URL')
+    if databaseurl:
+        settings['sqlalchemy.url'] = databaseurl
+        log.info("Using database url from ENV: %s" % databaseurl)
+
     for region in settings.get("db.cacheregions", "").split(" "):
         regions.append(region.split(":"))
     if cachedir:
