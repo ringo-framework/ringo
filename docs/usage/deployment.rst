@@ -6,13 +6,13 @@ Deployment
 
 Heroku
 ======
-Ringo applications can be deployed on `Heroko <https://heroku.com>`_.  In this
+Ringo applications can be deployed on `Heroku <https://heroku.com>`_.  In this
 tutorial it is assumed that you already have your application running in your
 virtual environment and you already have a configured account on Heroku. For
 more information how to start deploying python application see `the tutorial on Heroku <https://https://devcenter.heroku.com/articles/getting-started-with-python#introduction>`_
 
 
-0 Initialise a new application::
+ 0. Initialise a new application::
 
        # Create a new application named "myapp" with location EU
        heroku apps:create myapp --region eu 
@@ -25,17 +25,14 @@ more information how to start deploying python application see `the tutorial on 
        # Make sure sessions work as expected
        heroku features:enable http-session-affinity -a myapp
 
-        
-1. Pip freeze your environment. To ensure that your application runs with the
-same versions as your local version please store the excact packages using
-`pip freeze`::
+ 1. Pip freeze your environment. To ensure that your application runs with the same versions as your local version please store the excact packages using `pip freeze`::
 
         pip freeze > requirements.txt
         # Or in case you just want to pin development versions of the
         # ringo-framework
         pip freeze | grep ringo-framework > requirements.txt
 
-2. Prepare your ini file to use a custom port for the server::
+ 2. Prepare your ini file to use a custom port for the server::
 
         ----------development.ini--------------
         @@ -90,7 +90,7 @@ mail.default_sender =
@@ -47,8 +44,7 @@ same versions as your local version please store the excact packages using
         #url_schema = http
         #url_prefix =
 
- 3. Create a shell script `run-heroku.sh` which does the application initialisation and
-     start. Make the script executable::
+ 3. Create a shell script `run-heroku.sh` which does the application initialisation and start. Make the script executable::
 
         #!/bin/sh
         python setup.py develop
@@ -71,8 +67,7 @@ same versions as your local version please store the excact packages using
 
         heroku local
 
- 7. Finally add your modfied development.ini and the shell script to the
-     repository and push to heroku which will trigger the build process.::
+ 7. Finally add your modfied development.ini and the shell script to the repository and push to heroku which will trigger the build process.::
 
         git add development.ini
         git add run-heroku.sh
