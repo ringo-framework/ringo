@@ -395,7 +395,7 @@ class BaseItem(object):
                 # change at all in the model so continue
                 if oldvalue == value:
                     continue
-                log.debug(u"Setting value '%s' in %s" % (str(value).decode("utf8", errors="replace"), key))
+                log.debug(u"Setting value '%s' in %s" % (repr(value), key))
                 if isinstance(value, list) and isinstance(oldvalue, list):
                     # Special handling for relations in NM relations.
                     # See ticket #19 in Ringo issue tracker for more
@@ -679,7 +679,7 @@ class BaseList(object):
             sorted_items.reverse()
         self.items = sorted_items
 
-    def paginate(self, page=0, size=None):
+    def paginate(self, total, page=0, size=None):
         """This function will set some internal values for the
         pagination function based on the given params.
 
@@ -708,9 +708,9 @@ class BaseList(object):
         if size is None:
             pages = 1
             self.pagination_start = 0
-            self.pagination_end = len(self.items)
+            self.pagination_end = total
         else:
-            pages = int(math.ceil(float(len(self.items)) / size))
+            pages = int(math.ceil(float(total) / size))
             self.pagination_start = page * size
             self.pagination_end = (page + 1) * size
         self.pagination_pages = pages
@@ -726,6 +726,14 @@ class BaseList(object):
             start -= (abs((self.pagination_pages + 5) - end))
         self.pagination_first = start
         self.pagination_last = end
+
+        # If the total is equal to the count of items in the listing
+        # then the list is not pageinated and the listing still includes
+        # all items. In this case we will reduce the list of items to a
+        # actual relevant paginated items. Otherwise it is
+        # assumend that the reducing has been done done before.
+        if total == len(self.items):
+            self.items = self.items[self.pagination_start:self.pagination_end]
 
     def filter(self, filter_stack):
         """This function will filter the items by only leaving

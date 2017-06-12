@@ -11,7 +11,7 @@ from ringo.lib.renderer.lists import get_read_update_url
     <tr>
       % if bundled_actions and len(items) > 0:
         <th width="2em" class="checkboxrow">
-        <input type="checkbox" name="check_all" onclick="checkAll('id');">
+        <input type="checkbox" name="check_all" no-dirtyable onclick="checkAll('id');">
       </th>
       % endif
       % for field in tableconfig.get_columns(request.user):

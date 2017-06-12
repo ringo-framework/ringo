@@ -5,7 +5,7 @@
 <%def name="render_table_header_checkbox(name, multiple=True)">
   <th width="20px" class="checkboxrow">
     % if multiple:
-      <input type="checkbox" name="check_all" onclick="checkAll('${name}');">
+      <input type="checkbox" name="check_all" no-dirtyable onclick="checkAll('${name}');">
     % endif
   </th>
 </%def>

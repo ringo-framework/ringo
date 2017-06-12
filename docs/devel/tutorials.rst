@@ -764,6 +764,17 @@ A callback has the following structure::
 The request and the item should give you all the context you should need to to the
 desired modifications.
 
+However the preferred way to implement callbacks is wrapping your callable in
+a using the callback class with allows you to add more informations to
+configure its behavior.::
+
+        from ringo.views.callbacks import Callback
+        my_callback = Callback(foo_callback, mode="pre")
+
+This way to define the callback let you set time of execution of the callback
+while processing the actual view. See :mod:`ringo.views.callbacks` for more
+information.
+
 The callback must be supplied in the call of the main view function like
 this::
 
@@ -772,6 +783,13 @@ this::
                 permission='create')
         def create(request):
                 return create_(Foo, request, callback=foo_callback)
+
+In case you write your custom view and want to handle  the callback you should
+use the :func:`ringo.views.request.handle_callback` method.::
+
+        handle_callback(request, callback, item=item, mode="pre")
+        # Do the real action
+        handle_callback(request, callback, item=item, mode="post")
 
 .. versionadded:: 1.2.2
         The callback can now optionally be a list of callback functions. This

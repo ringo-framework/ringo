@@ -73,5 +73,5 @@
       name = action.name
     btn_css = btn
   %>
-  <a href="${url}" title="${title}" class="${btn_css}"><i class="${icon}">&nbsp;</i>${name}</a>
+  <a href="${url}" data-original-title="${title}" class="${btn_css}"><i class="${icon}">&nbsp;</i>${name}</a>
 </%def>

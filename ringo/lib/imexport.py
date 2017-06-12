@@ -493,7 +493,6 @@ class JSONImporter(Importer):
     """Docstring for JSONImporter."""
 
     def _deserialize_recursive(self, obj):
-        # This code is currently experimental.
         for field in obj:
             if isinstance(obj[field], (dict, list)):
                 clazz = getattr(self._clazz, field).mapper.class_
@@ -502,7 +501,7 @@ class JSONImporter(Importer):
                     import_data = [obj[field]]
                     imported_item = importer.perform(json.dumps(import_data))
                     obj[field] = imported_item[0][0]
-                else:
+                elif obj[field] and isinstance(obj[field][0], dict):
                     import_data = obj[field]
                     imported_item = importer.perform(json.dumps(import_data))
                     obj[field] = [x[0] for x in imported_item]
