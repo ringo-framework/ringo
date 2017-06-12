@@ -31,6 +31,9 @@ API to make getting often used values more easy.
 - Performance improvements on large overviews.
 - Fixed translations. Translations where broken in 1.16.x. Took last working
   version from 1.15.4 and updated.
+- Adds a improved callback mechanism. It allows you to define the execution
+  time of the callback with in the view. It can be pre or post the actual view
+  action.
 
 Implemented recursive Import and export based on a configuration file.
 

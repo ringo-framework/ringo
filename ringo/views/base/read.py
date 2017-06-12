@@ -5,6 +5,8 @@ from ringo.views.helpers import (
 )
 from ringo.views.response import JSONResponse
 from ringo.views.request import (
+    handle_history,
+    handle_params,
     handle_callback,
     get_item_from_request,
     get_return_value
@@ -22,12 +24,16 @@ def read(request, callback=None, renderers=None):
     :callback: Current function which is called after the item has been read.
     :returns: Dictionary.
     """
-    handle_callback(request, callback)
+    handle_history(request)
+    handle_params(request)
+    handle_callback(request, callback, mode="pre,default")
     rvalues = get_return_value(request)
     values = {'_roles': [str(r.name) for r in request.user.roles]}
     form = get_item_form('read', request, renderers, values=values)
     rvalues['form'] = render_item_form(request, form)
+    handle_callback(request, callback, mode="post")
     return rvalues
+
 
 def rest_read(request, callback=None):
     """Base method to handle read requests on the REST interface.
@@ -37,5 +43,5 @@ def rest_read(request, callback=None):
     :callback: Current function which is called after the item has been read.
     :returns: JSON object.
     """
-    handle_callback(request, callback)
+    handle_callback(request, callback, mode="pre,default")
     return JSONResponse(True, get_item_from_request(request))
