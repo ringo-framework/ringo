@@ -8,6 +8,7 @@ from ringo.lib.security import (
 )
 from ringo.lib.helpers import import_model, get_action_routename, literal
 from ringo.lib.sql.cache import invalidate_cache
+from ringo.views.callbacks import Callback
 from ringo.views.helpers import (
     get_item_from_request,
     get_item_modul,
@@ -75,22 +76,53 @@ def handle_event(request, item, event):
             handler(request, item)
 
 
-def handle_callback(request, callback, item=None):
-    """Will call the given callback
+def handle_callback(request, callbacks, item=None, mode=None):
+    """Will call the given `callbacks`. If callbacks is a list all of
+    the defined callbacks are called. The `mode` attribute is a comma
+    sperated list of string and works as some kind of filter on the
+    given callbacks and defines which callbacks are actually called.
+    :class:Callback instances can be configured to be called "pre" or
+    "post" the actual action of the view. The mode will only execute
+    matching callback instances.
+
+    There is a special mode "default" which is used to maintain the old
+    behaviour of the handling of the callbacks. Adding "default" as mode
+    will execute either simple callables as callbacks (old style) or new
+    style callbacks with undefined mode.
 
     :request: Current request
     :callback: Callable function or list of callable functions
     :item: item for which the callback will be called.
+    :mode: Filter on the given callbacks. Defines which callbacks are
+    actually called.
     :returns: item
 
     """
+    if mode is None:
+        mode = [None]
+    else:
+        modes = mode.split(",")
     if not item:
         item = get_item_from_request(request)
-    if isinstance(callback, list):
-        for cb in callback:
+    if callbacks is None:
+        return item
+    if not isinstance(callbacks, list):
+        callbacks = [callbacks]
+    for cb in callbacks:
+        # Handle callback objects.
+        if isinstance(cb, Callback) and ((cb.mode in modes) or (cb.mode is None and "default" in modes)):
+            # New callback objects. Only call the callback if the mode
+            # matches or if the mode of the callback is non but we are
+            # in "default" mode.
             item = cb(request, item)
-    elif callback:
-        item = callback(request, item)
+        elif not isinstance(cb, Callback) and ("default" in modes or None in modes):
+            # Old simple callabel. Only call the callback if we are in
+            # default mode or no mode is given.
+            # None.
+            item = cb(request, item)
+        else:
+            # Otherwise ignore the callback
+            continue
     return item
 
 
@@ -179,6 +211,10 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
     if form.validate(request.params) and "blobforms" not in request.params:
         checker = ValueChecker()
         try:
+            # Handle new callback objects wich are configured to be
+            # called previous the origin action. Old simple callbacks
+            # are ignored.
+            handle_callback(request, callback, mode="pre")
             if event == "create":
                 try:
                     factory = clazz.get_item_factory(request)
@@ -197,7 +233,11 @@ def handle_POST_request(form, request, callback, event="", renderers=None):
                 values = checker.check(clazz, form.data, request, item)
                 item.save(values, request)
             handle_event(request, item, event)
-            handle_callback(request, callback)
+            # Maintain old behaviour of callbacks. Callback are called
+            # post the origin action of the view. Therefor the callback
+            # must either be an instance of :class:Callback with mode
+            # "post" or it is a simple callable.
+            handle_callback(request, callback, mode="post,default")
             handle_caching(request)
 
             if event == "create":

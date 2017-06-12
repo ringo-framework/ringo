@@ -9,6 +9,7 @@ from ringo.lib.helpers import (
 )
 from ringo.views.response import JSONResponse
 from ringo.views.request import (
+    handle_callback,
     get_item_from_request
 )
 from ringo.views.base.list_ import set_bundle_action_handler
@@ -64,9 +65,9 @@ def _handle_delete_request(request, items, callback):
         item_label = get_item_modul(request, clazz).get_label(plural=True)
         mapping = {'item_type': item_label, 'num': len(items)}
         for item in items:
-            if callback:
-                item = callback(request, item)
+            handle_callback(request, callback, item=item, mode="pre")
             request.db.delete(item)
+            handle_callback(request, callback, item=item, mode="post,default")
         # Invalidate cache
         invalidate_cache()
         try:
