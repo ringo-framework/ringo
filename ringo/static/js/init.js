@@ -142,10 +142,10 @@ $( document ).ready(function() {
         $('.formbar-form form').each(function () {
             if($(this).data('initialValue') != $(this).serialize()){
                 // The DirtyFormWarning should not be shown, if the form
-                // has the attribute "no-dirtyable". See waskiq/issue2049.
+                // has the attribute "no-dirtyable" (See waskiq/issue2049) or
+                // if the form has the class "no-dirtyable". (See waskiq/2727)
                 var no_dirtyable = $(this).attr("no-dirtyable")
-                if(typeof no_dirtyable === typeof undefined
-                   || no_dirtyable != "true") {
+                if(!$(this).hasClass("no-dirtyable") && (typeof no_dirtyable === typeof undefined || no_dirtyable != "true")) {
                     isDirty = true;
                 }
             }
