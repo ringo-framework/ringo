@@ -208,6 +208,10 @@ class BaseItem(object):
         return BaseFactory(cls, request)
 
     @classmethod
+    def get_item_list(cls, request=None, user=None, cache="", items=None):
+        return get_item_list(request, cls, user=None, cache="", items=None)
+
+    @classmethod
     def _get_permissions(cls, modul, item, request):
         """Internal method to implement getting specific build of an ACL
         for this class (and instances). By default this function just
