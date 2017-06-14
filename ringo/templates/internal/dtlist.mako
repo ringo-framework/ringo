@@ -26,7 +26,7 @@ from ringo.lib.renderer.lists import get_read_update_url
   <tbody>
     % for item in items[listing.pagination_start:listing.pagination_end]:
       <%
-      data_link = get_read_update_url(request, item, clazz, listing.is_prefiltered_for_user())
+      data_link = get_read_update_url(request, item, clazz, listing.is_prefiltered_for_user()) or ""
       %>
       <tr item-id="${item.id}" data-link="${data_link}">
       % if bundled_actions:
