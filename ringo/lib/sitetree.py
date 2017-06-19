@@ -115,11 +115,15 @@ def walk_site_tree(st, el, item, request):
 
     if display_item_attr:
         display_item = getattr(item, display_item_attr)
-        display_str = site.get("display_format", "%{item}s")
+    else:
+        display_item = item
+
+    display_str = site.get("display_format", "%{item}s")
+    if display_str:
         path.append((display_str.format(item=display_item),
                      url(request, item)))
     else:
-        path.append((unicode(item), url(request, item)))
+        path.append((unicode(display_item), url(request, item)))
 
     if parent_site:
         parent_item = getattr(item, parent_item_attr)
