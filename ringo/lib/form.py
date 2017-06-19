@@ -5,6 +5,7 @@ from threading import Lock
 from formbar.form import Form
 from formbar.config import Config, load, parse
 from formbar.helpers import get_css_files, get_js_files
+from ringo.model.mixins import Blobform
 from ringo.lib.cache import CACHE_FORM_CONFIG
 from ringo.lib.helpers import (
     get_path_to,
@@ -77,16 +78,18 @@ def get_form_config(item, formname):
     :returns: Formconfig
     """
     if inspect.isclass(item):
+        is_blobform = issubclass(item, Blobform)
         cachename = "%s.%s" % (item.__name__, formname)
         filename = "%s.xml" % item.__tablename__
     else:
+        is_blobform = isinstance(item, Blobform)
         cachename = "%s.%s" % (item.__class__.__name__, formname)
         filename = "%s.xml" % item.__class__.__tablename__
     name = item.__module__.split(".")[0]
 
     with form_lock:
         if not CACHE_FORM_CONFIG.get(cachename):
-            if hasattr(item, 'fid'):
+            if is_blobform:
                 config = get_form_config_from_db(item.fid, formname)
             else:
                 config = get_form_config_from_file(name, filename, formname)
