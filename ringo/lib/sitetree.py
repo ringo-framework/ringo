@@ -103,6 +103,13 @@ def walk_site_tree(st, el, item, request):
     # item attribute. Other wise display the item.
     display_item_attr = site.get("display_item")
 
+    # Hack! Support lists but always take the first value in the list:
+    if isinstance(item, list):
+        if len(item) > 0:
+            item = item[0]
+        else:
+            return path
+
     if action:
         path.append((action, None))
 
