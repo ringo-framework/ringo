@@ -50,9 +50,9 @@ def _handle_delete_request(request, items, callback):
         item_label_log = get_item_modul(request, clazz).get_label()
         mapping = {'item_type': item_label, 'num': len(items)}
         for item in items:
-            handle_callback(request, callback, item=item, mode="pre")
+            handle_callback(request, callback, item=item, mode="pre,default")
             request.db.delete(item)
-            handle_callback(request, callback, item=item, mode="post,default")
+            handle_callback(request, callback, item=item, mode="post")
         # Invalidate cache
         invalidate_cache()
         try:
