@@ -1879,8 +1879,6 @@ The complexity can be configured per overview table using the
 ``table.json`` configuration which is available for all tables in the
 system.
 
-.. _admin_sessiontimer:
-
 Session Timer
 =============
 You can configure to show a session timer widget in the header of the
@@ -1950,6 +1948,18 @@ Default is true, so the menu is shown.
    disable the menu the users will loose access to some default actions like
    changing the ownership. 
 
+The context menu will show on default a entry to show/edit the ownership
+of the currently selected item. You can configure to hide this entry
+in case this option is not used in the application.
+
+.. note::
+
+    The action will always be shown if the user has the `admin` role. 
+
+
+* layout.hide_ownership = false
+
+Default is false, so the ownership menu entry is is shown.
 
 Sessions
 ========
