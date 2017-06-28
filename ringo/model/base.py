@@ -735,7 +735,7 @@ class BaseList(object):
         if total == len(self.items):
             self.items = self.items[self.pagination_start:self.pagination_end]
 
-    def filter(self, filter_stack):
+    def filter(self, filter_stack, request=None):
         """This function will filter the items by only leaving
         those items in the list which match all search criteria in the
         filter stack. The number of items will get reduced with every
@@ -773,6 +773,7 @@ class BaseList(object):
         in the list.
 
         :filter_stack: Filter stack
+        :request: Current request.
         :returns: Filtered list of items
         """
         self.search_filter = filter_stack
@@ -808,9 +809,14 @@ class BaseList(object):
                     expand = table_columns[field].get('expand')
                     value = item.get_value(field, expand=expand)
                     if isinstance(value, list):
-                        value = ", ".join([unicode(x) for x in value])
+                        if request and expand:
+                            value = ", ".join([request.translate(unicode(x)) for x in value])
+                        else:
+                            value = ", ".join([unicode(x) for x in value])
                     else:
                         value = unicode(value)
+                        if request and expand:
+                            value = request.translate(value)
                     if search_op:
                         if opmapping[search_op](value, search):
                             filtered_items.append(item)

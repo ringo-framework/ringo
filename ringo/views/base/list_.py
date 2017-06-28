@@ -386,7 +386,7 @@ def list_(request):
     # on out own.
     if items is None:
         listing.sort(sorting[0], sorting[1])
-        listing.filter(search)
+        listing.filter(search, request)
         total = len(listing.items)
 
     listing.paginate(total, pagination_page, pagination_size)
