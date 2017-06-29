@@ -10,13 +10,15 @@ from ringo.lib.sql import DBSession
 
 log = logging.getLogger(__name__)
 
+re_char_match = re.compile("(var){0,1}char\([0-9]+\)")
+
 
 def deserialize(value, datatype):
     """Very simple helper function which returns a python version
     of the given serialized value."""
     if datatype in ["varchar", "text"]:
         return value
-    elif value in  ["", None]:
+    elif value in ["", None]:
         return None
     elif datatype == "integer":
         return converters.to_integer(value)
@@ -33,11 +35,18 @@ def deserialize(value, datatype):
         return converters.to_datetime(value)
     elif datatype == "date":
         return converters.to_date(value)
-    elif datatype == "char(36)":
+    elif re_char_match.match(datatype):
         # UUID
         return value
     elif datatype == "blob":
         return base64.b64decode(value)
+    elif datatype == "boolean":
+        # In case of imports from a JSON file the value is already of
+        # type boolean.
+        if isinstance(value, bool):
+            return value
+        else:
+            converters.to_boolean(value)
     else:
         raise TypeError("{} is not supported".format(datatype))
 
@@ -78,6 +87,7 @@ def serialize(value):
         return unicode(value)
     except UnicodeDecodeError:
         return base64.b64encode(value)
+
 
 def safestring(unsafe):
     """Returns a 'safe' version of the given string. All non ascii chars
