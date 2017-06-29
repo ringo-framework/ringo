@@ -10,6 +10,7 @@ def handle_history(event):
     request = event.request
     history = request.ringo.history
     history.push(request)
+    request.session["history"] = history
     request.session.save()
 
 
@@ -25,7 +26,6 @@ class History:
         storing it. If there are more than 5 entries in the list the
         oldes entry will be removed.
         """
-
         url = request.url
 
         # normalize the URL by removing scheme and netloc. This avoids
@@ -42,7 +42,7 @@ class History:
 
         # Ignore URL defined from settings if configured
         for ignore in request.registry.settings.get("app.history.ignore", "").split(","):
-            if normalized_url.startswith(ignore):
+            if ignore and normalized_url.startswith(ignore):
                 return
 
         if not self.history or normalized_url != self.history[-1]:
