@@ -204,7 +204,8 @@ def get_search(clazz, request):
         if not found:
             log.debug('Adding search for "%s" in field "%s"' % (search,
                                                                 search_field))
-            saved_search.append((search, search_field, regexpr))
+            if search and search_field:
+                saved_search.append((search, search_field, regexpr))
     return saved_search
 
 
