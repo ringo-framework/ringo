@@ -31,7 +31,7 @@ function checkDirtyForms () {
     var forms_as_arr = Array.from(forms);
     for (var i = 0; i < forms_as_arr.length; i++){
         form = forms_as_arr[i];
-        if (!form.hasAttribute("no-dirtyable")) {
+        if (!form.hasAttribute("no-dirtyable") && !form.hasClass("no-dirtyable")) {
             var elements = form.getElementsByTagName('INPUT');
             var elements_as_arr = Array.from(elements);
             for (var j = 0; j < elements_as_arr.length; j++) {

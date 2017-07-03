@@ -164,7 +164,7 @@ def get_search(clazz, request):
         return saved_search
 
     if 'reset' in request.params:
-        return default_search
+        saved_search = []
 
     # If the request is not a equest from the search form then
     # abort here and return the saved search params if there are any.
@@ -204,7 +204,8 @@ def get_search(clazz, request):
         if not found:
             log.debug('Adding search for "%s" in field "%s"' % (search,
                                                                 search_field))
-            saved_search.append((search, search_field, regexpr))
+            if search and search_field:
+                saved_search.append((search, search_field, regexpr))
     return saved_search
 
 
@@ -386,7 +387,7 @@ def list_(request):
     # on out own.
     if items is None:
         listing.sort(sorting[0], sorting[1])
-        listing.filter(search)
+        listing.filter(search, request)
         total = len(listing.items)
 
     listing.paginate(total, pagination_page, pagination_size)

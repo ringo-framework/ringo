@@ -127,9 +127,9 @@ if sortable:
   % endif
   % for num, field in enumerate(tableconfig.get_columns(request.user)):
     % if autoresponsive:
-      <th width="${field.get('width')}" class="${num > 0 and 'hidden-xs'}">
+      <th width="${field.get('width')}" class="${num > 0 and 'hidden-xs'}" style="${'display: none;' if not field.get('visible', True) else ''}">
     % else:
-      <th width="${field.get('width')}" class="${render_responsive_class(field.get('screen'))}">
+      <th width="${field.get('width')}" class="${render_responsive_class(field.get('screen'))}" style="${'display: none;' if not field.get('visible', True) else ''}>
     % endif
       % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
         <a
@@ -176,9 +176,9 @@ if sortable:
     % endif
     % for num, field in enumerate(tableconfig.get_columns(request.user)):
       % if autoresponsive:
-        <td class="${num > 0 and 'hidden-xs'}">
+        <td class="${num > 0 and 'hidden-xs'}" style="${'display: none;' if not field.get('visible', True) else ''}">
       % else:
-        <td class="${render_responsive_class(field.get('screen'))}">
+        <td class="${render_responsive_class(field.get('screen'))}" style="${'display: none;' if not field.get('visible', True) else ''}">
       % endif
         <%
             try:
