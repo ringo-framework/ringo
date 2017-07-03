@@ -118,7 +118,7 @@ def walk_site_tree(st, el, item, request):
     else:
         display_item = item
 
-    display_str = site.get("display_format", "%{item}s")
+    display_str = site.get("display_format", "{item}")
     if display_str:
         path.append((display_str.format(item=display_item),
                      url(request, item)))

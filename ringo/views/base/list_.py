@@ -261,6 +261,9 @@ def load_items(request, clazz, list_params):
         items = query.all()
 
     total = query_all.count()
+    # Items must be a list otherwise we get TypeError: object of type
+    # 'CachingQuery' has no len() later.
+    items = [item for item in items]
     return items, total
 
 
