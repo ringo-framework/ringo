@@ -51,7 +51,7 @@ def test_get_form(apprequest, data):
                          ])
 def test_get_addrelation(apprequest, data):
     from ringo.lib.request.params import get_relation
-    apprequest.GET = data[0]
+    apprequest.params = data[0]
     relation = get_relation(apprequest)
     assert relation == data[1]
 
