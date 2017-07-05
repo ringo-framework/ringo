@@ -69,8 +69,9 @@ class Cache(object):
         :returns: None
 
         """
-        if hasattr(self._data, key):
+        if key in self._data:
             del self._data[key]
+
 
     def all(self):
         return self._data
