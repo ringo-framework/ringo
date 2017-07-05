@@ -1,4 +1,5 @@
 import os
+import re
 import logging
 import pkg_resources
 import transaction
@@ -19,7 +20,23 @@ from ringo.views.base import (
     get_action_view
 )
 
+static_urls = re.compile("\/\w+-static")
 log = logging.getLogger(__name__)
+
+
+class IgnoreStaticUrls(object):
+    """Subscriber predicates to ignore subscribers which begin with static urls."""
+    def __init__(self, val, config):
+        self.val = val
+
+    def text(self):
+        return 'path_startswith = %s' % (self.val,)
+
+    phash = text
+
+    def __call__(self, event):
+        return not static_urls.match(event.request.path)
+
 
 def preload_modules(event):
     """Preload all modules on each request and put them into the request
@@ -37,6 +54,7 @@ def setup(config):
     # TODO: Move this call into a better place. (ti) <2015-07-28 13:19> 
     get_formbar_css() # -> formbar_css_filenames
     get_formbar_js() # -> formbar_js_filenames
+    config.add_subscriber_predicate('ignore_static_urls', IgnoreStaticUrls)
 
     setup_extensions(config)
     setup_modules(config)
@@ -45,7 +63,8 @@ def setup(config):
     config.include('ringo.lib.renderer.setup_render_globals')
     config.include('ringo.lib.security.setup_ringo_security')
     config.include('ringo.lib.cache.setup_cache')
-    config.add_subscriber(preload_modules, NewRequest)
+    config.include('ringo.lib.request.app')
+    config.add_subscriber(preload_modules, NewRequest, ignore_static_urls="")
 
 
 def setup_extensions(config):
@@ -221,5 +240,9 @@ def setup_modul(config, modul):
     NTDBSession.commit()
 
     for action in modul.actions:
+        # Link is a special actions which does not need a view. So
+        # ignore it (e.g Link action).
+        if not action.url:
+            continue
         _setup_web_action(config, action, clazz, web_action_view_mapping)
         _setup_rest_action(config, action, clazz, rest_action_view_mapping)

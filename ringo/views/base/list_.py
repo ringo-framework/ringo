@@ -2,6 +2,7 @@ import uuid
 import logging
 from ringo.model.base import BaseFactory, get_item_list
 from ringo.model.user import User
+from ringo.lib.alchemy import is_relation
 from ringo.lib.table import get_table_config
 from ringo.lib.helpers.misc import get_item_modul
 from ringo.lib.helpers import literal
@@ -14,10 +15,6 @@ from ringo.lib.renderer.dialogs import (
     WarningDialogRenderer
 )
 from ringo.views.response import JSONResponse
-from ringo.views.request import (
-    handle_params,
-    handle_history
-)
 
 # The dictionary will hold the request handlers for bundled actions. The
 # dictionary will be filled from the view definitions
@@ -57,7 +54,7 @@ def handle_paginating(clazz, request):
     # Only set paginated if the table is the advancedsearch as the
     # simple search provides its own client sided pagination.
     if table_config.is_paginated() and table_config.is_advancedsearch(default):
-        default_page = 0 # First page
+        default_page = 0  # First page
         default_size = 50
     else:
         return (0, None)
@@ -155,8 +152,8 @@ def get_search(clazz, request):
     default_search = get_table_config(clazz).get_default_search()
     # Check if there is already a saved search in the session, If not
     # use the default search.
-    saved_search = (request.session.get('%s.list.search' % name, [])
-                    or default_search)
+    saved_search = (request.session.get('%s.list.search' % name, []) or
+                    default_search)
 
     regexpr = request.session.get('%s.list.search.regexpr' % name, False)
     if "enableregexpr" in request.params:
@@ -167,7 +164,7 @@ def get_search(clazz, request):
         return saved_search
 
     if 'reset' in request.params:
-        return default_search
+        saved_search = []
 
     # If the request is not a equest from the search form then
     # abort here and return the saved search params if there are any.
@@ -207,15 +204,73 @@ def get_search(clazz, request):
         if not found:
             log.debug('Adding search for "%s" in field "%s"' % (search,
                                                                 search_field))
-            saved_search.append((search, search_field, regexpr))
+            if search and search_field:
+                saved_search.append((search, search_field, regexpr))
     return saved_search
+
+
+def load_items(request, clazz, list_params):
+    """
+    Return a list of items which can be used as input for the
+    get_item_list methods. The purpose of this method is to handle as
+    much as possible regarding sorting/searching/pagination on the DB to
+    reduce the load in the application.
+
+
+    :request: Current request
+    :clazz: Class of items to load
+    :list_params: Dictionary with params for optimzed loading of the the
+    items. Those params are used to build specific SQL Queries which
+    already include aspects like sorting, filtering and pagination to
+    reduce the load in the application. If not provided all filtering
+    etc must be done later in the application. See related methods of
+    the :class:BaseList.
+    loaded.
+    :returns: List of class:BaseItem objects.
+    """
+    if list_params["search"]:
+        # Search is currently not supported in optimized loading. So
+        # return None and do the work on application side using the
+        # Baselist methods.
+        return None, 0
+
+    query_all = request.db.query(clazz)
+    query = request.db.query(clazz)
+    if list_params["sorting"]:
+        try:
+            sort_column = getattr(clazz, list_params["sorting"][0])
+        except AttributeError:
+            return None, 0
+
+        # Sorting is only supported on a few attributes.
+        if isinstance(sort_column, property):
+            return None, 0
+        if is_relation(clazz, list_params["sorting"][0]):
+            return None, 0
+
+        sort_order = list_params["sorting"][1]
+        if sort_order == "asc":
+            query = query.order_by(sort_column)
+        else:
+            query = query.order_by(sort_column.desc())
+
+    if list_params["pagination"] and list_params["pagination"][1]:
+        start = list_params["pagination"][0] * list_params["pagination"][1]
+        end = start + list_params["pagination"][1]
+        items = query.slice(start, end)
+    else:
+        items = query.all()
+
+    total = query_all.count()
+    # Items must be a list otherwise we get TypeError: object of type
+    # 'CachingQuery' has no len() later.
+    items = [item for item in items]
+    return items, total
 
 
 def bundle_(request):
     clazz = request.context.__model__
     module = get_item_modul(request, clazz)
-    handle_history(request)
-    handle_params(request)
     _ = request.translate
 
     # Handle bundle params. If the request has the bundle_action param
@@ -236,9 +291,9 @@ def bundle_(request):
     # Check if the user selected at least one item. If not show an
     # dialog informing that the selection is empty.
     if not ids:
-        title =  _("Empty selection")
-        body =  _("You have not selected any item in the list. "
-                  "Click 'OK' to return to the overview.")
+        title = _("Empty selection")
+        body = _("You have not selected any item in the list. "
+                 "Click 'OK' to return to the overview.")
         renderer = WarningDialogRenderer(request, title, body)
         rvalue = {}
         rvalue['dialog'] = literal(renderer.render(url=request.referrer))
@@ -301,7 +356,6 @@ def list_(request):
     # Important! Prevent any write access on the database for this
     # request. This is needed as transform would modify the items values
     # else.
-    handle_history(request)
 
     # If the user enters the overview page of an item we assume that the
     # user actually leaves any context where a former set backurl is
@@ -316,10 +370,28 @@ def list_(request):
     search = get_search(clazz, request)
     sorting = handle_sorting(clazz, request)
     pagination_page, pagination_size = handle_paginating(clazz, request)
-    listing = get_item_list(request, clazz, user=request.user)
-    listing.sort(sorting[0], sorting[1])
-    listing.filter(search)
-    listing.paginate(pagination_page, pagination_size)
+
+    list_params = {}
+    list_params["search"] = search
+    list_params["sorting"] = sorting
+    list_params["pagination"] = (pagination_page, pagination_size)
+
+    # Try to do an optimized loading of items. If the loading succeeds
+    # the loaded items will be used to build an item list. If for some
+    # reasone the loading was'nt successfull items will be None and
+    # loading etc will be done completely in application.
+    items, total = load_items(request, clazz, list_params)
+    listing = get_item_list(request, clazz, user=request.user, items=items)
+
+    # Ok no items are loaded. We will need to do sorting and filtering
+    # on out own.
+    if items is None:
+        listing.sort(sorting[0], sorting[1])
+        listing.filter(search, request)
+        total = len(listing.items)
+
+    listing.paginate(total, pagination_page, pagination_size)
+
     # Only save the search if there are items
     if len(listing.items) > 0:
         request.session['%s.list.search' % clazz.__tablename__] = search

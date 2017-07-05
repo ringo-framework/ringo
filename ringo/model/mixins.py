@@ -162,21 +162,11 @@ class Meta(object):
         item.updated = datetime.datetime.utcnow()
 
 
-class Blobform(object):
+class Blob(object):
     """Mixin to add a data fields to store form data as JSON in a single
-    field. Further the fid references the form definiton. The mixin will
-    overwrite the way how to get the form definiton and how to get
-    values from the item."""
+    field. The mixin will overwrite the way how to get the form
+    definiton and how to get values from the item."""
     data = Column(Text, default="{}")
-
-    @declared_attr
-    def fid(cls):
-        return Column(Integer, ForeignKey('forms.id'))
-
-    @declared_attr
-    def form(cls):
-        form = relationship("Form", uselist=False)
-        return form
 
     def __getattr__(self, name):
         """This function tries to get the given attribute of the item if
@@ -210,6 +200,19 @@ class Blobform(object):
                 log.debug("Setting value '%s' for '%s' in JSON" % (value, key))
                 json_data[key] = value
         setattr(self, 'data', json.dumps(json_data))
+
+
+class Blobform(Blob):
+    """Enhances the Blob class and make the form configurable. The fid
+    references the form definiton."""
+    @declared_attr
+    def fid(cls):
+        return Column(Integer, ForeignKey('forms.id'))
+
+    @declared_attr
+    def form(cls):
+        form = relationship("Form", uselist=False)
+        return form
 
 
 class Version(Base):
@@ -279,7 +282,7 @@ class Versioned(object):
             try:
                 values = json.loads(last.values)
                 for field in values:
-                    if field == "data" and isinstance(self, Blobform):
+                    if field == "data" and isinstance(self, Blob):
                         blobdata = json.loads(values[field])
                         for blobfield in blobdata:
                             pvalues[blobfield] = blobdata[blobfield]
@@ -361,6 +364,12 @@ class Owned(object):
     def is_owner(self, user):
         """Returns true if the Item is owned by the given user."""
         return user.id == self.uid
+
+    def is_member(self, user):
+        if self.group:
+            return user.id in [user.id for user in self.group.members]
+        else:
+            return False
 
 
 class Nested(object):

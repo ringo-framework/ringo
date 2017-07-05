@@ -26,6 +26,11 @@ default views and templates are used. The views provide default LCRUDIE
 * Delete: Deleting items.
 * Import (CSV, JSON)
 * Export (CSV, JSON)
+* Link: This is a special action. It is not available directly in the
+  view. No views will be generated. It is used internally to check if a
+  item can be linked to another item (n:m, 1:n, n:1). So this is used to
+  filter items in selection fields. On default all items
+  which can be read are allowed to be linked.
 
 These actions are defined in the :attr:`.ACTIONS` modul varialble.
 
@@ -76,6 +81,7 @@ class ActionItem(BaseItem, Base):
      * Download: icon-download
      * Export: icon-export
      * Import: icon-import
+     * Link: icon-link
      """
     description = sa.Column(sa.Text, nullable=False, default='')
     """Short description what the action does. Should be obvious by the
@@ -124,6 +130,10 @@ class ActionItem(BaseItem, Base):
     to be allowed to call this action. Known values are 'list', 'create',
     'read', 'update', 'delete', 'import', 'export'. If empty the
     permission system will use the the lowered name of the action."""
+
+    admin = sa.Column(sa.Boolean, nullable=False, default=False, server_default="0")
+    """Optional. If set to yes no checks for ownership are made for this
+    action. Defaults to False"""
 
     def is_visible(self, location):
         """Checks based on the setting in the display configuration
@@ -305,6 +315,11 @@ ACTIONS = {
     "export": ActionItem(name=_("Export"),
                          url="export/{id}",
                          icon="icon-export",
-                         bundle=True)
+                         bundle=True),
+    "link": ActionItem(name=_("Link"),
+                         url="",
+                         icon="icon-link",
+                         bundle=False,
+                         display="hide")
 }
 """Default available actions in Ringo"""

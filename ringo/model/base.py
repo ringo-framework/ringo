@@ -45,7 +45,7 @@ def levenshteinmatch(value, search, t):
     lenS = len(search)
 
     if lenS >= lenV:
-        l =  math.ceil(lenS * t)
+        l = math.ceil(lenS * t)
     else:
         l = math.ceil(lenV * t)
     ld = Levenshtein.distance(value.encode("utf-8"), search.encode("utf-8"))
@@ -63,11 +63,11 @@ def doublemetaphone(value, search):
     if value == search:
         return True
 
-    if dmeta_value[1] != None and dmeta_search[1] != None:
+    if dmeta_value[1] is not None and dmeta_search[1] is not None:
         for v in dmeta_value:
             for s in dmeta_search:
                 if v == s:
-                    return True 
+                    return True
     return dmeta_value == dmeta_search
 
 
@@ -82,9 +82,9 @@ def smatch(value, search):
         return True
 
     if doublemetaphone(value, search):
-        return True 
+        return True
     else:
-        return levenshteinmatch(search, value, 0.3) 
+        return levenshteinmatch(search, value, 0.3)
 
 
 opmapping = {
@@ -98,7 +98,6 @@ opmapping = {
 }
 
 
- 
 def load_modul(item):
     """Will load the related modul for the given item. First we try to
     get the bound session from the object and reuse this session to load
@@ -128,15 +127,15 @@ class BaseItem(object):
 
     The class overwrites the `__getattr__` and `__setattr__` methods to
     support getting and setting dot separatedattributes like
-    'getattr(foo.bar.baz)' 
+    'getattr(foo.bar.baz)'
     """
 
     _modul_id = None
-    #  TODO: Check if its possible to set the modul of the class
-    #  dynamically on application initialisation. This might help to get
-    #  rid of the annoying loading of the modul for a class (ti)
-    #  <2015-03-10 22:53>
-    #__modul__ = None
+    # TODO: Check if its possible to set the modul of the class
+    # dynamically on application initialisation. This might help to get
+    # rid of the annoying loading of the modul for a class (ti)
+    # <2015-03-10 22:53>
+    # __modul__ = None
     _sql_eager_loads = []
     """Configure a list of relations which are configured to be
     eager loaded."""
@@ -396,7 +395,7 @@ class BaseItem(object):
                 # change at all in the model so continue
                 if oldvalue == value:
                     continue
-                log.debug("Setting value '%s' in %s" % (value, key))
+                log.debug(u"Setting value '%s' in %s" % (repr(value), key))
                 if isinstance(value, list) and isinstance(oldvalue, list):
                     # Special handling for relations in NM relations.
                     # See ticket #19 in Ringo issue tracker for more
@@ -425,7 +424,6 @@ class BaseItem(object):
                     raise AttributeError(('Not setting "%s".'
                                          ' Attribute not found.') % key)
 
-
     def save(self, data, request=None):
         """Method to set new values and 'saving' changes to the item. In
         contrast to just setting the values saving means triggering
@@ -445,7 +443,7 @@ class BaseItem(object):
         .. note::
             Making the changes persistent to the database is finally
             done on the end of the request when the transaction of the
-            current session is commited. 
+            current session is commited.
 
         Please note, that you must ensure that the submitted values are
         validated. This function does no validation on the submitted
@@ -473,23 +471,21 @@ class BaseItem(object):
             for key in self.list_statemachines():
                 new_state_id = data.get(key)
                 old_state_id = old_values.get(key)
-                if ((new_state_id and old_state_id)
-                   and (new_state_id != old_state_id)):
-                    self.change_state(request, key,
-                                      old_state_id, new_state_id)
+                if ((new_state_id and old_state_id) and
+                   (new_state_id != old_state_id)):
+                    self.change_state(request, key, old_state_id, new_state_id)
 
-        #  FIXME: Fix building a log entry. The log modul has been
-        #  converted to an extension and is not available in the ringo
-        #  core (ti) <2015-01-31 19:04>
-        ## Handle logentry
-        #if isinstance(self, Logged):
-        #    if not self.id:
-        #        subject = "Create"
-        #        text = json.dumps(self.build_changes(old_values, data))
-        #    else:
-        #        subject = "Update"
-        #        text = json.dumps(self.build_changes(old_values, data))
-        #    self.add_log_entry(subject, text, request)
+        # FIXME: Fix building a log entry. The log modul has been
+        # converted to an extension and is not available in the ringo
+        # core (ti) <2015-01-31 19:04>
+        # if isinstance(self, Logged):
+        #     if not self.id:
+        #         subject = "Create"
+        #         text = json.dumps(self.build_changes(old_values, data))
+        #     else:
+        #         subject = "Update"
+        #         text = json.dumps(self.build_changes(old_values, data))
+        #     self.add_log_entry(subject, text, request)
 
         # If the item has no id, then we assume it is a new item. So
         # add it to the database session.
@@ -553,8 +549,6 @@ def get_item_list(request, clazz, user=None, cache="", items=None):
         listing = BaseList(clazz, request.db, cache, items)
         if user:
             listing = filter_itemlist_for_user(request, listing)
-        # Only cache the result if not items has been prefined for the
-        # list.
         if items is None:
             request.cache_item_list.set(key, listing)
             return listing
@@ -598,7 +592,7 @@ class BaseList(object):
     The BaseList is usually created by calling the
     :func:`.get_item_list` method. Using this method the BaseList will
     include all items of a given class which are readable by the current
-    user. 
+    user.
 
     Alternatively the BaseList can be initiated directly in two ways. On
     default all items of a given class will be loaded from the database.
@@ -619,6 +613,7 @@ class BaseList(object):
         self.db = db
         if items is None:
             q = self.db.query(self.clazz)
+
             if cache in regions.keys():
                 q = set_relation_caching(q, self.clazz, cache)
                 q = q.options(FromCache(cache))
@@ -684,7 +679,7 @@ class BaseList(object):
             sorted_items.reverse()
         self.items = sorted_items
 
-    def paginate(self, page=0, size=None):
+    def paginate(self, total, page=0, size=None):
         """This function will set some internal values for the
         pagination function based on the given params.
 
@@ -713,14 +708,14 @@ class BaseList(object):
         if size is None:
             pages = 1
             self.pagination_start = 0
-            self.pagination_end = len(self.items)
+            self.pagination_end = total
         else:
-            pages = int(math.ceil(float(len(self.items)) / size))
+            pages = int(math.ceil(float(total) / size))
             self.pagination_start = page * size
             self.pagination_end = (page + 1) * size
         self.pagination_pages = pages
 
-        ## Calculate the range to the pagination navigation
+        # Calculate the range to the pagination navigation
         start = self.pagination_current - 4
         end = self.pagination_current + 5
         if start < 0:
@@ -732,7 +727,15 @@ class BaseList(object):
         self.pagination_first = start
         self.pagination_last = end
 
-    def filter(self, filter_stack):
+        # If the total is equal to the count of items in the listing
+        # then the list is not pageinated and the listing still includes
+        # all items. In this case we will reduce the list of items to a
+        # actual relevant paginated items. Otherwise it is
+        # assumend that the reducing has been done done before.
+        if total == len(self.items):
+            self.items = self.items[self.pagination_start:self.pagination_end]
+
+    def filter(self, filter_stack, request=None):
         """This function will filter the items by only leaving
         those items in the list which match all search criteria in the
         filter stack. The number of items will get reduced with every
@@ -761,7 +764,7 @@ class BaseList(object):
         The "~" operator will trigger a fuzzy search using the Double
         Metaphone algorithm for determining equal phonetics. If the
         phonetics do not match the Levenshtein distance will be
-        calculated. 
+        calculated.
 
         The search will iterate over all items in the list. For each
         item the function will try to match the value of either all, or
@@ -770,6 +773,7 @@ class BaseList(object):
         in the list.
 
         :filter_stack: Filter stack
+        :request: Current request.
         :returns: Filtered list of items
         """
         self.search_filter = filter_stack
@@ -805,9 +809,14 @@ class BaseList(object):
                     expand = table_columns[field].get('expand')
                     value = item.get_value(field, expand=expand)
                     if isinstance(value, list):
-                        value = ", ".join([unicode(x) for x in value])
+                        if request and expand:
+                            value = ", ".join([request.translate(unicode(x)) for x in value])
+                        else:
+                            value = ", ".join([unicode(x) for x in value])
                     else:
                         value = unicode(value)
+                        if request and expand:
+                            value = request.translate(value)
                     if search_op:
                         if opmapping[search_op](value, search):
                             filtered_items.append(item)
@@ -850,8 +859,8 @@ class BaseFactory(object):
         item = self._clazz()
         # Try to set the ownership of the entry if the item provides the
         # fields.
-        if (hasattr(item, 'uid')
-           and user is not None):
+        if (hasattr(item, 'uid') and
+           user is not None):
             item.uid = user.id
         if (hasattr(item, 'gid')):
             modul = get_item_modul(None, item)

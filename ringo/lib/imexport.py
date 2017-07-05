@@ -1,5 +1,4 @@
 """Modul for the messanging system in ringo"""
-import re
 import logging
 import datetime
 import json
@@ -16,9 +15,79 @@ import sqlalchemy as sa
 
 from ringo.model.base import BaseItem
 from ringo.model.user import UserSetting
-from ringo.lib.helpers import serialize
+from ringo.lib.helpers import serialize, deserialize
+from ringo.lib.alchemy import get_props_from_instance
 
 log = logging.getLogger(__name__)
+
+
+class ExportConfiguration(object):
+
+    """
+    You can provide a JSON configuration file for the export to define
+    which fields of the given modul should be imported in detail.
+    Providing a configuration file allows you to export also
+    `properties` and related Items which are not part of the default
+    export.
+
+    Example export configuration::
+
+
+        ["f1", "f2", "f3", {"bar": ["f4", "f5", {"baz": [...]}}]
+
+    In this configuration "id", "foo", "bar" considered as fields of the
+    exported item. In contrast the keys of the nested dictionarys are
+    taken as the name of the relations. The following list defines again
+    the fields of the items in the relation.  So assuming you are
+    exporting items of type "Foo" the export will include fields "f1",
+    "f2", and "f3". Further "Foo" is related to "Bar" items in the
+    relation "bar". From the "Bar" items the fields "f4" and "f5" are
+    included. The "Bar" items have themself a relation called "baz" and
+    again you can follow the scheme to define a detail configuration of
+    what should be in the export.
+
+    The configuration also support wildcards. Use "*" so add all fields
+    of the item or related item::
+
+        ["*" {"bar": ["*", {"baz": [...]}}]
+    """
+
+    def __init__(self, jsonconfig):
+        self.config = jsonconfig
+        self.relations = self._parse(jsonconfig)
+
+    def _parse(self, config, relation="root"):
+        """Will return a dictionary with the field configuration for each
+        relation found in the export configuration. The field configuration
+        is a list of fieldnames.
+
+        :config: Export configuration
+        :relation: Name of the "current" relation. The name "root" is a
+        placeholder for the elements on the first level of the export.
+        :returns: Dict with realtion configuration
+
+        """
+        relations = {}
+        relations[relation] = []
+        for field in config:
+            if isinstance(field, dict):
+                for rel in field:
+                    relations.update(self._parse(field[rel], rel))
+            else:
+                relations[relation].append(field)
+        return relations
+
+    def includes_wildcard(self):
+        return "*" in self.config
+
+    def get_relation_fields(self):
+        fields = []
+        for f in self.config:
+            if f == "*":
+                continue
+            else:
+                fields.append(f)
+        return fields
 
 
 class ExtendedJSONEncoder(json.JSONEncoder):
@@ -35,140 +104,6 @@ class ExtendedJSONEncoder(json.JSONEncoder):
             return obj.id
         else:
             return json.JSONEncoder.default(self, obj)
-
-
-class RecursiveExporter(object):
-
-    """Recurisve exporter for items of type clazz. For each item in the
-    export the exporter will traverse down the relations of the items
-    based on a given export configuration. If no export configuration is
-    given the Exporter exports all fields of the items excluding
-    relations and blobforms.
-
-    Example export configuration::
-
-    ["id", "foo", "bar", {"baz": ["f1", "f2", {"r1": [...]}, "baq": [...]}]
-
-    In this configuration "id", "foo", "bar"... "f2" are considered as
-    fields of the exported items. In contrast the keys of the nested
-    dictionarys are taken as the name of the relations. The following
-    list defines again the fields of the items in the relation.
-    """
-
-    def __init__(self, clazz, config):
-        """@todo: to be defined1.
-
-        :clazz: Clazz
-        :config: Export configuration
-
-        """
-        if config:
-            self._config = self._parse_config(json.loads(config))
-        else:
-            self._config = {"root": None}
-        self._clazz = clazz
-        self._data = {}
-
-    def _parse_config(self, config, relation="root", result=None):
-        """Will return a dictionary with the field configuration for each
-        relation found in the export configuration. The field configuration
-        is a list of fieldnames.
-
-        :config: Export configuration
-        :relation: Name of the "current" relation. The name "root" is a
-        placeholder for the elements on the first level of the export.
-        :result: temporary relation configuration. Is neeed for recursion in
-        this function
-        :returns: Dict with realtion configuration
-
-        """
-        if result is None:
-            result = {}
-        result[relation] = []
-        for field in config:
-            if isinstance(field, dict):
-                for rel in field:
-                    result[rel] = self._parse_config(field[rel],
-                                                     rel,
-                                                     result)[rel]
-                    result[relation].append(rel)
-            else:
-                result[relation].append(field)
-        return result
-
-    def _iter_export(self, export, relation_config, relation):
-        raise NotImplementedError()
-
-    def _remove_duplicates(self):
-        raise NotImplementedError()
-
-    def perform(self, items):
-        """@todo: Docstring for perform.
-        function
-
-        :arg1: @todo
-        :returns: @todo
-
-        """
-        fields_to_export = self._config["root"]
-        exporter = Exporter(self._clazz, fields_to_export, serialized=False)
-        export = exporter.perform(items)
-        self._iter_export(export, self._config, "root")
-        self._remove_duplicates()
-        return self._data
-
-
-class RecursiveRelationExporter(RecursiveExporter):
-
-    """Recursive Expoert for items of type clazz. After the export has
-    finished the exported data will are returned as a dictionary. Each
-    key in the dictionary will hold the exported values of the
-    configured relations in the export configuration. The items of type
-    clazz acn be found in the dict under the key 'root'"""
-
-    def get_relation_config(self):
-        return self._config
-
-    def _iter_export(self, export, relation_config, relation):
-        if self._data.get(relation) is None:
-            self._data[relation] = []
-        for item in export:
-            temp = {}
-            for field in item:
-                if field in relation_config:
-                    fields_to_export = relation_config[field]
-                    if isinstance(item[field], list) and len(item[field]) > 0:
-                        clazz = item[field][0].__class__
-                        exporter = Exporter(clazz,
-                                            fields_to_export,
-                                            serialized=False)
-                        self._iter_export(exporter.perform(item[field]),
-                                          relation_config,
-                                          field)
-                    elif item[field] is not None:
-                        clazz = item[field]
-                        exporter = Exporter(clazz,
-                                            fields_to_export,
-                                            serialized=False)
-                        self._iter_export(exporter.perform([item[field]]),
-                                          relation_config,
-                                          field)
-                else:
-                    temp[field] = item[field]
-            self._data[relation].append(temp)
-
-    def _remove_duplicates(self):
-        for relation in self._data:
-            visited = []
-            unique = []
-            for item in self._data[relation]:
-                hashv = hash(unicode(item))
-                if hashv not in visited:
-                    visited.append(hashv)
-                    unique.append(item)
-                else:
-                    continue
-            self._data[relation] = unique
 
 
 class UnicodeCSVWriter:
@@ -213,46 +148,62 @@ class UnicodeCSVWriter:
 
 class Exporter(object):
 
-    """Docstring for Exporter. """
+    """Base exporter to export items of the given class. The
+    exporter will return a list of dictionarys with key values pairs
+    of the values for each items which should be exported.
 
-    def __init__(self, clazz, fields=None, serialized=True, relations=False):
-        """Base exporter to export items of the given class. The
-        exporter will return a list of dictionarys with key values pairs
-        of the values for each items which should be exported. The
-        fields to be exported can be configured. You can configure if
-        the values should be serialized too.
+    The export is done by calling the `perform` method of this
+    class.
 
-        On default no relations will be exported. This can be changed by
-        either setting the relations flag to true or defining relations
-        explicit in the fields attribute.
+    On default the exporter will return all fields of the item but
+    no relations or related items. However the Exporter is able to
+    export related items if configured correct. In this case the
+    Exporter will return a list of nested dictionaries.
 
-        Exported relations will the id of the linked items.
+    You can configure which will be exported on each item by either
+    using the `fields` parameter. If no fields are provided all fields
+    excluding the relations will be exported. The order of the
+    configured fields will determine the order of the fields in the
+    export (If supported e.g CSV).
 
-        :clazz: Clazz of the items which will be exported
+    A more detailed option to configur the content of the export you can
+    provide a ExportConfiguration to the exporter.
+
+    On default the exported items will be `serialized`. This means
+    that each value is converted into a export specific format. E.g
+    dates are converted into ISO8601 notation in the JSONExporter.
+    If set to false the the values are real python values.
+
+    Using the `relations` parameter is deprecated. It can be used as a
+    shortcut to add ORM relation of the item into the export.  Exported
+    relations will be the id of the linked items. In connection with the
+    serialized parameter the string representation of the linked items
+    are exported.
+    """
+
+    def __init__(self, clazz, fields=None, serialized=True, relations=False, config=None):
+        """
+        :clazz: Clazz of the items which will be exported.
         :fields: List of fields and relations which should be exported.
-        If no fields are provided all fields excluding the relations
-        will be exported. The order of the configured fields will
-        determine the order of the fields in the export (If supported
-        e.g CSV).
-        :serialized: Flag to indicate that the exported values should be
-        serialized e.g dates will be converted into ISO8601 format. If
-        realtions are included in the export the serialzed form will be
-        the string representation of the item.
-        Defaults to True.
+        :serialized: Flag to indicate that the exported values should be serialized.
+        :config: ExportConfiguration for the exporter.
 
         """
         self._clazz = clazz
         self._fields = fields
         self._serialized = serialized
         self._relations = relations
+        self._config = config
 
     def serialize(self, data):
-        """Will convert the given python data dictionary into a string
-        containing JSON data
+        """Method to convert the given python listing with the exported
+        items into a serialized form. This is depended on the concrete
+        exporter. This default implementation just returns the given
+        data as it is. You can overwrite this method in a more specific
+        renderer.
 
-        :data: Dictionary containing Python data.
+        :data: List containing exported items.
         :returns: String representing the data
-
         """
         return data
 
@@ -262,38 +213,78 @@ class Exporter(object):
         for key in data:
             # Handle data container of blobforms
             if key == "data":
-                jdata = json.loads(data[key])
-                for jkey in jdata:
-                    values[jkey] = jdata[jkey]
+                try:
+                    jdata = json.loads(data[key])
+                    for jkey in jdata:
+                        values[jkey] = jdata[jkey]
+                except ValueError:
+                    values[key] = data[key]
             else:
                 values[key] = data[key]
         return values
 
     def perform(self, items):
-        """Returns the serialized item as string
+        """Will export the given items. Depending if the Exporter has
+        been initialised with the `serialized` parameter the export will
+        return a list of dictionaries (each with the values) or in the
+        exporter specific format (e.g. JSON).
 
-        :items: @todo
-        :returns: @todo
+        :items: Items which will be exported.
+        :returns: Exported items. (Format Depends on the export configuration).
 
         """
         data = []
-        for item in items:
+        # Check if the given item(s) is a list. If not we put it into a
+        # temporary list.
+        if not isinstance(items, list):
+            _items = [items]
+        else:
+            _items = items
+        for item in _items:
             # Ensure that every item has a UUID. Set missing UUID here
             # if the item has no uuid set yet.
             if not item.uuid:
                 item.reset_uuid()
-            if self._fields is None:
-                # Default export. Export all fields excluding relations
-                values = item.get_values(serialized=self._serialized,
-                                         include_relations=self._relations)
+
+            # Check if a configuration is provided.
+
+            #  FIXME: Read support for deprecated "relations" argument?
+            #  Is missing here. (ti) <2017-05-23 14:02>
+            if not self._config or len(self._config.config) == 0:
+                # No configuration is provided. Export all fields
+                # exluding relations.
+                values = item.get_values(serialized=self._serialized)
             else:
+                # Configuration is provided. Export fields and relations
+                # based on the given configuration.
                 values = {}
-                for field in self._fields:
-                    value = item.get_value(field)
-                    if self._serialized:
-                        value = serialize(value)
-                    values[field] = value
+                if self._config.includes_wildcard():
+                    fields = [p.key for p in get_props_from_instance(item)]
+                    fields.extend(self._config.get_relation_fields())
+                else:
+                    fields = self._config.config
+                for field in fields:
+                    if isinstance(field, dict):
+                        for relation in field:
+                            clazz = getattr(self._clazz, relation).mapper.class_
+                            exporter = Exporter(clazz,
+                                                serialized=self._serialized,
+                                                config=ExportConfiguration(field[relation]))
+                            value = item.get_value(relation)
+                            value = exporter.perform(value)
+                            values[relation] = value
+                    else:
+                        value = serialize(item.get_value(field))
+                        values[field] = value
             data.append(self.flatten(values))
+
+        # If the input to the method was a single item we will return a
+        # single exported item.
+        if not isinstance(items, list):
+            if len(data) > 0:
+                data = data[0]
+            else:
+                data = None
         return self.serialize(data)
 
 
@@ -391,30 +382,14 @@ class Importer(object):
         and datetime deserialisation
         """
         for field in obj:
-            if (not field in self._clazz_type
-               or not self._clazz_type[field] in ['DATE',
-                                                  'DATETIME',
-                                                  'INTEGER']
-               or obj[field] is None):
+            if (field not in self._clazz_type or
+               obj[field] is None):
                 continue
-            elif obj[field] == "":
-                obj[field] = None
-                continue
-            elif self._clazz_type[field] == "INTEGER":
-                obj[field] = int(obj[field])
-            elif self._clazz_type[field] == "DATE":
-                obj[field] = datetime.datetime.strptime(
-                    obj[field], "%Y-%m-%d").date()
-            elif self._clazz_type[field] == "DATETIME":
-                # Interval fields are implemented as DATETIME
-                # See http://docs.sqlalchemy.org/en/latest/core/type_basics.html#sqlalchemy.types.Interval
-                # Check if we have a interval here
-                iv = re.compile(u"^\d{1,2}:\d{1,2}:\d{1,2}")
-                if iv.match(obj[field]):
-                    t = datetime.datetime.strptime(obj[field], "%H:%M:%S")
-                    obj[field] = datetime.timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
-                else:
-                    obj[field] = datetime.datetime.strptime(obj[field], "%Y-%m-%d %H:%M:%S")
+            else:
+                datatype = self._clazz_type[field].lower()
+                if datatype in ['manytoone', 'manytomany', 'onetomany', 'onetoone']:
+                    continue
+                obj[field] = deserialize(obj[field], datatype)
         return obj
 
     def _deserialize_relations(self, obj):
@@ -446,13 +421,18 @@ class Importer(object):
                 clazz = getattr(self._clazz, field).mapper.class_
                 tmp = []
                 for item_id in obj[field]:
-                    q = self._db.query(clazz).filter(clazz.id == item_id)
-                    try:
-                        tmp.append(q.one())
-                    except:
-                        log.warning(("Can not load '%s' id: %s "
-                                     "Relation '%s' of '%s' not set"
-                                     % (clazz, item_id, field, self._clazz)))
+                    if isinstance(item_id, BaseItem):
+                        # Item has been already be deserialized in the
+                        # recursive calls.
+                        tmp.append(item_id)
+                    else:
+                        q = self._db.query(clazz).filter(clazz.id == item_id)
+                        try:
+                            tmp.append(q.one())
+                        except:
+                            log.warning(("Can not load '%s' id: %s "
+                                         "Relation '%s' of '%s' not set"
+                                         % (clazz, item_id, field, self._clazz)))
                 obj[field] = tmp
         return obj
 
@@ -479,13 +459,13 @@ class Importer(object):
         :returns: List of imported items
 
         """
+        data = self.deserialize(data)
         imported_items = []
-        import_data = self.deserialize(data)
         factory = self._clazz.get_item_factory()
         if self._use_strict:
             factory._use_strict = self._use_strict
         _ = translate
-        for values in import_data:
+        for values in data:
             if load_key == "uuid":
                 id = values.get('uuid')
                 if "id" in values:
@@ -503,7 +483,7 @@ class Importer(object):
                 if ("id" in values and not values["id"]):
                     del values["id"]
                 item = factory.create(user=user, values=values)
-                self._db.add(item) 
+                self._db.add(item)
                 operation = _("CREATE")
             imported_items.append((item, operation))
         return imported_items
@@ -512,7 +492,23 @@ class Importer(object):
 class JSONImporter(Importer):
     """Docstring for JSONImporter."""
 
+    def _deserialize_recursive(self, obj):
+        for field in obj:
+            if isinstance(obj[field], (dict, list)):
+                clazz = getattr(self._clazz, field).mapper.class_
+                importer = JSONImporter(clazz, db=self._db, use_strict=self._use_strict)
+                if not isinstance(obj[field], list):
+                    import_data = [obj[field]]
+                    imported_item = importer.perform(json.dumps(import_data))
+                    obj[field] = imported_item[0][0]
+                elif obj[field] and isinstance(obj[field][0], dict):
+                    import_data = obj[field]
+                    imported_item = importer.perform(json.dumps(import_data))
+                    obj[field] = [x[0] for x in imported_item]
+        return obj
+
     def _deserialize_hook(self, obj):
+        obj = self._deserialize_recursive(obj)
         obj = self._deserialize_values(obj)
         return self._deserialize_relations(obj)
 
@@ -522,10 +518,10 @@ class JSONImporter(Importer):
         :data: String JSON data
         :returns: List of dictionary with python values
         """
-        conv = json.loads(data, object_hook=self._deserialize_hook)
+        conv = json.loads(data)
         if isinstance(conv, dict):
-            return [conv]
-        return conv
+            conv = [conv]
+        return [self._deserialize_hook(c) for c in conv]
 
 
 class CSVImporter(Importer):

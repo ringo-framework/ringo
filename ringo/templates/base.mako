@@ -46,7 +46,16 @@
     <script src="${request.static_path('ringo:static/js/jquery.jcountdown.min.js')}"></script>
     <script src="${request.static_path('ringo:static/js/jquery.timer.js')}"></script>
     % for filename in formbar_js_filenames: 
+      ## Ignore large ace library for all URL which does not call the
+      ## forms modul. This is the only place where the library is
+      ## currently needed.
+      % if filename.find("ace") > -1 and not request.path.find("forms") > -1:
+        <!--
+      % endif
       <script src="${request.static_path('formbar:static/%s' % filename)}"></script>
+      % if filename.find("ace") > -1 and not request.path.find("forms") > -1:
+        -->
+      % endif
     % endfor
     <script src="${request.static_path('ringo:static/js/listfield.js')}"></script>
     <script src="${request.static_path('ringo:static/js/helpers.js')}"></script>
@@ -150,6 +159,8 @@
     icon = "glyphicon glyphicon-export"
   elif icon == "icon-import":
     icon = "glyphicon glyphicon-import"
+  elif icon == "icon-link":
+    icon = "glyphicon glyphicon-link"
   return icon
   %>
 </%def>
@@ -157,7 +168,7 @@
 <%def name="render_item_base_actions(item)">
   <% context_actions = [] %>
   % for action in h.get_item_actions(request, item):
-    % if (request.url.find(action.name.lower()) < 0) and s.has_permission((action.permission or action.name.lower()), request.context.item, request):
+    % if (request.path.find(action.name.lower()) < 0) and s.has_permission((action.permission or action.name.lower()), request.context.item, request):
       <%
       if action.name == "Create":
         title = _('Create new item')
@@ -180,10 +191,10 @@
       %>
       % if action.icon.strip() == "icon-download":
       <a href="${h.get_action_url(request, item, action.name.lower())}"
-        class="btn btn-default nospinner hidden-print" title="${title}"><i class="${icon}"></i></a>
+        class="btn btn-default nospinner hidden-print" data-original-title="${title}"><i class="${icon}"></i></a>
       % else:
       <a href="${h.get_action_url(request, item, action.name.lower())}"
-        class="btn btn-default hidden-print" title="${title}"><i class="${icon}"></i></a>
+        class="btn btn-default hidden-print" data-original-title="${title}"><i class="${icon}"></i></a>
       % endif
     % endif
   % endfor

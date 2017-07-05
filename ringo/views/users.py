@@ -17,8 +17,6 @@ from ringo.views.base import create, rest_create, update
 from ringo.views.helpers import get_item_from_request, get_current_form_page
 
 from ringo.views.request import (
-    handle_history,
-    handle_params,
     handle_caching
 )
 
@@ -250,8 +248,6 @@ def changepassword(request):
         raise HTTPUnauthorized
 
     clazz = User
-    handle_history(request)
-    handle_params(request)
     _ = request.translate
     rvalue = {}
     # Load the item return 400 if the item can not be found.
@@ -333,8 +329,6 @@ def removeaccount(request):
 
     clazz = User
     _ = request.translate
-    handle_history(request)
-    handle_params(request)
     # Load the item return 400 if the item can not be found.
     factory = clazz.get_item_factory()
 

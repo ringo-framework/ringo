@@ -6,26 +6,25 @@ mapping = {'num_filters': len(listing.search_filter)}
 def render_link(request, field, url, value, clazz):
   out = []
   # Only take the path of the url and ignore any previous search filters.
-  out.append('<a href="%s" data-toggle="tooltip"' % (url))
+  out.append('<a href="%s" ' % (url))
   out.append('class="">')
   if hasattr(value, "render"):
-    out.append('%s</a>' % _(value.render()))
+    out.append('%s</a>' % value.render())
   else:
-    out.append('%s</a>' % _(value))
+    out.append('%s</a>' % value)
   return " ".join(out)
 
-def render_filter_link(request, field, value, clazz):
+def render_filter_link(url, request, field, value, clazz):
   out = []
   # Only take the path of the url and ignore any previous search filters.
-  url = request.current_route_path().split("?")[0]
   params = "form=search&search=%s&field=%s" % (value, field.get('name'))
-  out.append('<a href="%s?%s" data-toggle="tooltip"' % (url, params))
+  out.append('<a href="%s?%s" ' % (url, params))
   out.append('class="link filter"')
-  out.append('title="Filter %s on %s in %s">' % (h.get_item_modul(request, clazz).get_label(plural=True), value, field.get('label')))
+  out.append('data-original-title="Filter %s on %s in %s">' % (h.get_item_modul(request, clazz).get_label(plural=True), value, field.get('label')))
   if hasattr(value, "render"):
-    out.append('%s</a>' % _(value.render()))
+    out.append('%s</a>' % value.render())
   else:
-    out.append('%s</a>' % _(value))
+    out.append('%s</a>' % value)
   return " ".join(out)
 
 def render_responsive_class(visibleonsize):
@@ -123,20 +122,20 @@ if sortable:
   <tr>
   % if bundled_actions:
     <th width="2em">
-      <input type="checkbox" name="check_all" onclick="checkAll('id');">
+      <input type="checkbox" name="check_all" no-dirtyable onclick="checkAll('id');">
     </th>
   % endif
   % for num, field in enumerate(tableconfig.get_columns(request.user)):
     % if autoresponsive:
-      <th width="${field.get('width')}" class="${num > 0 and 'hidden-xs'}">
+      <th width="${field.get('width')}" class="${num > 0 and 'hidden-xs'}" style="${'display: none;' if not field.get('visible', True) else ''}">
     % else:
-      <th width="${field.get('width')}" class="${render_responsive_class(field.get('screen'))}">
+      <th width="${field.get('width')}" class="${render_responsive_class(field.get('screen'))}" style="${'display: none;' if not field.get('visible', True) else ''}>
     % endif
       % if request.session['%s.list.sort_order' % clazz.__tablename__] == "asc":
         <a
         href="${request.current_route_path().split('?')[0]}?sort_field=${field.get('name')}&sort_order=desc">
         % if field.get('title'):
-        <span data-toggle="tooltip" data-original-title="${field.get('title')}">
+        <span data-original-title="${field.get('title')}">
         % endif
         ${_(field.get('label'))}
         % if field.get('title'):
@@ -147,7 +146,7 @@ if sortable:
         <a
         href="${request.current_route_path().split('?')[0]}?sort_field=${field.get('name')}&sort_order=asc">
         % if field.get('title'):
-        <span data-toggle="tooltip" data-original-title="${field.get('title')}">
+        <span data-original-title="${field.get('title')}">
         % endif
         ${_(field.get('label'))}
         </a>
@@ -165,7 +164,7 @@ if sortable:
     </th>
   % endfor
   </tr>
-  % for item in items[listing.pagination_start:listing.pagination_end]:
+  % for item in items:
     <%
       data_link = get_read_update_url(request, item, clazz, listing.is_prefiltered_for_user())
     %>
@@ -177,9 +176,9 @@ if sortable:
     % endif
     % for num, field in enumerate(tableconfig.get_columns(request.user)):
       % if autoresponsive:
-        <td class="${num > 0 and 'hidden-xs'}">
+        <td class="${num > 0 and 'hidden-xs'}" style="${'display: none;' if not field.get('visible', True) else ''}">
       % else:
-        <td class="${render_responsive_class(field.get('screen'))}">
+        <td class="${render_responsive_class(field.get('screen'))}" style="${'display: none;' if not field.get('visible', True) else ''}">
       % endif
         <%
             try:
@@ -207,11 +206,11 @@ if sortable:
             <%
               links = []
               for v in value:
-                links.append(render_filter_link(request, field, v, clazz))
+                links.append(url, render_filter_link(request, field, v, clazz))
             %>
             ${", ".join(links) | n}
           % else:
-            ${render_filter_link(request, field, value, clazz) | n}
+            ${render_filter_link(url, request, field, value, clazz) | n}
           % endif
         % else:
           % if isinstance(value, list):

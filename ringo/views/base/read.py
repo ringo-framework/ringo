@@ -5,8 +5,8 @@ from ringo.views.helpers import (
 )
 from ringo.views.response import JSONResponse
 from ringo.views.request import (
-    handle_params,
     handle_history,
+    handle_params,
     handle_callback,
     get_item_from_request,
     get_return_value

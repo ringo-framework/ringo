@@ -1,5 +1,6 @@
 import logging
 import json
+from pyramid.security import Allow
 import sqlalchemy as sa
 from datetime import datetime
 from ringo.lib.alchemy import get_prop_from_instance
@@ -23,19 +24,22 @@ password_reset_requests = sa.Table(
 nm_user_roles = sa.Table(
     'nm_user_roles', Base.metadata,
     sa.Column('uid', sa.Integer, sa.ForeignKey('users.id')),
-    sa.Column('rid', sa.Integer, sa.ForeignKey('roles.id'))
+    sa.Column('rid', sa.Integer, sa.ForeignKey('roles.id')),
+    sa.UniqueConstraint('uid', 'rid')
 )
 
 nm_user_usergroups = sa.Table(
     'nm_user_usergroups', Base.metadata,
     sa.Column('uid', sa.Integer, sa.ForeignKey('users.id')),
-    sa.Column('gid', sa.Integer, sa.ForeignKey('usergroups.id'))
+    sa.Column('gid', sa.Integer, sa.ForeignKey('usergroups.id')),
+    sa.UniqueConstraint('uid', 'gid')
 )
 
 nm_action_roles = sa.Table(
     'nm_action_roles', Base.metadata,
     sa.Column('aid', sa.Integer, sa.ForeignKey('actions.id')),
-    sa.Column('rid', sa.Integer, sa.ForeignKey('roles.id'))
+    sa.Column('rid', sa.Integer, sa.ForeignKey('roles.id')),
+    sa.UniqueConstraint('aid', 'rid')
 )
 
 
@@ -195,6 +199,18 @@ class Usergroup(BaseItem, Owned, Base):
 
     def __unicode__(self):
         return self.name
+
+    @classmethod
+    def _get_permissions(cls, modul, item, request):
+
+        # Default ACL. Direct access
+        permissions = BaseItem._get_permissions(modul, item, request)
+
+        # A usergoups can be linked by all members of the group
+        if isinstance(item, BaseItem):
+            for user in item.members:
+                permissions.append((Allow, 'uid:{}'.format(user.id), 'link'))
+        return permissions
 
 
 class Role(BaseItem, Owned, Base):

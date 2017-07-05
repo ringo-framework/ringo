@@ -103,16 +103,27 @@ def walk_site_tree(st, el, item, request):
     # item attribute. Other wise display the item.
     display_item_attr = site.get("display_item")
 
+    # Hack! Support lists but always take the first value in the list:
+    if isinstance(item, list):
+        if len(item) > 0:
+            item = item[0]
+        else:
+            return path
+
     if action:
         path.append((action, None))
 
     if display_item_attr:
         display_item = getattr(item, display_item_attr)
-        display_str = site.get("display_format", "%{item}s")
+    else:
+        display_item = item
+
+    display_str = unicode(site.get("display_format", "{item}"))
+    if display_str:
         path.append((display_str.format(item=display_item),
                      url(request, item)))
     else:
-        path.append((unicode(item), url(request, item)))
+        path.append((unicode(display_item), url(request, item)))
 
     if parent_site:
         parent_item = getattr(item, parent_item_attr)

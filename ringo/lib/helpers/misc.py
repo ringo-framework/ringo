@@ -1,10 +1,54 @@
 import logging
+import re
 import string
+import base64
 from datetime import datetime
 from pyramid.threadlocal import get_current_request
+import formbar.converters as converters
 from ringo.lib.sql import DBSession
 
+
 log = logging.getLogger(__name__)
+
+re_char_match = re.compile("(var){0,1}char\([0-9]+\)")
+
+
+def deserialize(value, datatype):
+    """Very simple helper function which returns a python version
+    of the given serialized value."""
+    if datatype in ["varchar", "text"]:
+        return value
+    elif value in ["", None]:
+        return None
+    elif datatype == "integer":
+        return converters.to_integer(value)
+    elif datatype == "float":
+        return converters.to_float(value)
+    elif datatype == "datetime":
+        # Interval fields are implemented as DATETIME
+        # See http://docs.sqlalchemy.org/en/latest/core/type_basics.html#sqlalchemy.types.Interval
+        # Check if we have a interval here
+        iv = re.compile(u"^\d{1,2}:\d{1,2}:\d{1,2}")
+        if iv.match(value):
+            t = datetime.datetime.strptime(value, "%H:%M:%S")
+            return datetime.timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
+        return converters.to_datetime(value)
+    elif datatype == "date":
+        return converters.to_date(value)
+    elif re_char_match.match(datatype):
+        # UUID
+        return value
+    elif datatype == "blob":
+        return base64.b64decode(value)
+    elif datatype == "boolean":
+        # In case of imports from a JSON file the value is already of
+        # type boolean.
+        if isinstance(value, bool):
+            return value
+        else:
+            converters.to_boolean(value)
+    else:
+        raise TypeError("{} is not supported".format(datatype))
 
 
 def serialize(value):
@@ -36,9 +80,14 @@ def serialize(value):
     # method supports it to convert the given value into unicode
     if isinstance(value, bytearray):
         return value.decode("utf-8")
+
     log.warning("Unhandled type '%s'. "
                 "Using default and converting to unicode" % type(value))
-    return unicode(value)
+    try:
+        return unicode(value)
+    except UnicodeDecodeError:
+        return base64.b64encode(value)
+
 
 def safestring(unsafe):
     """Returns a 'safe' version of the given string. All non ascii chars
@@ -286,7 +335,7 @@ def get_saved_searches(request, name):
 
 
 def get_modules(request, display):
-    #  FIXME: Circular import (ti) <2015-05-11 21:52> 
+    # FIXME: Circular import (ti) <2015-05-11 21:52>
     from ringo.lib.security import has_permission
     user_moduls = []
     # The modules has been load already and are cached. So get them from

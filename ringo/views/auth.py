@@ -12,7 +12,6 @@ from formbar.form import Form, Validator
 from ringo.lib.sql import DBSession
 from ringo.model.user import USER_GROUP_ID, USER_ROLE_ID
 from ringo.lib.helpers import import_model
-from ringo.views.request import handle_history
 from ringo.views.users import (
     password_minlength_validator,
     password_nonletter_validator
@@ -55,7 +54,6 @@ def is_authcallback_enabled(settings):
 
 @view_config(route_name='login', renderer='/auth/login.mako')
 def login(request):
-    handle_history(request)
     _ = request.translate
     settings = request.registry.settings
     config = Config(load(get_path_to_form_config('auth.xml')))
@@ -104,7 +102,6 @@ def login(request):
 
 @view_config(route_name='logout', renderer='/auth/logout.mako')
 def logout(request):
-    handle_history(request)
     _ = request.translate
     target_url = request.route_path('home')
     if request.params.get('autologout'):
@@ -149,7 +146,6 @@ def register_user(request):
     settings = request.registry.settings
     if not is_registration_enabled(settings):
         raise exc.exception_response(503)
-    handle_history(request)
     _ = request.translate
     config = Config(load(get_path_to_form_config('auth.xml')))
     form_config = config.get_form('register_user')
@@ -237,7 +233,6 @@ def confirm_user(request):
     settings = request.registry.settings
     if not is_registration_enabled(settings):
         raise exc.exception_response(503)
-    handle_history(request)
     _ = request.translate
     success = False
     token = request.matchdict.get('token')
@@ -257,13 +252,13 @@ def forgot_password(request):
     settings = request.registry.settings
     if not is_pwreminder_enabled(settings):
         raise exc.exception_response(503)
-    handle_history(request)
     _ = request.translate
     config = Config(load(get_path_to_form_config('auth.xml')))
     form_config = config.get_form('forgot_password')
     form = Form(form_config, csrf_token=request.session.get_csrf_token(),
                 translate=_)
     complete = False
+    msg = None
     if request.POST:
         if form.validate(request.params):
             username = form.data.get('login')
@@ -284,20 +279,19 @@ def forgot_password(request):
                             template="password_reset_request",
                             values=values)
                 mailer.send(mail)
-                msg = _("Password reset token has been sent to the users "
-                        "email address. Please check your email.")
-                request.session.flash(msg, 'success')
-                complete = True
+                log.info(u"Passwort reset token sent to "
+                         u"user {} with email {}".format(username, recipient))
             else:
-                msg = _("Passwort reset token can not be sent to the "
-                        "user. Maybe the user does not exist or has no "
-                        "configured email.")
-                request.session.flash(msg, "error")
-                form = Form(form_config,
-                            csrf_token=request.session.get_csrf_token(),
-                            translate=_)
-                complete = False
-    return {'form': form.render(), 'complete': complete}
+                log.info(u"Failed sending Passwort reset token for {}. "
+                         u"User not found or missing email".format(username))
+            # Return a message to the user which does not allow to get
+            # information about the existence of a user.
+            msg = _("If the user has been found together with configured "
+                    "e-mail, a confirmation mail for resetting the password "
+                    "has been sent. Please check your e-mail box.")
+            request.session.flash(msg, 'success')
+            complete = True
+    return {'form': form.render(), 'complete': complete, 'msg': msg}
 
 
 @view_config(route_name='reset_password',
@@ -306,7 +300,6 @@ def reset_password(request):
     settings = request.registry.settings
     if not is_pwreminder_enabled(settings):
         raise exc.exception_response(503)
-    handle_history(request)
     _ = request.translate
     success = False
     token = request.matchdict.get('token')

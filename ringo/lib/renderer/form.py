@@ -1,5 +1,4 @@
 import logging
-import cgi
 import os
 import pkg_resources
 from mako.lookup import TemplateLookup
@@ -10,7 +9,6 @@ from formbar.renderer import (
     SelectionFieldRenderer as FormbarSelectionField,
     CheckboxFieldRenderer as FormbarCheckboxField
 )
-from formbar.fields import rules_to_string
 import ringo.lib.helpers as helpers
 from ringo.lib.helpers import get_action_routename, literal, escape, HTML
 from ringo.model.base import BaseItem, BaseList, get_item_list
@@ -28,11 +26,12 @@ log = logging.getLogger(__name__)
 #                         Renderers for form elements                     #
 ###########################################################################
 
+
 def add_renderers(custom_renderers):
     """Helper function to add ringo ringo specific renderers for form
     rendering."""
     for key in custom_renderers:
-        if not key in renderers:
+        if key not in renderers:
             renderers[key] = custom_renderers[key]
     return renderers
 
@@ -76,22 +75,26 @@ def get_link_url(item, request, actionname=None, backurl=False):
 
 
 def filter_options_on_permissions(request, options):
-    """Will filter the given options based on the permissions on the
-    current user of the request. After filtering the options will only
-    have items where the user is allowed to at least read it.
+    """Will iterate over all options and build a tuple for each option
+    with the following information:
+
+    1. The option itself
+    2. The value of the option
+    3. A flag indicating if the requesting user is allowed to `link` the
+       option. This information is later used on rendering.
 
     :request: current request
-    :options: list of tuple of options (item, value, filtered)
+    :options: list of tuple of options (item, value, linkable)
     :returns: filtered list of option tuples.
 
     """
     filtered_options = []
     for option in options:
-        visible = False
-        if (option[2] and (security.has_permission('read', option[0], request)
-           or not hasattr(option[0], 'owner'))):
-            visible = True
-        filtered_options.append((option[0], option[1], visible))
+        linkable = False
+        if (option[2] and (security.has_permission('link', option[0], request) or
+           not hasattr(option[0], 'owner'))):
+            linkable = True
+        filtered_options.append((option[0], option[1], linkable))
     return filtered_options
 
 
@@ -157,9 +160,12 @@ class CheckboxFieldRenderer(FormbarCheckboxField):
 
     def _get_template_values(self):
         values = FormbarCheckboxField._get_template_values(self)
-        values['options'] = filter_options_on_permissions(
-            self._field._form._request,
-            values['options'])
+        if self._field.readonly:
+            values['options'] = []
+        else:
+            values['options'] = filter_options_on_permissions(
+                self._field._form._request,
+                values['options'])
         return values
 
 
@@ -180,9 +186,12 @@ class DropdownFieldRenderer(FormbarDropdown):
 
     def _get_template_values(self):
         values = FormbarDropdown._get_template_values(self)
-        values['options'] = filter_options_on_permissions(
-            self._field._form._request,
-            values['options'])
+        if self._field.readonly:
+            values['options'] = []
+        else:
+            values['options'] = filter_options_on_permissions(
+                self._field._form._request,
+                values['options'])
         values['h'] = helpers
         return values
 
@@ -265,7 +274,6 @@ class StateFieldRenderer(FormbarDropdown):
         return values
 
 
-
 class ListingFieldRenderer(FormbarSelectionField):
     """Renderer to render a listing of linked items. Used attributes:
 
@@ -290,6 +298,11 @@ class ListingFieldRenderer(FormbarSelectionField):
       modal popup.
     * backlink: "true" or "false". If true the user will be redirected
       back to the listing after creating a new item. Defaults to true.
+    * action: Define the action which will be called when clicking an an
+      entry. On default the action will be determined by checking the
+      users permission and choosing between "read" or "update". Setting
+      action you can enforce using a certain action if the user has
+      sufficient permissions.
 
     Example::
 
@@ -337,7 +350,7 @@ class ListingFieldRenderer(FormbarSelectionField):
         # changes value in an attribute e.g. In this case the filtered
         # item is not in the list at all and will not be sent on a POST
         # request. This will result in removing the relation!
-        search  = config.get_default_search()
+        search = config.get_default_search()
         itemlist.filter(search)
         return itemlist
 
@@ -370,7 +383,7 @@ class ListingFieldRenderer(FormbarSelectionField):
         has_errors = len(self._field.get_errors())
         has_warnings = len(self._field.get_warnings())
         class_options = "form-group %s %s %s" % ((has_errors and 'has-error'),
-                                              (has_warnings and 'has-warning'),(active))
+                                                 (has_warnings and 'has-warning'), (active))
         html.append(HTML.tag("div", _closed=False,
                              rules=u"{}".format(";".join(rules_to_string(self._field))),
                              formgroup="{}".format(self._field.name),
@@ -378,20 +391,32 @@ class ListingFieldRenderer(FormbarSelectionField):
                              required="{}".format(self._field.required),
                              class_=class_options))
         html.append(self._render_label())
+
+        # All items which can potentially be linked. However this list
+        # of items may be already filtered be defining a default filter
+        # in the overview configuration which is used for this renderer.
+        items = self.itemlist.items
+        selected_items = self._get_selected_items(items)
+
         if self._field.readonly or self.onlylinked == "true":
-            items = self._get_selected_items(self.itemlist.items)
-        else:
-            items = self.itemlist.items
+            items = selected_items
+
+        # Filter options based on the configured filter expression of
+        # the renderer. Please note the this method return a list of
+        # tuples.
+        item_tuples = self._field.filter_options(items)
 
         # Get filtered options and only use the items which are
         # in the origin items list and has passed filtering.
-        items = self._field.filter_options(items)
-        # Now filter the items based on the user permissions
-        if self.showall != "true": 
-            items = filter_options_on_permissions(self._field._form._request,
-                                                  items)
+        item_tuples = self._field.filter_options(items)
+        # Filter the items again based on the permissions. This means
+        # resetting the third value in the tuple.
+        if self.showall != "true" and not self._field.readonly:
+            item_tuples = filter_options_on_permissions(self._field._form._request,
+                                                        item_tuples)
 
-        values = {'items': items,
+        values = {'items': item_tuples,
+                  'selected_item_ids': [i.id for i in selected_items],
                   'field': self._field,
                   'clazz': self.get_class(),
                   'pclazz': self._field._form._item.__class__,
@@ -399,6 +424,7 @@ class ListingFieldRenderer(FormbarSelectionField):
                   '_': self._field._form._translate,
                   's': security,
                   'h': helpers,
+                  'url_getter': get_link_url,
                   'tableconfig': get_table_config(self.itemlist.clazz,
                                                   config.table)}
         html.append(literal(self.template.render(**values)))

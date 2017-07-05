@@ -1,4 +1,3 @@
-import os
 import logging
 from pyramid.config import Configurator
 from pyramid_beaker import session_factory_from_settings
@@ -17,10 +16,6 @@ def main(global_config, **settings):
     """
     # Setup two db sessions. One using transactions (default) and one
     # without transactions.
-    databaseurl = os.environ.get('DATABASE_URL')
-    if databaseurl:
-        settings['sqlalchemy.url'] = databaseurl
-        log.info("Using database url from ENV: %s" % databaseurl)
     engine = setup_db_engine(settings)
     setup_db_session(engine, settings)
     Base.metadata.bind = engine
