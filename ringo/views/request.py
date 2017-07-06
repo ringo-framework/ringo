@@ -322,7 +322,7 @@ def handle_redirect_on_success(request, backurl=None):
         del request.session['%s.backurl' % clazz]
         request.session.save()
 
-    if backurl and request.params.get("_submit") not in ["stay", "nextpage"]:
+    if backurl and (request.params.get("_submit") not in ["stay", "nextpage"]):
         # Ignore the redirect to the backurl if the user clicks on
         # "Save" and "Save and proceed" Buttons. In this case a special
         # value is part of the form. In case of "Save and return" or
