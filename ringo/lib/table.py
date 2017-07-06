@@ -1,5 +1,5 @@
 """Modul to with function to work with the table configuration"""
-import base64 
+import base64
 import logging
 import os
 import json
@@ -152,7 +152,7 @@ class TableConfig:
     * *auto-responsive*: If True than only the first column of a table
       will be displayed on small devices. Else you need to configure the
       "screen" attribute for the fields.
-    * *show-info*: It True than a info field showing number of items in the 
+    * *show-info*: It True than a info field showing number of items in the
       table
 
     For DT tables you can define different search filters which are
@@ -318,11 +318,11 @@ def _load_overview_config(clazz):
             config = open(get_path_to_overview_config(cfile, appname), "r")
             break
         except IOError:
-	    # Silently ignore IOErrors here as is Ok when trying to load the
-	    # configurations files while iterating over the possible config
-	    # file locations. If the file can finally not be loaded an IOError
-	    # is raised at the end.
-            pass
+            # Silently ignore IOErrors here as is Ok when trying to load the
+            # configurations files while iterating over the possible config
+            # file locations. If the file can finally not be loaded an IOError
+            # is raised at the end.
+                pass
     else:
         if name.startswith("ringo_"):
             config = open(get_path_to_overview_config(cfile,
@@ -348,9 +348,9 @@ class Filter(object):
         self.label = self._conf.get("label", "")
         self.type = self._conf.get("type", "checkbox")
         self.active = self._conf.get("active", True)
-	# Decode the expr to be able to use it as as selector in jquery.
-	# Otherwise you might get an syntax error because the expression.
-	self.id = base64.urlsafe_b64encode(self.expr) 
+        # Decode the expr to be able to use it as as selector in jquery.
+        # Otherwise you might get an syntax error because the expression.
+        self.id = base64.b16encode(self.expr)
 
         # JS Options used in filter method
         if self._conf.get("regex", False):
