@@ -367,4 +367,5 @@ def get_return_value(request):
     item = get_item_from_request(request)
     rvalues['clazz'] = clazz
     rvalues['item'] = item
+    rvalues['request'] = request
     return rvalues
