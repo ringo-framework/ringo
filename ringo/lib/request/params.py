@@ -35,7 +35,7 @@ def get_form(request):
 
 
 def get_relation(request):
-    return request.GET.get('addrelation')
+    return request.params.get('addrelation')
 
 
 def is_confirmed(request):

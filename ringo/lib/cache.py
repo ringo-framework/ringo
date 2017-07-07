@@ -61,6 +61,18 @@ class Cache(object):
         """
         return self._data.get(key)
 
+    def delete(self, key):
+        """Will delete the cache value for the key.
+        Deleting a nonexiting value will be silently omitted.
+
+        :key: String idenditifier for the cached value
+        :returns: None
+
+        """
+        if key in self._data:
+            del self._data[key]
+
+
     def all(self):
         return self._data
 
