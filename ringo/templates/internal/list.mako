@@ -1,5 +1,6 @@
 <%
 from ringo.lib.renderer.lists import get_read_update_url
+from ringo.lib.helpers import literal, escape
 url = request.current_route_path().split("?")[0]
 mapping = {'num_filters': len(listing.search_filter)}
 
@@ -9,23 +10,24 @@ def render_link(request, field, url, value, clazz):
   out.append('<a href="%s" ' % (url))
   out.append('class="">')
   if hasattr(value, "render"):
-    out.append('%s</a>' % value.render())
+    out.append('%s</a>' % escape(value.render()))
   else:
-    out.append('%s</a>' % value)
-  return " ".join(out)
+    out.append('%s</a>' % escape(value))
+  return literal(" ".join(out))
+
 
 def render_filter_link(url, request, field, value, clazz):
   out = []
   # Only take the path of the url and ignore any previous search filters.
-  params = "form=search&search=%s&field=%s" % (value, field.get('name'))
+  params = "form=search&search=%s&field=%s" % (escape(value), field.get('name'))
   out.append('<a href="%s?%s" ' % (url, params))
   out.append('class="link filter"')
   out.append('data-original-title="Filter %s on %s in %s">' % (h.get_item_modul(request, clazz).get_label(plural=True), value, field.get('label')))
   if hasattr(value, "render"):
-    out.append('%s</a>' % value.render())
+    out.append('%s</a>' % escape(value.render()))
   else:
-    out.append('%s</a>' % value)
-  return " ".join(out)
+    out.append('%s</a>' % escape(value))
+  return literal(" ".join(out))
 
 def render_responsive_class(visibleonsize):
   """Will return a string containing BS3 responsve classes to hide
@@ -210,15 +212,15 @@ if sortable:
             %>
             ${", ".join(links) | n}
           % else:
-            ${render_filter_link(url, request, field, value, clazz) | n}
+            ${render_filter_link(url, request, field, value, clazz)}
           % endif
         % else:
           % if isinstance(value, list):
             % for v in value:
-              ${render_link(request, field, data_link, value, clazz) | n}
+              ${render_link(request, field, data_link, value, clazz)}
             % endfor
           % else:
-            ${render_link(request, field, data_link, value, clazz) | n}
+            ${render_link(request, field, data_link, value, clazz)}
           % endif
         % endif
     </td>
