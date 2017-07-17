@@ -51,10 +51,10 @@ def _handle_redirect(request):
                     break
             else:
                 # Now URL found. Redirect to the main page.
-                url = "/"
+                url = request.route_path("home")
         else:
-            # We are not sure where to redirect. Use "/"
-            url = "/"
+            # We are not sure where to redirect. Use main page
+            url = request.route_path("home")
         return HTTPFound(location=url)
 
 
