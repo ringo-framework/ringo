@@ -4,13 +4,11 @@ import pkg_resources
 from mako.lookup import TemplateLookup
 import ringo.lib.helpers
 from ringo.lib.helpers import (
-    get_app_name,
     get_saved_searches,
     get_item_actions,
     literal,
     get_action_routename
 )
-from ringo.model.mixins import Owned
 from ringo.lib.table import get_table_config
 import ringo.lib.security as security
 
@@ -31,18 +29,13 @@ def get_read_update_url(request, item, clazz, prefilterd=False):
     overviews. If the user of this request is not allowed to see the
     item at all, None will be returned as the url."""
 
-
-    is_owner = None
-    if request.user.has_role("admin"):
-        is_owner = True
-    elif isinstance(item, Owned):
-        is_owner = item.is_owner(request.user) or item.is_member(request.user)
+    is_admin = request.user.has_role("admin")
     permissions = ['read', 'update']
     url = None
     for permission in permissions:
-        if permission == 'read' and prefilterd:
-            url = request.route_path(get_action_routename(clazz, permission), id=item.id)
-        elif (is_owner or is_owner is None) and security.has_permission(permission, item, request):
+        if (permission == 'read' and prefilterd) \
+           or is_admin \
+           or security.has_permission(permission, item, request):
             url = request.route_path(get_action_routename(clazz, permission), id=item.id)
         else:
             break
@@ -112,14 +105,12 @@ class DTListRenderer(object):
         # Template for JS datatable configuration
         self.js_template = template_lookup.get_template("internal/dtlist.js.mako")
 
-
     def _get_table_id(self):
         table_id = ["dt",
                     self.config.clazz.__tablename__,
                     self.config.name]
         table_id = "_".join(table_id)
         return table_id
-
 
     def _render_js_config(self, request, table_id, bundled_actions):
         values = {'tableconfig': self.config,
