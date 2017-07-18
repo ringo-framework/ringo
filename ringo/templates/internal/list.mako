@@ -7,12 +7,18 @@ mapping = {'num_filters': len(listing.search_filter)}
 def render_link(request, field, url, value, clazz):
   out = []
   # Only take the path of the url and ignore any previous search filters.
-  out.append('<a href="%s" ' % (url))
-  out.append('class="">')
-  if hasattr(value, "render"):
-    out.append('%s</a>' % escape(value.render()))
+  if data_link:
+    out.append('<a href="%s" ' % (url))
+    out.append('class="">')
+    if hasattr(value, "render"):
+      out.append('%s</a>' % escape(value.render()))
+    else:
+      out.append('%s</a>' % escape(value))
   else:
-    out.append('%s</a>' % escape(value))
+    if hasattr(value, "render"):
+      out.append('%s' % escape(value.render()))
+    else:
+      out.append('%s' % escape(value))
   return literal(" ".join(out))
 
 
