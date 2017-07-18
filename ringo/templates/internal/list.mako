@@ -113,7 +113,7 @@ if sortable:
           </ul>
         </div>
         % if len(listing.search_filter) > 0:
-          <span class="muted"><small>(${_('${num_filter} filter applied', mapping=mapping )})</small></span>
+          <span class="muted"><small>(${len(listing.search_filter)} ${_('filter applied', mapping=mapping )})</small></span>
         % endif
       </form>
     </div>
