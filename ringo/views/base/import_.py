@@ -39,7 +39,7 @@ def _import(request):
     if request.POST.get('format') == 'json':
         importer = JSONImporter(clazz, request.db)
     elif request.POST.get('format') == 'csv':
-        importer = CSVImporter(clazz)
+        importer = CSVImporter(clazz, request.db)
 
     # Decide by which key to identify the items
     settings = request.registry.settings

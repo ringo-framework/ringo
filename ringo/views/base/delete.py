@@ -24,6 +24,17 @@ def _handle_redirect(request):
     :returns: Redirect
 
     """
+    def remove_virtual_path(request, url):
+        """This function removes the virtual path from the given URL.
+        This is needed because otherwise the regular expression does not
+        work.
+        """
+        virtual_path = request.environ["SCRIPT_NAME"]
+        clean_path = url.strip(virtual_path)
+        if not clean_path.startswith("/"):
+            clean_path = "/"+clean_path
+        return clean_path
+
     clazz = request.context.__model__
     backurl = request.session.get('%s.backurl' % clazz)
     if backurl:
@@ -36,7 +47,8 @@ def _handle_redirect(request):
         # Redirect to page where the user initialy came from to delete
         # the current item. The url depend on how the item is deleted.
         action = re.compile("^\/(\w+)\/(\w+).*")
-        action_match = action.match(history.last() or "")
+        url = history.last() or ""
+        action_match = action.match(remove_virtual_path(request, url))
 
         if action_match:
             # Initiated delete from detail view of a single item.
@@ -46,15 +58,15 @@ def _handle_redirect(request):
                 # which does not deal with the item we have
                 # deleted.
                 url = history.pop()
-                m = action.match(url)
+                m = action.match(remove_virtual_path(request, url))
                 if m and (m.group(1) != modulname or m.group(2) == "list"):
                     break
             else:
                 # Now URL found. Redirect to the main page.
-                url = "/"
+                url = request.route_path("home")
         else:
-            # We are not sure where to redirect. Use "/"
-            url = "/"
+            # We are not sure where to redirect. Use main page
+            url = request.route_path("home")
         return HTTPFound(location=url)
 
 
