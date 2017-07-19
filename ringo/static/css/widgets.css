@@ -158,6 +158,17 @@ table.content-shorten td {
  /* Datatables
  **********************************************************************/
 
+/* Overwrite default link color in datatables. Render all links in the
+ * datatable in black color instead of default bootstrap blue. In a table with
+ * thousands of entries you would otherwise look on a blue will showing
+ * thousands of linkable items. In this case we would loose the significance
+ * of the blue color as link indicator in other contextes. As the user assumes
+ * that he can click on the item in the table to open it is is save to render
+ * in it black color and not to use blue as link indication color.*/
+#data a {
+    color: black;
+}
+
 /* Overwrite padding in th to be aligend with the rest of the table.
  * This change was neeed after enabling the sorting icons. */
 table.dataTable thead th {
