@@ -782,7 +782,7 @@ class BaseList(object):
         table_columns = {}
 
         # Save cols in the tableconfig for later access while getting values.
-        for col in table_config.get_columns():
+        for col in [col for col in table_config.get_columns() if col.get("searchable", True)]:
             table_columns[col.get('name')] = col
 
         for search, search_field, regexpr in filter_stack:
@@ -814,15 +814,16 @@ class BaseList(object):
                         else:
                             value = ", ".join([unicode(x) for x in value])
                     else:
-                        value = unicode(value)
+                        pretty_value = unicode(prettify(request, value))
                         if request and expand:
-                            value = request.translate(value)
+                            pretty_value = request.translate(pretty_value)
                     if search_op:
+                        value = request.translate(unicode(value))
                         if opmapping[search_op](value, search):
                             filtered_items.append(item)
                             break
                     else:
-                        if re_expr.search(value):
+                        if re_expr.search(pretty_value):
                             filtered_items.append(item)
                             break
             self.items = filtered_items
