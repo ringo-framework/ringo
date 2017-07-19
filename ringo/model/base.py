@@ -819,12 +819,10 @@ class BaseList(object):
                             value = request.translate(value)
                     if search_op:
                         if opmapping[search_op](value, search):
-                            print value, search_op, search
                             filtered_items.append(item)
                             break
                     else:
                         if re_expr.search(value):
-                            print value
                             filtered_items.append(item)
                             break
             self.items = filtered_items
