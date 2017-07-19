@@ -74,7 +74,7 @@ if sortable:
           <label class="sr-only" for="field">${_('Fields')}</label>
           <select name="field"  class="form-control input-small">
             <option value="">${_('All columns')}</option>
-            % for field in tableconfig.get_columns(request.user):
+            % for field in [field for field in tableconfig.get_columns(request.user) if field.get("searchable", True)]:
               % if field.get('name') == search_field:
                 <option value="${field.get('name')}" selected>${_(field.get('label'))}</option>
               % else:
