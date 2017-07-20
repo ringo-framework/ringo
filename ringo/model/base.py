@@ -818,7 +818,10 @@ class BaseList(object):
                         if request and expand:
                             pretty_value = request.translate(pretty_value)
                     if search_op:
-                        value = request.translate(unicode(value))
+                        if request:
+                            value = request.translate(unicode(value))
+                        else:
+                            value = unicode(value)
                         if opmapping[search_op](value, search):
                             filtered_items.append(item)
                             break
