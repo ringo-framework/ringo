@@ -49,13 +49,6 @@ $( document ).ready(function() {
         $.fn.dataTable.moment( 'DD.MM.YYYY' );
         $.fn.dataTable.moment( 'DD.MM.YY, HH:mm' );
         $.fn.dataTable.moment( 'DD.MM.YY' );
-        // Older versions of babel (at least <= 1.3) will format the datetime
-        // without a comma between date and time. So sorting will fail as long
-        // as we do not specify a sorting pattern fot this too.
-        // Because Ringo is used in outdated systems (CentOS7) which comes
-        // with even older versions of babel we must add this fallback here.
-        $.fn.dataTable.moment( 'DD.MM.YYYY HH:mm' );
-        $.fn.dataTable.moment( 'DD.MM.YY HH:mm' );
     }
     $('.datatable-paginated').dataTable( {
            "oLanguage": {
