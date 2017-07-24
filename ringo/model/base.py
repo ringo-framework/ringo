@@ -814,6 +814,7 @@ class BaseList(object):
                             value = ", ".join([request.translate(unicode(x)) for x in value])
                         else:
                             value = ", ".join([unicode(x) for x in value])
+                        pretty_value = value
                     else:
                         pretty_value = unicode(prettify(request, value))
                         if request and expand:
