@@ -735,7 +735,7 @@ class BaseList(object):
         if total == len(self.items):
             self.items = self.items[self.pagination_start:self.pagination_end]
 
-    def filter(self, filter_stack, request=None):
+    def filter(self, filter_stack, request=None, table="overview"):
         """This function will filter the items by only leaving
         those items in the list which match all search criteria in the
         filter stack. The number of items will get reduced with every
@@ -774,11 +774,12 @@ class BaseList(object):
 
         :filter_stack: Filter stack
         :request: Current request.
+        :table: Name of the table config which is used for the search defaults to "overview".
         :returns: Filtered list of items
         """
         self.search_filter = filter_stack
         log.debug('Length filterstack: %s' % len(filter_stack))
-        table_config = get_table_config(self.clazz)
+        table_config = get_table_config(self.clazz, table)
         table_columns = {}
 
         # Save cols in the tableconfig for later access while getting values.
