@@ -1,7 +1,7 @@
 import logging
 from sqlalchemy.orm.exc import NoResultFound
+from pyramid.httpexceptions import HTTPNotFound
 from ringo.lib.helpers import get_item_modul
-from ringo.lib.security import get_permissions
 
 log = logging.getLogger(__name__)
 
@@ -54,7 +54,7 @@ class RessourceFactory(object):
             factory = self.__model__.get_item_factory()
             return factory.load(id, request.db)
         except NoResultFound:
-            return None
+            raise HTTPNotFound()
 
     def _get_item_permissions(self, request):
         return self.__model__._get_permissions(self.__modul__,
