@@ -339,16 +339,16 @@ def bundle_(request):
     return handler(request, items, None)
 
 
-def get_list_renderer(listing, request):
+def get_list_renderer(listing, request, table=None):
     """Returns the renderer for an listing.
     Allow to use DTListRenderer if the renderer configuration is set."""
-    tableconfig = get_table_config(listing.clazz)
+    tableconfig = get_table_config(listing.clazz, table)
     settings = request.registry.settings
     default = settings.get("layout.advanced_overviews") == "true"
     if tableconfig.is_advancedsearch(default):
-        return ListRenderer(listing, request.params.get("table"))
+        return ListRenderer(listing, table)
     else:
-        return DTListRenderer(listing, request.params.get("table"))
+        return DTListRenderer(listing, table)
 
 
 def list_(request):
