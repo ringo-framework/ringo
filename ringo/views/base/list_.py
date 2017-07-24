@@ -351,12 +351,21 @@ def get_list_renderer(listing, request, table=None):
         return DTListRenderer(listing, table)
 
 
-def list_(request):
-    clazz = request.context.__model__
-    # Important! Prevent any write access on the database for this
-    # request. This is needed as transform would modify the items values
-    # else.
+def get_base_list(clazz, request, user, table):
+    """Helper function in views to get a BaseList instance for the
+    given clazz. In contrast to the known "get_item_list" function
+    which function will also handle searching, sorting and pagination
+    based on the parameter privided within the current request.
 
+    This function makes the search, pagination and sorting feature (as
+    used in the advanced search) available in other external views.
+
+    :clazz: Class of item which will be loaded.
+    :request: Current request.
+    :user: Current user. If None, than all items of a class will be loaded.
+    :table: Name of the table configuration which is used for the listing.
+    :returns: BaseList instance
+    """
     # If the user enters the overview page of an item we assume that the
     # user actually leaves any context where a former set backurl is
     # relevant anymore. So delete it.
@@ -366,7 +375,6 @@ def list_(request):
         del request.session['%s.backurl' % clazz]
         request.session.save()
 
-    rvalue = {}
     search = get_search(clazz, request)
     sorting = handle_sorting(clazz, request)
     pagination_page, pagination_size = handle_paginating(clazz, request)
@@ -381,13 +389,13 @@ def list_(request):
     # reasone the loading was'nt successfull items will be None and
     # loading etc will be done completely in application.
     items, total = load_items(request, clazz, list_params)
-    listing = get_item_list(request, clazz, user=request.user, items=items)
+    listing = get_item_list(request, clazz, user=user, items=items)
 
     # Ok no items are loaded. We will need to do sorting and filtering
     # on out own.
     if items is None:
         listing.sort(sorting[0], sorting[1])
-        listing.filter(search, request)
+        listing.filter(search, request, table)
         total = len(listing.items)
 
     listing.paginate(total, pagination_page, pagination_size)
@@ -426,9 +434,15 @@ def list_(request):
                 user.settings.set('searches', searches_dic)
                 request.db.flush()
         request.session.save()
+    return listing
 
-    renderer = get_list_renderer(listing, request)
+
+def list_(request):
+    clazz = request.context.__model__
+    listing = get_base_list(clazz, request, request.user, "overview")
+    renderer = get_list_renderer(listing, request, request.params.get("table"))
     rendered_page = renderer.render(request)
+    rvalue = {}
     rvalue['clazz'] = clazz
     rvalue['listing'] = rendered_page
     rvalue['itemlist'] = listing
