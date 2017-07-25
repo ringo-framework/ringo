@@ -329,10 +329,9 @@ def handle_redirect_on_success(request, backurl=None):
         # the default submittbuttons with no special value we keep the
         # old behavior.
         return HTTPFound(location=backurl)
-    else:
-        # Handle redirect after success.
+    elif request.path.find("/create") > -1:
+        # Handle redirect after success.in case of a create.
         # Check if the user is allowed to call the url after saving
-
         if has_permission("update", item, request):
             route_name = get_action_routename(item, 'update')
             url = request.route_path(route_name, id=item.id)
@@ -340,6 +339,10 @@ def handle_redirect_on_success(request, backurl=None):
             route_name = get_action_routename(item, 'read')
             url = request.route_path(route_name, id=item.id)
         return HTTPFound(location=url)
+    else:
+        # Handle all other variants of the redirect and stay on the
+        # current url.
+        return HTTPFound(location=request.url)
 
 
 def handle_params(request):
