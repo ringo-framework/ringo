@@ -206,7 +206,6 @@ def setstandin(request, allowed_users=None):
 
     clazz = Usergroup
     request.session['%s.form' % clazz] = "membersonly"
-    request.session['%s.backurl' % clazz] = request.current_route_path()
     request.session.save()
     values = {}
     if allowed_users:
