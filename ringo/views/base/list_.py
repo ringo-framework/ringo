@@ -1,5 +1,6 @@
 import uuid
 import logging
+from sqlalchemy import or_
 from ringo.model.base import BaseFactory, get_item_list
 from ringo.model.user import User
 from ringo.lib.alchemy import is_relation
@@ -209,6 +210,35 @@ def get_search(clazz, request):
     return saved_search
 
 
+def _query_add_permission_filter(query, request, clazz):
+    modul = get_item_modul(request, clazz)
+    is_admin = False
+    is_allowed = True
+    for role in request.user.roles:
+        if role.name == "admin":
+            is_admin = True
+            break
+        for permission in role.permissions:
+            if permission.mid != modul.id or permission.name.lower() != "read":
+                continue
+            elif permission.admin or role.admin:
+                is_admin = True
+                break
+            else:
+                is_allowed = True
+    if is_admin:
+        # User is allowd to read all items
+        return query
+    elif is_allowed:
+        # User is not allowd to read items based on the uid and groups
+        usergroups = [g.id for g in request.user.groups]
+        query = query.filter(or_(clazz.uid == request.user.id, clazz.gid.in_(usergroups)))
+        return query
+    else:
+        # User is not allowd to read anything
+        return None
+
+
 def load_items(request, clazz, list_params):
     """
     Return a list of items which can be used as input for the
@@ -228,14 +258,24 @@ def load_items(request, clazz, list_params):
     loaded.
     :returns: List of class:BaseItem objects.
     """
+
     if list_params["search"]:
         # Search is currently not supported in optimized loading. So
         # return None and do the work on application side using the
         # Baselist methods.
         return None, 0
 
-    query_all = request.db.query(clazz)
+    #################################
+    #  Filter query on permissions  #
+    #################################
     query = request.db.query(clazz)
+    query = _query_add_permission_filter(query, request, clazz)
+    if query is None:
+        return [], 0
+
+    ############################
+    #  Sorting and paginating  #
+    ############################
     if list_params["sorting"]:
         try:
             sort_column = getattr(clazz, list_params["sorting"][0])
@@ -254,6 +294,7 @@ def load_items(request, clazz, list_params):
         else:
             query = query.order_by(sort_column.desc())
 
+    total = query.count()
     if list_params["pagination"] and list_params["pagination"][1]:
         start = list_params["pagination"][0] * list_params["pagination"][1]
         end = start + list_params["pagination"][1]
@@ -261,7 +302,6 @@ def load_items(request, clazz, list_params):
     else:
         items = query.all()
 
-    total = query_all.count()
     # Items must be a list otherwise we get TypeError: object of type
     # 'CachingQuery' has no len() later.
     items = [item for item in items]
@@ -388,7 +428,7 @@ def get_base_list(clazz, request, user, table):
     # the loaded items will be used to build an item list. If for some
     # reasone the loading was'nt successfull items will be None and
     # loading etc will be done completely in application.
-    if request.ringo.feature.optimized_list_load:
+    if request.ringo.feature.dev_optimized_list_load:
         items, total = load_items(request, clazz, list_params)
         listing = get_item_list(request, clazz, user=user, items=items)
         # Ok no items are loaded. We will need to do sorting and filtering
