@@ -68,7 +68,10 @@ def prettify(request, value):
         else:
             return ", ".join(values)
     elif hasattr(value, "render"):
-        return value.render()
+        try:
+            return value.render()
+        except TypeError:
+            return value.render(request)
     elif value is None:
         return ""
     return value
