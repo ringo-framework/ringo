@@ -208,7 +208,7 @@ class BaseItem(object):
 
     @classmethod
     def get_item_list(cls, request=None, user=None, cache="", items=None):
-        return get_item_list(request, cls, user=None, cache="", items=None)
+        return get_item_list(request, cls, user, cache=cache, items=items)
 
     @classmethod
     def _get_permissions(cls, modul, item, request):
