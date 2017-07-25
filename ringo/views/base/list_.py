@@ -388,16 +388,20 @@ def get_base_list(clazz, request, user, table):
     # the loaded items will be used to build an item list. If for some
     # reasone the loading was'nt successfull items will be None and
     # loading etc will be done completely in application.
-    items, total = load_items(request, clazz, list_params)
-    listing = get_item_list(request, clazz, user=user, items=items)
-
-    # Ok no items are loaded. We will need to do sorting and filtering
-    # on out own.
-    if items is None:
+    if request.ringo.feature.optimized_list_load:
+        items, total = load_items(request, clazz, list_params)
+        listing = get_item_list(request, clazz, user=user, items=items)
+        # Ok no items are loaded. We will need to do sorting and filtering
+        # on out own.
+        if items is None:
+            listing.sort(sorting[0], sorting[1])
+            listing.filter(search, request, table)
+    else:
+        listing = get_item_list(request, clazz, user=user)
         listing.sort(sorting[0], sorting[1])
         listing.filter(search, request, table)
-        total = len(listing.items)
 
+    total = len(listing.items)
     listing.paginate(total, pagination_page, pagination_size)
 
     # Only save the search if there are items
