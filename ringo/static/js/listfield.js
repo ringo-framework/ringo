@@ -1,7 +1,7 @@
 function checkAll(checkId) {
   var inputs = document.getElementsByTagName("input");
   for (var i = 0; i < inputs.length; i++) {
-      if (inputs[i].type == "checkbox" && inputs[i].name == checkId) {
+      if (inputs[i].type == "checkbox" && inputs[i].name == checkId && !inputs[i].classList.contains("hidden")) {
           if(inputs[i].checked == true) {
               inputs[i].checked = false ;
           } else if (inputs[i].checked == false ) {
