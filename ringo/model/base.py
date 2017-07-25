@@ -809,7 +809,9 @@ class BaseList(object):
                 for field in fields:
                     expand = table_columns[field].get('expand')
                     value = item.get_value(field, expand=expand)
-                    if isinstance(value, list):
+                    if hasattr(value, 'render'):
+                        pretty_value = value.render(request)
+                    elif isinstance(value, list):
                         if request and expand:
                             value = ", ".join([request.translate(unicode(x)) for x in value])
                         else:
