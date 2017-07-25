@@ -64,23 +64,6 @@
   </head>
   <body>
   ${next.body()}
-  <script>
-    function openItem(url) {
-      location.href = url;
-    };
-    function checkAll(checkId) {
-      var inputs = document.getElementsByTagName("input");
-      for (var i = 0; i < inputs.length; i++) {
-          if (inputs[i].type == "checkbox" && inputs[i].name == checkId) {
-              if(inputs[i].checked == true) {
-                  inputs[i].checked = false ;
-              } else if (inputs[i].checked == false ) {
-                  inputs[i].checked = true ;
-              }
-          }
-      }
-    };
-  </script>
   <script src="${request.static_path('ringo:static/js/ringo/autologout.js')}"></script>
   <script src="${request.static_path('ringo:static/js/init.js')}"></script>
   % if request.user:
