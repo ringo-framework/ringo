@@ -1,3 +1,5 @@
+some = Function.prototype.call.bind([].some);
+
 /* Method to get the preferred user language. As there is no reliable
  * way to get this information accross all browsers the language is set
  * by the server in a meta variable in the html header */
@@ -27,56 +29,69 @@ function getDTLanguage(language) {
  * (e.g. < input type='checkbox' no-dirtyable />)
  */
 function checkDirtyForms () {
+    var checkByNodeName = {
+        "INPUT": checkInput,
+        "TEXTAREA": checkTextarea,
+        "SELECT": checkSelect
+    };
     var forms = $("div.formbar-form").find("form:not(.no-dirtyable):not([no-dirtyable])");
     for (var i = 0; i < forms.length; i++){
-        form = forms[i];
-        var elements = form.getElementsByTagName('INPUT');
-        for (var j = 0; j < elements.length; j++){
-            var node = elements[j];
-            if (!node.hasAttribute("no-dirtyable")) {
-                switch (node.type) {
-                    case "checkbox":
-                    case "radio":
-                        if (node.checked != node.defaultChecked) {
-                            return true;
-                        }
-                        break;
-                    case "search":
-                        // search buttons aren't usually submittable
-                        break;
-                    default:
-                        //TODO check if all other input types are
-                        // covered (even html5 ones)
-                        if (node.value != node.defaultValue){
-                            return true;
-                        }
-                }
-            }
-        }
-        elements = form.getElementsByTagName('TEXTAREA');
-        for (var j = 0; j < elements.length; j++) {
-            var node = elements[j];
-            if (!node.hasAttribute("no-dirtyable")) {
-                if (node.value != node.defaultValue){
+        var form = forms[i];
+        var elements = $(form).find("INPUT, TEXTAREA, SELECT");
+        for (var index=0; index<elements.length; index+=1){
+            var currentElement = elements[index];
+            var check = checkByNodeName[currentElement.nodeName];
+            if (check){
+                if (check(currentElement)){
                     return true;
                 }
             }
         }
-        elements = form.getElementsByTagName('SELECT');
-        for (var j = 0; j < elements.length; j++) {
-            var node = elements[j];
-            if (!node.hasAttribute("no-dirtyable")){
-                try {
-                    if (!node.options[node.selectedIndex].defaultSelected){
-                        return true;
-                    }
-                }
-                catch (err) {
-                    //there may be no options at all, or nothing selected
-                    //TODO: check if there are cases this could mean "dirty form"
-                }
-            }
-        }
-    };
+    }
     return false;
 };
+
+function checkInput(node){
+    switch (node.type) {
+        case "checkbox":
+        case "radio":
+            if (node.checked != node.defaultChecked) {
+                return true;
+            }
+            break;
+        case "search":
+            // search buttons aren't usually submittable
+            break;
+        default:
+            //TODO check if all other input types are
+            // covered (even html5 ones)
+            if (node.value != node.defaultValue){
+                return true;
+            }
+    }
+    return false;
+}
+
+function checkSelect(node){
+    if (!node.hasAttribute("no-dirtyable")){
+        try {
+            if (some(node.options, function(x){ return defaultSelected}) && !node.options[node.selectedIndex].defaultSelected){
+                return true;
+            }
+        }
+        catch (err) {
+            //there may be no options at all, or nothing selected
+            //TODO: check if there are cases this could mean "dirty form"
+        }
+    }
+    return false;
+}
+
+function checkTextarea(node){
+    if (!node.hasAttribute("no-dirtyable")) {
+        if (node.value != node.defaultValue){
+            return true;
+        }
+    }
+    return false;
+}
