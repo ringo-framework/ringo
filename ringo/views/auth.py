@@ -89,6 +89,9 @@ def login(request):
                 authenticated = True
 
             if authenticated:
+                # Delete old session data and begin with new fresh session.
+                request.session.invalidate()
+
                 msg = _("Login was successfull")
                 request.session.flash(msg, 'success')
                 headers = remember(request, user.id)
