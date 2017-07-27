@@ -48,22 +48,24 @@ function checkDirtyForms () {
 };
 
 function checkInput(node){
-    switch (node.type) {
-        case "checkbox":
-        case "radio":
-            if (node.checked != node.defaultChecked) {
-                return true;
-            }
-            break;
-        case "search":
-            // search buttons aren't usually submittable
-            break;
-        default:
-            //TODO check if all other input types are
-            // covered (even html5 ones)
-            if (node.value != node.defaultValue){
-                return true;
-            }
+    if (!node.hasAttribute("no-dirtyable")){
+        switch (node.type) {
+            case "checkbox":
+            case "radio":
+                if (node.checked != node.defaultChecked) {
+                    return true;
+                }
+                break;
+            case "search":
+                // search buttons aren't usually submittable
+                break;
+            default:
+                //TODO check if all other input types are
+                // covered (even html5 ones)
+                if (node.value != node.defaultValue){
+                    return true;
+                }
+        }
     }
     return false;
 }
