@@ -43,7 +43,7 @@ def _handle_redirect(request):
         request.session.save()
         return HTTPFound(location=backurl)
     else:
-        history = request.session['history']
+        history = request.ringo.history
         # Redirect to page where the user initialy came from to delete
         # the current item. The url depend on how the item is deleted.
         action = re.compile("^\/(\w+)\/(\w+).*")
