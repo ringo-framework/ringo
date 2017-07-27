@@ -53,17 +53,15 @@ def _handle_redirect(request):
         if action_match:
             # Initiated delete from detail view of a single item.
             modulname = action_match.group(1)
-            while history.history:
-                # Pop urls from the history as long as we find an url
-                # which does not deal with the item we have
-                # deleted.
+            while 1:
                 url = history.pop()
-                m = action.match(remove_virtual_path(request, url))
-                if m and (m.group(1) != modulname or m.group(2) == "list"):
+                if url:
+                    m = action.match(remove_virtual_path(request, url))
+                    if m and (m.group(1) != modulname or m.group(2) == "list"):
+                        break
+                else:
+                    url = request.route_path("home")
                     break
-            else:
-                # Now URL found. Redirect to the main page.
-                url = request.route_path("home")
         else:
             # We are not sure where to redirect. Use main page
             url = request.route_path("home")
