@@ -45,6 +45,7 @@ class RingoRequest(object):
 
 def includeme(config):
     config.add_subscriber(add_ringo_request, NewRequest)
+    config.add_subscriber(add_ringo_request, NewResponse)
     config.add_subscriber(save_params_in_session, ContextFound)
     config.add_subscriber(handle_history, NewResponse, ignore_static_urls="")
 
