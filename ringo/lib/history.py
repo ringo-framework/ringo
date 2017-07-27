@@ -7,9 +7,11 @@ SET_CURRENT_FORM = re.compile("\/set_current_form_page.*")
 
 
 def handle_history(event):
+    """Is called per subscriber on NewResponse event."""
     request = event.request
     history = request.ringo.history
-    history.push(request)
+    if request.response.status_code == 200:
+        history.push(request)
     request.session["history"] = history
     request.session.save()
 

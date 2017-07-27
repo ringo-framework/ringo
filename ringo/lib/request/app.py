@@ -1,4 +1,4 @@
-from pyramid.events import NewRequest, ContextFound
+from pyramid.events import NewRequest, ContextFound, NewResponse
 from pyramid.decorator import reify
 
 from ringo.lib.request.featuretoggle import FeatureToggle
@@ -46,7 +46,7 @@ class RingoRequest(object):
 def includeme(config):
     config.add_subscriber(add_ringo_request, NewRequest)
     config.add_subscriber(save_params_in_session, ContextFound)
-    config.add_subscriber(handle_history, ContextFound, ignore_static_urls="")
+    config.add_subscriber(handle_history, NewResponse, ignore_static_urls="")
 
 
 def add_ringo_request(event):
