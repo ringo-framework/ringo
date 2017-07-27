@@ -10,8 +10,7 @@ def handle_history(event):
     """Is called per subscriber on NewResponse event."""
     request = event.request
     history = request.ringo.history
-    if request.response.status_code == 200:
-        history.push(request)
+    history.push(request)
     request.session["history"] = history
     request.session.save()
 
@@ -27,6 +26,11 @@ class History:
         username, password), if present, are removed from the URL before
         storing it. If there are more than 5 entries in the list the
         oldes entry will be removed.
+
+        Please note that the last entry in the history is the current
+        called URL.  This is relevant if you want to access the history
+        list directly for some reasone and not want to use the pop and
+        last methods.
         """
         url = request.url
 
@@ -59,6 +63,12 @@ class History:
         recent entry in the history. Optionally you can provide a number
         to the pop method to get e.g the 2 most recent entry."""
         url = None
+
+        # Because the last entry is always the current entry we will pop
+        # this entry also
+        if len(self.history) > 1:
+            self.history.pop()
+
         for x in range(num):
             if len(self.history) > 0:
                 url = self.history.pop()
@@ -67,6 +77,8 @@ class History:
     def last(self):
         """Returns the last element from the history stack without
         removing it"""
-        if len(self.history) > 0:
-            return self.history[-1]
+        if len(self.history) > 1:
+            # Because the last entry is always the current url we will
+            # return the pre last url (-2)
+            return self.history[-2]
         return None
