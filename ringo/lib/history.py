@@ -27,10 +27,14 @@ class History:
         storing it. If there are more than 5 entries in the list the
         oldes entry will be removed.
 
-        Please note that the last entry in the history is the current
-        called URL.  This is relevant if you want to access the history
-        list directly for some reasone and not want to use the pop and
-        last methods.
+        Please note, that the most recent entry in the history is always
+        the url of the current request. This is because the history is
+        is filled at the very beginnin of the request on the NewRequest
+        event. It is **not** possible to handle the history at response
+        time because the history can not be saved in the session. The
+        reason for this is unknown.  Howwver this special behaviour is
+        relevant if you want to access the history list directly for
+        some reasone and not want to use the pop and last methods.
         """
         url = request.url
 
@@ -63,15 +67,23 @@ class History:
         recent entry in the history. Optionally you can provide a number
         to the pop method to get e.g the 2 most recent entry."""
         url = None
+        current_url = None
 
-        # Because the last entry is always the current entry we will pop
-        # this entry also
-        if len(self.history) > 1:
-            self.history.pop()
+        # Because the last entry in the history is always the url of the
+        # current request we need to temporay pop the last entry to
+        # to make the actually last entry available as last entry in the
+        # history.
+        if len(self.history) > 0:
+            current_url = self.history.pop()
 
         for x in range(num):
             if len(self.history) > 0:
                 url = self.history.pop()
+
+        # Now readd the current entry to the history, because the
+        # current entry will be needed to build the history.
+        if current_url:
+            self.history.append(current_url)
         return url
 
     def last(self):
