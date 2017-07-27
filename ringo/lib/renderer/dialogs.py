@@ -1,6 +1,5 @@
 import logging
 import os
-import cgi
 import pkg_resources
 from mako.lookup import TemplateLookup
 
@@ -136,7 +135,7 @@ class ErrorDialogRenderer(DialogRenderer):
         history = self._request.ringo.history
         if url:
             values['ok_url'] = url
-        elif history:
+        elif history and history.last():
             values['ok_url'] = history.last()
         else:
             values['ok_url'] = self._request.route_path('home')
