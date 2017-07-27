@@ -5,7 +5,6 @@ from ringo.views.helpers import (
 )
 from ringo.views.response import JSONResponse
 from ringo.views.request import (
-    handle_history,
     handle_params,
     handle_callback,
     get_item_from_request,
@@ -24,7 +23,6 @@ def read(request, callback=None, renderers=None):
     :callback: Current function which is called after the item has been read.
     :returns: Dictionary.
     """
-    handle_history(request)
     handle_params(request)
     handle_callback(request, callback, mode="pre,default")
     rvalues = get_return_value(request)
