@@ -51,9 +51,7 @@ function checkInput(node){
     switch (node.type) {
         case "checkbox":
         case "radio":
-            if (node.checked != node.defaultChecked) {
-                return true;
-            }
+            if (node.checked != node.defaultChecked) return true;
             break;
         case "search":
             // search buttons aren't usually submittable
@@ -61,9 +59,7 @@ function checkInput(node){
         default:
             //TODO check if all other input types are
             // covered (even html5 ones)
-            if (node.value != node.defaultValue){
-                return true;
-            }
+            if (node.value != node.defaultValue) return true;
     }
     return false;
 }
@@ -71,9 +67,7 @@ function checkInput(node){
 function checkSelect(node){
     if (!node.hasAttribute("no-dirtyable")){
         try {
-            if (!node.options[node.selectedIndex].defaultSelected){
-                return true;
-            }
+            if (!node.options[node.selectedIndex].defaultSelected) return true;
         }
         catch (err) {
             //there may be no options at all, or nothing selected
@@ -85,9 +79,7 @@ function checkSelect(node){
 
 function checkTextarea(node){
     if (!node.hasAttribute("no-dirtyable")) {
-        if (node.value != node.defaultValue){
-            return true;
-        }
+        if (node.value != node.defaultValue) return true;
     }
     return false;
 }
