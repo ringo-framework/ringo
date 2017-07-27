@@ -71,7 +71,7 @@ function checkInput(node){
 function checkSelect(node){
     if (!node.hasAttribute("no-dirtyable")){
         try {
-            if (some(node.options, function(x){ return defaultSelected}) && !node.options[node.selectedIndex].defaultSelected){
+            if (!node.options[node.selectedIndex].defaultSelected){
                 return true;
             }
         }
