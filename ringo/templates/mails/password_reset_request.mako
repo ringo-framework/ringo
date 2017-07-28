@@ -1,6 +1,6 @@
 ${_('Dear user')},
 
-${_('You have received this email because you requested the reset of your password for ${app_name}: ${username}.', mapping={'app_name': app_name, 'username':username})}
+${_('You have received this email because you requested the reset of your password for ${app_name}: ${username}.', mapping={'app_name': app_name, 'username':username})|n}
 
 
 ${_('To complete the reset of your password you need to confirm reset by clicking the following link:')}
