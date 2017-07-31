@@ -57,7 +57,7 @@ class History:
 
         if not self.history or normalized_url != self.history[-1]:
             self.history.append(normalized_url)
-        if len(self.history) > 5:
+        if len(self.history) > 10:
             del self.history[0]
         return True
 
