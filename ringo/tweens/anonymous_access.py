@@ -1,4 +1,6 @@
 import logging
+import sys
+from sqlalchemy.orm.exc import NoResultFound
 from pyramid.security import remember, forget
 from pyramid.httpexceptions import HTTPFound
 from ringo.lib.sql.db import NTDBSession as db
@@ -15,7 +17,11 @@ def user_factory(handler, registry):
     global ANONYMOUS_USER
     if ANONYMOUS_USER is None:
         login = registry.settings.get("auth.anonymous_user")
-        ANONYMOUS_USER = db.query(User).filter(User.login == login).one()
+        try:
+            ANONYMOUS_USER = db.query(User).filter(User.login == login).one()
+        except NoResultFound:
+            log.error("Misconfigured anonymous user '{}'. User not found.".format(login))
+            sys.exit(1)
 
     def user_tween(request):
         if static_urls.match(request.path):

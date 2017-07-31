@@ -1,3 +1,11 @@
+1.17.1
+======
+Improvements:
+
+- Do not start the server in case the configured anonymous user is
+  misconfigured and can not be found.  Before the server exists hard with an
+  exception.
+
 1.17.0
 ======
 Incompatible change in Ringo. This will need a database update to your application!
