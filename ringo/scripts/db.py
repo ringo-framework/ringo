@@ -1,3 +1,4 @@
+import sys
 import logging
 import shutil
 import os
@@ -251,12 +252,17 @@ def handle_db_loaddata_command(args):
 
 
 def get_importer(session, modulname, fmt):
-    modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == modulname).all()[0].clazzpath
-    modul = dynamic_import(modul_clazzpath)
-    if fmt == "json":
-        return JSONImporter(modul, session)
-    else:
-        return CSVImporter(modul, session)
+    try:
+        modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == modulname).all()[0].clazzpath
+        modul = dynamic_import(modul_clazzpath)
+        if fmt == "json":
+            return JSONImporter(modul, session)
+        else:
+            return CSVImporter(modul, session)
+    except:
+        modules = [m.name for m in session.query(ModulItem).all()]
+        print "Can not load modul '{}'. Please choose one from [{}].".format(modulname, ", ".join(modules))
+        sys.exit(1)
 
 
 def do_import(session, importer, data, load_key):
