@@ -1700,7 +1700,18 @@ root of that custom static folder.
 
 * app.customstatic = /path/to/your/folder
 
-If not defined it will be ringo:static.
+Adding this configuration will make files under this location basically
+available in your application.
+
+Let's say you have a static image you want to access. You can do this in the
+followin way e.g in a Mako template::
+
+        request.static_url(h.get_app_customstatic('image.png'))
+
+`image.png` must be relative to the configured customstatic path.
+
+If `customstatic` is not configured the generated URL will link to the static
+folder in Ringo.
 
 .. index::
    single: Configuration; Logo

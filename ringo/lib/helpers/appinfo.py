@@ -92,13 +92,17 @@ def get_app_title():
     return settings['app.title']
 
 
-def get_app_customstatic():
+def get_app_customstatic(url=None):
     """Will return the path of the custom static folder which can be
     used for branding. If no configured the folder is the same folder
-    that ringo:static"""
+    that ringo:static."""
     registry = get_current_registry()
     settings = registry.settings
-    return settings.get('app.customstatic', 'ringo:static')
+    customstatic = settings.get('app.customstatic', 'ringo:static')
+    if url:
+        return "{}/{}".format(customstatic, url)
+    else:
+        return customstatic
 
 
 def get_app_logo():
@@ -110,8 +114,7 @@ def get_app_logo():
     settings = registry.settings
     logo = settings.get('app.logo')
     if logo:
-        customstatic = get_app_customstatic()
-        return "{}/{}".format(customstatic, logo)
+        return get_app_customstatic(logo)
     return None
 
 
