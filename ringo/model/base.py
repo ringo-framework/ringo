@@ -679,10 +679,12 @@ class BaseList(object):
             sorted_items.reverse()
         self.items = sorted_items
 
-    def paginate(self, total, page=0, size=None):
+    def paginate(self, total=None, page=0, size=None):
         """This function will set some internal values for the
         pagination function based on the given params.
 
+        :total: Number of items in the list. Can be usually determined
+        from the list directly.
         :page: Integer of the current page
         :size: Items per page
         :returns:
@@ -702,6 +704,9 @@ class BaseList(object):
         """Start index for slicing the items list on the current page"""
         self.pagination_end = None
         """End index for slicing the items list on the current page"""
+
+        if total is None:
+            total = len(self.items)
 
         # Calulate the slicing indexes for paginating and the total
         # number of pages.
