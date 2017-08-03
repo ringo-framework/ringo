@@ -5,6 +5,8 @@ Improvements:
 - Do not start the server in case the configured anonymous user is
   misconfigured and can not be found.  Before the server exists hard with an
   exception.
+- Improve error handling in case of non existing modul names in context of
+  "ringo-admin db" command.
 
 1.17.0
 ======
