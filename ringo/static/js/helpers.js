@@ -87,9 +87,7 @@ function checkSelect(node){
 
 function checkTextarea(node){
     if (!node.hasAttribute("no-dirtyable")) {
-        if (node.value != node.defaultValue){
-            return true;
-        }
+        if (node.value != node.defaultValue) return true;
     }
     return false;
 }
