@@ -7,6 +7,8 @@ Improvements:
   exception.
 - Improve error handling in case of non existing modul names in context of
   "ringo-admin db" command.
+- Improve error handling in case of invalid field names in filters in context of
+  "ringo-admin savadata" command.
 
 1.17.0
 ======

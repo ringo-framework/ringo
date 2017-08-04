@@ -173,7 +173,7 @@ def handle_db_upgrade_command(args):
     cfg = get_alembic_config(args)
     command.upgrade(cfg, "head")
     if cfg.get_main_option("sqlalchemy.url").find("postgres") > -1:
-    	handle_db_fixsequence_command(args)
+        handle_db_fixsequence_command(args)
 
 def handle_db_downgrade_command(args):
     cfg = get_alembic_config(args)
@@ -200,7 +200,12 @@ def handle_db_savedata_command(args):
             filter_item = f.split(",")
             filter_item[2] = bool(filter_item[2])
             filter_stack.append(tuple(filter_item))
-        listing.filter(filter_stack)
+        try:
+            listing.filter(filter_stack)
+        except KeyError:
+            print "Error while filtering."
+            sys.exit(1)
+
         data = listing.items
 
     if args.export_config:
