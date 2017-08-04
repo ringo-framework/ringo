@@ -459,33 +459,35 @@ class Importer(object):
         :returns: List of imported items
 
         """
-        data = self.deserialize(data)
-        imported_items = []
-        factory = self._clazz.get_item_factory()
-        if self._use_strict:
-            factory._use_strict = self._use_strict
-        _ = translate
-        for values in data:
-            if load_key == "uuid":
-                id = values.get('uuid')
-                if "id" in values:
-                    del values["id"]
-                load_key = "uuid"
-            else:
-                id = values.get(load_key)
-            try:
-                # uuid might be empty for new items, which will raise an
-                # error on loading.
-                item = factory.load(id, field=load_key)
-                item.set_values(values, use_strict=self._use_strict)
-                operation = _("UPDATE")
-            except sa.orm.exc.NoResultFound:
-                if ("id" in values and not values["id"]):
-                    del values["id"]
-                item = factory.create(user=user, values=values)
-                self._db.add(item)
-                operation = _("CREATE")
-            imported_items.append((item, operation))
+        self.load_key = load_key
+        with self._db.no_autoflush:
+            data = self.deserialize(data)
+            imported_items = []
+            factory = self._clazz.get_item_factory()
+            if self._use_strict:
+                factory._use_strict = self._use_strict
+            _ = translate
+            for values in data:
+                if load_key == "uuid":
+                    id = values.get('uuid')
+                    if "id" in values:
+                        del values["id"]
+                    load_key = "uuid"
+                else:
+                    id = values.get(load_key)
+                try:
+                    # uuid might be empty for new items, which will raise an
+                    # error on loading.
+                    item = factory.load(id, field=load_key)
+                    item.set_values(values, use_strict=self._use_strict)
+                    operation = _("UPDATE")
+                except sa.orm.exc.NoResultFound:
+                    if ("id" in values and not values["id"]):
+                        del values["id"]
+                    item = factory.create(user=user, values=values)
+                    self._db.add(item)
+                    operation = _("CREATE")
+                imported_items.append((item, operation))
         return imported_items
 
 
@@ -499,7 +501,7 @@ class JSONImporter(Importer):
                 importer = JSONImporter(clazz, db=self._db, use_strict=self._use_strict)
                 if not isinstance(obj[field], list):
                     import_data = [obj[field]]
-                    imported_item = importer.perform(json.dumps(import_data))
+                    imported_item = importer.perform(json.dumps(import_data), load_key=self.load_key)
                     obj[field] = imported_item[0][0]
                 elif obj[field] and isinstance(obj[field][0], dict):
                     import_data = obj[field]
