@@ -328,6 +328,10 @@ def setup_parser():
     parser["user"] = setup_user_parser(subparsers, global_arguments)
     parser["app"] = setup_application_parser(subparsers, global_arguments)
     parser["fixture"] = setup_fixture_parser(subparsers, global_arguments)
+
+    args = parser["root"].parse_args()
+    setup_registry(args)
+
     return (parser, subparsers, global_arguments)
 
 
@@ -339,9 +343,7 @@ def _get_app_name():
     return sys.argv[0].split("/")[-1].split("-")[0]
 
 
-def main():
-    parser, subparsers, global_arguments = setup_parser()
-    args = parser["root"].parse_args()
+def setup_registry(args):
     # FIXME: Initialialising the testing modul is currently the only
     # known way to make the settings
     # available in the current_registry call (which is called
@@ -353,6 +355,10 @@ def main():
     registry.settings = config
     testing.setUp(registry)
 
+
+def main():
+    parser, subparsers, global_arguments = setup_parser()
+    args = parser["root"].parse_args()
     args.func(args)
 
 if __name__ == '__main__':
