@@ -277,6 +277,7 @@ def do_import(session, importer, data, load_key):
     try:
         items = importer.perform(data, load_key=load_key)
     except ValueError as err:
+        print err
         session.rollback()
         sys.exit(1)
     for item, action in items:
