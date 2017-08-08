@@ -274,7 +274,11 @@ def do_import(session, importer, data, load_key):
     items = []
     updated = 0
     created = 0
-    items = importer.perform(data, load_key=load_key)
+    try:
+        items = importer.perform(data, load_key=load_key)
+    except ValueError as err:
+        session.rollback()
+        sys.exit(1)
     for item, action in items:
         # Add all new items to the session
         if action.find("CREATE") > -1:

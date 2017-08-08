@@ -17,6 +17,7 @@ from ringo.model.base import BaseItem
 from ringo.model.user import UserSetting
 from ringo.lib.helpers import serialize, deserialize
 from ringo.lib.alchemy import get_props_from_instance
+from ringo.lib.form import get_item_form
 
 log = logging.getLogger(__name__)
 
@@ -460,6 +461,7 @@ class Importer(object):
 
         """
         self.load_key = load_key
+        import_errors = {}
         with self._db.no_autoflush:
             data = self.deserialize(data)
             imported_items = []
@@ -487,7 +489,14 @@ class Importer(object):
                     item = factory.create(user=user, values=values)
                     self._db.add(item)
                     operation = _("CREATE")
-                imported_items.append((item, operation))
+                # Validate the imported item. Only add Item to the
+                form = get_item_form(item, self._db, None, None, formname="update")
+                if form.validate({}):
+                    imported_items.append((item, operation))
+                else:
+                    import_errors["{} (id:{})".format(type(item), item.id)] = form.get_errors()
+        if import_errors:
+            raise ValueError("Error! Validation failed.\n\n{}".format(import_errors))
         return imported_items
 
 
