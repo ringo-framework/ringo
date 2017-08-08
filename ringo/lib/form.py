@@ -39,6 +39,17 @@ def get_ownership_form(item, db, csrf_token, eval_url,
                 translate=translate)
 
 
+def get_item_form(item, db, csrf_token, eval_url,
+                  readonly=None, url_prefix=None, locale=None,
+                  translate=None, formname="update"):
+    config = get_form_config(item, formname)
+    return Form(config, item, db,
+                csrf_token=csrf_token,
+                eval_url=eval_url,
+                url_prefix=url_prefix,
+                locale=locale,
+                translate=translate)
+
 def get_path_to_form_config(filename, app=None, location=None):
     """Returns the path to the given form configuration. The filename
     should be realtive to the default `location` for the configurations
