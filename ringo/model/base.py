@@ -29,6 +29,7 @@ from ringo.lib.sql import DBSession
 from ringo.lib.sql.cache import regions
 from ringo.lib.sql.query import FromCache, set_relation_caching
 from ringo.lib.alchemy import get_columns_from_instance
+from ringo.model import Base
 from ringo.model.mixins import StateMixin, Owned
 
 log = logging.getLogger(__name__)
@@ -660,7 +661,12 @@ class BaseList(object):
         """
         def attrgetter(field, expand):
             def g(obj):
-                return obj.get_value(field, expand=expand)
+                value = obj.get_value(field, expand=expand)
+                # As long as we have a model instance we will do the
+                # comparison on the string representation.
+                if isinstance(value, Base):
+                    return unicode(value)
+                return value
             return g
 
         def nonecmp(a, b):
