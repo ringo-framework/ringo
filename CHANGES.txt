@@ -9,6 +9,7 @@ Improvements:
   "ringo-admin db" command.
 - Improve error handling in case of invalid field names in filters in context of
   "ringo-admin savedata" command.
+- Update moment.js to 2.18.1
 
 New:
 
