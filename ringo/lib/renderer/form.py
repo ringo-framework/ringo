@@ -39,10 +39,13 @@ def add_renderers(custom_renderers):
 def get_link_url(item, request, actionname=None, backurl=False):
     """Return a url to the given item. On default the link will be a
     link to the update or read view of the item depending on the
-    permission. If the user does not have enough permissions than None
-    is returned. Optionally you can provide the name of a action. In
-    this case the url will be build for the given actionname if the user
-    has enough permissions."""
+    permission. If the application is configured to open items in read
+    mode on default the update action will not be checked. If the user
+    does not have enough permissions than None is returned. Optionally
+    you can provide the name of a action. In this case the url will be
+    build for the given actionname if the user has enough
+    permissions."""
+    readmode = request.registry.settings.get("app.readmode") in ["True", "true"]
     if isinstance(item, BaseItem):
         if actionname:
             from ringo.views.helpers import get_item_modul
@@ -60,7 +63,7 @@ def get_link_url(item, request, actionname=None, backurl=False):
                                                       action.name.lower())
                 else:
                     return None
-        elif security.has_permission("update", item, request):
+        elif not readmode and security.has_permission("update", item, request):
             route_name = get_action_routename(item, 'update')
         elif security.has_permission("read", item, request):
             route_name = get_action_routename(item, 'read')
@@ -68,7 +71,7 @@ def get_link_url(item, request, actionname=None, backurl=False):
             return None
 
         query = {}
-        if backurl:
+        if not readmode and backurl:
             query['backurl'] = request.current_route_path()
         return request.route_path(route_name, id=item.id, _query=query)
     return None

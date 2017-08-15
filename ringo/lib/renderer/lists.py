@@ -29,8 +29,14 @@ def get_read_update_url(request, item, clazz, prefilterd=False):
     overviews. If the user of this request is not allowed to see the
     item at all, None will be returned as the url."""
 
+    permissions = ['read']
+    # If the application is configured to open items in readmode on
+    # default then we will not add the update action to the actions to
+    # check.
+    if not request.registry.settings.get("app.readmode") in ["True", "true"]:
+        permissions.append('update')
+
     is_admin = request.user.has_role("admin")
-    permissions = ['read', 'update']
     url = None
     for permission in permissions:
         if (permission == 'read' and prefilterd) \
