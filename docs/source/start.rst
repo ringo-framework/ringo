@@ -1798,6 +1798,23 @@ The mode is available using the :func:`get_app_mode` function.
 
 .. index:: Testing mode
 
+Application Readmode
+====================
+You can configure to enforce opening items from the overview in Read-Mode on
+default. This is especially useful in applications where the majority of
+requests are made to read something rather to update an item. Setting the
+default open mode to read bring performance advantages as the internal effort
+to render the form is lower for read forms.
+
+However the use can explicit switch to the update page from the read page
+using the context menu.
+
+* app.readmode = True
+
+The setting defaults to False, which means the application will determine if
+the user is allowed to update or read the items and will open the higher
+privileged page (update) if the user is allowed to.
+
 History ignores
 ===============
 You can configure URL which will be ignored in history. This is often needed

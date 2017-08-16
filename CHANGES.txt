@@ -5,9 +5,20 @@ Improvements:
 - Do not start the server in case the configured anonymous user is
   misconfigured and can not be found.  Before the server exists hard with an
   exception.
-- Improve error handling in case of non existing modul names in context of
+- Improve error handling in case of non existing module names in context of
   "ringo-admin db" command.
 - Improve error handling in case of invalid field names in filters in context of
+  "ringo-admin savedata" command.
+- Update moment.js to 2.18.1
+- Fixed sorting of Baselists. Sorting on model items is now done on its string
+  representation.
+
+New:
+
+- Added "app.readmode" configuration. When set to True, the application will
+  open items from overviews and Listings in readmode. Otherwise the
+  application will check the permissions of the user and opens the item in
+  update mode if the user has sufficient permissions. 
   "ringo-admin savadata" command.
 
 1.17.0
