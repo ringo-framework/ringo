@@ -17,6 +17,7 @@ from webhelpers.html import literal, escape, HTML
 from ringo.lib.helpers.format import (
     prettify,
     get_local_datetime,
+    get_timezone,
     get_week,
     format_timedelta,
     format_datetime
