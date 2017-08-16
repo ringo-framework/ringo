@@ -293,13 +293,22 @@ def get_action_routename(item, action, prefix=None):
 def get_open_url(request, item):
     """Convinience method to the a URL to 'open' the item."""
     from ringo.lib.security import has_permission
-    if has_permission("update", item, request):
-        return request.route_path(get_action_routename(item, "update"),
-                                  id=item.id)
-    elif has_permission("read", item, request):
-        return request.route_path(get_action_routename(item, "read"),
-                                  id=item.id)
-    return None
+
+    permissions = ['read']
+    # If the application is configured to open items in readmode on
+    # default then we will not add the update action to the actions to
+    # check.
+    if not request.registry.settings.get("app.readmode") in ["True", "true"]:
+        permissions.append('update')
+
+    url = None
+    for permission in permissions:
+        if has_permission(permission, item, request):
+            route_name = get_action_routename(item, permission)
+            url = request.route_path(route_name, id=item.id)
+        else:
+            break
+    return url
 
 
 def get_action_url(request, item, action):
