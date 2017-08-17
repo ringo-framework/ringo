@@ -1771,6 +1771,21 @@ enforced. An empty value means use a "default" encoding which leads to dates
 formatted in ISO8601. Otherwise the locale must match a known ISO-3166 locale
 string.
 
+.. index:: Timezone
+
+Application Timezone
+====================
+You can configure the timezone for the application. This timezone is used to
+convert the UTC datetimes into local datetimes. The configuration is done as
+string value. See https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+for a list of valid timezones.
+
+* app.timezone = Europe/Berlin
+
+The setting defaults to the configured timezone of the server.
+
+.. index:: Testing mode
+
 Application Mode
 ================
 The application can be configured to be in a special "mode". Where mode can be
@@ -1796,7 +1811,7 @@ such as hexadecimal or RGB values, named colors, etc.
 
 The mode is available using the :func:`get_app_mode` function.
 
-.. index:: Testing mode
+.. index:: Read mode
 
 Application Readmode
 ====================

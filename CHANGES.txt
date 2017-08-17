@@ -1,3 +1,13 @@
+1.18.0
+======
+This release needs a formbar version >= 1.2.0.
+
+Changes:
+
+- Form initialisation changed. Now the timezone parameter is passed when
+  initialising a new form. This information is needed to render datetimes in
+  correct local time.
+
 1.17.1
 ======
 Improvements:

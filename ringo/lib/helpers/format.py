@@ -20,6 +20,17 @@ from formbar.converters import from_timedelta
 ########################################################################
 
 
+def get_timezone(request):
+    """Returns the configured timezone in the settings. E.g
+    Europe/Berlin. If no timezone is configured return None.
+
+    :request: current request
+    :returns: string of timezone
+
+    """
+    return request.registry.settings.get("app.timezone")
+
+
 def prettify(request, value):
     """Generic function used in template rendering to prettify a given
     pythonic value into to a more human readable form. Depending on the
@@ -38,7 +49,7 @@ def prettify(request, value):
     try:
         #  FIXME: While testing get_current_request returns a dummy
         #  request object which does not have a ringo attribute.
-        #  Currenlty do not now how to add this. (ti) <2017-05-09 09:05> 
+        #  Currenlty do not now how to add this. (ti) <2017-05-09 09:05>
         locale_name = request.ringo.locale
     except AttributeError:
         locale_name = None
@@ -48,7 +59,7 @@ def prettify(request, value):
         locale_name = None
 
     if isinstance(value, datetime):
-        return format_datetime(get_local_datetime(value),
+        return format_datetime(get_local_datetime(value, get_timezone(request)),
                                locale_name=locale_name, format="short")
     elif isinstance(value, date):
         return format_date(value,
@@ -96,6 +107,8 @@ def get_local_datetime(dt, timezone=None):
         dt = pytz.utc.localize(dt)
     if not timezone:
         timezone = tz.tzlocal()
+    else:
+        timezone = tz.gettz(name=timezone)
     return dt.astimezone(timezone)
 
 

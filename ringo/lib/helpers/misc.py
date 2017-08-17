@@ -3,7 +3,7 @@ import re
 import string
 import base64
 from datetime import datetime
-from pyramid.threadlocal import get_current_request
+from pyramid.threadlocal import get_current_request, get_current_registry
 import formbar.converters as converters
 from ringo.lib.sql import DBSession
 
@@ -32,7 +32,11 @@ def deserialize(value, datatype):
         if iv.match(value):
             t = datetime.datetime.strptime(value, "%H:%M:%S")
             return datetime.timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
-        return converters.to_datetime(value)
+
+        # We need the configured timezone to convert the datetime into
+        # the correct timezone.
+        timezone = get_current_registry().settings.get("app.timezone")
+        return converters.to_datetime(value, locale=None, timezone=timezone)
     elif datatype == "date":
         return converters.to_date(value)
     elif re_char_match.match(datatype):
