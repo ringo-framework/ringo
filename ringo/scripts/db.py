@@ -5,6 +5,7 @@ import os
 import time
 import json
 from sqlalchemy import engine_from_config
+from sqlalchemy.orm.exc import NoResultFound
 import transaction
 
 from invoke import run
@@ -258,15 +259,17 @@ def handle_db_loaddata_command(args):
 
 def get_importer(session, modulname, fmt):
     try:
-        modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == modulname).all()[0].clazzpath
+        modul_clazzpath = session.query(ModulItem).filter(
+            ModulItem.name == modulname).one().clazzpath
         modul = dynamic_import(modul_clazzpath)
         if fmt == "json":
             return JSONImporter(modul, session)
         else:
             return CSVImporter(modul, session)
-    except:
+    except NoResultFound:
         modules = [m.name for m in session.query(ModulItem).all()]
-        print "Can not load modul '{}'. Please choose one from [{}].".format(modulname, ", ".join(modules))
+        print "Can not load modul '{}'. Please choose one from [{}].".format(
+            modulname, ", ".join(modules))
         sys.exit(1)
 
 
