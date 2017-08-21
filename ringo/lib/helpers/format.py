@@ -60,10 +60,10 @@ def prettify(request, value):
 
     if isinstance(value, datetime):
         return format_datetime(get_local_datetime(value, get_timezone(request)),
-                               locale_name=locale_name, format="short")
+                               locale_name=locale_name, format="medium")
     elif isinstance(value, date):
         return format_date(value,
-                           locale_name=locale_name, format="short")
+                           locale_name=locale_name, format="medium")
     elif isinstance(value, timedelta):
         return from_timedelta(value)
     elif isinstance(value, list):

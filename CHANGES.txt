@@ -7,6 +7,10 @@ Changes:
 - Form initialisation changed. Now the timezone parameter is passed when
   initialising a new form. This information is needed to render datetimes in
   correct local time.
+- Default format of dates and datetimes changed from short to medium display
+  (e.g 11.10.12 > 11.10.1912) to make. This fixes an error on sorting dates
+  with the moment.js library which otherwise must guess if a date is in 1900
+  or 2000.
 
 1.17.1
 ======
