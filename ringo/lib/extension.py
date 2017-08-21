@@ -106,19 +106,16 @@ def _add_modul(config, actions, dbsession):
 
 
 def _load_modul_by_name(session, modulname):
-    try:
-        # FIXME:
-        # Compatibilty mode. Older versions of Ringo added a 's' to the
-        # extensions modul name as Ringo usally uses the plural form.
-        # Newer versions use the configured extension name. So there
-        # might be a mixture of old and new modul names in the database.
-        # This code will handle this. (ti) <2016-01-04 13:50>
-        return session.query(ModulItem)\
-               .filter(sa.or_(ModulItem.name == modulname,
-                              ModulItem.name == modulname + 's'))\
-                .one()
-    except sa.orm.exc.NoResultFound:
-        return None
+    # FIXME:
+    # Compatibilty mode. Older versions of Ringo added a 's' to the
+    # extensions modul name as Ringo usally uses the plural form.
+    # Newer versions use the configured extension name. So there
+    # might be a mixture of old and new modul names in the database.
+    # This code will handle this. (ti) <2016-01-04 13:50>
+    return session.query(ModulItem)\
+                  .filter(sa.or_(ModulItem.name == modulname,
+                                 ModulItem.name == modulname + 's'))\
+                  .scalar()
 
 
 def register_modul(config, modul_config, actions=None):
