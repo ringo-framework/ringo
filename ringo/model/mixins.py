@@ -32,6 +32,7 @@ comments).
 import datetime
 import json
 import logging
+import re
 from sqlalchemy.ext.declarative import declared_attr
 
 from sqlalchemy import (
@@ -48,13 +49,15 @@ from sqlalchemy.orm import (
     relationship,
     backref
 )
-
+from formbar.converters import to_date
 from ringo.model import Base
 from ringo.lib.helpers import get_raw_value
 from ringo.lib.alchemy import get_columns_from_instance
 
+
 log = logging.getLogger(__name__)
 
+re_date = re.compile("\d{4}-\d{2}-\d{2}")
 
 class Mixin(object):
     """Base mixin class"""
@@ -177,7 +180,14 @@ class Blob(object):
         if data:
             json_data = json.loads(getattr(self, 'data'))
             if name in json_data:
-                return json_data[name]
+                json_value = json_data[name]
+                # Poor mans data type conversion.
+                if isinstance(json_value, basestring):
+                    # Try to convert the value into a date object if it
+                    # looks like a date.
+                    if re_date.match(json_value):
+                        return to_date(json_value)
+                return json_value
         return get_raw_value(self, name)
 
     def set_values(self, values, use_strict=False):

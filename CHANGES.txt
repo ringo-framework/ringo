@@ -12,6 +12,10 @@ Changes:
   with the moment.js library which otherwise must guess if a date is in 1900
   or 2000.
 
+Bugfix:
+- Support dates in blob forms. When loading the json from the database we will
+  now try to convert the date ("YYYY-MM-DD") into a python date object.
+
 1.17.1
 ======
 Improvements:
