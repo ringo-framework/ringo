@@ -174,7 +174,7 @@ def setup_modul_parser(subparsers, parent):
     add_parser.add_argument('--mixin',
                             nargs="*",
                             choices=['owned', 'meta', 'logged', 'state',
-                                     'blobform', 'versioned', 'printable',
+                                     'blob', 'blobform', 'versioned', 'printable',
                                      'nested', 'commented', 'tagged', 'todo'],
                             default=["owned"],
                             help='Mixins for the generated model')

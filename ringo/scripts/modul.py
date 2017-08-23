@@ -24,6 +24,7 @@ mixinmap = {
     'meta': 'Meta',
     'state': 'StateMixin',
     'blobform': 'Blobform',
+    'blob': 'Blob',
     'versioned': 'Versioned',
     'nested': 'Nested'
 }
