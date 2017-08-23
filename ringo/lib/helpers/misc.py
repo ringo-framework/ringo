@@ -225,7 +225,7 @@ def import_model(clazzpath):
     orig_clazz = dynamic_import(clazzpath)
     # Load entry from the database for the given modul
     mid = orig_clazz._modul_id
-    modul = DBSession.query(ModulItem).filter_by(id=mid).one()
+    modul = DBSession.query(ModulItem).get(mid)
     if modul.clazzpath == clazzpath:
         return orig_clazz
     else:

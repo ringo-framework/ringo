@@ -17,6 +17,7 @@ import fuzzy
 import Levenshtein
 from sqlalchemy import Column, CHAR
 from sqlalchemy.orm import joinedload, Session
+from sqlalchemy.orm.exc import NoResultFound
 from ringo.lib.helpers import (
     serialize, get_item_modul,
     get_raw_value, set_raw_value,
@@ -115,7 +116,7 @@ def load_modul(item):
     # Loading the modul is expensive! So try to cache it.
     if not CACHE_MODULES.get(mid):
         if session:
-            modul = session.query(ModulItem).filter_by(id=mid).one()
+            modul = session.query(ModulItem).get(mid)
         else:
             modul = get_item_modul(None, item)
         CACHE_MODULES.set(modul.id, modul)
@@ -895,21 +896,20 @@ class BaseFactory(object):
                 item.set_values(values)
         return item
 
-    def load(self, id, db=None, cache="", uuid=False, field=None):
+    def load(self, id, db=DBSession, cache="", uuid=False, field=None):
         """Loads the item with id from the database and returns it.
 
-        :id: ID of the item to be loaded
+        :id: Primary key or field value (if field is given) of the item to
+             be loaded
         :db: DB session to load the item
         :cache: Name of the cache region. If empty then no caching is
                 done.
-        :uuid: If true the given id is a uuid. Default to false
-        :field: If given the item can be loaded by an alternative field.
-                Default to None
+        :uuid: (deprecated) If True the given id is a uuid. Defaults to False
+        :field: If given, id is expected to be a unique value of the given
+                field. Defaults to None
         :returns: Instance of clazz
 
         """
-        if db is None:
-            db = DBSession
         q = db.query(self._clazz)
         if cache in regions.keys():
             q = set_relation_caching(q, self._clazz, cache)
@@ -924,4 +924,8 @@ class BaseFactory(object):
                           "field='uuid' instead", DeprecationWarning)
             return q.filter(self._clazz.uuid == id).one()
         else:
-            return q.filter(self._clazz.id == id).one()
+            item = q.get(id)
+            if item:
+                return item
+            else:
+                raise NoResultFound
