@@ -866,7 +866,7 @@ class BaseFactory(object):
         self._use_strict = use_strict
 
     def create(self, user, values):
-        """Will create a new instance of clazz. The instance is it is
+        """Will create a new instance of clazz. The instance is
         not saved persistent at this moment. The method will also take
         care of setting the correct ownership.
 
@@ -884,7 +884,7 @@ class BaseFactory(object):
            user is not None):
             item.uid = user.id
         if (hasattr(item, 'gid')):
-            modul = get_item_modul(None, item)
+            modul = load_modul(item)
             if modul.default_gid:
                 item.gid = modul.default_gid
             elif (user is not None and user.default_gid):
