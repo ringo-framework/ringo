@@ -62,6 +62,8 @@ def serialize(value):
         return ""
     if isinstance(value, unicode):
         return value
+    if isinstance(value, str):
+        return unicode(value)
     if isinstance(value, int):
         return unicode(value)
     if isinstance(value, float):
