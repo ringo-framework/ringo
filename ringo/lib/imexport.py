@@ -230,7 +230,8 @@ class Exporter(object):
         exporter specific format (e.g. JSON).
 
         :items: Items which will be exported.
-        :returns: Exported items. (Format Depends on the export configuration).
+        :returns: Exported items with UUIDs added where missing
+                  (format depends on the export configuration).
 
         """
         data = []

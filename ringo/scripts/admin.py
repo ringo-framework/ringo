@@ -235,9 +235,10 @@ def setup_db_parser(subparsers, parent):
     savedata_parser.add_argument('--format',
                         choices=["json", "csv"],
                         default="json",
-                        help="Format of the saved data")
+                        help="Format of the saved data (default json)")
     savedata_parser.add_argument('--filter',
-                        help="Define a filter on the exported data to select with items should be included in the export.")
+                        help="Define a filter to select which items"
+                             " should be included in the export.")
     savedata_parser.add_argument('--export-config',
                         help="Detailed configuration of the content of the export.")
 
@@ -276,7 +277,7 @@ def setup_db_parser(subparsers, parent):
     loaddata_parser.add_argument('--format',
                         choices=["json", "csv"],
                         default="json",
-                        help="Format of the loaded data")
+                        help="Format of the loaded data (default json)")
 
     # UUID command
     uuid_parser = sp.add_parser('resetuuid',
