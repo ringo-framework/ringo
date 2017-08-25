@@ -256,8 +256,17 @@ It is possible to export and import the data of modules in different formats.
 Supported formats are **JSON** and **CSV**. The default is to export and
 import JSON.
 
-Export can be triggered in the UI (If the user has sufficient permissions, and
-export is enabled) or using the CLI commands from :ref:`clidb` to
+In order to make items of a modul identifiable when exchanging data between
+different databases, each item is given a UUID upon creation. By default,
+these UUIDs are used as an identifier to decide during import
+whether an item is new or already present in the target database.
+An item without identifier (though it cannot be obtained by export)
+is always considered new. New items will be created in the
+target database. Already present items will be updated.
+
+Import and export can be triggered in the UI
+(if the user has sufficient permissions and it is enabled)
+or using the CLI commands from :ref:`clidb` to
 :ref:`clidb-export` and :ref:`clidb-import`.
 
 ************************************
@@ -2378,10 +2387,6 @@ providing `--format csv`.
 Only values of the given modul are exported. By default, this includes *all*
 fields of the module (including foreign keys) but not the related objects.
 
-In case an exported item has no UUID in the database, a UUID is generated and
-added in the export but not in the database. Consider :ref:`clidb-resetuuid`
-if you want to get persistent UUIDs.
-
 You can restrict the exported items by setting a `--filter` option. With a
 filter only items of the given modul matching the filter expression are
 exported. The filter expression is defined in the following syntax::
@@ -2425,12 +2430,12 @@ Configuration File
    single: Import
 .. _clidb-import:
 
-Importing data
-==============
-The data of a specfic module can be imported in a fixture by invoking the
+Import data
+===========
+The data of a specfic module can be imported from a fixture by invoking the
 following command::
 
-        ringo-admin db loaddata --loadbyid <modulname> <fixture>
+        ringo-admin db loaddata <modulname> <fixture>
 
 This will load the data in the fixture and insert or update the items in the
 database. Deleting items is not supported.
@@ -2440,14 +2445,6 @@ identified for either update or, in case there is no record found, creating a ne
 item. The default is to identify by the items UUID. With *--loadbyid*, the
 database primary key is used (which might differ between instances of your
 application!).
-
-.. note::
-
-   In case you want to import previously exported data, beware that
-   UUIDs missing in the database will be generated on export.
-   Thus, UUIDs differ between exports and are not suitable for identification
-   on import. Consider :ref:`clidb-resetuuid` prior to export.
-
 
 The option *--format {json,csv}* specifies the format of the input data, the
 default being JSON.
@@ -2464,11 +2461,12 @@ in the database to make the incremental counters work correct::
 
 Generate UUIDs
 ==============
-To generate UUIDs for the items of a given modul, use the following command::
+To regenerate UUIDs for the items of a given modul, use the following command::
 
         ringo-admin db resetuuid <modulname>
 
-To keep existing UUIDs, use the *--missing-only* option.
+Note that this makes your items unidentifiable if you import previously exported
+fixtures.
 
 
 ****************

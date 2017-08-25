@@ -228,11 +228,6 @@ class Exporter(object):
         else:
             _items = items
         for item in _items:
-            # Ensure that every item has a UUID. Set missing UUID here
-            # if the item has no uuid set yet.
-            if not item.uuid:
-                item.reset_uuid()
-
             # Check if a configuration is provided.
             if not self._config or len(self._config.config) == 0:
                 # No configuration is provided. Export all fields

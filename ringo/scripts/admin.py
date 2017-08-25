@@ -284,9 +284,6 @@ def setup_db_parser(subparsers, parent):
     uuid_parser.add_argument('modul',
                         metavar="modul",
                         help="Name of the Modul")
-    uuid_parser.add_argument('--missing-only',
-                        action="store_true",
-                        help="Reset the UUID only where it is not already set.")
 
     # Fix sequence command
     upgrade_parser = sp.add_parser('fixsequence',

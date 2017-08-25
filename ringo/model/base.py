@@ -143,6 +143,7 @@ class BaseItem(object):
 
     uuid = Column('uuid', CHAR(36),
                   unique=True,
+                  nullable=False,
                   default=lambda x: str(uuid.uuid4()))
 
     def render(self, request=None):
