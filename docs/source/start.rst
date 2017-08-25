@@ -2378,12 +2378,6 @@ providing `--format csv`.
 Only values of the given modul are exported. By default, this includes *all*
 fields of the module (including foreign keys) but not the related objects.
 
-You can include the related objects as well in the export by setting
-`--include-relations`. However, this does not really include the related items
-and its values but only adds another field in the export with the name of the
-relation in the modul. The value will be the string representation of the
-related item.
-
 In case an exported item has no UUID in the database, a UUID is generated and
 added in the export but not in the database. Consider :ref:`clidb-resetuuid`
 if you want to get persistent UUIDs.
@@ -2412,8 +2406,8 @@ include the item in the export.
 
 A more detailed configuration of the export can be achieved by providing a
 configuration file with the `--export-configuration` option. When using the
-configuration file all other options like (format, fields or
-include-relations) have no effect anymore. The export format will be a
+configuration file all other options (like `--format`) have no effect anymore.
+The export format will be a
 nested JSON including all configured fields.
 
 Details on the format of the export configuration file can be found in
