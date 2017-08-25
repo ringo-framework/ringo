@@ -404,10 +404,10 @@ class Importer(object):
                         # recursive calls.
                         tmp.append(item_id)
                     else:
-                        q = self._db.query(clazz).filter(clazz.id == item_id)
-                        try:
-                            tmp.append(q.one())
-                        except:
+                        item = self._db.query(clazz).get(item_id)
+                        if item:
+                            tmp.append(item)
+                        else:
                             log.warning(("Can not load '%s' id: %s "
                                          "Relation '%s' of '%s' not set"
                                          % (clazz, item_id, field, self._clazz)))
