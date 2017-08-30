@@ -7,9 +7,9 @@ import codecs
 import cStringIO
 import sets
 try:
-        import cStringIO as StringIO
+    import cStringIO as StringIO
 except ImportError:
-        import StringIO
+    import StringIO
 import xlsxwriter
 import sqlalchemy as sa
 
@@ -25,9 +25,9 @@ class ExportConfiguration(object):
 
     """
     You can provide a JSON configuration file for the export to define
-    which fields of the given modul should be imported in detail.
+    which fields of the given modul should be exported in detail.
     Providing a configuration file allows you to export also
-    `properties` and related Items which are not part of the default
+    `properties` and related items which are not part of the default
     export.
 
     Example export configuration::
@@ -160,28 +160,16 @@ class Exporter(object):
     export related items if configured correct. In this case the
     Exporter will return a list of nested dictionaries.
 
-    You can configure which will be exported on each item by either
-    using the `fields` parameter. If no fields are provided all fields
-    excluding the relations will be exported. The order of the
-    configured fields will determine the order of the fields in the
-    export (If supported e.g CSV).
-
-    A more detailed option to configur the content of the export you can
-    provide a ExportConfiguration to the exporter.
+    As a detailed configuration of the content of the export you can
+    provide an ExportConfiguration to the exporter.
 
     On default the exported items will be `serialized`. This means
     that each value is converted into a export specific format. E.g
     dates are converted into ISO8601 notation in the JSONExporter.
-    If set to false the the values are real python values.
-
-    Using the `relations` parameter is deprecated. It can be used as a
-    shortcut to add ORM relation of the item into the export.  Exported
-    relations will be the id of the linked items. In connection with the
-    serialized parameter the string representation of the linked items
-    are exported.
+    If set to false the values are real python values.
     """
 
-    def __init__(self, clazz, fields=None, serialized=True, relations=False, config=None):
+    def __init__(self, clazz, serialized=True, config=None):
         """
         :clazz: Clazz of the items which will be exported.
         :fields: List of fields and relations which should be exported.
@@ -190,9 +178,7 @@ class Exporter(object):
 
         """
         self._clazz = clazz
-        self._fields = fields
         self._serialized = serialized
-        self._relations = relations
         self._config = config
 
     def serialize(self, data):
@@ -230,7 +216,8 @@ class Exporter(object):
         exporter specific format (e.g. JSON).
 
         :items: Items which will be exported.
-        :returns: Exported items. (Format Depends on the export configuration).
+        :returns: Exported items with UUIDs added where missing
+                  (format depends on the export configuration).
 
         """
         data = []
@@ -241,15 +228,7 @@ class Exporter(object):
         else:
             _items = items
         for item in _items:
-            # Ensure that every item has a UUID. Set missing UUID here
-            # if the item has no uuid set yet.
-            if not item.uuid:
-                item.reset_uuid()
-
             # Check if a configuration is provided.
-
-            #  FIXME: Read support for deprecated "relations" argument?
-            #  Is missing here. (ti) <2017-05-23 14:02>
             if not self._config or len(self._config.config) == 0:
                 # No configuration is provided. Export all fields
                 # exluding relations.
@@ -274,8 +253,7 @@ class Exporter(object):
                             value = exporter.perform(value)
                             values[relation] = value
                     else:
-                        value = serialize(item.get_value(field))
-                        values[field] = value
+                        values[field] = item.get_value(field)
             data.append(self.flatten(values))
 
         # If the input to the method was a single item we will return a
@@ -426,10 +404,10 @@ class Importer(object):
                         # recursive calls.
                         tmp.append(item_id)
                     else:
-                        q = self._db.query(clazz).filter(clazz.id == item_id)
-                        try:
-                            tmp.append(q.one())
-                        except:
+                        item = self._db.query(clazz).get(item_id)
+                        if item:
+                            tmp.append(item)
+                        else:
                             log.warning(("Can not load '%s' id: %s "
                                          "Relation '%s' of '%s' not set"
                                          % (clazz, item_id, field, self._clazz)))

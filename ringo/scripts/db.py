@@ -217,12 +217,10 @@ def handle_db_savedata_command(args):
 
     if args.format == "json":
         exporter = JSONExporter(modul, serialized=False,
-                                relations=args.include_relations,
                                 config=export_config)
         data = prepare_data(data)
     else:
         exporter = CSVExporter(modul, serialized=False,
-                               relations=args.include_relations,
                                config=export_config)
     print exporter.perform(data)
 
@@ -295,22 +293,14 @@ def handle_db_uuid_command(args):
     modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == args.modul).all()[0].clazzpath
     modul = dynamic_import(modul_clazzpath)
     updated = 0
-    created = 0
     for item in session.query(modul).all():
-        if item.uuid:
-            if args.missing_only:
-                continue
-            else:
-                item.reset_uuid()
-                updated += 1
-        else:
-            item.reset_uuid()
-            created += 1
+        item.reset_uuid()
+        updated += 1
     try:
         transaction.commit()
-        print "Updated %s items, Created %s items" % (updated, created)
+        print "Updated %s items" % updated
     except:
-        print "Loading data failed!"
+        print "Reset UUIDs failed!"
 
 def _get_user_id_function():
     out = []

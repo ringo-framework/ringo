@@ -256,8 +256,17 @@ It is possible to export and import the data of modules in different formats.
 Supported formats are **JSON** and **CSV**. The default is to export and
 import JSON.
 
-Export can be triggered in the UI (If the user has sufficient permissions, and
-export is enabled) or using the CLI commands from :ref:`clidb` to
+In order to make items of a modul identifiable when exchanging data between
+different databases, each item is given a UUID upon creation. By default,
+these UUIDs are used as an identifier to decide during import
+whether an item is new or already present in the target database.
+An item without identifier (though it cannot be obtained by export)
+is always considered new. New items will be created in the
+target database. Already present items will be updated.
+
+Import and export can be triggered in the UI
+(if the user has sufficient permissions and it is enabled)
+or using the CLI commands from :ref:`clidb` to
 :ref:`clidb-export` and :ref:`clidb-import`.
 
 ************************************
@@ -2366,50 +2375,45 @@ The database can be downgraded by removing the last migration scripts::
 
 Export data
 ===========
-The data of a specfic module can be exported in a fixture by invoking the
+The data of a specfic module can be exported into a fixture by invoking the
 following command::
 
 
         ringo-admin db savedata <modulname> > fixture.json
 
 The default export format is JSON. You can change the export format to CSV by
-providing the `--format` option.
+providing `--format csv`.
 
-Only values of the given modul are exported. This includes *all*
-fields of the module but no relations. 
-
-You can include the relations as well in the export by setting the
-`--include-relations`. However this does not really include the related items
-and its values but only add another field in the export with the name of the
-relation in the modul. The value will be the string representation of the
-related item.
+Only values of the given modul are exported. By default, this includes *all*
+fields of the module (including foreign keys) but not the related objects.
 
 You can restrict the exported items by setting a `--filter` option. With a
 filter only items of the given modul matching the filter expression are
 exported. The filter expression is defined in the following syntax::
 
-        --filter search,field,isregex;[search,fieldname,isregex;...]
+        --filter expr,fieldname,isregex;[expr,fieldname,isregex;...]
 
-`search` defines the search expression and may be a regular expression if
-`isregexa` is "1" else "0". `fieldname` defines the name of the field on which the
-filter will apply. If field is empty, an item is exported if the search
+`expr` defines the search expression and may be a regular expression if
+`isregex` is "1" (otherwise set to "0"). `fieldname` defines the name of the
+field on which the filter will be applied. If `fieldname` is empty,
+an item is exported if the search
 expression matches any of the fields of the default overview configuration.
 
 .. note::
 
         Filtering is limited to fields which are confiured in the items
         :ref:`overview_config`. You can not filter on fields which are not
-        included in the overview. As a workaround you can setup hidden field
-        in the overview config.
+        included in the overview. As a workaround you can setup hidden fields
+        in the overview configuration.
 
-It is possible to define more than one filter. All filters must match to
+If more than one filter is given, all filters must match to
 include the item in the export.
 
-A More detailed configurations of the export can be done by providing a
-configuration file by setting the `--export-configuration` option. When using the
-configuration file all other options like (format, fields or
-include-relations) have no effect anymore. The default export format will be a
-nested JSON which will include all configured fields.
+A more detailed configuration of the export can be achieved by providing a
+configuration file with the `--export-configuration` option. When using the
+configuration file all other options (like `--format`) have no effect anymore.
+The export format will be a
+nested JSON including all configured fields.
 
 Details on the format of the export configuration file can be found in
 :ref:`exportconfiguration`.
@@ -2426,20 +2430,24 @@ Configuration File
    single: Import
 .. _clidb-import:
 
-Importing data
-==============
-The data of a specfic module can be imported in a fixture by invoking the
+Import data
+===========
+The data of a specfic module can be imported from a fixture by invoking the
 following command::
 
-        ringo-admin db loaddata --loadbyid <modulname> <fixture>
+        ringo-admin db loaddata <modulname> <fixture>
 
 This will load the data in the fixture and insert or update the items in the
 database. Deleting items is not supported.
 
-The option *--loadbyid* changes the mode how exiting items in the database are
-loaded for either update or, in case there is no record found, creating a new
-item. The default is loading mechanism is loading by  the items UUID. But this
-isn't practical for loading initial data.
+The option *--loadbyid* changes the mode how existing items in the database are
+identified for either update or, in case there is no record found, creating a new
+item. The default is to identify by the items UUID. With *--loadbyid*, the
+database primary key is used (which might differ between instances of your
+application!).
+
+The option *--format {json,csv}* specifies the format of the input data, the
+default being JSON.
 
 Fixing Sequences
 ================
@@ -2447,6 +2455,19 @@ After loading data into the database it is often needed to fix the sequences
 in the database to make the incremental counters work correct::
 
         ringo-admin db fixsequence
+
+
+.. _clidb-resetuuid:
+
+Generate UUIDs
+==============
+To regenerate UUIDs for the items of a given modul, use the following command::
+
+        ringo-admin db resetuuid <modulname>
+
+Note that this makes your items unidentifiable if you import previously exported
+fixtures.
+
 
 ****************
 ringo-admin user

@@ -11,10 +11,14 @@ Changes:
   (e.g 11.10.12 > 11.10.1912) to make. This fixes an error on sorting dates
   with the moment.js library which otherwise must guess if a date is in 1900
   or 2000.
+- Remove documentation of unimplemented export options --include-relations
+  and --fields.
 
 Bugfix:
 - Support dates in blob forms. When loading the json from the database we will
   now try to convert the date ("YYYY-MM-DD") into a python date object.
+- Always persist UUIDs of modul items instead of generating new UUIDs for
+  each export.
 
 1.17.1
 ======
