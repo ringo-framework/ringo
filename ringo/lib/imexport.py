@@ -7,9 +7,9 @@ import codecs
 import cStringIO
 import sets
 try:
-        import cStringIO as StringIO
+    import cStringIO as StringIO
 except ImportError:
-        import StringIO
+    import StringIO
 import xlsxwriter
 import sqlalchemy as sa
 
