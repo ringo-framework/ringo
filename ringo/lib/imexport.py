@@ -479,11 +479,13 @@ class JSONImporter(Importer):
                 importer = JSONImporter(clazz, db=self._db, use_strict=self._use_strict)
                 if not isinstance(obj[field], list):
                     import_data = [obj[field]]
-                    imported_item = importer.perform(json.dumps(import_data), load_key=self.load_key)
+                    imported_item = importer.perform(json.dumps(import_data),
+                                                     load_key=self.load_key)
                     obj[field] = imported_item[0][0]
                 elif obj[field] and isinstance(obj[field][0], dict):
                     import_data = obj[field]
-                    imported_item = importer.perform(json.dumps(import_data))
+                    imported_item = importer.perform(json.dumps(import_data),
+                                                     load_key=self.load_key)
                     obj[field] = [x[0] for x in imported_item]
         return obj
 
