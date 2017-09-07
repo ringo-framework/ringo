@@ -220,6 +220,8 @@ def setstandin(request, allowed_users=None):
             user_id = urlparse.urlparse(
                 request.GET.get('backurl')).path.split('/')[-1]
             user = request.db.query(User).get(user_id)
+            if not user:
+                raise HTTPBadRequest()
         # Otherwise the user sets the standin of his own group. In this
         # case the user is already in the request.
         else:
