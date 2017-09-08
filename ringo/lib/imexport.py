@@ -16,6 +16,7 @@ import sqlalchemy as sa
 from ringo.model.base import BaseItem
 from ringo.model.user import UserSetting
 from ringo.lib.helpers import serialize, deserialize
+from ringo.lib.sql import DBSession
 from ringo.lib.alchemy import get_props_from_instance
 
 log = logging.getLogger(__name__)
@@ -328,7 +329,7 @@ class CSVExporter(Exporter):
 class Importer(object):
     """Docstring for Importer."""
 
-    def __init__(self, clazz, db=None, use_strict=False):
+    def __init__(self, clazz, db=DBSession, use_strict=False):
         """@todo: to be defined1.
 
         :clazz: The clazz for which we will import data
@@ -375,8 +376,7 @@ class Importer(object):
         relations do not need to be handled as they should have a
         foreign key to the related item which is part of the items field
         anyway. It will replace the id values of the related items with
-        the loaded items. This only works if there is a db connection
-        available.
+        the loaded items.
 
         :obj: Deserialized dictionary from basic deserialisation
         :returns: Deserialized dictionary with additional MANYTOMANY
@@ -389,11 +389,9 @@ class Importer(object):
                 log.warning("Can not find field %s in %s" % (field, self._clazz_type))
                 continue
             # Handle all types of relations...
-            if ftype in ["MANYTOMANY", "MANYTOONE",
-                         "ONETOONE", "ONETOMANY"]:
-                # Remove the items from the list if there is no db
-                # connection or of there are not MANYTOMANY.
-                if not self._db or (ftype != "MANYTOMANY"):
+            if ftype in ["MANYTOMANY", "MANYTOONE", "ONETOONE", "ONETOMANY"]:
+                # Remove the items from the list if they are not MANYTOMANY.
+                if ftype != "MANYTOMANY":
                     del obj[field]
                     continue
                 clazz = getattr(self._clazz, field).mapper.class_
