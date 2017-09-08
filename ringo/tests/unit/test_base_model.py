@@ -32,12 +32,14 @@ class BaseItemTests(unittest.TestCase):
         result = unicode(item)
         self.assertEqual(result, u"modules")
 
-    def test_json(self):
-        from ringo.lib.imexport import JSONExporter
+    def test_json_imexport(self):
+        from ringo.lib.imexport import JSONExporter, JSONImporter
         item = self._load_item()
         exporter = JSONExporter(item.__class__)
         result = exporter.perform([item])
-        self.assertEqual(len(result), len('[{"str_repr": "%s|name", "description": "", "name": "modules", "label": "Modul", "default_gid": "", "id": "1", "label_plural": "Modules", "display": "admin-menu", "clazzpath": "ringo.model.modul.ModulItem", "uuid": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}]'))
+        imported = JSONImporter(item.__class__).perform(result)
+        self.assertEqual(len(imported), 1)
+        self.assertEqual(imported[0][1], "UPDATE")
 
     def test_get_form_config(self):
         from ringo.model.modul import ModulItem
