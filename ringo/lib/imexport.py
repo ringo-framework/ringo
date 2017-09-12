@@ -444,20 +444,16 @@ class Importer(object):
                 factory._use_strict = self._use_strict
             _ = translate
             for values in data:
-                if load_key == "uuid":
-                    id = values.get('uuid')
-                    if "id" in values:
-                        del values["id"]
-                    load_key = "uuid"
-                else:
-                    id = values.get(load_key)
+                id = values.get(load_key)
+                if load_key != "id" and "id" in values:
+                    # Only the database should manage primary keys.
+                    # Except when loading by primary key, allow trying to set it.
+                    del values["id"]
                 try:
                     item = factory.load(id, field=load_key)
                     item.set_values(values, use_strict=self._use_strict)
                     operation = _("UPDATE")
                 except sa.orm.exc.NoResultFound:
-                    if ("id" in values and not values["id"]):
-                        del values["id"]
                     item = factory.create(user=user, values=values)
                     self._db.add(item)
                     operation = _("CREATE")
