@@ -2,6 +2,7 @@ import logging
 import re
 import string
 import base64
+import sqlalchemy as sa
 from datetime import datetime
 from pyramid.threadlocal import get_current_request, get_current_registry
 import formbar.converters as converters
@@ -211,6 +212,19 @@ def dynamic_import(cl):
     return getattr(m, classname)
 
 
+def get_modul_by_name(modulname, session=DBSession):
+    # FIXME:
+    # Compatibilty mode. Older versions of Ringo added a 's' to the
+    # extensions modul name as Ringo usally uses the plural form.
+    # Newer versions use the configured extension name. So there
+    # might be a mixture of old and new modul names in the database.
+    # This code will handle this. (ti) <2016-01-04 13:50>
+    from ringo.model.modul import ModulItem
+    return session.query(ModulItem).filter(
+        sa.or_(ModulItem.name == modulname,
+               ModulItem.name == modulname + 's')).scalar()
+
+
 def import_model(clazzpath):
     """Will return the clazz defined by modul entry in the database of
     the given model. The clazzpath defines the base clazz which which
@@ -225,7 +239,7 @@ def import_model(clazzpath):
     orig_clazz = dynamic_import(clazzpath)
     # Load entry from the database for the given modul
     mid = orig_clazz._modul_id
-    modul = DBSession.query(ModulItem).filter_by(id=mid).one()
+    modul = DBSession.query(ModulItem).get(mid)
     if modul.clazzpath == clazzpath:
         return orig_clazz
     else:

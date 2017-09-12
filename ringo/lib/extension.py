@@ -29,10 +29,10 @@ To unregister a extension simply remove the extension from the
 
 """
 import logging
-import sqlalchemy as sa
 import transaction
 from ringo.lib.sql.db import DBSession
 from ringo.model.modul import ModulItem, ACTIONS
+from ringo.lib.helpers import get_modul_by_name
 
 log = logging.getLogger(name=__name__)
 
@@ -105,22 +105,6 @@ def _add_modul(config, actions, dbsession):
     return modul
 
 
-def _load_modul_by_name(session, modulname):
-    try:
-        # FIXME:
-        # Compatibilty mode. Older versions of Ringo added a 's' to the
-        # extensions modul name as Ringo usally uses the plural form.
-        # Newer versions use the configured extension name. So there
-        # might be a mixture of old and new modul names in the database.
-        # This code will handle this. (ti) <2016-01-04 13:50>
-        return session.query(ModulItem)\
-               .filter(sa.or_(ModulItem.name == modulname,
-                              ModulItem.name == modulname + 's'))\
-                .one()
-    except sa.orm.exc.NoResultFound:
-        return None
-
-
 def register_modul(config, modul_config, actions=None):
     return check_register_modul(config, modul_config, actions)
 
@@ -142,7 +126,7 @@ def check_register_modul(config, modul_config, actions=None):
     """
 
     modulname = modul_config.get('name')
-    modul = _load_modul_by_name(DBSession, modulname)
+    modul = get_modul_by_name(modulname)
     if modul:
         log.info("Extension '%s' OK" % modulname)
     else:

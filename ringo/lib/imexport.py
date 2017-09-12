@@ -454,8 +454,6 @@ class Importer(object):
                 else:
                     id = values.get(load_key)
                 try:
-                    # uuid might be empty for new items, which will raise an
-                    # error on loading.
                     item = factory.load(id, field=load_key)
                     item.set_values(values, use_strict=self._use_strict)
                     operation = _("UPDATE")

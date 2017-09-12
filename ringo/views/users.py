@@ -219,7 +219,9 @@ def setstandin(request, allowed_users=None):
         if request.GET.get('backurl'):
             user_id = urlparse.urlparse(
                 request.GET.get('backurl')).path.split('/')[-1]
-            user = request.db.query(User).filter(User.id == user_id).one()
+            user = request.db.query(User).get(user_id)
+            if not user:
+                raise HTTPBadRequest()
         # Otherwise the user sets the standin of his own group. In this
         # case the user is already in the request.
         else:
@@ -330,7 +332,6 @@ def removeaccount(request):
     _ = request.translate
     # Load the item return 400 if the item can not be found.
     factory = clazz.get_item_factory()
-
     try:
         item = factory.load(id, request.db)
         # Check authorisation
