@@ -344,8 +344,11 @@ def get_action_url(request, item, action):
     route_name = get_action_routename(item, action)
     if isinstance(item, object):
         # If backurl is set
-        clazz = request.context.__model__
-        backurl = request.session.get('%s.backurl' % clazz)
+        if hasattr(request.context, "__model__"):
+            clazz = request.context.__model__
+            backurl = request.session.get('%s.backurl' % clazz)
+        else:
+            backurl = None
         query = {}
         if backurl:
             query['backurl'] = backurl
