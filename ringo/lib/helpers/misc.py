@@ -343,7 +343,13 @@ def get_action_url(request, item, action):
     """
     route_name = get_action_routename(item, action)
     if isinstance(item, object):
-        return request.route_path(route_name, id=item.id)
+        # If backurl is set
+        clazz = request.context.__model__
+        backurl = request.session.get('%s.backurl' % clazz)
+        query = {}
+        if backurl:
+            query['backurl'] = backurl
+        return request.route_path(route_name, id=item.id, _query=query)
     # TODO: Is this code ever reached. See testcase (ti) <2014-02-25 23:17>
     return request.route_path(route_name)
 
