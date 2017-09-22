@@ -25,7 +25,7 @@ requires = [
     'dogpile.cache',
     'passlib',
     'python-dateutil',
-    'fuzzy',
+    'fuzzy==1.1',
     'python-Levenshtein',
     'webhelpers',
     'psycopg2',
