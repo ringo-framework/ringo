@@ -36,7 +36,10 @@ def deserialize(value, datatype):
 
         # We need the configured timezone to convert the datetime into
         # the correct timezone.
-        timezone = get_current_registry().settings.get("app.timezone")
+        if get_current_registry().settings:
+            timezone = get_current_registry().settings.get("app.timezone")
+        else:
+            timezone = None
         return converters.to_datetime(value, locale=None, timezone=timezone)
     elif datatype == "date":
         return converters.to_date(value)
