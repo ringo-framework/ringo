@@ -177,7 +177,7 @@ class Blob(object):
         this case we will split the attribute name by "." and try to get
         the attribute along the "." separated attribute name."""
         data = getattr(self, 'data')
-        if data and name.find(".") < 0:
+        if data:
             # In some cases it is needed to be able to trigger getting the
             # exapanded value without calling the get_value method. This can
             # be achieved by accessing the attribute with a special name.
@@ -186,16 +186,17 @@ class Blob(object):
             if name.endswith("__e_x_p_a_n_d"):
                 return self.get_value(name.replace("__e_x_p_a_n_d", ""),
                                       expand=True)
-            json_data = json.loads(getattr(self, 'data'))
-            if name in json_data:
-                json_value = json_data[name]
-                # Poor mans data type conversion.
-                if isinstance(json_value, basestring):
-                    # Try to convert the value into a date object if it
-                    # looks like a date.
-                    if re_date.match(json_value):
-                        return to_date(json_value)
-                return json_value
+            elif name.find(".") < 0:
+                json_data = json.loads(getattr(self, 'data'))
+                if name in json_data:
+                    json_value = json_data[name]
+                    # Poor mans data type conversion.
+                    if isinstance(json_value, basestring):
+                        # Try to convert the value into a date object if it
+                        # looks like a date.
+                        if re_date.match(json_value):
+                            return to_date(json_value)
+                    return json_value
         return get_raw_value(self, name)
 
     def set_values(self, values, use_strict=False):
