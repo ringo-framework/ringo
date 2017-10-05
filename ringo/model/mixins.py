@@ -177,7 +177,7 @@ class Blob(object):
         this case we will split the attribute name by "." and try to get
         the attribute along the "." separated attribute name."""
         data = getattr(self, 'data')
-        if data:
+        if data and name.find(".") < 0:
             # In some cases it is needed to be able to trigger getting the
             # exapanded value without calling the get_value method. This can
             # be achieved by accessing the attribute with a special name.
@@ -209,7 +209,7 @@ class Blob(object):
             # Ignore private form fields
             if key.startswith('_'):
                 continue
-            if key in columns:
+            if key in columns or key.find(".") > -1:
                 log.debug("Setting value '%s' for '%s' in DB" % (value, key))
                 setattr(self, key, value)
             else:
