@@ -2449,6 +2449,29 @@ application!).
 The option *--format {json,csv}* specifies the format of the input data, the
 default being JSON.
 
+A JSON file must contain a list with objects corresponding to the `modulname`.
+Nested JSON files including related objects (corresponding to a
+`relationship <http://docs.sqlalchemy.org/en/rel_1_1/orm/relationship_api.html#sqlalchemy.orm.relationship>`_
+in the model that points to instances of BaseItem) are allowed.
+In case the nested file contains the same object multiple times,
+because it is included as a relation of multiple parent or child items,
+it can only be considered as the same object, if it can be identified by
+either UUID or primary key (see above).
+Otherwise multiple items will be created in the database or the import will
+fail if this is not possible (e.g. due to integrity constraints).
+Nested JSON files will usually be created by export
+(see :ref:`exportconfiguration`).
+
+Items related via a many-to-many relationship with an import item
+can also be given as a list of primary keys that will be resolved during import.
+
+Note that foreign keys, if they are part of relations not included as objects
+in a JSON file, must satisfy constraints in the target database.
+E.g. if an imported item has a foreign key attribute and the related item
+is not part of the import file, the value of the foreign key attribute must
+equal an existing value in the referenced column in the target database.
+
+
 Fixing Sequences
 ================
 After loading data into the database it is often needed to fix the sequences

@@ -1,8 +1,8 @@
 import os
 import transaction
 from ringo.scripts.db import get_session
-from ringo.lib.helpers import get_app_location, dynamic_import
-from ringo.lib.extension import _add_modul, _load_modul_by_name
+from ringo.lib.helpers import get_app_location, dynamic_import, get_modul_by_name
+from ringo.lib.extension import _add_modul
 from ringo.model import extensions
 
 
@@ -49,7 +49,7 @@ def handle_ext_init_command(args):
     session = get_session(os.path.join(*path))
     for ext in extensions:
         if ext == args.name:
-            if _load_modul_by_name(session, ext.replace("ringo_", "")):
+            if get_modul_by_name(ext.replace("ringo_", ""), session):
                 print "Extension %s already added!" % args.name
             else:
                 extension = dynamic_import("%s." % args.name)
@@ -65,7 +65,7 @@ def handle_ext_delete_command(args):
     path.append(get_app_location(args.app))
     path.append(args.config)
     session = get_session(os.path.join(*path))
-    modul = _load_modul_by_name(session, args.name.replace("ringo_", ""))
+    modul = get_modul_by_name(args.name.replace("ringo_", ""), session)
     if modul:
         if args.name in extensions:
             session.delete(modul)

@@ -47,6 +47,7 @@ def _handle_redirect(request):
         # Redirect to page where the user initialy came from to delete
         # the current item. The url depend on how the item is deleted.
         action = re.compile("^\/(\w+)\/(\w+).*")
+        action_backurl = re.compile(".*backurl=%2F(\w+)%2F(\w+)%2F.*")
         url = history.last() or ""
         action_match = action.match(remove_virtual_path(request, url))
 
@@ -56,9 +57,19 @@ def _handle_redirect(request):
             while 1:
                 url = history.pop()
                 if url:
-                    m = action.match(remove_virtual_path(request, url))
+                    clean_path = remove_virtual_path(request, url)
+                    m = action.match(clean_path)
+                    x = action_backurl.match(clean_path)
                     if m and (m.group(1) != modulname or m.group(2) == "list"):
-                        break
+                        if x:
+                            # Has a backurl. Check if the backurl
+                            # indicates that the user came from the
+                            # recently deleted item and therefore this
+                            # URL is very likely to be invalid too.
+                            if (x.group(1) != modulname or x.group(2) == "list"):
+                                break
+                        else:
+                            break
                 else:
                     url = request.route_path("home")
                     break

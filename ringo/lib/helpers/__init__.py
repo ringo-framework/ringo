@@ -31,6 +31,7 @@ from ringo.lib.helpers.misc import (
     get_raw_value,
     set_raw_value,
     dynamic_import,
+    get_modul_by_name,
     import_model,
     get_item_modul,
     get_modules,

@@ -2,9 +2,11 @@ import urlparse
 import re
 
 DOWNLOAD_URL = re.compile(".*\/download\/[0-9]+")
-STATIC_URL = re.compile("\/\w+-static\/.*")
-SET_CURRENT_FORM = re.compile("\/set_current_form_page.*")
+STATIC_URL = re.compile(".*\/\w+-static\/.*")
+SET_CURRENT_FORM = re.compile(".*\/set_current_form_page.*")
+REST_URLS = re.compile(".*\/rest\/.*")
 FAVICON = re.compile(".*\/favicon\.ico")
+
 
 def handle_history(event):
     """Is called per subscriber on NewResponse event."""
@@ -48,6 +50,7 @@ class History:
         if (DOWNLOAD_URL.match(normalized_url) or
            STATIC_URL.match(normalized_url) or
            SET_CURRENT_FORM.match(normalized_url) or
+           REST_URLS.match(normalized_url) or
            FAVICON.match(normalized_url)):
             return
 

@@ -128,10 +128,7 @@ def load_user(login):
     :returns: User or None
 
     """
-    try:
-        return DBSession.query(User).filter_by(login=login).one()
-    except NoResultFound:
-        return None
+    return DBSession.query(User).filter_by(login=login).scalar()
 
 
 def csrf_token_validation(event):

@@ -5,7 +5,6 @@ import os
 import time
 import json
 from sqlalchemy import engine_from_config
-from sqlalchemy.orm.exc import NoResultFound
 import transaction
 
 from invoke import run
@@ -17,7 +16,7 @@ from pyramid.paster import (
     setup_logging,
 )
 from ringo.lib.sql import DBSession, NTDBSession, setup_db_session
-from ringo.lib.helpers import get_app_location, dynamic_import
+from ringo.lib.helpers import get_app_location, dynamic_import, get_modul_by_name
 from ringo.lib.imexport import (
     JSONExporter, JSONImporter,
     CSVExporter, CSVImporter,
@@ -96,6 +95,17 @@ def get_session(config_file, transactional=True):
     else:
         NTDBSession.configure(bind=engine)
         return NTDBSession
+
+
+def get_modul(modulname, session):
+    modul_item = get_modul_by_name(modulname, session)
+    if not modul_item:
+        modules = [m.name for m in session.query(ModulItem).all()]
+        msg = "Can not load modul '{}'. Please choose one from [{}].".format(
+            modulname, ", ".join(modules))
+        print >> sys.stderr, msg
+        sys.exit(1)
+    return dynamic_import(modul_item.clazzpath)
 
 
 def copy_initial_migration_scripts(args):
@@ -189,8 +199,7 @@ def handle_db_savedata_command(args):
     path = []
     path.append(args.config)
     session = get_session(os.path.join(*path))
-    modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == args.modul).all()[0].clazzpath
-    modul = dynamic_import(modul_clazzpath)
+    modul = get_modul(args.modul, session)
     data = session.query(modul).order_by(modul.id).all()
 
     if args.filter:
@@ -256,19 +265,11 @@ def handle_db_loaddata_command(args):
 
 
 def get_importer(session, modulname, fmt):
-    try:
-        modul_clazzpath = session.query(ModulItem).filter(
-            ModulItem.name == modulname).one().clazzpath
-        modul = dynamic_import(modul_clazzpath)
-        if fmt == "json":
-            return JSONImporter(modul, session)
-        else:
-            return CSVImporter(modul, session)
-    except NoResultFound:
-        modules = [m.name for m in session.query(ModulItem).all()]
-        print "Can not load modul '{}'. Please choose one from [{}].".format(
-            modulname, ", ".join(modules))
-        sys.exit(1)
+    modul = get_modul(modulname, session)
+    if fmt == "json":
+        return JSONImporter(modul, session)
+    else:
+        return CSVImporter(modul, session)
 
 
 def do_import(session, importer, data, load_key):
@@ -279,7 +280,6 @@ def do_import(session, importer, data, load_key):
     for item, action in items:
         # Add all new items to the session
         if action.find("CREATE") > -1:
-            session.add(item)
             created += 1
         else:
             updated += 1
@@ -290,8 +290,7 @@ def handle_db_uuid_command(args):
     path = []
     path.append(args.config)
     session = get_session(os.path.join(*path))
-    modul_clazzpath = session.query(ModulItem).filter(ModulItem.name == args.modul).all()[0].clazzpath
-    modul = dynamic_import(modul_clazzpath)
+    modul = get_modul(args.modul, session)
     updated = 0
     for item in session.query(modul).all():
         item.reset_uuid()

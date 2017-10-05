@@ -16,6 +16,7 @@ import sqlalchemy as sa
 from ringo.model.base import BaseItem
 from ringo.model.user import UserSetting
 from ringo.lib.helpers import serialize, deserialize
+from ringo.lib.sql import DBSession
 from ringo.lib.alchemy import get_props_from_instance
 
 log = logging.getLogger(__name__)
@@ -216,8 +217,7 @@ class Exporter(object):
         exporter specific format (e.g. JSON).
 
         :items: Items which will be exported.
-        :returns: Exported items with UUIDs added where missing
-                  (format depends on the export configuration).
+        :returns: Exported items (format depends on the export configuration).
 
         """
         data = []
@@ -328,12 +328,15 @@ class CSVExporter(Exporter):
 class Importer(object):
     """Docstring for Importer."""
 
-    def __init__(self, clazz, db=None, use_strict=False):
+    def __init__(self, clazz, db=DBSession, use_strict=False):
         """@todo: to be defined1.
 
-        :clazz: The clazz for which we will import data
+        :clazz: The class (inheriting from BaseItem) of the import data
 
         """
+        if not issubclass(clazz, BaseItem):
+            raise TypeError("%s is not a subclass of BaseItem" % clazz)
+
         self._clazz = clazz
         self._db = db
         self._clazz_type = self._get_types(clazz)
@@ -371,46 +374,46 @@ class Importer(object):
         return obj
 
     def _deserialize_relations(self, obj):
-        """Will deserialize items in a MANYTOMANY relation. Other
-        relations do not need to be handled as they should have a
-        foreign key to the related item which is part of the items field
-        anyway. It will replace the id values of the related items with
-        the loaded items. This only works if there is a db connection
-        available.
+        """Deserialize items in a MANYTOMANY relation given as a list
+        of primary keys. It will replace the id values of the related items with
+        the loaded items.
+        Other types of relations have a foreign key, which is an attribute at
+        one side of the relation anyway. Thus, the relationship can be
+        established by importing both sides of the relationship.
 
         :obj: Deserialized dictionary from basic deserialisation
         :returns: Deserialized dictionary with additional MANYTOMANY
         relations.
         """
         for field in obj.keys():
+            # Just keep already deserialized relations
+            if (isinstance(obj[field], BaseItem)
+                or isinstance(obj[field], list) and all(
+                    isinstance(i, BaseItem) for i in obj[field])):
+                continue
+
             try:
                 ftype = self._clazz_type[field]
             except KeyError:
-                log.warning("Can not find field %s in %s" % (field, self._clazz_type))
+                log.warning("Can not find field %s in %s"
+                            % (field, self._clazz_type))
                 continue
+
             # Handle all types of relations...
-            if ftype in ["MANYTOMANY", "MANYTOONE",
-                         "ONETOONE", "ONETOMANY"]:
-                # Remove the items from the list if there is no db
-                # connection or of there are not MANYTOMANY.
-                if not self._db or (ftype != "MANYTOMANY"):
-                    del obj[field]
-                    continue
+            if ftype in ["MANYTOONE", "ONETOONE", "ONETOMANY"]:
+                # Remove related items from object if they are not MANYTOMANY.
+                del obj[field]
+            elif ftype == "MANYTOMANY":
                 clazz = getattr(self._clazz, field).mapper.class_
                 tmp = []
                 for item_id in obj[field]:
-                    if isinstance(item_id, BaseItem):
-                        # Item has been already be deserialized in the
-                        # recursive calls.
-                        tmp.append(item_id)
+                    item = self._db.query(clazz).get(item_id)
+                    if item:
+                        tmp.append(item)
                     else:
-                        item = self._db.query(clazz).get(item_id)
-                        if item:
-                            tmp.append(item)
-                        else:
-                            log.warning(("Can not load '%s' id: %s "
-                                         "Relation '%s' of '%s' not set"
-                                         % (clazz, item_id, field, self._clazz)))
+                        log.warning(("Can not load '%s' id: %s "
+                                     "Relation '%s' of '%s' not set"
+                                     % (clazz, item_id, field, self._clazz)))
                 obj[field] = tmp
         return obj
 
@@ -438,34 +441,27 @@ class Importer(object):
 
         """
         self.load_key = load_key
-        with self._db.no_autoflush:
-            data = self.deserialize(data)
-            imported_items = []
-            factory = self._clazz.get_item_factory()
-            if self._use_strict:
-                factory._use_strict = self._use_strict
-            _ = translate
-            for values in data:
-                if load_key == "uuid":
-                    id = values.get('uuid')
-                    if "id" in values:
-                        del values["id"]
-                    load_key = "uuid"
-                else:
-                    id = values.get(load_key)
-                try:
-                    # uuid might be empty for new items, which will raise an
-                    # error on loading.
-                    item = factory.load(id, field=load_key)
-                    item.set_values(values, use_strict=self._use_strict)
-                    operation = _("UPDATE")
-                except sa.orm.exc.NoResultFound:
-                    if ("id" in values and not values["id"]):
-                        del values["id"]
-                    item = factory.create(user=user, values=values)
-                    self._db.add(item)
-                    operation = _("CREATE")
-                imported_items.append((item, operation))
+        data = self.deserialize(data)
+        imported_items = []
+        factory = self._clazz.get_item_factory()
+        if self._use_strict:
+            factory._use_strict = self._use_strict
+        _ = translate
+        for values in data:
+            id = values.get(load_key)
+            if load_key != "id" and "id" in values:
+                # Only the database should manage primary keys.
+                # Except when loading by primary key, allow trying to set it.
+                del values["id"]
+            try:
+                item = factory.load(id, field=load_key)
+                item.set_values(values, use_strict=self._use_strict)
+                operation = _("UPDATE")
+            except sa.orm.exc.NoResultFound:
+                item = factory.create(user=user, values=values)
+                self._db.add(item)
+                operation = _("CREATE")
+            imported_items.append((item, operation))
         return imported_items
 
 
@@ -477,12 +473,13 @@ class JSONImporter(Importer):
             if isinstance(obj[field], (dict, list)):
                 clazz = getattr(self._clazz, field).mapper.class_
                 importer = JSONImporter(clazz, db=self._db, use_strict=self._use_strict)
-                if not isinstance(obj[field], list):
+                if isinstance(obj[field], dict):
                     import_data = [obj[field]]
                     imported_item = importer.perform(json.dumps(import_data),
                                                      load_key=self.load_key)
                     obj[field] = imported_item[0][0]
-                elif obj[field] and isinstance(obj[field][0], dict):
+                elif (obj[field] and all(
+                        isinstance(i, dict) for i in obj[field])):
                     import_data = obj[field]
                     imported_item = importer.perform(json.dumps(import_data),
                                                      load_key=self.load_key)
