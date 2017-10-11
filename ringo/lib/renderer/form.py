@@ -71,8 +71,9 @@ def get_link_url(item, request, actionname=None, backurl=False):
             return None
 
         query = {}
-        if not readmode and backurl:
-            query['backurl'] = request.current_route_path()
+        if backurl:
+            clazz = request.context.__model__
+            query['backurl'] = request.session.get('%s.backurl' % clazz) or request.current_route_path()
         return request.route_path(route_name, id=item.id, _query=query)
     return None
 

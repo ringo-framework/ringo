@@ -36,7 +36,10 @@ def deserialize(value, datatype):
 
         # We need the configured timezone to convert the datetime into
         # the correct timezone.
-        timezone = get_current_registry().settings.get("app.timezone")
+        if get_current_registry().settings:
+            timezone = get_current_registry().settings.get("app.timezone")
+        else:
+            timezone = None
         return converters.to_datetime(value, locale=None, timezone=timezone)
     elif datatype == "date":
         return converters.to_date(value)
@@ -343,7 +346,16 @@ def get_action_url(request, item, action):
     """
     route_name = get_action_routename(item, action)
     if isinstance(item, object):
-        return request.route_path(route_name, id=item.id)
+        # If backurl is set
+        if hasattr(request.context, "__model__"):
+            clazz = request.context.__model__
+            backurl = request.session.get('%s.backurl' % clazz)
+        else:
+            backurl = None
+        query = {}
+        if backurl:
+            query['backurl'] = backurl
+        return request.route_path(route_name, id=item.id, _query=query)
     # TODO: Is this code ever reached. See testcase (ti) <2014-02-25 23:17>
     return request.route_path(route_name)
 
