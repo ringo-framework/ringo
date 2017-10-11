@@ -227,19 +227,11 @@ def handle_db_savedata_command(args):
     if args.format == "json":
         exporter = JSONExporter(modul, serialized=False,
                                 config=export_config)
-        data = prepare_data(data)
     else:
         exporter = CSVExporter(modul, serialized=False,
                                config=export_config)
     print exporter.perform(data)
 
-def prepare_data(applications):
-    import datetime
-    for application in applications:
-        for field, value in application.__dict__.items():
-            if isinstance(value, datetime.date):
-                application.__setattr__(field, str(value))
-    return applications
 
 def handle_db_loaddata_command(args):
     path = []
