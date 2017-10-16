@@ -245,7 +245,7 @@ def confirm_user(request):
         msg = _("The user has beed successfull confirmed.")
     else:
         msg = _("The user was not confirmed. Maybe the confirmation"
-                " token was not valid?")
+                " token was not valid or the user is already confirmed?")
     return {'msg': msg, 'success': success}
 
 

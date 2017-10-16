@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-07-25 22:15+0200\n"
+"POT-Creation-Date: 2017-10-16 14:08+0200\n"
 "PO-Revision-Date: 2017-05-11 16:57+0200\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language: de\n"
@@ -21,23 +21,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.4.0\n"
 
-#: ringo/lib/imexport.py:481
+#: ringo/lib/imexport.py:459
 msgid "UPDATE"
 msgstr "AKTUALISIERUNG"
 
-#: ringo/lib/imexport.py:487
+#: ringo/lib/imexport.py:463
 msgid "CREATE"
 msgstr "ANLEGEN"
 
-#: ringo/lib/renderer/dialogs.py:84
+#: ringo/lib/renderer/dialogs.py:83
 msgid "Confirm ${Action}"
 msgstr "Bestätigen ${Action}"
 
-#: ringo/lib/renderer/dialogs.py:104
+#: ringo/lib/renderer/dialogs.py:103
 msgid "Do you really want to ${action} the following ${item} items?"
 msgstr "Wollen Sie wirklich die folgenden ${item} Einträge ${action}?"
 
-#: ringo/lib/renderer/dialogs.py:114
+#: ringo/lib/renderer/dialogs.py:113
 msgid ""
 "Please press \"${Action}\" to ${action} the item. Press \"Cancel\" to "
 "cancel the action."
@@ -493,7 +493,7 @@ msgstr ""
 " Sie erhalten im Anschluss eine Email mit einem Bestätigungslink, um die "
 "Registrierung abzuschließen."
 
-#: ringo/templates/auth/register_user.mako:20 ringo/views/auth.py:223
+#: ringo/templates/auth/register_user.mako:20 ringo/views/auth.py:226
 msgid ""
 "User has been created and a confirmation mail was sent to the users email"
 " adress. Please check your email."
@@ -834,47 +834,49 @@ msgstr "FEHLER: %s"
 msgid "Login failed!"
 msgstr "Anmeldung fehlgeschlagen"
 
-#: ringo/views/auth.py:92
+#: ringo/views/auth.py:95
 msgid "Login was successfull"
 msgstr "Anmeldung war erfolgreich"
 
-#: ringo/views/auth.py:112
+#: ringo/views/auth.py:115
 msgid "Logout was successfull"
 msgstr "Abmeldung war erfolgreich"
 
-#: ringo/views/auth.py:157
+#: ringo/views/auth.py:160
 msgid "There is already a user with this name"
 msgstr "Es gibt bereits einen Nutzer mit dieser Anmeldekennung"
 
-#: ringo/views/auth.py:161 ringo/views/users.py:129 ringo/views/users.py:159
-#: ringo/views/users.py:280
+#: ringo/views/auth.py:164 ringo/views/users.py:129 ringo/views/users.py:159
+#: ringo/views/users.py:282
 msgid "Password must be at least 12 characters long."
 msgstr "Passwort muss mindestens 12 Zeichen lang sein."
 
-#: ringo/views/auth.py:165 ringo/views/users.py:133 ringo/views/users.py:163
-#: ringo/views/users.py:284
+#: ringo/views/auth.py:168 ringo/views/users.py:133 ringo/views/users.py:163
+#: ringo/views/users.py:286
 msgid "Password must contain at least 2 non-letters."
 msgstr "Passwort muss mindestens 2 Nicht-Buchstaben enthalten."
 
-#: ringo/views/auth.py:211
+#: ringo/views/auth.py:214
 msgid "Confirm user registration"
 msgstr "Bestätigung Nutzerregistrierung"
 
-#: ringo/views/auth.py:242
+#: ringo/views/auth.py:245
 msgid "The user has beed successfull confirmed."
 msgstr "Der Zugang wurde erfolgreich bestätigt."
 
-#: ringo/views/auth.py:244
-msgid "The user was not confirmed. Maybe the confirmation token was not valid?"
+#: ringo/views/auth.py:247
+msgid ""
+"The user was not confirmed. Maybe the confirmation token was not valid or"
+" the user is already confirmed?"
 msgstr ""
 "Der Zugang konnte nicht bestätigt werden. Vielleicht ist das Best"
-"ätigungs-Token nicht gülitg?"
+"ätigungs-Token nicht gültig oder der Benutzer wurde schon bestätigt."
 
-#: ringo/views/auth.py:270
+#: ringo/views/auth.py:273
 msgid "Password reset request"
 msgstr "Anfrage Passwort zurücksetzen"
 
-#: ringo/views/auth.py:289
+#: ringo/views/auth.py:292
 msgid ""
 "If the user has been found together with configured e-mail, a "
 "confirmation mail for resetting the password has been sent. Please check "
@@ -884,11 +886,11 @@ msgstr ""
 "Bestätigungsmail zum Zurücksetzen des Passworts verschickt worden. Bitte "
 "prüfen Sie ihr E-Mail Postfach."
 
-#: ringo/views/auth.py:310
+#: ringo/views/auth.py:313
 msgid "Password has been reseted"
 msgstr "Passwort wurde zurückgesetzt"
 
-#: ringo/views/auth.py:320
+#: ringo/views/auth.py:323
 msgid ""
 "Password was resetted and sent to the users email address. Please check "
 "your email."
@@ -896,7 +898,7 @@ msgstr ""
 "Das Passwort wurde zurückgesetzt und an die E-Mail Adresse des Nutzer "
 "geschickt. Bitte prüfen Sie ihre E-Mail."
 
-#: ringo/views/auth.py:324
+#: ringo/views/auth.py:327
 msgid "Password was not resetted. Maybe the request token was not valid?"
 msgstr ""
 "Das Passwort wurde nicht zurückgesetzt. Vielleicht ist das Token nicht "
@@ -966,34 +968,34 @@ msgstr "Fehler beim Validieren von ${item_type}."
 msgid "Error on validation ${item_type} \"${item}\"."
 msgstr "Fehler beim Validieren von ${item_type} „${item}“."
 
-#: ringo/views/users.py:124 ringo/views/users.py:154 ringo/views/users.py:403
-#: ringo/views/users.py:423
+#: ringo/views/users.py:124 ringo/views/users.py:154 ringo/views/users.py:404
+#: ringo/views/users.py:424
 msgid "This name is already in use, please use something unique."
 msgstr ""
 "Dieser Name wird bereits benutzt, bitte nehmen Sie einen eindeutigen "
 "Namen."
 
-#: ringo/views/users.py:277
+#: ringo/views/users.py:279
 msgid "The given password is not correct"
 msgstr "Das angegebene Passwort ist nicht korrekt"
 
-#: ringo/views/users.py:296
+#: ringo/views/users.py:298
 msgid "Changed password for \"${item}\" successfull."
 msgstr "Password für „${item}“ erfolgreich geändert."
 
-#: ringo/views/users.py:306
+#: ringo/views/users.py:308
 msgid "Error on changing the password for \"${item}\"."
 msgstr "Fehler bei der Änderung des Passworts für „${item}“."
 
-#: ringo/views/users.py:359
+#: ringo/views/users.py:360
 msgid "Deleting the account of \"${item}\" failed."
 msgstr "Löschen des Zugang von \"${item}\" ist fehlgeschlagen."
 
-#: ringo/views/base/delete.py:89
+#: ringo/views/base/delete.py:98
 msgid "Can not delete ${item_type} items."
 msgstr "Kann ${item_type} Einträge nicht löschen."
 
-#: ringo/views/base/delete.py:91
+#: ringo/views/base/delete.py:100
 msgid ""
 "There has been an integrity error which prevents the request to be "
 "fulfilled. There are still depended items on the item to be deleted. "
@@ -1005,7 +1007,7 @@ msgstr ""
 "Eintrag. Bitte entfernen Sie alle abhängigen Beziehungen zu diesem "
 "Eintrag und versuchen Sie es noch einmal. Hinweis: ${error}"
 
-#: ringo/views/base/delete.py:104
+#: ringo/views/base/delete.py:113
 msgid "Deleted ${num} ${item_type} successfully."
 msgstr "${num} ${item_type} erfolgreich gelöscht."
 
