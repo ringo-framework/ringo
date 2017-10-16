@@ -132,10 +132,11 @@ $( document ).ready(function() {
         window.open(url,"_self");
     });
     $("a.modalform").click(openModalForm);
-        $("a.modalform").click(function(event) {
+    $("a.modalform").click(function(event) {
             event.preventDefault();
             return false;
     });
+
 
     // Check the initial values of the form and warn the user if the leaves
     // the page without saving the form.
