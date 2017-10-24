@@ -286,7 +286,8 @@ class XLSXExporter(Exporter):
             row = 1
             for item in data:
                 for key in keys:
-                    sheet.write(row, col, item[key])
+                    value = serialize(item[key])
+                    sheet.write(row, col, value)
                     col += 1
                 row += 1
                 col = 0
