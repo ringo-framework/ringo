@@ -21,6 +21,7 @@ def get_prop_from_instance(item, name, include_relations=False):
         if prop.key == name:
             return prop
 
+
 def get_columns_from_instance(item, include_relations=False):
     return get_columns_from_clazz(item.__class__, include_relations)
 
@@ -29,6 +30,13 @@ def get_relations_from_clazz(clazz):
     only_columns = set(get_columns_from_clazz(clazz))
     with_relations = set(get_columns_from_clazz(clazz, True))
     return with_relations-only_columns
+
+
+def get_relprops_from_clazz(clazz):
+    only_columns = set(get_props_from_clazz(clazz))
+    with_relations = set(get_props_from_clazz(clazz, True))
+    return with_relations-only_columns
+
 
 def is_relation(clazz, name):
     return name in get_relations_from_clazz(clazz)
