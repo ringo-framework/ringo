@@ -388,8 +388,8 @@ class Importer(object):
         """
         for field in obj.keys():
             # Just keep already deserialized relations
-            if (isinstance(obj[field], BaseItem)
-                or isinstance(obj[field], list) and all(
+            if (isinstance(obj[field], BaseItem) or
+                isinstance(obj[field], list) and all(
                     isinstance(i, BaseItem) for i in obj[field])):
                 continue
 
