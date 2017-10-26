@@ -182,6 +182,17 @@ class Exporter(object):
         self._serialized = serialized
         self._config = config
 
+    def _collect_keys(self, data):
+        """The function will collect all keys (fields) within the given
+        items. This is needed in case of blobform items as those items
+        has a generic data field which may contain variable number of
+        fields depending if the item has a value for the fields or
+        not."""
+        keys = sets.Set()
+        for item in data:
+            keys = keys.union(item.keys())
+        return keys
+
     def serialize(self, data):
         """Method to convert the given python listing with the exported
         items into a serialized form. This is depended on the concrete
@@ -273,7 +284,7 @@ class XLSXExporter(Exporter):
         output = StringIO.StringIO()
         book = xlsxwriter.Workbook(output)
         if len(data) > 0:
-            keys = sorted(data[0].keys())
+            keys = sorted(self._collect_keys(data))
             sheet = book.add_worksheet(self._clazz.__tablename__)
             row = 0
             col = 0
@@ -286,7 +297,7 @@ class XLSXExporter(Exporter):
             row = 1
             for item in data:
                 for key in keys:
-                    value = serialize(item[key])
+                    value = serialize(item.get(key))
                     sheet.write(row, col, value)
                     col += 1
                 row += 1
@@ -305,17 +316,6 @@ class JSONExporter(Exporter):
 
 class CSVExporter(Exporter):
     """Docstring for CSVExporter. """
-
-    def _collect_keys(self, data):
-        """The function will collect all keys (fields) within the given
-        items. This is needed in case of blobform items as those items
-        has a generic data field which may contain variable number of
-        fields depending if the item has a value for the fields or
-        not."""
-        keys = sets.Set()
-        for item in data:
-            keys = keys.union(item.keys())
-        return keys
 
     def serialize(self, data):
         outfile = cStringIO.StringIO()
