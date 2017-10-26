@@ -17,7 +17,10 @@ from ringo.model.base import BaseItem
 from ringo.model.user import UserSetting
 from ringo.lib.helpers import serialize, deserialize
 from ringo.lib.sql import DBSession
-from ringo.lib.alchemy import get_props_from_instance
+from ringo.lib.alchemy import (
+    get_props_from_instance,
+    get_relprops_from_clazz
+)
 
 log = logging.getLogger(__name__)
 
@@ -231,6 +234,7 @@ class Exporter(object):
         :returns: Exported items (format depends on the export configuration).
 
         """
+        self._items = items
         data = []
         # Check if the given item(s) is a list. If not we put it into a
         # temporary list.
@@ -280,6 +284,29 @@ class Exporter(object):
 class XLSXExporter(Exporter):
     """Docstring for XLSXExporter. """
 
+    def _strip_s_from_tablename(self, table):
+        return table[0:-1]
+
+    def write_rel_tables(self, book):
+        props = get_relprops_from_clazz(self._clazz)
+        for p in props:
+            if p.direction.name != "MANYTOMANY":
+                continue
+            rel_table = self._strip_s_from_tablename(p.key)
+            item_table = self._strip_s_from_tablename(self._clazz.__tablename__)
+            sheet = book.add_worksheet("nm_{}_{}".format(item_table, rel_table))
+            sheet.write(0, 0, "{}_id".format(item_table))
+            sheet.write(0, 1, "{}_id".format(rel_table))
+            row = 1
+            for item in self._items:
+                relation = getattr(item, p.key)
+                if isinstance(relation, list):
+                    for ritem in relation:
+                        sheet.write(row, 0, item.id)
+                        sheet.write(row, 1, ritem.id)
+            row += 1
+        return book
+
     def serialize(self, data):
         output = StringIO.StringIO()
         book = xlsxwriter.Workbook(output)
@@ -302,6 +329,7 @@ class XLSXExporter(Exporter):
                     col += 1
                 row += 1
                 col = 0
+        book = self.write_rel_tables(book)
         book.close()
         output.seek(0)
         return output.read()
