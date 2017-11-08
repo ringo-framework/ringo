@@ -1,3 +1,4 @@
+<div id="statefield">
 % if field.renderer.layout == "button":
   <label for="${field.id}">${_(field.label)}</label>
   <div class="readonlyfield" name="${field.name}">
@@ -68,13 +69,32 @@
   </div>
 </div>
 % endif
+</div>
+<div id="statefieldinfo" class="alert alert-info" role="info">
+  ${_('Form must not have unsaved changes. Please save outstanding changes before changing the state.')}
+</div>
 
 <script>
-  $("#${field.id}").change(function() {
-    var selected = $(this).val();
-    $(".result-state").each(function(selected) {
-      $(this).hide();
+  $(function() {
+    $("#${field.id}").change(function() {
+      var selected = $(this).val();
+      $(".result-state").each(function(selected) {
+        $(this).hide();
+      });
+      $("#result-state-"+selected).show();
     });
-    $("#result-state-"+selected).show();
+    $("div.formbar-form").on("clean", function() {
+        $('#statefieldinfo').hide();
+        $('#statefield button, #statefield select').each(function() {
+          $(this).prop('disabled', false);
+        })
+    });
+    $("div.formbar-form").on("dirty", function() {
+        $('#statefieldinfo').show();
+        $('#statefield button, #statefield select').each(function() {
+          $(this).prop('disabled', true);
+        })
+    });
   });
+
 </script>
