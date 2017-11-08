@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Ringo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-10-16 14:08+0200\n"
+"POT-Creation-Date: 2017-11-08 12:06+0100\n"
 "PO-Revision-Date: 2017-05-11 16:57+0200\n"
 "Last-Translator: Torsten Irländer <torsten@irlaender.de>\n"
 "Language: de\n"
@@ -21,11 +21,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.4.0\n"
 
-#: ringo/lib/imexport.py:459
+#: ringo/lib/imexport.py:460
 msgid "UPDATE"
 msgstr "AKTUALISIERUNG"
 
-#: ringo/lib/imexport.py:463
+#: ringo/lib/imexport.py:464
 msgid "CREATE"
 msgstr "ANLEGEN"
 
@@ -674,37 +674,43 @@ msgstr "Druckkonfiguration für"
 
 #. Label for description field in form config
 #. Label for description column in overview table config
-#: ringo/templates/internal/statefield.mako:10 ringo/views/forms/forms.xml:2
+#: ringo/templates/internal/statefield.mako:11 ringo/views/forms/forms.xml:2
 #: ringo/views/forms/modules.xml:4 ringo/views/forms/roles.xml:6
 #: ringo/views/forms/usergroups.xml:3 ringo/views/tables/forms.json:3
 msgid "Description"
 msgstr "Beschreibung"
 
-#: ringo/templates/internal/statefield.mako:14
+#: ringo/templates/internal/statefield.mako:15
 msgid "Please select one of the following steps:"
 msgstr "Bitte wählen Sie einen der folgenden Schritte:"
 
 #. Label for review_state column in overview table config
-#: ringo/templates/internal/statefield.mako:25 ringo/views/forms/forms.xml:10
+#: ringo/templates/internal/statefield.mako:26 ringo/views/forms/forms.xml:10
 #: ringo/views/tables/forms.json:5
 msgid "State"
 msgstr "Status"
 
-#: ringo/templates/internal/statefield.mako:40
+#: ringo/templates/internal/statefield.mako:41
 msgid "State transition"
 msgstr "Zustandswechsel"
 
-#: ringo/templates/internal/statefield.mako:42
+#: ringo/templates/internal/statefield.mako:43
 msgid "No Transition"
 msgstr "Kein Wechsel"
 
-#: ringo/templates/internal/statefield.mako:52
+#: ringo/templates/internal/statefield.mako:53
 msgid "Current state"
 msgstr "Aktueller Zustand"
 
-#: ringo/templates/internal/statefield.mako:59
+#: ringo/templates/internal/statefield.mako:60
 msgid "Resulting State"
 msgstr "Resultierender Zustand"
+
+#: ringo/templates/internal/statefield.mako:74
+msgid ""
+"Please save outstanding changes before changing the state. To discard the"
+" changes please reload the page."
+msgstr "Bitte speicher Sie ausstehende Änderungen bevor Sie den Status ändern. Um die gemachte Änderungen zu verwerfen, laden Sie diese Seite neu."
 
 #: ringo/templates/mails/password_reminder.mako:1
 #: ringo/templates/mails/password_reset_request.mako:1
@@ -1539,4 +1545,14 @@ msgstr "Gruppen"
 #: ringo/views/tables/users.json:8
 msgid "Last login"
 msgstr "Letze Anmeldung"
+
+#~ msgid ""
+#~ "Form must not have unsaved changes. "
+#~ "Please save outstanding changes before "
+#~ "changing the state."
+#~ msgstr ""
+#~ "Das Formular darf keine ungespeicherten "
+#~ "Änderungen haben. Bitte speichern Sie "
+#~ "ausstehende Änderungen, bevor Sie den "
+#~ "Status ändern."
 

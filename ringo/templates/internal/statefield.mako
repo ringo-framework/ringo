@@ -71,7 +71,7 @@
 % endif
 </div>
 <div id="statefieldinfo" class="alert alert-info" role="info">
-  ${_('Form must not have unsaved changes. Please save outstanding changes before changing the state.')}
+  ${_('Please save outstanding changes before changing the state. To discard the changes please reload the page.')}
 </div>
 
 <script>

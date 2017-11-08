@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ringo 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-10-16 14:08+0200\n"
+"POT-Creation-Date: 2017-11-08 12:06+0100\n"
 "PO-Revision-Date: 2013-03-28 18:17+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.4.0\n"
 
-#: ringo/lib/imexport.py:459
+#: ringo/lib/imexport.py:460
 msgid "UPDATE"
 msgstr ""
 
-#: ringo/lib/imexport.py:463
+#: ringo/lib/imexport.py:464
 msgid "CREATE"
 msgstr ""
 
@@ -624,36 +624,42 @@ msgstr ""
 
 #. Label for description field in form config
 #. Label for description column in overview table config
-#: ringo/templates/internal/statefield.mako:10 ringo/views/forms/forms.xml:2
+#: ringo/templates/internal/statefield.mako:11 ringo/views/forms/forms.xml:2
 #: ringo/views/forms/modules.xml:4 ringo/views/forms/roles.xml:6
 #: ringo/views/forms/usergroups.xml:3 ringo/views/tables/forms.json:3
 msgid "Description"
 msgstr ""
 
-#: ringo/templates/internal/statefield.mako:14
+#: ringo/templates/internal/statefield.mako:15
 msgid "Please select one of the following steps:"
 msgstr ""
 
 #. Label for review_state column in overview table config
-#: ringo/templates/internal/statefield.mako:25 ringo/views/forms/forms.xml:10
+#: ringo/templates/internal/statefield.mako:26 ringo/views/forms/forms.xml:10
 #: ringo/views/tables/forms.json:5
 msgid "State"
 msgstr ""
 
-#: ringo/templates/internal/statefield.mako:40
+#: ringo/templates/internal/statefield.mako:41
 msgid "State transition"
 msgstr ""
 
-#: ringo/templates/internal/statefield.mako:42
+#: ringo/templates/internal/statefield.mako:43
 msgid "No Transition"
 msgstr ""
 
-#: ringo/templates/internal/statefield.mako:52
+#: ringo/templates/internal/statefield.mako:53
 msgid "Current state"
 msgstr ""
 
-#: ringo/templates/internal/statefield.mako:59
+#: ringo/templates/internal/statefield.mako:60
 msgid "Resulting State"
+msgstr ""
+
+#: ringo/templates/internal/statefield.mako:74
+msgid ""
+"Please save outstanding changes before changing the state. To discard the"
+" chages please reload the page."
 msgstr ""
 
 #: ringo/templates/mails/password_reminder.mako:1
@@ -1752,5 +1758,11 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "The user was not confirmed. Maybe the confirmation token was not valid?"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Form must not have unsaved changes. "
+#~ "Please save outstanding changes before "
+#~ "changing the state."
 #~ msgstr ""
 
