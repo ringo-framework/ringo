@@ -414,6 +414,30 @@ class BaseItem(object):
                     # items seems to work too. I excpet that poping the
                     # items will somehow tweak SQLAlchemy in the way
                     # that it handles deleting items correct now.
+
+                    # Ensure correct relations.
+                    # Commit 2b8ccb9 introduces a change for the
+                    # Listingfieldrenderer which affects handling
+                    # relations. The submitted values does no longer contain
+                    # all linked elements. Now the submitted values will
+                    # only contain linked elements which can be
+                    # read/linked by the user. Because this is often only a
+                    # subset of actually linked items, the code now must
+                    # ensure that relations to items which where not
+                    # included in the submitted values does not get lost.
+                    if request:
+                        from ringo.lib.security import has_permission
+                        # Oldvalue contains all actually linked items.
+                        for ov in oldvalue:
+                            if not has_permission("link", ov, request):
+                                # It the item was linked by the user is
+                                # not allowed to link it (is not part of
+                                # the submitted values), we must keep
+                                # the relation.
+                                value.append(ov)
+                        # Now value contains all previous linked items
+                        # the user is not allowed to change, plus the
+                        # current selection of the user.
                     while oldvalue:
                         oldvalue.pop(0)
                     for nvalue in value:
