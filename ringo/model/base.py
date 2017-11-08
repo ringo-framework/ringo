@@ -362,7 +362,7 @@ class BaseItem(object):
             values[field] = value
         return values
 
-    def set_values(self, values, use_strict=False):
+    def set_values(self, values, use_strict=False, request=None):
         """Will set the values of the item. The values to be set are
         provided by a dictionary with key value pairs given with the
         `values` option. Keys in the dictionary beginning with "_" are
@@ -387,7 +387,6 @@ class BaseItem(object):
         :use_strict: boolean, if true raise a exception if an attribute is
                      missing (default: False).
         """
-
         for key, value in values.iteritems():
             # Ignore private form fields
             if key.startswith('_'):
@@ -467,7 +466,7 @@ class BaseItem(object):
 
         old_values = self.get_values()
         # Set values
-        self.set_values(data)
+        self.set_values(data, request=request)
 
         # Handle statechange
         if isinstance(self, StateMixin):
