@@ -305,6 +305,10 @@ ul.dropdown-menu li table td {
 }
 
 /* Statefield */
+#statefieldinfo {
+   margin-top: 5px;
+   display: none;
+}
 
 /* Hide infos on the resulting state on default. */
 .result-state {
