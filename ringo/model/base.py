@@ -362,7 +362,7 @@ class BaseItem(object):
             values[field] = value
         return values
 
-    def set_values(self, values, use_strict=False):
+    def set_values(self, values, use_strict=False, request=None):
         """Will set the values of the item. The values to be set are
         provided by a dictionary with key value pairs given with the
         `values` option. Keys in the dictionary beginning with "_" are
@@ -387,7 +387,6 @@ class BaseItem(object):
         :use_strict: boolean, if true raise a exception if an attribute is
                      missing (default: False).
         """
-
         for key, value in values.iteritems():
             # Ignore private form fields
             if key.startswith('_'):
@@ -415,6 +414,30 @@ class BaseItem(object):
                     # items seems to work too. I excpet that poping the
                     # items will somehow tweak SQLAlchemy in the way
                     # that it handles deleting items correct now.
+
+                    # Ensure correct relations.
+                    # Commit 2b8ccb9 introduces a change for the
+                    # Listingfieldrenderer which affects handling
+                    # relations. The submitted values does no longer contain
+                    # all linked elements. Now the submitted values will
+                    # only contain linked elements which can be
+                    # read/linked by the user. Because this is often only a
+                    # subset of actually linked items, the code now must
+                    # ensure that relations to items which where not
+                    # included in the submitted values does not get lost.
+                    if request:
+                        from ringo.lib.security import has_permission
+                        # Oldvalue contains all actually linked items.
+                        for ov in oldvalue:
+                            if not has_permission("link", ov, request):
+                                # It the item was linked by the user is
+                                # not allowed to link it (is not part of
+                                # the submitted values), we must keep
+                                # the relation.
+                                value.append(ov)
+                        # Now value contains all previous linked items
+                        # the user is not allowed to change, plus the
+                        # current selection of the user.
                     while oldvalue:
                         oldvalue.pop(0)
                     for nvalue in value:
@@ -467,7 +490,7 @@ class BaseItem(object):
 
         old_values = self.get_values()
         # Set values
-        self.set_values(data)
+        self.set_values(data, request=request)
 
         # Handle statechange
         if isinstance(self, StateMixin):

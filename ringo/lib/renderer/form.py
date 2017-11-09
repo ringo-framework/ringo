@@ -341,7 +341,13 @@ class ListingFieldRenderer(FormbarSelectionField):
     @property
     def itemlist(self):
         clazz = self.get_class()
-        itemlist = get_item_list(self._field._form._request, clazz)
+        if self.showall == 'true':
+            itemlist = get_item_list(self._field._form._request,
+                                     clazz)
+        else:
+            itemlist = get_item_list(self._field._form._request,
+                                     clazz,
+                                     user=self._field._form._request.user)
         config = get_table_config(itemlist.clazz,
                                   self._field._config.renderer.table)
         sort_field = config.get_default_sort_column()
