@@ -136,7 +136,19 @@ $( document ).ready(function() {
             event.preventDefault();
             return false;
     });
-
+    // Prevent users from submitting the form by pressing enter in input
+    // fields. This is needed because we may have multiple submit buttons in
+    // the form which may trigger differen actions. As it is not possible to
+    // define a default submit which is always triggered by pressing enter we
+    // depend on what the browser likes to do. Disabling pressing enter is a
+    // tradeoff to enable consistent behaviour in the appication. See
+    // issue2080.
+    $("input").keydown(function(event){
+        if(event.keyCode == 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
 
     // Check the initial values of the form and warn the user if the leaves
     // the page without saving the form.
