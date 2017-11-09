@@ -710,7 +710,7 @@ msgstr "Resultierender Zustand"
 msgid ""
 "Please save outstanding changes before changing the state. To discard the"
 " changes please reload the page."
-msgstr "Bitte speicher Sie ausstehende Änderungen bevor Sie den Status ändern. Um die gemachte Änderungen zu verwerfen, laden Sie diese Seite neu."
+msgstr "Bitte speichern Sie ausstehende Änderungen bevor Sie den Status ändern. Um die gemachte Änderungen zu verwerfen, laden Sie diese Seite neu."
 
 #: ringo/templates/mails/password_reminder.mako:1
 #: ringo/templates/mails/password_reset_request.mako:1
