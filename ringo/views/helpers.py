@@ -221,7 +221,11 @@ def get_next_form_page(form, current_page):
     :returns: ID of the next page in the form
     """
     found = False
-    for page in form.pages:
+    for element in form._config.walk(root=None, values=form.data, evaluate=True, include_layout=True):
+        if element.tag != "page":
+            continue
+        else:
+            page = element
         if found:
             return page.attrib.get("id").strip("p")
         if current_page == int(page.attrib.get("id").strip("p")):
