@@ -157,7 +157,7 @@ $( document ).ready(function() {
         $(this).data('initialValue', $(this).serialize());
     });
     function openDirtyDialog(url, hide_spinner, event) {
-        isDirty = checkDirtyForms();
+        isDirty = form.isDirty();
         if((isDirty == true) && (DirtyFormWarningOpen == false)) {
             var dialog = $("#DirtyFormWarning");
             $('#DirtyFormWarningProceedButton').attr("href", url);
