@@ -24,7 +24,7 @@
   % endif
 % elif field.renderer.layout == "simple":
 <label for="${field.id}">${_('State')}</label>
-<select id="${field.id}" name="${field.name}" class="form-control">
+<select id="${field.id}" name="${field.name}" class="form-control" no-dirtyable="true">
   <option value="${state._id}" selected="selected">${_(state._label)}</option>
   % for trans in state.get_transitions():
       <option value="${trans._end_state._id}">${_(trans._label)}</option>
@@ -39,7 +39,7 @@
     % if not field.readonly:
     <p>
       <strong>${_('State transition')}:</strong><br/>
-      <select id="${field.id}" name="${field.name}" class="form-control">
+      <select id="${field.id}" name="${field.name}" class="form-control" no-dirtyable="true">
         <option value="${state._id}" selected="selected">${_('No Transition')}</option>
         % for trans in state.get_transitions():
             <option value="${trans._end_state._id}">${_(trans._label)}</option>
