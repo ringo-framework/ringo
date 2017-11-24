@@ -2410,7 +2410,7 @@ If more than one filter is given, all filters must match to
 include the item in the export.
 
 A more detailed configuration of the export can be achieved by providing a
-configuration file with the `--export-configuration` option. When using the
+configuration file with the `--export-config` option. When using the
 configuration file all other options (like `--format`) have no effect anymore.
 The export format will be a
 nested JSON including all configured fields.
