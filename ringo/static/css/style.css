@@ -123,11 +123,13 @@ nav ul.pagination {
  */
 
 span[data-original-title]:not([data-toggle="tooltip"]){
-    position: relative;
+  position: relative;
+  z-index: 1030 !important;
 }
 
 a[data-original-title]:not([data-toggle="tooltip"]){
-    position: relative;
+  position: relative;
+  z-index: 1030 !important;
 }
 
 span[data-original-title]:not([data-toggle="tooltip"]):hover:after {
@@ -142,7 +144,6 @@ span[data-original-title]:not([data-toggle="tooltip"]):hover:after {
   margin: -3px 3px  3px -3px;
   color: #fff;
   background-color: #000;
-  z-index: 1030;
 }
 
 a[data-original-title]:not([data-toggle="tooltip"]):hover:after {
@@ -157,5 +158,4 @@ a[data-original-title]:not([data-toggle="tooltip"]):hover:after {
   margin: -3px 3px  3px -3px;
   color: #fff;
   background-color: #000;
-  z-index: 1030;
 }
