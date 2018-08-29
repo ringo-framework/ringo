@@ -27,13 +27,13 @@
     <entity id="e6" name="usergroup" label="Default group">
       <help>The default group determines which group will be used for new entries of this user.</help>
     </entity>
-    <entity id="e7" name="activated" label="Activated">
-      <renderer type="radio">
+    <entity id="e7" name="activated" label="Activated" type="integer">
+      <renderer type="dropdown">
         <label align="left"/>
       </renderer>
       <options>
-        <option value="True">Yes</option>
-        <option value="False">No</option>
+        <option value="1">Yes</option>
+        <option value="0">No</option>
       </options>
     </entity>
     <entity id="e8" name="activation_token" label="Activation Token">
